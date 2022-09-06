@@ -185,7 +185,7 @@ context("Export maintenance record", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -201,7 +201,7 @@ context("Export maintenance record", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -580,7 +580,7 @@ context("Export maintenance record", () => {
     });
 
     it("Select 'CAL/PM' tab", () => {
-      cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+      cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
