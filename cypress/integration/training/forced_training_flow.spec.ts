@@ -285,10 +285,6 @@ context("Forced training flow", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -426,6 +422,7 @@ context("Forced training flow", () => {
     it("Select Users to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.wait(2000);
     });
 
     it("Navigate to Overview tab", () => {
@@ -530,14 +527,12 @@ context("Forced training flow", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
+      cy.wait(2000);
     });
 
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -547,6 +542,7 @@ context("Forced training flow", () => {
     });
 
     it("Click Approve", () => {
+      cy.wait(2000);
       cy.trApproveTraining();
     });
   });
