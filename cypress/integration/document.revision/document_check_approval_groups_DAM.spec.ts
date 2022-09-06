@@ -386,7 +386,7 @@ context("Document Approver Requirement on DAM with the groups", () => {
 
   context("'Approve & Release' Document & confirm the user and roles selected.", () => {
     it("click on 'Approve and Release' button", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it(`Enforce user rule, Add ${SECOND_USER.name} to approvers`, () => {
