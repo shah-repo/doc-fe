@@ -32,12 +32,10 @@ class FBEBPartState {
     set(this, "childrenParts", childrenParts);
 
   // MARK: @helpers
-  public addExistingPartChild = (docRevId?: string, body?: EBPartPatchBody) => {
+  public addExistingPartChild = (docRevId?: string, body?: EBPartPatchBody, callback?: () => void) => {
     if (!docRevId) { return; }
     body = {
-      ...body, formInput: omit(body?.formInput,
-        Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
-      ),
+      ...body,
     } as EBPartPatchBody;
 
     this.existingChildApi.set({
@@ -45,14 +43,30 @@ class FBEBPartState {
       urlValues: { docRevId },
       body,
       method: "patch",
+    }, (data, error) => {
+      if (error) {
+        this.existingChildApi.onError(error);
+        return;
+      }
+      this.existingChildApi.data = data;
+      this.existingChildApi.onSuccess();
+      callback?.();
     });
   };
 
-  public addNewPartChild = (body: EBPartPostBody) => {
+  public addNewPartChild = (body: EBPartPostBody, callback?: () => void) => {
     body = omit(body,
       Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES }),
     ) as EBPartPostBody;
-    this.newChildApi.set({ body, method: "post" });
+    this.newChildApi.set({ body, method: "post" }, (data, error) => {
+      if (error) {
+        this.newChildApi.onError(error);
+        return;
+      }
+      this.newChildApi.data = data;
+      this.newChildApi.onSuccess();
+      callback?.();
+    });
   };
 
   public fetchProposedDocId = (documentTypeId: string) => {

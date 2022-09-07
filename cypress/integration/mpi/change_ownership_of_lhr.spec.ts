@@ -522,9 +522,6 @@ context("Change Ownership of LHR", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
 
       it("Select Details tab", () => {
         cy.drSelectDetailsTab();

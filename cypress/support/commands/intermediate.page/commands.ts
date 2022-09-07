@@ -13,6 +13,7 @@ declare global {
       intPageVerifyDescriptionViewMoreNotExist(): Chainable<Subject>;
       intPageVerifyDocTypeExist(): Chainable<Subject>;
       intPageVerifyDocIdIsEditable(): Chainable<Subject>;
+      intPageVerifyDocIdIsNotEditable(): Chainable<Subject>;
       intPageVerifyRevisionStageExist(): Chainable<Subject>;
       intPageVerifyTrainingRequiredExist(): Chainable<Subject>;
       intPageVerifySelectedUsersExist(): Chainable<Subject>;
@@ -123,6 +124,8 @@ declare global {
       intPageVerifyPartToBeManufacturedNotExist(): Chainable<Subject>;
       intPageVerifyBuildTypeExist(): Chainable<Subject>;
       intPageVerifyBuildTypeNotExist(): Chainable<Subject>;
+      intPageVerifyDueDateExist(): Chainable<Subject>;
+      intPageVerifyDueDateNotExist(): Chainable<Subject>;
       intPageVerifyLHRStepExist(): Chainable<Subject>;
       intPageVerifyLHRStepNotExist(): Chainable<Subject>;
       intPageVerifyPoStatusExist(): Chainable<Subject>;
@@ -241,6 +244,10 @@ Cypress.Commands.add("intPageVerifyDocTypeExist", () => {
 
 Cypress.Commands.add("intPageVerifyDocIdIsEditable", () => {
   cy.get(`input[id="document.docId"]`).should("not.be.disabled");
+});
+
+Cypress.Commands.add("intPageVerifyDocIdIsNotEditable", () => {
+  cy.get(`input[id="document.docId"]`).should("be.disabled");
 });
 
 Cypress.Commands.add("intPageVerifyRevisionStageExist", () => {
@@ -688,6 +695,14 @@ Cypress.Commands.add("intPageVerifyBuildTypeNotExist", () => {
   cy.get(`[data-cy="Build Type"]`).should("not.exist");
 });
 
+Cypress.Commands.add("intPageVerifyDueDateExist", () => {
+  cy.get(`[data-cy="Due Date"]`).should("exist");
+});
+
+Cypress.Commands.add("intPageVerifyDueDateNotExist", () => {
+  cy.get(`[data-cy="Due Date"]`).should("not.exist");
+});
+
 Cypress.Commands.add("intPageVerifyLHRStepExist", () => {
   cy.get(`[data-cy^="LHR Step"]`).should("exist");
 });
@@ -1009,7 +1024,7 @@ Cypress.Commands.add("intPageVerifySpecificationTabExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyCalPmHistoryTabExist", () => {
-  cy.get(`[data-cy="tabId.calpmhistory"]`).should("exist");
+  cy.get(`[data-cy="tabId.specification"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifyTrainingTabExist", () => {

@@ -3,6 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -34,14 +35,14 @@ context("Intermediate page validation", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[2].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[5], USERS[3], USERS[4]],
             documentTypes: [],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -59,7 +60,7 @@ context("Intermediate page validation", () => {
 
   context("Login company admin", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: adminEmployee.id });
     });
   });
 
@@ -207,8 +208,8 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyDocTypeExist();
       });
 
-      it("Verify Document id is editable", () => {
-        cy.intPageVerifyDocIdIsEditable();
+      it("Verify Document id is not editable", () => {
+        cy.intPageVerifyDocIdIsNotEditable();
       });
 
       it("Verify 'Document Type' and 'Document Id' fields are in one line", () => {
@@ -332,6 +333,153 @@ context("Intermediate page validation", () => {
       it("Verify 'Add Field' button displayed", () => {
         cy.intPageVerifyAddFieldExist();
       });
+    });
+  });
+
+  context(`Click on ‘Add Field’ button in one of the tabs`, () => {
+    it("Add Field-1 'Checkbox group'", () => {
+      SystemRequirement("FB-0120");
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbOpenValidation();
+      cy.fbFieldRequired();
+      cy.fbAddNewFieldButton();
+    });
+
+    it(`Add Field-2 'Radio Button'`, () => {
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
+      cy.get(`input[value^="visibility"]`).check();
+      cy.get(`input[name="validators.required_if_in"]`).check();
+      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("fb-checkbox-group" );
+      cy.get(`input[type="checkbox"][value="option1"]`).check({ force: true });
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add Autocomplete", () => {
+      SystemRequirement("FB-0140", "FB-0150");
+      cy.fbClickAddNewHiddenBtn();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
+      cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Make sure Field1 is displayed as 'Required' → As the user, enter a value that is different than 'X'", () => {
+      cy.get(".MuiFormHelperText-root.Mui-error").eq(1).contains("The fb-checkbox-group is a required field.");
+    });
+
+    it("Make sure Field 2 remains Hidden", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy^=\"radiogroup-10\"]").should("not.exist");
+    });
+
+    it("Go back to Field 1 and enter 'X' → Field 2 is displayed", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[value='option1']").eq(0).arrowClick({ force: true });
+    });
+
+    it("Verify that Text field is exists", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy='radiogroup-10']").should("exist");
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+  context("Edit the fields", () => {
+    it("Edit Field 1 by adding a new option", () => {
+      cy.get("[class*='fb-field-wrapper-fb-checkbox-group-']").trigger("mouseover");
+      cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true });
+      cy.fbGroupOptions("\noption3");
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+    });
+
+    it("Save form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Remove Field 2 Validations", () => {
+      cy.get("[class*='fb-field-wrapper-fb-radiobutton-group-']").trigger("mouseover");
+      cy.get("[data-cy='edit-schema-item']").eq(2).arrowClick({ force: true });
+      cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
+      cy.get(`input[name="validators.required_if_in"]`).arrowClick();
+      cy.get("[value='default']").arrowClick();
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Remove Field 2", () => {
+      cy.get("[class*='fb-field-wrapper-fb-radiobutton-group-']").trigger("mouseover");
+      cy.get("[data-cy='remove-schema-item']").eq(2).arrowClick();
+    });
+
+    it("Save form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Edit Field 3 and make it required", () => {
+      cy.get("[class*='fb-field-wrapper-fb-autocomplete-']").trigger("mouseover");
+      cy.get("[data-cy='edit-schema-item']").eq(2).arrowClick({ force: true });
+      cy.fbOpenValidation();
+      cy.fbFieldRequired();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+    });
+
+    it("Save form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Open the Preview mode and make sure it was updated accordingly with changes in step 12 and 13", () => {
+    it("Open Preview dialog", () => {
+      cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Make sure Field1 is displayed as 'Required' → As the user, enter a value that is different than 'X'", () => {
+      cy.get(".MuiFormHelperText-root.Mui-error").eq(1).contains("The fb-checkbox-group is a required field.");
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[value='option3']").eq(0).should("exist");
+    });
+
+    it("Make sure Field 2 remains Hidden", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find("[data-cy='radiogroup-10']").should("not.exist");
+    });
+
+    it("Verify that Field-3 Autocomplete required", () => {
+      cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
+        .find(".MuiFormHelperText-root.Mui-error").contains("The fb-autocomplete is a required field.");
+    });
+
+    it("Close Preview dialog", () => {
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
     });
   });
 });
