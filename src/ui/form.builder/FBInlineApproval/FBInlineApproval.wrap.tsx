@@ -196,7 +196,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       if (!ids) { return; }
       map(ids, (approver) => {
         const approval = find(inlineApprovalState?.getApprovals, (a) => a.approver?.id === approver);
-        inlineApprovalState?.approvalTransition("abandon", (approval as FBInlineApprovalBody)?.id);
+        inlineApprovalState?.approvalTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
+          const id  = workspaceState?.id;
+          if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+        });
       });
     }
 
