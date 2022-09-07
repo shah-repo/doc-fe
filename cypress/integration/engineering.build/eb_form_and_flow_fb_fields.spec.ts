@@ -761,8 +761,8 @@ context("Procedure and parts flow test", () => {
 
     it("Edit Component", () => {
       cy.wait(2000);
-      cy.get("[data-cy=\"edit-schema-item\"]").eq(1).arrowClick({ force: true });
-      cy.get("[data-cy=\"label\"]").clear();
+      cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true });
+      cy.get("[data-cy='label']").clear();
       cy.fbEnterLabel({ label: "EB Procedure Edited" });
       cy.fbAddField();
     });
@@ -774,7 +774,6 @@ context("Procedure and parts flow test", () => {
       cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      // cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
     });
 
     it("Add component again", () => {
