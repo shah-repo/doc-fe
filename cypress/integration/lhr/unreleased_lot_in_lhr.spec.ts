@@ -3,7 +3,6 @@
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
-import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
@@ -20,12 +19,12 @@ let approvalRequestDocumentType;
 let initialArDocument;
 let group;
 // let equipmentDocumentType;
-let materialsDocumentType;
+// let materialsDocumentType;
 let partDocumentType;
 // let equipmentDocument;
 let materialsDocument;
 let mpiDocument;
-let mpiDocumentType;
+// let mpiDocumentType;
 let createdPartDocument;
 let developersGroup;
 let secondEmployee;
@@ -71,13 +70,6 @@ context("Unreleased LOT in LHR", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[5].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
-          // equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
-          materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
-          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
-          mpiDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
-          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          LotsType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots");
           done();
         });
       });
@@ -108,11 +100,11 @@ context("Unreleased LOT in LHR", () => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Materials document</p>",
+              description: "<p>Part form</p>",
               document: {
-                docId: "MT-00004",
+                docId: "PRT-00005",
                 documentType: {
-                  id: materialsDocumentType[0].id,
+                  id: partDocumentType[0].id,
                 },
                 securityList: {
                   operators: [],
@@ -150,7 +142,7 @@ context("Unreleased LOT in LHR", () => {
       });
     });
 
-    it("[API]Create part document", (done: any) => {
+    xit("[API]Create part document", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
@@ -210,7 +202,7 @@ context("Unreleased LOT in LHR", () => {
       });
     });
 
-    it("[API]Create unreleased part document", (done: any) => {
+    xit("[API]Create unreleased part document", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -371,9 +363,9 @@ context("Unreleased LOT in LHR", () => {
               ],
               operators: [],
             },
-            documentType: {
-              id: mpiDocumentType[0].id,
-            },
+            // documentType: {
+            //   id: mpiDocumentType[0].id,
+            // },
           },
         },
         employeeId: adminEmployee.id as unknown as string,
@@ -394,7 +386,7 @@ context("Unreleased LOT in LHR", () => {
       });
     });
 
-    it("[API]Create Lots form", (done: any) => {
+    xit("[API]Create Lots form", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -724,17 +716,145 @@ context("Unreleased LOT in LHR", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[5], employeeId: adminEmployee.id });
     });
+  });
 
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
+  context("Create Part form", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Fill in the Part attributes", () => {
+      it("Enter title Part document", () => {
+        cy.drEnterDocumentTitle({ name: "Part Form" });
+      });
+
+      it("Enter description 'Part document description'", () => {
+        cy.drEnterDocumentDescription({ description: "Part document description" });
+      });
+
+      it("Select 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Lots' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Parts" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      context("Release Parts", () => {
+        it("Approve and release Lots document", () => {
+          cy.drApproveAndReleaseDialog();
+          cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.ReleaseDocRev,
+            () => {
+              cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+            });
+        });
+      });
+    });
+  });
+
+  context("Start Part creation flow", () => {
+    it("Navigates to parts list", () => {
+      cy.navigToParts();
+    });
+
+    it("Click on 'Add new part' button", () => {
+      cy.ptClickCreateNewPart();
+    });
+
+    it("Enter title 'Part document'", () => {
+      cy.drEnterDocumentTitle({ name: "Part document" });
+    });
+
+    it("Enter description 'Test Part description'", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drEnterDocumentDescription({ description: "Test Part description" });
+      });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    context("Release Part", () => {
+      it("Approve and release Part document", () => {
+        cy.drApproveAndReleaseDialog();
+        cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.ReleaseDocRev,
+          () => {
+            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+          });
+      });
+    });
+  });
+
+  context("Create LOT form", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Fill in the LOT attributes", () => {
+      it("Enter title LOT document", () => {
+        cy.drEnterDocumentTitle({ name: "LOT Form" });
+      });
+
+      it("Enter description 'LOT document description'", () => {
+        cy.drEnterDocumentDescription({ description: "LOT document description" });
+      });
+
+      it("Select 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Lots' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lots" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      context("Release Lots", () => {
+        it("Approve and release Lots document", () => {
+          cy.drApproveAndReleaseDialog();
+          cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.wrapWithWaitOnApiCall(
+            CyRoutes.ReleaseDocRev,
+            () => {
+              cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+            });
+        });
+      });
+    });
   });
 
   context("Create lot document", () => {
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
-
     it("Navigate to Lots", () => {
       cy.navigToLots();
     });
@@ -771,17 +891,26 @@ context("Unreleased LOT in LHR", () => {
 
     it("Select 'Part document' for Part lot", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.pause();
       cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
       cy.get("ul>li[role=option]").contains("Part document").arrowClick();
     });
-
-    // it("Click on save", () => {
-    //   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-    // });
   });
 
   context("Create MPI document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it("Enter title 'MPI document", () => {
+        cy.drEnterDocumentTitle({ name: "MPI document" });
+      });
+    });
+
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
         cy.navigToDocumentList();
@@ -898,7 +1027,7 @@ context("Unreleased LOT in LHR", () => {
 
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("PI-00002");
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -919,13 +1048,13 @@ context("Unreleased LOT in LHR", () => {
             });
         });
 
-      // it("Goto LHRt", () => {
-      // cy.url().then((url: any) => {
-      //   lhrtUrl = url;
-      // });
-      //   cy.progressBarShouldNotExist();
-      //   cy.listLoadingElementShouldNotExist();
-      // });
+        // it("Goto LHRt", () => {
+        // cy.url().then((url: any) => {
+        //   lhrtUrl = url;
+        // });
+        //   cy.progressBarShouldNotExist();
+        //   cy.listLoadingElementShouldNotExist();
+        // });
       });
     });
   });
@@ -982,8 +1111,8 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #22090201`)
-        .contains("LOT #22090201").should("not.exist");
+      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #22090701`)
+        .contains("LOT #22090701").should("not.exist");
     });
 
     it("Lot dialog should close", () => {
@@ -997,15 +1126,16 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Search for specific LOT", () => {
-      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").arrowType("LOT #22090201");
+      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").arrowType("LOT #22090701");
     });
 
     it("Click on LOT", () => {
       cy.get("[data-grid-col-index=\"0\"]").arrowClick();
     });
 
-    it("Select approvals", () => {
-      cy.get("[data-cy=fb-approvals-fb-approvals-ksherq6d]").autocompleteSelect("enlil.testmail+cy1@gmail.com");
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[5].email });
+      cy.unClick();
     });
 
     it("Click on approve and submit", () => {
@@ -1050,9 +1180,11 @@ context("Unreleased LOT in LHR", () => {
       cy.get("[data-cy=\"LHR Step 1 - Rev A\"] > .MuiBox-root > span").arrowClick();
     });
 
-    it("Click 'START MPI'", () => {
-      // cy.get(".MuiBox-root-2265 > [data-cy=fb-control-btn]").arrowClick();
-      cy.mpiStartStep({ stepNumber: 1 });
+    it("Click View step", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
+        cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Procedure", () => {
@@ -1070,15 +1202,14 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #22090201`)
-        .contains("LOT #22090201").should("exist");
+      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #22090701`);
     });
 
     it("Lot dialog should close", () => {
       cy.get("[data-cy=\"dialog-close\"]").arrowClick();
     });
   });
-
 });
+
 
 export { };

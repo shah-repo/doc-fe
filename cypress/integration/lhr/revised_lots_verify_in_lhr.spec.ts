@@ -1,0 +1,981 @@
+
+// / <reference types="Cypress" />
+
+import "moment-timezone";
+import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { CSLDocTypeLot } from "../../utils/constants/documentTypes/componentSpecificationLot";
+import { EForm } from "../../utils/constants/documentTypes/efm";
+import { CSPart } from "../../utils/constants/documentTypes/part";
+import { EFM10605TemplateSchema } from "../../utils/constants/formTemplates/efm10605";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+
+let createdCompany;
+let adminEmployee;
+let loginResponse;
+let createdEFM10605FormDocument;
+let approvalRequestDocumentType;
+let formDocumentType;
+let initialArDocument;
+let cslDocumentType;
+let csPartDocumentType;
+let createdPartFormDocument;
+let createdLotFromLHR;
+let createdCSPartDocument;
+let group;
+const groupEveryone = "Everyone";
+const ARForm = "AR Form";
+const MPI = "Manufacturing Process Instructions";
+const CSPartDocumentTitle = "Part document";
+const EFM10605Rev = "EFM-10605 form";
+
+context("Released_lots_verify_in_lhr", () => {
+  before(() => {
+    cy.clearLocalStorageSnapshot();
+  });
+
+  beforeEach(() => {
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  context("[API]Prepare company", () => {
+    it("[API]Creates company", (done: any) => {
+      cy.authApiLogin({
+        email: CONFIG.SUPERADMIN_EMAIL,
+        password: CONFIG.SUPERADMIN_PASSWORD,
+      }).then((response) => {
+        loginResponse = response;
+
+        cy.cmpCreateCompany({
+          specFilePath: __filename,
+          payload: {
+            companyAdminEmail: USERS[1].email,
+            importerEmail: IMPORTER_USER.email,
+            users: [USERS[2], USERS[3], USERS[4]],
+            acctCodes: ["code 1"],
+            addresses: ["Address 1"],
+            documentTypes: [
+              EForm,
+              CSLDocTypeLot,
+              CSPart,
+            ],
+          }, sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
+          cslDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, CSLDocTypeLot.documentTypeName);
+          csPartDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, CSPart.documentTypeName);
+
+          done();
+        });
+      });
+    });
+
+    it("[API]Login second tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+    });
+
+    it("[API]Create EFM-10605", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: groupEveryone,
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: ARForm,
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>EFM-10605</p>",
+              document: {
+                docId: "EFM-10605",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: EFM10605Rev,
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: cslDocumentType[0].id,
+                }],
+                schema: EFM10605TemplateSchema,
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdEFM10605FormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdEFM10605FormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+    it("[API]Create Lot from LHR", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: groupEveryone,
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: ARForm,
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Lot from LHR</p>",
+              document: {
+                docId: "FM-00005",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Lot from LHR",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: cslDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    name: "lot_quantity",
+                    type: "quantity",
+                    index: 0,
+                    label: "Initial Quantity",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Initial Quantity",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "lot_usable_quantity",
+                    type: "quantity",
+                    index: 1,
+                    label: "Usable Quantity",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Usable Quantity",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "lot_expiry_date",
+                    type: "datepicker",
+                    index: 2,
+                    label: "Expiration Date",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Expiration Date",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "lot_part",
+                    type: "autocomplete",
+                    index: 3,
+                    label: "Part Selection",
+                    rules: "required",
+                    tabId: "details",
+                    optionId: "21",
+                    validators: {
+                      required: true,
+                    },
+                    placeholder: "Select the appropriate part for this lot",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "Part Selection",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "100-inspection-override",
+                    type: "checkboxgroup",
+                    index: 4,
+                    label: "100% Inspection Override",
+                    tabId: "details",
+                    options: [
+                      {
+                        text: "100% Inspection Override",
+                        value: "100% Inspection Override",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    validationAttribute: "100% Inspection Override",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "fb-approvals-kn7jq134",
+                    type: "approvals",
+                    index: 5,
+                    label: "form.builder.approvals",
+                    tabId: "details",
+                    deleteDisabled: true,
+                    uniqueSchemaItem: true,
+                  },
+                ],
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdLotFromLHR = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdLotFromLHR.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+    it("[API]Create Part form", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: groupEveryone,
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: ARForm,
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Part form</p>",
+              document: {
+                docId: "FM-00003",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Part form document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: csPartDocumentType[0].id,
+                }],
+                schema: csPartDocumentType[0].schema,
+              },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPartFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPartFormDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+    it("[API]Create CS Part", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: groupEveryone,
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: ARForm,
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>CS Part revision</p>",
+              document: {
+                docId: "CS-02001",
+                documentType: {
+                  id: csPartDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: CSPartDocumentTitle,
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+              formDocument: { id: createdPartFormDocument.id },
+
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdCSPartDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdCSPartDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+    it("[API]API request for updating company navigation", (done: any) => {
+      cy.cmpUpdateCompany({
+        employeeId: adminEmployee.id,
+        sessionId: loginResponse.sessionId as unknown as string,
+        payload: {
+          navigation: [
+            {
+              icon: "/navigation_icons/dashboard.svg",
+              path: "/",
+              type: "LINK",
+              label: "Dashboard",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/document.svg",
+                  path: "/document_revision",
+                  type: "LINK",
+                  label: "Document List",
+                },
+                {
+                  icon: "/navigation_icons/cr.svg",
+                  path: "/change_request",
+                  type: "LINK",
+                  label: "Approval Requests",
+                },
+                {
+                  icon: "/navigation_icons/text-paper.svg",
+                  type: "CATEGORY",
+                  label: "Records",
+                  category: "Record",
+                },
+              ],
+              type: "MENU",
+              label: "Document Control",
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              type: "CATEGORY",
+              label: "Equipment",
+              category: "Equipment",
+            },
+            {
+              icon: "/navigation_icons/supplier-menu.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/supplier-list.svg",
+                  type: "CATEGORY",
+                  label: "Supplier List",
+                  category: "Supplier",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Supplier Management",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/receipt_list.svg",
+              type: "CATEGORY",
+              label: "Purchase Orders",
+              category: "Purchase Order",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/cart-simple-in.svg",
+              type: "CATEGORY",
+              label: "Receiving",
+              category: "Receive",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/tools.svg",
+              menu: [
+                {
+                  icon: "/navigation_icons/icon_parts.svg",
+                  type: "CATEGORY",
+                  label: "Parts",
+                  category: "Parts",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/eb_icon.svg",
+                  type: "CATEGORY",
+                  label: "Engineering Builds",
+                  category: "EB",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/tag-check.svg",
+                  type: "CATEGORY",
+                  label: "Lots",
+                  category: "Lot",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+                {
+                  icon: "/navigation_icons/lhr_icon.svg",
+                  type: "CATEGORY",
+                  label: "LHR",
+                  category: "Lhr",
+                  restrictedToUsersWithTags: [
+                    GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+                  ],
+                },
+              ],
+              type: "MENU",
+              label: "Manufacturing",
+              restrictedToUsersWithTags: [
+                GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+              ],
+            },
+            {
+              icon: "/navigation_icons/group-management.svg",
+              path: "/group_management",
+              type: "LINK",
+              label: "Group Management",
+              restrictedToUsersWithTags: [
+                GroupTag.GROUP_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/user-management.svg",
+              path: "/user_management",
+              type: "LINK",
+              label: "User Management",
+              restrictedToUsersWithTags: [
+                GroupTag.USER_MANAGEMENT,
+              ],
+            },
+            {
+              icon: "/navigation_icons/document-menu.svg",
+              path: "/document_type_management",
+              type: "LINK",
+              label: "Document Type Management",
+              restrictedToUsersWithTags: [
+                GroupTag.DOCUMENT_TYPE_MANAGEMENT,
+              ],
+            },
+          ],
+        },
+      }).then(() => {
+        done();
+      });
+    });
+  });
+
+  context("Login user", () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+  });
+
+  context("Create CSL from EFM-10605", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Open EFM-10605", () => {
+      cy.drClickOnSpecificDocFromList({ item: EFM10605Rev });
+      cy.wait(2000);
+    });
+
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromFormRecord();
+      cy.wait(2000);
+    });
+
+    it("Enter title", () => {
+      cy.get("[data-cy=\"field-name\"]").should("exist");
+      cy.get("[data-cy=\"field-name\"]").arrowClick({ force: true }).wait(1000);
+      cy.get("[data-cy=\"field-name\"]").arrowType("CSL with part selection");
+      cy.unClick();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Enter quantity received", () => {
+      cy.get("[name=\"lot_quantity\"]").arrowType("12");
+    });
+
+    it(`Select '${CSPartDocumentTitle}'  Part `, () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
+      cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+    });
+
+    it("Click create document", () => {
+      cy.recClickSaveBtn();
+    });
+
+    context("Release CSL", () => {
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add an Approval", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
+
+      it("Click 'Submit for Approval' button", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Click 'Approve' button", () => {
+        cy.ebApprove();
+      });
+    });
+  });
+
+  context("Revised Document", () => {
+    it("Revise record", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.get("[data-cy=\"updateRecord\"]").click();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Create MPI document", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter title 'MPI document'", () => {
+      cy.drEnterDocumentTitle({ name: "MPI document" });
+    });
+
+    it("Enters description 'MPI Description'", () => {
+      cy.drEnterDocumentDescription({ description: "MPI Description" });
+    });
+
+    it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: MPI });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Add 'CS Part' as Material to step #1", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    context("Release MPI", () => {
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Approve and release MPI document", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+
+    context("Verify Materials", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Verify materials of clone of Step #1", () => {
+        cy.contains("Step #1").parentsUntil("li")
+          .find("[data-cy=\"form.builder.mpi.procedure.materials.title\"]")
+          .should("have.text", `CS-02001 - ${CSPartDocumentTitle} | Qty: 3 each`);
+      });
+    });
+
+  });
+
+  context("Create LHRt document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Fill LHRt document attributes", () => {
+      it("Enter document title 'LHRt document'", () => {
+        cy.drEnterDocumentTitle({ name: "LHRt document" });
+      });
+
+      it("Fill LHRt document description", () => {
+        cy.drEnterDocumentDescription({ description: "LHRt document description" });
+      });
+
+      it("Select 'LHRt' document type", () => {
+        cy.drSelectDocumentType({ documentType: "LHR Template" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Lot History Record' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Select 'Part document' for Part to be Manufactured", () => {
+        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
+          cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      context("Select created MPI in LHR template", () => {
+        it("Select Details tab", () => {
+          cy.wrapWithWaitOnApiCalls(
+            [CyRoutes.GetAutocompleteOptions, CyRoutes.GetFieldLocks], () => {
+              cy.drSelectDetailsTab();
+            });
+        });
+
+        it("Click 'LHR Step'", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+        });
+
+        it("Select MPI document for step #1 in LHRt", () => {
+          cy.wait(2000);
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+      });
+
+      context("Release LHRt", () => {
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Approve and release LHRt document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+    });
+  });
+
+  context("Create LHR", () => {
+    it("Click create new document from LHRt", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter initial quantity", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.unClick();
+      });
+    });
+
+    it("Select 'Production' build type", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[value=\"Production\"]").check();
+        cy.unClick();
+      });
+    });
+
+    it("Add 'Due Date'", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poAddDateRequired();
+        cy.unClick();
+      });
+    });
+
+    it("Click save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+    });
+
+    it("Click 'START MPI'", () => {
+      cy.mpiStartStep({ stepNumber: 1 });
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Click on Select from Materials", () => {
+      cy.get("[data-cy=\"form.builder.select\"]").eq(0).arrowClick({ force: true });
+    });
+
+    it("Lot dialog should open", () => {
+      cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
+    });
+
+    it("LOT #22090701 should not be present", () => {
+      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #22090701`)
+        .contains("LOT #22090701").should("not.exist");
+    });
+
+    it("Lot dialog should close", () => {
+      cy.get("[data-cy=\"dialog-close\"]").arrowClick();
+    });
+  });
+
+  context("Release CSL document", () => {
+    it("Navigate to Lots", () => {
+      cy.navigToRecords();
+    });
+
+    it("Search for specific LOT", () => {
+      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").arrowType("LOT #22090701");
+    });
+
+    it("Click on LOT", () => {
+      cy.get("[data-grid-col-index=\"0\"]").arrowClick();
+    });
+
+    it("Select approvals", () => {
+      cy.get("[data-cy=fb-approvals-fb-approvals-kkoabl58]").autocompleteSelect("enlil.testmail+cy1@gmail.com");
+    });
+
+    it("Click on approve and submit", () => {
+      cy.get("[data-cy=ApproveAndRelease-button] > .MuiButton-label").arrowClick();
+    });
+
+    it("Click on approve", () => {
+      cy.get("[data-cy=\"form.builder.request.approve\"] > .MuiBox-root").arrowClick();
+    });
+
+    it("Enter password and confirm", () => {
+      cy.get("[data-cy=password] > .MuiInputBase-root > .MuiInputBase-input")
+        .arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"common.confirm\"] > .MuiBox-root").arrowClick();
+    });
+  });
+
+  context("Update LHR", () => {
+    it("Navigate to LHR landing page", () => {
+      cy.navigToLHR();
+    });
+
+    it("Select created LHR record", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.DocRevPreview,
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+          cy.get("tr.k-master-row").first().arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
+      });
+      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1 - Rev A\"] > .MuiBox-root > span").eq(0).arrowClick();
+    });
+
+    it("Click View step", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
+        cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on Procedure", () => {
+      cy.get("[data-cy=\"tabId.procedure\"] > .MuiBox-root").arrowClick();
+    });
+
+    it("Click on Select from Materials", () => {
+      cy.get("[data-cy=\"form.builder.select\"]").eq(0).arrowClick({ force: true });
+    });
+
+    it("Lot dialog should open", () => {
+      cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
+    });
+
+    it("LOT #22090701 should be present", () => {
+      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #22090701`);
+    });
+
+    it("Lot dialog should close", () => {
+      cy.get("[data-cy=\"dialog-close\"]").arrowClick();
+    });
+  });
+});
+
+
+export { };
