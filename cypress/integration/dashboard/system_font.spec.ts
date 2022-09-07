@@ -4,7 +4,7 @@
 // / <reference types="Cypress" />
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { FONT_SIZE_10, FONT_SIZE_12, FONT_SIZE_13, FONT_SIZE_14, FONT_SIZE_16, FONT_SIZE_19, FONT_SIZE_22_4, FONT_SIZE_48, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_13, LINE_HT_15, LINE_HT_15_2, LINE_HT_15_96, LINE_HT_16, LINE_HT_18, LINE_HT_19_2, LINE_HT_19_5, LINE_HT_20, LINE_HT_20_02, LINE_HT_21, LINE_HT_21_28, LINE_HT_24, LINE_HT_25_6, LINE_HT_26_208, LINE_HT_26_6, LINE_HT_27_17, LINE_HT_49_92, sora, soraSansserif, TEXT_TRANS_UPPER } from "../../utils/constants/fonts_constants";
+import { FONT_SIZE_10, FONT_SIZE_12, FONT_SIZE_13, FONT_SIZE_14, FONT_SIZE_16, FONT_SIZE_19, FONT_SIZE_22_4, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_13, LINE_HT_15, LINE_HT_15_2, LINE_HT_15_96, LINE_HT_16, LINE_HT_18, LINE_HT_19_2, LINE_HT_19_5, LINE_HT_20, LINE_HT_20_02, LINE_HT_21, LINE_HT_21_28, LINE_HT_24, LINE_HT_25_6, LINE_HT_26_208, LINE_HT_27_17, sora, soraSansserif, TEXT_TRANS_UPPER } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompanyA;
@@ -142,7 +142,7 @@ context("User Creation Flow", () => {
     });
   });
 
-  context.skip("Verify font for 'Create a document' button", () => {
+  context("Verify font for 'Create a document' button", () => {
     it(`Verify 'Create a document' button font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight  ${FONT_WT_600}`, () => {
       cy.get("[data-cy=\"document.revision.create\"]")
         .checkStylePropExists({
@@ -324,11 +324,11 @@ context("User Creation Flow", () => {
       });
     });
 
-    it(`Verify 'Approvers' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24}  font-weight ${FONT_WT_600}`, () => {
-      cy.get("[data-cy=\"form.builder.approvers\"]")
+    it(`Verify 'Approvers' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24}  font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
+      cy.get(`[data-cy="form.builder.approvals"]`)
         .checkStylePropExists({
-          content: "Approvers",
-          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+          content: "Approvals",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
         });
     });
 
@@ -349,7 +349,7 @@ context("User Creation Flow", () => {
     });
 
     it(`Verify document Type as 'Form' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_15_2} font-weight ${FONT_WT_600}`, () => {
-      cy.get("[data-cy=\"select.document.documentType.id\"]")
+      cy.get(`[id="mui-component-select-document.documentType.id"]`)
         .checkStylePropExists({
           content: "Form",
           props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_15_2, "font-weight": FONT_WT_600 },
@@ -373,10 +373,10 @@ context("User Creation Flow", () => {
         });
     });
 
-    it(`Verify 'output Document Types field' as 'Approval Request' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
-      cy.get("[id=\"formTemplate.outputDocumentTypes\"]").contains("Approval Request")
+    it(`Verify 'output Document Types field' as 'Bulk Create' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
+      cy.get("[id=\"formTemplate.outputDocumentTypes\"]").contains("Bulk Create")
         .checkStylePropExists({
-          content: "Approval Request",
+          content: "Bulk Create",
           props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
         });
     });
@@ -424,7 +424,8 @@ context("User Creation Flow", () => {
 
   context(`Click on 'Send To Email'`, () => {
     it(`Click on 'Send To Email'`, () => {
-      cy.sendToEmail();
+      cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+      cy.get("div.Toastify__toast-container").should("exist");
     });
   });
 
@@ -616,11 +617,11 @@ context("User Creation Flow", () => {
         });
     });
 
-    it(`Verify 'Approvers' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Approvals' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_500}`, () => {
       cy.get(`[data-cy="Bookmarks-detail"]`)
         .checkStylePropExists({
-          content: "Approvers",
-          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+          content: "Approvals",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15, "font-weight": FONT_WT_500 },
         });
     });
 
@@ -644,14 +645,14 @@ context("User Creation Flow", () => {
     });
   });
 
-  context("Verify The side bar options Migration fonts", () => {
-    it("Verify The side bar options References fonts", () => {
-      // cy.get("[data-cy=\"references-icon\"]").arrowClick();
-      cy.pause();
-    });
-    //   it("Verify The side bar options MIgration fonts", () => {
-    //   });
-  });
+  // context("Verify The side bar options Migration fonts", () => {
+  //   it("Verify The side bar options References fonts", () => {
+  //     // cy.get("[data-cy=\"references-icon\"]").arrowClick();
+  //     cy.pause();
+  //   });
+  //   //   it("Verify The side bar options MIgration fonts", () => {
+  //   //   });
+  // });
 
   context("Click on 'Approve and Release' button", () => {
     it("Click on Approve and Release button", () => {
@@ -672,11 +673,11 @@ context("User Creation Flow", () => {
         });
     });
 
-    it(`Verify 'Approvers' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Approvers' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15_96} font-weight ${FONT_WT_600}`, () => {
       cy.get(`[data-cy="field-approvals"]`)
         .checkStylePropExists({
           content: "Approvers",
-          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15_96, "font-weight": FONT_WT_600 },
         });
     });
 
@@ -739,49 +740,43 @@ context("User Creation Flow", () => {
       cy.usrClickMyProfile();
     });
 
-    it(`Verify 'User Profile' font-size ${FONT_SIZE_22_4} font-family ${sora} line-height ${LINE_HT_26_208} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'User Profile' font-size ${FONT_SIZE_22_4} font-family ${soraSansserif} line-height ${LINE_HT_26_208} font-weight ${FONT_WT_400}`, () => {
       cy.get("[class^=\"MuiTypography-root makeStyles-userProfile\"]")
         .checkStylePropExists({
           content: "User Profile",
-          props: { "font-size": FONT_SIZE_22_4, "font-family": sora, "line-height": LINE_HT_26_208, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_22_4, "font-family": soraSansserif, "line-height": LINE_HT_26_208, "font-weight": FONT_WT_400 },
         });
     });
 
-    it(`Verify 'User Name' font-size ${FONT_SIZE_48} font-family ${sora} line-height ${LINE_HT_49_92} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'User Name' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
       cy.get("[class^=\"MuiTypography-root makeStyles-userName\"]")
         .checkStylePropExists({
           content: USERS[1].name,
-          props: { "font-size": FONT_SIZE_48, "font-family": sora, "line-height": LINE_HT_49_92, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
         });
     });
 
-    // it(`Verify 'Groups' font-size FONT_SIZE_16 font-family ${soraSansserif} line-height 49.92px font-weight 400`, () => {
-    //   cy.get("#SummaryBaseProps-label").contains("Groups")
-    //     .should("have.css", "font-size", "FONT_SIZE_16");
-    //   cy.get("#SummaryBaseProps-label").contains("Groups")
-    //     .should("have.css", "font-family", soraSansserif);
-    //   cy.get("#SummaryBaseProps-label").contains("Groups")
-    //     .should("have.css", "line-height", "49.92px");
-    //   cy.get("#SummaryBaseProps-label").contains("Groups")
-    //     .should("have.css", "font-weight", FONT_WT_400);
-    // });
+    it(`Verify 'Groups' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_400}`, () => {
+      cy.get("#SummaryBaseProps-label")
+        .checkStylePropExists({
+          content: "Groups",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_400 },
+        });
+    });
 
-    // it(`Verify 'Groups text message' font-size FONT_SIZE_16 font-family ${soraSansserif} line-height 26.208px font-weight 400`, () => {
-    //   cy.get("#SummaryBaseProps-values").contains("Owner as approver")
-    //     .should("have.css", "font-size", "FONT_SIZE_16");
-    //   cy.get("#SummaryBaseProps-values").contains("Owner as approver")
-    //     .should("have.css", "font-family", soraSansserif);
-    //   cy.get("#SummaryBaseProps-values").contains("Owner as approver")
-    //     .should("have.css", "line-height", "20px");
-    //   cy.get("#SummaryBaseProps-values").contains("Owner as approver")
-    //     .should("have.css", "font-weight", FONT_WT_400);
-    // });
+    it(`Verify 'Groups text message' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.get("#SummaryBaseProps-values")
+        .checkStylePropExists({
+          content: "Owner as approver",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+        });
+    });
 
-    it(`Verify 'Addresses' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_26_6} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Addresses' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_25_6} font-weight ${FONT_WT_600}`, () => {
       cy.get("[class^=\"MuiTypography-root makeStyles-title\"]")
         .checkStylePropExists({
           content: "Addresses",
-          props: { "font-size": FONT_SIZE_16, "font-family": sora, "line-height": LINE_HT_26_6, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_25_6, "font-weight": FONT_WT_600 },
         });
     });
 
@@ -789,7 +784,7 @@ context("User Creation Flow", () => {
       cy.get("#EditRemoveAddFields-add")
         .checkStylePropExists({
           content: "Add Addresses",
-          props: { "font-size": FONT_SIZE_12, "font-family": sora, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
         });
     });
 
@@ -810,12 +805,16 @@ context("User Creation Flow", () => {
     });
 
     it(`Click on 'Add Acct Codes' button and enter 'TC333'`, () => {
-      cy.get("#EditRemoveAddFields-add").contains("Add Acct Codes").arrowClick().arrowType("TC333");
+      cy.get(`[id="EditRemoveAddFields-add"]`).contains("Add Acct Codes").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`input[placeholder="New Acct Code"]`).arrowType("TC333");
+      cy.unClick();
       cy.get("#EditRemoveAddFields-done").contains("Done").arrowClick();
     });
 
     it(`Verify 'TC333' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_25_6} font-weight ${FONT_WT_400}`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-title- MuiTypography-subtitle1\"]")
+      cy.get("[class^=\"MuiTypography-root makeStyles-title- MuiTypography-subtitle1\"]").last()
         .checkStylePropExists({
           content: "TC333",
           props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_25_6, "font-weight": FONT_WT_400 },
