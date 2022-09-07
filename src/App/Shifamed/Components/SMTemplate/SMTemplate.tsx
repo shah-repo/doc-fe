@@ -34,7 +34,7 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
         </SMBox>
       )}
       <SMBox display="flex" flex={1} {...contentBoxProps} >
-        <SMBox flex={1}>
+        <SMBox width={"0px"} flex={1}>
           {children}
         </SMBox>
       </SMBox>
