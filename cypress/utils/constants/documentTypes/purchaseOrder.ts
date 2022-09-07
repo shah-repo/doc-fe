@@ -343,6 +343,7 @@ export const PurchaseOrderDocType:  IdocumentTypeDto = {
       type: "autocomplete",
       index: 2,
       label: "Requestor",
+      rules: "required",
       optionId: "3",
       optionPath: "/change_requests/available_approvers",
       placeholder: "[Select requestor here]",
