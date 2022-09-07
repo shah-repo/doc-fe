@@ -141,3 +141,9 @@ Cypress.Commands.add("mpiStartStep", (params: {stepNumber: number}) => {
 Cypress.Commands.add("mpiClickNotStarted", (params: {stepNumber: number}) => {
   cy.get("[data-cy=\"form.builder.step.noStarted\"]").eq(params.stepNumber - 1).arrowClick();
 });
+
+Cypress.Commands.add("mpiSelectRedLine", () => {
+  cy.get("[data-cy='HeaderMenuButton']").arrowClick();
+  cy.get("[data-cy='redlineButton']").arrowClick();
+  cy.checkToastMessage({ exists: false });
+});
