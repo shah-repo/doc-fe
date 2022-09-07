@@ -733,7 +733,7 @@ context("Procedure and parts flow test", () => {
 
       it("Save document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
-        cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("not.exist");
+        cy.get("[data-cy='form.builder.step.number']").eq(1).should("not.exist");
       });
 
       it("Add textfield to eb", () => {
@@ -840,18 +840,18 @@ context("Procedure and parts flow test", () => {
 
       it("Verify materials are copied", () => {
         SystemRequirement("REQ-3020");
-        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+        cy.get("[data-cy='form.builder.procedure.materials.title']")
           .eq(2).should("have.text", "PRT-00005 - Part document | LOT #" + lotDateSuffix + "01 | Qty: 2 each");
-        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
+        cy.get("[data-cy='form.builder.procedure.materials.title']")
           .eq(3).should("have.text", "Free text material | Test | Qty: 3 sets");
 
       });
 
       it("Verify equipments are copied", () => {
         SystemRequirement("REQ-3020");
-        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+        cy.get("[data-cy='form.builder.procedure.equipment.title']")
           .eq(2).should("have.text", "ET-00003 - Equipment document ");
-        cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]")
+        cy.get("[data-cy='form.builder.procedure.equipment.title']")
           .eq(3).should("have.text", "Free text equipment ");
       });
 
@@ -866,10 +866,10 @@ context("Procedure and parts flow test", () => {
 
       it("Remove step", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+          cy.get("[data-cy='remove-schema-item']").last().arrowClick({ force: true });
         });
         cy.progressBarShouldNotExist();
-        cy.get("[data-cy=\"form.builder.step.number\"]").eq(2).should("not.exist");
+        cy.get("[data-cy='form.builder.step.number']").eq(2).should("not.exist");
       });
     });
 
@@ -940,7 +940,7 @@ context("Procedure and parts flow test", () => {
 
       it("Verify step description is copied", () => {
         SystemRequirement("REQ-3020");
-        cy.get("div[id^=\"fb-mpiprocedure\"] p").eq(1)
+        cy.get("div[id^='fb-mpiprocedure'] p").eq(1)
           .should("have.text", "Step #1 description");
       });
 
@@ -963,7 +963,6 @@ context("Procedure and parts flow test", () => {
 
       it("Verify attachments are copied", () => {
         SystemRequirement("REQ-3020");
-
         cy.get("[data-cy=\"mediaUploadField\"]>div>div>div>div>div").eq(1).arrowClick();
         cy.get("[data-cy=\"mediaUploadField\"] ul>li div[title]").each(($el) => {
           const attachName = $el.text();
@@ -973,14 +972,13 @@ context("Procedure and parts flow test", () => {
 
       it("Remove last step", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+          cy.get("[data-cy='remove-schema-item']").last().arrowClick({ force: true });
         });
       });
 
       it("Save document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
-
     });
 
     context("Add materials and equipments", () => {
@@ -1032,7 +1030,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Verify 'Free text material' has increased number of materials to '3'", () => {
-        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(2)
+        cy.get("[data-cy='form.builder.procedure.materials.title']").eq(2)
           .should("contain.text", "Free text material")
           .should("contain.text", "Qty: 3 sets");
       });
@@ -1045,7 +1043,6 @@ context("Procedure and parts flow test", () => {
 
     context("Create EB and release it", () => {
       it("Submit for approval", () => {
-        // cy.pause();
         cy.pmSubmitForApproval();
       });
 
@@ -1146,20 +1143,19 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Verify 'Materials document' is removed from materials", () => {
-        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(2)
+        cy.get("[data-cy='form.builder.procedure.materials.title']").eq(2)
           .should("contain.text", "PRT-00005 - Part document | LOT #"
           + lotDateSuffix + "01 | Qty: 2 each");
       });
 
       it("Verify 'Free text material' is removed from materials", () => {
-        cy.get("[data-cy=\"form.builder.procedure.materials.title\"]").eq(3)
+        cy.get("[data-cy='form.builder.procedure.materials.title']").eq(3)
           .should("contain.text", "Free text material | ? | Qty: 2 sets");
       });
 
       it("Verify 'Equipment document' is removed from equipment", () => {
         cy.get("[data-cy=\"form.builder.procedure.equipment.title\"]").eq(1)
           .should("contain.text", "ET-00003 - Equipment document");
-        // cy.pause();
       });
 
       it("Verify 'Free text equipment' is removed from equipment", () => {
