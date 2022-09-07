@@ -21,7 +21,7 @@ export const styles = makeStyles(() =>
     },
     chipRoot: {
       "whiteSpace": "normal",
-      "background": "#EDF3FF",
+      "background": Colors.light_blue,
       "borderRadius": "2px",
       "height": "30px",
       "margin": "10px 0",
