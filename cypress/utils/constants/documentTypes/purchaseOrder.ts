@@ -339,7 +339,7 @@ export const PurchaseOrderDocType:  IdocumentTypeDto = {
       tabId: "details",
     },
     {
-      name: "requestor-k740hxlb",
+      name: "po-requestor-autocomplete",
       type: "autocomplete",
       index: 2,
       label: "Requestor",

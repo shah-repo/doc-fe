@@ -522,7 +522,7 @@ context("PO test", () => {
           });
         }).as("response");
 
-        cy.get("[data-cy^=\"requestor-\"]").autocompleteSelect(`${USERS[1].name}`);
+        cy.get("[data-cy^=\"po-requestor-\"]").autocompleteSelect(`${USERS[1].name}`);
       });
     });
 
