@@ -28,10 +28,11 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   isOutput,
   lockOwnerName,
   labelProps,
+  index,
 }) => (
   <>
     {!hidden && (
-      <Box mb={gutter ? 1.875 : 0} {...boxProps}>
+      <Box mb={gutter ? 1.875 : 0} {...boxProps} data-cy={`${type}-${index}`}>
         <Observer>
           {() => (
             <>{inputState?.includeNotes && <FBNotes {...{ name }} />}</>
