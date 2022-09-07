@@ -510,7 +510,13 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.get("[data-cy='form.builder.request.approve']").contains("Approve").click();
+      cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").click();
+        cy.progressBarShouldAppear();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status`, () => {

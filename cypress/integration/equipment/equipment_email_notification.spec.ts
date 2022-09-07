@@ -211,7 +211,7 @@ context("Test Equipment maintenance email notifications", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                   },
                 ],
               },
@@ -397,7 +397,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select 'Active' as EQ status", () => {
-        cy.get("input[name=fb-default-eq-status][value=Active]").check();
+        cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
       });
 
       it("Save document", () => {
@@ -410,11 +410,11 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
-        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
+        cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick({ force: true });
         cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
       });
 
@@ -445,13 +445,14 @@ context("Test Equipment maintenance email notifications", () => {
               documentType: { id: approvalRequestDocumentType[0].id },
               formDocument: { id: initialArDocument[0].id },
               formInput: {
-                documentRevisions: [{
+                "fb-default-eq-status": "Active",
+                "documentRevisions": [{
                   proposedDocumentRevision: { id: createdSecondEquipmentDocID },
                   descriptionOfChange: "ar test",
                   justificationOfChange: "ar test",
                   id: faker.random.uuid(),
                 }],
-                approvers: [
+                "approvers": [
                   {
                     approver: {
                       id: adminEmployee.id,
@@ -631,7 +632,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select 'Active' as EQ status", () => {
-        cy.get("input[name=fb-default-eq-status][value=Active]").check();
+        cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
       });
 
       it("Save document", () => {
@@ -643,13 +644,13 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
-        cy.get("[name=fb-primary-owner-eq]").arrowClick();
-        cy.get("ul>li[role=option]").contains(ADMIN_USER.name).arrowClick();
+        cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
+        cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
-        cy.get("[name=fb-coordinator-eq]").arrowClick();
-        cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
+        cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
+        cy.get("ul>li[role=\"option\"]").contains(FIRST_USER.name).arrowClick();
       });
 
       it("Save document", () => {
@@ -662,7 +663,7 @@ context("Test Equipment maintenance email notifications", () => {
 
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
@@ -874,7 +875,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select 'Active' as EQ status", () => {
-        cy.get("input[name=fb-default-eq-status][value=Active]").check();
+        cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
       });
 
       it("Save document", () => {
@@ -886,13 +887,13 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
-        cy.get("[name=fb-primary-owner-eq]").arrowClick();
-        cy.get("ul>li[role=option]").contains(ADMIN_USER.name).arrowClick();
+        cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
+        cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
-        cy.get("[name=fb-coordinator-eq]").arrowClick();
-        cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
+        cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
+        cy.get("ul>li[role=\"option\"]").contains(FIRST_USER.name).arrowClick();
       });
 
       it("Save document", () => {
@@ -905,7 +906,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {
@@ -1117,7 +1118,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select 'Active' as EQ status", () => {
-        cy.get("input[name=fb-default-eq-status][value=Active]").check();
+        cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
       });
 
       it("Save document", () => {
@@ -1129,13 +1130,13 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it(`Select "${ADMIN_USER.name}" as Primary Owner`, () => {
-        cy.get("[name=fb-primary-owner-eq]").arrowClick();
-        cy.get("ul>li[role=option]").contains(ADMIN_USER.name).arrowClick();
+        cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
+        cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
       });
 
       it(`Select "${FIRST_USER.name}" as Coordinator`, () => {
-        cy.get("[name=fb-coordinator-eq]").arrowClick();
-        cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
+        cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
+        cy.get("ul>li[role=\"option\"]").contains(FIRST_USER.name).arrowClick();
       });
 
       it("Save document", () => {
@@ -1147,7 +1148,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Select document 'Yes' for preventative maintenance required", () => {
-        cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+        cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
       });
 
       it("Select 'Maintenance record form' for preventative maintenance required", () => {

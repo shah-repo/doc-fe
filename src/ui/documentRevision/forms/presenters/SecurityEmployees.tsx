@@ -8,9 +8,10 @@ import AutocompleteField from "../../../components/forms/fields/Autocomplete/Aut
 
 interface Props {
   portal?: boolean;
+  isDisabled?: boolean;
 }
 
-const SecurityEmployees: React.FunctionComponent<Props> = ({ portal }) => {
+const SecurityEmployees: React.FunctionComponent<Props> = ({ portal, isDisabled }) => {
   const intl = useIntl();
   const availableApprovers = useSelector((state: ApplicationState) => {
     const currentUserId = authSelectors.currentUserId(state);
@@ -34,6 +35,7 @@ const SecurityEmployees: React.FunctionComponent<Props> = ({ portal }) => {
       }}
       options={availableApprovers}
       portal={portal}
+      isDisabled={isDisabled}
     />
   );
 };

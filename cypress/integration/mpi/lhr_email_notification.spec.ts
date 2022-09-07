@@ -266,8 +266,8 @@ context("LHRs email notifications", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("[data-cy=\"lhrstep-built-in\"]").arrowType(MPIDocumentTitle);
-          cy.get(dataCyOptions).contains(MPIDocumentTitle).arrowClick();
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect(MPIDocumentTitle);
         });
       });
 
@@ -310,7 +310,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.url().then((url: any) => {
         lhr1DocUrl = url;
       });
@@ -416,7 +416,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.url().then((url: any) => {
         lhr2DocUrl = url;
       });
@@ -523,7 +523,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it(`Select '${BUILD_TYPE.RD}' build type`, () => {
