@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -327,10 +328,6 @@ context("Training by Groups", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -388,7 +385,7 @@ context("Training by Groups", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -422,6 +419,14 @@ context("Training by Groups", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Click Refresh on 'Document to trained on'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
@@ -440,13 +445,18 @@ context("Training by Groups", () => {
       cy.get("[name=training-validity]").arrowType("5");
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
     it("Select Groups to train 'Group1 and Group2'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
+      cy.wait(2000);
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Save training", () => {
@@ -486,16 +496,12 @@ context("Training by Groups", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
     });
 
     it("Open created training", () => {
-      cy.contains("test training title").arrowClick();
+      cy.get(`[data-grid-row-index="0"]`).contains("test training title").arrowClick();
     });
 
     it("Click on 'Revise Document'", () => {
@@ -511,20 +517,23 @@ context("Training by Groups", () => {
       cy.drEnterDocumentTitle({ name: " update" });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add new Group to train 'Group3'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
+      cy.wait(2000);
     });
 
     it("Remove group Group1", () => {
       cy.get("[data-cy=training-select-groups-to-train]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick();
+        .find(".MuiAutocomplete-tag").eq(1).find(".MuiChip-deleteIcon").arrowClick();
+      cy.wait(2000);
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   });
 
@@ -560,6 +569,7 @@ context("Training by Groups", () => {
     });
 
     it("Click Approve", () => {
+      cy.wait(2000);
       cy.trApproveTraining();
     });
   });

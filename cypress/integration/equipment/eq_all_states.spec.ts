@@ -1,3 +1,4 @@
+/* eslint-disable cypress.eslint.rules/cy.pause */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
@@ -146,6 +147,7 @@ context("Equipment maintenance for checking History in all states", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
+                    tabId: "overview",
                     deleteInFormDisabled: true,
                   },
                   {
@@ -162,6 +164,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     validationAttribute: "Primary Owner",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "specification",
                   },
                   {
                     name: "fb-coordinator-eq",
@@ -177,6 +180,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     validationAttribute: "Coordinator",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "specification",
                   },
                   {
                     index: 3,
@@ -192,6 +196,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
+                    tabId: "specification",
                   },
                   {
                     index: 4,
@@ -206,6 +211,7 @@ context("Equipment maintenance for checking History in all states", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     applicableValidationSchema: true,
+                    tabId: "specification",
                     validationAttribute: "Calibration",
                   },
                 ],
@@ -272,6 +278,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_id",
@@ -286,6 +293,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 ],
                 deleteDisabled: true,
                 validationMode: "default",
+                tabId: "details",
                 deleteInFormDisabled: true,
               },
               {
@@ -296,6 +304,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -309,6 +318,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 index: 3,
                 label: "Completion Date",
                 rules: "required",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -323,6 +333,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 label: "Equipment Maintenance Section",
                 rules: "required",
                 hidden: true,
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -334,6 +345,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 label: "form.builder.approvals",
                 type: "approvals",
                 deleteDisabled: true,
+                tabId: "overview",
                 name: "fb-approvals-kybkhbpt",
                 uniqueSchemaItem: true,
                 index: 5,
@@ -399,6 +411,7 @@ context("Equipment maintenance for checking History in all states", () => {
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 deleteDisabled: true,
+                tabId: "details",
                 deleteInFormDisabled: true,
               },
               {
@@ -408,6 +421,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 label: "Equipment",
                 rules: "required",
                 optionId: "20",
+                tabId: "details",
                 placeholder: "[Select revision here]",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -421,6 +435,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -436,6 +451,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -449,6 +465,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -462,6 +479,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 label: "form.builder.approvals",
                 type: "approvals",
                 deleteDisabled: true,
+                tabId: "overview",
                 name: "fb-approvals-kybkhbpt",
                 uniqueSchemaItem: true,
                 index: 5,
@@ -1087,6 +1105,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.drSelectCalPmHistoryTab();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });
@@ -1113,6 +1132,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.drSelectCalPmHistoryTab();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });
@@ -1139,6 +1159,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.drSelectCalPmHistoryTab();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });
@@ -1152,6 +1173,7 @@ context("Equipment maintenance for checking History in all states", () => {
     context("Verify for IN REVIEW Numeric Equipment", () => {
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.drSelectCalPmHistoryTab();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });
@@ -1169,6 +1191,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
       context("Verify Maintenance History is changed to History", () => {
         it("Verify for pm", () => {
+          cy.drSelectCalPmHistoryTab();
           cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
           cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
         });

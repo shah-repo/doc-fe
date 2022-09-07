@@ -138,6 +138,10 @@ context("NCO document type management with record doc type", () => {
       cy.drEnterDocumentDescription({ description: "New Company description" });
     });
 
+    it("Select 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it(`Enters company name '${newCompanyName}'`, () => {
       cy.get("[name^=company-name-]").arrowType(newCompanyName);
     });
@@ -184,7 +188,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
@@ -220,6 +224,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Add Acronym", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
       cy.dtmAddAcronym({ acronym: "GRN-" });
     });
 
@@ -239,6 +244,7 @@ context("NCO document type management with record doc type", () => {
       cy.get("[class='k-grid-content k-virtual-content']").scrollTo("center").wait(1000);
       cy.dtmAddStartingNumber({ startingNumber: "{backspace}2000" });
     });
+
     it("Select Revision Stage 'Numeric'", () => {
       cy.dtmSelectRevisionStage({ revisionStage: "Numeric" });
     });
@@ -269,6 +275,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Edit Revision Stage", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("center").wait(1000);
       cy.get("[data-grid-row-index='0']>td>span>span>span").eq(3).contains("Numeric").arrowClick();
       cy.get("li").contains("Alpha").arrowClick();
     });
@@ -353,7 +360,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Enter description 'Green Record Document Revision description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "Green ecord Document Revision description" });
+      cy.drEnterDocumentDescription({ description: "Green ecord Document Revision description" });
     });
 
     it("Add approval", () => {
@@ -424,6 +431,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Edit Document type name", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
       cy.dtmAddAcronym({ acronym: "LGR-" });
     });
 

@@ -2,6 +2,7 @@ import { useFormikContext } from "formik";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { SM } from "../../../../App";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentRevision, FBOutputDocumentType } from "../../../../state/ducks/documentRevisions/types";
@@ -9,57 +10,50 @@ import { documentsActions } from "../../../../state/ducks/documents";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import SelectField, { SelectOption } from "../../../components/forms/fields/Select";
 import { filterSecurityGroupsForQms } from "../../../documentType/list/helpers";
-import { FB, FBEditorPropertiesType, FBSchemaProps } from "../../../form.builder";
+import { FBEditorPropertiesType, FBSchemaProps } from "../../../form.builder";
+import { styles as FBAutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import { FBWorkspaceMode } from "../../../form.builder/types/workspace";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentTypeSelect } from "../../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { DocumentCloneType } from "../../Clone.container";
-import { checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentEditableSchema, checkIsDocumentForm, checkIsDocumentPart, checkIsDynamicForm, checkIsTypeMustBeOutput, checkIsTypeOnlyOnOutputs, hasDefaultNote } from "../../helpers/checkDocumentGroup";
 import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
+import { styles } from "./styles/DocIdInput.styles";
 
 interface Props extends RouteComponentProps {
   isDocRevStatusDraft: boolean;
   type?: DocumentCloneType;
   outputDocumentTypes?: FBOutputDocumentType[];
-  savedocInfo: React.Dispatch<React.SetStateAction<{
-    name: string;
-    isQms: boolean;
-    needsSignature: boolean;
-  }>>;
   isDisabled: boolean;
   documentTypeId?: string;
-  setDisableCreateButton: (value: boolean) => void;
 }
 
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDocRevStatusDraft,
   type,
   outputDocumentTypes = [],
-  savedocInfo,
   isDisabled = false,
   documentTypeId,
-  setDisableCreateButton,
   match,
 }) => {
   const { isVisible, label, tooltipConfig, validation: validators } = useDocumentTypeSelect(documentTypeId);
-
-  const { workspaceState } = FB.useStores();
+  const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores() || {};
   const formik = useFormikContext();
-
+  const classes = styles();
   const loadProposedIdAction = useActionCreator(documentsActions.loadDocumentProposedIdWithCallback);
   const asyncDocumentProposedId = useAsync({
     onSuccess: () => {
-      setDisableCreateButton(false);
+      _documentRevisionFormState?.setCreateDocumentDisabled(false);
     },
 
   });
   const loadDocumentProposedId = (id: string) => {
     // Disable create button sets the flag for temporary disabling
     // of create button until correct doc id is generated
-    setDisableCreateButton(true);
+    _documentRevisionFormState?.setCreateDocumentDisabled(true);
     asyncDocumentProposedId.start(loadProposedIdAction, id, asyncDocumentProposedId);
   };
 
@@ -103,7 +97,11 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     const typeId = event.target.value as string;
     const type = documentTypesById[typeId] || {};
     const docTypeHasDefaultNote = hasDefaultNote(type.groupOptions);
-    savedocInfo({ name: event.target.name || "", isQms: type.isQms, needsSignature: type.needsSignature as boolean });
+    _documentRevisionFormState?.setDocInfo({
+      name: event.target.name || "",
+      isQms: type.isQms,
+      needsSignature: type.needsSignature as boolean,
+    });
     formik.setFieldValue("securityGroups", []);
 
     if (loadDocumentProposedId) {
@@ -130,11 +128,12 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       if (!isCreateMaintenance) { scheme = getFBSchemeByDocType(
         formValues,
         documentTypesById,
-        workspaceState?.getSchema(),
+        _documentRevisionFormState?.schema,
+        _tabsState?.tabID
       ); }
     }
     if (!isCreateMaintenance) {
-      workspaceState?.setMode(mode);
+      _formState?.setMode(mode);
       if (isNewOutput) {
         return;
       }
@@ -163,7 +162,15 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
           includeNotes: true,
         };
       });
-      workspaceState?.setSchema(predefinedSchema); }
+      if (checkIsDocumentEditableSchema(type.groupOptions)) {
+        _formState?.setValue("schema", predefinedSchema);
+      } else {
+        _formState?.setValue("formTemplate.schema", predefinedSchema);
+        if (predefinedSchema.length) {
+          _documentRevisionFormState?.setFBSchema(predefinedSchema);
+        }
+      }
+    }
   };
 
   if (!isVisible && type !== "newOutput") {
@@ -176,12 +183,15 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         name="document.documentType.id"
         label={label}
         selectProps={{
+          disabled: isDocTypeDisabled,
           inputProps: { id: "documentType", disabled: isDocTypeDisabled },
           onChange: handleTypeChange,
         }}
         options={options}
         validate={validators}
         includeEmpty={false}
+        inputStyleProps={classes.input}
+        labelProps={FBAutoCompleteStyles.labelStyle}
       />
     </CustomLabelTooltip>
   );

@@ -2,7 +2,7 @@ import { FBApprovalMatrixFieldState, FBButtonProps, FBInputProps } from "..";
 import { FBWorkspaceMode } from "../types/workspace";
 
 export type FBApprovalMatrixFieldProps =
-& Pick<FBInputProps, "name" | "disabled" | "autosave">
+& Pick<FBInputProps, "name" | "disabled" | "autosave" | "type">
 & {
   handleAdd?: FBButtonProps["onClick"];
   approvalMatrixFieldState?: FBApprovalMatrixFieldState;

@@ -1,17 +1,20 @@
 import { makeStyles } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 const FBPurchaseOrderClasses = makeStyles({
   root: {
     "width": "100%",
     "tableLayout": "fixed",
     "& th": {
-      backgroundColor: "#f6f7f7",
-      color: "#252525",
       padding: "14px 8px",
       whiteSpace: "nowrap",
+      background: Colors.athens_gray,
+      boxShadow: `{0 1px 0 ${Colors.chinese_silver}}`,
+      borderRadius: "3px 0 0 0",
     },
     "& .FBTotal-root": {
       padding: "10px 8px",
+      borderBottom: 0,
     },
     "& .FBIcon-root": {
       "color": "#c1c1c1",
@@ -27,12 +30,19 @@ const FBPurchaseOrderClasses = makeStyles({
     },
     "& tr": {
       cursor: "pointer",
-      height: "45px",
+      height: "47px",
+      border: `1px solid ${Colors.chinese_silver}`,
     },
     "& td": {
       padding: "0px 8px",
       whiteSpace: "nowrap",
     },
+  },
+  button: {
+    borderRadius: 0,
+    borderStyle: "dashed",
+    borderColor: Colors.dodger_blue,
+    height: "40px",
   },
 });
 

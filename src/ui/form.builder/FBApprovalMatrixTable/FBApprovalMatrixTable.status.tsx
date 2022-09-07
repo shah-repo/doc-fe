@@ -3,7 +3,7 @@ import { get, keys, values } from "lodash";
 import React from "react";
 import { FBApprovalMatrixCheck, FBApprovalMatrixItem, FBApprovalMatrixTableProps, FBApprovalMatrixTableRoleHead, FBApprovalRole, FBCheckbox, FBMapWrapper, FBTableCell } from "..";
 
-const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTableProps> = ({
+const FBApprovalMatrixTableStatus: React.FunctionComponent<Omit<FBApprovalMatrixTableProps, "syncScroll">> = ({
   cellHeight,
   approvalData: { approvalRoles = [], approvalMatrix = [] } = {},
   mode,
@@ -11,7 +11,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
   name,
 }) => (
   <Table className={classes?.tableStatus}>
-    <TableHead >
+    <TableHead>
       <TableRow style={{ height: "30px" }}>
         <FBMapWrapper<string[]> collection={values(FBApprovalMatrixTableRoleHead)}>
           {(head: string, index) => (
@@ -74,7 +74,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
                       {mode === "edit" && (
                         <FBTableCell align="center">
                           <FBApprovalMatrixCheck
-                            name={`${name}.approvalMatrix.${i}.approvalRoles.${key}.${index}`}
+                            name={`${name}.${i}.approvalRoles.${key}.${index}`}
                             dataCy={`${name}.approvalMatrix.${i}.approvalRoles.${key}.${index}`}
                             checked={value}
                           />
@@ -100,7 +100,7 @@ const FBApprovalMatrixTableStatus: React.FunctionComponent<FBApprovalMatrixTable
                   <FBTableCell key={`fb-approval-matrix-add-${value}-${index}`}>
                     <Box display="flex" justifyContent="center" pl={3}>
                       <FBCheckbox
-                        name={`${name}.approvalMatrix.${approvalMatrix.length}.approvalRoles.${key}.${index}`}
+                        name={`${name}.${approvalMatrix.length}.approvalRoles.${key}.${index}`}
                         dataCy={`approvalMatrix.approvalRoles.${key}.${index}`}
                         gutter={false}
                         defaultChecked={false}

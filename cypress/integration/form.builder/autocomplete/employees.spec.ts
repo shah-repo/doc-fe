@@ -110,6 +110,10 @@ context("Autocomplete 'Employees' test", () => {
         it("Checks on 'Enable Hello Sign' button", () => {
           cy.contains("Enable Hello Sign").arrowClick();
         });
+        it("Close Popup", () => {
+          cy.get("[role=\"dialog\"]").scrollTo("top");
+          cy.get("#DialogContent-close").arrowClick();
+        });
       });
     });
 
@@ -143,10 +147,14 @@ context("Autocomplete 'Employees' test", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
         });
 
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 

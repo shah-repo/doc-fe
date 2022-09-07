@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -224,12 +225,14 @@ context("Export for LHR", () => {
                 label: "form.builder.mpiprocedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "procedure",
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
                 stepIndex: 1,
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -274,6 +277,7 @@ context("Export for LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
+                tabId: "procedure",
               },
               {
                 name: "lhrs-accepted-quantity",
@@ -291,6 +295,7 @@ context("Export for LHR", () => {
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
                 includeNotes: true,
+                tabId: "procedure",
               },
               {
                 name: "lhrs-rejected-quantity",
@@ -300,6 +305,7 @@ context("Export for LHR", () => {
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
+                tabId: "procedure",
                 deleteDisabled: true,
                 editorProperties: [
                   "includeNotes",
@@ -322,6 +328,7 @@ context("Export for LHR", () => {
                 validationAttribute: "Approvals",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
             ],
           },
@@ -386,6 +393,7 @@ context("Export for LHR", () => {
                 editorConfig: {
                   id: createdPartDocument.documentId,
                 },
+                tabId: "overview",
               },
               {
                 name: "lhr_initial_quantity",
@@ -399,6 +407,7 @@ context("Export for LHR", () => {
                 validationAttribute: "Initial Quantity",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhr-end-quantity",
@@ -413,6 +422,7 @@ context("Export for LHR", () => {
                 validationAttribute: "End Quantity",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhr-build-type",
@@ -437,6 +447,7 @@ context("Export for LHR", () => {
                 validationAttribute: "Build Type",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhr-due-date",
@@ -449,6 +460,7 @@ context("Export for LHR", () => {
                 validationMode: "default",
                 validationAttribute: "Due Date",
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhrstep-built-in",
@@ -464,6 +476,7 @@ context("Export for LHR", () => {
                 editorConfig: {
                   value: createdMPIDocument.id,
                 },
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -472,6 +485,7 @@ context("Export for LHR", () => {
                 name: "fb-approvals-kvateryo",
                 uniqueSchemaItem: true,
                 index: 6,
+                tabId: "overview",
               },
             ],
           },
@@ -543,7 +557,7 @@ context("Export for LHR", () => {
     });
 
     it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Click save document", () => {
@@ -553,14 +567,21 @@ context("Export for LHR", () => {
     });
   });
 
-  context("LHR with WIP status and LHRS with WIP", () => {
+  context(`LHR with ${STATUS_TYPES_LABEL.WIP} status and LHRS with ${STATUS_TYPES_LABEL.WIP}`, () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-A" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-A" });
     });
   });
 
-  context("LHR with WIP status and LHRS with In Review", () => {
+  context(`LHR with ${STATUS_TYPES_LABEL.WIP} status and LHRS with ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+    it("Select 'Details' tab", () => {
+      cy.contains("Details").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Click 'START MPI'", () => {
+      cy.mpiClickNotStarted({ stepNumber: 1 });
       cy.mpiStartStep({ stepNumber: 1 });
       cy.url().then((url: any) => {
         lhrsUrl = url;
@@ -571,14 +592,6 @@ context("Export for LHR", () => {
       cy.cmpTurnOffAutosave();
     });
 
-    it("Enter 'Start quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
-    });
-
-    it("Enter 'Accepted quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
-    });
-
     it("Add an Approval", () => {
       cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -594,28 +607,45 @@ context("Export for LHR", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Select 'Procedure' tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Enter 'Start quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
+    });
+
+    it("Enter 'Accepted quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
+    });
+
+    it("Click save document", () => {
+      cy.drSaveDocumentWithoutaudit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Complete step", () => {
-      cy.pmSubmitForApproval();
-      cy.get("#HeaderInfo-status").should("have.text", "In Review");
+      cy.lhrSubmitForApproval();
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-A" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-A" });
     });
   });
 
-  context("LHR with WIP status and LHRS with Completed", () => {
+  context(`LHR with ${STATUS_TYPES_LABEL.WIP} status and LHRS with ${STATUS_TYPES_LABEL.COMPLETED}`, () => {
     it("Open LHRS", () => {
       cy.visit(lhrsUrl);
       cy.progressBarShouldNotExist();
@@ -627,27 +657,26 @@ context("Export for LHR", () => {
     });
 
     it("Approve step", () => {
-      cy.ebApprove();
-      cy.get("#HeaderInfo-status").should("have.text", "Completed");
+      cy.lhrApprove();
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.COMPLETED });
     });
 
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-A" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-A" });
     });
   });
 
-  context("LHR with WIP status and LHRS with Canceled", () => {
+  context(`LHR with ${STATUS_TYPES_LABEL.WIP} status and LHRS with ${STATUS_TYPES_LABEL.CANCELED}`, () => {
     it("Open LHRS", () => {
       cy.visit(lhrsUrl);
       cy.progressBarShouldNotExist();
@@ -660,59 +689,54 @@ context("Export for LHR", () => {
 
     it("Click Update record", () => {
       cy.drClickReviseDocument();
+    });
+
+    it("Click Save button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Cancel draft", () => {
-      cy.get("[data-cy=DocumentRevisionList-item]").eq(0).should("be.exist");
-      cy.reload();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.contains("A.1").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.drCancelDraftButton();
-      cy.get("#HeaderInfo-status").should("have.text", "Canceled");
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.CANCELED });
     });
 
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-A" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-A" });
     });
   });
 
-  context("LHR with In Review status and LHRS with Completed", () => {
+  context(`LHR with ${STATUS_TYPES_LABEL.IN_REVIEW} and LHRS with ${STATUS_TYPES_LABEL.COMPLETED}`, () => {
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
-      cy.progressBarShouldNotExist();
+      cy.lhrSubmitForApproval();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-A" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-A", pdfStatus: "In Review" });
     });
   });
 
-  context("LHR with Released status and LHRS with Completed", () => {
+  context(`LHR with ${STATUS_TYPES_LABEL.RELEASED} and LHRS with ${STATUS_TYPES_LABEL.COMPLETED}`, () => {
     it("Click Approve button", () => {
-      cy.ebApprove();
+      cy.lhrApprove();
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Released", filename: "-A" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-A", pdfStatus: "Released" });
     });
   });
 
-  context("LHR with Released status and LHRS with WIP", () => {
+  context(`LHR with ${STATUS_TYPES_LABEL.RELEASED} and LHRS with ${STATUS_TYPES_LABEL.WIP}`, () => {
     it("Open LHRS", () => {
       cy.visit(lhrsUrl);
       cy.progressBarShouldNotExist();
@@ -727,23 +751,26 @@ context("Export for LHR", () => {
       cy.drClickReviseDocument();
     });
 
+    it("Save the document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Released", filename: "-A" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-A", pdfStatus: "Released" });
     });
   });
 
-  context("LHR with superseded", () => {
+  context(`LHR with ${STATUS_TYPES_LABEL.SUPERSEDED}`, () => {
     it("Open LHRS", () => {
       cy.visit(lhrsUrl);
       cy.progressBarShouldNotExist();
@@ -752,6 +779,10 @@ context("Export for LHR", () => {
 
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
+    });
+
+    it("Click on revisions tab on side panel", () => {
+      cy.drClickRevisionsSidePanel();
     });
 
     it("Select LHRS with WIP", () => {
@@ -770,64 +801,71 @@ context("Export for LHR", () => {
     });
 
     it("Complete step", () => {
-      cy.pmSubmitForApproval();
-      cy.get("#HeaderInfo-status").should("have.text", "In Review");
+      cy.lhrSubmitForApproval();
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
     it("Approve step", () => {
-      cy.ebApprove();
-      cy.get("#HeaderInfo-status").should("have.text", "Completed");
+      cy.lhrApprove();
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.COMPLETED });
     });
 
     it("visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType, CyRoutes.DocPreview,
+        CyRoutes.GetSpecificDocumentType,
       ], () => {
         cy.visit(lhrUrl);
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Update record", () => {
-      cy.drClickReviseDocument();
-      cy.progressBarShouldNotExist();
+      cy.lhrClickReviseDocument();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Select LHRS with WIP", () => {
-      cy.contains("WIP").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
+    it("Save the document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
+    it("Click on revisions tab on side panel", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
+    it(`Select LHRS with ${STATUS_TYPES_LABEL.WIP}`, () => {
+      cy.contains(STATUS_TYPES_LABEL.WIP).eq(0).arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
-      cy.progressBarShouldNotExist();
+      cy.lhrSubmitForApproval();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Approve button", () => {
-      cy.ebApprove();
+      cy.lhrApprove();
+    });
+
+    it("Click on revisions tab on side panel", () => {
+      cy.drClickRevisionsSidePanel();
     });
 
     it("Select 'Superseded' record", () => {
       cy.contains("Superseded").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Superseded", filename: "-A" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.SUPERSEDED, filename: "-A", pdfStatus: "Superseded" });
     });
   });
 
-  context("LHR with voided", () => {
+  context(`LHR with ${STATUS_TYPES_LABEL.VOIDED}`, () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -851,7 +889,7 @@ context("Export for LHR", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-A-Void" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.VOIDED, filename: "-A-Void", pdfStatus: "Voided" });
     });
   });
 });

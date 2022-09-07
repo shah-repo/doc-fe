@@ -5,6 +5,7 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -238,12 +239,14 @@ context("LHRs email notifications", () => {
                 type: "section",
                 index: 0,
                 label: "form.builder.mpiprocedure",
+                tabId: "procedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
+                tabId: "procedure",
                 index: 1,
                 stepIndex: 1,
                 applicableOn: [
@@ -279,6 +282,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -296,6 +300,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -313,6 +318,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -330,6 +336,7 @@ context("LHRs email notifications", () => {
                 type: "approvals",
                 index: 5,
                 label: "Approvals",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -397,6 +404,7 @@ context("LHRs email notifications", () => {
                 type: "partsselection",
                 index: 0,
                 label: "Part to be Manufactured",
+                tabId: "overview",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
                 editorConfig: {
@@ -408,6 +416,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 1,
                 label: "Initial Quantity",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -421,6 +430,7 @@ context("LHRs email notifications", () => {
                 type: "quantity",
                 index: 2,
                 label: "End Quantity",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -435,6 +445,7 @@ context("LHRs email notifications", () => {
                 type: "radiogroup",
                 index: 3,
                 label: "Build Type",
+                tabId: "overview",
                 options: [
                   {
                     text: "R&D",
@@ -459,6 +470,7 @@ context("LHRs email notifications", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Due Date",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -471,6 +483,7 @@ context("LHRs email notifications", () => {
                 type: "lhrstep",
                 index: 5,
                 label: "LHR Step",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -483,6 +496,7 @@ context("LHRs email notifications", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kvateryo",
@@ -774,6 +788,14 @@ context("LHRs email notifications", () => {
     });
 
     context("Start LHRs", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         SystemRequirement("REQ-3210");
         cy.mpiStartStep({ stepNumber: 1 });
@@ -789,11 +811,11 @@ context("LHRs email notifications", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Verify status is WIP", () => {
-        cy.drCheckDocumentStatus({ status: "WIP" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
         cy.url().then((url: any) => {
           lhrs1DocUrl = url;
         });
@@ -817,6 +839,10 @@ context("LHRs email notifications", () => {
     });
 
     context("Add atributes to LHRs with operator", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Enter 'Start quntity' for LHRs #1", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
@@ -836,6 +862,10 @@ context("LHRs email notifications", () => {
           cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
           cy.unClick();
         });
+      });
+
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add an Approval", () => {

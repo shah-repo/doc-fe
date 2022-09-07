@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -156,6 +157,10 @@ context("DAM approvals in LHR", () => {
         cy.drEnterDocumentTitle({ name: "New Company" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enters description 'New Company description'", () => {
         cy.drEnterDocumentDescription({ description: "New Company description" });
       });
@@ -210,7 +215,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Approve and release document - create company", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
@@ -309,6 +314,7 @@ context("DAM approvals in LHR", () => {
                   {
                     name: "approvals-kycw6cjf",
                     type: "approvals",
+                    tabId: "overview",
                     index: 0,
                     label: "Approvals",
                     rules: "",
@@ -416,16 +422,19 @@ context("DAM approvals in LHR", () => {
         cy.drSelectDocumentType({ documentType: "Form" });
       });
 
-      it("Select 'Purchase Order' output document type from dropdown", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
-      });
-
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Set document type", () => {
         cy.drSetDocTypeId({ docId: "00006" });
+      });
+
+      it("Select 'Purchase Order' output document type from dropdown", () => {
+        cy.get("[data-cy=\"field-outputDocumentTypes\"]").arrowClick();
+        cy.wait(1500);
+        cy.get(`[id^="react-select"]`).contains("Purchase Order").arrowClick();
+        cy.unClick();
       });
 
       it("Click create document after filling document", () => {
@@ -509,6 +518,10 @@ context("DAM approvals in LHR", () => {
     });
 
     context("Create Purchase Order document and verify supplier", () => {
+      it("Turn on autosave", () => {
+        cy.cmpTurnOnAutosave();
+      });
+
       it("Create new document from form", () => {
         cy.drCreateNewDocumentFromForm();
       });
@@ -528,10 +541,8 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Enter Supplier Description 'Supplier Description'", () => {
-        cy.xpath("//div[@data-cy=\"description\"]/../div[2]").arrowClick();
-        cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear()
-          .arrowType("Supplier Description");
-        cy.get("[data-cy=\"description\"]>div").arrowClick();
+        cy.xpath("//div[@data-cy=\"description\"]/../div[2]").eq(-1).arrowClick();
+        cy.get("#fb-mpiprocedure-ref-description").find("div[contenteditable]").arrowType("Supplier Description");
         cy.checkToastMessage({ exists: false });
       });
 
@@ -558,8 +569,8 @@ context("DAM approvals in LHR", () => {
       });
 
       it("clicks on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.poVerifyStatus({ status: "Draft" });
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
 
       it("Navigates to Supplier and Select created supplier", () => {
@@ -568,52 +579,81 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Verify supplier status should be 'Draft'", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
 
-      it("Release supplier", () => {
+      it("Add approver", () => {
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click Save button", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0).arrowClick();
+      });
+
+      it("Release supplier", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+          cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebApprove();
-      });
-
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
-      it("Update Supplier name and Release it", () => {
-        cy.drClickReviseDocument();
-        cy.get("#Title-field input").clear().arrowType("1");
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.ReleaseDocRev,
+          () => {
+            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
           });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
 
+      it("Update Supplier name", () => {
+        cy.drClickReviseDocument();
+        cy.drEnterDocumentTitle({ name: "1" });
+      });
+
+      it("Click Save button", () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Add approver", () => {
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0).arrowClick();
+      });
+
+      it("Click Save button", () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
+
+      it("Release supplier", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+          cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebApprove();
+        cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.ReleaseDocRev,
+          () => {
+            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+          });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Turn off autosave", () => {
@@ -623,7 +663,7 @@ context("DAM approvals in LHR", () => {
       it("Open PO again - verify PO in Draft is updated to the newly released version of the Supplier", () => {
         cy.navigToPurchaseOrder();
         cy.dlSelectFirstDocument();
-        cy.poVerifyStatus({ status: "Draft" });
+        cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 2 - New Supplier1");
       });
 
@@ -646,15 +686,15 @@ context("DAM approvals in LHR", () => {
         });
       });
 
-      it("check status should be 'Pending Approval'", () => {
-        cy.poVerifyStatus({ status: "Pending Approval" });
+      it(`check status should be '${STATUS_TYPES_LABEL.PENDING_APPROVAL}'`, () => {
+        cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
       });
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
         cy.drClickReviseDocument();
-        cy.get("#Title-field input").clear().arrowType("2");
+        cy.drEnterDocumentTitle({ name: "2" });
         cy.wrapWithWaitOnApiCalls(
           [CyRoutes.PostDocRev], () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
@@ -669,12 +709,25 @@ context("DAM approvals in LHR", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+          cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebApprove();
+      });
+
+      it("Approve supplier", () => {
+        cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.ReleaseDocRev,
+          () => {
+            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+          });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Turn off autosave", () => {
@@ -695,7 +748,7 @@ context("DAM approvals in LHR", () => {
 
       it("Open PO again - verify PO in Pending Approval updated to the newly released version of the Supplier", () => {
         cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
-        cy.poVerifyStatus({ status: "Pending Approval" });
+        cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 3 - New Supplier12");
       });
 
@@ -745,7 +798,7 @@ context("DAM approvals in LHR", () => {
         cy.navigToSuppliers();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
         cy.drClickReviseDocument();
-        cy.get("#Title-field input").clear().arrowType("3");
+        cy.drEnterDocumentTitle({ name: "3" });
         cy.wrapWithWaitOnApiCalls(
           [CyRoutes.PostDocRev], () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
@@ -760,12 +813,24 @@ context("DAM approvals in LHR", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+          cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebApprove();
+      });
+
+      it("Approve supplier", () => {
+        cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.ReleaseDocRev,
+          () => {
+            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+          });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -827,9 +892,17 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
         cy.drEnterDocumentDescription({ description: "Test description1" });
         cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Submit for Approval", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Approve PO", () => {
         cy.ebApprove();
       });
 

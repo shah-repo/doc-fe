@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { AuditGroupType } from "../../../state/ducks/audit/types";
+import { Approval } from "../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../state/reducers";
 import { FBSchemaProps } from "../../form.builder";
 import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus } from "../../hooks/docCustomization/useCustomization";
-import AuditPresenter from "./Audit.presenter";
+import AuditPresenter from "./Audit.presenter.new";
 
 interface OwnProps {
   documentRevisionId: string;
@@ -53,11 +54,12 @@ const AuditContainer: React.FunctionComponent<AuditContainerProps> = ({
     tooltipConfig,
   } = useDocumentStatus(documentTypeId, selectedDocument?.status);
   const versionNumber = selectedDocument?.displayRevision;
+  const approvals = selectedDocument?.approvals as Approval[];
   const schema = selectedDocument?.formDocument?.formTemplate?.schema as FBSchemaProps[];
 
   return  <CustomLabelTooltip {...{ tooltipConfig }}>
     <AuditPresenter
-      {...{ audit, versionNumber, isStatusVisible, schema }}
+      {...{ audit, approvals, versionNumber, isStatusVisible, schema }}
       statusLabel={statusLabel as string}
     />
   </CustomLabelTooltip>;

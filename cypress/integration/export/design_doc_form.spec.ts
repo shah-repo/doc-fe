@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { pdfFooterDate } from "../../utils/constants/dateHandler";
 import { DesignDocument } from "../../utils/constants/documentTypes/testTypes";
@@ -114,7 +115,7 @@ context("Export internal doc - Design Document form", () => {
 
     it("Add TextField", () => {
       cy.fbAddNewField();
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
@@ -123,21 +124,21 @@ context("Export internal doc - Design Document form", () => {
 
     it("Add section field", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Section" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
       cy.fbEnterLabel({ label: "fb-section" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Subsection", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Subsection" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Subsection" });
       cy.fbEnterNameValue({ name: "label", value: "fb-subsection" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Checkbox group", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
@@ -145,7 +146,7 @@ context("Export internal doc - Design Document form", () => {
 
     it("Add Autocomplete with Document Revision", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-doc-revision" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
       cy.fbAddNewFieldButton();
@@ -153,21 +154,21 @@ context("Export internal doc - Design Document form", () => {
 
     it("Add Text Editor", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Date picker", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Select Field", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Select" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
       cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
@@ -175,7 +176,7 @@ context("Export internal doc - Design Document form", () => {
 
     it("Add Radio Button group", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -190,7 +191,7 @@ context("Export internal doc - Design Document form", () => {
 
     it("Add Paragraph", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Paragraph" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Paragraph" });
       cy.get("[data-cy=\"paragraph\"]>div>div>div>div>div[contenteditable]")
         .click({ force: true }).clear().arrowType("fb-paragraph");
       cy.fbAddNewFieldButton();
@@ -198,7 +199,7 @@ context("Export internal doc - Design Document form", () => {
 
     it("Add File Upload", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
@@ -206,7 +207,7 @@ context("Export internal doc - Design Document form", () => {
 
     it("Add Blank Template Form", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Blank Template Form" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Blank Template Form" });
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
       cy.fbAddNewFieldButton();
       cy.elUploadAttachment({ fileName: "TestTemplate.json", el: "fb-attachment-field-fb-blank-template-" });
@@ -214,28 +215,28 @@ context("Export internal doc - Design Document form", () => {
 
     it("Add Step", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Step" });
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Step" });
       cy.fbEnterNameValue({ name: "label", value: "fb-step" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Quantity", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
       cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Instructions Media upload", () => {
       cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ field: "Instructions Media upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Instructions Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-instructions" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Evidence Media upload", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Evidence Media upload" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Evidence Media upload" });
       cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
@@ -254,7 +255,7 @@ context("Export internal doc - Design Document form", () => {
 
   context("Check pdf email and get content", () => {
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "Draft", filename: "-1-DD-doc-form" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.DRAFT, filename: "-1-DD-doc-form" }).then((data) => {
         pdfContent = data;
       });
     });
@@ -404,7 +405,7 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Get pdf content", () => {
-      cy.getExportPdfContent({ status: "Released", filename: "-1-DD-doc-form" }).then((data) => {
+      cy.getExportPdfContent({ status: STATUS_TYPES_LABEL.RELEASED, filename: "-1-DD-doc-form" }).then((data) => {
         pdfContent = data;
       });
     });

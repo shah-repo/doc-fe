@@ -1,8 +1,8 @@
-import { Box, Button, Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import { setExpandedState, setGroupIds } from "@progress/kendo-react-data-tools";
 import {
-  Grid as Kgrid, GridColumn,
+  Grid as KendoGrid, GridColumn,
   GridColumnMenuGroup,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
@@ -17,6 +17,7 @@ import { cloneDeep, each, find, isEmpty, map, set, sortBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
+import { AutoSizer, Size } from "react-virtualized";
 import Config from "../../../config";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentType, DOC_TYPE_GROUP_OPTION, GroupWithGroupOptions } from "../../../state/ducks/documentRevisions/documentType/types";
@@ -30,6 +31,7 @@ import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoGridConfiguration } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
+import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
 import { toastError } from "../../components/notifications";
 import { TablePanelStateProps } from "../../components/table/types";
 import Text from "../../components/Text";
@@ -42,7 +44,7 @@ import { CommandCell } from "./column.templates/CommandCell";
 import { NewRowObject } from "./column.templates/NewRowObject";
 import { DTMCellTemplateMapping } from "./config";
 import { getDropDownDataSource } from "./filter.template/CommonCellDropdownFilterTemplate";
-import KendoGridStyles from "./styles";
+import { styles } from "./styles";
 import { DTMAddRow, DTMRowItem } from "./types";
 
 interface KendoPanelProps<T> {
@@ -71,7 +73,8 @@ export function KendoPanel<T extends { id?: string }>({
 }: KendoPanelProps<DocumentType>) {
   const intl = useIntl();
   const getTranslatedText = (key: string) => key ? intl.formatMessage({ id: key }) : "";
-  const classes = KendoGridStyles();
+  const classes = styles();
+  const gridClasses = KendoGridStyles();
   const actualData: DocumentType[] = cloneDeep(gridData);
   const [noDataMessage, setNoDataMessage] = useState(<span />);
   const [isLoading, setIsLoading] = useState(false);
@@ -322,6 +325,9 @@ export function KendoPanel<T extends { id?: string }>({
 
   // On field config: inline edit
   const update = (dataItem: DTMRowItem) => {
+    // need to convert
+    dataItem.active = dataItem.active === true || dataItem.active.toString() ===
+    getTranslatedText(TranslatedText[DisplayText.ACTIVE]);
     const newData = {
       documentTypeName: dataItem.documentTypeName,
       documentTypeAcronym: dataItem.documentTypeAcronym,
@@ -531,77 +537,83 @@ export function KendoPanel<T extends { id?: string }>({
   // Hide Choose Operator Tooltip. There is Kendo-react configuration to do this
   hideOperatorTooltip();
 
-  return (
+  const tableRenderer = ({ width }: Size) => (
     <>
-      <Grid>
-        {isLoading && <Loader />}
-        <Grid item>
-          <Box mb={2}>
-            <Grid container={true}>
-              <Grid item xs>
-                <GridTitle translation="documenttype.management" />
-              </Grid>
-              <Grid item>
-                <Button
-                  onClick={exportDAMDialog.open}
-                  variant="outlined"
-                  className={classes.exportBtn}
-                >
-                  <Text translation={"common.export.dam.details"} />
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={addNewRowObject}
-                  className={ disabled ? classes.disabledAddBtn : classes.addBtn}
-                  {...{ disabled }}
-                >
-                  <Text translation={"common.add.document.type"} />
-                </Button>
-              </Grid>
+      <KendoGlobalization>
+        <KendoGrid
+          className={`${gridClasses.grid} no-row-pointer`}
+          style={{ width: `${width}px` }}
+          data={result}
+          sortable={true}
+          filterable={true}
+          reorderable={false}
+          pageable={gridConfiguration.pagerSettings}
+          resizable={true}
+          groupable={true}
+          total={resultState.total}
+          cellRender={CellRender}
+          onDataStateChange={onDataStateChange}
+          {...dataState}
+          onExpandChange={onExpandChange}
+          expandField="expanded"
+          editField={gridEditID}
+          onItemChange={itemChange}
+          onColumnReorder={columnReorder}
+          onColumnResize={columnResize}
+        >
+          <GridToolbar>
+            <Grid item>
+              <Button
+                variant="outlined"
+                className={classes.clearButton}
+                onClick={async () => { await clearFilter(false); }}
+              >
+                <Text translation={"common.clear.filters"} />
+              </Button>
             </Grid>
-          </Box>
-        </Grid>
-        <Grid item={true}>
-          <KendoGlobalization>
-            <Kgrid
-              className={`${classes.kGrid} no-row-pointer`}
-              data={result}
-              sortable={true}
-              filterable={true}
-              reorderable={false}
-              pageable={gridConfiguration.pagerSettings}
-              resizable={true}
-              groupable={true}
-              total={resultState.total}
-              cellRender={CellRender}
-              onDataStateChange={onDataStateChange}
-              {...dataState}
-              onExpandChange={onExpandChange}
-              expandField="expanded"
-              editField={gridEditID}
-              onItemChange={itemChange}
-              onColumnReorder={columnReorder}
-              onColumnResize={columnResize}
+          </GridToolbar>
+          {renderColumns()}
+          <GridNoRecords>{noDataMessage}</GridNoRecords>
+        </KendoGrid>
+      </KendoGlobalization>
+      {isLoading && <Loader />}
+    </>
+  );
+
+  const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
+  return (
+    <Grid container>
+      <Grid item xs={12} className={gridClasses.headerGridItem}>
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
+            <GridTitle translation="documenttype.management" />
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={exportDAMDialog.open}
+              variant="outlined"
+              data-cy="Export-Dam-Button"
+              className={classes.exportBtn}
             >
-              <GridToolbar>
-                <Grid item>
-                  <Button
-                    variant="outlined"
-                    className={classes.clearButton}
-                    onClick={async () => { await clearFilter(false); }}
-                  >
-                    <Text translation={"common.clear.filters"} />
-                  </Button>
-                </Grid>
-              </GridToolbar>
-              {renderColumns()}
-              <GridNoRecords>{noDataMessage}</GridNoRecords>
-            </Kgrid>
-          </KendoGlobalization>
+              <Text translation={"common.export.dam.details"} />
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={addNewRowObject}
+              data-cy="Add-DocumentType-Button"
+              className={ disabled ? classes.disabledAddBtn : classes.addBtn}
+              {...{ disabled }}
+            >
+              <Text translation={"common.add.document.type"} />
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
+      <Grid item xs={12} className={gridClasses.kendoGridItem}>
+        {renderBody()}
+      </Grid>
       <ExportDAMDetails dialog={exportDAMDialog} />
-    </>
+    </Grid>
   );
 }
 

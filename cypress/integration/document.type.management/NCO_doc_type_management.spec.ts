@@ -137,6 +137,10 @@ context("NCO document type management", () => {
       cy.drEnterDocumentDescription({ description: "New Company description" });
     });
 
+    it("Select 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it(`Enters company name '${newCompanyName}'`, () => {
       cy.get("[name^=company-name-]").arrowType(newCompanyName);
     });
@@ -182,7 +186,7 @@ context("NCO document type management", () => {
     });
 
     it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
@@ -236,7 +240,7 @@ context("NCO document type management", () => {
     });
 
     it("Cancel newly created document creation", () => {
-      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick({ force: true });
     });
 
     it("Check filters for document type management", () => {
@@ -264,6 +268,7 @@ context("NCO document type management", () => {
     });
 
     it("Add Acronym", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
       cy.dtmAddAcronym({ acronym: "RED" });
     });
 
@@ -322,6 +327,7 @@ context("NCO document type management", () => {
     });
 
     it("Edit Acronym", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
       cy.dtmAddAcronym({ acronym: "YEL" });
     });
 
@@ -356,7 +362,7 @@ context("NCO document type management", () => {
 
     it("Click on edit added Doc Type", () => {
       cy.wait(1500);
-      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span>span>button").eq(0).arrowClick();
     });
 
     it("Inactivate doc type", () => {
@@ -366,7 +372,8 @@ context("NCO document type management", () => {
 
     it("Confirm Edit added Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
+        cy.wait(1500);
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span>span>button").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -375,7 +382,8 @@ context("NCO document type management", () => {
   context("Delete newly added Doc type", () => {
     it("Click on delete Doc Type", () => {
       cy.wait(1500);
-      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick();
+      // eslint-disable-next-line max-len
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span>span>button").eq(1).arrowClick({ force: true });
     });
 
     it("Confirm deleted Doc Type is no longer in the list", () => {

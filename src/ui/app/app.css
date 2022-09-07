@@ -4,6 +4,29 @@
   scroll-behavior: inherit !important;
 }
 
+/* use "hide-scroll" class to hide scrollbars but keep functionality */
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scroll::-webkit-scrollbar,
+.hide-scroll div::-webkit-scrollbar {
+  background-color: transparent;
+  width: 6px;
+  height: 6px;
+}
+
+.hide-scroll::-webkit-scrollbar-thumb,
+.hide-scroll div::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scroll,
+.hide-scroll div {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
 :root {
   --navy: #011FBB;
   --almost_black: #080B11;
@@ -22,6 +45,7 @@
 
 body {
   background-color: var(--white) !important;
+  overflow: hidden;
 }
 
 .react-datepicker-wrapper,
@@ -112,8 +136,9 @@ td#kendo-expandable-column[role="gridcell"] {
   flex-shrink: 1;
   overflow: hidden;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--almost_black);
+  text-transform: uppercase;
 }
 
 .k-toolbar,
@@ -200,6 +225,7 @@ td#kendo-expandable-column[role="gridcell"] {
   color: var(--almost_black);
   border-radius: 4px;
   border: 1px solid var(--lavender-mist);
+  background-color: var(--lavender-mist);
 }
 
 .k-grid .k-grid-table tbody tr {
@@ -349,3 +375,40 @@ td#kendo-expandable-column[role="gridcell"] {
 .k-list-container .k-popup .k-list .k-item {
   white-space: nowrap;
 }
+
+.MuiMenuItem-root span,
+.MuiAutocomplete-listbox {
+  font-family: "Sora"
+}
+
+.Toastify__toast,
+.Toastify__toast-body,
+.Toastify__toast-container,
+.Toastify__close-button {
+  font-family: 'Sora';
+}
+
+
+.containing-box-scrollbar::-webkit-scrollbar {
+  background-color: transparent;
+  width: 6px;
+  height: 6px;
+}
+
+.containing-box-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.containing-box-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--light-gray);
+  border-radius: 1ex;
+}
+
+.MuiFormGroup-root .MuiRadio-root {
+  padding-left: 0px;
+}
+
+.MuiFormGroup-row .MuiRadio-root {
+    padding-left: 11px;
+ }
+ 

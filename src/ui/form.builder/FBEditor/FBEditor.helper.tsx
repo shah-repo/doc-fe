@@ -1,6 +1,7 @@
 import { filter, includes, size, union } from "lodash";
 import React from "react";
 import { FB, FBData, FBEditorActions, FBEditorHelperProps, FBEditorState, FBEditorTitle, FBInputProps, FBInputType } from "..";
+import { SM } from "../../../App";
 
 export const withFBEditorHelper = <T extends FBEditorHelperProps>(
   Component: React.FunctionComponent<T>
@@ -9,9 +10,8 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
     openEditor,
     ...props
   }: T) => {
-
-    const { dialogState, workspaceState, formState } = FB.useStores();
-
+    const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
+    const { _documentRevisionFormState } = SM.useStores();
     function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
       const { type, stepIndex } = props;
       if (includes(FBEditorState.pickStepIndex, type)) {
@@ -36,7 +36,9 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       };
       handler[type]?.();
     }
-
+    const onFBEditorClose = () => {
+      leftPanelState?.closeDialog();
+    };
     openEditor = (props?: Partial<FBInputProps>) => () => {
       const { type, index } = props || {};
       if (!type) {
@@ -54,18 +56,38 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       }
       const { underValidation } = editorForm.props;
 
-      dialogState && dialogState.config({
-        open: true,
-        title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
-        maxWidth: "sm",
-        content: editorForm,
-        actions: (
-          <FBEditorActions
-            key={`fb-editor-actions-${type}`}
-            parentFormState={formState}
-            {...{ type, index }} />
-        ),
-      });
+      if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
+      if (leftPanelState) {
+        leftPanelState.setIndex(index || 0);
+        leftPanelState.config({
+          open: true,
+          showLeftPanelEditor: true,
+          title: <FBEditorTitle type={type} onFBEditorClose={onFBEditorClose} underValidation={underValidation}/>,
+          maxWidth: "sm",
+          content: editorForm,
+          actions: (
+            <FBEditorActions
+              key={`fb-editor-actions-${type}`}
+              parentFormState={formState}
+              outerContainerMargin={0}
+              {...{ type, index }} />
+          ),
+        });
+      } else {
+        dialogState && dialogState.config({
+          open: true,
+          title: underValidation ? <FBEditorTitle /> : "form.builder.create.field",
+          maxWidth: "sm",
+          content: editorForm,
+          actions: (
+            <FBEditorActions
+              key={`fb-editor-actions-${type}`}
+              parentFormState={formState}
+              {...{ type, index }} />
+          ),
+        });
+
+      }
     };
 
     return Component({

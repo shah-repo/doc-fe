@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -109,6 +110,7 @@ context("Test upgradability of old supplier form and record", () => {
                     type: "section",
                     index: 0,
                     label: "Section 1 - Completed by Requester",
+                    tabId: "details",
                     rules: "",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
@@ -119,6 +121,7 @@ context("Test upgradability of old supplier form and record", () => {
                     type: "texteditor",
                     index: 1,
                     label: "Contact Information (Name, title, email and phone number)",
+                    tabId: "details",
                     rules: "",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
@@ -129,6 +132,7 @@ context("Test upgradability of old supplier form and record", () => {
                     type: "radiogroup",
                     index: 2,
                     label: "Supplier Type:",
+                    tabId: "details",
                     rules: "",
                     options: [
                       {
@@ -157,6 +161,7 @@ context("Test upgradability of old supplier form and record", () => {
                     type: "radiogroup",
                     index: 3,
                     label: "Purpose:",
+                    tabId: "details",
                     rules: "",
                     options: [
                       {
@@ -318,12 +323,16 @@ context("Test upgradability of old supplier form and record", () => {
       });
 
       context("Add approvals field to form", () => {
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Click add new field", () => {
           cy.fbAddNewFieldWhenHiddenLastPlace();
         });
 
         it("Select approvals from given fields", () => {
-          cy.fbSelectItemFromNewFieldList({ field: "Approvals" });
+          cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Approvals" });
         });
 
         it("Click add field", () => {
@@ -342,12 +351,16 @@ context("Test upgradability of old supplier form and record", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
 
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Verify approvals block is present", () => {
           cy.get("input[data-cy^=\"fb-approvals-approvals\"]").should("exist");
         });
 
         it("Verify revision 2 is released", () => {
-          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
         });
       });
     });
@@ -366,6 +379,10 @@ context("Test upgradability of old supplier form and record", () => {
         cy.drClickUpgradeForm();
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Verify approvals block is present", () => {
         cy.get("input[data-cy^=\"fb-approvals-approvals\"]").should("exist");
       });
@@ -379,12 +396,16 @@ context("Test upgradability of old supplier form and record", () => {
           cy.pmSubmitForApproval();
         });
 
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Approve supplier document", () => {
           cy.ebApprove();
         });
 
         it("Verify revision is revision 1 - Released", () => {
-          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Released" });
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED });
         });
       });
     });
@@ -413,6 +434,10 @@ context("Test upgradability of old supplier form and record", () => {
           cy.drClickUpgradeForm();
         });
 
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Verify approvals block is present", () => {
           cy.get("input[data-cy^=\"fb-approvals-approvals\"]").should("exist");
         });
@@ -427,12 +452,16 @@ context("Test upgradability of old supplier form and record", () => {
           cy.pmSubmitForApproval();
         });
 
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Approve supplier document", () => {
           cy.ebApprove();
         });
 
         it("Verify revision is revision 1 - Released", () => {
-          cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
+          cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
         });
       });
     });

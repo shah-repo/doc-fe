@@ -4,8 +4,12 @@ import { useSelector } from "react-redux";
 import { userManagementSelectors } from "../../../../state/ducks/userManagement";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 
+interface Props {
+  portal?: boolean;
+  isDisabled?: boolean;
+}
 
-const SecurityGroups: React.FunctionComponent = () => {
+const SecurityGroups: React.FunctionComponent<Props> = ({ portal, isDisabled }) => {
   const intl = useIntl();
   const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
 
@@ -22,6 +26,8 @@ const SecurityGroups: React.FunctionComponent = () => {
         }),
       }}
       options={groupOptions}
+      portal={portal}
+      isDisabled={isDisabled}
     />
   );
 };

@@ -39,6 +39,8 @@ import "./commands/filters/commands";
 import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
 import "./commands/imap/commands";
+import "./commands/intermediate.page/commands";
+import "./commands/layout.new/commands";
 import "./commands/mpi/commands";
 import "./commands/navigation/commands";
 import "./commands/parts.materials/commands";
@@ -172,8 +174,8 @@ function skipTestIfNeeded(this: any, ...args) {
 }
 
 function markFutureTestsForSkippingIfNeeded(this: any) {
-  const { state, DontSkipOnFailure } = this.currentTest;
-  if (!DontSkipOnFailure && state === "failed") {
+  const { state, DontSkipOnFailure, _retries, _currentRetry } = this.currentTest;
+  if (!DontSkipOnFailure && state === "failed" && _retries === _currentRetry) {
     return cy.task("shouldSkip", true);
   }
 }

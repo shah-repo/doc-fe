@@ -45,21 +45,3 @@ export const toDocumentTypeBody = (values) => ({
   schema: typeof values.schema == "string" ? parseJSON(values.schema) : values.schema,
   fieldsConfig: typeof values.fieldsConfig === "string" ? parseJSON(values.fieldsConfig) : values.fieldsConfig,
 });
-
-export const toDocumentTypeIntialValues = (documentType) => ({
-  documentTypeName: documentType.documentTypeName,
-  documentTypeAcronym: documentType.documentTypeAcronym,
-  privateNumberPool: documentType.privateNumberPool,
-  canRedLine: documentType.canRedLine,
-  isQms: documentType.isQms,
-  needsSignature: documentType.needsSignature,
-  defaultTraining: documentType.defaultTraining,
-  equipmentEnforceProd: documentType.equipmentEnforceProd,
-  startingNumber: documentType.startingNumber,
-  hiddenForCreationForUsersWithoutTags: enumToOptions(documentType.hiddenForCreationForUsersWithoutTags),
-  defaultRevStage: enumToOptions([documentType.defaultRevStage]),
-  group: enumToOptions([documentType.group]),
-  category: documentType.category,
-  schema: stringifyJSON(documentType.schema),
-  fieldsConfig: stringifyJSON(documentType.fieldsConfig),
-});

@@ -163,6 +163,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                     ],
                     deleteDisabled: true,
                     deleteInFormDisabled: true,
+                    tabId: "overview",
                   },
                   {
                     name: "fb-primary-owner-eq",
@@ -178,6 +179,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                     validationAttribute: "Primary Owner",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "specification",
                   },
                   {
                     name: "fb-coordinator-eq",
@@ -193,6 +195,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                     validationAttribute: "Coordinator",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "specification",
                   },
                   {
                     index: 3,
@@ -208,6 +211,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
+                    tabId: "specification",
                   },
                   {
                     index: 4,
@@ -223,6 +227,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "Calibration",
+                    tabId: "specification",
                   },
                   {
                     label: "form.builder.approvals",
@@ -231,6 +236,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                     name: "fb-approvals-kycyk1n8",
                     uniqueSchemaItem: true,
                     index: 5,
+                    tabId: "overview",
                   },
                 ],
               },
@@ -296,6 +302,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_id",
@@ -311,6 +318,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 validationMode: "default",
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_maintainer",
@@ -326,6 +334,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 validationMode: "default",
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-equipment_due_date",
@@ -339,6 +348,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 validationMode: "default",
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-requipment-maintenance-section",
@@ -353,6 +363,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 validationMode: "default",
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -360,6 +371,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",
                 uniqueSchemaItem: true,
+                tabId: "overview",
                 index: 5,
               },
             ],
@@ -424,6 +436,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 ],
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_id",
@@ -439,6 +452,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 validationMode: "default",
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "equipment_maintainer",
@@ -454,6 +468,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 validationMode: "default",
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-equipment_due_date",
@@ -467,6 +482,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 validationMode: "default",
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 name: "fb-requipment-maintenance-section",
@@ -481,6 +497,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 validationMode: "default",
                 deleteInFormDisabled: true,
+                tabId: "details",
               },
               {
                 label: "form.builder.approvals",
@@ -489,6 +506,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 name: "fb-approvals-kybkhbpt",
                 uniqueSchemaItem: true,
                 index: 5,
+                tabId: "overview",
               },
             ],
           },
@@ -1127,12 +1145,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 label: "form.builder.mpiprocedure",
                 deleteDisabled: true,
                 deleteInFormDisabled: true,
+                tabId: "procedure",
               },
               {
                 name: "mpi-procedure-built-in",
                 type: "mpiprocedure",
                 index: 1,
                 stepIndex: 1,
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1166,6 +1186,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 type: "quantity",
                 index: 2,
                 label: "Start quantity",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1183,6 +1204,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 type: "quantity",
                 index: 3,
                 label: "Accepted quantity",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1200,6 +1222,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 type: "quantity",
                 index: 4,
                 label: "Rejected quantity",
+                tabId: "procedure",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1225,6 +1248,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 validationAttribute: "Approvals",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
             ],
           },
@@ -1289,6 +1313,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 editorConfig: {
                   id: createdPartDocument.documentId,
                 },
+                tabId: "overview",
               },
               {
                 name: "lhr_initial_quantity",
@@ -1302,6 +1327,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 validationAttribute: "Initial Quantity",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhr-end-quantity",
@@ -1316,6 +1342,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 validationAttribute: "End Quantity",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhr-build-type",
@@ -1340,6 +1367,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 validationAttribute: "Build Type",
                 deleteInFormDisabled: true,
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhr-due-date",
@@ -1352,6 +1380,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 validationMode: "default",
                 validationAttribute: "Due Date",
                 applicableValidationSchema: true,
+                tabId: "overview",
               },
               {
                 name: "lhrstep-built-in",
@@ -1362,6 +1391,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 validationMode: "default",
+                tabId: "details",
                 applicableValidationSchema: true,
                 stepIndex: 1,
                 editorConfig: {
@@ -1374,6 +1404,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                 deleteDisabled: true,
                 name: "fb-approvals-kvateryo",
                 uniqueSchemaItem: true,
+                tabId: "overview",
                 index: 6,
               },
             ],
@@ -1738,6 +1769,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      });
+
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -1748,6 +1787,10 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     context("Fill LHRs", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Enter 'Start quntity' for LHRs #1", () => {
         cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
       });
@@ -1763,15 +1806,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     context("Verify equipment select dialog on LHRs", () => {
       it("Click 'SELECT' for 'Equipment document - rev 1'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("[data-cy=\"form.builder.select\"]")
-            .eq(1)
-            .click({ force: true });
-        });
+        cy.get("[data-cy=\"form.builder.select\"]")
+          .eq(1)
+          .click({ force: true });
       });
 
       it("Open dropdown", () => {
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.wait(1000);
+        cy.get(`div[role=dialog] button[title="Open"]`).should("be.visible").arrowClick({ force: true });
       });
 
       it("Verify list item should have cal and pm ", () => {
@@ -1819,13 +1861,11 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       it("Verify background color is gray because it due is not expired", () => {
         SystemRequirement("REQ-4930");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
-          .should("have.css", "background-color", "rgb(212, 219, 225)");
+          .should("have.css", "background-color", "rgb(235, 237, 242)");
       });
 
       it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
-        cy.get(`div[data-cy="form.builder.change"]`).should("not.be.visible");
-        cy.get(`[data-cy="form.builder.lhrs.procedure.materials.title"]`).scrollIntoView();
-        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover();
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover().wait(1000);
         cy.get(`div[data-cy="form.builder.change"]`).should("be.visible");
       });
 
@@ -1847,6 +1887,9 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     context("Finish LHRs", () => {
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
       it("Add approver", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
@@ -1860,6 +1903,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Approve step", () => {
+        cy.wait(3000);
         cy.ebApprove();
       });
     });
@@ -1869,14 +1913,8 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
         cy.drClickReviseDocument();
       });
 
-      it("Update step #1 description", () => {
-        cy.cmpTurnOffAutosave();
-        cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
-        cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
-      });
-
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Add an Approval", () => {
@@ -1884,7 +1922,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Complete step", () => {
@@ -1892,6 +1930,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Approve step", () => {
+        cy.wait(3000);
         cy.ebApprove();
       });
     });
@@ -1950,11 +1989,21 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
       it("Navigate to LHR", () => {
         cy.navigToLHR();
+        cy.wait(5000);
       });
 
       it("Enter LHR document 1", () => {
         cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00004");
+        cy.wait(5000);
         cy.dlSelectFirstDocument();
+      });
+
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
       });
 
       it("Click 'START MPI'", () => {
@@ -1967,6 +2016,10 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     context("Fill LHRs", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Enter 'Start quntity' for LHRs #1", () => {
         cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
       });
@@ -1982,15 +2035,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     context("Verify equipment select dialog on LHRs", () => {
       it("Click 'SELECT' for 'Equipment document - rev 1'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("[data-cy=\"form.builder.select\"]")
-            .eq(1)
-            .click({ force: true });
-        });
+        cy.get("[data-cy=\"form.builder.select\"]")
+          .eq(1)
+          .click({ force: true });
       });
 
       it("Open dropdown", () => {
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick();
+        cy.wait(1000);
+        cy.get(`div[role=dialog] button[title="Open"]`).should("be.visible").arrowClick({ force: true });
       });
 
       it("Verify list item should have cal and pm ", () => {
@@ -2039,13 +2091,11 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       it("Verify background color is gray because it due is not expired", () => {
         SystemRequirement("REQ-4930");
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
-          .should("have.css", "background-color", "rgb(212, 219, 225)");
+          .should("have.css", "background-color", "rgb(235, 237, 242)");
       });
 
       it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
-        cy.get(`div[data-cy="form.builder.change"]`).should("not.be.visible");
-        cy.get(`[data-cy="form.builder.lhrs.procedure.materials.title"]`).scrollIntoView();
-        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover();
+        cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).realHover().wait(1000);
         cy.get(`div[data-cy="form.builder.change"]`).should("be.visible");
       });
 
@@ -2067,6 +2117,10 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     context("Finish LHRs", () => {
+      it("Select Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Add approver", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
       });
@@ -2080,6 +2134,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Approve step", () => {
+        cy.wait(3000);
         cy.ebApprove();
       });
     });
@@ -2089,14 +2144,8 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
         cy.drClickReviseDocument();
       });
 
-      it("Update step #1 description", () => {
-        cy.cmpTurnOffAutosave();
-        cy.get("div[contenteditable]").eq(0).arrowClick({ force: true }).arrowType(" updated!");
-        cy.get("div[data-cy=\"form.builder.step.number\"]").eq(0).arrowClick();
-      });
-
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Add an Approval", () => {
@@ -2104,7 +2153,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Complete step", () => {
@@ -2112,6 +2161,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Approve step", () => {
+        cy.wait(3000);
         cy.ebApprove();
       });
     });

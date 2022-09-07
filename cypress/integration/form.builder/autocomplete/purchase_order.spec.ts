@@ -127,7 +127,7 @@ context("Autocomplete 'Purchase Order' test", () => {
       });
 
       it("Get purchase order no", () => {
-        cy.get("#HeaderInfo-docId").then((po) => { purchaseOrderNo = po.text(); });
+        cy.get("[data-cy=\"HeaderInfo-docId\"]").then((po) => { purchaseOrderNo = po.text(); });
       });
 
       it("Select 'Open' for PO status", () => {
@@ -184,14 +184,18 @@ context("Autocomplete 'Purchase Order' test", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
 
-        it("Select 'Component Protocol' output document type", () => {
+        it("Select 'Clinical Protocol' output document type", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+        });
+
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
 
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 

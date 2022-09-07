@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -35,6 +36,14 @@ const materialNo = "MT-00004";
 const materialTitle = "Material document";
 const partNo = "PRT-00005";
 const partTitle = "Part document";
+const po = "PO #";
+const rev = "REVISION";
+const poStatus = "PO STATUS";
+const supplier = "SUPPLIER";
+const partNumber = "PART NUMBER";
+const amount = "AMOUNT";
+const requestor = "REQUESTOR";
+const issueDate = "ISSUE DATE";
 
 context("Purchase Order Landing Page", () => {
   before(() => {
@@ -287,6 +296,7 @@ context("Purchase Order Landing Page", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -314,6 +324,7 @@ context("Purchase Order Landing Page", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -327,6 +338,7 @@ context("Purchase Order Landing Page", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -338,6 +350,7 @@ context("Purchase Order Landing Page", () => {
                   {
                     label: "form.builder.approvals",
                     type: "poapprovals",
+                    tabId: "details",
                     deleteDisabled: false,
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
@@ -469,14 +482,14 @@ context("Purchase Order Landing Page", () => {
     });
 
     it("Verify all columns are present", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "PO #");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Revision");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "PO Status");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Supplier");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Part Number");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Amount");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Requestor");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "Issue Date");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${po}`);
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${rev}`);
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${poStatus}`);
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${supplier}`);
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${partNumber}`);
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", `${amount}`);
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", `${requestor}`);
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", `${issueDate}`);
     });
 
     it(`Verify drag and drop`, () => {
@@ -541,7 +554,7 @@ context("Purchase Order Landing Page", () => {
     });
 
     it("Check status of PO should be Draft", () => {
-      cy.poCheckStatus("Draft" );
+      cy.poCheckStatus(STATUS_TYPES_LABEL.DRAFT);
     });
 
     it("Click on 'Purchase Order' on sidebar", () => {
@@ -552,17 +565,17 @@ context("Purchase Order Landing Page", () => {
   context("Verify that arrow for sorting are present in all columns and verify asm and desc order", () => {
     context("Sort 'PO #'", () => {
       it("PO # should be in ascending order", () => {
-        cy.contains("PO #").eq(0).click();
+        cy.contains(`${po}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO #").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${po}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 8 });
       });
 
       it("PO # should be in descending order", () => {
-        cy.contains("PO #").eq(0).click();
+        cy.contains(`${po}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO #").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${po}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 8 });
       });
@@ -570,17 +583,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Revision'", () => {
       it("Revision should be in ascending order", () => {
-        cy.contains("Revision").eq(0).click();
+        cy.contains(`${rev}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${rev}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 8 });
       });
 
       it("Revision should be in descending order", () => {
-        cy.contains("Revision").eq(0).click();
+        cy.contains(`${rev}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${rev}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 8 });
       });
@@ -588,17 +601,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'PO Status'", () => {
       it("PO Status should be in ascending order", () => {
-        cy.contains("PO Status").eq(0).click();
+        cy.contains(`${poStatus}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${poStatus}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 8 });
       });
 
       it("PO Status should be in descending order", () => {
-        cy.contains("PO Status").eq(0).click();
+        cy.contains(`${poStatus}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${poStatus}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 8 });
       });
@@ -606,17 +619,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Supplier'", () => {
       it("Supplier should be in ascending order", () => {
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.get("[aria-colindex]").contains(`${supplier}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.get("[aria-colindex]").contains(`${supplier}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
       });
 
       it("Supplier should be in descending order", () => {
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
+        cy.get("[aria-colindex]").contains(`${supplier}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.get("[aria-colindex]").contains(`${supplier}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 8 });
       });
@@ -624,17 +637,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Part Number'", () => {
       it("Part Number should be in ascending order", () => {
-        cy.contains("Part Number").eq(0).click();
+        cy.contains(`${partNumber}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${partNumber}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 8 });
       });
 
       it("Part Number should be in descending order", () => {
-        cy.contains("Part Number").eq(0).click();
+        cy.contains(`${partNumber}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${partNumber}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 8 });
       });
@@ -642,17 +655,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Amount'", () => {
       it("Amount should be in ascending order", () => {
-        cy.contains("Amount").eq(0).click();
+        cy.contains(`${amount}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${amount}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 8 });
       });
 
       it("Amount should be in descending order", () => {
-        cy.contains("Amount").eq(0).click();
+        cy.contains(`${amount}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${amount}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 8 });
       });
@@ -660,17 +673,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Requestor'", () => {
       it("Requestor should be in ascending order", () => {
-        cy.contains("Requestor").eq(0).click();
+        cy.contains(`${requestor}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${requestor}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 8 });
       });
 
       it("Requestor should be in descending order", () => {
-        cy.contains("Requestor").eq(0).click();
+        cy.contains(`${requestor}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${requestor}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 8 });
       });
@@ -678,17 +691,17 @@ context("Purchase Order Landing Page", () => {
 
     context("Sort 'Issue Date'", () => {
       it("Issue Date should be in ascending order", () => {
-        cy.contains("Issue Date").eq(0).click();
+        cy.contains(`${issueDate}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${issueDate}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 7, colLength: 8 });
       });
 
       it("Issue Date should be in descending order", () => {
-        cy.contains("Issue Date").eq(0).click();
+        cy.contains(`${issueDate}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${issueDate}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 7, colLength: 8 });
       });
@@ -752,10 +765,10 @@ context("Purchase Order Landing Page", () => {
       cy.get(`[aria-colindex="2"] input`).should("have.attr", "value", "1");
       cy.get(`[aria-colindex="3"] input`).should("have.attr", "value", "N/A");
       cy.get(`[aria-colindex="4"] input`).should("have.attr", "value", "N/A");
-      cy.get(`[aria-colindex="5"] input`).arrowType("N/A");
-      cy.get(`[aria-colindex="6"] input`).arrowType("N/A");
-      cy.get(`[aria-colindex="7"] input`).arrowType("Giovanni Reynolds");
-      cy.get(`[aria-colindex="8"] input`).arrowType("N/A");
+      cy.get(`[aria-colindex="5"] input`).should("have.attr", "value", "N/A");
+      cy.get(`[aria-colindex="6"] input`).should("have.attr", "value", "N/A");
+      cy.get(`[aria-colindex="7"] input`).should("have.attr", "value", "Giovanni Reynolds");
+      cy.get(`[aria-colindex="8"] input`).should("have.attr", "value", "N/A");
     });
 
     it("Verify that user is able to click button 'Clear Filters' and all filters should be cleared'", () => {
@@ -774,32 +787,32 @@ context("Purchase Order Landing Page", () => {
 
   context("Verify hide and freeze", () => {
     it("Verify hide", () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "PO #");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${po}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item").contains("Hide Column").arrowClick();
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "PO #");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${po}`);
     });
 
     it("Verify unhide", () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "PO #");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${po}`);
       cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
-      cy.get("ul>li[role=menuitem]").contains("PO #").parents("li").find("svg").arrowClick();
+      cy.get("ul>li[role=menuitem]").contains(`${po}`).parents("li").find("svg").arrowClick();
       cy.get("body").type("{esc}");
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "PO #");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${po}`);
     });
 
     it("Verify freeze", () => {
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "PO #");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${po}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "PO #");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${po}`);
     });
 
     it("Verify un-freeze", () => {
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "PO #");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${po}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "PO #");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${po}`);
     });
   });
 

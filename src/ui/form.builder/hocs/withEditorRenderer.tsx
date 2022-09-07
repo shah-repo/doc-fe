@@ -7,6 +7,7 @@ import { FB, FBData } from "..";
 import { isTranslation } from "../../translations/types";
 import FBButton from "../components/inputs/FBButton";
 import { FBFieldEditorComponent, omitLabelValidation, pickDefaultLabel } from "../defaults/editor";
+import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 import editorStore from "../stores/ui/FBEditorStore";
 import FBStore from "../stores/ui/FBStore";
@@ -139,7 +140,7 @@ export const withEditorRenderer =
         />
         <Box display="flex" flexDirection="row-reverse" mx={-1}>
           <FBButton label={buttonLabel} onClick={onClick} />
-          <FBButton label="common.cancel" onClick={editorStore.reset} />
+          <StyledCancelFBButton label="common.cancel" onClick={editorStore.reset} />
         </Box>
       </Box>
     );

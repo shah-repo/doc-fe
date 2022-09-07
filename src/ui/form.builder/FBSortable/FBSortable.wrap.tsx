@@ -1,8 +1,9 @@
 import { map } from "lodash";
-import { useObserver } from "mobx-react";
+import { useObserver, Observer } from "mobx-react";
 import React from "react";
 import { arrayMove, SortableElement, SortEnd } from "react-sortable-hoc";
 import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState, FBSortableProps } from "..";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
 
 export const withFBSortable = <T extends FBSortableProps>(
   Component: React.FunctionComponent<T>,
@@ -12,6 +13,7 @@ export const withFBSortable = <T extends FBSortableProps>(
   }: T) => {
 
     const { workspaceState } = FB.useStores();
+    const { _tabsState } = SM.useStores();
 
     const schemaField = (schemaItem: FBSchemaProps): React.ReactNode | undefined => {
       const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
@@ -23,19 +25,26 @@ export const withFBSortable = <T extends FBSortableProps>(
       });
     };
 
+    const isHiddenByRules = (item: FBSchemaProps) => workspaceState?.hiddenFieldsByRules?.has(item.name as string);
+
     const SortableItem = SortableElement(({ value }: { value: FBSchemaProps }) => (
-      <li style={{ listStyleType: "none" }}>
-        <FBFieldWrapper
-          key={`fb-sortable-wrapper-${value.index}`}
-          inputProps={value as FBInputProps}
-        >
-          {schemaField(value)}
-        </FBFieldWrapper>
-      </li>
+      <Observer>
+        {() => (
+          <li style={{ listStyleType: "none", display: isHiddenByRules(value) ? "none" : "block" }}>
+            <FBFieldWrapper
+              key={`fb-sortable-wrapper-${value.index}`}
+              inputProps={value as FBInputProps}
+            >
+              {schemaField(value)}
+            </FBFieldWrapper>
+          </li>
+        )}
+      </Observer>
     ));
 
     const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
-      if (schemaItem.deleted || schemaItem.hidden) { return; }
+      if (schemaItem.deleted || schemaItem.hidden ||
+        (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
       return (
         <SortableItem
           key={`fb-sortable-item-${index}`}

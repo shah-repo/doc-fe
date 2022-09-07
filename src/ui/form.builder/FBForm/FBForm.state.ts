@@ -32,6 +32,7 @@ class FBFormState extends FBSchemaState {
   @observable public helpers = new Map<string, string>();
   @observable public inputState = new Map<string, FBInputState>();
   @observable public locked = new Map<string, FBLockValue>();
+  @observable public approvalMap = {};
 
   public constructor({
     schema,
@@ -137,6 +138,9 @@ class FBFormState extends FBSchemaState {
     this.inputState.get(fieldName)?.setValue(undefined);
   };
 
+  @action public setApprovalMap = (approvals) => {
+    set(this, "approvalMap", { ...this.approvalMap, ...approvals });
+  };
   @action public setRules = (rules: Dictionary<string>) =>
     set(this.rules, rules);
 

@@ -3,16 +3,16 @@ import classNames from "classnames";
 import React, { useEffect, useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
-import { ReactComponent as RemoveDocumentActive } from "../../../../assets/images/circle-delete-second.svg";
-import { ReactComponent as RemoveDocument } from "../../../../assets/images/circle-delete.svg";
+import { ReactComponent as RemoveDocument } from "../../../../assets/images/trash.svg";
+import { ReactComponent as RemoveDocumentActive } from "../../../../assets/images/trashHover.svg";
 import { Attachment } from "../../../../state/ducks/attachments/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { Document, DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import Text from "../../../components/Text";
+import { CustomStyleTooltip } from "../../../dashboard.new/line.items/common/CustomStyleTooltip";
 import { documentRevisionStatusContextFromDocList } from "../../../documentRevision/DocumentRevisionsManager.container";
 import { isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
-import Colors from "../../../layout/theme/utils/colors";
 import FileIcon from "./icon";
 import { styles } from "./utils/styles";
 import { AttachmentIconProps } from "./utils/types";
@@ -93,7 +93,6 @@ AttachmentIconProps
       marginRight="10px"
       visibility={isMouseInside ? "visible" : "hidden"}
       borderRadius={4}
-      bgcolor={Colors.light_red}
       onMouseEnter={() => setRemoveHover?.(!disabled)}
       onMouseLeave={() => setRemoveHover?.(false)}
     >
@@ -102,11 +101,20 @@ AttachmentIconProps
         onClick={handleRemove && handleRemove(file)}
         id="AttachmentIconPresenter-handleRemove"
       >
-        {removeHover ?
-          <Tooltip title={<Text translation={"common.delete"} />}>
+        {removeHover ? (
+          <CustomStyleTooltip
+            title={<Text translation={"common.delete"} />}
+            placement="top"
+            arrow
+            classes={{
+              tooltipPlacementTop: classes.tooltipPlacementTop,
+            }}
+          >
             <RemoveDocumentActive />
-          </Tooltip> :
-          <RemoveDocument />}
+          </CustomStyleTooltip>
+        ) : (
+          <RemoveDocument />
+        )}
       </Button>
     </Box>
   );

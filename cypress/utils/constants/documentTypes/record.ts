@@ -2,7 +2,6 @@ import { DOC_TYPE_GROUP } from "../../../../src/state/ducks/documentRevisions/do
 import { IdocumentTypeDto } from "../../../support/commands";
 import { Categories } from "../categories";
 
-
 export const LegalRecord: IdocumentTypeDto = {
   documentTypeName: "Legal Record",
   documentTypeAcronym: "LR-",

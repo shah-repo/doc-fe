@@ -10,8 +10,8 @@ const FBHyperlink: React.FunctionComponent<FBHyperlinkProps> = ({
   ...props
 }) => (
   <FBInput {...props} type="hyperlink">
-    <Link rel="noopener" {...{ onClick }}>
-      <Box fontSize="h6.fontSize">{label}</Box>
+    <Link rel="noopener" {...{ onClick }} underline="hover">
+      <Box fontSize={12} fontWeight= {600} lineHeight="15px">{label}</Box>
     </Link>
   </FBInput>
 );

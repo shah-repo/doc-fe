@@ -2,10 +2,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { BulkImport } from "../../utils/constants/documentTypes/bulkImport";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -130,6 +130,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Select Form Document For Import",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-add-column-document-record-id",
@@ -155,6 +156,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Column Document/Record Id?",
                     deleteInFormDisabled: false,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-output-document-type",
@@ -172,6 +174,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Select Output Document Type",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-download-sheet",
@@ -181,6 +184,7 @@ context("Export Bulk", () => {
                     deleteDisabled: true,
                     editorProperties: [],
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-import",
@@ -189,6 +193,7 @@ context("Export Bulk", () => {
                     label: "EXCEL FOR IMPORT",
                     deleteDisabled: false,
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-import-file",
@@ -204,6 +209,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Upload excel with data for import",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-logging",
@@ -212,6 +218,7 @@ context("Export Bulk", () => {
                     label: "Mass Create Logs",
                     deleteDisabled: false,
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-logging-file",
@@ -226,6 +233,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Logs",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     index: 8,
@@ -238,6 +246,7 @@ context("Export Bulk", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "textfield",
+                    tabId: "details",
                   },
                   {
                     index: 9,
@@ -251,6 +260,7 @@ context("Export Bulk", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "textfield",
+                    tabId: "details",
                   },
                   {
                     index: 10,
@@ -266,6 +276,7 @@ context("Export Bulk", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     applicableValidationSchema: true,
+                    tabId: "details",
                     editorProperties: [],
                     label: "Inline approval",
                     editorConfig: {
@@ -355,6 +366,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Select Form Document For Import",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-add-column-document-record-id",
@@ -380,6 +392,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Column Document/Record Id?",
                     deleteInFormDisabled: false,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-output-document-type",
@@ -397,6 +410,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Select Output Document Type",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-download-sheet",
@@ -406,6 +420,7 @@ context("Export Bulk", () => {
                     deleteDisabled: true,
                     editorProperties: [],
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-import",
@@ -414,6 +429,7 @@ context("Export Bulk", () => {
                     label: "EXCEL FOR IMPORT",
                     deleteDisabled: false,
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-import-file",
@@ -429,6 +445,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Upload excel with data for import",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-logging",
@@ -437,6 +454,7 @@ context("Export Bulk", () => {
                     label: "Mass Create Logs",
                     deleteDisabled: false,
                     deleteInFormDisabled: true,
+                    tabId: "details",
                   },
                   {
                     name: "fb-spreadsheet-for-logging-file",
@@ -451,6 +469,7 @@ context("Export Bulk", () => {
                     validationAttribute: "Logs",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "details",
                   },
                   {
                     label: "form.builder.approvals",
@@ -459,6 +478,7 @@ context("Export Bulk", () => {
                     name: "fb-approvals-l02u8tzp",
                     uniqueSchemaItem: true,
                     index: 8,
+                    tabId: "details",
                   },
                 ],
               },
@@ -514,11 +534,8 @@ context("Export Bulk", () => {
       cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
     });
 
-    it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
-        cy.unClick();
-      });
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Select form to be used for bulk creation", () => {
@@ -552,14 +569,14 @@ context("Export Bulk", () => {
     });
   });
 
-  context("Bulk Import with WIP status", () => {
+  context(`Bulk Import with ${STATUS_TYPES_LABEL.WIP} status`, () => {
     it("Verify export", () => {
       SystemRequirement("REQ-3800");
-      cy.exportVerifyEmail({ status: "WIP", filename: "-1-Bulk-Creation-document" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-1-Bulk-Creation-document" });
     });
   });
 
-  context("Bulk Import Last Signed status", () => {
+  context(`Bulk Import ${STATUS_TYPES_LABEL.LAST_SIGNED} status`, () => {
     context("Add Bulk Import Last Signed", () => {
       it("Add inline approver", () => {
         cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].email }`);
@@ -573,6 +590,10 @@ context("Export Bulk", () => {
         cy.inlineApproval();
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Select Last Signed", () => {
         cy.contains("Last Signed").arrowClick();
         cy.progressBarShouldNotExist();
@@ -580,15 +601,26 @@ context("Export Bulk", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Last Signed", filename: "-1-Bulk-Creation-document" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.LAST_SIGNED, filename: "-1-Bulk-Creation-document",
+          pdfStatus: "Last Signed",
+        });
       });
     });
   });
 
-  context("Bulk Import Archive status", () => {
+  context(`Bulk Import ${STATUS_TYPES_LABEL.ARCHIVE} status`, () => {
     context("Add Bulk Import Archive", () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status record", () => {
         cy.contains("WIP").arrowClick();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Update section", () => {
@@ -601,12 +633,24 @@ context("Export Bulk", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Click Request Approval button", () => {
         cy.contains("Request approval").arrowClick();
       });
 
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Approve inline approval", () => {
         cy.inlineApproval();
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Select Archive", () => {
@@ -616,13 +660,20 @@ context("Export Bulk", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Archive", filename: "-1-Bulk-Creation-document" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.ARCHIVE, filename: "-1-Bulk-Creation-document",
+          pdfStatus: "Archive",
+        });
       });
     });
   });
 
-  context("Bulk Import Released status", () => {
+  context(`Bulk Import ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
     context("Add Bulk Import Released", () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status record", () => {
         cy.contains("WIP").arrowClick();
         cy.progressBarShouldNotExist();
@@ -631,16 +682,19 @@ context("Export Bulk", () => {
 
       it("Finalize and release button click'", () => {
         cy.reload();
-        cy.recApproveAndReleaseInlineRecord();
+        cy.recFinalizeAndReleaseRecord();
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-A-Bulk-Creation-document" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.RELEASED, filename: "-A-Bulk-Creation-document",
+          pdfStatus: "Released",
+        });
       });
     });
   });
 
-  context("Bulk Import Canceled status", () => {
+  context(`Bulk Import ${STATUS_TYPES_LABEL.CANCELED} status`, () => {
     context("Add Bulk Import Canceled", () => {
       it("Click Update record", () => {
         cy.drClickReviseDocument();
@@ -655,12 +709,15 @@ context("Export Bulk", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Canceled", filename: "-A-1-Bulk-Creation-document" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.CANCELED, filename: "-A-1-Bulk-Creation-document",
+          pdfStatus: "Canceled",
+        });
       });
     });
   });
 
-  context("Bulk Import In Review status", () => {
+  context(`Bulk Import ${STATUS_TYPES_LABEL.IN_REVIEW} status`, () => {
     context("Create a Bulk Import from form", () => {
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
@@ -684,11 +741,8 @@ context("Export Bulk", () => {
         cy.drEnterDocumentTitle( { name: "Bulk Import form" });
       });
 
-      it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").click();
-          cy.unClick();
-        });
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -714,7 +768,7 @@ context("Export Bulk", () => {
       });
     });
 
-    context("Add Bulk Import with In Review", () => {
+    context(`Add Bulk Import with ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
       it("Add inline approver", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email }`);
       });
@@ -730,7 +784,10 @@ context("Export Bulk", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "In Review", filename: "-A-Bulk-Import-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-A-Bulk-Import-form",
+          pdfStatus: "In Review",
+        });
       });
     });
   });

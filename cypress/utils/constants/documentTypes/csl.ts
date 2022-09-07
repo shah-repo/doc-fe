@@ -28,6 +28,7 @@ export const CSLDocType: IdocumentTypeDto = {
       validationAttribute: "Initial Quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "lot_usable_quantity",
@@ -42,6 +43,7 @@ export const CSLDocType: IdocumentTypeDto = {
       validationAttribute: "Usable Quantity",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "lot_expiry_date",
@@ -55,6 +57,7 @@ export const CSLDocType: IdocumentTypeDto = {
       validationAttribute: "Expiration Date",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "lot_part",
@@ -65,6 +68,7 @@ export const CSLDocType: IdocumentTypeDto = {
       placeholder: "Select the appropriate part for this lot",
       deleteDisabled: true,
       deleteInFormDisabled: true,
+      tabId: "details",
     },
   ],
   fieldsConfig: {

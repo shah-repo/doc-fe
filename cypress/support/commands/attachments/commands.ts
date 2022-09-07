@@ -110,7 +110,7 @@ Cypress.Commands.add("atchUploadUserListJSONForNCO", (params: {fileName: string;
 Cypress.Commands.add("atchUploadTemplateForBLC", (params: {fileName: string }) => {
   cy.fixture(`bulk.create/${params.fileName}`, "binary").then((fileContent) => {
     cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachments], () => {
-      cy.get("input[id^=fb-attachment-field-fb-spreadsheet-for-import-file]").attachFile({
+      cy.get("[id=\"sm-tabpanel-1\" ] input[id^=fb-attachment-field-fb-spreadsheet-for-import-file]").attachFile({
         fileContent: Cypress.Blob.binaryStringToBlob(fileContent,
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
         mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -124,8 +124,8 @@ Cypress.Commands.add("atchUploadTemplateForBLC", (params: {fileName: string }) =
 
 Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
-    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
+    cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment], () => {
+      cy.get("#AttachmentFieldPresenter-linkButton").arrowClick({ force: true });
       cy.get("#attachments-button-file-clean-copy").attachFile({
         fileContent: fileContent.toString(),
         fileName: params.fileName,
@@ -414,7 +414,7 @@ Cypress.Commands.add("excelDownloadTemplate", (params: {saveFileName: string  })
       }
     });
   }).as("attach");
-  cy.get("[data-cy=\"Download Excel Template\"]").arrowClick();
+  cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"Download Excel Template\"]").arrowClick();
   cy.wait("@attach").then((res) => {
     const file = Cypress.Blob.arrayBufferToBinaryString(res.response?.body.file);
     cy.writeFile("cypress/downloads/" + params.saveFileName, file, "binary");

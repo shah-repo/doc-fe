@@ -1,8 +1,10 @@
-import { first, omit } from "lodash";
+import { first } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { EBPartRequestBody, FB, FBAutocompleteAsyncOption, FBDialogState, FBEBPartForm, FBEBPartProps, FBEBPartState, PartType } from "..";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBEBPart = <T extends FBEBPartProps>(
@@ -26,6 +28,8 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     const { workspaceState, formState } = FB.useStores();
     const { childrenParts = [] } = workspaceState?.document || {};
     const childrenPartsForRevise = workspaceState?.document?.formInput?.childrenPartsForRevise as EBPartRequestBody[];
+    const dispatch = useDispatch();
+
     if (first(childrenParts) || !first(childrenPartsForRevise)) {
       partTypeDefaultValue = PartType.DocumentRevision;
       childrenPartsValue = first(childrenParts)?.id;
@@ -38,6 +42,12 @@ export const withFBEBPart = <T extends FBEBPartProps>(
       { childrenParts: first(childrenParts)?.id, childrenPartsForRevise: first(childrenPartsForRevise)?.id }
     );
     const { id: ebId } = workspaceState || {};
+
+    const updateAudit = useCallback(() => {
+      if (ebId) {
+        dispatch(documentRevisionsActions.loadAudit(ebId));
+      }
+    }, [dispatch, ebId]);
 
     useEffect(() => reaction(
       () => ebPartState?.childrenParts,
@@ -67,19 +77,19 @@ export const withFBEBPart = <T extends FBEBPartProps>(
     React.useEffect(() => reaction(
       () => formState?.inputState.get("childrenParts")?.value,
       (childPartId: string) => {
-        if (!childPartId || (childPartId !== ebPartState.childrenParts && ebPartState.childrenParts)) { return; }
+        if ((childPartId !== ebPartState.childrenParts && ebPartState.childrenParts)) { return; }
         const childrenParts = childPartId && childPartId !== "" ? [{ id: childPartId }] : [];
         const body = {
-          formInput: omit(formState?.getValues(), "childrenPartsForRevise"),
           childrenParts,
         };
         ebPartState.addExistingPartChild(
           ebId,
           body,
+          updateAudit
         );
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+    ), [ebId]);
 
     React.useEffect(() => reaction(
       () => formState?.inputState.get("childForRevise")?.value,
@@ -89,13 +99,13 @@ export const withFBEBPart = <T extends FBEBPartProps>(
         const body = {
           childrenParts: [],
           formInput: {
-            ...formState?.getValues(),
             childrenPartsForRevise,
           },
         };
         ebPartState.addExistingPartChild(
           ebId,
           body,
+          updateAudit
         );
       }
     ));

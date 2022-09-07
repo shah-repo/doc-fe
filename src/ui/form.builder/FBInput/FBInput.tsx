@@ -27,16 +27,19 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
   includeNotes,
   isOutput,
   lockOwnerName,
+  labelProps,
+  index,
 }) => (
   <>
     {!hidden && (
-      <Box mb={gutter ? 5 : 0} {...boxProps}>
+      <Box mb={gutter ? 1.875 : 0} {...boxProps} data-cy={`${type}-${index}`}>
         <Observer>
           {() => (
             <>{inputState?.includeNotes && <FBNotes {...{ name }} />}</>
           )}
         </Observer>
-        <FormControl fullWidth {...{ error }}>
+
+        <FormControl fullWidth {...{ error }} >
           <Box display="flex" flexDirection="row">
             <Observer>
               {() => (
@@ -52,12 +55,13 @@ const FBInput: React.FunctionComponent<FBInputProps> = ({
               )}
             </Observer>
             {!includes(FBInputState.omitLabel, type) && label && (
-              <FBLabel {...{ error, label, loading }} />
+              <FBLabel {...{ error, label, loading, labelProps }} />
             )}
           </Box>
 
           {children}
         </FormControl>
+
         {!isEmpty(helperText) && showErrorMsg && (
           <FormHelperText {...{ error }}>
             <Text message={helperText as string} />

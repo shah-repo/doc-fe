@@ -8,7 +8,8 @@ import { ChangeRequest } from "../changeRequest/types";
 import { Approval, Id, Nullable, Owner, User } from "../common/types";
 import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { DocumentGroupOptionsType, DocumentType } from "./documentType/types";
+import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from "./documentType/types";
+import { Employee } from "../company/types";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -46,6 +47,7 @@ export interface DocumentRevisionDocument {
   smartReferencesTo?: SmartReference[];
   smartReferencesFrom?: SmartReference[];
   typeSpecificConfig?: TypeSpecificConfig;
+  operators?: Employee[];
 }
 
 export interface SecurityList {
@@ -177,6 +179,7 @@ export interface SmartReference {
   toDocumentId?: Nullable<string>;
   type: SmartReferenceType;
   active?: boolean;
+  stepIndex?: Nullable<number>;
 }
 
 export enum SmartReferenceType {
@@ -231,6 +234,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   parentEquipment?: Id;
   equipmentSection?: string;
   redline?: boolean;
+  tabId?: string;
 }
 
 export interface DocumentRevisionSetAction {
@@ -326,6 +330,8 @@ export interface FBOutputDocumentType {
   documentTypeName?: string;
   groupOptions?: DocumentGroupOptionsType[];
   active?: boolean;
+  group?: DocumentGroupType;
+
 }
 
 export interface HeaderTableType {

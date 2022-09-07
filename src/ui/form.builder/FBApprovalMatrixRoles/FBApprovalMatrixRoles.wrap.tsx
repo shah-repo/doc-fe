@@ -1,6 +1,7 @@
+import { get, isEmpty } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBApprovalMatrixRolesActions, FBApprovalMatrixRolesProps, FBData, FBDialogState, FBForm } from "..";
+import { FB, FBApprovalMatrixRolesActions, FBApprovalMatrixRolesProps, FBDAMFields, FBData, FBDialogState, FBForm } from "..";
 
 export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
   Component: React.FunctionComponent<T>
@@ -13,8 +14,10 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     ...props
   }: T) => {
 
-    const { approvalMatrixFieldState } = FB.useStores();
+    const { approvalMatrixFieldState, workspaceState } = FB.useStores();
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
+    const { formInput } = workspaceState || {};
+    const darMatrix = get(formInput, FBDAMFields.DAR, []);
 
     onClick = () => {
       dialogState?.config({
@@ -26,7 +29,8 @@ export const withFBApprovalMatrixRoles = <T extends FBApprovalMatrixRolesProps>(
     };
 
     useObserver(() => {
-      approvalRoles = approvalMatrixFieldState?.data?.approvalRoles;
+      approvalRoles = isEmpty(approvalMatrixFieldState?.data?.approvalRoles) ? darMatrix :
+        approvalMatrixFieldState?.data?.approvalRoles;
     });
 
     return Component({

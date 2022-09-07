@@ -5,6 +5,7 @@ import List from "@material-ui/core/List";
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import cx from "classnames";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
@@ -95,7 +96,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
               </Box>
             )
             : (
-              <List>
+              <List className={cx(classes.list, "containing-box-scrollbar")}>
                 {
                   navigationItems.map((link: NavigationItem) => (
                     <NavigationLinkContainer

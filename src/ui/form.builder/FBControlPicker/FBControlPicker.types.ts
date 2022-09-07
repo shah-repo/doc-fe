@@ -15,6 +15,23 @@ type FBControlPickerType =
 | "customcontrols"
 | "buttons"
 | "instructions"
-| "actions";
+| "actions"
+| "favourites";
 
+export interface FBFavouritesBody {
+  fbComponent: string;
+}
+interface Favourites {
+  companyId: string;
+  createdAt: string;
+  employeeId: string;
+  fbComponent: string;
+  id: string;
+  updatedAt: string;
+}
+export interface FBFavouritesResponse {
+  results: Favourites[];
+  page_total: number;
+  total: number;
+}
 export type FBControlPickerDataProps = Partial<Record<FBControlPickerType, FBInputType[]>>;

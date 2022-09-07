@@ -1,11 +1,15 @@
-/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
-import { reaction } from "mobx";
+import { Dictionary, find, findIndex, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { autorun, reaction } from "mobx";
+import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
+import { useSelector } from "react-redux";
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
+import { SM } from "../../../App";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { ApplicationState } from "../../../state/reducers";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -78,11 +82,16 @@ export const withFBInput = <T extends FBInputProps>(
   }: T) => {
 
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
+    const { _documentRevisionFormState } = SM.useStores();
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
+
+    const feedbackDetails = useLocalStore(() => ({
+      error, helperText,
+    }));
 
     useEffect(() => {
       includeNotes =
@@ -93,9 +102,19 @@ export const withFBInput = <T extends FBInputProps>(
       inputState?.setIncludeNotes(includeNotes || false);
     }, []);
 
+    useEffect(() => {
+      formState?.validate();
+    }, [formState]);
 
-    helperText = formState?.errors.get(name) || helperText;
-    error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
+    useEffect(() => {
+      const disposeAutorun = autorun(() => {
+        const errorName = formState?.errors.get(name) || helperText;
+        feedbackDetails.error = formState?.errorValidation && showErrorMsg && !isUndefined(errorName);
+        feedbackDetails.helperText = errorName;
+      });
+      return disposeAutorun;
+    }, []);
+
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
@@ -138,16 +157,29 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
+    if (
+      (isOutput || formState?.workspaceMode !== FBWorkspaceModeOptions.DESIGN) &&
+      ![FBWorkspaceModeOptions.FORMPREVIEW, FBWorkspaceModeOptions.PREVIEW].includes(
+        formState?.workspaceMode as FBWorkspaceModeOptions
+      )
+    ) {
       const isUnderMode = (
-        !helperText && (
+        !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
           validationValue === "" ||
           (isArray(validationValue) && size(validationValue) === 0)
         )
       );
 
-      (validationMode === "visibility") && (hidden = isUnderMode);
+      if (validationMode === "visibility") {
+        hidden = isUnderMode;
+
+        if (isUnderMode) {
+          workspaceState?.addHiddenFieldByRules(name);
+        } else {
+          workspaceState?.deleteHiddenFieldByRules(name);
+        }
+      }
       (!disabled && validationMode === "disabled") && (disabled = isUnderMode);
     }
 
@@ -160,7 +192,6 @@ export const withFBInput = <T extends FBInputProps>(
             return;
           }
           const value = optionsToString?.(options);
-          formState?.setFieldValue(name, value, withState, omitFormValue);
           return value;
         },
         autocompleteasync() { return; },
@@ -221,7 +252,7 @@ export const withFBInput = <T extends FBInputProps>(
     useEffect(() => {
       if (!formState && !inputState) { return; }
       // Input states
-      formState!.inputState.set(name, inputState!);
+      formState?.inputState.set(name, inputState!);
 
       // Validation settings
       let attr = (label as string) || placeholder || validationAttribute || name;
@@ -260,11 +291,18 @@ export const withFBInput = <T extends FBInputProps>(
         }
       );
     }, []);
-
+    const group = _documentRevisionFormState?.documentType?.group || "OTHER";
+    const tabConfig = useSelector((state: ApplicationState) =>
+      documentTypeSelectors.getTabConfiguration(state, group));
     useEffect(() => {
       if (!bookmarked) { return; }
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
-      bookmarkState?.addBookmark({ name, label });
+      const schemaItm = find(
+        workspaceState?.schema,
+        (schemaItem) => !!(schemaItem.name && name?.includes(schemaItem.name))
+      );
+      const tabIndex = findIndex(tabConfig, (tab) => tab.tabId === schemaItm?.tabId);
+      bookmarkState?.addBookmark({ name, label, tabIndex });
     }, [bookmarked]);
 
     useEffect(() => {
@@ -292,13 +330,13 @@ export const withFBInput = <T extends FBInputProps>(
       includeContext,
       isInputOwner,
       validationMode,
-      helperText,
+      helperText: feedbackDetails.helperText,
       children,
       disabled,
       defaultValue,
       type,
       name,
-      error,
+      error: feedbackDetails.error,
       inputState,
       editorProperties,
       hidden,

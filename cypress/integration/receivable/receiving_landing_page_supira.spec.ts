@@ -42,14 +42,14 @@ const todaysDate = moment().tz("America/Los_Angeles");
 const todaysDateFormated = moment().tz("America/Los_Angeles").format("L");
 
 const COLUMN_HEADERS = [
-  "Receipt ID",
-  "Receipt Record State",
-  "Owner",
+  "RECEIPT ID",
+  "RECEIPT RECORD STATE",
+  "OWNER",
   "PO #",
-  "Released Date",
-  "Supplier",
-  "Part Number/Rev",
-  "PO Status",
+  "RELEASED DATE",
+  "SUPPLIER",
+  "PART NUMBER/REV",
+  "PO STATUS",
 ];
 
 context("Test Supplier Landing Page for Supira", () => {
@@ -467,6 +467,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "select",
                 index: 0,
                 label: "PO Status",
+                tabId: "details",
                 options: [
                   {
                     text: "Open",
@@ -494,6 +495,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "section",
                 index: 1,
                 label: "General Information",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -503,6 +505,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Requestor",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -528,6 +531,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "supplier",
                 index: 3,
                 label: "Supplier ",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -541,6 +545,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Order Date",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -565,6 +570,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "purchaseorder",
                 index: 5,
                 label: "Purchase Order",
+                tabId: "lineitems",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -578,6 +584,7 @@ context("Test Supplier Landing Page for Supira", () => {
                 type: "approvals",
                 index: 6,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -911,6 +918,7 @@ context("Test Supplier Landing Page for Supira", () => {
                     type: "poreceive",
                     index: 0,
                     label: "Receive PO",
+                    tabId: "details",
                     rules: "",
                     hidden: false,
                     deleted: false,
@@ -929,6 +937,7 @@ context("Test Supplier Landing Page for Supira", () => {
                   {
                     name: "fb-approvals-kzqkpxqm",
                     type: "approvals",
+                    tabId: "overview",
                     index: 1,
                     label: "form.builder.approvals",
                     deleteDisabled: true,
@@ -1278,7 +1287,7 @@ context("Test Supplier Landing Page for Supira", () => {
           const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
           it(`${columnHeader} should be in ascending order`, () => {
-            cy.contains(columnHeaderRegex).eq(0).arrowClick();
+            cy.contains(columnHeaderRegex).eq(0).arrowClick({ force: true });
             cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
               .should("be.exist");
             cy.wait(200);
@@ -1286,7 +1295,7 @@ context("Test Supplier Landing Page for Supira", () => {
           });
 
           it(`${columnHeader} should be in descending order`, () => {
-            cy.contains(columnHeaderRegex).eq(0).arrowClick();
+            cy.contains(columnHeaderRegex).eq(0).arrowClick({ force: true });
             cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
               .should("be.exist");
             cy.wait(200);
@@ -1307,6 +1316,10 @@ context("Test Supplier Landing Page for Supira", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.equipClickCreateNew();
       });
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Search for API PO document and select it", () => {
@@ -1337,7 +1350,7 @@ context("Test Supplier Landing Page for Supira", () => {
       cy.navigToReceivableList();
     });
 
-    it("Filter Receipt ID column", () => {
+    it("Filter RECEIPT ID column", () => {
       cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
       cy.get(`th[aria-colindex="7"] input`).arrowType("PRT-00005 - 1");
     });
@@ -1355,7 +1368,10 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.get(`[name^="fb-approvals-fb-approvals"]`).arrowClick().wait(500);
+      cy.get(`[name^="fb-approvals-fb-approvals"]`)
+        .autocompleteSelect(USERS[1].email);
+      cy.unClick();
     });
 
     it("Save PO", () => {
@@ -1377,7 +1393,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
-      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+      cy.get("tr[data-grid-row-index=\"0\"]").should("contain", "PRT-00005 - 1");
     });
 
     it("Navigate to created one", () => {
@@ -1393,7 +1409,7 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Verify value of PART NUMBER/REV value", () => {
-      cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
+      cy.get("tr[data-grid-row-index=\"0\"]").should("contain", "PRT-00005 - 1");
     });
 
     it("Verify export button exists", () => {
@@ -1402,7 +1418,6 @@ context("Test Supplier Landing Page for Supira", () => {
   });
 
   context("Verify PART NUMBER/REV when Released new one", () => {
-
     it("Filter RC-00001", () => {
       cy.get(`th[aria-colindex="1"] input`).arrowType("RC-00001");
     });
@@ -1412,27 +1427,15 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-approvals-fb-approvals\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.pmSubmitForApproval();
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
-      cy.listLoadingElementShouldNotExist();
+      cy.ebApprove();
     });
 
     it("Navigate to Receivable landing page", () => {

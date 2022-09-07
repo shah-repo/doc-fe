@@ -10,6 +10,7 @@ import { Group } from "../../state/ducks/auth/types";
 import { ChangeRequest } from "../../state/ducks/changeRequest/types";
 import { Approval, ApprovalStatus, Owner } from "../../state/ducks/common/types";
 import { Employee } from "../../state/ducks/company/types";
+import { STATUS_TYPES_LABEL } from "../../state/ducks/dashboard.new/my.feeds/types";
 import { DocumentType } from "../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions/types";
 import { getAuditDefaultValue } from "../common/utils/audit";
@@ -73,13 +74,13 @@ const AuditFactory: React.FunctionComponent<Props> = ({
       },
       fileupload() { return (<AuditAttachment audit={audit} />); },
       checkboxgroup() {
-        let arrayValue: string[] = [];
+        const arrayValue: string[] = [];
         try {
-          arrayValue = JSON.parse(auditValue);
+          arrayValue.push(JSON.parse(auditValue));
         } catch {
           arrayValue.push(auditValue);
         }
-        return (<div>{arrayValue.join(", ")}</div>);
+        return (<div>{arrayValue?.join(", ")}</div>);
       },
       procedure() {
         if (audit.field === "fileUploadCandidate") {
@@ -146,6 +147,10 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         returnValue = (audit.nextValue as DocumentType).documentTypeName;
         break;
       case "approvals.status":
+        if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
+          returnValue = (audit.nextValue as Employee).user?.name;
+          break;
+        }
       case "status":
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;
@@ -174,11 +179,12 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           </div>);
           break;
         }
-        returnValue = (<div data-cy={dataCy}>{(audit.nextValue as string)}</div>);
+        returnValue = (<div data-cy={dataCy}>{(STATUS_TYPES_LABEL[audit.nextValue as string])}</div>);
         break;
       case "s3link":
         returnValue = <AuditDownloadS3link s3link={audit.nextValue as string}/>;
         break;
+      case "childrenParts":
       case "formDocument": {
         const { name, displayRevision, document } = audit.nextValue as DocumentRevision;
         returnValue = (<div data-cy={dataCy}>{`${document.docId} - revision ${displayRevision} - ${name}`}</div>);

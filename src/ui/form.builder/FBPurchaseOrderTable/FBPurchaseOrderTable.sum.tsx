@@ -8,7 +8,9 @@ import React from "react";
 import { FormattedNumber } from "react-intl";
 import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell } from "..";
 import Text from "../../components/Text";
+import { FBTableCellStyles } from "../styles/FBTableCell.styles";
 import { FBPurchaseOrderTableSumProps } from "./FBPurchaseOrderTable.types";
+import createLotButtonStyles from "./styledCreateLotButton";
 
 
 const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumProps> = ({
@@ -18,54 +20,66 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
   items = [],
   calculation,
   mode,
-}) => (
-  <Table className={classes?.table}>
-    <TableHead>
-      <TableRow>
-        {mode === "preview" && <FBTableCell />}
-        {mode !== "preview" && <FBTableCell label="form.builder.field.tax" align="right"/>}
-        {mode !== "preview" && <FBTableCell label="form.builder.sum" align="right"/>}
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      <FBMapWrapper<FBPurchaseOrderItem[]> collection={items}>
-        {(item: FBPurchaseOrderItem, index) => (
-          <TableRow
-            key={`fb-po-item-${item.id}-${index}`}
-            onClick={() => handleItem && handleItem(item)}
-          >
-            {mode === "preview" && !(item?.type === "service") &&
-              <FBTableCell align="right">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ margin: 0 }}
-                  onClick={(e) => handleLot && handleLot(e, item)}>
-                  <Text translation="form.builder.po.create.a.lot" />
-                </Button>
-              </FBTableCell>
-            }
-            {mode !== "preview" &&
-              <FBTableCell align="right">
-                {item.tax && <CheckBoxIcon className="FBIcon-root" fontSize="small" />}
-                {!item.tax && <CheckBoxOutlineBlankIcon className="FBIcon-root" fontSize="small" />}
-              </FBTableCell>
-            }
-            {mode !== "preview" &&
-              <FBTableCell align="right" data-cy="poSum" >
-                <FormattedNumber
-                  value={Number(item.totalAmount)}
-                  // eslint-disable-next-line react/style-prop-object
-                  style="currency"
-                  currency={calculation?.currency}
-                />
-              </FBTableCell>
-            }
-          </TableRow>
-        )}
-      </FBMapWrapper>
-    </TableBody>
-  </Table>
-);
+  isReceivable,
+}) => {
+  const cellStyle = FBTableCellStyles();
+  const lotButtonStyles = createLotButtonStyles();
+
+  return (
+    <Table className={classes?.table}>
+      <TableHead>
+        {isReceivable && <TableRow>
+          <FBTableCell colSpan={1} />
+        </TableRow>}
+        <TableRow>
+          {mode === "preview" && <FBTableCell />}
+          {mode !== "preview" && <FBTableCell label="form.builder.field.tax" align="right"
+            className={`${cellStyle.cellFont} ${cellStyle.cellFontWeightLow}`}
+          />}
+          {mode !== "preview" && <FBTableCell label="form.builder.sum" align="right"
+            className={`${cellStyle.cellFont} ${cellStyle.cellFontWeightLow}`}
+          />}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <FBMapWrapper<FBPurchaseOrderItem[]> collection={items}>
+          {(item: FBPurchaseOrderItem, index) => (
+            <TableRow
+              key={`fb-po-item-${item.id}-${index}`}
+              onClick={() => handleItem && handleItem(item)}
+            >
+              {mode === "preview" && !(item?.type === "service") &&
+                <FBTableCell align="center">
+                  <Button
+                    variant="outlined"
+                    className={lotButtonStyles.lotButton}
+                    onClick={(e) => handleLot && handleLot(e, item)}>
+                    <Text translation="form.builder.po.create.a.lot" />
+                  </Button>
+                </FBTableCell>
+              }
+              {mode !== "preview" &&
+                <FBTableCell align="right">
+                  {item.tax && <CheckBoxIcon className="FBIcon-root" fontSize="small" />}
+                  {!item.tax && <CheckBoxOutlineBlankIcon className="FBIcon-root" fontSize="small" />}
+                </FBTableCell>
+              }
+              {mode !== "preview" &&
+                <FBTableCell align="right" data-cy="poSum" >
+                  <FormattedNumber
+                    value={Number(item.totalAmount)}
+                    // eslint-disable-next-line react/style-prop-object
+                    style="currency"
+                    currency={calculation?.currency}
+                  />
+                </FBTableCell>
+              }
+            </TableRow>
+          )}
+        </FBMapWrapper>
+      </TableBody>
+    </Table>
+  );
+};
 
 export default FBPurchaseOrderTableSum;

@@ -309,6 +309,7 @@ context("Autocomplete test", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -336,6 +337,7 @@ context("Autocomplete test", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -349,6 +351,7 @@ context("Autocomplete test", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -359,6 +362,7 @@ context("Autocomplete test", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "poapprovals",
                     deleteDisabled: false,
                     name: "fb-po-approvals-kqqix31p",
@@ -573,6 +577,7 @@ context("Autocomplete test", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -583,6 +588,7 @@ context("Autocomplete test", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -596,6 +602,7 @@ context("Autocomplete test", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -609,6 +616,7 @@ context("Autocomplete test", () => {
                 type: "textfield",
                 index: 3,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -618,6 +626,7 @@ context("Autocomplete test", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ki5yh7ba",
@@ -681,6 +690,7 @@ context("Autocomplete test", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -695,6 +705,7 @@ context("Autocomplete test", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -709,6 +720,7 @@ context("Autocomplete test", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -722,6 +734,7 @@ context("Autocomplete test", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -732,6 +745,7 @@ context("Autocomplete test", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -750,6 +764,7 @@ context("Autocomplete test", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "details",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ksherq6d",
@@ -811,6 +826,10 @@ context("Autocomplete test", () => {
       cy.drSelectReferences( "Part document" );
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -845,10 +864,14 @@ context("Autocomplete test", () => {
       cy.pmSubmitForApproval();
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
@@ -898,7 +921,6 @@ context("Autocomplete test", () => {
     it("Approve and release FORM document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        // cy.fbClickButton({ el: "updateRecord" });
       });
     });
 
@@ -914,16 +936,23 @@ context("Autocomplete test", () => {
       cy.drEnterDocumentDescription({ description: "test description" });
     });
 
+    it("Navigate to Approval roles tab", () => {
+      cy.drSelectApprovalRolesTab();
+    });
+
     it("Click on 'Add Another Role' button", () => {
       cy.get("button[data-cy=\"form.builder.add.another.role\"]").arrowClick();
     });
 
     it("Enter Approval Role " + approvalRoleName, () => {
-      cy.get("[data-cy=\"name\"]").arrowType(approvalRoleName);
+      cy.get("[data-cy=\"name\"]").scrollIntoView().arrowType(approvalRoleName).wait(500);
+      cy.unClick();
     });
 
     it("Click on 'Add' button", () => {
-      cy.get("button[data-cy=\"common.add\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.get("button[data-cy=\"common.add\"]").arrowClick();
+      });
     });
 
     it("Click on 'Create Document' button", () => {
@@ -965,9 +994,13 @@ context("Autocomplete test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Select 'Component Protocol' output document type", () => {
+    it("Select 'Clinical Protocol' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     context("Add Autocomplete fields", () => {
@@ -1075,13 +1108,14 @@ context("Autocomplete test", () => {
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Approve and release FORM document", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
         });
+        cy.fbClickButton({ el: "updateRecord" });
       });
     });
   });

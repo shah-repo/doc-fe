@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
@@ -328,10 +329,6 @@ context("Add/Remove groups from Training Curriculum", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -389,8 +386,8 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDoc1Id = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
     });
   });
 
@@ -424,6 +421,14 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Click Refresh on 'Document to trained on'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
@@ -442,19 +447,22 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.get("[name=training-validity]").arrowType("5");
     });
 
+    it("Select Groups to train 'Group1 and Group2'", () => {
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
+      cy.wait(2000);
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Select Groups to train 'Group1 and Group2'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
-      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
-    });
-
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Click Submit for Approval", () => {
@@ -476,6 +484,7 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it(`Open and complete training`, () => {
+      cy.wait(2000);
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc` });
       cy.trCompleteTraining();
     });
@@ -509,10 +518,6 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.navigToTrainingCurriculums();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Select training", () => {
       cy.trSelectFirstDocument();
     });
@@ -526,20 +531,26 @@ context("Add/Remove groups from Training Curriculum", () => {
       });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add new Group to train 'Group3'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
     });
 
     it("Remove group Group1", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick();
+      cy.get("[data-cy=training-select-groups-to-train]").parent().parent()
+        .find(".MuiChip-root.MuiAutocomplete-tag.MuiChip-deletable")
+        .contains("Group1").parent().parent().find("svg").arrowClick();
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select Approver", () => {

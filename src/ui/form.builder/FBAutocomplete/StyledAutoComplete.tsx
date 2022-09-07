@@ -1,4 +1,4 @@
-import { withStyles } from "@material-ui/core";
+import { Chip, withStyles } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
 export const StyledAutoComplete = withStyles((theme) => ({
@@ -6,3 +6,15 @@ export const StyledAutoComplete = withStyles((theme) => ({
     paddingRight: "28px",
   },
 }))(Autocomplete);
+
+export const StyledPopupAutoComplete = withStyles((theme) => ({
+  endAdornment: {
+    paddingRight: "5px",
+  },
+}))(Autocomplete);
+
+export const StyledChip = withStyles((theme) => ({
+  label: {
+    padding: "5px 8px",
+  },
+}))(Chip);

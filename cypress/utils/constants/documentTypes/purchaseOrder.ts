@@ -147,6 +147,7 @@ export const PurchaseOrderTest: IdocumentTypeDto = {
       validationAttribute: "PO Status",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "po-supplier-built-in",
@@ -161,6 +162,7 @@ export const PurchaseOrderTest: IdocumentTypeDto = {
       validationAttribute: "Supplier",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "po-items-built-in",
@@ -174,6 +176,7 @@ export const PurchaseOrderTest: IdocumentTypeDto = {
       validationAttribute: "Purchase Order",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "lineitems",
     },
   ],
 };
@@ -323,6 +326,7 @@ export const PurchaseOrderDocType:  IdocumentTypeDto = {
       validationAttribute: "PO Status",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "general-information-to-be-completed-by-requester-kc3oqlpn",
@@ -332,6 +336,7 @@ export const PurchaseOrderDocType:  IdocumentTypeDto = {
       applicableOn: [
         "ON_STATE_TO_IN_REVIEW",
       ],
+      tabId: "details",
     },
     {
       name: "requestor-k740hxlb",
@@ -351,6 +356,7 @@ export const PurchaseOrderDocType:  IdocumentTypeDto = {
       formValuesRules: {},
       validationAttribute: "Requestor",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "po-supplier-built-in",
@@ -365,6 +371,7 @@ export const PurchaseOrderDocType:  IdocumentTypeDto = {
       validationAttribute: "Supplier",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "ordered-k6mlhan7",
@@ -383,6 +390,7 @@ export const PurchaseOrderDocType:  IdocumentTypeDto = {
       formValuesRules: {},
       validationAttribute: "Order Date",
       applicableValidationSchema: true,
+      tabId: "details",
     },
     {
       name: "po-items-built-in",
@@ -396,6 +404,7 @@ export const PurchaseOrderDocType:  IdocumentTypeDto = {
       validationAttribute: "Purchase Order",
       deleteInFormDisabled: true,
       applicableValidationSchema: true,
+      tabId: "lineitems",
     },
   ],
 };

@@ -36,8 +36,8 @@ let createdTrainingCurriculumFormDocument;
 let developersGroup;
 const FIRST_USER = USERS[1];
 
-const approvalNotificationToday = momentInPST().format("MMM DD, YYYY");
-const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM DD, YYYY");
+const approvalNotificationToday = momentInPST().format("MMM D, YYYY");
+const approvalNotificationYesterday = momentInPST().subtract({ day: 1 }).format("MMM D, YYYY");
 
 context("Approval dates for AR and approval block", () => {
   before(() => {
@@ -382,6 +382,7 @@ context("Approval dates for AR and approval block", () => {
                   {
                     index: 0,
                     type: "textfield",
+                    tabId: "details",
                     name: "textfield-l39qj0uv",
                     hidden: false,
                     outputDisabled: false,
@@ -404,6 +405,7 @@ context("Approval dates for AR and approval block", () => {
                     type: "approvals",
                     index: 1,
                     label: "Approvals",
+                    tabId: "overview",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -515,6 +517,7 @@ context("Approval dates for AR and approval block", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -542,6 +545,7 @@ context("Approval dates for AR and approval block", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -555,6 +559,7 @@ context("Approval dates for AR and approval block", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -565,6 +570,7 @@ context("Approval dates for AR and approval block", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "poapprovals",
                     deleteDisabled: false,
                     name: "fb-po-approvals-kqqix31p",
@@ -690,6 +696,7 @@ context("Approval dates for AR and approval block", () => {
                 type: "section",
                 index: 0,
                 label: "Periodic Training",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -702,6 +709,7 @@ context("Approval dates for AR and approval block", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Documents to Train on",
+                tabId: "details",
                 rules: "|required",
                 multiple: true,
                 optionId: "36",
@@ -724,6 +732,7 @@ context("Approval dates for AR and approval block", () => {
                 type: "radiogroup",
                 index: 2,
                 label: "Refresh/repeat training periodically?",
+                tabId: "details",
                 rules: "required||",
                 options: [
                   {
@@ -746,6 +755,7 @@ context("Approval dates for AR and approval block", () => {
                 type: "quantity",
                 index: 3,
                 label: "Training Frequency (in days)",
+                tabId: "details",
                 rules: "required_if:training-refresh-training-periodically,Yes",
                 validators: {
                   required_if: {
@@ -767,6 +777,7 @@ context("Approval dates for AR and approval block", () => {
                 type: "section",
                 index: 4,
                 label: "Trainees Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -779,6 +790,7 @@ context("Approval dates for AR and approval block", () => {
                 type: "autocomplete",
                 index: 5,
                 label: "Groups to Train",
+                tabId: "details",
                 multiple: true,
                 optionId: "10",
                 placeholder: "Select groups",
@@ -797,6 +809,7 @@ context("Approval dates for AR and approval block", () => {
                 type: "autocomplete",
                 index: 6,
                 label: "Users to Train (if applicable)",
+                tabId: "details",
                 multiple: true,
                 optionId: "13",
                 placeholder: "Select users",
@@ -812,6 +825,7 @@ context("Approval dates for AR and approval block", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-l0wcpa0v",
@@ -1278,6 +1292,9 @@ context("Approval dates for AR and approval block", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
+        subject: `Can you please approve my request`,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
       };
       cy.wait(20000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {

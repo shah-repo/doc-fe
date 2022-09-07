@@ -8,12 +8,17 @@ export const styles = makeStyles(() =>
     },
     icon: {
       width: "15px",
+      cursor: "pointer",
     },
     listItem: {
       paddingLeft: "1px",
+      cursor: "unset",
     },
     actionIcon: {
       paddingLeft: "10px",
+    },
+    cursorPointer: {
+      cursor: "pointer",
     },
     viewTooltipText: {
       fontWeight: "bold",
@@ -25,6 +30,7 @@ export const styles = makeStyles(() =>
       borderLeft: `1px solid ${Colors.light_gray_blue}`,
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
+      cursor: "unset",
     },
     customTooltipWidth: {
       maxWidth: 500,

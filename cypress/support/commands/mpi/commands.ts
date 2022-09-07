@@ -25,6 +25,7 @@ declare global {
       mpiAddEquipmentToStep(params: {checkParameter?: boolean; numbOfStep: integer; equipment: string}): Chainable;
       mpiAddEquipmentParameterToStep(params: {numbOfStep: integer; equipmentDescription: string}): Chainable;
       mpiStartStep(params: {stepNumber: number}): Chainable;
+      mpiClickNotStarted(params: {stepNumber: number}): Chainable;
     }
   }
 }
@@ -62,8 +63,7 @@ Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
   cy.get("ul>li[role=option]").contains(params.material).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.quntity);
   cy.wait(500);
-  cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.unit).arrowClick();
+  cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.unit);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -136,4 +136,8 @@ Cypress.Commands.add("mpiStartStep", (params: {stepNumber: number}) => {
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("mpiClickNotStarted", (params: {stepNumber: number}) => {
+  cy.get("[data-cy=\"form.builder.step.noStarted\"]").eq(params.stepNumber - 1).arrowClick();
 });

@@ -4,45 +4,63 @@ import Colors from "../../layout/theme/utils/colors";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     submitButton: {
-      "background": Colors.medium_blue,
+      "height": "36px",
+      "borderRadius": "100px",
+      "backgroundColor": Colors.navy,
       "color": Colors.white,
-      "boxShadow": "none",
-      "margin": "0 10px 0 5px",
-      "flexGrow": 1,
       "&:hover": {
-        background: Colors.medium_blue,
+        background: Colors.navy,
       },
     },
     cancelButton: {
-      "background": Colors.light_blue,
-      "color": Colors.medium_blue,
-      "boxShadow": "none",
-      "margin": "0 5px 0 10px",
-      "flexGrow": 0.6,
+      "height": "36px",
+      "borderRadius": "100px",
+      "backgroundColor": Colors.white,
+      "color": Colors.navy,
       "&:hover": {
-        background: Colors.light_blue,
+        background: Colors.white,
+        boxShadow:
+          "0px 2px 4px -1px rgb(0 0 0 / 5%), 0px 4px 5px 0px rgb(0 0 0 / 5%), 0px 1px 10px 0px rgb(0 0 0 / 5%)",
       },
+    },
+    buttonLabel: {
+      fontWeight: 700,
+      fontSize: "12px",
+      lineHeight: "15px",
+      textTransform: "capitalize",
+      whiteSpace: "nowrap",
+      padding: "10.5px 20px",
     },
     dialogAction: {
-      display: "flex",
-      marginBottom: 10,
+      "display": "flex",
+      "justify-content": "flex-end",
+      "alignItems": "center",
+      "padding": "20px 20px 20px 0px",
+      "height": "76px",
+      "background": Colors.white_smoke,
     },
-    dialogContent: {
-      color: Colors.dark_gray,
-      opacity: 0.6,
+    contentContainer: {
+      flexWrap: "nowrap",
+      padding: "20px",
     },
-    iconContainer: {
-      "&:before": {
-        content: "''",
-        height: 40,
-        width: 45,
-        position: "absolute",
-        backgroundColor: Colors.red,
-        opacity: 0.1,
-        color: Colors.light_red,
-        transform: "translate(-10px, -6px)",
-        borderRadius: 11,
-      },
+    alertIcon: {
+      marginTop: "2px",
+      paddingRight: "20px",
+    },
+    alertTitle: {
+      fontWeight: 600,
+      fontSize: "18px",
+      lineHeight: "23px",
+      color: Colors.almost_black,
+      width: "378px",
+    },
+    contentText: {
+      "fontWeight": 400,
+      "fontSize": "14px",
+      "lineHeight": "21px",
+      "color": Colors.almost_black,
+      "paddingTop": "10px",
+      "white-space": "break-spaces",
     },
   }),
 );

@@ -10,7 +10,6 @@ import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { Supplier } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -34,6 +33,99 @@ let createdLotsFormDocument;
 let receivableDocumentType;
 let createdRecivableFormDocument;
 let createdReceivable1;
+
+const DL_COLUMN_HEADERS = [
+  "DOC ID",
+  "REVISION",
+  "DOCUMENT TITLE",
+  "TYPE",
+  "OWNER",
+  "AR ID",
+  "STATUS",
+  "EFFECTIVE DATE",
+];
+
+const GROUP_MGMT_COLUMN_HEADERS = [
+  "GROUP TYPE",
+  "NAME",
+  // "MEMBERS",
+  // "PERMISSIONS",
+  // "TAGS",
+  // "PARENT GROUPS",
+];
+
+const USER_MGMT_COLUMN_HEADERS = [
+  "SIGNED UP",
+  "NAME",
+  "EMAIL",
+  "GROUPS",
+  "ACTIVE",
+];
+
+const EQ_COLUMN_HEADERS = [
+  "ID",
+  "REVISION",
+  "STATE",
+  "TITLE",
+  "EFT OWNER",
+  "CAL DUE DATE",
+  "PM DUE DATE",
+  "EQ STATUS",
+];
+
+const SUPP_COLUMN_HEADERS = [
+  "SUPPLIER ID",
+  "SUPPLIER NAME",
+  "SUPPLIER LEVEL",
+  "SUPPLIER STATUS",
+  "STATE",
+  "OWNER",
+  "APPROVAL ID",
+];
+
+const PARTS_COLUMN_HEADERS = [
+  "PARTS ID",
+  "DOCUMENT TITLE",
+  "OWNER",
+  "STATE",
+  "APPROVAL ID",
+];
+
+const PO_COLUMN_HEADERS = [
+  "PO #",
+  "REVISION",
+  "PO STATUS",
+  "SUPPLIER",
+  "PART NUMBER",
+  "AMOUNT",
+  "REQUESTOR",
+  "ISSUE DATE",
+];
+
+const RECEIVING_COLUMN_HEADERS = [
+  "RECEIVE ID",
+  "DOCUMENT TITLE",
+  "OWNER",
+  "STATE",
+  "APPROVAL ID",
+];
+
+const AR_COLUMN_HEADERS = [
+  "AR ID",
+  "AR TITLE",
+  "OWNER",
+  "STATUS",
+];
+
+const RECORDS_COLUMN_HEADERS = [
+  "ID",
+  "REVISION",
+  "STATE",
+  "TITLE",
+  "OWNER",
+  "RELEASED DATE",
+  "FORM ID",
+];
 
 context("Sorting test", () => {
   context("[API]Prepare company", () => {
@@ -564,6 +656,7 @@ context("Sorting test", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -591,6 +684,7 @@ context("Sorting test", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -604,6 +698,7 @@ context("Sorting test", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -619,6 +714,7 @@ context("Sorting test", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
+                    tabId: "details",
                   },
                 ],
               },
@@ -741,11 +837,13 @@ context("Sorting test", () => {
                           index: 0,
                           type: "poreceive",
                           label: "Receivable",
+                          tabId: "details",
                           name: "receivable-kdptzei2",
                           applicableOn: ["ON_STATE_TO_IN_REVIEW"],
                         },
                         {
                           label: "form.builder.approvals",
+                          tabId: "details",
                           type: "approvals",
                           deleteDisabled: true,
                           name: "fb-approvals-kn7fbu5l",
@@ -902,6 +1000,7 @@ context("Sorting test", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -929,6 +1028,7 @@ context("Sorting test", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -942,6 +1042,7 @@ context("Sorting test", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -957,6 +1058,7 @@ context("Sorting test", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
+                    tabId: "details",
                   },
                 ],
               },
@@ -1103,6 +1205,7 @@ context("Sorting test", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -1130,6 +1233,7 @@ context("Sorting test", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1143,6 +1247,7 @@ context("Sorting test", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1158,6 +1263,7 @@ context("Sorting test", () => {
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
                     index: 3,
+                    tabId: "details",
                   },
                 ],
               },
@@ -1412,6 +1518,7 @@ context("Sorting test", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1426,6 +1533,7 @@ context("Sorting test", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1440,6 +1548,7 @@ context("Sorting test", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1453,6 +1562,7 @@ context("Sorting test", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -1463,6 +1573,7 @@ context("Sorting test", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -1481,6 +1592,7 @@ context("Sorting test", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "details",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ksherq6d",
@@ -1522,145 +1634,25 @@ context("Sorting test", () => {
       cy.navigToDocumentList();
     });
 
-    context("Sort 'Doc Id'", () => {
-      it("Doc Id should be in ascending order", () => {
-        cy.get("span").contains("Doc ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get("span").contains("Doc ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 8 });
-      });
+    DL_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-      it("Doc Id should be in descending order", () => {
-        cy.get("span").contains("Doc ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get("span").contains("Doc ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 8 });
-      });
-    });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 8 });
+        });
 
-    context("Sort 'Revision'", () => {
-      it("Revision should be in ascending order", () => {
-        cy.contains("Revision").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 1, colLength: 8 });
-      });
-
-      it("Revision should be in descending order", () => {
-        cy.contains("Revision").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 1, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Document title'", () => {
-      it("Document title should be in ascending order", () => {
-        cy.contains("Document title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Document title").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 2, colLength: 8 });
-      });
-
-      it("Document title should be in descending order", () => {
-        cy.contains("Document title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Document title").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 2, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Type'", () => {
-      it("Type should be in ascending order", () => {
-        cy.contains("Type").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Type").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 3, colLength: 8 });
-      });
-
-      it("Type should be in descending order", () => {
-        cy.contains("Type").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Type").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 3, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Owner'", () => {
-      it("Owner should be in ascending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 4, colLength: 8 });
-      });
-
-      it("Owner should be in descending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 4, colLength: 8 });
-      });
-    });
-
-    // context("Sort 'AR ID'", () => {
-    //   it("AR ID should be in ascending order", () => {
-    //     cy.contains("AR ID").eq(0).click();
-    //     cy.contains("AR ID").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-    //       .should("be.exist");
-    //     cy.verifyAscSort({ index: 5, colLength: 8 });
-    //   });
-
-    //   it("AR ID should be in descending order", () => {
-    //     cy.contains("AR ID").eq(0).click();
-    //     cy.contains("AR ID").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
-    //       .should("be.exist");
-    //     cy.verifyDesSort({ index: 5, colLength: 8 });
-    //   });
-    // });
-
-    context("Sort 'Status'", () => {
-      it("Status should be in ascending order", () => {
-        cy.contains("Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Status").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 6, colLength: 8 });
-      });
-
-      it("Status should be in descending order", () => {
-        cy.contains("Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Status").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 6, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Effective Date'", () => {
-      it("Effective Date should be in ascending order", () => {
-        cy.contains("Effective Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Effective Date").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 7, colLength: 8 });
-      });
-
-      it("Effective Date should be in descending order", () => {
-        cy.contains("Effective Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Effective Date").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 7, colLength: 8 });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 8 });
+        });
       });
     });
   });
@@ -1670,53 +1662,25 @@ context("Sorting test", () => {
       cy.grpNavigateToGroupManagement();
     });
 
-    // context("Sort 'Name'", () => {
-    //   it("Name should be in ascending order", () => {
-    //     cy.contains("Name").eq(0).click();
-    //     cy.contains("Name").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-    //       .should("be.exist");
-    //     cy.verifyAscSort({ index: 0, colLength: 3 });
-    //   });
+    GROUP_MGMT_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-    //   it("Name should be in descending order", () => {
-    //     cy.contains("Name").eq(0).click();
-    //     cy.contains("Name").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
-    //       .should("be.exist");
-    //     cy.verifyDesSort({ index: 0, colLength: 3 });
-    //   });
-    // });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 7 });
+        });
 
-    // context("Sort 'Members'", () => {
-    //   it("Members should be in ascending order", () => {
-    //     cy.contains("Members").eq(0).click();
-    //     cy.contains("Members").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-    //       .should("be.exist");
-    //     cy.verifyAscSort({ index: 1, colLength: 3 });
-    //   });
-
-    //   it("Members should be in descending order", () => {
-    //     cy.contains("Members").eq(0).click();
-    //     cy.contains("Members").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
-    //       .should("be.exist");
-    //     cy.verifyDesSort({ index: 1, colLength: 3 });
-    //   });
-    // });
-
-    context("Sort 'Group Type'", () => {
-      it("Group Type should be in ascending order", () => {
-        cy.contains("Group Type").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Group Type").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 7 });
-      });
-
-      it("Group Type should be in descending order", () => {
-        cy.contains("Group Type").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Group Type").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 7 });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 7 });
+        });
       });
     });
   });
@@ -1726,90 +1690,25 @@ context("Sorting test", () => {
       cy.usrNavigateToUserManagement();
     });
 
-    context("Sort 'Name'", () => {
-      it("Name should be in ascending order", () => {
-        cy.contains("Name").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Name").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 1, colLength: 6 });
-      });
+    USER_MGMT_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-      it("Name should be in descending order", () => {
-        cy.contains("Name").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Name").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 1, colLength: 6 });
-      });
-    });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 6 });
+        });
 
-    context("Sort 'Email'", () => {
-      it("Email should be in ascending order", () => {
-        cy.contains("Email").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Email").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 2, colLength: 6 });
-      });
-
-      it("Email should be in descending order", () => {
-        cy.contains("Email").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Email").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 2, colLength: 6 });
-      });
-    });
-
-    // context("Sort 'Groups'", () => {
-    //   it("Groups should be in ascending order", () => {
-    //     cy.contains("Groups").eq(0).click();
-    //     cy.contains("Groups").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-    //       .should("be.exist");
-    //     cy.verifyAscSort({ index: 2, colLength: 5 });
-    //   });
-
-    //   it("Groups should be in descending order", () => {
-    //     cy.contains("Groups").eq(0).click();
-    //     cy.contains("Groups").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
-    //       .should("be.exist");
-    //     cy.verifyDesSort({ index: 2, colLength: 5 });
-    //   });
-    // });
-
-    context("Sort 'Active'", () => {
-      it("Active should be in ascending order", () => {
-        cy.contains("Active").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Active").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 4, colLength: 6 });
-      });
-
-      it("Active should be in descending order", () => {
-        cy.contains("Active").eq(0).click();
-        cy.contains("Active").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 4, colLength: 6 });
-      });
-    });
-
-    context("Sort 'Signed up'", () => {
-      it("Signed up should be in ascending order", () => {
-        cy.contains("Signed Up").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Signed Up").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 6 });
-      });
-
-      it("Signed up should be in descending order", () => {
-        cy.contains("Signed Up").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Signed Up").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 6 });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 6 });
+        });
       });
     });
   });
@@ -1819,147 +1718,25 @@ context("Sorting test", () => {
       cy.navigToEquipment();
     });
 
-    context("Sort 'ID'", () => {
-      it("ID should be in ascending order", () => {
-        cy.contains("ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 8 });
-      });
+    EQ_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-      it("ID should be in descending order", () => {
-        cy.contains("ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 8 });
-      });
-    });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 8 });
+        });
 
-    context("Sort 'Revision'", () => {
-      it("Revision should be in ascending order", () => {
-        cy.contains("Revision").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 1, colLength: 8 });
-      });
-
-      it("Revision should be in descending order", () => {
-        cy.contains("Revision").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 1, colLength: 8 });
-      });
-    });
-
-    context("Sort 'State'", () => {
-      it("State should be in ascending order", () => {
-        cy.contains("State").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 2, colLength: 8 });
-      });
-
-      it("State should be in descending order", () => {
-        cy.contains("State").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 2, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Title'", () => {
-      it("Title should be in ascending order", () => {
-        cy.contains("Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Title").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 3, colLength: 8 });
-      });
-
-      it("Title should be in descending order", () => {
-        cy.contains("Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Title").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 3, colLength: 8 });
-      });
-    });
-
-    context("Sort 'EFT Owner'", () => {
-      it("EFT Owner should be in ascending order", () => {
-        cy.contains("EFT Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 4, colLength: 8 });
-      });
-
-      it("EFT Owner should be in descending order", () => {
-        cy.contains("EFT Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 4, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Cal Due Date'", () => {
-      it("Cal Due Date should be in ascending order", () => {
-        cy.contains("Cal Due Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 5, colLength: 8 });
-      });
-
-      it("Cal Due Date should be in descending order", () => {
-        cy.contains("Cal Due Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 5, colLength: 8 });
-      });
-    });
-
-    context("Sort 'PM Due Date'", () => {
-      it("PM Due Date should be in ascending order", () => {
-        cy.contains("PM Due Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 6, colLength: 8 });
-      });
-
-      it("PM Due Date should be in descending order", () => {
-        cy.contains("PM Due Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 6, colLength: 8 });
-      });
-    });
-
-    context("Sort 'EQ Status'", () => {
-      it("EQ Status should be in ascending order", () => {
-        cy.contains("EQ Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 7, colLength: 8 });
-      });
-
-      it("EQ Status should be in descending order", () => {
-        cy.contains("EQ Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 7, colLength: 8 });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 8 });
+        });
       });
     });
   });
@@ -1969,131 +1746,30 @@ context("Sorting test", () => {
       cy.navigToSuppliers();
     });
 
-    context("Sort 'Supplier ID'", () => {
-      it("Supplier ID should be in ascending order", () => {
-        cy.contains("Supplier ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 7 });
-      });
+    SUPP_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-      it("Supplier ID should be in descending order", () => {
-        cy.contains("Supplier ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 7 });
-      });
-    });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 7 });
+        });
 
-    context("Sort 'Supplier Name'", () => {
-      it("Supplier Name should be in ascending order", () => {
-        cy.contains("Supplier Name").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 1, colLength: 7 });
-      });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 7 });
 
-      it("Supplier Name should be in descending order", () => {
-        cy.contains("Supplier Name").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 1, colLength: 7 });
-      });
-    });
-
-    context("Sort 'Supplier Level'", () => {
-      it("Supplier Level should be in ascending order", () => {
-        cy.contains("Supplier Level").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 2, colLength: 7 });
-      });
-
-      it("Supplier Level should be in descending order", () => {
-        cy.contains("Supplier Level").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 2, colLength: 7 });
-      });
-    });
-
-    context("Sort 'Supplier Status'", () => {
-      it("Supplier Status should be in ascending order", () => {
-        cy.contains("Supplier Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 3, colLength: 7 });
-      });
-
-      it("Supplier Status should be in descending order", () => {
-        cy.contains("Supplier Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 3, colLength: 7 });
-      });
-    });
-
-    context("Sort 'State'", () => {
-      it("State should be in ascending order", () => {
-        cy.contains("State").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 4, colLength: 7 });
-      });
-
-      it("State should be in descending order", () => {
-        cy.contains("State").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 4, colLength: 7 });
-      });
-    });
-
-    context("Sort 'Owner'", () => {
-      it("Owner should be in ascending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 5, colLength: 7 });
-      });
-
-      it("Owner should be in descending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 5, colLength: 7 });
-      });
-    });
-
-    context("Sort 'Approval ID'", () => {
-      it("Approval ID should be in ascending order", () => {
-        cy.contains("Approval ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 6, colLength: 7 });
-      });
-
-      it("Approval ID should be in descending order", () => {
-        cy.contains("Approval ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 6, colLength: 7 });
+          // workaround for sorting issue between 'Supplier Level' and 'Supplier Status' columns
+          if (columnHeader === "SUPPLIER LEVEL") {
+            cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          }
+        });
       });
     });
   });
@@ -2103,93 +1779,25 @@ context("Sorting test", () => {
       cy.navigToParts();
     });
 
-    context("Sort 'Parts ID'", () => {
-      it("Parts ID should be in ascending order", () => {
-        cy.contains("Parts ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Parts ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 5 });
-      });
+    PARTS_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-      it("Parts ID should be in descending order", () => {
-        cy.contains("Parts ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Parts ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 5 });
-      });
-    });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 5 });
+        });
 
-    context("Sort 'Document Title'", () => {
-      it("Document Title should be in ascending order", () => {
-        cy.contains("Document Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 1, colLength: 5 });
-      });
-
-      it("Document Title should be in descending order", () => {
-        cy.contains("Document Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 1, colLength: 5 });
-      });
-    });
-
-    context("Sort 'Owner'", () => {
-      it("Owner should be in ascending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 2, colLength: 5 });
-      });
-
-      it("Owner should be in descending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 2, colLength: 5 });
-      });
-    });
-
-    context("Sort 'State'", () => {
-      it("State should be in ascending order", () => {
-        cy.contains("State").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 3, colLength: 5 });
-      });
-
-      it("State should be in descending order", () => {
-        cy.contains("State").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 3, colLength: 5 });
-      });
-    });
-
-    context("Sort 'Approval ID'", () => {
-      it("Approval ID should be in ascending order", () => {
-        cy.contains("Approval ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 4, colLength: 5 });
-      });
-
-      it("Approval ID should be in descending order", () => {
-        cy.contains("Approval ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 4, colLength: 5 });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 5 });
+        });
       });
     });
   });
@@ -2199,147 +1807,25 @@ context("Sorting test", () => {
       cy.navigToPurchaseOrder();
     });
 
-    context("Sort 'PO #'", () => {
-      it("PO # should be in ascending order", () => {
-        cy.contains("PO #").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO #").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 8 });
-      });
+    PO_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-      it("PO # should be in descending order", () => {
-        cy.contains("PO #").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO #").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 8 });
-      });
-    });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 8 });
+        });
 
-    context("Sort 'Revision'", () => {
-      it("Revision should be in ascending order", () => {
-        cy.contains("Revision").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 1, colLength: 8 });
-      });
-
-      it("Revision should be in descending order", () => {
-        cy.contains("Revision").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 1, colLength: 8 });
-      });
-    });
-
-    context("Sort 'PO Status'", () => {
-      it("PO Status should be in ascending order", () => {
-        cy.contains("PO Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 2, colLength: 8 });
-      });
-
-      it("PO Status should be in descending order", () => {
-        cy.contains("PO Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("PO Status").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 2, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Supplier'", () => {
-      it("Supplier should be in ascending order", () => {
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 3, colLength: 8 });
-      });
-
-      it("Supplier should be in descending order", () => {
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.get("[aria-colindex]").contains("Supplier").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 3, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Part Number'", () => {
-      it("Part Number should be in ascending order", () => {
-        cy.contains("Part Number").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 4, colLength: 8 });
-      });
-
-      it("Part Number should be in descending order", () => {
-        cy.contains("Part Number").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Part Number").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 4, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Amount'", () => {
-      it("Amount should be in ascending order", () => {
-        cy.contains("Amount").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 5, colLength: 8 });
-      });
-
-      it("Amount should be in descending order", () => {
-        cy.contains("Amount").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Amount").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 5, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Requestor'", () => {
-      it("Requestor should be in ascending order", () => {
-        cy.contains("Requestor").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 6, colLength: 8 });
-      });
-
-      it("Requestor should be in descending order", () => {
-        cy.contains("Requestor").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Requestor").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 6, colLength: 8 });
-      });
-    });
-
-    context("Sort 'Issue Date'", () => {
-      it("Issue Date should be in ascending order", () => {
-        cy.contains("Issue Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 7, colLength: 8 });
-      });
-
-      it("Issue Date should be in descending order", () => {
-        cy.contains("Issue Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Issue Date").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 7, colLength: 8 });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 8 });
+        });
       });
     });
   });
@@ -2349,92 +1835,27 @@ context("Sorting test", () => {
       cy.navigToReceivableList();
     });
 
-    context("Sort 'Receive ID'", () => {
-      it("Receive ID should be in ascending order", () => {
-        cy.contains("Receive ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Receive ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 5 });
-      });
+    RECEIVING_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-      it("Receive ID should be in descending order", () => {
-        cy.contains("Receive ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Receive ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 5 });
-      });
-    });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 5 });
+        });
 
-    context("Sort 'Document Title'", () => {
-      it("Document Title should be in ascending order", () => {
-        cy.contains("Document Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 1, colLength: 5 });
-      });
-
-      it("Document Title should be in descending order", () => {
-        cy.contains("Document Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Document Title").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 1, colLength: 5 });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 5 });
+        });
       });
     });
-
-    context("Sort 'Owner'", () => {
-      it("Owner should be in ascending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 2, colLength: 5 });
-      });
-
-      it("Owner should be in descending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 2, colLength: 5 });
-      });
-    });
-
-
-    // context("Sort 'State'", () => {
-    //   it("State should be in ascending order", () => {
-    //     cy.contains("State").eq(0).click();
-    //     cy.contains("State").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-    //       .should("be.exist");
-    //     cy.verifyAscSort({ index: 3, colLength: 5 });
-    //   });
-
-    //   it("State should be in descending order", () => {
-    //     cy.contains("State").eq(0).click();
-    //     cy.contains("State").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
-    //       .should("be.exist");
-    //     cy.verifyDesSort({ index: 3, colLength: 5 });
-    //   });
-    // });
-
-    // context("Sort 'Approval ID'", () => {
-    //   it("Approval ID should be in ascending order", () => {
-    //     cy.contains("Approval ID").eq(0).click();
-    //     cy.contains("Approval ID").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--ASC")
-    //       .should("be.exist");
-    //     cy.verifyAscSort({ index: 4, colLength: 5 });
-    //   });
-
-    //   it("Approval ID should be in descending order", () => {
-    //     cy.contains("Approval ID").eq(0).click();
-    //     cy.contains("Approval ID").eq(0).parent().find(".ReactVirtualized__Table__sortableHeaderIcon--DESC")
-    //       .should("be.exist");
-    //     cy.verifyDesSort({ index: 4, colLength: 5 });
-    //   });
-    // });
   });
 
   context("AR Sorting", () => {
@@ -2444,76 +1865,25 @@ context("Sorting test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    context("Sort 'AR ID'", () => {
-      it("AR ID should be in ascending order", () => {
-        cy.contains("AR ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("AR ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 4 });
-      });
+    AR_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-      it("AR ID should be in descending order", () => {
-        cy.contains("AR ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("AR ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 4 });
-      });
-    });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 4 });
+        });
 
-    context("Sort 'AR Title'", () => {
-      it("AR Title should be in ascending order", () => {
-        cy.contains("AR Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("AR Title").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 1, colLength: 4 });
-      });
-
-      it("AR Title should be in descending order", () => {
-        cy.contains("AR Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("AR Title").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 1, colLength: 4 });
-      });
-    });
-
-    context("Sort 'Owner'", () => {
-      it("Owner should be in ascending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 2, colLength: 4 });
-      });
-
-      it("Owner should be in descending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 2, colLength: 4 });
-      });
-    });
-
-
-    context("Sort 'Status'", () => {
-      it("Status should be in ascending order", () => {
-        cy.contains("Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Status").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 3, colLength: 4 });
-      });
-
-      it("Status should be in descending order", () => {
-        cy.contains("Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Status").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 3, colLength: 4 });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 4 });
+        });
       });
     });
   });
@@ -2523,131 +1893,25 @@ context("Sorting test", () => {
       cy.navigToRecords();
     });
 
-    context("Sort 'ID'", () => {
-      it("ID should be in ascending order", () => {
-        cy.contains("ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 0, colLength: 7 });
-      });
+    RECORDS_COLUMN_HEADERS.forEach( (columnHeader, i) => {
+      context(`Sort '${columnHeader}'`, () => {
+        const columnHeaderRegex = new RegExp("^" + columnHeader + "$", "g");
 
-      it("ID should be in descending order", () => {
-        cy.contains("ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 0, colLength: 7 });
-      });
-    });
+        it(`${columnHeader} should be in ascending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-asc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyAscSort({ index: i, colLength: 7 });
+        });
 
-    context("Sort 'Revision'", () => {
-      it("Revision should be in ascending order", () => {
-        cy.contains("Revision").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 1, colLength: 7 });
-      });
-
-      it("Revision should be in descending order", () => {
-        cy.contains("Revision").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 1, colLength: 7 });
-      });
-    });
-
-    context("Sort 'State'", () => {
-      it("State should be in ascending order", () => {
-        cy.contains("State").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 2, colLength: 7 });
-      });
-
-      it("State should be in descending order", () => {
-        cy.contains("State").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 2, colLength: 7 });
-      });
-    });
-
-
-    context("Sort 'Title'", () => {
-      it("Title should be in ascending order", () => {
-        cy.contains("Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Title").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 3, colLength: 7 });
-      });
-
-      it("Title should be in descending order", () => {
-        cy.contains("Title").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Title").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 3, colLength: 7 });
-      });
-    });
-
-    context("Sort 'Owner'", () => {
-      it("Owner should be in ascending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 4, colLength: 7 });
-      });
-
-      it("Owner should be in descending order", () => {
-        cy.contains("Owner").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 4, colLength: 7 });
-      });
-    });
-
-    context("Sort 'Released Date'", () => {
-      it("Released Date should be in ascending order", () => {
-        cy.contains("Released Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Released Date").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 5, colLength: 7 });
-      });
-
-      it("Released Date should be in descending order", () => {
-        cy.contains("Released Date").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Released Date").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 5, colLength: 7 });
-      });
-    });
-
-    context("Sort 'Form ID'", () => {
-      it("Form ID should be in ascending order", () => {
-        cy.contains("Form ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Form ID").eq(0).parent().find("span.k-i-sort-asc-sm")
-          .should("be.exist");
-        cy.verifyAscSort({ index: 6, colLength: 7 });
-      });
-
-      it("Form ID should be in descending order", () => {
-        SystemRequirement("REQ-4820"); // Requirement covered by successfull test
-        cy.contains("Form ID").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Form ID").eq(0).parent().find("span.k-i-sort-desc-sm")
-          .should("be.exist");
-        cy.verifyDesSort({ index: 6, colLength: 7 });
+        it(`${columnHeader} should be in descending order`, () => {
+          cy.contains(columnHeaderRegex).eq(0).arrowClick();
+          cy.contains(columnHeaderRegex).eq(0).parent().find("span.k-i-sort-desc-sm")
+            .should("be.exist");
+          cy.wait(200);
+          cy.verifyDesSort({ index: i, colLength: 7 });
+        });
       });
     });
   });

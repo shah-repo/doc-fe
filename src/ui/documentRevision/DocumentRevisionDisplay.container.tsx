@@ -1,6 +1,7 @@
 import { get } from "lodash";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { DocumentRevisionSummary } from "../../App";
 import { getHasPermission } from "../../common/utils/selectors";
 import { authSelectors } from "../../state/ducks/auth";
 import { GroupTag, Permission } from "../../state/ducks/auth/types";
@@ -10,7 +11,6 @@ import { ApplicationState } from "../../state/reducers";
 import { AsyncState } from "../../state/types";
 import AsyncGate from "../components/AsyncGate";
 import DocumentRevisionUpdatedSubscriptions from "../document.revision/subscriptons";
-import SummaryPresenter from "../document.revision/summary/presenter";
 import CloneContainer from "./Clone.container";
 import DocumentRevisionUpdateContainer from "./DocumentRevisionUpdate.container";
 import { canChangeDocumentOwner, canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
@@ -80,9 +80,17 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
     }
   }, [documentRevisionId, loadDocumentRevision]);
 
+  const dispatch = useDispatch();
+  const loadDocumentRevisions = useCallback(() => {
+    if (documentId) {
+      dispatch(documentRevisionsActions.loadDocument(documentId));
+    }
+  }, [dispatch, documentId]);
+
   useEffect(() => {
     loadDocumentRevisionAction();
-  }, [loadDocumentRevisionAction]);
+    loadDocumentRevisions();
+  }, [loadDocumentRevisionAction, loadDocumentRevisions]);
 
   const operators = get(selectedDocument, "document.operators", []);
   const availableOperators = operators.map((operator) => operator.user.email);
@@ -132,11 +140,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
         />
       )}
       {canPreview && (
-        <SummaryPresenter
-          dataProp={documentRevision}
-          canChangeOwnerShip={canChangeOwnerShip}
-          canShowCreateVersionButton={true}
-        />
+        <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }}/>
       )}
       {isNewVersion && (
         <CloneContainer documentRevision={documentRevision} type="newVersion" isNewVersion={isNewVersion} />
