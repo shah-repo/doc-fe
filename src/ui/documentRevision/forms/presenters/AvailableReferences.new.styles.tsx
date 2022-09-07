@@ -16,7 +16,7 @@ export const styles = makeStyles(() =>
       },
       "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
         transform: "translate(14px, 14px) scale(0.75)",
-        color: "#767B87",
+        color: Colors.font_gray,
       },
     },
     chipRoot: {

@@ -6,6 +6,7 @@ import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } fro
 import { debounce, isArray, map, some, truncate } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { tooltipStyles } from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
@@ -19,6 +20,7 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { FBTooltip } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
+import { isTranslation } from "../../../translations/types";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 import { styles } from "./AvailableReferences.new.styles";
@@ -56,6 +58,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
+  const intl = useIntl();
+  const getDisplayText = (localiseString) =>
+    isTranslation(localiseString)
+      ? intl.formatMessage({ id: localiseString })
+      : null;
   const classes = styles();
   const { submitForm } = useFormContext();
   const { _documentRevisionFormState } = SM.useStores();
@@ -203,8 +210,8 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         classes={{ option: classes.option }}
         value={{ label: "" }}
         options={ModifiedOptions}
-        // disable filtering on client
         getOptionLabel={(option) => option.label }
+        // disable filtering on client
         filterOptions={(x) => x}
         renderInput={(params: RenderInputParams) => (
           <Box display="flex">
@@ -213,7 +220,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                label={!open && "Select"}
+                label={!open && getDisplayText("common.select.placeholder")}
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: "0px 30px 0px 9px", height: value.length ? "100%" : "40px" },
