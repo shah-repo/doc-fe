@@ -2308,7 +2308,7 @@ context("LHR & LHRS Flow", () => {
       cy.contains("Build Type").should("be.visible");
       cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
       cy.get("[value='R&D']").check();
-      cy.wait(100);
+      cy.wait(2000);
     });
   });
 
@@ -2788,22 +2788,25 @@ context("LHR & LHRS Flow", () => {
     });
 });
 context("Login Third operator and complete step", () => {
-
   it("Login user to dashboard", () => {
     cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
   });
 
   it("Navigate to LHRs", () => {
-    cy.navigToRecords();
     cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-      cy.visit(lhrs1DocUrl);
+      cy.contains("LHR-00001").arrowClick();
     });
   });
 
   context("Complete LHRs with operator", () => {
     it("Approve step", () => {
-      cy.ebApprove();
-      cy.wait(15000);
+      cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.wait(3000);
     });
   });
 });
@@ -2812,14 +2815,15 @@ context("Login as owner and access LHR", () => {
     cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
   });
   it("Navig to LHRs #1", () => {
-    cy.navigToRecords();
     cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-      cy.visit(lhr1DocUrl);
+      cy.contains("LHR-00001").eq(0).arrowClick({ force: true });
     });
   });
 });
 context("check loader present and  Step 1, Step 2 completed ", () => {
   it("Select Details tab", () => {
+    cy.wait(100);
+    cy.contains("LHR-00001").arrowClick({ force: true });
     cy.drSelectDetailsTab();
   });
   it("verify loader is present", () => {
@@ -2939,7 +2943,7 @@ context("In the LHR Overview tab", () => {
       cy.get("[data-cy='form.builder.request.approve']").contains("Approve").arrowClick();
       cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
       cy.unClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
         cy.get("[data-cy='common.confirm']").arrowClick();
       });
       cy.checkToastMessage({ exists: false });
@@ -2948,6 +2952,7 @@ context("In the LHR Overview tab", () => {
   });
   context("Go to Lots landing page and check that Lot is displayed there as well.", () => {
     it("Navigate to lots", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       cy.navigToLots();
     });
     it("Verify filter for LOT #", () => {
