@@ -147,15 +147,6 @@ context(
         });
       });
 
-      it("[API]Login second tester", (done: any) => {
-        cy.authApiLogin({
-          email: USERS[2].email,
-        }).then((response) => {
-          loginResponse = response;
-          done();
-        });
-      });
-
       it("[API]Login admin tester", (done: any) => {
         cy.authApiLogin({
           email: USERS[1].email,
@@ -193,7 +184,7 @@ context(
 
     context("Login user", () => {
       it("Login user to dashboard", () => {
-        cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
+        cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
       });
     });
 
@@ -286,11 +277,6 @@ context(
             cy.contains("Last saved:").should("be.exist");
           });
 
-          xit("Check if 'Change Owner' button header menu and is functional", () => {
-            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-          });
-
           it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
             cy.sendToEmail();
@@ -341,7 +327,7 @@ context(
 
       context("Add an approver and submit for approval → The record will be in “In Review”", () => {
         it("Add Approver to approvals list", () => {
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
         });
 
         it("Click on Submit For Approval", () => {
@@ -370,13 +356,14 @@ context(
             cy.contains("Last saved:").should("not.exist");
           });
 
-          xit("Check if 'Change Owner' button header menu and is functional", () => {
+          it("Check if 'Change Owner' button header menu and is functional", () => {
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
             cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
 
           it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
+            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
             cy.checkToastMessageContains({
               message: "File will be sent to your email shortly.",
@@ -446,8 +433,14 @@ context(
             cy.contains("Last saved:").should("not.exist");
           });
 
+          it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+          });
+
           it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
+            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
             cy.checkToastMessageContains({
               message: "File will be sent to your email shortly.",
@@ -461,7 +454,8 @@ context(
             });
 
             it("Add Approver to approvals list", () => {
-              cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
+              cy.wait(3000);
+              cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
             });
 
             it("Click on Submit For Approval", () => {
@@ -510,7 +504,7 @@ context(
 
         it("Add Approver to approvals list", () => {
           cy.wait(3000);
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
         });
 
         it("Click on Submit For Approval", () => {
@@ -542,7 +536,7 @@ context(
             cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
             cy.drClickCreateDocumentWithoutApiCall();
             cy.wait(3000);
-            cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[2].name}`);
+            cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[1].name}`);
             cy.drApproveAndReleaseDialog();
             cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
             cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
@@ -586,6 +580,11 @@ context(
         context("Right side:", () => {
           it("Last save should not be present", () => {
             cy.contains("Last saved:").should("not.exist");
+          });
+
+          it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
 
           it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
@@ -692,20 +691,6 @@ context(
           it("Last save should be present", () => {
             cy.contains("Last saved:").should("be.exist");
           });
-
-          xit("Check if 'Change Owner' button header menu and is functional", () => {
-            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-          });
-
-          xit(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
-          email shortly`, () => {
-            cy.sendToEmail();
-            cy.checkToastMessageContains({
-              message: "File will be sent to your email shortly.",
-            });
-            cy.closeAllAlertMessages();
-          });
         });
 
         context(
@@ -761,7 +746,7 @@ context(
       context("Add an approver and submit for approval → The record will be in “In Review”", () => {
         it("Add Approver to approvals list", () => {
           cy.wait(3000);
-          cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[2].name);
+          cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
         });
 
         it("Click on Submit For Approval", () => {
@@ -790,18 +775,9 @@ context(
             cy.contains("Last saved:").should("not.exist");
           });
 
-          xit("Check if 'Change Owner' button header menu and is functional", () => {
+          it("Check if 'Change Owner' button header menu and is functional", () => {
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
             cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-          });
-
-          xit(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
-          email shortly`, () => {
-            cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
-            cy.checkToastMessageContains({
-              message: "File will be sent to your email shortly.",
-            });
-            cy.closeAllAlertMessages();
           });
 
           it("Click 'Withdraw Submission' button", () => {
@@ -811,7 +787,13 @@ context(
             });
           });
 
+          it("Add Approver to approvals list", () => {
+            cy.wait(3000);
+            cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
+          });
+
           it("Click on Submit For Approval", () => {
+            cy.wait(3000);
             cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
           });
         });
@@ -861,13 +843,9 @@ context(
             cy.contains("Last saved:").should("not.exist");
           });
 
-          xit(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
-          email shortly`, () => {
-            cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
-            cy.checkToastMessageContains({
-              message: "File will be sent to your email shortly.",
-            });
-            cy.closeAllAlertMessages();
+          it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
 
           context(`Update the PO and release the new revision`, () => {
@@ -878,7 +856,7 @@ context(
             it("Add Approver to approvals list", () => {
               cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
               cy.wait(3000);
-              cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[2].name);
+              cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
             });
 
             it("Click on Submit For Approval", () => {
@@ -928,7 +906,7 @@ context(
         it("Add Approver to approvals list", () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
           cy.wait(3000);
-          cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[2].name);
+          cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
         });
 
         it("Click on Submit For Approval", () => {
@@ -960,7 +938,7 @@ context(
             cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
             cy.drClickCreateDocumentWithoutApiCall();
             cy.wait(3000);
-            cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(`${USERS[2].name}`);
+            cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(`${USERS[1].name}`);
             cy.drApproveAndReleaseDialog();
             cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
             cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
@@ -1006,16 +984,10 @@ context(
             cy.contains("Last saved:").should("not.exist");
           });
 
-          xit(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
-          email shortly`, () => {
-            cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
-            cy.checkToastMessageContains({
-              message: "File will be sent to your email shortly.",
-            });
-            cy.closeAllAlertMessages();
+          it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
-
-
         });
       });
 
