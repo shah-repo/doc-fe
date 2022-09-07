@@ -81,6 +81,19 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ docum
               </ListItem>
               <Box mt={1.875}>
                 <Box color={Colors.font_gray} fontSize={12}>
+                  <Text translation="common.crid" />
+                </Box>
+                <Link
+                  to={changeRequestEditPath(changeRequest.id)}
+                  target="_blank"
+                  id="ChangeRequestLink-docRev-linkButton"
+                  className={classes.linkButton}
+                >
+                  <span>{changeRequest.crId}</span>
+                </Link>
+              </Box>
+              <Box mt={1.875}>
+                <Box color={Colors.font_gray} fontSize={12}>
                   <Text translation="cr.title" />
                 </Box>
                 <Box color={Colors.almost_black} fontSize={14}>
@@ -106,19 +119,6 @@ const RevisionHistory: React.FunctionComponent<SidebarPresenterProps> = ({ docum
                       (e) => e.justificationOfChange
                     )}
                 </Box>
-              </Box>
-              <Box mt={1.875}>
-                <Box color={Colors.font_gray} fontSize={12}>
-                  <Text translation="common.crid" />
-                </Box>
-                <Link
-                  to={changeRequestEditPath(changeRequest.id)}
-                  target="_blank"
-                  id="ChangeRequestLink-docRev-linkButton"
-                  className={classes.linkButton}
-                >
-                  <span>{changeRequest.crId}</span>
-                </Link>
               </Box>
             </Box>
           );
