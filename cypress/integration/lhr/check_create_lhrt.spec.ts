@@ -439,22 +439,15 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
     });
 
     it("Verify if exist LHR fields", () => {
-      cy.get("[data-cy=\"Part to be Manufactured\"]");
-      cy.get("[data-cy=\"Initial Quantity\"]");
-      cy.get("[data-cy=\"End Quantity\"]");
-      cy.get("[data-cy=\"Build Type\"]");
-      cy.get("[data-cy=\"Due Date\"]");
+      cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist");
+      cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+      cy.get("[data-cy=\"End Quantity\"]").should("exist");
+      cy.get("[data-cy=\"Build Type\"]").should("exist");
+      cy.get("[data-cy=\"Due Date\"]").should("exist");
     });
 
     it("Verify LHRT is in DRAFT status", () => {
       cy.drCheckDocumentStatus({ status: "DRAFT" });
-    });
-
-    it("Part to be Manufactured field should have text in red", () => {
-      cy.get("[name=\"lhr-selected-part\"]").parent().parent()
-        .find(".Mui-error").eq(1)
-        .should("have.text", "The Part to be Manufactured is a required field.")
-        .and("have.css", "color", "rgb(244, 67, 54)");
     });
 
     it("Select Details tab", () => {
@@ -466,13 +459,6 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
       cy.wait(2000);
     });
 
-    it("LHR step should also display text in red", () => {
-      cy.get("[name=\"lhrstep-built-in\"]").parent().parent()
-        .find(".Mui-error").eq(0)
-        .should("have.text", "The LHR Step is a required field.")
-        .and("have.css", "color", "rgb(244, 67, 54)");
-    });
-
     it("Select Overview tab", () => {
       cy.drSelectOverviewTab();
     });
@@ -481,15 +467,8 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
     });
 
-    it("Verify error message", () => {
-      cy.checkToastMessageIsEqual({
-        message: "Field Part to be Manufactured is required.\n" +
-        "Field LHR Step #undefined is required.",
-      });
-      cy.closeAllAlertMessages();
-    });
-
     it("Select 'Part document' for Part to be Manufactured", () => {
+      cy.closeAllAlertMessages();
       cy.drCloseApproveAndReleaseDialog();
       cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
@@ -499,18 +478,6 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
-    it("Approve and release LHRt document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
-    });
-
-    it("Verify error message", () => {
-      cy.checkToastMessageIsEqual({
-        message: "Field LHR Step #1 is required.",
-      });
-      cy.closeAllAlertMessages();
-      cy.drCloseApproveAndReleaseDialog();
     });
 
     context("Select created MPI in LHR template", () => {
@@ -577,11 +544,11 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
     });
 
     it("Verify if exist LHR fields", () => {
-      cy.get("[data-cy=\"Part to be Manufactured\"]");
-      cy.get("[data-cy=\"Initial Quantity\"]");
-      cy.get("[data-cy=\"End Quantity\"]");
-      cy.get("[data-cy=\"Build Type\"]");
-      cy.get("[data-cy=\"Due Date\"]");
+      cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist");
+      cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+      cy.get("[data-cy=\"End Quantity\"]").should("exist");
+      cy.get("[data-cy=\"Build Type\"]").should("exist");
+      cy.get("[data-cy=\"Due Date\"]").should("exist");
     });
 
     it("Select Details tab", () => {
@@ -589,7 +556,7 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
     });
 
     it("Verify all LHR Steps added to the previous revision are present", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]");
+      cy.get("[data-cy=\"LHR Step 1\"]").should("exist");
     });
 
     it("Click Add Step button", () => {
@@ -598,8 +565,8 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
     });
 
     it("Verify LHR Step is added", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]");
-      cy.get("[data-cy=\"LHR Step 2\"]");
+      cy.get("[data-cy=\"LHR Step 1\"]").should("exist");
+      cy.get("[data-cy=\"LHR Step 2\"]").should("exist");
     });
 
     it("Select MPI document for step #2 in LHRt", () => {

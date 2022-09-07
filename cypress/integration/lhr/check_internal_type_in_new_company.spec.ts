@@ -430,11 +430,11 @@ context("Scenario 4: Create new company and verify Internal Type for LHR Templat
     });
 
     it("Verify if exist LHR fields", () => {
-      cy.get("[data-cy=\"Part to be Manufactured\"]");
-      cy.get("[data-cy=\"Initial Quantity\"]");
-      cy.get("[data-cy=\"End Quantity\"]");
-      cy.get("[data-cy=\"Build Type\"]");
-      cy.get("[data-cy=\"Due Date\"]");
+      cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist");
+      cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+      cy.get("[data-cy=\"End Quantity\"]").should("exist");
+      cy.get("[data-cy=\"Build Type\"]").should("exist");
+      cy.get("[data-cy=\"Due Date\"]").should("exist");
     });
 
     it("Verify Group for LHR Template", () => {
@@ -450,13 +450,6 @@ context("Scenario 4: Create new company and verify Internal Type for LHR Templat
       cy.drCheckDocumentStatus({ status: "DRAFT" });
     });
 
-    it("Part to be Manufactured field should have text in red", () => {
-      cy.get("[name=\"lhr-selected-part\"]").parent().parent()
-        .find(".Mui-error").eq(1)
-        .should("have.text", "The Part to be Manufactured is a required field.")
-        .and("have.css", "color", "rgb(244, 67, 54)");
-    });
-
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -466,31 +459,11 @@ context("Scenario 4: Create new company and verify Internal Type for LHR Templat
       cy.wait(2000);
     });
 
-    it("LHR step should also display text in red", () => {
-      cy.get("[name=\"lhrstep-built-in\"]").parent().parent()
-        .find(".Mui-error").eq(0)
-        .should("have.text", "The LHR Step is a required field.")
-        .and("have.css", "color", "rgb(244, 67, 54)");
-    });
-
     it("Select Overview tab", () => {
       cy.drSelectOverviewTab();
     });
 
-    it("Approve and release LHRt document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
-    });
-
-    it("Verify error message", () => {
-      cy.checkToastMessageIsEqual({
-        message: "Field Part to be Manufactured is required.\n" +
-        "Field LHR Step #undefined is required.",
-      });
-      cy.closeAllAlertMessages();
-    });
-
     it("Select 'Part document' for Part to be Manufactured", () => {
-      cy.drCloseApproveAndReleaseDialog();
       cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("ul>li[role=option]").contains("Part document").arrowClick();
@@ -499,18 +472,6 @@ context("Scenario 4: Create new company and verify Internal Type for LHR Templat
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
-    it("Approve and release LHRt document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
-    });
-
-    it("Verify error message", () => {
-      cy.checkToastMessageIsEqual({
-        message: "Field LHR Step #1 is required.",
-      });
-      cy.closeAllAlertMessages();
-      cy.drCloseApproveAndReleaseDialog();
     });
 
     context("Select created MPI in LHR template", () => {
