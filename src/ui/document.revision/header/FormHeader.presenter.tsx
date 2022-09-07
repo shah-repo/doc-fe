@@ -14,7 +14,7 @@ import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { FB } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
-import { styles } from "./FormHeader.styles";
+import useStyles from "./FormHeader.styles";
 
 interface Props {
   isCreateDocumentDisabled: boolean;
@@ -28,7 +28,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { workspaceState } = FB.useStores();
   const { _documentRevisionFormState } = SM.useStores();
-  const classes = styles();
+  const classes = useStyles();
   const renderLastSavedContnet = () => (
     <Box>
       Last saved: &nbsp;

@@ -1,10 +1,10 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
 const HEIGHT = 35;
 const WIDTH = 128;
 
-export default makeStyles((theme: Theme) => ({
+export default makeStyles((theme) => ({
   root: {
     position: "absolute",
     right: 0,

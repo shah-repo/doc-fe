@@ -1,7 +1,7 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 
-export default makeStyles((theme: Theme) => ({
+export default makeStyles({
   root: {
     overflowY: "scroll",
     backgroundColor: Colors.alabaster,
@@ -27,4 +27,4 @@ export default makeStyles((theme: Theme) => ({
   indicator: {
     background: Colors.cerulean,
   },
-}));
+});

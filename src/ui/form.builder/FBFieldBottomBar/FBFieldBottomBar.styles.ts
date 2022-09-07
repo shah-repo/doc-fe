@@ -1,7 +1,7 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-export default makeStyles((theme: Theme) => ({
+export default makeStyles((theme) => ({
   root: {
     position: "absolute",
     left: 0,

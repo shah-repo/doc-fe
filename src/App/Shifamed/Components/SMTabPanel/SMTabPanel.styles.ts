@@ -1,6 +1,6 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 
-export default makeStyles((theme: Theme) => ({
+export default makeStyles((theme) => ({
   content: {
     overflowY: "scroll",
     margin: theme.spacing(-4.5, -2.75, 0, -2),
