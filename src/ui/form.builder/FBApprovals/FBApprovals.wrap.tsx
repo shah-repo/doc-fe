@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, get, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
+import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -168,16 +168,23 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         const { id } = workspaceState || {};
         if (!id) { return; }
         dispatch(documentRevisionsActions.loadAudit(id));
+        if (!workspaceState?.autosave) { return; }
+        workspaceState?.saveDocRev(formState?.getValues());
       }));
     }
 
     function removeApprover(ids?: string[]) {
       if (!ids) { return; }
       map(ids, (approver) => {
+        const deletedApproverIndex = findIndex(document?.approvals, (a) =>
+          a.approverId === approver && a.status === "DRAFT");
         const approval = find(approvalsState?.getApprovals, (a) => a.approver?.id === approver);
+        document?.approvals?.splice(deletedApproverIndex, 1);
         approvalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
           const id  = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+          if (!workspaceState?.autosave) { return; }
+          workspaceState?.saveDocRev(formState?.getValues());
         });
       });
     }
