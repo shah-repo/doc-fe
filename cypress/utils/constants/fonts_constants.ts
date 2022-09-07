@@ -10,6 +10,10 @@ export const FONT_SIZE_14 = "14px";
 export const FONT_SIZE_14_4 = "14.4px";
 export const FONT_SIZE_16 = "16px";
 export const FONT_SIZE_19 = "19px";
+export const FONT_SIZE_22_4 = "22.4px";
+export const FONT_SIZE_27 = "27px";
+export const FONT_SIZE_28 = "28px";
+export const FONT_SIZE_48 = "48px";
 
 export const FONT_WT_300 = "300";
 export const FONT_WT_400 = "400";
@@ -42,9 +46,5 @@ export const LINE_HT_13 = "13px";
 export const LINE_HT_16 = "16px";
 export const LINE_HT_19_2 = "19.2px";
 export const LINE_HT_20_02 = "20.02px";
-export const FONT_SIZE_22_4 = "22.4px";
-export const FONT_SIZE_27 = "27px";
-export const FONT_SIZE_28 = "28px";
-export const FONT_SIZE_48 = "48px";
 
 export const TEXT_TRANS_UPPER = "uppercase";
