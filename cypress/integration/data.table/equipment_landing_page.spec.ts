@@ -194,7 +194,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -210,7 +210,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1330,6 +1330,7 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.dlClearFilters();
       cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Draft").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       cy.wait(500);
     });
