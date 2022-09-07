@@ -135,6 +135,10 @@ context("Intermediate page validation", () => {
     it("Verify 'Selected Groups' field is displayed", () => {
       cy.intPageVerifySelectedGroupsExist();
     });
+
+    it("Verify 'Attachment' field is displayed", () => {
+      cy.intPageVerifyAttachmentExist();
+    });
   });
 
   context("Enter title and select revision stage", () => {
@@ -310,12 +314,26 @@ context("Intermediate page validation", () => {
       cy.get(`[data-cy="description"] [contenteditable]`).first()
         .arrowType("{moveToEnd}{enter}Checking length of characters and lines ends here.");
       cy.unClick().wait(3000);
+      cy.get("[data-cy=\"description\"] button").should("be.visible");
       cy.get("[data-cy=\"description\"] button").arrowClick();
       cy.get(`[data-cy="description"] [contenteditable]`).first()
         .scrollIntoView({ ensureScrollable: false });
     });
 
-    // TODO: scroll visibility to be added
+    it("Scroll page to bottom and check editor bar is fixed at the top of the field", () => {
+      cy.get("#sm-tabpanel-0").scrollTo("bottom");
+      cy.get(".rdw-editor-toolbar").should("be.visible");
+    });
+
+    it("Verify 'Create Document' button is visible", () => {
+      cy.get("#DocumentRevisionForm-submit").should("be.visible");
+    });
+
+    it("Click away and verify description field", () => {
+      cy.unClick();
+      cy.get(`[data-cy="description"] button`).should("be.visible");
+      cy.get(".rdw-editor-toolbar").should("not.exist");
+    });
   });
 
   context("Verify 'Add Field' and 'Form Options' not displayed on page", () => {
@@ -366,6 +384,30 @@ context("Intermediate page validation", () => {
 
     it("Check 'Preview Layout' button gets colored", () => {
       cy.intPageVerifyPreviewLayoutButtonEnabled();
+    });
+  });
+
+  context("Scroll page at bottom and verify fixed fields when the description field is collapsed", () => {
+    it("Scroll page to bottom", () => {
+      cy.get("#sm-tabpanel-0").scrollTo("bottom");
+    });
+
+    it("Verify 'Title' field is visible", () => {
+      cy.intPageVerifyTitleExist();
+    });
+
+    it("Verify 'Description' field is visible", () => {
+      cy.intPageVerifyDescriptionExist();
+      cy.get(`[data-cy="description"] button`).should("be.visible");
+    });
+
+    it("Verify 'Create Document' button is visible", () => {
+      cy.get("#DocumentRevisionForm-submit").should("be.visible");
+    });
+
+    it("Verify tabs bar is visible", () => {
+      cy.get(".MuiTabs-flexContainer").should("be.visible");
+      cy.get(`[data-cy="field-document.documentType.id"]`).should("not.be.visible");
     });
   });
 
