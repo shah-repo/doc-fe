@@ -2,35 +2,18 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
-import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
-// import { LotsTest } from "../../utils/constants/documentTypes/lot";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
-// import { LotsTests } from "../../utils/constants/documentTypes/lotsTest";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
 let adminEmployee;
-let approvalRequestDocumentType;
-let initialArDocument;
-let group;
-// let equipmentDocumentType;
-// let materialsDocumentType;
-let partDocumentType;
-// let equipmentDocument;
-let materialsDocument;
-let mpiDocument;
-// let mpiDocumentType;
-let createdPartDocument;
 let developersGroup;
 let secondEmployee;
-let createdLotsFormDocument;
-let formDocumentType;
-let LotsType;
 
 context("Unreleased LOT in LHR", () => {
   before(() => {
@@ -60,8 +43,6 @@ context("Unreleased LOT in LHR", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               LotHistoryRecordTest,
-              // LotsTest,
-              // LotsTests,
               MPITest,
               LHRTTest,
             ],
@@ -81,447 +62,6 @@ context("Unreleased LOT in LHR", () => {
       }).then((response) => {
         loginResponse = response;
         done();
-      });
-    });
-
-    xit("[API]Create Part document", () => {
-      cy.grpGetGroupByName({
-        sessionId: loginResponse.sessionId,
-        employeeId: adminEmployee.id,
-        groupName: "Everyone",
-      }).then((response) => {
-        group = response;
-        cy.arGetArDocumentByName({
-          sessionId: loginResponse.sessionId,
-          employeeId: adminEmployee.id,
-          name: "AR Form",
-        }).then((response) => {
-          initialArDocument = response;
-          cy.drCreateDocumentRevision({
-            payload: {
-              attachments: [],
-              description: "<p>Part form</p>",
-              document: {
-                docId: "PRT-00005",
-                documentType: {
-                  id: partDocumentType[0].id,
-                },
-                securityList: {
-                  operators: [],
-                  securityEmployees: [],
-                  securityGroups: [
-                    {
-                      id: group.body[0].id,
-                    },
-                  ],
-                },
-              },
-              name: "Part document",
-              referenceTo: [],
-              retrain: false,
-              revisionChangeType: RevisionChangeType.NextRevision,
-              revisionStage: 1,
-            },
-            employeeId: adminEmployee.id as unknown as string,
-            sessionId: loginResponse.sessionId as unknown as string,
-          }).then((response) => {
-            materialsDocument = response;
-            cy.drAPIApproveAndRelease({
-              documentId: materialsDocument.id,
-              payload: {
-                effectiveDate: (new Date()).toISOString(),
-                documentType: { id: approvalRequestDocumentType[0].id },
-                formDocument: { id: initialArDocument[0].id },
-                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-              },
-              employeeId: adminEmployee.id,
-              sessionId: loginResponse.sessionId,
-            });
-          });
-        });
-      });
-    });
-
-    xit("[API]Create part document", (done: any) => {
-      cy.grpGetGroupByName({
-        sessionId: loginResponse.sessionId,
-        employeeId: adminEmployee.id,
-        groupName: "Everyone",
-      }).then((response) => {
-        group = response;
-        cy.arGetArDocumentByName({
-          sessionId: loginResponse.sessionId,
-          employeeId: adminEmployee.id,
-          name: "AR Form",
-        }).then((response) => {
-          initialArDocument = response;
-          cy.drCreateDocumentRevision({
-            payload: {
-              attachments: [],
-              description: "<p>Part document</p>",
-              document: {
-                docId: "CS-00005",
-                documentType: {
-                  id: partDocumentType[0].id,
-                },
-                securityList: {
-                  operators: [],
-                  securityEmployees: [],
-                  securityGroups: [
-                    {
-                      id: group.body[0].id,
-                    },
-                  ],
-                },
-              },
-              name: "Part document",
-              referenceTo: [],
-              retrain: false,
-              revisionChangeType: RevisionChangeType.NextRevision,
-              revisionStage: 1,
-            },
-            employeeId: adminEmployee.id as unknown as string,
-            sessionId: loginResponse.sessionId as unknown as string,
-          }).then((response) => {
-            createdPartDocument = response;
-            cy.drAPIApproveAndRelease({
-              documentId: createdPartDocument.id,
-              payload: {
-                effectiveDate: (new Date()).toISOString(),
-                documentType: { id: approvalRequestDocumentType[0].id },
-                formDocument: { id: initialArDocument[0].id },
-                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-              },
-              employeeId: adminEmployee.id,
-              sessionId: loginResponse.sessionId,
-            }).then(() => {
-              done();
-            });
-          });
-        });
-      });
-    });
-
-    xit("[API]Create unreleased part document", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>unreleased part document</p>",
-          document: {
-            docId: "CS-00010",
-            documentType: {
-              id: partDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Unreleased part document",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then(() => {
-        done();
-      });
-    });
-
-    xit("[API]Create MPI document", () => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          formTemplate: {
-            outputDocumentTypes: [],
-            schema: [
-              {
-                name: "fb-mpi-procedure-section-built-in",
-                type: "section",
-                index: 0,
-                label: "form.builder.mpiprocedure",
-                tabId: "details",
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "mpi-procedure-built-in",
-                type: "mpiprocedure",
-                tabId: "details",
-                index: 1,
-                stepIndex: 1,
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-                editorConfig: {
-                  materials: [
-                    {
-                      id: "kolg5zka",
-                      title: materialsDocument.id,
-                      quantity: 1,
-                      unit: "sets",
-                    },
-                  ],
-                  description: "<p>Description of MPI step created with API</p>",
-                },
-              },
-              {
-                name: "lhrs-start-quantity",
-                type: "quantity",
-                index: 2,
-                label: "Start quantity",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                editorProperties: [
-                  "includeNotes",
-                ],
-                validationAttribute: "Start quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-                includeNotes: true,
-              },
-              {
-                name: "lhrs-accepted-quantity",
-                type: "quantity",
-                index: 3,
-                label: "Accepted quantity",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                editorProperties: [
-                  "includeNotes",
-                ],
-                validationAttribute: "Accepted quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-                includeNotes: true,
-              },
-              {
-                name: "lhrs-rejected-quantity",
-                type: "quantity",
-                index: 4,
-                label: "Rejected quantity",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                editorProperties: [
-                  "includeNotes",
-                ],
-                validationAttribute: "Rejected quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-                includeNotes: true,
-              },
-              {
-                name: "approvals-built-in",
-                type: "approvals",
-                index: 5,
-                label: "Approvals",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                uniqueSchemaItem: true,
-                validationAttribute: "Approvals",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-            ],
-          },
-          description: "<p>MPI created with API description</p>",
-          name: "MPI created with API",
-          attachments: [],
-          referenceTo: [],
-          revisionStage: 1,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          retrain: false,
-          document: {
-            docId: "PI-00008",
-            securityList: {
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-              operators: [],
-            },
-            // documentType: {
-            //   id: mpiDocumentType[0].id,
-            // },
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        mpiDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: mpiDocument.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        });
-      });
-    });
-
-    xit("[API]Create Lots form", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Lots Form document</p>",
-          document: {
-            docId: "FM-00008",
-            documentType: {
-              id: formDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Lots form document",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [{
-              id: LotsType[0].id,
-            }],
-            schema: [
-              {
-                name: "lot_quantity",
-                type: "quantity",
-                index: 0,
-                label: "Initial Quantity",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                editorProperties: [],
-                validationAttribute: "Initial Quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lot_usable_quantity",
-                type: "quantity",
-                index: 1,
-                label: "Usable Quantity",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                editorProperties: [],
-                validationAttribute: "Usable Quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lot_expiry_date",
-                type: "datepicker",
-                index: 2,
-                label: "Expiration Date",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationAttribute: "Expiration Date",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lot_part",
-                type: "autocomplete",
-                index: 3,
-                label: "Part Selection",
-                tabId: "details",
-                optionId: "21",
-                placeholder: "Select the appropriate part for this lot",
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "100-inspection-override",
-                type: "checkboxgroup",
-                index: 4,
-                label: "100% Inspection Override",
-                tabId: "details",
-                options: [
-                  {
-                    text: "100% Inspection Override",
-                    value: "100% Inspection Override",
-                  },
-                ],
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                editorProperties: [],
-                validationAttribute: "100% Inspection Override",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                label: "form.builder.approvals",
-                tabId: "details",
-                type: "approvals",
-                deleteDisabled: true,
-                name: "fb-approvals-ksherq6d",
-                uniqueSchemaItem: true,
-                index: 5,
-              },
-            ],
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdLotsFormDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdLotsFormDocument.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => {
-          done();
-        });
       });
     });
 
@@ -1047,14 +587,6 @@ context("Unreleased LOT in LHR", () => {
               cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
             });
         });
-
-        // it("Goto LHRt", () => {
-        // cy.url().then((url: any) => {
-        //   lhrtUrl = url;
-        // });
-        //   cy.progressBarShouldNotExist();
-        //   cy.listLoadingElementShouldNotExist();
-        // });
       });
     });
   });
@@ -1097,12 +629,10 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click on Procedure", () => {
-      // cy.mpiStartStep({ stepNumber: 1 });
       cy.get("[data-cy=\"tabId.procedure\"] > .MuiBox-root").arrowClick();
     });
 
     it("Click on Select from Materials", () => {
-      // cy.mpiStartStep({ stepNumber: 1 });
       cy.get("[data-cy=\"form.builder.select\"]").eq(0).arrowClick({ force: true });
     });
 
@@ -1176,7 +706,6 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click 'LHR Step'", () => {
-      // cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
       cy.get("[data-cy=\"LHR Step 1 - Rev A\"] > .MuiBox-root > span").arrowClick();
     });
 
@@ -1188,12 +717,10 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click on Procedure", () => {
-      // cy.mpiStartStep({ stepNumber: 1 });
       cy.get("[data-cy=\"tabId.procedure\"] > .MuiBox-root").arrowClick();
     });
 
     it("Click on Select from Materials", () => {
-      // cy.mpiStartStep({ stepNumber: 1 });
       cy.get("[data-cy=\"form.builder.select\"]").eq(0).arrowClick({ force: true });
     });
 
