@@ -13,6 +13,7 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import AttachmentsField from "../../../../ui/document.revision/form/attachments";
 import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
+import RedlineBanner from "../../../../ui/documentRevision/forms/presenters/redline/Redline.banner";
 import UpgradeToLatestContainer from "../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
@@ -152,6 +153,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           ),
         }}
       >
+        <RedlineBanner />
         <UpgradeToLatestContainer
           type="banner"
           docRevId={documentRevision?.id}
@@ -265,6 +267,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           {tabType === TabTypeOptions.TABS_MEQ && (
                             <FBMaterialEqInfoContainer
                               documentRevisionId={documentRevision?.id}
+                              inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                             />
                           )}
                           {tabType === "TRAINING" &&

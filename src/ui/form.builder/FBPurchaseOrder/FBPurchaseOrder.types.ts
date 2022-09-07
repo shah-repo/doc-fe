@@ -17,7 +17,10 @@ export type FBPurchaseOrderProps =
   isPO: boolean;
 };
 
-type FBPurchaseOrderItemType = "product" | "service";
+export enum FBPurchaseOrderItemType {
+  PRODUCT = "product",
+  SERVICE = "service",
+}
 
 export interface FBPurchaseOrderItem {
   id: string;

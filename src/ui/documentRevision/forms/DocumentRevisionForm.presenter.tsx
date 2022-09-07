@@ -1,13 +1,13 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, includes, isEmpty } from "lodash";
+import { flatten, includes, isEmpty, get } from "lodash";
 import { Observer, observer, useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
 import { authSelectors } from "../../../state/ducks/auth";
-import { DocumentTypeByIdState, DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBOutputDocumentType } from "../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../state/ducks/documents";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
@@ -19,7 +19,7 @@ import BuildsContainer from "../../document.revision/summary/builds.container";
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { DocumentCloneType } from "../Clone.container";
+import { DocumentCloneType, DocumentCloneTypeOptions } from "../Clone.container";
 import { isOperator } from "../DocumentRevisionDisplay.container";
 import { checkIsDocumentDAM, checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentPOAM, checkIsDocumentRecord, checkIsTypeHaveOutput } from "../helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../helpers/documentRevisionStatus";
@@ -53,6 +53,7 @@ interface Props
   mode: FBWorkspaceMode;
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
+  isPreview?: boolean;
 }
 
 const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
@@ -77,6 +78,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   mode,
   doNotPrompt,
   onDirtyFlagChange,
+  isPreview,
 }) => {
   useScrollIntoView();
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
@@ -97,7 +99,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   const isCurrentUserOperator = React.useContext(isOperator);
   const groupOptions = documentRevision?.document.documentType.groupOptions;
-  const group = documentRevision?.document.documentType.group;
   // MARK: @helpers
   const isDocRevStatusDraft = isDocumentRevisionInDraft(documentRevision?.status);
   const isDocRevStatusInPendingChange = isDocumentRevisionPendingChange(documentRevision?.status);
@@ -115,6 +116,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isOwner = documentRevision?.owner ? documentRevision?.owner.user.email === email : true;
   const isDisabled: boolean = initialValues.id !== undefined;
   const isDisabledInput = values.id !== undefined && isCurrentUserOperator && !isOwner;
+  const isDisabledInputInPreview = isPreview || isDisabledInput;
   const docRevId = documentRevision?.id;
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const documentTypeId = values.document?.documentType?.id || "";
@@ -205,12 +207,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     FBWorkspaceModeOptions.FORMDESIGN,
   ].includes(_formState?.mode as FBWorkspaceModeOptions) || isEB);
 
-  const isAttachmentRequired = _documentRevisionFormState?.documentRevision?.id
-    || ![DOC_TYPE_GROUP.DYNAMIC_FORM, DOC_TYPE_GROUP.PI].includes(documentTypeById?.group as DOC_TYPE_GROUP);
-  const isAttachmentForOther = [DOC_TYPE_GROUP.OTHER].includes(group as DOC_TYPE_GROUP);
-
-  const outputDocumentTypeName = initialValues?.outputDocumentTypes ? initialValues?.outputDocumentTypes.map((i) =>
-    i?.label?.includes("Purchase Order")) : [false];
+  // outputDocumentTypes could be OptionType[] and OptionType in some cases.
+  // @todo: fix it.
+  const outputDocumentTypeName = get(initialValues?.outputDocumentTypes, "[0].label")
+    || get(initialValues?.outputDocumentTypes, "label");
+  const outputIsPO = includes(outputDocumentTypeName, "Purchase Order");
 
   return (
     <FormWrapper
@@ -232,7 +233,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         {isVisible && <Grid item xs={6}>
           <DocumentTypeSelect
             outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
-            isDisabled={isDisabledInput}
+            isDisabled={isDisabledInputInPreview}
             {...{
               type,
               isDocRevStatusDraft,
@@ -246,7 +247,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <DocIdInput
               document={values.document}
               {...{
-                isDisabled,
+                isDisabled: isDisabledInputInPreview,
                 documentTypesById,
                 setDocId,
                 documentTypeId,
@@ -337,14 +338,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-        {(!values.status || type === "newOutput") && (
-          <Grid item xs={12}>
-            <DocumentSecurity documentTypeId={documentTypeId} />
-          </Grid>
-        )}
         {showOutputSection ? (
           <>
-            {isAttachmentRequired && (isPO || includes(outputDocumentTypeName, true)
+            {(isPO || outputIsPO
               ? _tabsState?.tabID !== "details" && (
               <Grid item xs={12}>
                 <AttachmentsField
@@ -372,21 +368,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   />
                 </Grid>
               ))}
-
-            {hasOutput && (
-              <Grid item xs={12}>
-                <FBActiveNoOutput
-                  docRevId={initialValues.id}
-                  status={documentRevision?.status}
-                  version={documentRevision?.version}
-                  isDisabled={isDisabledInput}
-                  outputDocs={values.outputDocumentTypes as OptionType[]}
-                />
-              </Grid>
-            )}
           </>
         ) : (
-          isAttachmentForOther && <Grid item xs={12}>
+          <Grid item xs={12}>
             <AttachmentsField
               isDisabled={isDisabledInput}
               isNewVersion={false}
@@ -396,6 +380,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               docRevStatus={documentRevision?.status}
               documentRevision={documentRevision}
               documentTypeId={documentTypeId || ""}
+            />
+          </Grid>
+        )}
+        {!isPreview && (!values.status || type === DocumentCloneTypeOptions.newOutput) && (
+          <Grid item xs={12}>
+            <DocumentSecurity documentTypeId={documentTypeId} />
+          </Grid>
+        )}
+        {showOutputSection && hasOutput && (
+          <Grid item xs={12}>
+            <FBActiveNoOutput
+              docRevId={initialValues.id}
+              status={documentRevision?.status}
+              version={documentRevision?.version}
+              isDisabled={isDisabledInputInPreview}
+              outputDocs={values.outputDocumentTypes as OptionType[]}
             />
           </Grid>
         )}

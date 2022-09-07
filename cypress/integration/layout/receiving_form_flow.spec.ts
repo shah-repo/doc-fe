@@ -1692,7 +1692,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Select Part Number", () => {
-      cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
+      cy.poSelectPartNumberNew({ partNo: "PRT-00005 - 1" });
     });
 
     it("Enter Quantity Ordered", () => {
@@ -1725,7 +1725,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Save PO", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
     });
 
     it("Enter Shipping Cost", () => {

@@ -21,6 +21,7 @@ declare global {
       drSelectDetailsTab(): Chainable<Subject>;
       drSelectTrainingTab(): Chainable<Subject>;
       drSelectProcedureTab(): Chainable<Subject>;
+      drSelectMaterialsAndEquipmentTab(): Chainable<Subject>;
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectDocumentTab(): Chainable<Subject>;
       drSelectChangeDetailsTab(): Chainable<Subject>;
@@ -268,6 +269,11 @@ Cypress.Commands.add("drSelectProcedureTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drSelectMaterialsAndEquipmentTab", () => {
+  cy.get("[data-cy=\"tabId.materialsandequipment\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectDocumentTab", () => {
   cy.get("[data-cy=\"tabId.documents\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
@@ -289,7 +295,7 @@ Cypress.Commands.add("drSelectSpecificationTab", () => {
 });
 
 Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
-  cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -486,6 +492,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
     [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
+  cy.wait(1000);
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
