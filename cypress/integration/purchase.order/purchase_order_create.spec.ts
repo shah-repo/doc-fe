@@ -79,7 +79,7 @@ const predefinedPOSchema = [
     ],
   },
   {
-    name: "requestor-k740hxlb",
+    name: "po-requestor-autocomplete",
     type: "autocomplete",
     index: 2,
     label: "Requestor",
@@ -617,7 +617,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Requestor field cannot be deleted", () => {
-      cy.get(".fb-field-wrapper-requestor-k740hxlb>div>div>div>[data-cy='remove-schema-item']")
+      cy.get(".fb-field-wrapper-po-requestor-autocomplete>div>div>div>[data-cy='remove-schema-item']")
         .should("have.class", "schema-delete-disabled");
     });
 
@@ -671,7 +671,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Requestor exists", () => {
-      cy.get(`[name="requestor-k740hxlb"]`).eq(1).should("exist");
+      cy.get("[data-cy='po-requestor-autocomplete']").eq(1).should("exist");
     });
 
     it("Supplier exists", () => {
@@ -918,7 +918,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Requestor exists", () => {
-      cy.get(`[name="requestor-k740hxlb"]`).should("exist");
+      cy.get("[data-cy='po-requestor-autocomplete']").should("exist");
     });
 
     it("Supplier exists", () => {
@@ -970,7 +970,7 @@ context("Create company with JSON's", () => {
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy^='requestor-']").arrowClick();
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
 
@@ -1012,6 +1012,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Add an Approval", () => {
+      cy.wait(3000);
       cy.poAddApproverOnApproverList({ approver: USERS[1].email });
     });
 
