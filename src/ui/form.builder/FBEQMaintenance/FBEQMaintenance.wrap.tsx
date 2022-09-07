@@ -7,7 +7,7 @@ import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceStat
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import {
   DocumentRevision,
-  DocumentRevisionStatus,
+  DocumentRevisionStatus, FBOutputDocumentType,
   RevisionChangeType,
 } from "../../../state/ducks/documentRevisions/types";
 import useAsync from "../../hooks/useAsync";
@@ -16,6 +16,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
 import { toastError } from "../../components/notifications";
+import { documentVersionPath } from "../../document.revision/utils/paths";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>
@@ -51,13 +52,13 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
+    let lastReleasedMaintenanceForm: DocumentRevision | undefined;
     if (pmFormId && availableMaintenanceForms) {
       const maintenanceForm = availableMaintenanceForms?.find((e) => e.id === pmFormId);
-      const lastReleased = maintenanceForm?.documentRevisions?.find((rev) =>
+      lastReleasedMaintenanceForm = maintenanceForm?.documentRevisions?.find((rev) =>
         rev.status === DocumentRevisionStatus.Released);
-      pmFormId = lastReleased?.id;
+      pmFormId = lastReleasedMaintenanceForm?.id;
     }
-    // MARK: @reactions
 
     // Set new pm button disabled status.
     useEffect(() => reaction(
@@ -81,40 +82,35 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     }
 
     const async = useAsync<DocumentRevision>({
-      onSuccess: (createdDocumentRevision?) => {
-        console.log(createdDocumentRevision);
+      onSuccess: (data) => {
+        window.open(
+          documentVersionPath(data?.id as string, data?.document?.id as string),
+          "_blank"
+        );
       },
       onError: (error) => {
         toastError(error);
       },
     });
+
     const create = useActionCreator(documentRevisionsActions.create);
 
-    // const pmForm = useSelector((state: ApplicationState) =>
-    //   documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""));
+    // todo: fix pmFormId "jumping"
 
     // MARK: @methods
-    handleAdd = () => {
-      if (!docRevId && !pmFormId) { return; }
+    handleAdd = async () => {
+      if (!docRevId && !pmFormId) {
+        return;
+      }
 
       const values: DocumentRevisionFormValues = {
-        formDocument: {
-          id: pmFormId,
-        },
-        parentEquipment: {
-          id: docRevId as string,
-        },
+        formDocument: { id: pmFormId },
+        parentEquipment: { id: docRevId as string },
         equipmentSection: name,
-        document: {
-          docId: "123", // todo: gen correct id
-          documentType: {
-            id: "1f6ddb7f-8a76-4491-8a70-b9af5827543e", // todo: take correct doc type
-          },
-        },
         revisionChangeType: RevisionChangeType.NextRevision,
         name: "",
         description: "",
-        revisionStage: 1, // todo: take default revision stage
+        revisionStage: 3,
         retrain: false,
         attachments: [],
         referenceTo: [],
@@ -125,13 +121,17 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       };
 
       // REQ: It only has to be populated if there is one output type
-      // const pmFormOutput = pmForm?.formTemplate?.outputDocumentTypes;
-      // if (pmFormOutput?.length === 1) {
-      //   values.document = {
-      //     ...values.document,
-      //     documentType: pmFormOutput[0] as FBOutputDocumentType,
-      //   };
-      // }
+      const pmFormOutput = lastReleasedMaintenanceForm?.formTemplate?.outputDocumentTypes;
+      if (pmFormOutput?.length === 1) {
+        const documentType = pmFormOutput[0] as FBOutputDocumentType;
+
+        const { docId } = await fbEqMaintenanceState.getProposedId(documentType.id);
+
+        values.document = {
+          docId,
+          documentType,
+        };
+      }
 
       const body = toNewVersionRequestBody(values);
 
