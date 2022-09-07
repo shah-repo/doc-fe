@@ -479,6 +479,7 @@ context("Test training curriculum landing page updates", () => {
                 type: "section",
                 index: 0,
                 label: "Periodic Training",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -489,6 +490,7 @@ context("Test training curriculum landing page updates", () => {
               {
                 name: "training-document-to-be-trained-on",
                 type: "autocomplete",
+                tabId: "details",
                 index: 1,
                 label: "Documents to Train on",
                 rules: "|required",
@@ -511,6 +513,7 @@ context("Test training curriculum landing page updates", () => {
               {
                 name: "training-refresh-training-periodically",
                 type: "radiogroup",
+                tabId: "details",
                 index: 2,
                 label: "Refresh/repeat training periodically?",
                 rules: "required||",
@@ -533,6 +536,7 @@ context("Test training curriculum landing page updates", () => {
               {
                 name: "training-validity",
                 type: "quantity",
+                tabId: "details",
                 index: 3,
                 label: "Training Frequency (in days)",
                 rules: "required_if:training-refresh-training-periodically,Yes",
@@ -554,6 +558,7 @@ context("Test training curriculum landing page updates", () => {
               {
                 name: "training-details-section",
                 type: "section",
+                tabId: "details",
                 index: 4,
                 label: "Trainees Details",
                 applicableOn: [
@@ -566,6 +571,7 @@ context("Test training curriculum landing page updates", () => {
               {
                 name: "training-select-groups-to-train",
                 type: "autocomplete",
+                tabId: "details",
                 index: 5,
                 label: "Groups to Train",
                 multiple: true,
@@ -584,6 +590,7 @@ context("Test training curriculum landing page updates", () => {
               {
                 name: "training-select-users-to-train",
                 type: "autocomplete",
+                tabId: "details",
                 index: 6,
                 label: "Users to Train (if applicable)",
                 multiple: true,
@@ -601,6 +608,7 @@ context("Test training curriculum landing page updates", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-l0wcpa0v",
@@ -670,6 +678,20 @@ context("Test training curriculum landing page updates", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
@@ -690,18 +712,14 @@ context("Test training curriculum landing page updates", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
-    });
-
     it("Save training", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
+    });
+
+    it("Verify training status should be 'Draft'", () => {
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
     });
 
     it("Click Submit for Approval", () => {
@@ -709,7 +727,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+      cy.drCheckDocumentStatus({ status: "IN REVIEW" });
     });
 
     it("Click Approve", () => {
@@ -788,6 +806,20 @@ context("Test training curriculum landing page updates", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
@@ -809,18 +841,12 @@ context("Test training curriculum landing page updates", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
     it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {
@@ -828,7 +854,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+      cy.drCheckDocumentStatus({ status: "IN REVIEW" });
     });
 
     it("Click Approve", () => {
@@ -919,6 +945,20 @@ context("Test training curriculum landing page updates", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
@@ -939,12 +979,8 @@ context("Test training curriculum landing page updates", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
     it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
     });
 
     it("Save training", () => {
@@ -958,7 +994,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+      cy.drCheckDocumentStatus({ status: "IN REVIEW" });
     });
 
     it("Click Approve", () => {
@@ -969,7 +1005,12 @@ context("Test training curriculum landing page updates", () => {
       cy.drClickReviseDocument();
     });
 
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select one more group to train", () => {
+      cy.wait(2000);
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
     });
 
@@ -1076,6 +1117,20 @@ context("Test training curriculum landing page updates", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
@@ -1096,18 +1151,12 @@ context("Test training curriculum landing page updates", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
     it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {
@@ -1115,7 +1164,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+      cy.drCheckDocumentStatus({ status: "IN REVIEW" });
     });
 
     it("Click Approve", () => {
@@ -1124,6 +1173,10 @@ context("Test training curriculum landing page updates", () => {
 
     it("Revise TC", () => {
       cy.drClickReviseDocument();
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Select one more group to train", () => {
@@ -1222,6 +1275,20 @@ context("Test training curriculum landing page updates", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
     });
@@ -1238,18 +1305,12 @@ context("Test training curriculum landing page updates", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
     it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: "DRAFT" });
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {
@@ -1257,7 +1318,7 @@ context("Test training curriculum landing page updates", () => {
     });
 
     it("Verify training status should be 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+      cy.drCheckDocumentStatus({ status: "IN REVIEW" });
     });
 
     it("Click Approve", () => {
@@ -1266,6 +1327,10 @@ context("Test training curriculum landing page updates", () => {
 
     it("Revise TC", () => {
       cy.drClickReviseDocument();
+    });
+
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Select one more group to train", () => {
