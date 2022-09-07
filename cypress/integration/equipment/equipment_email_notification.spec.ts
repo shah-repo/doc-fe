@@ -211,7 +211,7 @@ context("Test Equipment maintenance email notifications", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                   },
                 ],
               },
