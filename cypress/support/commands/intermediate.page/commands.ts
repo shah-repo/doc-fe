@@ -34,6 +34,7 @@ declare global {
       intPageVerifyApproversNotExist(): Chainable<Subject>;
       intPageVerifyApprovalsExist(): Chainable<Subject>;
       intPageVerifyApprovalsNotExist(): Chainable<Subject>;
+      intPageVerifyAddDocumentExist(): Chainable<Subject>;
       intPageVerifyAddDocumentExistDisabled(): Chainable<Subject>;
       intPageVerifyAddDocumentNotExist(): Chainable<Subject>;
       intPageVerifyAddFieldExist(): Chainable<Subject>;
@@ -326,6 +327,10 @@ Cypress.Commands.add("intPageVerifyApprovalsExist", () => {
 
 Cypress.Commands.add("intPageVerifyApprovalsNotExist", () => {
   cy.get(`[data-cy="form.builder.approvals"]`).should("not.exist");
+});
+
+Cypress.Commands.add("intPageVerifyAddDocumentExist", () => {
+  cy.get(`[data-cy="fb.add.document"]`).should("exist").should("not.be.disabled");
 });
 
 Cypress.Commands.add("intPageVerifyAddDocumentExistDisabled", () => {
@@ -976,7 +981,7 @@ Cypress.Commands.add("intPageVerifySelectOutputDocumentTypeNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyDownloadExcelTemplateExist", () => {
-  cy.get(`button [data-cy="Download Excel Template"]`).should("exist");
+  cy.get(`[data-cy="Download Excel Template"]`).parent().parent("button").should("exist").should("not.be.disabled");
 });
 
 Cypress.Commands.add("intPageVerifyDownloadExcelTemplateExistDisabled", () => {
