@@ -607,10 +607,6 @@ context("Search PO item with correct order date format", () => {
             cy.wait(2000);
           });
 
-          /* it("Add an Approval", () => {
-            cy.poAddApproverOnApproverList({ approver: USERS[1].name });
-          }); */
-
           it("Click 'Submit for Approval' button", () => {
             cy.pmSubmitForApproval();
           });
