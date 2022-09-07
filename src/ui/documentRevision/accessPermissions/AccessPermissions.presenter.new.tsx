@@ -362,7 +362,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                               {e.user.name}
                             </Typography>
                           </Grid>
-                          <Grid item className={classes.deleteIcon}>
+                          <Grid item className={classes.deleteIcon} data-cy={"operator-ac-" + e.user.name}>
                             <CloseIcon onClick={() => handleDeleteOperatorAccess(e.id)} />
                           </Grid>
                         </Grid>

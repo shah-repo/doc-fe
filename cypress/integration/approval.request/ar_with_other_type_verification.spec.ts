@@ -226,12 +226,18 @@ context("Approval request implementation tasks", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+    });
+
+    it("Move component", () => {
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+      cy.wait(2000);
       cy.get(".drag-handle").eq(2)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
     });
 
     it("Select Documents tab", () => {
@@ -293,17 +299,6 @@ context("Approval request implementation tasks", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
-    it("Add TextField 1", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
-      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
-      cy.fbEnterNameValue({ name: "rows", value: "2" });
-      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
-      cy.fbAddNewFieldButton();
-    });
-
     it("Add TextField 2", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
@@ -344,18 +339,35 @@ context("Approval request implementation tasks", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Add TextField 1", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-1" });
+      cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder 1" });
+      cy.fbEnterNameValue({ name: "rows", value: "2" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
+      cy.fbAddNewFieldButton();
+    });
+
     it("Verify Edit, Move and Remove", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
       cy.fbEnterPlaceholder({ placeholder: " changed" });
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      cy.get(".drag-handle").eq(0)
+    });
+
+    it("Move component", () => {
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(3)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(".drag-handle").eq(1)
+      cy.get(".drag-handle").eq(2)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
     });
 
     it("Click on ‘Approve & Release’", () => {
