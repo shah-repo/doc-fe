@@ -2,8 +2,8 @@ import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { SelectOption } from "../../components/forms/fields/Select";
 import { ChangeRequestUserProps } from "./types";
 
-export const canEditChangeRequest = ({ dataProp, currentUserEmail }: ChangeRequestUserProps) => (
-  currentUserEmail === dataProp.owner.user.email && dataProp.state === ChangeRequestStatus.Draft
+export const canEditChangeRequest = ({ dataProp: changeRequest, currentUserEmail }: ChangeRequestUserProps) => (
+  currentUserEmail === changeRequest.owner.user.email && changeRequest.state === ChangeRequestStatus.Draft
 );
 
 export const canChangeCROwner = (
@@ -23,8 +23,10 @@ export const canChangeCROwner = (
   isCompanyAdmin ||
   hasOwnerShipTag;
 
-export const canEditApprovers = ({ dataProp, currentUserEmail }: ChangeRequestUserProps) => canEditChangeRequest({ dataProp, currentUserEmail }) ||
-    (currentUserEmail === dataProp.owner.user.email && dataProp.state === ChangeRequestStatus.InReview);
+export const canEditApprovers =
+  ({ dataProp: changeRequest, currentUserEmail }: ChangeRequestUserProps) =>
+    canEditChangeRequest({ dataProp: changeRequest, currentUserEmail }) ||
+    (currentUserEmail === changeRequest.owner.user.email && changeRequest.state === ChangeRequestStatus.InReview);
 
 export const changeRequestStatusOption = () => {
   const options: SelectOption[] = [];

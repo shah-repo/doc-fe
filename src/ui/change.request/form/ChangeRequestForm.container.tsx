@@ -1,22 +1,15 @@
+/* eslint-disable no-console */
 import { Formik, FormikProps } from "formik";
 import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SMFormHOCProps } from "../../../App";
 import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
-import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
-import { ReactComponent as EyeIcon } from "../../../assets/images/eye-icon-references.svg";
-import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
 import { AsyncState } from "../../../state/types";
 import styles from "../../common/style/styles";
-import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
-import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
-import { FB, FBBookmarkState, FBProvider } from "../../form.builder";
-import ChangeRequestAuditContainer from "../audit/Audit.container";
-import CRReferences from "../references/Reference";
+import { FB, FBBookmarkState, FBProvider, FBWorkspaceModeOptions } from "../../form.builder";
 import ChangeRequestForm from "./ChangeRequestForm";
 import { ChangeRequestFormValues } from "./types";
 
@@ -43,6 +36,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   changeRequest,
   doNotPrompt,
   chosenForm,
+  _formState,
 }) => {
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
@@ -50,8 +44,6 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
   }, []);
-
-  const intl = useIntl();
 
   const changeOpenStatus = (isDrawerOpen) => {
     setOpen(isDrawerOpen);
@@ -64,17 +56,20 @@ const ChangeRequestFormContainer: React.FunctionComponent<
     ? changeRequest.formDocument?.formTemplate?.schema
     : chosenForm?.formTemplate?.schema;
 
+  _formState?.setMode(FBWorkspaceModeOptions.FORM);
+  // console.log(_formState);
+
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <ChangeRequestForm
       asyncState={asyncState}
       changeRequest={changeRequest}
       doNotPrompt={doNotPrompt}
-      sidebarList={sidebarList}
       changeOpenStatus={changeOpenStatus}
       schema={schemaData}
-      mode="form"
+      mode={FBWorkspaceModeOptions.FORM}
       withoutBottomBar={true}
       autosave={autosaveEnabled}
+      _formState={_formState}
       {...props}
     />
 
@@ -101,51 +96,6 @@ const ChangeRequestFormContainer: React.FunctionComponent<
     // </FBWorkspace>
 
   );
-
-  const sidebarList: SidebarTypes[] = [
-    {
-      icon: <EyeIcon />,
-      type: "references",
-      details: {
-        shouldShow: true,
-        title:
-          intl?.formatMessage({
-            id: "common.references",
-          }) || "",
-        component: (
-          <CRReferences
-            chosenForm={chosenForm}
-            changeRequest={changeRequest}
-          />
-        ),
-      },
-    },
-    {
-      icon: <TimelineIcon />,
-      type: "history",
-      details: {
-        shouldShow: Boolean(changeRequest),
-        dataCy: "timeline-icon",
-        title: intl.formatMessage({
-          id: "document.revision.history",
-        }),
-        component: changeRequest ? <ChangeRequestAuditContainer {...{ changeRequest, isDrawerOpen }} />
-          : null,
-      },
-    },
-    {
-      icon: <BookmarkIcon />,
-      type: "bookmarks",
-      details: {
-        shouldShow: true,
-        dataCy: "bookmark-icon",
-        title: intl.formatMessage({
-          id: "document.revision.bookmarks",
-        }),
-        component: <Bookmarks fromAR={true} />,
-      },
-    },
-  ];
 
   return (
     <FBProvider {...{ bookmarkState }}>

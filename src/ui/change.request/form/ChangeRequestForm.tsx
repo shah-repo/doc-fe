@@ -11,12 +11,11 @@ import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
-import Sidebar from "../../common/components/Sidebar";
-import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../form.builder";
 import { FBWorkspaceMode } from "../../form.builder/types/workspace";
 import Colors from "../../layout/theme/utils/colors";
 import FormHeader from "./assessmentForm/FormHeader";
+import ChangeRequestSidebar from "./ChangeRequest.sidebar";
 import ChangeRequestFormHeader from "./ChangeRequestFormHeader";
 import { toChangeRequestFormValues } from "./transform";
 
@@ -28,7 +27,6 @@ type ChangeRequestFormProps =
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
-  sidebarList: SidebarTypes[];
   changeOpenStatus: (status: boolean) => void;
   schema?: FBSchemaProps[];
   mode: FBWorkspaceMode;
@@ -40,14 +38,17 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   asyncState,
   changeRequest,
   doNotPrompt,
-  sidebarList,
   changeOpenStatus,
   schema,
   mode,
   withoutBottomBar,
   autosave,
+  _formState,
 }) => {
   const { _tabsState } = SM.useStores();
+  _formState?.setMode(mode);
+
+  // console.log(_formState);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
   // const classes = styles({ isDrawerOpen });
@@ -65,7 +66,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
 
   const onTabChange = (event, newValue, tabConfig) => {
-    console.log(event, newValue, tabConfig);
+    // console.log(event, newValue, tabConfig);
     _tabsState?.setValue(newValue);
     _tabsState?.setTabID(tabConfig[newValue].tabId);
   };
@@ -98,7 +99,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         {...changeRequest && changeRequest.crId && {
           rightSidebar: (
             <Observer>
-              {() => <Sidebar sidebarList={sidebarList} isDrawerOpen={isDrawerOpen}
+              {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
                 setOpen={changeSidebarOpenStatus} fromEdit={true}/>}
             </Observer>
           ),
@@ -143,7 +144,8 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 mode={mode}
                               />
                           }
-                          {tabType === "DYNAMIC" && showTabContent && mode !== FBWorkspaceModeOptions.NONE &&
+                          {tabType === "DYNAMIC" && showTabContent &&
+                            _formState?.mode !== FBWorkspaceModeOptions.NONE &&
                             <FBWorkspace
                               isPortal={false}
                               initialValues={cloneDeep(changeRequest?.formInput)}
