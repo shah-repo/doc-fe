@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -66,7 +67,6 @@ context("Check inline approval Record flow", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
-
 
   context("Create group and add members.", () => {
     context("Create 'Group'", () => {
@@ -140,6 +140,10 @@ context("Check inline approval Record flow", () => {
         cy.drSelectDetailsTab();
       });
 
+      it("Check status should be Draft", () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+      });
+
       it("Add TextField", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
@@ -162,6 +166,10 @@ context("Check inline approval Record flow", () => {
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval" });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect(groupName);
+      });
+
+      it("verify groupname created.", () => {
+        cy.get("[data-cy=\"editorConfig.groups\"]").parent().should("contain.text", groupName);
         cy.fbAddNewFieldButton();
       });
 
@@ -274,10 +282,13 @@ context("Check inline approval Record flow", () => {
       cy.drSelectDetailsTab();
     });
 
+    it("Check status should be Draft", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
+
     it("Verify inline approver members", () => {
       cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[2].name}`);
     });
   });
-
 });

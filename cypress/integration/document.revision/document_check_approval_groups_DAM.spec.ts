@@ -4,7 +4,6 @@ import "moment-timezone";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
@@ -172,7 +171,7 @@ context("Document Approver Requirement on DAM with the groups", () => {
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+        cy.drCreateNewDocumentFromForm();
       });
     });
   });
@@ -201,7 +200,7 @@ context("Document Approver Requirement on DAM with the groups", () => {
         CyRoutes.GetFieldLocks,
       ],
       () => {
-        cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
+        cy.drSelectApprovalRolesTab();
       });
     });
 
@@ -217,6 +216,10 @@ context("Document Approver Requirement on DAM with the groups", () => {
 
     it(`Add approving users: ${FIRST_USER.name}`, () => {
       cy.drEnterApprovingUsers(FIRST_USER.name);
+    });
+
+    it("Verify the group present in list", () => {
+      cy.get("[data-cy^=groups]").eq(0).autocompleteSelect(`${groupName}`);
     });
 
     it(`Add approving groups: ${groupName}`, () => {
@@ -326,7 +329,6 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
   });
 
-
   context("'Approve and Release' the document", () => {
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -389,13 +391,19 @@ context("Document Approver Requirement on DAM with the groups", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
     });
 
-    it(`Enforce user rule, Add ${SECOND_USER.name} to approvers`, () => {
-      SystemRequirement("REQ-4270");
-      cy.drAddApprover({ name: SECOND_USER.name });
+    it("Verify the group members", () => {
+      cy.get("[data-cy^=field-approvals]").eq(0).autocompleteSelect(`${FIRST_USER.name}`);
+      cy.get("[data-cy^=field-approvals]").eq(0).autocompleteSelect(`${SECOND_USER.name}`);
     });
 
-    it("Type password in Approve and Release dialog", () => {
-      cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+    it(`${roleOne} should be checked`, () => {
+      cy.get(`[data-cy="group-0"]`).contains(roleOne);
+      cy.get(`[data-cy="checked-0"]`).should("be.visible");
+    });
+
+    it(`${roleTwo} should be checked`, () => {
+      cy.get(`[data-cy="group-1"]`).contains(roleTwo);
+      cy.get(`[data-cy="checked-1"]`).should("be.visible");
     });
   });
 });
