@@ -22,10 +22,7 @@ class FBEQMaintenanceState {
 
   public getProposedId = (documentTypeId: string) => {
     this.proposedIdApi.set({
-      url: DOCUMENT_PROPOSED_DOC_ID,
-      urlValues: {
-        documentTypeId,
-      },
+      url: DOCUMENT_PROPOSED_DOC_ID + "?documentTypeId=" + documentTypeId,
     });
     return this.proposedIdApi.fetch();
   };

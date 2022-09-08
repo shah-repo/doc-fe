@@ -101,6 +101,11 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const create = useActionCreator(documentRevisionsActions.create);
 
     // todo: fix pmFormId "jumping"
+    // todo: loading
+    // todo: disabled button
+    // todo: remove old logic from create_maintance
+    // refactor
+    // fix current state
 
     // MARK: @methods
     handleAdd = async () => {
