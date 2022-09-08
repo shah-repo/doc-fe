@@ -719,7 +719,7 @@ context("Test usage report is correctly counting documents", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -735,7 +735,7 @@ context("Test usage report is correctly counting documents", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
