@@ -252,7 +252,6 @@ export { default as FBSnackbar } from "./FBSnackbar/FBSnackbar";
 export { default as FBSnackbarState } from "./FBSnackbar/FBSnackbar.state";
 export * from "./FBSnackbar/FBSnackbar.types";
 export { default as FBSortable } from "./FBSortable/FBSortable";
-export { default as FBSortableState } from "./FBSortable/FBSortable.state";
 export * from "./FBSortable/FBSortable.types";
 export { default as FBStarter } from "./FBStarter/FBStarter";
 export * from "./FBStarter/FBStarter.types";

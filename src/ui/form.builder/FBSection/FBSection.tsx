@@ -10,7 +10,7 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
   showErrorMsg = false,
   omitFinalValidation = true,
   stepIndex,
-  index = 0,
+  index,
   children,
   loading,
   name,
@@ -23,8 +23,11 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
   >
     <Box
       color={Colors.almost_black}
+      mt={index !== 0 ? "25px" : .50}
+      mb={0.625}
+      mx={0}
       fontSize={16}
-      lineHeight={1.5}
+      lineHeight="24px"
       fontWeight={600}
       id={name}
       style={{ scrollMarginTop: 50, borderBottom: `1px solid ${Colors.chinese_silver}` }}

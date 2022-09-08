@@ -249,18 +249,6 @@ export const FBAutosave: FBInputType[] = [
   "texteditor",
 ];
 
-export const BlockTypeField: FBInputType[] = [
-  "section",
-  "approvals",
-  "blanktplform",
-  "purchaseorder",
-  "poapprovals",
-  "poApprovalMatrix",
-  "eqmaintenance",
-  "stepsection",
-  "teststep",
-];
-
 export interface FBInputConstructor {
   value: any;
   hidden?: boolean;

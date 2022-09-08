@@ -105,7 +105,7 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
   return (
-    <Box pb={3}>
+    <Box pb={3} pl={2}>
       <ListItem data-cy="BuildsPresenter-label" disableGutters>
         <Typography variant="h6" style={labelProps}>
           <Text message={label} />
