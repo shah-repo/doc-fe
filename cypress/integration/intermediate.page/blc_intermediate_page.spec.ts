@@ -264,8 +264,8 @@ context("Intermediate page validation", () => {
         cy.intPageVerifySelectOutputDocumentTypeExist();
       });
 
-      it("Check 'DOWNLOAD EXCEL TEMPLATE button' is displayed (disabled)", () => {
-        cy.intPageVerifyDownloadExcelTemplateExistDisabled();
+      it("Check 'DOWNLOAD EXCEL TEMPLATE button' is displayed (clickable)", () => {
+        cy.intPageVerifyDownloadExcelTemplateExist();
       });
 
       it("Close Preview dialog", () => {

@@ -15,7 +15,6 @@ import { DocumentType } from "../../state/ducks/documentRevisions/documentType/t
 import { DocumentRevision, Reference } from "../../state/ducks/documentRevisions/types";
 import { getAuditDefaultValue } from "../common/utils/audit";
 import Text from "../components/Text";
-import { Translation } from "../translations/types";
 import AuditAttachment from "./AuditAttachment";
 import AuditAutocomplete from "./AuditAutocomplete";
 import AuditDownloadS3link from "./AuditDownloadS3link";
@@ -156,16 +155,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
-        returnValue = (
-          <Text
-            dataCy={dataCy}
-            translation="changeRequest.audit.status.updated.by"
-            values={{
-              status: <Text translation={audit.nextValue as Translation} />,
-              name: audit.owner?.user.name,
-            }}
-          />
-        );
+        returnValue = (<div data-cy={dataCy}>{audit.owner?.user.name}</div>);
         break;
       case "securityGroups":
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Group).name}</div>);
