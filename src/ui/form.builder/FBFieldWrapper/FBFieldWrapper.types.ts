@@ -11,4 +11,5 @@ export type FBFieldWrapperProps =
     markDownVisible?: boolean;
     inputProps?: Partial<FBInputProps>;
     isDragged?: boolean;
+    position: number;
   };
