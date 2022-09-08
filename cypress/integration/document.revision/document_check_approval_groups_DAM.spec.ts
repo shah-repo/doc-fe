@@ -380,7 +380,7 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
   });
 
-  context("Save document & approve & release.", () => {
+  context("Save document.", () => {
     it("Clicks on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
@@ -396,14 +396,11 @@ context("Document Approver Requirement on DAM with the groups", () => {
       cy.get("[data-cy^=field-approvals]").eq(0).autocompleteSelect(`${SECOND_USER.name}`);
     });
 
-    it(`${roleOne} should be checked`, () => {
-      cy.get(`[data-cy="group-0"]`).should("contain.text", roleOne);
-      cy.get(`[data-cy="checked-0"]`).should("be.visible");
-    });
-
-    it(`${roleTwo} should be checked`, () => {
-      cy.get(`[data-cy="group-1"]`).should("contain.text", roleTwo);
-      cy.get(`[data-cy="checked-1"]`).should("be.visible");
+    it(`Verify roles should be checked`, () => {
+      cy.get(`[data-cy="group-0"]`).parent().parent()
+        .should("contain.text", roleOne)
+        .and("contain.text", roleTwo);
     });
   });
 });
+
