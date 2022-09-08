@@ -45,7 +45,7 @@ const FormHeader: React.FC<Props> = ({
       </Grid>
     </Grid>
     <FormMessage asyncState={asyncState} />
-    <FormProgress asyncState={asyncState} />
+    <FormProgress asyncState={asyncState} attached />
   </Header>
 );
 
