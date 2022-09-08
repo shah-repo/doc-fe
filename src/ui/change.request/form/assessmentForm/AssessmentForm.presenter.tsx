@@ -106,4 +106,4 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(AssessmentFormPresenter);
+withStyles(styles)(AssessmentFormPresenter);
