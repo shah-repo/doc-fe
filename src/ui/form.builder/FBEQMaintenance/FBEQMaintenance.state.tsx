@@ -5,15 +5,14 @@ import { AvailableMaintenanceForm } from "..";
 import { DOCUMENT_PROPOSED_DOC_ID } from "../../../state/ducks/documents/constants";
 
 class FBEQMaintenanceState {
-  // MARK: @observables
   @observable public newPMDisabled?: boolean;
+  @observable public newPMLoading?: boolean;
 
   public availableMaintenanceFormsApi: FBRequest<AvailableMaintenanceForm[], null> = new FBRequest();
   public proposedIdApi: FBRequest<unknown, unknown> = new FBRequest();
 
-  // MARK: @actions
-  @action public setNewPMDisabled = (disabled?: boolean) =>
-    set(this, "newPMDisabled", disabled);
+  @action public setNewPMDisabled = (value: boolean) => set(this, "newPMDisabled", value);
+  @action public setNewPMLoading = (value: boolean) => set(this, "newPMLoading", value);
 
   public getAvailableMaintenanceForms = () => this.availableMaintenanceFormsApi.set({
     url: FBEndpoint.FecthAvailableMaintenanceForms,

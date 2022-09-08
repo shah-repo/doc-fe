@@ -29,6 +29,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     handleAdd,
     eqMaintenanceState,
     isNewPMDisabled,
+    isNewPMLoading,
     pmFormId,
     name = "",
     editorConfig,
@@ -37,24 +38,23 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     getOptionLabel,
     ...props
   }: T) => {
+    eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
 
     // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const fbEqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     const { id: docRevId, document: { status = "" } = {} } = workspaceState || {};
     const isEqStatusReleased = status === DocumentRevisionStatus.Released;
     const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
     const complianceStatus = formState?.getFieldValue(`${name}.status`);
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
     const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYearAlt);
-    availableMaintenanceForms = fbEqMaintenanceState?.availableMaintenanceFormsApi.data;
+    availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
 
     useEffect(() => {
-      fbEqMaintenanceState?.getAvailableMaintenanceForms();
+      eqMaintenanceState?.getAvailableMaintenanceForms();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
     let lastReleasedMaintenanceForm: DocumentRevision | undefined;
     if (pmFormId && availableMaintenanceForms) {
@@ -82,7 +82,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       return !(
         formState?.getFieldValue(`${name}.preventativeForm`) &&
         formState?.getFieldValue(`${name}.frequency`)
-      ) || !isEqStatusReleased || !pmFormId || !lastReleasedMaintenanceForm;
+      ) || !isEqStatusReleased || !pmFormId || !lastReleasedMaintenanceForm
+        || Boolean(eqMaintenanceState?.newPMLoading);
     }
 
     const async = useAsync<DocumentRevision>({
@@ -91,16 +92,19 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
           documentVersionPath(data?.id as string, data?.document?.id as string),
           "_blank"
         );
+        eqMaintenanceState?.setNewPMLoading(false);
+        eqMaintenanceState?.setNewPMLoading(newPMDisabled());
       },
       onError: (error) => {
         toastError(error);
+        eqMaintenanceState?.setNewPMLoading(false);
+        eqMaintenanceState?.setNewPMLoading(newPMDisabled());
       },
     });
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     const documentTypesById = useSelector(documentTypeSelectors.byId);
     const create = useActionCreator(documentRevisionsActions.create);
 
-    // todo: loading
     // todo: remove old logic from create_maintance
     // refactor
     // fix current state
@@ -110,6 +114,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       if (!docRevId || !lastReleasedMaintenanceForm) {
         return;
       }
+
+      eqMaintenanceState?.setNewPMLoading(true);
 
       const values: DocumentRevisionFormValues = {
         formDocument: { id: lastReleasedMaintenanceForm.id },
@@ -133,7 +139,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         const shortDocumentType = pmFormOutput[0] as FBOutputDocumentType;
         const documentType = documentTypesById[shortDocumentType.id] ?? {};
 
-        const { docId } = await fbEqMaintenanceState.getProposedId(documentType.id);
+        const { docId } = await eqMaintenanceState?.getProposedId(documentType.id);
 
         values.document = {
           docId,
@@ -181,11 +187,9 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 
     // MARK: @observer
     useObserver(() => {
-      isNewPMDisabled = (
-        eqMaintenanceState?.newPMDisabled ||
-        newPMDisabled()
-      );
-      availableMaintenanceForms = fbEqMaintenanceState?.availableMaintenanceFormsApi.data;
+      isNewPMDisabled = eqMaintenanceState?.newPMDisabled || newPMDisabled();
+      isNewPMLoading = eqMaintenanceState?.newPMLoading;
+      availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
     });
 
     return Component({
@@ -194,6 +198,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       complianceDueDate,
       complianceStatus,
       isNewPMDisabled,
+      isNewPMLoading,
       name,
       editorConfig,
       isTypePM,

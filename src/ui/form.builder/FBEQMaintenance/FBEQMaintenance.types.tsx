@@ -9,22 +9,13 @@ export type FBEQMaintenanceProps =
   complianceDueDate?: string;
   complianceStatus?: string;
   isNewPMDisabled?: boolean;
+  isNewPMLoading?: boolean;
   pmFormId?: string;
   isTypePM?: boolean;
   availableMaintenanceForms?: AvailableMaintenanceForm[];
   preventativeFormOptions?: FBAutocompleteProps["filterOptions"];
   getOptionLabel?: FBAutocompleteProps["getOptionLabel"];
 };
-
-// interface FBEQMaintenanceValue {
-//   preventativeForm: string;
-//   frequency: number;
-//   instructions: string;
-//   manufacturer: string;
-//   specs: string;
-//   history: DocumentRevision[];
-//   status: string;
-// }
 
 export interface AvailableMaintenanceForm {
   companyId: string;
