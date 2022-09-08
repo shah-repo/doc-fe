@@ -160,28 +160,12 @@ context("Intermediate page validation", () => {
       cy.intPageVerifyMakeVsBuyNotExist();
     });
 
-    it("Check 'Primary Supplier' is not displayed", () => {
-      cy.intPageVerifyPrimarySupplierNotExist();
-    });
-
-    it("Check 'Other Suppliers' is not displayed", () => {
-      cy.intPageVerifyOtherSuppliersNotExist();
-    });
-
     it("Check 'Unit of measure' is not displayed", () => {
       cy.intPageVerifyUnitOfMeasureNotExist();
     });
 
     it("Check 'Traceability required' is not displayed", () => {
       cy.intPageVerifyTraceabilityRequiredNotExist();
-    });
-
-    it("Check 'Serialized' is not displayed", () => {
-      cy.intPageVerifySerializedNotExist();
-    });
-
-    it("Check 'Select serialization' is not displayed", () => {
-      cy.intPageVerifySelectSerializationNotExist();
     });
 
     it("Check 'IQC Required' is not displayed", () => {
@@ -271,28 +255,12 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyMakeVsBuyExist();
       });
 
-      it("Check 'Primary Supplier' is displayed", () => {
-        cy.intPageVerifyPrimarySupplierExist();
-      });
-
-      it("Check 'Other Suppliers' is displayed", () => {
-        cy.intPageVerifyOtherSuppliersExist();
-      });
-
       it("Check 'Unit of measure' is displayed", () => {
         cy.intPageVerifyUnitOfMeasureExist();
       });
 
       it("Check 'Traceability required' is displayed", () => {
         cy.intPageVerifyTraceabilityRequiredExist();
-      });
-
-      it("Check 'Serialized' is displayed", () => {
-        cy.intPageVerifySerializedExist();
-      });
-
-      it("Check 'Select serialization' is displayed", () => {
-        cy.intPageVerifySelectSerializationExist();
       });
 
       it("Check 'IQC Required' is displayed", () => {
@@ -326,28 +294,12 @@ context("Intermediate page validation", () => {
       cy.intPageVerifyMakeVsBuyExist();
     });
 
-    it("Check 'Primary Supplier' is displayed", () => {
-      cy.intPageVerifyPrimarySupplierExist();
-    });
-
-    it("Check 'Other Suppliers' is displayed", () => {
-      cy.intPageVerifyOtherSuppliersExist();
-    });
-
     it("Check 'Unit of measure' is displayed", () => {
       cy.intPageVerifyUnitOfMeasureExist();
     });
 
     it("Check 'Traceability required' is displayed", () => {
       cy.intPageVerifyTraceabilityRequiredExist();
-    });
-
-    it("Check 'Serialized' is displayed", () => {
-      cy.intPageVerifySerializedExist();
-    });
-
-    it("Check 'Select serialization' is displayed", () => {
-      cy.intPageVerifySelectSerializationExist();
     });
 
     it("Check 'IQC Required' is displayed", () => {
