@@ -9,7 +9,7 @@ import { ReactComponent as TimelineIcon } from "../../../assets/images/history.s
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { DataProps } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import Sidebar from "../../common/components/Sidebar";
@@ -54,6 +54,10 @@ const Container: React.FunctionComponent<Props> = ({
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const hasOwnershipTag = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
+
+  const displayLastSaved = (
+    dataProp.state === ChangeRequestStatus.Draft
+  );
 
   const canChangeOwnerShip = canChangeCROwner(
     dataProp.state,
@@ -184,7 +188,9 @@ const Container: React.FunctionComponent<Props> = ({
 
   return (
     <FBProvider {...{ bookmarkState }}>
-      <SummaryHeader {...{ dataProp, canChangeOwnerShip, asyncState: async.asyncState, errors, canEdit }}/>
+      <SummaryHeader
+        {...{ dataProp, canChangeOwnerShip, asyncState: async.asyncState, errors, canEdit, displayLastSaved }}
+      />
       <div className={classes.root}>
         <div className={classes.appFrame}>
           {summaryFormikRenderer()}
