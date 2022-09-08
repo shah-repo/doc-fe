@@ -20,7 +20,7 @@ const StyledTooltip = (props: TooltipProps) => {
   return <FBTooltip arrow placement="left" classes={classes} {...props} />;
 };
 
-export const Sidebar: React.FunctionComponent<Props> = ({
+const Sidebar: React.FunctionComponent<Props> = ({
   sidebarList,
   isDrawerOpen,
   setOpen,
@@ -82,3 +82,5 @@ export const Sidebar: React.FunctionComponent<Props> = ({
     </Box>
   );
 };
+
+(Sidebar);

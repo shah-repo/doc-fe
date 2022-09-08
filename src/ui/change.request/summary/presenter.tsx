@@ -34,7 +34,7 @@ interface OwnProps extends DataProps<ChangeRequest> {
 
 type Props = OwnProps & FormikProps<ChangeRequestFormValues>;
 
-export const Presenter: React.FunctionComponent<Props> = ({
+const Presenter: React.FunctionComponent<Props> = ({
   dataProp,
   asyncState,
   canEdit,
@@ -70,3 +70,4 @@ export const Presenter: React.FunctionComponent<Props> = ({
     </Box>
   ); };
 
+(Presenter);
