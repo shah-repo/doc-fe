@@ -9,6 +9,7 @@ import HeaderInfo from "../../components/common/header/HeaderInfo";
 import { generateSubtitle } from "../../components/common/header/subtitles";
 import FormMessage from "../../components/forms/FormMessage";
 import Text from "../../components/Text";
+import { DOCUMENT_REVISION_CREATE_URL } from "../../constants/urls";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container";
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
@@ -24,11 +25,13 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   isCreateDocumentDisabled,
 }) => {
   const isNewLayout = SM.isNewLayout;
+  const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
+
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { workspaceState } = FB.useStores();
   const { _documentRevisionFormState } = SM.useStores();
-  const classes = useStyles();
+  const classes = useStyles(isCreateUrl);
   const renderLastSavedContnet = () => (
     <Box>
       Last saved: &nbsp;

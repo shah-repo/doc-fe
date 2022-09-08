@@ -68,7 +68,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
   }
 
   return (
-    <AppBar color="primary" className={classes.appbar}>
+    <AppBar color="primary" className={classes.appbar} position="relative">
       <Toolbar className={classes.toolbar}>
         <Grid container={true}>
           {children}
