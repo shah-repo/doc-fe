@@ -218,14 +218,14 @@ context("Document Approver Requirement on DAM with the groups", () => {
       cy.drEnterApprovingUsers(FIRST_USER.name);
     });
 
-    it("Verify the group present in list", () => {
-      cy.get("[data-cy^=groups]").eq(0).autocompleteSelect(`${groupName}`);
-    });
 
     it(`Add approving groups: ${groupName}`, () => {
       cy.drEnterApprovingGroups(groupName);
     });
 
+    it("Verify the group present in list", () => {
+      cy.get("[name^=\"groups\"]").should("contain", `${groupName}`);
+    });
     it("Save role", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drAddApprovalRole();
@@ -397,12 +397,12 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
 
     it(`${roleOne} should be checked`, () => {
-      cy.get(`[data-cy="group-0"]`).contains(roleOne);
+      cy.get(`[data-cy="group-0"]`).should("contain.text", roleOne);
       cy.get(`[data-cy="checked-0"]`).should("be.visible");
     });
 
     it(`${roleTwo} should be checked`, () => {
-      cy.get(`[data-cy="group-1"]`).contains(roleTwo);
+      cy.get(`[data-cy="group-1"]`).should("contain.text", roleTwo);
       cy.get(`[data-cy="checked-1"]`).should("be.visible");
     });
   });

@@ -170,10 +170,10 @@ context("Check inline approval Record flow", () => {
 
       it("verify groupname created.", () => {
         cy.get("[data-cy=\"editorConfig.groups\"]").parent().should("contain.text", groupName);
-        cy.fbAddNewFieldButton();
       });
 
       it("Save the form", () => {
+        cy.fbAddNewFieldButton();
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
@@ -249,10 +249,14 @@ context("Check inline approval Record flow", () => {
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval" });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect(groupName);
-        cy.fbAddNewFieldButton();
+      });
+
+      it("verify groupname created.", () => {
+        cy.get("[data-cy=\"editorConfig.groups\"]").parent().should("contain.text", groupName);
       });
 
       it("Save the form", () => {
+        cy.fbAddNewFieldButton();
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
@@ -286,9 +290,14 @@ context("Check inline approval Record flow", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
-    it("Verify inline approver members", () => {
+    it("Select inline approver members", () => {
       cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[2].name}`);
+    });
+
+    it("Verify inline approver members", () => {
+      cy.get("[data-cy^=fb-ia-inline-approval-]").parent().should("contain", `${USERS[1].name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-]").parent().should("contain", `${USERS[2].name}`);
     });
   });
 });
