@@ -17,6 +17,10 @@ import { documentRevisionsActions } from "../../../state/ducks/documentRevisions
 import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
 import { toastError } from "../../components/notifications";
 import { documentVersionPath } from "../../document.revision/utils/paths";
+import { useSelector } from "react-redux";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>
@@ -92,7 +96,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         toastError(error);
       },
     });
-
+    const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+    const documentTypesById = useSelector(documentTypeSelectors.byId);
     const create = useActionCreator(documentRevisionsActions.create);
 
     // todo: fix pmFormId "jumping"
@@ -114,16 +119,16 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         retrain: false,
         attachments: [],
         referenceTo: [],
-
-        securityEmployees: [], // todo
-        securityGroups: [], // todo
-        operators: [], // todo
+        securityEmployees: [],
+        securityGroups: [],
+        operators: [],
       };
 
       // REQ: It only has to be populated if there is one output type
       const pmFormOutput = lastReleasedMaintenanceForm?.formTemplate?.outputDocumentTypes;
       if (pmFormOutput?.length === 1) {
-        const documentType = pmFormOutput[0] as FBOutputDocumentType;
+        const shortDocumentType = pmFormOutput[0] as FBOutputDocumentType;
+        const documentType = documentTypesById[shortDocumentType.id] ?? {};
 
         const { docId } = await fbEqMaintenanceState.getProposedId(documentType.id);
 
@@ -131,6 +136,8 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
           docId,
           documentType,
         };
+
+        values.securityGroups = filterSecurityGroupsForQms(documentType.isQms, groupOptions);
       }
 
       const body = toNewVersionRequestBody(values);
