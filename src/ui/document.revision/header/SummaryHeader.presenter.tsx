@@ -12,14 +12,14 @@ interface Props {
   documentRevision: DocumentRevision;
   canChangeOwnerShip?: boolean;
   canShowCreateVersionButton?: boolean;
-  displayLastEdit: boolean;
+  displayLastSaved: boolean;
 }
 
 const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   canChangeOwnerShip,
   canShowCreateVersionButton,
-  displayLastEdit,
+  displayLastSaved,
 }) => (
   <Header
     displayStatus={documentRevision.displayStatus}
@@ -43,7 +43,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
     />
     <Grid item={true} xs={6}>
       <Grid container={true} alignItems="center" justify="flex-end">
-        {displayLastEdit && documentRevision.updatedAt && (
+        {displayLastSaved && documentRevision.updatedAt && (
           <HeaderLastSaved
             timestamp={documentRevision.updatedAt}
           />

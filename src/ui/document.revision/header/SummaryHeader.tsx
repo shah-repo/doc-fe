@@ -21,8 +21,9 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   FormHeaderSummaryContext = React.createContext<FormHeaderSummaryContext | undefined>({
     documentRevisionSummary: documentRevision,
   });
-  const displayLastEdit = (
+  const displayLastSaved = (
     documentRevision.status === DocumentRevisionStatus.Draft
+    || documentRevision.status === DocumentRevisionStatus.PendingChange
   );
   return (
     <SummaryHeaderPresenter
@@ -30,7 +31,7 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
         documentRevision,
         canChangeOwnerShip,
         canShowCreateVersionButton,
-        displayLastEdit,
+        displayLastSaved,
       }}
     />
 
