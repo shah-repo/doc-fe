@@ -19,8 +19,8 @@ const newCompanyName2 = "New company " + randomNumberForCompany2;
 const newCompanyAbbr2 = "NC-" + randomNumberForCompany2;
 
 // This test is only for demo & run only on demo env
-const isContext = Cypress.env('FE_URL').includes('demo.enlil.io')
-? context : context.skip
+const isContext = Cypress.env("FE_URL").includes("demo.enlil.io")
+  ? context : context.skip;
 
 isContext("Test for banner test in demo", () => {
   before(() => {
