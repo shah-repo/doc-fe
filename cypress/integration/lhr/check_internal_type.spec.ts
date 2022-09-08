@@ -178,5 +178,18 @@ context(testName, () => {
       cy.unClick();
       cy.navigToDocumentList();
     });
+
+    it("Reload page", () => {
+      cy.reload();
+    });
+
+    it("Verify Group for LHR Template", () => {
+      cy.intercept({ method: "GET", pathname: "/api/v1/document_type" }, (req) => {
+        req.reply((res) => {
+          const item = res.body.find((item) => item.documentTypeName === "LHR Template");
+          expect(item.group).to.equal("LHRT");
+        });
+      }).as("response");
+    });
   });
 });
