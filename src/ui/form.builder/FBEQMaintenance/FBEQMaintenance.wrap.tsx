@@ -1,5 +1,5 @@
 import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
-import { isEmpty, lowerCase } from "lodash";
+import { lowerCase } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -82,7 +82,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       return !(
         formState?.getFieldValue(`${name}.preventativeForm`) &&
         formState?.getFieldValue(`${name}.frequency`)
-      ) || !isEqStatusReleased || isEmpty(pmFormId);
+      ) || !isEqStatusReleased || !pmFormId || !lastReleasedMaintenanceForm;
     }
 
     const async = useAsync<DocumentRevision>({
@@ -100,22 +100,20 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const documentTypesById = useSelector(documentTypeSelectors.byId);
     const create = useActionCreator(documentRevisionsActions.create);
 
-    // todo: fix pmFormId "jumping"
     // todo: loading
-    // todo: disabled button
     // todo: remove old logic from create_maintance
     // refactor
     // fix current state
 
     // MARK: @methods
     handleAdd = async () => {
-      if (!docRevId && !pmFormId) {
+      if (!docRevId || !lastReleasedMaintenanceForm) {
         return;
       }
 
       const values: DocumentRevisionFormValues = {
-        formDocument: { id: pmFormId },
-        parentEquipment: { id: docRevId as string },
+        formDocument: { id: lastReleasedMaintenanceForm.id },
+        parentEquipment: { id: docRevId },
         equipmentSection: name,
         revisionChangeType: RevisionChangeType.NextRevision,
         name: "",
