@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { BoxProps } from "@material-ui/core";
+import { FormikProps } from "formik";
 import { cloneDeep, map } from "lodash";
 import { Observer } from "mobx-react";
 import React, { useEffect } from "react";
@@ -17,13 +18,14 @@ import Colors from "../../layout/theme/utils/colors";
 import FormHeader from "./assessmentForm/FormHeader";
 import ChangeRequestSidebar from "./ChangeRequest.sidebar";
 import ChangeRequestFormHeader from "./ChangeRequestFormHeader";
-import { toChangeRequestFormValues } from "./transform";
+import { ChangeRequestFormValues } from "./types";
 
 type ChangeRequestFormProps =
 & Pick<SMProviderProps, "_formState" | "_documentRevisionFormState">
 & SMTabsHOCProps
 & Pick<BoxProps, "onScroll">
 & {
+  formValues: FormikProps<ChangeRequestFormValues>;
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
@@ -32,9 +34,11 @@ type ChangeRequestFormProps =
   mode: FBWorkspaceMode;
   withoutBottomBar: boolean;
   autosave: boolean;
+  formInput?: Record<string, any>;
 };
 
 const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
+  formValues,
   asyncState,
   changeRequest,
   doNotPrompt,
@@ -44,11 +48,12 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   withoutBottomBar,
   autosave,
   _formState,
+  formInput,
 }) => {
   const { _tabsState } = SM.useStores();
-  _formState?.setMode(mode);
 
-  // console.log(_formState);
+  _formState?.setMode(mode);
+  _formState?.setAutosave(autosave);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
   // const classes = styles({ isDrawerOpen });
@@ -86,7 +91,8 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         minHeight: "calc(70%)",
         bgcolor: Colors.alabaster,
       }}
-      values={toChangeRequestFormValues(changeRequest as ChangeRequest)}
+      // values={toChangeRequestFormValues(changeRequest as ChangeRequest)}
+      values={formValues.values}
       header= {
         <FormHeader {...{ changeRequest, asyncState }}/>
       }
@@ -136,7 +142,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           {tabType === "MIXED" && showTabContent && changeRequest &&
                               <FBWorkspace
                                 isPortal={false}
-                                initialValues={cloneDeep(changeRequest?.formInput)}
+                                initialValues={formInput}
                                 changeRequest={cloneDeep(changeRequest)}
                                 autosave={autosave}
                                 withoutBottomBar={withoutBottomBar}
@@ -148,7 +154,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                             _formState?.mode !== FBWorkspaceModeOptions.NONE &&
                             <FBWorkspace
                               isPortal={false}
-                              initialValues={cloneDeep(changeRequest?.formInput)}
+                              initialValues={formInput}
                               changeRequest={cloneDeep(changeRequest)}
                               autosave={autosave}
                               withoutBottomBar={withoutBottomBar}

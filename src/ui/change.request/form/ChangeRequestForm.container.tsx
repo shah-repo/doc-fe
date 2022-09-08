@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import { Formik, FormikProps } from "formik";
-import React, { useEffect } from "react";
+import { cloneDeep } from "lodash";
+import { useObserver } from "mobx-react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { SMFormHOCProps } from "../../../App";
 import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
@@ -10,6 +12,7 @@ import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/
 import { AsyncState } from "../../../state/types";
 import styles from "../../common/style/styles";
 import { FB, FBBookmarkState, FBProvider, FBWorkspaceModeOptions } from "../../form.builder";
+import FBDataStore from "../../form.builder/FBStore/FBDataStore";
 import ChangeRequestForm from "./ChangeRequestForm";
 import { ChangeRequestFormValues } from "./types";
 
@@ -41,6 +44,27 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
+  const calcInitialValues = useMemo(() => {
+    // console.log(initialValues);
+    // console.log(FBDataStore?.refreshData);
+
+    initialValues.formInput = FBDataStore?.refreshData?.formInput ?? initialValues.formInput;
+    // console.log(initialValues);
+
+    return {
+      ...initialValues,
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialValues, FBDataStore?.refreshData]);
+
+  useObserver(() => {
+    calcInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? calcInitialValues.formInput;
+  });
+
+  const formInput = useMemo(() =>
+    calcInitialValues ? cloneDeep(calcInitialValues.formInput) : {}
+  , [calcInitialValues]);
+
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
   }, []);
@@ -61,6 +85,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
 
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <ChangeRequestForm
+      formValues={props}
       asyncState={asyncState}
       changeRequest={changeRequest}
       doNotPrompt={doNotPrompt}
@@ -70,6 +95,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       withoutBottomBar={true}
       autosave={autosaveEnabled}
       _formState={_formState}
+      formInput={formInput}
       {...props}
     />
 
@@ -102,7 +128,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <Formik
-            initialValues={initialValues}
+            initialValues={calcInitialValues}
             onSubmit={onSubmit}
             enableReinitialize={true}
           >
