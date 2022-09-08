@@ -1077,8 +1077,8 @@ context("po_requestor_as_an_approver", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
-    xit("User should not able to release PO, error message should appear", () => {
-    });
+    // xit("User should not able to release PO, error message should appear", () => {
+    // });
 
     it("Remove Approver'", () => {
       cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick();
@@ -1324,8 +1324,8 @@ context("po_requestor_as_an_approver", () => {
           .should("exist");
       });
     });
-    xit("Verify that both Requestors fulfills PO level signature", () => {
-    });
+    // xit("Verify that both Requestors fulfills PO level signature", () => {
+    // });
   });
   context("Navigate to Requestor field and remove Requestor", () => {
     it("navigate to Details tab", () => {
@@ -1677,8 +1677,8 @@ context("po_requestor_as_an_approver", () => {
 
   });
   context("Verify that Approvers fulfill PO level signature", () => {
-    xit("verify po level signature", () => {
-    });
+    // xit("verify po level signature", () => {
+    // });
     context("Check “Backspace” and “Clear all” option will not be available in the PO approval field", () => {
       it(`Verify that “Backspace” and “Clear all” option will not be available in the PO approval field`, () => {
         cy.get("[data-cy^=fb-po-approvals]").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
