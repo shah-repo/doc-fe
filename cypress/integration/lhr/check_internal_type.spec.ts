@@ -112,6 +112,7 @@ context(testName, () => {
 
     it("Verify revision", () => {
       cy.drCheckDocumentStatus({ status: "DRAFT" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
     });
   });
 
@@ -133,6 +134,7 @@ context(testName, () => {
 
     it("Verify revision", () => {
       cy.drCheckDocumentStatus({ status: "RELEASED" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
     });
   });
 
@@ -147,6 +149,7 @@ context(testName, () => {
 
     it("Verify revision", () => {
       cy.drCheckDocumentStatus({ status: "DRAFT" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
     });
 
     it("Create Approval Role", () => {
@@ -166,6 +169,14 @@ context(testName, () => {
         .should("contain", "LHRT-")
         .and("contain", "LHRT")
         .and("contain", "LHR Template");
+      cy.get("[data-cy=dialog-close]").click();
+    });
+  });
+
+  context("Verify Group for LHR Template in Document list", () => {
+    it("Navigate to Document list", () => {
+      cy.unClick();
+      cy.navigToDocumentList();
     });
   });
 });

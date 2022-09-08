@@ -448,6 +448,7 @@ context("Scenario 4: Create new company and verify Internal Type for LHR Templat
 
     it("Verify LHRT is in DRAFT status", () => {
       cy.drCheckDocumentStatus({ status: "DRAFT" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
     });
 
     it("Select Details tab", () => {
@@ -505,6 +506,7 @@ context("Scenario 4: Create new company and verify Internal Type for LHR Templat
 
       it("Verify LHRT is in RELEASED status", () => {
         cy.drCheckDocumentStatus({ status: "RELEASED" });
+        cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
       });
     });
   });

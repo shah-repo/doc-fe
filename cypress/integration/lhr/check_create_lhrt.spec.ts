@@ -447,6 +447,7 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
 
     it("Verify LHRT is in DRAFT status", () => {
       cy.drCheckDocumentStatus({ status: "DRAFT" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
     });
 
     it("Select Details tab", () => {
@@ -510,6 +511,7 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
 
       it("Verify LHRT is in RELEASED status", () => {
         cy.drCheckDocumentStatus({ status: "RELEASED" });
+        cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
       });
     });
   });
@@ -531,6 +533,7 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
 
     it("Verify LHRT is in DRAFT status", () => {
       cy.drCheckDocumentStatus({ status: "DRAFT" });
+      cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
     });
 
     it("Verify Group for LHR Template", () => {
