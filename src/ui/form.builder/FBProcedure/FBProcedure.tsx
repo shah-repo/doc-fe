@@ -1,10 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBInput, FBLabel, FBMapWrapper, FBProcedureItem, FBProcedureItemType, FBProcedureProps, FBProvider, FBTextEditor } from "..";
-import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
-import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/icon_add.svg";
-import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/icon_clone.svg";
+import { FBButton, FBInput, FBLabel, FBMapWrapper, FBProcedureItem, FBProcedureItemType, FBProcedureProps, FBProvider, FBTextEditor } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBProcedure } from "./FBProcedure.wrap";
@@ -42,23 +39,21 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
       {isOutput && (
         <FBProvider {...{ procedureState }}>
           {!isPreview && (
-            <Box display="flex" flexDirection="row-reverse" mb={-2.5} position="relative" zIndex={1}>
-              <StyledTooltip placement="top" title="form.builder.clone.step">
-                <CloneIcon
-                  data-cy="form.builder.clone.step"
-                  onClick={() => handleAdd?.(true)}
-                  {...{ disabled }}
-                  style={{ marginLeft: "5px", cursor: "pointer" }}
-                />
-              </StyledTooltip>
-              <StyledTooltip placement="top" title="form.builder.add.step">
-                <AddNewIcon
-                  data-cy="form.builder.add.step"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleAdd?.()}
-                  {...{ disabled }}
-                />
-              </StyledTooltip>
+            <Box display="flex" flexDirection="row-reverse" mb={1} mt={2.5}>
+              <FBButton
+                label="form.builder.clone.step"
+                style={{ textTransform: "none", margin: 0 }}
+                size="small"
+                onClick={() => handleAdd?.(true)}
+                {...{ disabled }}
+              />
+              <FBButton
+                label="form.builder.add.step"
+                style={{ textTransform: "none", margin: 0, marginRight: 4 }}
+                size="small"
+                onClick={() => handleAdd?.()}
+                {...{ disabled }}
+              />
             </Box>
           )}
           <FBTextEditor

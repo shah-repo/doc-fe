@@ -4,5 +4,5 @@ import { FBInputProps } from "../types/common";
 
 export type FBFieldBottomBarProps =
   & Pick<FBInputProps, "index">
-  & Pick<BoxProps, "visibility">
+  & Pick<BoxProps, "visibility" | "mt">
   & FBStarterProps;

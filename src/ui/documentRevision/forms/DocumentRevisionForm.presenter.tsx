@@ -1,6 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { flatten, get, includes, isEmpty } from "lodash";
+import { flatten, includes, isEmpty, get } from "lodash";
 import { Observer, observer, useObserver } from "mobx-react";
 import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -229,7 +229,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
         doNotPrompt={doNotPrompt}
         onDirtyFlagChange={onDirtyFlagChange}
       />
-      <Grid container spacing={3}>
+      <Grid container spacing={3} md={12} sm={12}>
         {isVisible && <Grid item xs={6}>
           <DocumentTypeSelect
             outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
@@ -240,19 +240,22 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               documentTypeId,
             }}
           />
-        </Grid>}
-        {isDocIdVisible && <Grid item xs={6}>
-          <DocIdInput
-            document={values.document}
-            {...{
-              isDisabled: isDisabledInputInPreview,
-              documentTypesById,
-              setDocId,
-              documentTypeId,
-              type,
-            }}
-          />
-        </Grid>}
+        </Grid>
+        }
+        {
+          isDocIdVisible && <Grid item xs={6}>
+            <DocIdInput
+              document={values.document}
+              {...{
+                isDisabled: isDisabledInputInPreview,
+                documentTypesById,
+                setDocId,
+                documentTypeId,
+                type,
+              }}
+            />
+          </Grid>
+        }
         {enableRevision && <Grid item xs={6}>
           {/* hack for rerender revision stage */}
           <Observer>
@@ -301,7 +304,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Grid>
         )}
         {isEB && documentRevision?.parent && (
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <BuildsContainer
               dataProp={flatten([documentRevision.parent])}
               label="common.previous.build"
@@ -312,7 +315,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Grid>
         )}
         {isEB && documentRevision?.children && (
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <BuildsContainer
               dataProp={documentRevision.children}
               label="common.next.build"
@@ -396,7 +399,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             />
           </Grid>
         )}
-        {values.formDocument?.renderHTMLDefined && _formState?.active && documentRevision && values.id && (
+        {_formState?.active && documentRevision && values.id && (
           <Grid item xs={12}>
             <Box textAlign="right">
               <GenerateHtmlPreview

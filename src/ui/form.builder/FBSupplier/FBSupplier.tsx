@@ -1,9 +1,9 @@
 import { Box } from "@material-ui/core";
-import cx from "classnames";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInput, FBProvider, FBSupplierProps } from "..";
 import { FBButtonStyles } from "../styles/FBButton.styles";
 import { withFBSupplier } from "./FBSupplier.wrap";
+
 
 const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
   handleAdd,
@@ -16,7 +16,6 @@ const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
   name,
 }) => {
   const classes = FBButtonStyles();
-
   return (
     <FBProvider {...{ dialogState, supplierState }}>
       <FBDialog />
@@ -33,18 +32,19 @@ const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
               {...{ name, label, disabled, loading }}
             />
           </Box>
-          {!isPreview && (
-            <Box ml={1}>
-              <FBButton
-                variant="contained"
-                size="large"
-                label="form.builder.create.new.supplier"
-                onClick={handleAdd}
-                {...{ disabled }}
-                className={cx(classes.button, classes.margin)}
-              />
-            </Box>
-          )}
+          {!isPreview && <Box>
+            <FBButton
+              variant="contained"
+              label="form.builder.create.new.supplier"
+              onClick={handleAdd}
+              {...{ disabled }}
+              className={classes.button}
+              style={{
+                marginBottom: "0px",
+                height: "40px",
+              }}
+            />
+          </Box>}
         </Box>
       </FBInput>
     </FBProvider>

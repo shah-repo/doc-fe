@@ -14,7 +14,7 @@ import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { FB } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
-import useStyles from "./FormHeader.styles";
+import { styles } from "./FormHeader.styles";
 
 interface Props {
   isCreateDocumentDisabled: boolean;
@@ -28,7 +28,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   const  { documentRevision, isDisabled, asyncState, type, lastSavedTimestamp } = React.useContext(FormHeaderContext)!;
   const { workspaceState } = FB.useStores();
   const { _documentRevisionFormState } = SM.useStores();
-  const classes = useStyles();
+  const classes = styles();
   const renderLastSavedContnet = () => (
     <Box>
       Last saved: &nbsp;
@@ -52,7 +52,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
     </Box>
   );
   return (
-    <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus}>
+    <Header status={documentRevision?.status} displayStatus={documentRevision?.displayStatus} >
       {documentRevision &&
       <HeaderInfo
         revisionStage={documentRevision.revisionStage}
@@ -84,7 +84,9 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
             {(asyncState.status === AsyncStatus.Active ||
               workspaceState?.documentRevApi.loading ||
               _documentRevisionFormState?.loading) && (
-              <LinearProgress className={classes.linearProgress} data-cy="Document-Save-Progress-Bar" />
+              <Box width="100%" pt={1}>
+                <LinearProgress className={classes.linearProgress} data-cy="Document-Save-Progress-Bar" />
+              </Box>
             )}
           </>
         )}
