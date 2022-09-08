@@ -175,14 +175,6 @@ context("Intermediate page validation", () => {
       cy.intPageVerifyDocumentTypeToBeSelectedNotExist();
     });
 
-    it("Check 'JSON Form' is not displayed", () => {
-      cy.intPageVerifyJsonFormNotExist();
-    });
-
-    it("Check 'Define the output of that form' is not displayed", () => {
-      cy.intPageVerifyDefineTheOutputOfThatFormNotExist();
-    });
-
     it("Check 'Default Revision Stage' is not displayed", () => {
       cy.intPageVerifyDefaultRevisionStageNotExist();
     });
@@ -282,14 +274,6 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyDocumentTypeToBeSelectedExist();
       });
 
-      it("Check 'JSON Form' is displayed", () => {
-        cy.intPageVerifyJsonFormExist();
-      });
-
-      it("Check 'Define the output of that form' is displayed", () => {
-        cy.intPageVerifyDefineTheOutputOfThatFormExist();
-      });
-
       it("Check 'Default Revision Stage' is displayed", () => {
         cy.intPageVerifyDefaultRevisionStageExist();
       });
@@ -331,14 +315,6 @@ context("Intermediate page validation", () => {
 
     it("Check 'Document Type to be selected' is displayed", () => {
       cy.intPageVerifyDocumentTypeToBeSelectedExist();
-    });
-
-    it("Check 'JSON Form' is displayed", () => {
-      cy.intPageVerifyJsonFormExist();
-    });
-
-    it("Check 'Define the output of that form' is displayed", () => {
-      cy.intPageVerifyDefineTheOutputOfThatFormExist();
     });
 
     it("Check 'Default Revision Stage' is displayed", () => {
