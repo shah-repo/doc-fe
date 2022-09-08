@@ -1,7 +1,8 @@
 import { Box } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBDialog, FBEBPartProps, FBInput, FBProvider, FBRadioGroup, PartType } from "..";
-import useStyles from "./FBEBPart.styles";
+import { FBButtonStyles } from "../styles/FBButton.styles";
 import { withFBEBPart } from "./FBEBPart.wrap";
 
 const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
@@ -17,7 +18,8 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   childrenPartsValue,
   partType,
 }) => {
-  const classes = useStyles();
+  const classes = FBButtonStyles();
+  const revisonMode = partTypeDefaultValue === PartType.DocumentRevision;
 
   return (
     <FBProvider {...{ dialogState, ebPartState }}>
@@ -42,8 +44,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
               shouldReloadOnInit
               withState
               omitFormValue
-              hidden={partType === PartType.Document
-              || (!partType && partTypeDefaultValue === PartType.Document)}
+              hidden={partType === PartType.Document || (!partType && !revisonMode)}
               name="childrenParts"
               optionId={FBAutocompleteAsyncOption.availableParts}
               additionalData={childrenParts}
@@ -61,8 +62,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
               shouldReloadOnInit
               withState
               omitFormValue
-              hidden={partType === PartType.DocumentRevision
-              || (!partType && partTypeDefaultValue === PartType.DocumentRevision)}
+              hidden={partType === PartType.DocumentRevision || (!partType && revisonMode)}
               name="childForRevise"
               optionId={FBAutocompleteAsyncOption.availablePartDocuments}
               additionalData={childrenPartsForRevise}
@@ -73,20 +73,20 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
               }}
             />
           </Box>
-          <Box>
+          <Box ml={1}>
             <FBButton
               variant="contained"
               label="form.builder.create.new.part"
+              size="large"
               onClick={handleAdd}
-              className={classes.button}
-              disabled={disabled
-              || partType === PartType.Document
-              || (!partType && partTypeDefaultValue === PartType.Document)}
+              className={cx(classes.button, classes.margin)}
+              disabled={disabled || partType === PartType.Document || (!partType && !revisonMode)}
             />
           </Box>
         </Box>
       </FBInput>
-    </FBProvider>);
+    </FBProvider>
+  );
 };
 
 export default withFBEBPart(FBEBPart);
