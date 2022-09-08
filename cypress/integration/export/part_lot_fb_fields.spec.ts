@@ -241,14 +241,19 @@ context("Export Part Lot", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
+    });
+
+    it("Move Component", () => {
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+      cy.wait(2000);
       cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
     });
-
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -410,5 +415,3 @@ context("Export Part Lot", () => {
     });
   });
 });
-
-export { };
