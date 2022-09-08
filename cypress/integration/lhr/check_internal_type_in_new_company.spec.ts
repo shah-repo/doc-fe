@@ -27,7 +27,7 @@ let materialsDocument;
 let mpiDocumentType;
 let mpiDocument;
 
-context("Scenario 4: Create new company and verify Internal Type for LHR Template is LHRT", () => {
+context("Create new company and verify Internal Type for LHR Template is LHRT", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

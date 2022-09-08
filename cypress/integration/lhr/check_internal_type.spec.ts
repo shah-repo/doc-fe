@@ -23,7 +23,7 @@ const outputDocumentType = "Document Approval Matrix";
 
 const documentName = "ENC-12612 Scenario 1";
 const recordName = "Record 1";
-const testName = "Scenario 1: Verify Internal Type for LHR Template is LHRT";
+const testName = "Verify Internal Type for LHR Template is LHRT";
 
 context(testName, () => {
   before(() => {
