@@ -27,7 +27,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     }, []);
 
     function controlRenderer(schemaItem: FBSchemaProps | FBInputProps): React.ReactNode | undefined {
-      return FBSchemaState.component(schemaItem);
+      return FBSchemaState.component({ ...schemaItem, gutter: false });
     }
 
     function isApproved(schemaItem: FBSchemaProps): boolean {
@@ -91,10 +91,10 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
               },
               disabled: (
                 disabled ||
-              isPreviewOrFormPreview ||
-              isApproved({ ...schemaItem, index }) ||
-              (reviseDisabled && outputRevision) ||
-              (outputDisabled && isOutput && !isEmpty(id))
+                isPreviewOrFormPreview ||
+                isApproved({ ...schemaItem, index }) ||
+                (reviseDisabled && outputRevision) ||
+                (outputDisabled && isOutput && !isEmpty(id))
               ),
               index,
             })}
