@@ -82,7 +82,6 @@ context("Scenario 2: Verify the user is able to create LHRT", () => {
       });
     });
 
-
     it("[API]Create equipment one", () => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
