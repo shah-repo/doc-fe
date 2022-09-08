@@ -1313,7 +1313,7 @@ context(
       context(`Update the Supplier and release the new revision`, () => {
         it("Check if 'Update Record' button header menu and is functional", () => {
           cy.get("[data-cy=\"updateRecord\"]").should("be.visible").arrowClick();
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").click();
         });
 
         it("Add Approver to approvals list", () => {
@@ -1491,15 +1491,6 @@ context(
         context("Right side:", () => {
           it("Turn off autosave", () => {
             cy.cmpTurnOffAutosave();
-          });
-
-          xit(`Save → Verify it is functional and the last saved should be updated every time there is a “save” event 
-      (manual or auto)`, () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-
-          xit("Last save should be present", () => {
-            cy.contains("Last saved:").should("be.exist");
           });
 
           it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
