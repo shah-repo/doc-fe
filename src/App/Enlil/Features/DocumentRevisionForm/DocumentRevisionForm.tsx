@@ -165,7 +165,10 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
-              contentBoxProps={{ minHeight: isMPI ? "100%" :  (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px" ), height: "auto" }}
+              contentBoxProps={{
+                minHeight: isMPI ? "100%" :  (((!isLHR && !isTypeMpiDoc) || isLHR)
+                  ? "20%" : "0px" ), height: "auto",
+              }}
               boxProps={{
                 overflow: (_documentRevisionFormState?.expanded ? "auto" :
                   (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
