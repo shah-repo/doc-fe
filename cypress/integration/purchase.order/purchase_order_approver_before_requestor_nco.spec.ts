@@ -555,7 +555,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select Order Date", () => {
-      cy.get("input[name^=po-order-date]").parent().find("button").arrowClick();
+      cy.get("input[name^=ordered-]").parent().find("button").arrowClick();
       cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
     });
 
@@ -572,7 +572,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select Part Number", () => {
-      cy.poSelectPartNumber({ partNo: "PRT-00001 - 1" });
+      cy.poSelectPartNumber({ partNo: "PRT-00001" });
     });
 
     it("Enter Supplier Part Number", () => {
@@ -728,7 +728,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Verify Order Date`, () => {
-      cy.get(`[name^="po-order-date"]`).should("not.have.value", "");
+      cy.get(`[name^="ordered-"]`).should("not.have.value", "");
     });
 
     it(`Check the Approval field contain ${ownerName} - ${ownerEmail}`, () => {
@@ -869,7 +869,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Verify Order Date`, () => {
-      cy.get(`[name^="po-order-date"]`).should("not.have.value", "");
+      cy.get(`[name^="ordered-"]`).should("not.have.value", "");
     });
 
     it(`Check the Approval field contain ${USERS[2].name} - ${USERS[2].email}`, () => {
