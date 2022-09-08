@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -14,6 +15,7 @@ let loginResponse;
 let adminEmployee;
 let developersGroup;
 let secondEmployee;
+const currentDate = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 context("Unreleased LOT in LHR", () => {
   before(() => {
@@ -612,7 +614,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickCreateDocumentWithApiCall();
       cy.wait(3000);
     });
 
@@ -629,7 +631,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click on Procedure", () => {
-      cy.get("[data-cy=\"tabId.procedure\"] > .MuiBox-root").arrowClick();
+      cy.drSelectProcedureTab();
     });
 
     it("Click on Select from Materials", () => {
@@ -641,8 +643,8 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #22090701`)
-        .contains("LOT #22090701").should("not.exist");
+      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #${currentDate}01`)
+        .contains(`LOT #${currentDate}01`).should("not.exist");
     });
 
     it("Lot dialog should close", () => {
@@ -656,7 +658,8 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Search for specific LOT", () => {
-      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").arrowType("LOT #22090701");
+      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox")
+        .arrowType(`LOT #${currentDate}01`);
     });
 
     it("Click on LOT", () => {
@@ -673,13 +676,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click on approve", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"] > .MuiBox-root").arrowClick();
-    });
-
-    it("Enter password and confirm", () => {
-      cy.get("[data-cy=password] > .MuiInputBase-root > .MuiInputBase-input")
-        .arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.get("[data-cy=\"common.confirm\"] > .MuiBox-root").arrowClick();
+      cy.ebApprove();
     });
   });
 
@@ -717,7 +714,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click on Procedure", () => {
-      cy.get("[data-cy=\"tabId.procedure\"] > .MuiBox-root").arrowClick();
+      cy.drSelectProcedureTab();
     });
 
     it("Click on Select from Materials", () => {
@@ -729,7 +726,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #22090701`);
+      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #${currentDate}01`);
     });
 
     it("Lot dialog should close", () => {

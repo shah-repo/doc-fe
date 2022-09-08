@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import "moment-timezone";
+import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -31,6 +32,7 @@ const ARForm = "AR Form";
 const MPI = "Manufacturing Process Instructions";
 const CSPartDocumentTitle = "Part document";
 const EFM10605Rev = "EFM-10605 form";
+const currentDate = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 context("Released_lots_verify_in_lhr", () => {
   before(() => {
@@ -852,10 +854,6 @@ context("Released_lots_verify_in_lhr", () => {
       });
     });
 
-    it("Click save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-    });
-
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -880,9 +878,9 @@ context("Released_lots_verify_in_lhr", () => {
       cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
     });
 
-    it("LOT #22090701 should not be present", () => {
-      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #22090701`)
-        .contains("LOT #22090701").should("not.exist");
+    it(`LOT #${currentDate}01 should not be present`, () => {
+      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}01`)
+        .contains(`LOT #${currentDate}01`).should("not.exist");
     });
 
     it("Lot dialog should close", () => {
@@ -896,15 +894,17 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Search for specific LOT", () => {
-      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").arrowType("LOT #22090701");
+      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox")
+        .arrowType(`LOT #${currentDate}01`);
     });
 
     it("Click on LOT", () => {
-      cy.get("[data-grid-col-index=\"0\"]").arrowClick();
+      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick();
     });
 
     it("Select approvals", () => {
-      cy.get("[data-cy=fb-approvals-fb-approvals-kkoabl58]").autocompleteSelect("enlil.testmail+cy1@gmail.com");
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.unClick();
     });
 
     it("Click on approve and submit", () => {
@@ -912,13 +912,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on approve", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"] > .MuiBox-root").arrowClick();
-    });
-
-    it("Enter password and confirm", () => {
-      cy.get("[data-cy=password] > .MuiInputBase-root > .MuiInputBase-input")
-        .arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.get("[data-cy=\"common.confirm\"] > .MuiBox-root").arrowClick();
+      cy.ebApprove();
     });
   });
 
@@ -956,7 +950,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on Procedure", () => {
-      cy.get("[data-cy=\"tabId.procedure\"] > .MuiBox-root").arrowClick();
+      cy.drSelectProcedureTab();
     });
 
     it("Click on Select from Materials", () => {
@@ -967,8 +961,8 @@ context("Released_lots_verify_in_lhr", () => {
       cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
     });
 
-    it("LOT #22090701 should be present", () => {
-      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #22090701`);
+    it(`LOT #${currentDate}01 should be present`, () => {
+      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}01`);
     });
 
     it("Lot dialog should close", () => {
