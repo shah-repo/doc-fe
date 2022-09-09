@@ -193,52 +193,59 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                         <SMBox
                           key={index}
                         >
-                          {tabType === "MIXED" && <>
-                            <DocumentRevisionFormPresenter
-                              {...formValues}
-                              releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                              {...{
-                                documentRevisions,
-                                documentRevision,
-                                showRevisionTypeChange,
-                                proposedDocId,
-                                setDocId,
-                                doNotPrompt,
-                                onDirtyFlagChange,
-                                documentTypesById,
-                                canChangeOwnerShip,
-                                type,
-                                isNewVersion,
-                                bannerPortal,
-                                showAdministrativeAndVoidChange,
-                                pmFormId,
-                                redlineActive,
-                                isOutput,
-                                lastSavedTimestamp,
-                                isDisabled,
-                                email,
-                                isOwner,
-                                mode,
-                              }}
-                            />
-                            {documentRevision && showTabContent &&  <FBWorkspace
-                              isPortal={false}
-                              document={{
-                                ...formValues.values as unknown as DocumentRevision,
-                                ...documentRevision as unknown as DocumentRevision,
-                              }}
-                              {... { autosaveEnabled, workspaceState }}
-                              initialValues={formInput}
-                              schema={schema}
-                            />}
-                          </>}
-                          {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
+                          {tabType === "MIXED" && (
+                            <>
+                              <DocumentRevisionFormPresenter
+                                {...formValues}
+                                releasedDocRev={_documentRevisionFormState?.releasedDocRev}
+                                {...{
+                                  documentRevisions,
+                                  documentRevision,
+                                  showRevisionTypeChange,
+                                  proposedDocId,
+                                  setDocId,
+                                  doNotPrompt,
+                                  onDirtyFlagChange,
+                                  documentTypesById,
+                                  canChangeOwnerShip,
+                                  type,
+                                  isNewVersion,
+                                  bannerPortal,
+                                  showAdministrativeAndVoidChange,
+                                  pmFormId,
+                                  redlineActive,
+                                  isOutput,
+                                  lastSavedTimestamp,
+                                  isDisabled,
+                                  email,
+                                  isOwner,
+                                  mode,
+                                }}
+                              />
+                              {documentRevision && showTabContent && (
+                                <FBWorkspace
+                                  isPortal={false}
+                                  document={{
+                                    ...formValues.values as unknown as DocumentRevision,
+                                    ...documentRevision as unknown as DocumentRevision,
+                                  }}
+                                  {... { autosaveEnabled, workspaceState }}
+                                  initialValues={formInput}
+                                  schema={schema}
+                                />
+                              )}
+                            </>
+                          )}
+                          {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" && (
                             <>
                               {tabInfo.tabId === "lineitems" && (
                                 <Box pb={3.75}>
-                                  {mode === FBWorkspaceModeOptions.FORM &&
-                                    <FBSection name={`fb-po-section-po-items-built-in`}
-                                      label="form.builder.po.details"  />}
+                                  {mode === FBWorkspaceModeOptions.FORM && (
+                                    <FBSection
+                                      name={`fb-po-section-po-items-built-in`}
+                                      label="form.builder.po.details"
+                                    />
+                                  )}
                                   <AttachmentsField
                                     isDisabled={isDisabledInput}
                                     isNewVersion={false}
@@ -270,8 +277,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                               inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                             />
                           )}
-                          {tabType === "TRAINING" &&
-                          _tabsState?.value === trainingTabIndex && (
+                          {tabType === "TRAINING" && _tabsState?.value === trainingTabIndex && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                             />
