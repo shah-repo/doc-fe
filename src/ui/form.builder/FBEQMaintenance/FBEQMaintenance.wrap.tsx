@@ -106,6 +106,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const create = useActionCreator(documentRevisionsActions.create);
 
     // todo: remove old logic from create_maintance
+    // todo: reload history
     // refactor
     // fix current state
 
@@ -188,7 +189,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // MARK: @observer
     useObserver(() => {
       isNewPMDisabled = eqMaintenanceState?.newPMDisabled || newPMDisabled();
-      isNewPMLoading = eqMaintenanceState?.newPMLoading;
+      isNewPMLoading = eqMaintenanceState?.newPMLoading || eqMaintenanceState?.availableMaintenanceFormsApi.loading;
       availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
     });
 
