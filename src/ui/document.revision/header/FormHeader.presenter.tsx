@@ -54,7 +54,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
       }
       <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center" container>
         <Grid container={true} alignItems="center" justify="flex-end">
-          {documentRevision.updatedAt && (
+          {documentRevision?.updatedAt && (
             <HeaderLastSaved
               timestamp={documentRevision.updatedAt}
               loading={asyncState.status === AsyncStatus.Active}
