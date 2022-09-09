@@ -48,7 +48,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   pmFormId,
   redlineActive,
   isOutput,
-  lastSavedTimestamp,
   email,
   isOwner,
   schema,
@@ -123,6 +122,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
@@ -217,7 +217,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                   pmFormId,
                                   redlineActive,
                                   isOutput,
-                                  lastSavedTimestamp,
                                   isDisabled,
                                   email,
                                   isOwner,

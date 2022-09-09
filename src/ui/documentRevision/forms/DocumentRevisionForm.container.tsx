@@ -39,7 +39,6 @@ export interface FormHeaderContext {
   mode: FBWorkspaceMode;
   asyncState: AsyncState;
   type?: DocumentCloneType;
-  lastSavedTimestamp?: string;
 }
 
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
@@ -66,7 +65,6 @@ interface OwnProps {
   isNewVersion?: boolean;
   pmFormId?: string;
   pmForm?: DocumentRevision;
-  lastSavedTimestamp?: string;
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
@@ -90,7 +88,6 @@ DocumentRevisionFormContainerProps
   isNewVersion,
   pmFormId,
   pmForm,
-  lastSavedTimestamp,
 }) => {
   const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
@@ -224,7 +221,6 @@ DocumentRevisionFormContainerProps
     asyncState,
     type,
     mode,
-    lastSavedTimestamp,
   });
 
   const groupOptions1 = documentRevision?.document.documentType.groupOptions;
@@ -266,7 +262,6 @@ DocumentRevisionFormContainerProps
         document,
         redlineActive,
         isOutput,
-        lastSavedTimestamp,
         email,
         isOwner,
         autosaveEnabled,
