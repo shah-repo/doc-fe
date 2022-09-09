@@ -29,7 +29,7 @@ interface OwnProps {
   changeRequest: ChangeRequest;
 }
 
-export type ChangeRequestUpdateContainerProps = OwnProps &
+type ChangeRequestUpdateContainerProps = OwnProps &
 DispatchProps &
 StateProps;
 
