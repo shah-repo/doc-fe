@@ -399,16 +399,16 @@ context("Intermediate page validation", () => {
       cy.get(`#linkTitle`).arrowType("Test_Link");
       cy.get(`#linkTarget`).arrowType("www.enlil.com");
       cy.get(`#openLinkInNewWindow`).check();
-      cy.get(`input[.rdw-link-modal-btn]`).contains("Add").arrowClick();
+      cy.get(`.rdw-link-modal-btn`).contains("Add").arrowClick();
       cy.unClick();
       cy.get(`[data-cy="description"] [contenteditable]`).contains("Test_Link")
-        .parent().parent()
-        .should("have.attr", `href="http://www.enlil.com"`);
-      cy.get(`[data-cy="description"] [contenteditable]`).click().type("{selectAll}")
-        .get(`[title="Unlink"]`).arrowClick();
+        .parent().parent().parent()
+        .should("contain.html", `href="http://www.enlil.com"`);
+      cy.get(`[data-cy="description"] [contenteditable]`).first().type("{leftArrow}");
+      cy.get(`[title="Unlink"]`).arrowClick();
       cy.get(`[data-cy="description"] [contenteditable]`).contains("Test_Link")
-        .parent().parent()
-        .should("not.have.attr", `href="http://www.enlil.com"`);
+        .parent().parent().parent()
+        .should("not.contain.html", `href="http://www.enlil.com"`);
     });
 
     it("Verify Description editor option 'Undo' and 'Redo'", () => {
