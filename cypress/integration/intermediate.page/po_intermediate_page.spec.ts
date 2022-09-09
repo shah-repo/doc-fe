@@ -80,7 +80,7 @@ context("Intermediate page validation", () => {
     });
   });
 
-  context("Verify fields displays on page", () => {
+  xcontext("Verify fields displays on page", () => {
     it("Verify header on the top left is empty", () => {
       cy.get("[data-cy=\"HeaderInfo\"]").should("not.exist");
     });
@@ -254,30 +254,180 @@ context("Intermediate page validation", () => {
   });
 
   context("Verify DescriptionToolBar Functionality", () => {
-    it("Verify Description for BOLD", () => {
-      cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
-      cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Bold\"]").arrowClick().wait(2000);
+    it("Verify Description editor option 'BOLD'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Bold\"]").arrowClick();
       cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
       cy.get("[data-cy=\"description\"]").contains("I am here").should("have.css", "font-weight", "700");
       cy.unClick();
     });
 
-    it("Verify Description for Italic", () => {
-      cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
-      cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Italic\"]").arrowClick().wait(2000);
+    it("Verify Description editor option 'Italic'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Italic\"]").arrowClick();
       cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
       cy.get("[data-cy=\"description\"]").contains("I am here").should("have.css", "font-style", "italic");
       cy.unClick();
     });
 
-    // TODO: remaining options to be added
-
-    it("Verify Description for Monospace", () => {
-      cy.get(`[data-cy="description"] [contenteditable]`).first().clear().wait(1000);
-      cy.get("[class=\"rdw-inline-wrapper\"]").find("[title=\"Monospace\"]").arrowClick().wait(2000);
+    it("Verify Description editor option 'Underline'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[class="rdw-inline-wrapper"]`).find(`[title="Underline"]`).arrowClick();
       cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
-      cy.get("[data-cy=\"description\"]").contains("I am here").should("have.css", "font-family", "monospace");
       cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent().should("have.attr", "style", `text-decoration: underline;`);
+    });
+
+    it("Verify Description editor option 'Strikethrough'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[class="rdw-inline-wrapper"]`).find(`[title="Strikethrough"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent().should("have.attr", "style", `text-decoration: line-through;`);
+    });
+
+    it("Verify Description editor option 'Monospace'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[class="rdw-inline-wrapper"]`).find(`[title="Monospace"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
+      cy.get(`[data-cy="description"]`).contains("I am here").should("have.css", "font-family", "monospace");
+      cy.unClick();
+    });
+
+    it("Verify Description editor option 'Superscript'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here{selectAll}");
+      cy.get(`[class="rdw-inline-wrapper"]`).find(`[title="Superscript"]`).arrowClick();
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent()
+        .should("have.attr", "style", `font-size: 11px; position: relative; top: -8px; display: inline-flex;`);
+    });
+
+    it("Verify Description editor option 'Subscript'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here{selectAll}");
+      cy.get(`[class="rdw-inline-wrapper"]`).find(`[title="Subscript"]`).arrowClick();
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent()
+        .should("have.attr", "style", `font-size: 11px; position: relative; bottom: -8px; display: inline-flex;`);
+    });
+
+    it("Verify Description editor option 'Unordered'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get("[title=\"Unordered\"]").arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here");
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent().parent().parent()
+        .should("have.class", "public-DraftStyleDefault-unorderedListItem");
+    });
+
+    it("Verify Description editor option 'Ordered'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get("[title=\"Ordered\"]").arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here");
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent().parent().parent()
+        .should("have.class", "public-DraftStyleDefault-orderedListItem");
+    });
+
+    it("Verify Description editor option 'Indent' and 'Outdent'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("{moveToEnd}{enter}This is TA");
+      cy.get(`[title="Indent"]`).arrowClick();
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("This is TA")
+        .parent().parent().parent()
+        .should("have.class", "public-DraftStyleDefault-depth1");
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("{moveToEnd}");
+      cy.get(`[title="Outdent"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("This is TA")
+        .parent().parent().parent()
+        .should("have.class", "public-DraftStyleDefault-depth0");
+      cy.get(`[data-cy="description"] [contenteditable]`).get(`[title="Ordered"]`).arrowClick();
+    });
+
+    it("Verify Description editor option 'Text align Left'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[title="Left"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here");
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent().parent().parent()
+        .should("have.class", "rdw-left-aligned-block");
+    });
+
+    it("Verify Description editor option 'Text align Center'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[title="Center"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here");
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent().parent().parent()
+        .should("have.class", "rdw-center-aligned-block");
+    });
+
+    it("Verify Description editor option 'Text align Right'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[title="Right"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here");
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent().parent().parent()
+        .should("have.class", "rdw-right-aligned-block");
+    });
+
+    it("Verify Description editor option 'Text align Justify'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[title="Justify"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here");
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("I am here")
+        .parent().parent().parent()
+        .should("have.class", "rdw-justify-aligned-block");
+      cy.get(`[data-cy="description"] [contenteditable]`).click().get(`[title="Justify"]`).arrowClick();
+    });
+
+    // it("Verify Description editor option 'Link' and 'Unlink'", () => {
+    //   cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+    //   cy.get(`[title="Link"]`).arrowClick();
+    //   cy.get(`#linkTitle`).arrowType("Test Link");
+    //   cy.get(`#linkTarget`).arrowType("www.enlil.com");
+    //   cy.get(`#openLinkInNewWindow`).check();
+    //   cy.get(`input[.rdw-link-modal-btn]`).contains("Add").arrowClick();
+    //   cy.unClick();
+    // });
+
+    it("Verify Description editor option 'Undo' and 'Redo'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here");
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("{end} TA");
+      cy.get(`[title="Undo"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).should("not.contain", " TA");
+      cy.get(`[title="Redo"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).should("contain", " TA");
+    });
+
+    it("Verify Description editor option 'Remove'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[title="Bold"]`).arrowClick();
+      cy.get(`[title="Italic"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).first().arrowType("I am here").wait(1000);
+      cy.unClick();
+      cy.get(`[data-cy="description"]`).contains("I am here")
+        .should("have.css", "font-weight", "700")
+        .should("have.css", "font-style", "italic");
+      cy.get(`[data-cy="description"]`).contains("I am here").arrowType("{selectAll}");
+      cy.get(`[title="Remove"]`).arrowClick();
+      cy.get(`[data-cy="description"]`).contains("I am here")
+        .should("not.have.css", "font-weight", "700")
+        .should("not.have.css", "font-style", "italic");
     });
   });
 
