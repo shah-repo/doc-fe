@@ -349,7 +349,7 @@ context("Intermediate page validation", () => {
       cy.get(`[data-cy="description"] [contenteditable]`).contains("This is TA")
         .parent().parent().parent()
         .should("have.class", "public-DraftStyleDefault-depth0");
-      cy.get(`[data-cy="description"] [contenteditable]`).get(`[title="Ordered"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).click().get(`[title="Ordered"]`).arrowClick();
     });
 
     it("Verify Description editor option 'Text align Left'", () => {
@@ -393,15 +393,23 @@ context("Intermediate page validation", () => {
       cy.get(`[data-cy="description"] [contenteditable]`).click().get(`[title="Justify"]`).arrowClick();
     });
 
-    // it("Verify Description editor option 'Link' and 'Unlink'", () => {
-    //   cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
-    //   cy.get(`[title="Link"]`).arrowClick();
-    //   cy.get(`#linkTitle`).arrowType("Test Link");
-    //   cy.get(`#linkTarget`).arrowType("www.enlil.com");
-    //   cy.get(`#openLinkInNewWindow`).check();
-    //   cy.get(`input[.rdw-link-modal-btn]`).contains("Add").arrowClick();
-    //   cy.unClick();
-    // });
+    it("Verify Description editor option 'Link' and 'Unlink'", () => {
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.get(`[title="Link"]`).arrowClick();
+      cy.get(`#linkTitle`).arrowType("Test_Link");
+      cy.get(`#linkTarget`).arrowType("www.enlil.com");
+      cy.get(`#openLinkInNewWindow`).check();
+      cy.get(`input[.rdw-link-modal-btn]`).contains("Add").arrowClick();
+      cy.unClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("Test_Link")
+        .parent().parent()
+        .should("have.attr", `href="http://www.enlil.com"`);
+      cy.get(`[data-cy="description"] [contenteditable]`).click().type("{selectAll}")
+        .get(`[title="Unlink"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).contains("Test_Link")
+        .parent().parent()
+        .should("not.have.attr", `href="http://www.enlil.com"`);
+    });
 
     it("Verify Description editor option 'Undo' and 'Redo'", () => {
       cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
