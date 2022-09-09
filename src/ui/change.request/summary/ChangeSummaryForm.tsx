@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { BoxProps } from "@material-ui/core";
 import { cloneDeep, map } from "lodash";
 import { Observer } from "mobx-react";
@@ -55,8 +54,6 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 }) => {
   const { _tabsState } = SM.useStores();
   _formState?.setMode(mode);
-
-  console.log(_formState);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
   // const classes = styles({ isDrawerOpen });
@@ -141,8 +138,6 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
                       const showTabContent = _tabsState?.tabID === tabInfo.tabId;
-
-                      // console.log(tabType, showTabContent, _formState);
 
                       return (
                         <SMBox key={index} {...{ py: 2 }}>

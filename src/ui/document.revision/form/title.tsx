@@ -24,9 +24,7 @@ const Title: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useTitle(documentTypeId);
-  // console.log(isVisible, label, tooltipConfig);
   const documents = useSelector(documentRevisionsSelectors.getDocumentRevisionsList);
-  // console.log(documents);
   const options = useMemo(
     () =>
       uniqBy(documents, (document) => document.name)
