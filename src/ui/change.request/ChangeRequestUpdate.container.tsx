@@ -37,7 +37,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
-export const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
+const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
   { save, changeRequest, currentUserEmail, loadAudit }) => {
 
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
