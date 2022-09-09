@@ -7,6 +7,7 @@ import HeaderLastSaved from "../../components/common/header/HeaderLastSaved";
 import { generateSubtitle } from "../../components/common/header/subtitles";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
+import { getVersionNumber } from "../utils/helpers";
 
 interface Props {
   documentRevision: DocumentRevision;
@@ -39,7 +40,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       subRevision={documentRevision?.subRevision}
       displayStatus={documentRevision.displayStatus}
       subtitle={generateSubtitle(documentRevision)}
-      displayRevision={documentRevision.displayRevision}
+      displayRevision={getVersionNumber(documentRevision.id)}
     />
     <Grid item={true} xs={6}>
       <Grid container={true} alignItems="center" justify="flex-end">

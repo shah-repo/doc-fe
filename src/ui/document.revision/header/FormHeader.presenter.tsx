@@ -13,6 +13,7 @@ import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevision
 import DocRevActions from "../../documentRevision/forms/presenters/Actions";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { FB } from "../../form.builder";
+import { getVersionNumber } from "../utils/helpers";
 import useStyles from "./FormHeader.styles";
 
 interface Props {
@@ -48,7 +49,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
         subRevision={documentRevision?.subRevision}
         displayStatus={documentRevision.displayStatus}
         subtitle={generateSubtitle(documentRevision)}
-        displayRevision={documentRevision.displayRevision}
+        displayRevision={getVersionNumber(documentRevision.id)}
       />
       }
       <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center" container>
