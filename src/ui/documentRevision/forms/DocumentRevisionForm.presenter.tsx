@@ -49,7 +49,6 @@ interface Props
   pmFormId?: string;
   releasedDocRev?: DocumentRevision;
   redlineActive: boolean;
-  lastSavedTimestamp?: string;
   mode: FBWorkspaceMode;
   doNotPrompt?: boolean;
   onDirtyFlagChange?: (dirty: boolean) => void;
