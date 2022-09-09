@@ -11,7 +11,6 @@ import { useRevisionStageSelect } from "../../../hooks/docCustomization/useCusto
 import { styles } from "./styles/RevisionStage.styles";
 
 interface Props {
-  isPreview?: boolean;
   isDisabled: boolean;
   isDocRevFirstDraft: boolean;
   shouldShowRevStageForDocType: boolean;
@@ -20,7 +19,6 @@ interface Props {
 }
 
 const RevisionStage: React.FunctionComponent<Props> = ({
-  isPreview,
   isDisabled,
   isDocRevFirstDraft,
   shouldShowRevStageForDocType,
@@ -52,7 +50,6 @@ const RevisionStage: React.FunctionComponent<Props> = ({
             // had to covert to string
             // if value is number, cheking radio buttons doesn't work correctly
             value={option.value.toString()}
-            disabled={isPreview}
             data-cy={option.text}
             style={{ width: "fit-content", marginLeft: 0 }}
           />)

@@ -1,4 +1,4 @@
-import { Box, withStyles, WithStyles } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { FormikProps } from "formik";
 import React, { ReactNode, useEffect } from "react";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
@@ -14,12 +14,9 @@ import ScrollToError from "../../../components/forms/ScrollToError";
 import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import useDidMount from "../../../hooks/useDidMount";
 import { ChangeRequestFormValues } from "../types";
-import styles from "./AssessmentForm.styles";
 import FormHeader from "./FormHeader";
 
-interface Props
-  extends WithStyles<typeof styles>,
-  FormikProps<ChangeRequestFormValues> {
+interface Props extends FormikProps<ChangeRequestFormValues> {
   asyncState: AsyncState;
   changeRequest?: ChangeRequest;
   doNotPrompt?: boolean;
@@ -32,7 +29,6 @@ export let formIdContext = React.createContext<string | undefined>(undefined);
 
 const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   asyncState,
-  classes,
   changeRequest,
   dirty,
   isSubmitting,
@@ -61,7 +57,7 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   }, []);
 
   return (
-    <div className={classes.container}>
+    <div>
       <FormHeader {...{ changeRequest, asyncState }}/>
       <Box width="100%" height="100%" display="flex" marginTop={1.25}>
         <Box width="100%" px="34px" height="calc(100vh - 132px)" overflow="auto" className="hide-scroll">
@@ -106,4 +102,4 @@ const AssessmentFormPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withStyles(styles)(AssessmentFormPresenter);
+export default AssessmentFormPresenter;

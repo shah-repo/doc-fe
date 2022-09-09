@@ -21,7 +21,9 @@ declare global {
       ebCloneClickNo(): Chainable<Subject>;
       ebCloneClickContinue(): Chainable<Subject>;
       ebAddMaterialDocument(params: { title: string; value: string; name: string }): Chainable<Subject>;
+      ebAddStep2MaterialDocument(params: { title: string; value: string; name: string }): Chainable<Subject>;
       ebAddEquipmentDocument(params: { title: string }): Chainable<Subject>;
+      ebAddStep2EquipmentDocument(params: { title: string }): Chainable<Subject>;
       ebClickCloneFromMenu(): Chainable<Subject>;
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
@@ -103,13 +105,29 @@ Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: s
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.value);
-  cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.name).arrowClick();
+  cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+});
+
+Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowClick();
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
+  cy.get("[name=\"quantity\"]").arrowType(params.value);
+  cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
 
 Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowClick();
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
+  cy.unClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+});
+
+Cypress.Commands.add("ebAddStep2EquipmentDocument", (params: { title: string }) => {
+  cy.get("[data-cy=\"form.builder.equipment.btn\"]").last().arrowClick();
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick();
   cy.unClick();
@@ -129,7 +147,7 @@ Cypress.Commands.add("ebApprove", () => {
   cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
@@ -141,7 +159,7 @@ Cypress.Commands.add("lhrApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
