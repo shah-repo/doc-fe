@@ -1,7 +1,6 @@
 
 // / <reference types="Cypress" />
 
-import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -11,27 +10,25 @@ import { CyRoutes } from "../../support/routes";
 import { CSLDocTypeLot } from "../../utils/constants/documentTypes/componentSpecificationLot";
 import { EForm } from "../../utils/constants/documentTypes/efm";
 import { CSPart } from "../../utils/constants/documentTypes/part";
-import { EFM10605TemplateSchema } from "../../utils/constants/formTemplates/efm10605";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let adminEmployee;
 let loginResponse;
-let createdEFM10605FormDocument;
 let approvalRequestDocumentType;
 let formDocumentType;
 let initialArDocument;
-let cslDocumentType;
+let createdCSLFormDocument;
 let csPartDocumentType;
 let createdPartFormDocument;
-let createdLotFromLHR;
 let createdCSPartDocument;
+let CSLDocumentType;
 let group;
 const groupEveryone = "Everyone";
 const ARForm = "AR Form";
 const MPI = "Manufacturing Process Instructions";
 const CSPartDocumentTitle = "Part document";
-const EFM10605Rev = "EFM-10605 form";
+const FORMNAME = "FM-00006";
 const currentDate = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 context("Released_lots_verify_in_lhr", () => {
@@ -74,9 +71,8 @@ context("Released_lots_verify_in_lhr", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          cslDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, CSLDocTypeLot.documentTypeName);
           csPartDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, CSPart.documentTypeName);
-
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");
           done();
         });
       });
@@ -88,230 +84,6 @@ context("Released_lots_verify_in_lhr", () => {
       }).then((response) => {
         loginResponse = response;
         done();
-      });
-    });
-
-    it("[API]Create EFM-10605", (done: any) => {
-      cy.grpGetGroupByName({
-        sessionId: loginResponse.sessionId,
-        employeeId: adminEmployee.id,
-        groupName: groupEveryone,
-      }).then((response) => {
-        group = response;
-        cy.arGetArDocumentByName({
-          sessionId: loginResponse.sessionId,
-          employeeId: adminEmployee.id,
-          name: ARForm,
-        }).then((response) => {
-          initialArDocument = response;
-          cy.drCreateDocumentRevision({
-            payload: {
-              attachments: [],
-              description: "<p>EFM-10605</p>",
-              document: {
-                docId: "EFM-10605",
-                documentType: {
-                  id: formDocumentType[0].id,
-                },
-                securityList: {
-                  operators: [],
-                  securityEmployees: [],
-                  securityGroups: [
-                    {
-                      id: group.body[0].id,
-                    },
-                  ],
-                },
-              },
-              name: EFM10605Rev,
-              referenceTo: [],
-              retrain: false,
-              revisionChangeType: RevisionChangeType.NextRevision,
-              revisionStage: 1,
-              formTemplate: {
-                outputDocumentTypes: [{
-                  id: cslDocumentType[0].id,
-                }],
-                schema: EFM10605TemplateSchema,
-              },
-
-            },
-            employeeId: adminEmployee.id as unknown as string,
-            sessionId: loginResponse.sessionId as unknown as string,
-          }).then((response) => {
-            createdEFM10605FormDocument = response;
-            cy.drAPIApproveAndRelease({
-              documentId: createdEFM10605FormDocument.id,
-              payload: {
-                effectiveDate: (new Date()).toISOString(),
-                documentType: { id: approvalRequestDocumentType[0].id },
-                formDocument: { id: initialArDocument[0].id },
-                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-              },
-              employeeId: adminEmployee.id,
-              sessionId: loginResponse.sessionId,
-            }).then(() => done());
-          });
-        });
-      });
-    });
-
-    it("[API]Create Lot from LHR", (done: any) => {
-      cy.grpGetGroupByName({
-        sessionId: loginResponse.sessionId,
-        employeeId: adminEmployee.id,
-        groupName: groupEveryone,
-      }).then((response) => {
-        group = response;
-        cy.arGetArDocumentByName({
-          sessionId: loginResponse.sessionId,
-          employeeId: adminEmployee.id,
-          name: ARForm,
-        }).then((response) => {
-          initialArDocument = response;
-          cy.drCreateDocumentRevision({
-            payload: {
-              attachments: [],
-              description: "<p>Lot from LHR</p>",
-              document: {
-                docId: "FM-00005",
-                documentType: {
-                  id: formDocumentType[0].id,
-                },
-                securityList: {
-                  operators: [],
-                  securityEmployees: [],
-                  securityGroups: [
-                    {
-                      id: group.body[0].id,
-                    },
-                  ],
-                },
-              },
-              name: "Lot from LHR",
-              referenceTo: [],
-              retrain: false,
-              revisionChangeType: RevisionChangeType.NextRevision,
-              revisionStage: 1,
-              formTemplate: {
-                outputDocumentTypes: [{
-                  id: cslDocumentType[0].id,
-                }],
-                schema: [
-                  {
-                    name: "lot_quantity",
-                    type: "quantity",
-                    index: 0,
-                    label: "Initial Quantity",
-                    tabId: "details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Initial Quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lot_usable_quantity",
-                    type: "quantity",
-                    index: 1,
-                    label: "Usable Quantity",
-                    tabId: "details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Usable Quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lot_expiry_date",
-                    type: "datepicker",
-                    index: 2,
-                    label: "Expiration Date",
-                    tabId: "details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Expiration Date",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lot_part",
-                    type: "autocomplete",
-                    index: 3,
-                    label: "Part Selection",
-                    rules: "required",
-                    tabId: "details",
-                    optionId: "21",
-                    validators: {
-                      required: true,
-                    },
-                    placeholder: "Select the appropriate part for this lot",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Part Selection",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "100-inspection-override",
-                    type: "checkboxgroup",
-                    index: 4,
-                    label: "100% Inspection Override",
-                    tabId: "details",
-                    options: [
-                      {
-                        text: "100% Inspection Override",
-                        value: "100% Inspection Override",
-                      },
-                    ],
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "100% Inspection Override",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "fb-approvals-kn7jq134",
-                    type: "approvals",
-                    index: 5,
-                    label: "form.builder.approvals",
-                    tabId: "details",
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                  },
-                ],
-              },
-
-            },
-            employeeId: adminEmployee.id as unknown as string,
-            sessionId: loginResponse.sessionId as unknown as string,
-          }).then((response) => {
-            createdLotFromLHR = response;
-            cy.drAPIApproveAndRelease({
-              documentId: createdLotFromLHR.id,
-              payload: {
-                effectiveDate: (new Date()).toISOString(),
-                documentType: { id: approvalRequestDocumentType[0].id },
-                formDocument: { id: initialArDocument[0].id },
-                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-              },
-              employeeId: adminEmployee.id,
-              sessionId: loginResponse.sessionId,
-            }).then(() => done());
-          });
-        });
       });
     });
 
@@ -426,6 +198,207 @@ context("Released_lots_verify_in_lhr", () => {
             createdCSPartDocument = response;
             cy.drAPIApproveAndRelease({
               documentId: createdCSPartDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => done());
+          });
+        });
+      });
+    });
+
+    it("[API]Create and release inline form for CSL", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>CSL inline form</p>",
+              document: {
+                docId: "FM-00006",
+                documentType: {
+                  id: formDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "CSL inline form",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 3,
+              formTemplate: {
+                outputDocumentTypes: [{
+                  id: CSLDocumentType[0].id,
+                }],
+                schema: [
+                  {
+                    name: "lot_quantity",
+                    type: "quantity",
+                    index: 0,
+                    label: "Initial Quantity",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    validationAttribute: "Initial Quantity",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "lot_usable_quantity",
+                    type: "quantity",
+                    index: 1,
+                    label: "Usable Quantity",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    editorProperties: [],
+                    validationAttribute: "Usable Quantity",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "lot_expiry_date",
+                    type: "datepicker",
+                    index: 2,
+                    label: "Expiration Date",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Expiration Date",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    name: "lot_part",
+                    type: "autocomplete",
+                    index: 3,
+                    label: "Part Selection",
+                    tabId: "details",
+                    optionId: "21",
+                    placeholder: "Select the appropriate part for this lot",
+                    deleteDisabled: true,
+                    deleteInFormDisabled: true,
+                  },
+                  {
+                    name: "100-inspection-override",
+                    type: "checkboxgroup",
+                    index: 4,
+                    label: "100% Inspection Override",
+                    tabId: "details",
+                    options: [
+                      {
+                        text: "100% Inspection Override",
+                        value: "100% Inspection Override",
+                      },
+                    ],
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationMode: "default",
+                    editorProperties: [],
+                    validationAttribute: "100% Inspection Override",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
+                  {
+                    label: "form.builder.approvals",
+                    tabId: "details",
+                    type: "approvals",
+                    deleteDisabled: true,
+                    name: "fb-approvals-l02u8tzp",
+                    uniqueSchemaItem: true,
+                    index: 5,
+                  },
+                  {
+                    index: 6,
+                    type: "section",
+                    name: "textfield-kn7fc209",
+                    validationMode: "default",
+                    label: "Section 1",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "textfield",
+                  },
+                  {
+                    index: 7,
+                    type: "textfield",
+                    name: "textfield1-kn7fc7w4",
+                    rows: 1,
+                    validationMode: "default",
+                    label: "textfield 1",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    validationAttribute: "textfield",
+                  },
+                  {
+                    index: 8,
+                    type: "inlineapproval",
+                    name: "inline-approval-kw6gbxwm",
+                    hidden: false,
+                    outputDisabled: false,
+                    deleted: false,
+                    deleteInFormDisabled: false,
+                    validationMode: "default",
+                    validationAttribute: "Inline approval",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    applicableValidationSchema: true,
+                    editorProperties: [],
+                    label: "Inline approval",
+                    tabId: "details",
+                    editorConfig: {
+                      groups: [
+                        group.body[0].id,
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdCSLFormDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdCSLFormDocument.id,
               payload: {
                 effectiveDate: (new Date()).toISOString(),
                 documentType: { id: approvalRequestDocumentType[0].id },
@@ -607,13 +580,13 @@ context("Released_lots_verify_in_lhr", () => {
     });
   });
 
-  context("Create CSL from EFM-10605", () => {
+  context("Create a CSL from inline form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
 
-    it("Open EFM-10605", () => {
-      cy.drClickOnSpecificDocFromList({ item: EFM10605Rev });
+    it("Open CSL form", () => {
+      cy.drClickOnSpecificDocFromList({ item: FORMNAME });
       cy.wait(2000);
     });
 
@@ -647,32 +620,129 @@ context("Released_lots_verify_in_lhr", () => {
       cy.recClickSaveBtn();
     });
 
-    context("Release CSL", () => {
-      it("Select Overview tab", () => {
-        cy.drSelectOverviewTab();
-      });
+    context("Approve CSL", () => {
+      context("Approve CSL", () => {
+        it("Add inline approver", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+            () => {
+              cy.listLoadingElementShouldNotExist();
+              cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
+                .autocompleteSelect(USERS[1].email);
+            });
+        });
 
-      it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
+        it("Click Request Approval button", () => {
+          cy.contains("Request approval").arrowClick();
+        });
 
-      it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
-      });
+        it("Approve inline approval", () => {
+          cy.inlineApproval();
+        });
 
-      it("Click 'Approve' button", () => {
-        cy.ebApprove();
+        it("Finalize and release button click'", () => {
+          cy.wait(2000);
+          cy.recFinalizeAndReleaseRecord();
+        });
+      });
+    });
+
+    context("Revised Document", () => {
+      it("Revise Document", () => {
+        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
     });
   });
 
-  context("Revised Document", () => {
-    it("Revise record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"updateRecord\"]").click();
+  context("Create a CSL2 from inline form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Open CSL form", () => {
+      cy.drClickOnSpecificDocFromList({ item: FORMNAME });
+      cy.wait(2000);
+    });
+
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromFormRecord();
+      cy.wait(2000);
+    });
+
+    it("Enter title", () => {
+      cy.get("[data-cy=\"field-name\"]").should("exist");
+      cy.get("[data-cy=\"field-name\"]").arrowClick({ force: true }).wait(1000);
+      cy.get("[data-cy=\"field-name\"]").arrowType("CSL2 with part selection");
+      cy.unClick();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Enter quantity received", () => {
+      cy.get("[name=\"lot_quantity\"]").arrowType("12");
+    });
+
+    it(`Select '${CSPartDocumentTitle}'  Part `, () => {
+      cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
+      cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+    });
+
+    it("Click create document", () => {
+      cy.recClickSaveBtn();
+    });
+
+    context("Approve CSL", () => {
+      it("Add inline approver", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+          () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
+              .autocompleteSelect(USERS[1].email);
+          });
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+
+      it("Click Request Approval button", () => {
+        cy.contains("Request approval").arrowClick();
+      });
+
+      it("Approve inline approval", () => {
+        cy.inlineApproval();
+      });
+
+      it("Finalize and release button click'", () => {
+        cy.wait(2000);
+        cy.recFinalizeAndReleaseRecord();
+      });
+    });
+
+
+    context("Revised Document", () => {
+      it("Revise Document", () => {
+        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+      });
+
+      it("Click on Details", () => {
+        cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+      });
+
+      it("Select approvals", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.unClick();
+      });
+
+      it("Click on approve and submit", () => {
+        cy.get("[data-cy=ApproveAndRelease-button] > .MuiButton-label").arrowClick().wait(1000);
+      });
+
+      it("Click on Details", () => {
+        cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").should("exist");
+        cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+      });
+
+      it("Click on approve", () => {
+        cy.ebApprove();
+      });
     });
   });
 
@@ -878,6 +948,10 @@ context("Released_lots_verify_in_lhr", () => {
       cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
     });
 
+    it(`LOT #${currentDate}02 should be present`, () => {
+      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}02`);
+    });
+
     it(`LOT #${currentDate}01 should not be present`, () => {
       cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}01`)
         .contains(`LOT #${currentDate}01`).should("not.exist");
@@ -890,7 +964,7 @@ context("Released_lots_verify_in_lhr", () => {
 
   context("Release CSL document", () => {
     it("Navigate to Lots", () => {
-      cy.navigToRecords();
+      cy.navigToLots();
     });
 
     it("Search for specific LOT", () => {
@@ -902,13 +976,22 @@ context("Released_lots_verify_in_lhr", () => {
       cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick();
     });
 
+    it("Click on Details", () => {
+      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+    });
+
     it("Select approvals", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       cy.unClick();
     });
 
     it("Click on approve and submit", () => {
-      cy.get("[data-cy=ApproveAndRelease-button] > .MuiButton-label").arrowClick();
+      cy.get("[data-cy=ApproveAndRelease-button] > .MuiButton-label").arrowClick().wait(1000);
+    });
+
+    it("Click on Details", () => {
+      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").should("exist");
+      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
     });
 
     it("Click on approve", () => {
@@ -939,7 +1022,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click 'LHR Step'", () => {
-      cy.get("[data-cy=\"LHR Step 1 - Rev A\"] > .MuiBox-root > span").eq(0).arrowClick();
+      cy.get("[data-cy=\"LHR Step 1 - Rev A\"] > .MuiBox-root > span").arrowClick();
     });
 
     it("Click View step", () => {
@@ -959,6 +1042,10 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Lot dialog should open", () => {
       cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
+    });
+
+    it(`LOT #${currentDate}02 should be present`, () => {
+      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}02`);
     });
 
     it(`LOT #${currentDate}01 should be present`, () => {
