@@ -9,7 +9,7 @@ import { ReactComponent as TimelineIcon } from "../../../assets/images/history.s
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { DataProps } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import Sidebar from "../../common/components/Sidebar";
@@ -26,7 +26,7 @@ import ChangeRequestAuditContainer from "../audit/Audit.container";
 import { toChangeRequestFormValues, toChangeRequestUpdateRequestBody } from "../form/transform";
 import { ChangeRequestFormValues } from "../form/types";
 import CRReferences from "../references/Reference";
-import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
+import { canChangeCROwner, canEditApprovers, canEditChangeRequest, statesWithLastSavedEnabled } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import Presenter from "./presenter";
 import SummaryHeader from "./SummaryHeader";
@@ -55,9 +55,7 @@ const Container: React.FunctionComponent<Props> = ({
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const hasOwnershipTag = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
 
-  const displayLastSaved = (
-    dataProp.state === ChangeRequestStatus.Draft
-  );
+  const displayLastSaved = statesWithLastSavedEnabled.includes(dataProp.state);
 
   const canChangeOwnerShip = canChangeCROwner(
     dataProp.state,

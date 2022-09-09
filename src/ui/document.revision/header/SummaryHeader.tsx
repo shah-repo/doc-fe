@@ -1,5 +1,6 @@
 import React from "react";
-import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { statesWithLastSavedEnabled } from "../utils/helpers";
 import SummaryHeaderPresenter from "./SummaryHeader.presenter";
 
 interface Props {
@@ -21,10 +22,8 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   FormHeaderSummaryContext = React.createContext<FormHeaderSummaryContext | undefined>({
     documentRevisionSummary: documentRevision,
   });
-  const displayLastSaved = (
-    documentRevision.status === DocumentRevisionStatus.Draft
-    || documentRevision.status === DocumentRevisionStatus.PendingChange
-  );
+  const displayLastSaved = statesWithLastSavedEnabled.includes(documentRevision.status);
+
   return (
     <SummaryHeaderPresenter
       {...{
@@ -34,7 +33,6 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
         displayLastSaved,
       }}
     />
-
   );
 };
 

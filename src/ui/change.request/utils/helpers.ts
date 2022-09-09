@@ -36,3 +36,4 @@ export const changeRequestStatusOption = () => {
   return options;
 };
 
+export const statesWithLastSavedEnabled = [ChangeRequestStatus.Draft];
