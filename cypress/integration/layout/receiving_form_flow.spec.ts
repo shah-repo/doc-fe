@@ -797,7 +797,7 @@ context("Receiving landing page test", () => {
 
   context("Move & Edit & Remove component", () => {
     it("Verify Add field", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(0).contains("Add a Field")
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(0).contains("Add Field")
         .should("exist");
     });
 
