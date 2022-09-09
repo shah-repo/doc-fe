@@ -55,6 +55,8 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   const group: DocumentGroupType =
     docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
+  const inDesignMode = mode === "design" || mode === "formDesign";
+
   return (
     <Box>
       <FBWorkspaceSocket />
@@ -86,7 +88,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
             <Text translation="form.builder.add.step" />
           </Button>
         )}
-      {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
+      {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} mt={inDesignMode ? 6 : 0} />}
     </Box>
   );
 };
