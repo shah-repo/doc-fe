@@ -86,7 +86,7 @@ const predefinedPOSchema = [
     ],
   },
   {
-    name: "requestor-k740hxlb",
+    name: "po-requestor-autocomplete",
     type: "autocomplete",
     index: 2,
     label: "Requestor",
@@ -517,9 +517,9 @@ context("Create company with JSON's", () => {
                 label: COLUMN_HEADERS[7],
                 fieldName: "irrelevant",
                 showOnWeb: true,
-                valuePath: "precalc.requestor-k740hxlb",
+                valuePath: "precalc.po-requestor-autocomplete",
                 sourcePath: [
-                  "formInput.requestor-k740hxlb",
+                  "formInput.po-requestor-autocomplete",
                   "formInput.po-requestor-autocomplete",
                 ],
                 showOnAndroid: true,
@@ -810,7 +810,7 @@ context("Create company with JSON's", () => {
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy^=\"requestor-\"]").arrowClick();
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
 
@@ -819,7 +819,8 @@ context("Create company with JSON's", () => {
     });
 
     it("Add an Approval", () => {
-      cy.poAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.wait(3000);
+      cy.get("[data-cy^=\"fb-po-approvals\"]").autocompleteSelect(USERS[1].email);
     });
   });
 

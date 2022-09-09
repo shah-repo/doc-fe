@@ -750,33 +750,36 @@ context("Procedure and parts flow test", () => {
 
   context("Move & Edit & Remove component", () => {
     it("move Component", () => {
-      cy.get(`[class="drag-handle"]`).eq(2)
-        .realMouseDown({ position: "center", button: "left" });
+      cy.get("[data-cy='form.builder.procedure']").trigger("mouseover");
       cy.wait(3000);
+      cy.get(`[class="drag-handle"]`).eq(1)
+        .realMouseDown({ position: "center", button: "left" });
       cy.get(`[class="drag-handle"]`).eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Edit Component", () => {
-      cy.wait(2000);
-      cy.get("[data-cy=\"edit-schema-item\"]").eq(2).arrowClick({ force: true });
-      cy.get("[data-cy=\"label\"]").clear();
+      cy.fbClickLabelEditHiddenBtn({ label: "EB Procedure" });
+      cy.get("[data-cy='label']").clear();
       cy.fbEnterLabel({ label: "EB Procedure Edited" });
       cy.fbAddField();
     });
 
     it("remove Component EB procedure Edited ", () => {
-      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });    });
+      cy.fbClickRemoveBtn({ label: "Step #1" });
+      cy.fbClickRemoveBtn({ label: "EB Procedure Edited" });
+    });
 
     it("Add component again", () => {
-      cy.fbAddNewFieldWhenHidden();
+      cy.get("[data-cy='form.builder.add.field']").eq(0).arrowClick({ force: true });
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.get("[value=\"copyableValue\"]").check();
       cy.fbAddField();
@@ -819,14 +822,6 @@ context("Procedure and parts flow test", () => {
     });
 
     context("Verify the imported field", () => {
-      it("Verify field materials", () => {
-        cy.get("[data-cy=\"form.builder.materials\"]").should("have.text", "Materials");
-      });
-
-      it("Verify field  Equipment", () => {
-        cy.get("[data-cy=\"form.builder.equipment\"]").eq(0).should("have.text", "Equipment");
-      });
-
       it("Verify field EB Procedure", () => {
         cy.get("[data-cy=\"form.builder.procedure\"]").should("have.text", "EB Procedure");
       });
@@ -838,40 +833,39 @@ context("Procedure and parts flow test", () => {
 
     context("Move & Edit & Remove component", () => {
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.get("[data-cy='form.builder.add.field']").eq(0).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for eb test" });
         cy.fbAddField();
       });
 
       it("move Component", () => {
-        cy.get(`[class="drag-handle"]`).eq(4)
-          .realMouseDown({ position: "center", button: "left" });
+        cy.get("[data-cy='Textfield for eb test']").trigger("mouseover");
         cy.wait(3000);
         cy.get(`[class="drag-handle"]`).eq(3)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
+        cy.unClick();
       });
 
-      it("move Component again", () => {
-        cy.get(`[class="drag-handle"]`).eq(3)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(4)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.fbClickLabelEditHiddenBtn({ label: "Textfield for eb test" });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for eb test Edited" });
         cy.fbAddField();
       });
 
       it("remove Component", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+        cy.fbClickRemoveBtn({ label: "Textfield for eb test Edited" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -887,40 +881,39 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.get("[data-cy='form.builder.add.field']").eq(0).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for eb test" });
         cy.fbAddField();
       });
 
       it("move Component", () => {
-        cy.get(`[class="drag-handle"]`).eq(4)
+        cy.get("[data-cy='form.builder.procedure']").trigger("mouseover");
+        cy.wait(3000);
+        cy.get(`[class="drag-handle"]`).eq(1)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(3)
+        cy.get(`[class="drag-handle"]`).eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
+        cy.unClick();
       });
 
-      it("move Component again", () => {
-        cy.get(`[class="drag-handle"]`).eq(3)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(4)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
-
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.fbClickLabelEditHiddenBtn({ label: "Textfield for eb test" });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for eb test Edited" });
         cy.fbAddField();
       });
 
       it("remove Component", () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+        cy.fbClickRemoveBtn({ label: "Textfield for eb test Edited" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1055,32 +1048,25 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Add component", () => {
-          cy.fbAddNewFieldWhenHidden();
+          cy.get("[data-cy='form.builder.add.field']").eq(0).arrowClick({ force: true });
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
           cy.fbAddLabelName({ name: "Textfield for eb test" });
           cy.fbAddField();
         });
 
         it("move Component", () => {
-          cy.get(`[class="drag-handle"]`).eq(6)
+          cy.get("[data-cy='form.builder.procedure']").trigger("mouseover");
+          cy.wait(3000);
+          cy.get(`[class="drag-handle"]`).eq(1)
             .realMouseDown({ position: "center", button: "left" });
           cy.wait(3000);
-          cy.get(`[class="drag-handle"]`).eq(5)
-            .realMouseMove(0, 0, { position: "center" })
-            .realMouseUp();
-        });
-
-        it("move Component again", () => {
-          cy.get(`[class="drag-handle"]`).eq(5)
-            .realMouseDown({ position: "center", button: "left" });
-          cy.wait(3000);
-          cy.get(`[class="drag-handle"]`).eq(6)
+          cy.get(`[class="drag-handle"]`).eq(0)
             .realMouseMove(0, 0, { position: "center" })
             .realMouseUp();
         });
 
         it("Edit Component", () => {
-          cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+          cy.fbClickLabelEditHiddenBtn({ label: "Textfield for eb test" });
           cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
           cy.fbAddLabelName({ name: "Textfield for eb test Edited" });
           cy.fbAddField();
