@@ -36,6 +36,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     availableMaintenanceForms,
     preventativeFormOptions,
     getOptionLabel,
+    maintenanceHistory,
     ...props
   }: T) => {
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
@@ -52,6 +53,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 
     useEffect(() => {
       eqMaintenanceState?.getAvailableMaintenanceForms();
+      eqMaintenanceState?.getMaintenanceHistory(docRevId as string);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -88,6 +90,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
 
     const async = useAsync<DocumentRevision>({
       onSuccess: (data) => {
+        eqMaintenanceState?.getMaintenanceHistory(docRevId as string);
         window.open(
           documentVersionPath(data?.id as string, data?.document?.id as string),
           "_blank"
@@ -106,7 +109,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     const create = useActionCreator(documentRevisionsActions.create);
 
     // todo: remove old logic from create_maintance
-    // todo: reload history
     // refactor
     // fix current state
 
@@ -191,6 +193,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       isNewPMDisabled = eqMaintenanceState?.newPMDisabled || newPMDisabled();
       isNewPMLoading = eqMaintenanceState?.newPMLoading || eqMaintenanceState?.availableMaintenanceFormsApi.loading;
       availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
+      maintenanceHistory = eqMaintenanceState?.maintenanceHistoryApi.data?.[name];
     });
 
     return Component({
@@ -205,6 +208,7 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       isTypePM,
       preventativeFormOptions,
       getOptionLabel,
+      maintenanceHistory,
     });
   };
 

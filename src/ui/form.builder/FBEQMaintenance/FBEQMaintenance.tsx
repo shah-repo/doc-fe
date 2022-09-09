@@ -19,6 +19,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   isTypePM,
   rules,
   autosave,
+  maintenanceHistory,
   ...props
 }) => (
   <FBInput showErrorMsg={false} {...{ name, rules, autosave }} {...props} type="eqmaintenance">
@@ -77,7 +78,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       rules={`required_if:${name}.requirements,Yes`}
       {...{ disabled, autosave }}
     />
-    <FBEQMaintenanceHistory {...{ name }}/>
+    <FBEQMaintenanceHistory maintenanceHistory={maintenanceHistory} />
     {complianceDueDate &&
       <Box mb={3} data-cy="maintenance.status">
         <FBText
