@@ -7,7 +7,7 @@ interface Props {
   documentRevision: DocumentRevision;
   canChangeOwnerShip?: boolean;
   canShowCreateVersionButton?: boolean;
-  displayLastEdit?: boolean;
+  displayLastSaved?: boolean;
 }
 export interface FormHeaderSummaryContext {
   documentRevisionSummary: DocumentRevision;
