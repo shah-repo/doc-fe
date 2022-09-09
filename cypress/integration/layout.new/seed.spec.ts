@@ -140,6 +140,11 @@ context("Verify New Layout for Seed Document", () => {
       cy.verifyFixedTab();
     });
 
+    it("Verify form option box should be visible in overview tab", () => {
+      cy.get(".formOptionsBox").scrollIntoView();
+      cy.get(".formOptionsBox").should("be.visible");
+    });
+
     context("Verify tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview tab default fields", () => {
@@ -215,6 +220,7 @@ context("Verify New Layout for Seed Document", () => {
 
         it("Verify that Form Options should appear for Details tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });

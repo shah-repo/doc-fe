@@ -153,6 +153,7 @@ context("Verify New Layout for Bulk Import Document", () => {
 
         it("Verify that Form Options should appear for Overview tab", () => {
           cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -207,6 +208,7 @@ context("Verify New Layout for Bulk Import Document", () => {
 
         it("Verify that Form Options should appear for Details tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });

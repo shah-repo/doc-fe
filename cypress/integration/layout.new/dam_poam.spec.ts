@@ -168,6 +168,8 @@ context("DAM and POAM", () => {
         });
 
         it("Verify that Form Options should appear for this tab", () => {
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -639,6 +641,7 @@ context("DAM and POAM", () => {
 
         it("Verify that Form Options should appear for this tab", () => {
           cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -652,6 +655,7 @@ context("DAM and POAM", () => {
       context("Verify that Matrix Details tab contain", () => {
         it("Verify that Form Options should appear for this tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
