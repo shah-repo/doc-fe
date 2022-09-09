@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Formik, FormikProps } from "formik";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -80,7 +79,6 @@ const Container: React.FunctionComponent<Props> = ({
   };
 
   _formState?.setMode(FBWorkspaceModeOptions.PREVIEW);
-  console.log(_formState);
 
   const summaryPresenterRenderer = (
     props: FormikProps<ChangeRequestFormValues>,

@@ -34,6 +34,7 @@ type ChangeRequestFormProps =
   autosave: boolean;
   canEdit: boolean;
   canChangeOwnership: boolean;
+  displayLastSaved: boolean;
   errors: any;
 };
 
@@ -49,6 +50,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   _formState,
   canEdit,
   canChangeOwnership,
+  displayLastSaved,
   errors,
 }) => {
   const { _tabsState } = SM.useStores();
@@ -94,7 +96,10 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
       }}
       values={toChangeRequestFormValues(changeRequest)}
       header= {
-        <SummaryHeader {...{ dataProp: changeRequest, canChangeOwnership, asyncState, errors, canEdit  }}/>
+        <SummaryHeader {...{
+          dataProp: changeRequest, canChangeOwnership, asyncState,
+          errors, canEdit, displayLastSaved,
+        }}/>
       }
     >
       <SMTemplate
