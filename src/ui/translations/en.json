@@ -1329,5 +1329,6 @@
   "tabId.calpmhistory": "Cal/PM History",
   "meq.chip.nextCalDate": "Next Callibration Due :",
   "meq.chip.prevMaintance": "Preventive Maintenance Due : ",
-  "form.builder.addEquiSpec": "Add Cal or PM"
+  "form.builder.addEquiSpec": "Add Cal or PM",
+  "EXCEL FOR IMPORT": "Excel For Import"
 }

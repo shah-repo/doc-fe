@@ -33,6 +33,8 @@ enum Colors {
   platinum_grey = "#E2E2E2",
   cultured="#f6f7f7",
   light_athens_gray ="#E9EBF0",
+  bright_gray2="#E1E7F2",
+  dark_gray2="#ABB0BA",
   // blue
   light_blue = "#edf4ff",
   blue = "#0066FF",

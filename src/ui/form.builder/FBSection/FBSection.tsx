@@ -34,7 +34,7 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
           locale={label as string}
           boxProps={{
             component: "span",
-            style: { textTransform: "uppercase", float: "left" },
+            style: { float: "left" },
           }}
           {...{ loading }}
         />
