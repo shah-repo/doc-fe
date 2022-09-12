@@ -12,7 +12,6 @@ import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -643,7 +642,6 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      SystemRequirement("REQ-1360");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.poAddNewFieldItem();
       });
@@ -850,14 +848,12 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      SystemRequirement("REQ-1360");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.poAddNewFieldItem();
       });
     });
 
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
-      SystemRequirement("REQ-1400");
       cy.get("[data-cy='common.add']").click();
       cy.get("p[class*='MuiFormHelperText-root']>span")
         .contains("The Part Number field is required when Supplier Part Number is empty.");
@@ -866,43 +862,35 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Select Part Number", () => {
-      SystemRequirement("REQ-1410");
       cy.poSelectPartNumber({ partNo: "PRT-00001 - 1" });
     });
 
     it("Enter Quantity Ordered", () => {
-      SystemRequirement("REQ-1410");
       cy.poEnterQuantityOrdered({ quantity: "5" });
     });
 
     it("Select Units", () => {
-      SystemRequirement("REQ-1410");
       cy.poSelectUnits();
     });
 
     it("Select GL code", () => {
-      SystemRequirement("REQ-1410");
       cy.poSelectGLCode();
     });
 
     it("Enter Supplier Part Number", () => {
-      SystemRequirement("REQ-1410");
       cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
     });
 
     it("Enter number of Units", () => {
-      SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
     });
 
     it("Add Required Date", () => {
-      SystemRequirement("REQ-1410");
       cy.get("[name='date']").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
     it("Check Tax box", () => {
-      SystemRequirement("REQ-1450");
       cy.poSelectTaxCheckbox();
     });
 
