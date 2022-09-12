@@ -109,8 +109,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       },
     });
 
-    // todo: remove old logic from create_maintance
-
     handleAdd = async () => {
       if (!docRevId || !lastReleasedMaintenanceForm) {
         return;
