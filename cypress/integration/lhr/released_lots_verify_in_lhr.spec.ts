@@ -607,12 +607,12 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").arrowType("12");
+      cy.get("[name=\"lot_quantity\"]").focus().arrowType("12");
     });
 
     it(`Select '${CSPartDocumentTitle}'  Part `, () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
+      cy.get("[data-cy=\"lot_part\"]").focus().arrowType(CSPartDocumentTitle);
       cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
     });
 
@@ -652,11 +652,11 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").arrowType("12");
+      cy.get("[name=\"lot_quantity\"]").focus().arrowType("12");
     });
 
     it(`Select '${CSPartDocumentTitle}'  Part `, () => {
-      cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
+      cy.get("[data-cy=\"lot_part\"]").focus().arrowType(CSPartDocumentTitle);
       cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
     });
 
@@ -799,7 +799,7 @@ context("Released_lots_verify_in_lhr", () => {
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
+        cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType(CSPartDocumentTitle);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
           cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
         });
@@ -853,7 +853,7 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Enter initial quantity", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.get("[name=\"lhr_initial_quantity\"]").focus().arrowType("10");
         cy.unClick();
       });
     });
@@ -919,7 +919,7 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Search for specific LOT", () => {
       cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox")
-        .arrowType(`LOT #${currentDate}01`);
+        .focus().arrowType(`LOT #${currentDate}01`);
     });
 
     it("Click on LOT", () => {
@@ -1027,7 +1027,7 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Search for specific LOT", () => {
       cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").clear()
-        .arrowType(`LOT #${currentDate}01`);
+        .focus().arrowType(`LOT #${currentDate}01`);
     });
 
     it("Click on LOT", () => {
@@ -1050,7 +1050,7 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Search for specific LOT", () => {
       cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").clear()
-        .arrowType(`LOT #${currentDate}02`);
+        .focus().arrowType(`LOT #${currentDate}02`);
     });
 
     it("Click on LOT", () => {
@@ -1154,7 +1154,7 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Search for specific LOT", () => {
       cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").clear()
-        .arrowType(`LOT #${currentDate}01`);
+        .focus().arrowType(`LOT #${currentDate}01`);
     });
 
     it("Click on LOT", () => {
