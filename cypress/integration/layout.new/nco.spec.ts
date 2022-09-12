@@ -268,7 +268,7 @@ context("Verify New Layout for NCO Document", () => {
 
             it("Verify that Form Options should appear for Overview tab", () => {
               cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
-              cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
+              cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
               cy.verifyFormOptionsVisibility();
             });
           });
@@ -436,19 +436,19 @@ context("Verify New Layout for NCO Document", () => {
 
       context("Enter values for Details tab predefined schema fields", () => {
         it(`Enters company name '${newCompanyName}'`, () => {
-          cy.get("[name^=company-name-]").arrowType(newCompanyName);
+          cy.get("[name^=company-name-]").arrowType(newCompanyName, { force: true });
         });
 
         it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
-          cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
+          cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
         });
 
         it(`Enters company email '${USERS[1].email}'`, () => {
-          cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
+          cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email, { force: true });
         });
 
         it("Select 'Yes' for 'Approved DAM json is used'", () => {
-          cy.get("[name*=\"approved-dam-json-is-used-\"]").check("Yes");
+          cy.get("[name*=\"approved-dam-json-is-used-\"]").check("Yes", { force: true });
         });
 
         it("Upload correct DAM JSON", () => {
@@ -456,7 +456,7 @@ context("Verify New Layout for NCO Document", () => {
         });
 
         it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-          cy.get("[name*=\"approved-page-details-json-is-used-\"]").check("Yes");
+          cy.get("[name*=\"approved-page-details-json-is-used-\"]").check("Yes", { force: true });
         });
 
         it("Upload Page Details JSON", () => {
@@ -464,7 +464,7 @@ context("Verify New Layout for NCO Document", () => {
         });
 
         it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-          cy.get("[name*=\"approved-navigation-json-is-used-\"]").check("Yes");
+          cy.get("[name*=\"approved-navigation-json-is-used-\"]").check("Yes", { force: true });
         });
 
         it("Upload Navigation JSON", () => {
