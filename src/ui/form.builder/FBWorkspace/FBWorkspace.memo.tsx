@@ -6,6 +6,7 @@ import {
   FBSchema,
   FBStarter,
   FBWorkspaceBottomBar,
+  FBWorkspaceModeOptions,
   FBWorkspaceProps,
   FBWorkspaceSocket,
 } from "..";
@@ -21,7 +22,7 @@ import Colors from "../../layout/theme/utils/colors";
 const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   isStarter,
   schema,
-  mode = "none",
+  mode = FBWorkspaceModeOptions.NONE,
   includeTransport = true,
   workspaceState,
   withoutBottomBar = false,
@@ -55,7 +56,8 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   const group: DocumentGroupType =
     docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
-  const inDesignMode = mode === "design" || mode === "formDesign";
+  const designModes = [FBWorkspaceModeOptions.DESIGN, FBWorkspaceModeOptions.FORMDESIGN];
+  const inDesignMode = designModes.includes(mode);
 
   return (
     <Box>

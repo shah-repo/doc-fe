@@ -1,5 +1,5 @@
 import { Dictionary } from "lodash";
-import { FBInputProps, FBSchemaState, FBWorkspaceMode } from "..";
+import { FBInputProps, FBSchemaState, FBWorkspaceModeOptions } from "..";
 
 export type FBSchemaProps = Pick<FBInputProps,
   | "label"
@@ -57,7 +57,7 @@ export type FBSchemaProps = Pick<FBInputProps,
 };
 
 export interface FBSchemaComponentProps {
-  workspaceMode?: FBWorkspaceMode;
+  workspaceMode?: FBWorkspaceModeOptions;
   schema?: FBSchemaProps[];
   schemaState?: FBSchemaState;
 }
