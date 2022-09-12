@@ -190,17 +190,17 @@ context(testName, () => {
     });
 
     it("Create Approval Role", () => {
-      cy.get("[data-cy=\"tabId.approvalroles\"]").click();
+      cy.drSelectApprovalRolesTab();
       cy.get("[data-cy=\"form.builder.add.another.role\"] > .MuiBox-root").click();
       cy.get("[data-cy=\"name\"]").arrowType("Role 1").wait(1000);
       cy.drEnterApprovingGroups("Groups Management");
-      cy.get("[data-cy=\"common.add\"]").eq(0).click();
+      cy.drAddApprovalRole();
     });
   });
 
-  context(`Virify ${recordName}`, () => {
-    it("Virify matrix details", () => {
-      cy.get("[data-cy=\"tabId.matrixdetails\"]").click();
+  context(`Verify ${recordName}`, () => {
+    it("Verify matrix details", () => {
+      cy.drSelectMatrixDetailsTab();
       cy.get(":nth-child(1) > .MuiIconButton-label > .MuiBox-root > .MuiSvgIcon-root").click();
       cy.get(".MuiTableBody-root")
         .should("contain", "LHRT-")
@@ -210,12 +210,12 @@ context(testName, () => {
     });
   });
 
-  context("Virify in document type management", () => {
+  context("Verify in document type management", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
     });
 
-    it("Virify LHR Temlate", () => {
+    it("Verify LHR Temlate", () => {
       cy.intercept({ method: "GET", pathname: "/api/v1/document_type" }, (req) => {
         req.reply((res) => {
           const item = res.body.find((item) => item.documentTypeName === "LHR Template");
