@@ -3,22 +3,26 @@ import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
+import HeaderLastSaved from "../../components/common/header/HeaderLastSaved";
 import { generateSubtitle } from "../../components/common/header/subtitles";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
+import { getVersionNumber } from "../utils/helpers";
 
 interface Props {
   documentRevision: DocumentRevision;
   canChangeOwnerShip?: boolean;
   canShowCreateVersionButton?: boolean;
+  displayLastSaved: boolean;
 }
 
 const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   canChangeOwnerShip,
   canShowCreateVersionButton,
-}) => {
-  const headerRenderer = () => <Header
+  displayLastSaved,
+}) => (
+  <Header
     displayStatus={documentRevision.displayStatus}
     status={documentRevision.status}
   >
@@ -36,10 +40,15 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       subRevision={documentRevision?.subRevision}
       displayStatus={documentRevision.displayStatus}
       subtitle={generateSubtitle(documentRevision)}
-      displayRevision={documentRevision.displayRevision}
+      displayRevision={getVersionNumber(documentRevision.id)}
     />
     <Grid item={true} xs={6}>
       <Grid container={true} alignItems="center" justify="flex-end">
+        {displayLastSaved && documentRevision.updatedAt && (
+          <HeaderLastSaved
+            timestamp={documentRevision.updatedAt}
+          />
+        )}
         <ControlsContainer
           documentRevision={documentRevision}
           canShowCreateVersionButton={canShowCreateVersionButton}
@@ -48,12 +57,7 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
         />
       </Grid>
     </Grid>
-  </Header>;
-
-  return (<>
-    { headerRenderer()}
-  </>
-  );
-};
+  </Header>
+);
 
 export default SummaryHeaderPresenter;

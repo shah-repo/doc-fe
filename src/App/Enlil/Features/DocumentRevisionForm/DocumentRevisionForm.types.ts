@@ -41,7 +41,6 @@ export type DocumentRevisionFormProps =
   document?: Document;
   redlineActive: boolean;
   isOutput: boolean;
-  lastSavedTimestamp?: string;
   email: string;
   isOwner: boolean;
   schema: FBSchemaProps[];
