@@ -109,7 +109,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   return (
     <>
       {includeQRScan && (
-        <Box display="flex" flexDirection="row-reverse" mb={-3}>
+        <Box display="flex" flexDirection="row-reverse" mb={-3} position="relative" zIndex={1}>
           <Typography variant="button" display="block" color="primary">
             <Text message="form.builder.scan.qr" />
           </Typography>
