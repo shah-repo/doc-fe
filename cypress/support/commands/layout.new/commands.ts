@@ -15,7 +15,7 @@ declare global {
       verifySelectedTab(params: {tab: string}): Chainable;
       verifyFixedTab(): Chainable;
       verifyApprovalsField(): Chainable;
-      verifyFormOptionsVisibility(params: {visibility: boolean}): Chainable;
+      verifyFormOptionsVisibility(): Chainable;
       verifyExpandCollpase(): Chainable;
       verifyReferencesGeneralInfo(params: {user: string}): Chainable;
       verifyReferencesOtherInfo(): Chainable;
@@ -82,11 +82,10 @@ Cypress.Commands.add("verifyApprovalsField", () => {
   cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
 });
 
-Cypress.Commands.add("verifyFormOptionsVisibility", (params: {visibility: boolean}) => {
-  const condition = params.visibility ? "exist" : "not.exist";
-  cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should(condition);
-  cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should(condition);
-  cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should(condition);
+Cypress.Commands.add("verifyFormOptionsVisibility", () => {
+  cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("be.visible");
+  cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("be.visible");
+  cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("be.visible");
 });
 
 Cypress.Commands.add("verifyExpandCollpase", () => {
