@@ -215,13 +215,12 @@ context(testName, () => {
       cy.navigToDocumentTypeManagement();
     });
 
-    it("Verify LHR Temlate", () => {
-      cy.intercept({ method: "GET", pathname: "/api/v1/document_type" }, (req) => {
-        req.reply((res) => {
-          const item = res.body.find((item) => item.documentTypeName === "LHR Template");
-          expect(item.group).to.equal("LHRT");
-        });
-      }).as("response");
+    it("Filter items", () => {
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("LHR Template").wait(1000);
+      cy.get(`[aria-colindex="12"] [class="k-input"]`).arrowClick({ force: true });
+      cy.get("li").contains("LHRT").arrowClick().wait(500);
+      cy.get(`[data-grid-col-index="0"]`).should("exist");
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
