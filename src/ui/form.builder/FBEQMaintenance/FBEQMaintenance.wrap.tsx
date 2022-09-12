@@ -88,6 +88,10 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         || Boolean(eqMaintenanceState?.newPMLoading);
     }
 
+    const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+    const documentTypesById = useSelector(documentTypeSelectors.byId);
+
+    const create = useActionCreator(documentRevisionsActions.create);
     const async = useAsync<DocumentRevision>({
       onSuccess: (data) => {
         eqMaintenanceState?.getMaintenanceHistory(docRevId as string);
@@ -96,23 +100,17 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
           "_blank"
         );
         eqMaintenanceState?.setNewPMLoading(false);
-        eqMaintenanceState?.setNewPMLoading(newPMDisabled());
+        eqMaintenanceState?.setNewPMDisabled(newPMDisabled());
       },
       onError: (error) => {
         toastError(error);
         eqMaintenanceState?.setNewPMLoading(false);
-        eqMaintenanceState?.setNewPMLoading(newPMDisabled());
+        eqMaintenanceState?.setNewPMDisabled(newPMDisabled());
       },
     });
-    const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
-    const documentTypesById = useSelector(documentTypeSelectors.byId);
-    const create = useActionCreator(documentRevisionsActions.create);
 
     // todo: remove old logic from create_maintance
-    // refactor
-    // fix current state
 
-    // MARK: @methods
     handleAdd = async () => {
       if (!docRevId || !lastReleasedMaintenanceForm) {
         return;
@@ -142,12 +140,16 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
         const shortDocumentType = pmFormOutput[0] as FBOutputDocumentType;
         const documentType = documentTypesById[shortDocumentType.id] ?? {};
 
-        const { docId } = await eqMaintenanceState?.getProposedId(documentType.id);
+        try {
+          const { docId } = await eqMaintenanceState?.getProposedId(documentType.id);
 
-        values.document = {
-          docId,
-          documentType,
-        };
+          values.document = {
+            docId,
+            documentType,
+          };
+        } catch (error) {
+          return async.errorHandler.execute(error);
+        }
 
         values.securityGroups = filterSecurityGroupsForQms(documentType.isQms, groupOptions);
       }
