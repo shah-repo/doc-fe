@@ -922,6 +922,7 @@ context("PO Removes lineitems removes approver", () => {
 
   context("Navigate to Approval field and add Approver User 1", () => {
     it("Open details tab", () => {
+      cy.drSelectLineItems();
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -929,24 +930,12 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it(`Select '${USERS[1].name}' as Approver`, () => {
-      // cy.get(`[name^="fb-po-approvals-"][role]`).click().wait(2000)
-      //   .arrowType(`${USERS[1].name}{enter}`);
-      // cy.get(`[name^="fb-po-approvals-"]`).eq(1).scrollIntoView().click();
-      // cy.pause();
-
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`, { force: true });
-
-      // cy.get(`[name^="fb-po-approvals-"][role]`).click().wait(2000);
-      // cy.pause();
-      // cy.get(`[name^="fb-po-approvals-"][role]`).select(`${USERS[1].name} - ${USERS[1].email}`);
-      // cy.pause();
-      // cy.get(`[name^="fb-po-approvals-"][role]`).scrollIntoView().click().autocompleteSelect(`${USERS[1].name}`, { force: true });
-      // cy.get(`[name^="fb-po-approvals-"][role]`).scrollIntoView().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+      cy.get("[data-cy^='fb-po-approvals']").autocompleteSelect(USERS[1].name);
       cy.unClick();
     });
 
     it(`Verify the Approver field is added with User 1`, () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`[name^="fb-po-approvals"]`).contains(`${USERS[1].name} - ${USERS[1].email}`).should("exist");
     });
   });
 
@@ -957,16 +946,14 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it(`Verify 'The requestor field is required field' is disappeared`, () => {
-      cy.get(".MuiFormHelperText-root.Mui-error").should("not.exist");
+      cy.get(".MuiFormHelperText-root.Mui-error").should("not.exist").wait(2000);
     });
   });
 
   context("Verify that the approver field is added once in the approvals field", () => {
     it("Verify that the approver is only added once in the approvals field", () => {
-      // need to add code for this
-      // cy.get("[name^=fb-po-approvals-]").eq(1).arrowClick();
-      // cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
-      cy.pause();
+      cy.get("[data-cy^='fb-po-approvals']").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[1].name).should("not.exist");
     });
   });
 
