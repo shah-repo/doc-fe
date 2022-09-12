@@ -736,8 +736,8 @@ context("Unreleased LOT in LHR", () => {
 
     it("Select Lot", () => {
       cy.get("[data-cy=\"usedOverride\"]")
-        .autocompleteSelect(`LOT #${currentDate}01`)
-        .should("have.value", `LOT #${currentDate}01 | `);
+        .autocompleteSelect(`LOT #${currentDate}01`);
+      cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}01 | `);
     });
 
     it("Lot dialog should close", () => {

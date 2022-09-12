@@ -671,7 +671,7 @@ context("Released_lots_verify_in_lhr", () => {
             () => {
               cy.listLoadingElementShouldNotExist();
               cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
-                .autocompleteSelect(USERS[1].email);
+                .autocompleteSelect(USERS[1].name);
             });
         });
 
@@ -898,8 +898,8 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Select Lot", () => {
       cy.get("[data-cy=\"usedOverride\"]")
-        .autocompleteSelect(`LOT #${currentDate}02`)
-        .should("have.value", `LOT #${currentDate}02 | `);
+        .autocompleteSelect(`LOT #${currentDate}02`);
+      cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}02 | `);
     });
 
     it(`LOT #${currentDate}01 should not be present`, () => {
@@ -1005,14 +1005,14 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Select Lot", () => {
       cy.get("[data-cy=\"usedOverride\"]")
-        .autocompleteSelect(`LOT #${currentDate}02`)
-        .should("have.value", `LOT #${currentDate}02 | `);
+        .autocompleteSelect(`LOT #${currentDate}02`);
+      cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}02 | `);
     });
 
     it("Select Lot", () => {
       cy.get("[data-cy=\"usedOverride\"]").clear()
-        .autocompleteSelect(`LOT #${currentDate}01`)
-        .should("have.value", `LOT #${currentDate}01 | `);
+        .autocompleteSelect(`LOT #${currentDate}01`);
+      cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}01 | `);
     });
 
     it("Lot dialog should close", () => {
@@ -1235,14 +1235,14 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Select Lot", () => {
       cy.get("[data-cy=\"usedOverride\"]")
-        .autocompleteSelect(`LOT #${currentDate}02`)
-        .should("have.value", `LOT #${currentDate}02 | `);
+        .autocompleteSelect(`LOT #${currentDate}02`);
+      cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}02 | `);
     });
 
     it("Select Lot", () => {
       cy.get("[data-cy=\"usedOverride\"]").clear()
-        .autocompleteSelect(`LOT #${currentDate}01`)
-        .should("have.value", `LOT #${currentDate}01 | `);
+        .autocompleteSelect(`LOT #${currentDate}01`);
+      cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}01 | `);
     });
 
     it("Lot dialog should close", () => {
