@@ -25,9 +25,7 @@ class FBEQMaintenanceState {
   };
 
   public getMaintenanceHistory = (id: string) => {
-    this.maintenanceHistoryApi.set({
-      urlValues: { id },
-    });
+    this.maintenanceHistoryApi.set({ urlValues: { id } });
     return this.maintenanceHistoryApi.fetch();
   };
 }

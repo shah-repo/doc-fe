@@ -41,7 +41,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   }: T) => {
     eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
 
-    // MARK: @config
     const { workspaceState, formState } = FB.useStores();
     const { id: docRevId, document: { status = "" } = {} } = workspaceState || {};
     const isEqStatusReleased = status === DocumentRevisionStatus.Released;
@@ -79,7 +78,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // MARK: @helpers
     function newPMDisabled(): boolean {
       return !(
         formState?.getFieldValue(`${name}.preventativeForm`) &&
@@ -188,7 +186,6 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       return `${option.docId} - rev ${option.displayRevision} - ${option.name}`;
     };
 
-    // MARK: @observer
     useObserver(() => {
       isNewPMDisabled = eqMaintenanceState?.newPMDisabled || newPMDisabled();
       isNewPMLoading = eqMaintenanceState?.newPMLoading || eqMaintenanceState?.availableMaintenanceFormsApi.loading;
