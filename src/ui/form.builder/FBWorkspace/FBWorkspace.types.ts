@@ -31,7 +31,7 @@ export type FBWorkspaceProps =
   snackbarState?: FBSnackbarState;
   portalContainer?: React.MutableRefObject<HTMLDivElement | null>;
   schema?: FBSchemaProps[];
-  mode?: FBWorkspaceModeOptions;
+  mode?: FBWorkspaceMode;
   isStarter?: boolean;
   active?: boolean;
   includeTransport?: boolean;
