@@ -1,22 +1,25 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 //
-import { CONFIG } from "../../support/config";
-import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 Cypress.Screenshot.defaults({
   screenshotOnRunFailure: false,
 });
 
-let company;
-let adminEmployeeLoginResponse;
-let employeeLoginAdmin;
+import "moment-timezone";
+import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { CONFIG } from "../../support/config";
+import { BulkImport } from "../../utils/constants/documentTypes/bulkImport";
+import { Calibration } from "../../utils/constants/documentTypes/calibration";
+import { PurchaseOrderDocDTM } from "../../utils/constants/documentTypes/purchaseOrderDoc";
+import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
+import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
-const ADMIN_USER = USERS[10];
-const FIRST_USER = USERS[11];
-const SECOND_USER = USERS[12];
-const THIRD_USER = USERS[13];
-const INDIVIDUAL_USER = USERS[14];
+let adminEmployee;
+let developersGroup;
+let createdCompany;
+let loginResponse;
+let multipleCompanies;
 
 const documentType = "Form";
 const outputDocumentType = "Document Approval Matrix";
@@ -38,42 +41,76 @@ context(testName, () => {
     cy.saveLocalStorage();
   });
 
-  context("[API] Prepare company", () => {
+  context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,
         password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
-        adminEmployeeLoginResponse = response;
+        loginResponse = response;
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: ADMIN_USER.email,
+            companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
-            users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
-            documentTypes: [],
-          }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
+            users: [USERS[2], USERS[3], USERS[4]],
+            documentTypes: [
+              BulkImport, OneTimeTrainingTest, TrainingCurriculum, Calibration, PurchaseOrderDocDTM,
+            ],
+          }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
-          company = response;
-          employeeLoginAdmin = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
+          createdCompany = response;
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
     });
 
-    it("[API]Login admin", (done: any) => {
+    it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: ADMIN_USER.email,
+        email: USERS[1].email,
       }).then((response) => {
-        adminEmployeeLoginResponse = response;
+        loginResponse = response;
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
+      });
+    });
+
+    it("[API]Get group", () => {
+      cy.grpGetGroupByName({
+        groupName: "Developers",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        developersGroup = response;
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: developersGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }],
+          tags: [...developersGroup.body[0].tags,
+            GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
+            GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
+          ],
+        },
       });
     });
   });
 
-  context("Log in admin", () => {
-    it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginAdmin.id });
+  context("Login user", () => {
+    it("Logs user in", () => {
+      cy.authLogin({
+        email: USERS[1].email,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
   });
 
@@ -170,6 +207,21 @@ context(testName, () => {
         .and("contain", "LHRT")
         .and("contain", "LHR Template");
       cy.get("[data-cy=dialog-close]").click();
+    });
+  });
+
+  context("Virify in document type management", () => {
+    it("Navigate to document type management", () => {
+      cy.navigToDocumentTypeManagement();
+    });
+
+    it("Virify LHR Temlate", () => {
+      cy.intercept({ method: "GET", pathname: "/api/v1/document_type" }, (req) => {
+        req.reply((res) => {
+          const item = res.body.find((item) => item.documentTypeName === "LHR Template");
+          expect(item.group).to.equal("LHRT");
+        });
+      }).as("response");
     });
   });
 
