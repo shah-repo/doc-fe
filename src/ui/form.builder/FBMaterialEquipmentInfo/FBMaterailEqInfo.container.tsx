@@ -1,7 +1,7 @@
 import { isEqual, keys, union, unionBy } from "lodash";
+import { useObserver } from "mobx-react";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FBMeqState, FBPartItemStatus } from "..";
-import { toastError } from "../../components/notifications";
 import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
 import FB from "../helpers/FB";
 import { Equipment, Material, MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
@@ -23,11 +23,7 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
 
   const callBack = (
     setter: Dispatch<SetStateAction<MaterialAndEquipment>>
-  ) => (data: MaterialAndEquipment, error: Error)  => {
-    if (error) {
-      toastError(error.message);
-      return;
-    }
+  ) => (data: MaterialAndEquipment) => {
     setter(data);
   };
 
@@ -84,6 +80,8 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
 
   const materialData = showDiff ? calculateDataDiff(currentData, parentMaterialData) : currentData;
 
+  const loading = useObserver(() => meqState.loading);
+
   return (
     <>
       <FBMaterialEqInfoPresenterNext
@@ -91,6 +89,7 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
           materialData,
           showDiff,
           includeDiff,
+          loading,
         }}
         handleShowDiffChange={setShowDiff}
       />

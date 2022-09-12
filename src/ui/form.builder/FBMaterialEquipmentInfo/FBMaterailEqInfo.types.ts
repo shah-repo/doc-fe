@@ -34,6 +34,7 @@ export interface MaterialEqProps {
   materialData: MaterialAndEquipment;
   includeDiff: boolean;
   showDiff: boolean;
+  loading?: boolean;
   handleShowDiffChange: (value: boolean) => void;
 }
 
