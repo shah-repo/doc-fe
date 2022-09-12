@@ -26,6 +26,7 @@ let materialsDocumentType;
 let equipmentDocument;
 let materialsDocument;
 let developersGroup;
+let arId;
 
 context("Status Bar of New Enlil items approved via express AR", () => {
   before(() => {
@@ -571,6 +572,17 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     it(`Verify 'Last saved: ' does not exist in Released statusbar`, () => {
       cy.verifyLastSavedNotExists();
+    });
+  });
+
+  context("Click on the AR ID link and verify AR opens in new tab", () => {
+    it(`Click on the AR ID link`, () => {
+      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").invoke("removeAttr", "target").click();
+    });
+
+    it(`Verify AR opens in a new tab`, () => {
+      cy.url().should("include", "/preview");
+      cy.go("back");
     });
   });
 
