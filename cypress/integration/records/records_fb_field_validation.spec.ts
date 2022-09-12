@@ -1051,7 +1051,7 @@ context("Records flow", () => {
       });
 
       it("move component", () => {
-        cy.get("[data-cy='fb-textfield']").trigger("mouseover");
+        cy.get("[data-cy='textfield-1']").trigger("mouseover");
         cy.wait(2000);
         cy.get(".drag-handle").eq(1)
           .realMouseDown({ position: "center", button: "left" });
@@ -1074,7 +1074,7 @@ context("Records flow", () => {
       });
 
       it("move component", () => {
-        cy.get("[data-cy='fb-checkbox-group-changed']").trigger("mouseover");
+        cy.get("[data-cy='checkboxgroup-2']").trigger("mouseover");
         cy.wait(2000);
         cy.get(".drag-handle").eq(1)
           .realMouseDown({ position: "center", button: "left" });
@@ -1086,246 +1086,25 @@ context("Records flow", () => {
         cy.fbClickRemoveBtn({ label: "fb-checkbox-group-changed" });
       });
 
-      it("Verify Autocomplete attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-autocomplete" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-changed" });
-        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-autocomplete placeholder" });
-        cy.get(`[data-cy="optionId"]`).should("have.value", "Document revisions");
-        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+      it("Verify Subsection attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "FB-SUBSECTION" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-subsection" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-subsection-changed" });
         cy.fbAddNewFieldButton();
-        cy.get(`[data-cy="fb-autocomplete-changed"]`).should("exist");
+        cy.get(`[name^="fb-subsection"]`).should("contain", "FB-SUBSECTION-CHANGED");
       });
 
       it("move component", () => {
-        cy.get("[data-cy='fb-autocomplete-changed']").trigger("mouseover");
+        cy.get("[data-cy='subsection-15']").trigger("mouseover");
         cy.wait(2000);
-        cy.get(".drag-handle").eq(1)
+        cy.get(".drag-handle").eq(13)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
+        cy.get(".drag-handle").eq(12)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
         cy.unClick();
-        cy.fbClickRemoveBtn({ label: "fb-autocomplete-changed" });
-      });
-
-      it("Verify Text Editor attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-text-editor" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-text-editor" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-text-editor-changed" });
-        cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.get(`[data-cy="fb-text-editor-changed"]`).should("exist");
-      });
-
-      it("move component", () => {
-        cy.get("[data-cy='fb-text-editor-changed']").trigger("mouseover");
-        cy.wait(2000);
-        cy.get(".drag-handle").eq(1)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-        cy.unClick();
-        cy.fbClickRemoveBtn({ label: "fb-text-editor-changed" });
-      });
-
-      it("Verify Date picker attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-datepicker" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-datepicker" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-datepicker-changed" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.get(`[data-cy="fb-datepicker-changed"]`).should("exist");
-      });
-
-      it("move component", () => {
-        cy.get("[data-cy='fb-datepicker-changed']").trigger("mouseover");
-        cy.wait(2000);
-        cy.get(".drag-handle").eq(1)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-        cy.unClick();
-        cy.fbClickRemoveBtn({ label: "fb-datepicker-changed" });
-      });
-
-      it("Verify Hyperlink attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-hyperlink" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-hyperlink" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink-changed" });
-        cy.fbVerifyNameValue({ name: "linkUrl", value: "google.com" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.get(`[name^="fb-hyperlink"]`).should("contain", "fb-hyperlink-changed");
-      });
-
-      it("move component", () => {
-        cy.get("[data-cy='hyperlink-6']").trigger("mouseover");
-        cy.wait(2000);
-        cy.get(".drag-handle").eq(1)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-        cy.unClick();
-      });
-
-      it("Verify location linked on Hyperlink and remove it", () => {
-        cy.window().then((win) => {
-          cy.spy(win, "open").as("redirect");
-        });
-        cy.get("[name^=fb-hyperlink-]").arrowClick();
-        cy.get("@redirect").should("be.calledWith", "https://google.com");
-        cy.fbClickRemoveBtn({ label: "fb-hyperlink-changed" });
-      });
-
-      it("Verify Select Field attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-select-field" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-select-field" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-select-field-changed" });
-        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-select-field placeholder" });
-        cy.fbVerifyOptions("option1", "option2");
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.get(`[data-cy="fb-select-field-changed"]`).should("exist");
-      });
-
-      it("move component", () => {
-        cy.get("[data-cy='fb-select-field-changed']").trigger("mouseover");
-        cy.wait(2000);
-        cy.get(".drag-handle").eq(1)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-        cy.unClick();
-        cy.fbClickRemoveBtn({ label: "fb-select-field-changed" });
-      });
-
-      it("Verify Radio Button group attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-radiobutton-group" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group-changed" });
-        cy.fbVerifyOptions("option1", "option2");
-        cy.fbVerifyOptions("option1", "option2");
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.get(`[data-cy="fb-radiobutton-group-changed"]`).should("exist");
-      });
-
-      it("move component", () => {
-        cy.get("[data-cy='fb-radiobutton-group-changed']").trigger("mouseover");
-        cy.wait(2000);
-        cy.get(".drag-handle").eq(1)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-        cy.unClick();
-        cy.fbClickRemoveBtn({ label: "fb-radiobutton-group-changed" });
-      });
-
-      it("Verify Paragraph attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-paragraph" });
-        cy.get(`[data-cy="paragraph"]`).parent().find("div p").eq(-1).should("have.text", "fb-paragraph");
-        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-      });
-
-      it("Verify File Upload attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-fileupload" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-fileupload" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-fileupload-changed" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.get(`[data-cy="fb-fileupload-changed"]`).should("exist");
-      });
-
-      it("move component", () => {
-        cy.get("[data-cy='fb-fileupload-changed']").trigger("mouseover");
-        cy.wait(2000);
-        cy.get(".drag-handle").eq(2)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-        cy.unClick();
-        cy.fbClickRemoveBtn({ label: "fb-fileupload-changed" });
-      });
-
-      it("Verify Blank Template Form attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-blank-template" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-blank-template-changed" });
-        cy.fbAddNewFieldButton();
-        cy.get(`[data-cy="fb-blank-template-changed"]`).should("exist");
-        cy.contains("image.jpg").should("exist");
-      });
-
-      it("move component", () => {
-        cy.get("[data-cy='fb-blank-template-changed']").trigger("mouseover");
-        cy.wait(2000);
-        cy.get(".drag-handle").eq(2)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-        cy.unClick();
-        cy.fbClickRemoveBtn({ label: "fb-blank-template-changed" });
-      });
-
-      it("Verify Quantity attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-quantity" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-quantity-changed" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.get(`[data-cy="fb-quantity-changed"]`).should("exist");
-      });
-
-      it("move component", () => {
-        cy.get("[data-cy='fb-quantity-changed']").trigger("mouseover");
-        cy.wait(2000);
-        cy.get(".drag-handle").eq(2)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-        cy.unClick();
-        cy.fbClickRemoveBtn({ label: "fb-quantity-changed" });
-      });
-
-      it("Verify Timer attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-timer" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-timer" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-timer-changed" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.get(`[data-cy="fb-timer-changed"]`).should("exist");
-      });
-
-      it("move component", () => {
-        cy.get("[data-cy='fb-timer-changed']").trigger("mouseover");
-        cy.wait(2000);
-        cy.get(".drag-handle").eq(2)
-          .realMouseDown({ position: "center", button: "left" });
-        cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
-          .realMouseMove(0, 0, { position: "center" })
-          .realMouseUp();
-        cy.unClick();
-        cy.fbClickRemoveBtn({ label: "fb-timer-changed" });
+        cy.fbClickRemoveBtn({ label: "FB-SUBSECTION-CHANGED" });
       });
 
       it("Verify Section attributes", () => {
@@ -1340,35 +1119,260 @@ context("Records flow", () => {
       it("move component", () => {
         cy.get("[data-cy='fb-section-changed']").trigger("mouseover");
         cy.wait(2000);
-        cy.get(".drag-handle").eq(2)
+        cy.get(".drag-handle").eq(12)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
-        cy.get(".drag-handle").eq(0)
+        cy.get(".drag-handle").eq(11)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
         cy.unClick();
         cy.fbClickRemoveBtn({ label: "fb-section-changed" });
       });
 
-      it("Verify Subsection attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "FB-SUBSECTION" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-subsection" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-subsection-changed" });
+      it("Verify Timer attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-timer" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-timer" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-timer-changed" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
-        cy.get(`[name^="fb-subsection"]`).should("contain", "FB-SUBSECTION-CHANGED");
+        cy.get(`[data-cy="fb-timer-changed"]`).should("exist");
       });
 
       it("move component", () => {
-        cy.get("[data-cy='subsection-15']").trigger("mouseover");
+        cy.get("[data-cy='textfield-14']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(".drag-handle").eq(11)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(".drag-handle").eq(10)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+        cy.unClick();
+        cy.fbClickRemoveBtn({ label: "fb-timer-changed" });
+      });
+
+      it("Verify Quantity attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-quantity" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-quantity-changed" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.get(`[data-cy="fb-quantity-changed"]`).should("exist");
+      });
+
+      it("move component", () => {
+        cy.get("[data-cy='textfield-13']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(".drag-handle").eq(10)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(".drag-handle").eq(9)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+        cy.unClick();
+        cy.fbClickRemoveBtn({ label: "fb-quantity-changed" });
+      });
+
+
+      it("Verify Blank Template Form attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-blank-template" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-blank-template-changed" });
+        cy.fbAddNewFieldButton();
+        cy.get(`[data-cy="fb-blank-template-changed"]`).should("exist");
+        cy.contains("image.jpg").should("exist");
+      });
+
+      it("move component", () => {
+        cy.get("[data-cy='blanktplform-12']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(".drag-handle").eq(9)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(".drag-handle").eq(8)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+        cy.unClick();
+        cy.fbClickRemoveBtn({ label: "fb-blank-template-changed" });
+      });
+
+      it("Verify File Upload attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-fileupload" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-fileupload" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-fileupload-changed" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.get(`[data-cy="fb-fileupload-changed"]`).should("exist");
+      });
+
+      it("move component", () => {
+        cy.get("[data-cy='fileupload-11']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(".drag-handle").eq(8)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(".drag-handle").eq(7)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+        cy.unClick();
+        cy.fbClickRemoveBtn({ label: "fb-fileupload-changed" });
+      });
+
+      it("Verify Paragraph attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-paragraph" });
+        cy.get(`[data-cy="paragraph"]`).parent().find("div p").eq(-1).should("have.text", "fb-paragraph");
+        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+        cy.fbClickRemoveBtn({ label: "fb-paragraph" });
+      });
+
+
+      it("Verify Radio Button group attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-radiobutton-group" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group-changed" });
+        cy.fbVerifyOptions("option1", "option2");
+        cy.fbVerifyOptions("option1", "option2");
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.get(`[data-cy="fb-radiobutton-group-changed"]`).should("exist");
+      });
+
+      it("move component", () => {
+        cy.get("[data-cy='radiogroup-8']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(".drag-handle").eq(6)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(".drag-handle").eq(5)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+        cy.unClick();
+        cy.fbClickRemoveBtn({ label: "fb-radiobutton-group-changed" });
+      });
+
+      it("Verify Select Field attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-select-field" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-select-field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-select-field-changed" });
+        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-select-field placeholder" });
+        cy.fbVerifyOptions("option1", "option2");
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.get(`[data-cy="fb-select-field-changed"]`).should("exist");
+      });
+
+      it("move component", () => {
+        cy.get("[data-cy='select-8']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(".drag-handle").eq(5)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(".drag-handle").eq(4)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+        cy.unClick();
+        cy.fbClickRemoveBtn({ label: "fb-select-field-changed" });
+      });
+
+      it("Verify Hyperlink attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-hyperlink" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-hyperlink" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink-changed" });
+        cy.fbVerifyNameValue({ name: "linkUrl", value: "google.com" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.get(`[name^="fb-hyperlink"]`).should("contain", "fb-hyperlink-changed");
+      });
+
+      it("move component", () => {
+        cy.get("[data-cy='hyperlink-7']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(".drag-handle").eq(4)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(".drag-handle").eq(3)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+        cy.unClick();
+      });
+
+      it("Verify location linked on Hyperlink and remove it", () => {
+        cy.window().then((win) => {
+          cy.spy(win, "open").as("redirect");
+        });
+        cy.get("[name^=fb-hyperlink-]").arrowClick();
+        cy.get("@redirect").should("be.calledWith", "https://google.com");
+        cy.fbClickRemoveBtn({ label: "fb-hyperlink-changed" });
+      });
+
+
+      it("Verify Date picker attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-datepicker" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-datepicker" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-datepicker-changed" });
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.get(`[data-cy="fb-datepicker-changed"]`).should("exist");
+      });
+
+      it("move component", () => {
+        cy.get("[data-cy='datepicker-6']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(".drag-handle").eq(3)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(".drag-handle").eq(2)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+        cy.unClick();
+        cy.fbClickRemoveBtn({ label: "fb-datepicker-changed" });
+      });
+
+      it("Verify Text Editor attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-text-editor" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-text-editor" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-text-editor-changed" });
+        cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
+        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.get(`[data-cy="fb-text-editor-changed"]`).should("exist");
+      });
+
+      it("move component", () => {
+        cy.get("[data-cy='texteditor-5']").trigger("mouseover");
         cy.wait(2000);
         cy.get(".drag-handle").eq(2)
+          .realMouseDown({ position: "center", button: "left" });
+        cy.wait(3000);
+        cy.get(".drag-handle").eq(1)
+          .realMouseMove(0, 0, { position: "center" })
+          .realMouseUp();
+        cy.unClick();
+        cy.fbClickRemoveBtn({ label: "fb-text-editor-changed" });
+      });
+
+      it("Verify Autocomplete attributes", () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
+        cy.fbVerifyNameValue({ name: "label", value: "fb-autocomplete" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-changed" });
+        cy.fbVerifyNameValue({ name: "placeholder", value: "fb-autocomplete placeholder" });
+        cy.get(`[data-cy="optionId"]`).should("have.value", "Document revisions");
+        cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+        cy.fbAddNewFieldButton();
+        cy.get(`[data-cy="fb-autocomplete-changed"]`).should("exist");
+      });
+
+      it("move component", () => {
+        cy.get("[data-cy='autocomplete-4']").trigger("mouseover");
+        cy.wait(2000);
+        cy.get(".drag-handle").eq(1)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(".drag-handle").eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
         cy.unClick();
-        cy.fbClickRemoveBtn({ label: "FB-SUBSECTION-CHANGED" });
+        cy.fbClickRemoveBtn({ label: "fb-autocomplete-changed" });
       });
 
       it("Verify Inline Approval attributes", () => {
@@ -1627,9 +1631,9 @@ context("Records flow", () => {
     });
 
     it("move component", () => {
-      cy.get("[data-cy='fb-textfield']").trigger("mouseover");
+      cy.get("[data-cy='textfield-17']").trigger("mouseover");
       cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
+      cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
@@ -1639,271 +1643,25 @@ context("Records flow", () => {
       cy.fbClickRemoveBtn({ label: "fb-textfield" });
     });
 
-    it("Verify Checkbox group attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-checkbox-group" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-checkbox-group" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group-changed" });
-      cy.fbVerifyOptions("option1", "option2");
-      cy.fbVerifyCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+    it("Verify Subsection attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "FB-SUBSECTION" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-subsection" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-subsection-changed" });
       cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-checkbox-group-changed"]`).should("exist");
+      cy.get(`[name^="fb-subsection"]`).should("contain", "FB-SUBSECTION-CHANGED");
     });
 
     it("move component", () => {
-      cy.get("[data-cy='fb-checkbox-group-changed']").trigger("mouseover");
+      cy.get("[data-cy='subsection-31']").trigger("mouseover");
       cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
+      cy.get(".drag-handle").eq(14)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
+      cy.get(".drag-handle").eq(13)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
       cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-checkbox-group-changed" });
-    });
-
-    it("Verify Autocomplete attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-autocomplete" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-changed" });
-      cy.fbVerifyNameValue({ name: "placeholder", value: "fb-autocomplete placeholder" });
-      cy.get(`[data-cy="optionId"]`).should("have.value", "Document revisions");
-      cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-autocomplete-changed"]`).should("exist");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='fb-autocomplete-changed']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-autocomplete-changed" });
-    });
-
-    it("Verify Text Editor attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-text-editor" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-text-editor" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-text-editor-changed" });
-      cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
-      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-text-editor-changed"]`).should("exist");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='fb-text-editor-changed']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-text-editor-changed" });
-    });
-
-    it("Verify Date picker attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-datepicker" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-datepicker" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-datepicker-changed" });
-      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-datepicker-changed"]`).should("exist");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='fb-datepicker-changed']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-datepicker-changed" });
-    });
-
-    it("Verify Hyperlink attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-hyperlink" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-hyperlink" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink-changed" });
-      cy.fbVerifyNameValue({ name: "linkUrl", value: "google.com" });
-      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.fbAddNewFieldButton();
-      cy.get(`[name^="fb-hyperlink"]`).should("contain", "fb-hyperlink-changed");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='hyperlink-22']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(1)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-    });
-
-    it("Verify location linked on Hyperlink and remove", () => {
-
-      cy.window().then((win) => {
-        cy.spy(win, "open").as("redirect");
-      });
-      cy.get("[name^=fb-hyperlink-]").arrowClick();
-      cy.get("@redirect").should("be.calledWith", "https://google.com");
-      cy.fbClickRemoveBtn({ label: "fb-hyperlink-changed" });
-    });
-
-    it("Verify Select Field attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-select-field" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-select-field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-select-field-changed" });
-      cy.fbVerifyNameValue({ name: "placeholder", value: "fb-select-field placeholder" });
-      cy.fbVerifyOptions("option1", "option2");
-      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-select-field-changed"]`).should("exist");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='fb-select-field-changed']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-select-field-changed" });
-    });
-
-    it("Verify Radio Button group attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-radiobutton-group" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group-changed" });
-      cy.fbVerifyOptions("option1", "option2");
-      cy.fbVerifyOptions("option1", "option2");
-      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-radiobutton-group-changed"]`).should("exist");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='fb-radiobutton-group-changed']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-radiobutton-group-changed" });
-    });
-
-    it("Verify Paragraph attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-paragraph" });
-      cy.get(`[data-cy="paragraph"]`).parent().find("div p").eq(-1).should("have.text", "fb-paragraph");
-      cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-      cy.fbClickRemoveBtn({ label: "fb-paragraph" });
-    });
-
-    it("Verify File Upload attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-fileupload" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-fileupload" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-fileupload-changed" });
-      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-fileupload-changed"]`).should("exist");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='fb-fileupload-changed']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-fileupload-changed" });
-    });
-
-    it("Verify Blank Template Form attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-blank-template" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-blank-template-changed" });
-      cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-blank-template-changed"]`).should("exist");
-      cy.contains("image.jpg").should("exist");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='fb-blank-template-changed']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-blank-template-changed" });
-    });
-
-    it("Verify Quantity attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-quantity" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-quantity-changed" });
-      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-quantity-changed"]`).should("exist");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='fb-quantity-changed']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-quantity-changed" });
-    });
-
-    it("Verify Timer attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-timer" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-timer" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-timer-changed" });
-      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-      cy.fbAddNewFieldButton();
-      cy.get(`[data-cy="fb-timer-changed"]`).should("exist");
-    });
-
-    it("move component", () => {
-      cy.get("[data-cy='fb-timer-changed']").trigger("mouseover");
-      cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-      cy.unClick();
-      cy.fbClickRemoveBtn({ label: "fb-timer-changed" });
+      cy.fbClickRemoveBtn({ label: "FB-SUBSECTION-CHANGED" });
     });
 
     it("Verify Section attributes", () => {
@@ -1918,41 +1676,295 @@ context("Records flow", () => {
     it("move component", () => {
       cy.get("[data-cy='fb-section-changed']").trigger("mouseover");
       cy.wait(2000);
-      cy.get(".drag-handle").eq(2)
+      cy.get(".drag-handle").eq(13)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
+      cy.get(".drag-handle").eq(12)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
       cy.unClick();
       cy.fbClickRemoveBtn({ label: "fb-section-changed" });
     });
 
-    it("Verify Subsection attributes", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "FB-SUBSECTION" });
-      cy.fbVerifyNameValue({ name: "label", value: "fb-subsection" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-subsection-changed" });
+    it("Verify Timer attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-timer" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-timer" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-timer-changed" });
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
-      cy.get(`[name^="fb-subsection"]`).should("contain", "FB-SUBSECTION-CHANGED");
+      cy.get(`[data-cy="fb-timer-changed"]`).should("exist");
     });
 
     it("move component", () => {
-      cy.get("[data-cy='subsection-31']").trigger("mouseover");
+      cy.get("[data-cy='textfield-30']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(12)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(11)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+      cy.fbClickRemoveBtn({ label: "fb-timer-changed" });
+    });
+
+    it("Verify Quantity attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-quantity" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-quantity" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-quantity-changed" });
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-quantity-changed"]`).should("exist");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='textfield-29']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(11)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(10)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+      cy.fbClickRemoveBtn({ label: "fb-quantity-changed" });
+    });
+
+
+    it("Verify Blank Template Form attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-blank-template" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-blank-template" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-blank-template-changed" });
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-blank-template-changed"]`).should("exist");
+      cy.contains("image.jpg").should("exist");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='blanktplform-28']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(10)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(9)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+      cy.fbClickRemoveBtn({ label: "fb-blank-template-changed" });
+    });
+
+    it("Verify File Upload attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-fileupload" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-fileupload" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-fileupload-changed" });
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-fileupload-changed"]`).should("exist");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='fileupload-27']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(9)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(8)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+      cy.fbClickRemoveBtn({ label: "fb-fileupload-changed" });
+    });
+
+    it("Verify Paragraph attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-paragraph" });
+      cy.get(`[data-cy="paragraph"]`).parent().find("div p").eq(-1).should("have.text", "fb-paragraph");
+      cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      cy.fbClickRemoveBtn({ label: "fb-paragraph" });
+    });
+
+
+    it("Verify Radio Button group attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-radiobutton-group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group-changed" });
+      cy.fbVerifyOptions("option1", "option2");
+      cy.fbVerifyOptions("option1", "option2");
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-radiobutton-group-changed"]`).should("exist");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='radiogroup-24']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(7)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(6)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+      cy.fbClickRemoveBtn({ label: "fb-radiobutton-group-changed" });
+    });
+
+    it("Verify Select Field attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-select-field" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-select-field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-select-field-changed" });
+      cy.fbVerifyNameValue({ name: "placeholder", value: "fb-select-field placeholder" });
+      cy.fbVerifyOptions("option1", "option2");
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-select-field-changed"]`).should("exist");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='select-24']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(6)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(5)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+      cy.fbClickRemoveBtn({ label: "fb-select-field-changed" });
+    });
+
+    it("Verify Hyperlink attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-hyperlink" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-hyperlink" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-hyperlink-changed" });
+      cy.fbVerifyNameValue({ name: "linkUrl", value: "google.com" });
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[name^="fb-hyperlink"]`).should("contain", "fb-hyperlink-changed");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='hyperlink-23']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(5)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(4)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+    });
+
+    it("Verify location linked on Hyperlink and remove it", () => {
+      cy.window().then((win) => {
+        cy.spy(win, "open").as("redirect");
+      });
+      cy.get("[name^=fb-hyperlink-]").arrowClick();
+      cy.get("@redirect").should("be.calledWith", "https://google.com");
+      cy.fbClickRemoveBtn({ label: "fb-hyperlink-changed" });
+    });
+
+
+    it("Verify Date picker attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-datepicker" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-datepicker" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-datepicker-changed" });
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-datepicker-changed"]`).should("exist");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='datepicker-22']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(4)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(3)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+      cy.fbClickRemoveBtn({ label: "fb-datepicker-changed" });
+    });
+
+    it("Verify Text Editor attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-text-editor" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-text-editor" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-text-editor-changed" });
+      cy.fbVerifyOptions("SelectOne", "SelectTwo", "SelectThree");
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-text-editor-changed"]`).should("exist");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='texteditor-21']").trigger("mouseover");
       cy.wait(2000);
       cy.get(".drag-handle").eq(3)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(2)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+      cy.fbClickRemoveBtn({ label: "fb-text-editor-changed" });
+    });
+
+    it("Verify Autocomplete attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete-changed" });
+      cy.fbVerifyNameValue({ name: "placeholder", value: "fb-autocomplete placeholder" });
+      cy.get(`[data-cy="optionId"]`).should("have.value", "Document revisions");
+      cy.fbVerifyCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-autocomplete-changed"]`).should("exist");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='autocomplete-20']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(2)
+        .realMouseDown({ position: "center", button: "left" });
+      cy.wait(3000);
+      cy.get(".drag-handle").eq(1)
+        .realMouseMove(0, 0, { position: "center" })
+        .realMouseUp();
+      cy.unClick();
+      cy.fbClickRemoveBtn({ label: "fb-autocomplete-changed" });
+    });
+
+    it("Verify Checkbox group attributes", () => {
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-checkbox-group" });
+      cy.fbVerifyNameValue({ name: "label", value: "fb-checkbox-group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group-changed" });
+      cy.fbVerifyOptions("option1", "option2");
+      cy.fbVerifyCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-checkbox-group-changed"]`).should("exist");
+    });
+
+    it("move component", () => {
+      cy.get("[data-cy='checkboxgroup-19']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
       cy.unClick();
-      cy.fbClickRemoveBtn({ label: "FB-SUBSECTION-CHANGED" });
+      cy.fbClickRemoveBtn({ label: "fb-checkbox-group-changed" });
     });
 
     it("Verify Inline Approval attributes", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-inline-approval" });
       cy.fbVerifyNameValue({ name: "label", value: "fb-inline-approval" });
       cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval-changed" });
+      cy.get(`[data-cy="editorConfig.approvers"]`).parent().should("contain", USERS[1].email);
+      cy.get(`[data-cy="editorConfig.groups"]`).parent().should("contain", "Everyone");
+      cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.get(`[data-cy="fb-inline-approval-changed"]`).should("exist");
+      cy.fbClickRemoveBtn({ label: "fb-inline-approval-changed" });
     });
   });
 });
