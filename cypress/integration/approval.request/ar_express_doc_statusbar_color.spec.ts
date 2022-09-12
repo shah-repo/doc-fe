@@ -26,7 +26,6 @@ let materialsDocumentType;
 let equipmentDocument;
 let materialsDocument;
 let developersGroup;
-let arId;
 
 context("Status Bar of New Enlil items approved via express AR", () => {
   before(() => {
