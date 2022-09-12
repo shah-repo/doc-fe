@@ -1182,33 +1182,33 @@ context("Inspection flow", () => {
       });
 
       it("Select make vs buy", () => {
-        cy.get("[id$=\"make-vs-buy\"]").arrowClick();
+        cy.get("[id$=\"make-vs-buy\"]").arrowClick({ force: true });
         cy.get("ul>li[role=option]").contains("Make").arrowClick();
       });
 
       it("Select unit of measure", () => {
-        cy.get("[id$=\"unit-of-measure\"]").arrowClick();
+        cy.get("[id$=\"unit-of-measure\"]").arrowClick({ force: true });
         cy.get("ul>li[role=option]").contains("Batch").arrowClick();
       });
 
       it("Select traceability required", () => {
-        cy.get("[value=\"Traceability required\"]").check();
+        cy.get("[value=\"Traceability required\"]").check({ force: true });
       });
 
       it("Select 'No' for Serialized option", () => {
-        cy.get("[name=\"serialized\"][value=\"No\"]").check();
+        cy.get("[name=\"serialized\"][value=\"No\"]").check({ force: true });
       });
 
       it("Select 'IQC Required'", () => {
-        cy.get("[value=\"IQC Required\"]").check();
+        cy.get("[value=\"IQC Required\"]").check({ force: true });
       });
 
       it("Select 'Limited Shelf Life'", () => {
-        cy.get("[value=\"Limited Shelf Life\"]").check();
+        cy.get("[value=\"Limited Shelf Life\"]").check({ force: true });
       });
 
       it("Select 'FAI Required'", () => {
-        cy.get("[value=\"FAI Required\"]").check();
+        cy.get("[value=\"FAI Required\"]").check({ force: true });
       });
 
       context("Release part document", () => {
@@ -1303,7 +1303,7 @@ context("Inspection flow", () => {
       });
 
       it("Add 'Expiry Date'", () => {
-        cy.xpath("//input[@name]/ ../div/button").arrowClick();
+        cy.xpath("//input[@name]/ ../div/button").arrowClick({ force: true });
         cy.get("button.MuiPickersDay-current").arrowClick();
       });
 

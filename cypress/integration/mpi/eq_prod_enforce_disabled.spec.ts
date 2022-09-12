@@ -211,7 +211,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                   },
                   {
                     index: 4,
@@ -227,7 +227,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "Calibration",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                   },
                   {
                     label: "form.builder.approvals",
@@ -1649,7 +1649,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Verify background color is gray because it due is not expired", () => {
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
-          .should("have.css", "background-color", "rgb(212, 219, 225)");
+          .should("have.css", "background-color", "rgb(235, 237, 242)");
       });
 
       it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
@@ -1720,7 +1720,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Add an Approval", () => {
@@ -1728,7 +1728,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Complete step", () => {
@@ -1884,7 +1884,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Verify background color is gray because it due is not expired", () => {
         cy.get(`div[data-cy="form.builder.mpi.part.selection.equipment"]`).parent()
-          .should("have.css", "background-color", "rgb(212, 219, 225)");
+          .should("have.css", "background-color", "rgb(235, 237, 242)");
       });
 
       it("Verify Change button is present on hover", { scrollBehavior: false }, () => {
@@ -1955,7 +1955,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Add an Approval", () => {
@@ -1963,7 +1963,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Complete step", () => {

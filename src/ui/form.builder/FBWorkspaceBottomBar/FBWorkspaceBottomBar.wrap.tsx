@@ -3,6 +3,7 @@ import { find, get, map, unionBy } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
 import { toastError } from "../../components/notifications";
+import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   Component: React.FunctionComponent<T>,
@@ -28,6 +29,12 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
         workspaceState?.mode === "design" ||
         workspaceState?.mode === "preview");
 
+    const { document: { document: { documentType = {} } = {} } = {} } = workspaceState || {};
+    // Form options should remain disabled in output doc types, regardless of their state.
+    if (!checkIsDocumentForm(documentType?.groupOptions)) {
+      previewDisabled = true;
+      includeTransport = false;
+    }
     const readFile = (file: Blob) => {
       const reader = new FileReader();
       reader.readAsText(file);

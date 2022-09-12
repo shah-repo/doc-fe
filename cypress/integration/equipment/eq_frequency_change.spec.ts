@@ -196,7 +196,7 @@ context("Equipment due date calculation while changing frequency", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                   },
                   {
                     index: 4,
@@ -211,7 +211,7 @@ context("Equipment due date calculation while changing frequency", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     applicableValidationSchema: true,
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     validationAttribute: "Calibration",
                   },
                 ],
