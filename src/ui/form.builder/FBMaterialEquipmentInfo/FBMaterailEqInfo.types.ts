@@ -14,6 +14,7 @@ export interface Material {
   quantity: number;
   unit: string;
   lots: LotItem[];
+  status?: string;
 }
 
 export interface Equipment {
@@ -21,15 +22,19 @@ export interface Equipment {
   title: string;
   nextCalibration: Date;
   nextPm: Date;
+  status?: string;
 }
 
 export interface MaterialAndEquipment {
   equipment: Equipment[];
-  materials: Material [];
+  materials: Material[];
 }
 
 export interface MaterialEqProps {
   materialData: MaterialAndEquipment;
+  includeDiff: boolean;
+  showDiff: boolean;
+  handleShowDiffChange: (value: boolean) => void;
 }
 
 export interface MaterialEqContainerProps {
