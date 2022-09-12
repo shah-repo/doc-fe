@@ -17,6 +17,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   childForReviseValue,
   childrenPartsValue,
   partType,
+  children,
 }) => {
   const classes = FBButtonStyles();
   const revisonMode = partTypeDefaultValue === PartType.DocumentRevision;
@@ -33,6 +34,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
         withState
         omitFormValue
       />
+      {children}
       <FBInput type="ebpart">
         <Box display="flex" alignItems="flex-end" mt={2.5}>
           <Box flexGrow={1}>
