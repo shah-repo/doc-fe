@@ -91,6 +91,7 @@ class FBInlineApprovalState {
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
+    callback?: () => void
   ) => {
     if (!id) { return; }
     this.transitionApi.set({
@@ -98,6 +99,13 @@ class FBInlineApprovalState {
       url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
       method: "post",
+    }, (data, error) => {
+      if (error) {
+        return this.transitionApi.onError(error);
+      }
+      this.transitionApi.data = data;
+      this.transitionApi.onSuccess();
+      callback?.();
     });
   };
 

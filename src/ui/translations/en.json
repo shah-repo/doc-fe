@@ -546,6 +546,8 @@
   "documentRevision.audit.redline.BOOLEAN_NEW": "Redline",
   "documentRevision.audit.approvers.removed.by": "Approval Removed by {owner}",
   "documentRevision.audit.formDocument": "Form Set To",
+  "documentRevision.audit.childrenParts.ARRAY_DELETED": "Part removed",
+  "documentRevision.audit.childrenParts.ARRAY_NEW": "Part added",
   "document.revision.audit.download.s3link.error": "Attachment can't be downloaded",
   "document.revision.quntity.error": "You cannot exceed more than 10 numbers after the decimal in the \"Quantity\" field.",
   "document.revision.quntity.positive.error": "\"Quantity\" field must be a positive number.",
@@ -625,7 +627,7 @@
   "form.builder.details": "Details",
   "form.builder.create": "Create a Form",
   "form.builder.name": "Form Name",
-  "form.builder.add.field": "Add a Field",
+  "form.builder.add.field": "Add Field",
   "form.builder.create.field": "Create a Field",
   "form.builder.edit.field": "Edit Field",
   "form.builder.section": "Section",
@@ -975,7 +977,8 @@
   "form.builder.attachments": "Attachments",
   "form.builder.unit": "Unit",
   "form.builder.header.rev": "Rev {revision}",
-  "form.builder.header.lastSaved": "Last saved: {lastSavedTimestamp}",
+  "form.builder.header.lastSaved": "Last saved {lastSavedTimestamp}",
+  "form.builder.header.autoSaving": "Auto-saving, please wait…",
   "form.builder.header.lastEdited": "Last edit {lastSavedTimestamp}",
   "form.builder.header.control.label": "Show customizable labels",
   "form.builder.procedure.materials.title": "{title} | {lot} | Qty: {quantity} {unit}",
@@ -1325,5 +1328,6 @@
   "tabId.training": "Training",
   "tabId.calpmhistory": "Cal/PM History",
   "meq.chip.nextCalDate": "Next Callibration Due :",
-  "meq.chip.prevMaintance": "Preventive Maintenance Due : "
+  "meq.chip.prevMaintance": "Preventive Maintenance Due : ",
+  "form.builder.addEquiSpec": "Add Cal or PM"
 }

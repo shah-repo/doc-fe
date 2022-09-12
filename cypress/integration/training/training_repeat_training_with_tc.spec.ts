@@ -716,7 +716,7 @@ context("Repeat Training with Training Curriculum", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Navigate to Overview tab", () => {

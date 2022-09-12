@@ -26,7 +26,7 @@ import ChangeRequestAuditContainer from "../audit/Audit.container";
 import { toChangeRequestFormValues, toChangeRequestUpdateRequestBody } from "../form/transform";
 import { ChangeRequestFormValues } from "../form/types";
 import CRReferences from "../references/Reference";
-import { canChangeCROwner, canEditApprovers, canEditChangeRequest } from "../utils/helpers";
+import { canChangeCROwner, canEditApprovers, canEditChangeRequest, statesWithLastSavedEnabled } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
 import Presenter from "./presenter";
 import SummaryHeader from "./SummaryHeader";
@@ -54,6 +54,8 @@ const Container: React.FunctionComponent<Props> = ({
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   const isCompanyAdmin = useGetHasTag(GroupTag.USER_MANAGEMENT);
   const hasOwnershipTag = useGetHasTag(GroupTag.OWNERSHIP_CHANGE);
+
+  const displayLastSaved = statesWithLastSavedEnabled.includes(dataProp.state);
 
   const canChangeOwnerShip = canChangeCROwner(
     dataProp.state,
@@ -184,7 +186,9 @@ const Container: React.FunctionComponent<Props> = ({
 
   return (
     <FBProvider {...{ bookmarkState }}>
-      <SummaryHeader {...{ dataProp, canChangeOwnerShip, asyncState: async.asyncState, errors, canEdit }}/>
+      <SummaryHeader
+        {...{ dataProp, canChangeOwnerShip, asyncState: async.asyncState, errors, canEdit, displayLastSaved }}
+      />
       <div className={classes.root}>
         <div className={classes.appFrame}>
           {summaryFormikRenderer()}

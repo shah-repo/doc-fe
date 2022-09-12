@@ -1208,13 +1208,8 @@ context("Autosave LHR", () => {
       });
 
       it("Select MPI document for step #1 in LHRt", () => {
-        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
-        cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-          $el.trigger("click");
-        });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
-        });
+        cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
+        cy.get("input[data-cy^=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
       });
     });
 
@@ -1227,16 +1222,8 @@ context("Autosave LHR", () => {
       });
 
       it("Select MPI document created with API for step #2 in LHRt", () => {
-        cy.get("[data-cy=\"LHR Step 2\"]").arrowClick();
-        cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
-          $el.trigger("click");
-        });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
-          CyRoutes.GetAutocompleteOptions,
-          CyRoutes.PatchDocRev], () => {
-          cy.listLoadingElementShouldNotExist();
-          cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
-        });
+        cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(1).arrowClick({ force: true });
+        cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1501,7 +1488,7 @@ context("Autosave LHR", () => {
 
   context("Add parameter materials and equipment", () => {
     it("Click 'LHR Step'", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
     });
     it("Add material parameter", () => {
       cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
@@ -1840,11 +1827,8 @@ context("Autosave LHR", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click 'LHR Step'", () => {
-      cy.get("[data-cy^=\"LHR Step 1\"]").arrowClick();
-    });
-
     it("Click 'START MPI'", () => {
+      cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
       cy.mpiStartStep({ stepNumber: 1 });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -2251,15 +2235,12 @@ context("Autosave LHR", () => {
       cy.drSelectDetailsTab();
     });
 
-    it("Click 'LHR Step'", () => {
-      cy.get("[data-cy^=\"LHR Step 2\"]").arrowClick();
-    });
 
     it("Click 'START MPI'", () => {
+      cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(1).arrowClick({ force: true });
       cy.mpiStartStep({ stepNumber: 1 });
       cy.landingPageLoadingElementShouldNotExist();
     });
-
 
     it("Verify LHRs title", () => {
       cy.get("#HeaderInfo-subtitle", { timeout: 50000 })

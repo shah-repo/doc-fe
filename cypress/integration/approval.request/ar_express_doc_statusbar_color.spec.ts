@@ -348,6 +348,8 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
       cy.fbAddNewFieldButton();
       cy.elUploadAttachment({ fileName: "TestTemplate.json", el: "fb-attachment-field-fb-blank-template-" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Quantity", () => {
@@ -397,7 +399,6 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     it("Click save document", () => {
       SystemRequirement("REQ-3120");
       cy.drClickCreateDocumentWithApiCallForForms();
-      // lastSavedTime = currentTime;
     });
 
     it(`Check doc Draft status as ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -413,20 +414,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    it(`Verify 'Last saved: ' exist in statusbar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").contains(`Last saved: `);
+    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
     });
-
-    // it(`Check the last saved time less less than 2 mins`, () => {
-    //   cy.get("[class*=\"makeStyles-lastEdited\"]").contains("Last saved: ").then(($el: any) => {
-    //     const timeDuration = $el.text().trim().match(/Last saved: (.*)/)[1].trim();
-    //     expect(timeDuration).isBetween(currentTime, lastSavedTime).format("mm");
-    //     //  moment(end.diff(startTime)).format("m[m] s[s]")
-    //     const duration = moment(currentTime.diff(lastSavedTime)).format("hh:mm:ss a");
-    //     cy.log(duration);
-    //     // const timeDiff = currentTime.diff(lastSavedTime, "minutes");
-    //   });
-    // });
 
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
       SystemRequirement("REQ-2800");
@@ -459,9 +449,9 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
     });
 
-    // it(`Verify statusbar conataining DRAFT is still visible`, () => {
-    //   cy.get("div[data-cy=\"HeaderInfo-status\"]").should("be.visible");
-    // });
+    it(`Verify statusbar conataining DRAFT is still visible`, () => {
+      cy.get("div[data-cy=\"HeaderInfo-status\"]").should("be.visible");
+    });
 
     it(`Verify DRAFT statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
@@ -477,12 +467,12 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it(`Verify again user1 'Last saved: ' exist in statusbar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").contains(`Last saved: `);
+    it(`Verify again user1 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
     });
   });
 
-  context("Login as user2 and check for 'Last saved' exists in statusbar", () => {
+  context("Login as user2 and check for 'Last saved' exists in statusbar with time duration", () => {
     it("Logout and login", () => {
       cy.authLogout();
       cy.authLogin({
@@ -514,8 +504,8 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    it(`Verify 'Last saved: ' exist in Statusbar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").contains(`Last saved: `);
+    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
     });
   });
 
@@ -549,9 +539,6 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     it("Check MPI doc released status and click on Send To Email", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
-      // cy.drGetDocIdElementFromUI().should("contain.text", "MPI-").then(($docIdElement: JQuery<HTMLElement>) => {
-      //   MPIDocId = $docIdElement.text();
-      // });
     });
   });
 
@@ -583,7 +570,18 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Released statusbar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").should("not.be.exist");
+      cy.verifyLastSavedNotExists();
+    });
+  });
+
+  context("Click on the AR ID link and verify AR opens in new tab", () => {
+    it(`Click on the AR ID link`, () => {
+      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").invoke("removeAttr", "target").click();
+    });
+
+    it(`Verify AR opens in a new tab`, () => {
+      cy.url().should("include", "/preview");
+      cy.go("back");
     });
   });
 
@@ -624,8 +622,8 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 
-    it(`Verify 'Last saved: ' does not exist in Released statusbar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").should("not.be.exist");
+    it(`Verify 'Last saved' does not exist in Released statusbar`, () => {
+      cy.verifyLastSavedNotExists();
     });
 
     it(`Verify the statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
@@ -660,7 +658,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    it(`Verify 'Revise Document' exists in statusbar`, () => {
+    it(`Verify 'Revise Document' does not exists in statusbar`, () => {
       cy.contains("[data-cy=\"updateRecord\"]").should("not.be.exist");
     });
 
@@ -673,12 +671,12 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 
-    it(`Verify 'Last saved: ' does not exist in statusbar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").should("not.be.exist");
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
     });
 
-    it(`Verify the statusbar background-color as MANDY (${Colors.mandy})`, () => {
-      cy.verifyStatusbarBgcolor({ bcolor: "rgb(235, 71, 112)" });
+    it(`Verify the statusbar background-color as RED(#EC2B00)`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
     });
   });
 
@@ -739,8 +737,8 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    it(`Verify 'Last saved: ' does not exist in statusbar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").should("not.be.exist");
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
     });
 
     it("Check if 'Change Owner' button exists", () => {
