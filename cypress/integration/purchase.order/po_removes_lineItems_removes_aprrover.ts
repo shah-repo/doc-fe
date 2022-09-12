@@ -925,23 +925,28 @@ context("PO Removes lineitems removes approver", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(1000);
     });
 
     it(`Select '${USERS[1].name}' as Approver`, () => {
       // cy.get(`[name^="fb-po-approvals-"][role]`).click().wait(2000)
       //   .arrowType(`${USERS[1].name}{enter}`);
-      cy.get(`[name^="fb-po-approvals-"][role]`).click().should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      // cy.get(`[name^="fb-po-approvals-"]`).eq(1).scrollIntoView().click();
+      // cy.pause();
+
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`, { force: true });
+
+      // cy.get(`[name^="fb-po-approvals-"][role]`).click().wait(2000);
+      // cy.pause();
+      // cy.get(`[name^="fb-po-approvals-"][role]`).select(`${USERS[1].name} - ${USERS[1].email}`);
+      // cy.pause();
+      // cy.get(`[name^="fb-po-approvals-"][role]`).scrollIntoView().click().autocompleteSelect(`${USERS[1].name}`, { force: true });
+      // cy.get(`[name^="fb-po-approvals-"][role]`).scrollIntoView().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
       cy.unClick();
-      cy.pause();
     });
 
     it(`Verify the Approver field is added with User 1`, () => {
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
-    });
-
-    it(`Verify User 1 does not appear again in the dropdown list `, () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).click();
-      cy.pause();
     });
   });
 
@@ -958,8 +963,10 @@ context("PO Removes lineitems removes approver", () => {
 
   context("Verify that the approver field is added once in the approvals field", () => {
     it("Verify that the approver is only added once in the approvals field", () => {
-      cy.get("[name^=fb-po-approvals-]").eq(1).arrowClick();
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      // need to add code for this
+      // cy.get("[name^=fb-po-approvals-]").eq(1).arrowClick();
+      // cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.pause();
     });
   });
 
