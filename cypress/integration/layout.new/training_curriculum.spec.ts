@@ -667,7 +667,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
     context("Enter values for Details tab predefined schema fields", () => {
       it(`Select Documents to Train on ${formTitle}`, () => {
-        cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect(formTitle);
+        cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect(formTitle, { force: true });
       });
 
       it("Select Refresh/repeat training periodically? 'Yes'", () => {

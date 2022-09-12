@@ -469,11 +469,12 @@ context("Verify New Layout for Seed Document", () => {
 
     context("Enter values for Details tab predefined schema fields", () => {
       it("Enters document title 'First document'", () => {
-        cy.get("[data-cy^=document-title-]").arrowType("First document");
+        cy.get("[name^=document-title-]").arrowType("First document", { force: true });
       });
 
       it("Select 'Form with output' value on 'Type of document to be created'", () => {
-        cy.get("[name^=type-of-document-to-be-created-]").eq(0).check();
+        cy.pause();
+        cy.get("[name^=type-of-document-to-be-created-]").eq(0).check({ force: true });
       });
 
       it("Select 'Numeric' value on 'Default Revision Stage'", () => {
@@ -490,18 +491,18 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Selects document type as 'Form'", () => {
-        cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
-        cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul").contains("li", "Form").arrowClick();
+        cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick({ force: true });
+        cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul").contains("li", "Form").arrowClick({ force: true });
       });
 
       it("Selects document type as 'Clinical Protocol'", () => {
-        cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick();
+        cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick({ force: true });
         cy.get("[id^=menu-define-the-output-of-that-form-]>div:nth-child(3)>ul")
-          .contains("li", "Clinical Protocol").arrowClick();
+          .contains("li", "Clinical Protocol").arrowClick({ force: true });
       });
 
       it("Selects 'No' training required option", () => {
-        cy.get("[name^=training-required-]").eq(1).arrowClick();
+        cy.get("[name^=training-required-]").eq(1).arrowClick({ force: true });
       });
     });
 
@@ -512,11 +513,11 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Check checkbox option", () => {
-        cy.get(`input[type="checkbox"][value="Option 1"]`).last().check();
+        cy.get(`input[type="checkbox"][value="Option 1"]`).last().check({ force: true });
       });
 
       it("Select radio button option", () => {
-        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
+        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick({ force: true });
       });
 
       it("Save document", () => {
