@@ -1,5 +1,5 @@
 import { Grid, LinearProgress } from "@material-ui/core";
-import { Observer } from "mobx-react";
+import { useObserver } from "mobx-react";
 import React from "react";
 import { SM } from "../../../App";
 import { AsyncStatus } from "../../../state/types";
@@ -24,13 +24,16 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   isCreateDocumentDisabled,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const  { documentRevision, isDisabled, asyncState, type } = React.useContext(FormHeaderContext)!;
+  const { documentRevision, isDisabled, asyncState, type } = React.useContext(FormHeaderContext)!;
   const { workspaceState } = FB.useStores();
   const { _documentRevisionFormState } = SM.useStores();
-  const isLoading =
+
+  const isLoading = useObserver(() => (
     asyncState.status === AsyncStatus.Active
-    || workspaceState?.documentRevApi.loading
-    || _documentRevisionFormState?.loading;
+      || workspaceState?.documentRevApi.loading
+      || _documentRevisionFormState?.loading)
+  );
+
   const isCreateUrl = SM.pathname.includes(DOCUMENT_REVISION_CREATE_URL);
   const classes = useStyles(isCreateUrl);
   return (
@@ -55,7 +58,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
       }
       <Grid item={true} xs={type !== "newOutput" && isDisabled ? 6 : 12} alignContent="center" container>
         <Grid container={true} alignItems="center" justify="flex-end">
-          {documentRevision.updatedAt && (
+          {documentRevision?.updatedAt && (
             <HeaderLastSaved
               timestamp={documentRevision.updatedAt}
               loading={asyncState.status === AsyncStatus.Active}
@@ -65,13 +68,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
         </Grid>
       </Grid>
       <FormMessage asyncState={asyncState} data-cy="Document-Save-Progress-Bar" />
-      <Observer>
-        {() => (
-          <>
-            {isLoading && <LinearProgress className={classes.linearProgress} data-cy="Document-Save-Progress-Bar" />}
-          </>
-        )}
-      </Observer>
+      {isLoading && <LinearProgress className={classes.linearProgress} data-cy="Document-Save-Progress-Bar" />}
     </Header>
   );
 };
