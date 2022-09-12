@@ -82,6 +82,9 @@ export const getVersionNumber = (documentRevisionId) => {
   );
 };
 
+
+export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange];
+
 // Disabled because of ENC-7826
 /* export const shouldHaveNoResponse = (dataToSubmit: any, documentRevision: DocumentRevision) => {
   const schema = get(documentRevision, "formDocument.formTemplate.schema");
