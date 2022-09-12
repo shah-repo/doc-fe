@@ -80,7 +80,7 @@ context("Intermediate page validation", () => {
     });
   });
 
-  xcontext("Verify fields displays on page", () => {
+  context("Verify fields displays on page", () => {
     it("Verify header on the top left is empty", () => {
       cy.get("[data-cy=\"HeaderInfo\"]").should("not.exist");
     });
