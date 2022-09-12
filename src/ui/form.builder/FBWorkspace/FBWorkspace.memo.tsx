@@ -6,6 +6,7 @@ import {
   FBSchema,
   FBStarter,
   FBWorkspaceBottomBar,
+  FBWorkspaceModeOptions,
   FBWorkspaceProps,
   FBWorkspaceSocket,
 } from "..";
@@ -55,7 +56,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   const group: DocumentGroupType =
     docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
-  const inDesignMode = mode === "design" || mode === "formDesign";
+  const inDesignMode = mode === FBWorkspaceModeOptions.DESIGN || mode === FBWorkspaceModeOptions.FORMDESIGN;
 
   return (
     <Box>
