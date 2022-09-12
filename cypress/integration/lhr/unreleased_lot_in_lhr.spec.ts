@@ -3,6 +3,7 @@
 
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
@@ -436,6 +437,10 @@ context("Unreleased LOT in LHR", () => {
       cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
       cy.get("ul>li[role=option]").contains("Part document").arrowClick();
     });
+
+    it("Record is in WIP status", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
+    });
   });
 
   context("Create MPI document", () => {
@@ -678,6 +683,10 @@ context("Unreleased LOT in LHR", () => {
     it("Click on approve", () => {
       cy.ebApprove();
     });
+
+    it("Record is in Accepted status", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.ACCEPTED });
+    });
   });
 
   context("Update LHR", () => {
@@ -726,7 +735,9 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #${currentDate}01`);
+      cy.get("[data-cy=\"usedOverride\"]")
+        .autocompleteSelect(`LOT #${currentDate}01`)
+        .should("have.value", `LOT #${currentDate}01 | `);
     });
 
     it("Lot dialog should close", () => {

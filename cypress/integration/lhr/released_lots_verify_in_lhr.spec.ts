@@ -2,6 +2,7 @@
 
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -618,9 +619,13 @@ context("Released_lots_verify_in_lhr", () => {
     it("Click create document", () => {
       cy.recClickSaveBtn();
     });
+
+    it("Record is in WIP status", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
+    });
   });
 
-  context("Create a CSL from inline form", () => {
+  context("Create a CSL2 from inline form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -681,6 +686,10 @@ context("Released_lots_verify_in_lhr", () => {
         it("Finalize and release button click'", () => {
           cy.wait(2000);
           cy.recFinalizeAndReleaseRecord();
+        });
+
+        it("Record is in RELEASED status", () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         });
       });
     });
@@ -750,7 +759,6 @@ context("Released_lots_verify_in_lhr", () => {
           .should("have.text", `CS-02001 - ${CSPartDocumentTitle} | Qty: 3 each`);
       });
     });
-
   });
 
   context("Create LHRt document", () => {
@@ -888,8 +896,10 @@ context("Released_lots_verify_in_lhr", () => {
       cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
     });
 
-    it(`LOT #${currentDate}02 should be present`, () => {
-      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}02`);
+    it("Select Lot", () => {
+      cy.get("[data-cy=\"usedOverride\"]")
+        .autocompleteSelect(`LOT #${currentDate}02`)
+        .should("have.value", `LOT #${currentDate}02 | `);
     });
 
     it(`LOT #${currentDate}01 should not be present`, () => {
@@ -942,6 +952,140 @@ context("Released_lots_verify_in_lhr", () => {
       cy.recFinalizeAndReleaseRecord();
       cy.wait(2000);
     });
+
+    it("Record is in RELEASED status", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    });
+  });
+
+  context("Update LHR", () => {
+    it("Navigate to LHR landing page", () => {
+      cy.navigToLHR();
+    });
+
+    it("Select created LHR record", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.DocRevPreview,
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+          cy.get("tr.k-master-row").first().arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
+      });
+      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1 - Rev A\"] > .MuiBox-root > span").arrowClick();
+    });
+
+    it("Click View step", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
+        cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on Procedure", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Click on Select from Materials", () => {
+      cy.get("[data-cy=\"form.builder.select\"]").eq(0).arrowClick({ force: true });
+    });
+
+    it("Lot dialog should open", () => {
+      cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
+    });
+
+    it("Select Lot", () => {
+      cy.get("[data-cy=\"usedOverride\"]")
+        .autocompleteSelect(`LOT #${currentDate}02`)
+        .should("have.value", `LOT #${currentDate}02 | `);
+    });
+
+    it("Select Lot", () => {
+      cy.get("[data-cy=\"usedOverride\"]").clear()
+        .autocompleteSelect(`LOT #${currentDate}01`)
+        .should("have.value", `LOT #${currentDate}01 | `);
+    });
+
+    it("Lot dialog should close", () => {
+      cy.get("[data-cy=\"dialog-close\"]").arrowClick();
+    });
+  });
+
+  context("Revise CSL Document", () => {
+    it("Navigate to Lots", () => {
+      cy.navigToLots();
+    });
+
+    it("Search for specific LOT", () => {
+      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").clear()
+        .arrowType(`LOT #${currentDate}01`);
+    });
+
+    it("Click on LOT", () => {
+      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick();
+    });
+
+    it("Revise document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Record is in WIP status", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
+    });
+  });
+
+  context("Revise & Release CSL2 document", () => {
+    it("Navigate to Lots", () => {
+      cy.navigToLots();
+    });
+
+    it("Search for specific LOT", () => {
+      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").clear()
+        .arrowType(`LOT #${currentDate}02`);
+    });
+
+    it("Click on LOT", () => {
+      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick();
+    });
+
+    it("Revise document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Click on Details", () => {
+      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+    });
+
+    it("Select approvals", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.unClick();
+    });
+
+    it("Click on approve and submit", () => {
+      cy.get("[data-cy=ApproveAndRelease-button] > .MuiButton-label").arrowClick().wait(1000);
+    });
+
+    it("Click on Details", () => {
+      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").should("exist");
+      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+    });
+
+    it("Click on approve", () => {
+      cy.ebApprove();
+    });
+
+    it("Record is in RELEASED status", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    });
   });
 
   context("Update LHR", () => {
@@ -993,8 +1137,112 @@ context("Released_lots_verify_in_lhr", () => {
       cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}02`);
     });
 
-    it(`LOT #${currentDate}01 should be present`, () => {
-      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}01`);
+    it(`LOT #${currentDate}01 should not be present`, () => {
+      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}01`)
+        .contains(`LOT #${currentDate}01`).should("not.exist");
+    });
+
+    it("Lot dialog should close", () => {
+      cy.get("[data-cy=\"dialog-close\"]").arrowClick();
+    });
+  });
+
+  context("Release CSL document", () => {
+    it("Navigate to Lots", () => {
+      cy.navigToLots();
+    });
+
+    it("Search for specific LOT", () => {
+      cy.get("[aria-colindex=\"1\"] > .k-filtercell > .k-filtercell-wrapper > .k-textbox").clear()
+        .arrowType(`LOT #${currentDate}01`);
+    });
+
+    it("Click on LOT", () => {
+      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick();
+    });
+
+    it("Click on Details", () => {
+      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+    });
+
+    it("Select approvals", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.unClick();
+    });
+
+    it("Click on approve and submit", () => {
+      cy.get("[data-cy=ApproveAndRelease-button] > .MuiButton-label").arrowClick().wait(1000);
+    });
+
+    it("Click on Details", () => {
+      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").should("exist");
+      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+    });
+
+    it("Click on approve", () => {
+      cy.ebApprove();
+    });
+
+    it("Record is in RELEASED status", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    });
+  });
+
+  context("Update LHR", () => {
+    it("Navigate to LHR landing page", () => {
+      cy.navigToLHR();
+    });
+
+    it("Select created LHR record", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.DocRevPreview,
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+          cy.get("tr.k-master-row").first().arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
+      });
+      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1 - Rev A\"] > .MuiBox-root > span").arrowClick();
+    });
+
+    it("Click View step", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
+        cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on Procedure", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Click on Select from Materials", () => {
+      cy.get("[data-cy=\"form.builder.select\"]").eq(0).arrowClick({ force: true });
+    });
+
+    it("Lot dialog should open", () => {
+      cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
+    });
+
+    it("Select Lot", () => {
+      cy.get("[data-cy=\"usedOverride\"]")
+        .autocompleteSelect(`LOT #${currentDate}02`)
+        .should("have.value", `LOT #${currentDate}02 | `);
+    });
+
+    it("Select Lot", () => {
+      cy.get("[data-cy=\"usedOverride\"]").clear()
+        .autocompleteSelect(`LOT #${currentDate}01`)
+        .should("have.value", `LOT #${currentDate}01 | `);
     });
 
     it("Lot dialog should close", () => {
