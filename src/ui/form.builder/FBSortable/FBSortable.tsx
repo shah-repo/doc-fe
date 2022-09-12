@@ -1,10 +1,11 @@
 import React from "react";
 import { SortableContainer } from "react-sortable-hoc";
-import { FBSortableProps } from "..";
+import { FBProvider, FBSortableProps } from "..";
 import { withFBSortable } from "./FBSortable.wrap";
 
 const FBSortable: React.FunctionComponent<FBSortableProps> = ({
   items,
+  sortableState,
   ...props
 }) => {
   const SortableList = SortableContainer(() => (
@@ -12,8 +13,18 @@ const FBSortable: React.FunctionComponent<FBSortableProps> = ({
       {items}
     </ul>
   ));
-
-  return <SortableList {...props} axis="y" lockAxis="y" pressDelay={200} />;
+  return (
+    <FBProvider { ...{ sortableState }}>
+      <SortableList
+        {...props}
+        axis="y"
+        lockAxis="y"
+        pressDelay={200}
+        lockToContainerEdges
+        lockOffset={["5%", "100%"]}
+      />
+    </FBProvider>
+  );
 };
 
 export default withFBSortable(FBSortable);

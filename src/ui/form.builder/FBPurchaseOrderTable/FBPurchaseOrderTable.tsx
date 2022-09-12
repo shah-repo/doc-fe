@@ -2,7 +2,8 @@ import { TableBody } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
-import { FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
+import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
+import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon_add_btn.svg";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
 
@@ -22,6 +23,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   loading,
   mode,
   name,
+  isReceivable,
+  gutter,
 }) => (
   <Table className={classes?.root}>
     {/* Commenting as per design */}
@@ -36,13 +39,32 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
     </TableHead>*/}
     <TableBody>
       <TableRow>
-        <FBTableCell colSpan={8}>
-          <FBPurchaseOrderTableDetails {...{ handleDelete, handleItem, classes, items, mode, loading, calculation }} />
+        <FBTableCell colSpan={9}>
+          <FBPurchaseOrderTableDetails {...{
+            handleDelete, handleItem, classes, items, mode,
+            loading, calculation, isReceivable,
+          }} />
         </FBTableCell>
-        <FBTableCell colSpan={3} style={{ verticalAlign: "baseline" }}>
-          <FBPurchaseOrderTableSum {...{ handleItem, handleLot, classes, items, calculation, mode }} />
+        <FBTableCell colSpan={1} style={{ verticalAlign: "baseline" }}>
+          <FBPurchaseOrderTableSum {...{ handleItem, handleLot, classes, items, calculation, mode, isReceivable }} />
         </FBTableCell>
       </TableRow>
+      {!disabled && (
+        <TableRow>
+          <FBTableCell colSpan={10}>
+            <FBButton
+              label="form.builder.add.line.item"
+              onClick={() => handleItem && handleItem()}
+              fullWidth
+              showNewButton
+              startIcon={<PlusIcon />}
+              className={classes?.button}
+              newVariant={true}
+              {...{ disabled }}
+            />
+          </FBTableCell>
+        </TableRow>
+      )}
       {mode === "form" && (
         <FBPurchaseOrderTableTotal {...{
           handleShippingCostChange,

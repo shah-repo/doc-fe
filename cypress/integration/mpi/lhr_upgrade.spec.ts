@@ -317,12 +317,8 @@ context("LHR Upgrade", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
-          });
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
+          cy.get("input[data-cy^=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
         });
       });
 
@@ -361,7 +357,7 @@ context("LHR Upgrade", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });

@@ -392,7 +392,7 @@ context("Purchase Supplier Update1", () => {
       });
 
       it("clicks on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
 

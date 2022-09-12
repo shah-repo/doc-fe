@@ -3,6 +3,7 @@
 
 import { LINE_ITEMS_STATUS_TYPES } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -103,10 +104,15 @@ context("File delete in Pending Change", () => {
     it("Upload test.docx and image.jpg files", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
       cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[3].name}`]);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[3].name}`]);
+      });
     });
 
     context("Withdraw submission and check attachments on document", () => {

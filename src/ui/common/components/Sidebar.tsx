@@ -83,4 +83,4 @@ const Sidebar: React.FunctionComponent<Props> = ({
   );
 };
 
-export default Sidebar;
+(Sidebar);

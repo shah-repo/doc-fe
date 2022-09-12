@@ -15,6 +15,7 @@ interface Props {
   templateOptions: TemplateOption[];
   dialog: DialogHandler;
   handleCreateButton(): void;
+  handleTemplateSelection: (option: TemplateOption) => void;
   headers: HeaderTableType[];
   data: any[];
   exportDialog: DialogHandler;
@@ -25,6 +26,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
   dialog,
   exportDialog,
   handleCreateButton,
+  handleTemplateSelection,
   headers,
   data,
 }) => {
@@ -69,7 +71,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
         classes={{ paper: classes.dialogPaper }}
       >
         <FormListHeader {...{ dialog }} />
-        <FormListContent {...{ dialog, templateOptions }} />
+        <FormListContent {...{ dialog, templateOptions, handleTemplateSelection }} />
       </Dialog>
     </>
   );

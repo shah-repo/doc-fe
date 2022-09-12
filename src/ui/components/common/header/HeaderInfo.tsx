@@ -173,7 +173,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                 alignItems="center"
               >
                 <Grid item={true} className={classes.itemIcon}>
-                  <div className={classes.icon} />
+                  <div data-cy="Header-listIcon" className={classes.icon} />
                 </Grid>
                 {
                   !isTypeMpiOutput && !relatedParentPartDetails && <Link
@@ -181,16 +181,22 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     onClick={returnToList}
                     className={classes.link}
                   >
-                    <Grid item={true} className={classes.title}>
+                    <Grid item={true} data-cy="Header-listTitle" className={classes.title}>
                       {title}
                     </Grid>
                   </Link>
                 }
                 {
                   isTypeMpiOutput &&
-                    <Grid item={true} className={classes.mpiTitle}>
+                  <Link
+                    underline="hover"
+                    onClick={returnToList}
+                    className={classes.link}
+                  >
+                    <Grid item={true} data-cy="Header-listTitle" className={classes.mpiTitle}>
                       {title}
                     </Grid>
+                  </Link>
                 }
                 {
                   relatedParentPartDetails && relatedParentPartDetails.parentDocId && <Link
@@ -227,7 +233,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     </Typography>
                   )}
                 </Grid>
-            &nbsp;
+                &nbsp;
                 <Grid item={true} className={classes.whiteDot}></Grid>&nbsp;
                 <Grid item={true}>
                   <Text

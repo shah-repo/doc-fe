@@ -45,21 +45,21 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty, index } = change;
+      const { owner, ownerUser, ownerThirdParty } = change;
       const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
 
       if (change.field.includes("-built-in")) {
         return null;
       }
 
-      if (index && renderChanges(audit[groupId], key).props.children[index]?.length === 0) {
+      if (!renderChanges(audit[groupId], key)) {
         return null;
       }
 
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <UserAvatarListItem
-            name={name}
+            name={<span data-cy={`change-key-${key}`}>{name}</span>}
             user={(owner && owner.user) || ownerUser || ownerThirdParty}
             secondaryComponent={
               <DateTime
@@ -384,6 +384,10 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       change.index = key++;
     });
 
+    if (!singleFields.length && !attachments.length && !newReferences.length && !deletedReferences.length) {
+      return null;
+    }
+
     return (
       <>
         {singleFields}
@@ -400,11 +404,17 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const parentGroupKey = auditGroup[0].groupKey;
     const parentIndex = auditGroup[0].index;
 
+    const isRemovingApproverAction = (
+      auditGroup[0].field === "approvals.status" && auditGroup[0].nextValue === ApprovalStatus.Abandoned
+    );
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Typography variant="subtitle1" className={classes.auditKey}>
           <Text dataCy={`change-key-${parentGroupKey}-${parentIndex}`}
-            message={`documentRevision.audit.${field}.${type}`} />
+            message={
+              isRemovingApproverAction
+                ? `documentRevision.audit.${field}.ARRAY_DELETED`
+                : `documentRevision.audit.${field}.${type}`} />
         </Typography>
         {auditGroup.map((change, index) => (
           <div

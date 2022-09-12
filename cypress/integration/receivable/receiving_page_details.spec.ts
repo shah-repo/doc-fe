@@ -1,4 +1,3 @@
-import moment from "moment";
 import "moment-timezone";
 import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
@@ -7,6 +6,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate, receivingReleasedDate, receivingReleasedDateMonth } from "../../utils/constants/dateHandler";
 import { LotsTest } from "../../utils/constants/documentTypes/lot";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
@@ -52,11 +52,6 @@ const RADIO_BUTTON_GROUP_LABEL = "radioGroup";
 const CHECKBOX_LABEL = "checkboxGroup";
 const CHECKBOX_REQUIRED_IF_VALUE = "Y";
 
-const dateOffset = (5 * 1000);
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
-const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/DD/YYYY");
 
 context("Receivable test with Page Details", () => {
   before(() => {
@@ -383,7 +378,7 @@ context("Receivable test with Page Details", () => {
                 ],
               },
               {
-                name: "requestor-k740hxlb",
+                name: "po-requestor-autocomplete",
                 type: "autocomplete",
                 index: 2,
                 label: "Requestor",
@@ -462,19 +457,13 @@ context("Receivable test with Page Details", () => {
                 applicableValidationSchema: true,
               },
               {
-                name: "approvals-built-in",
-                type: "approvals",
+                name: "fb-po-approvals-l7rbwkqp",
+                type: "poapprovals",
                 index: 6,
-                label: "Approvals",
+                label: "form.builder.approvals",
                 tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
+                deleteDisabled: false,
                 uniqueSchemaItem: true,
-                validationAttribute: "Approvals",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
               },
             ],
           },
@@ -739,7 +728,7 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Select Requestor", () => {
-        cy.get("[data-cy^=requestor]").arrowClick();
+        cy.get("[data-cy^=po-requestor]").arrowClick();
         cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         cy.unClick();
       });
@@ -751,10 +740,6 @@ context("Receivable test with Page Details", () => {
 
       it("Select 'SUP-00001' Supplier ", () => {
         cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001");
-      });
-
-      it("Enters description 'New Purchase Order Description'", () => {
-        cy.drEnterDocumentDescription({ description: "New Purchase Order" });
       });
 
       it("Enters description 'New Purchase Order Description'", () => {
@@ -882,14 +867,6 @@ context("Receivable test with Page Details", () => {
       context("Approve Purchase Order document", () => {
         it("Click on 'Details' tab", () => {
           cy.drSelectDetailsTab();
-        });
-
-        it("Add an Approval", () => {
-          cy.get("input[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("input[data-cy=\"fb-approvals-approvals-built-in\"]").autocompleteSelect(USERS[1].name);
-          });
-          cy.unClick();
         });
 
         it("Save PO", () => {
@@ -1127,7 +1104,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Verify requester is present on receivable", () => {
-      cy.get("input[data-cy^=\"requestor\"]").should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get("input[data-cy^=\"po-requestor\"]").should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
     });
 
     it("Verify supplier is present on receivable", () => {
@@ -1151,7 +1128,7 @@ context("Receivable test with Page Details", () => {
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
     });
 
@@ -1206,8 +1183,7 @@ context("Receivable test with Page Details", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${releasedFormId}${filetime}_WIP1.zip`;
+            downloadFile  =  `${releasedFormId}${fileTimeFormat}_WIP1.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -1300,10 +1276,10 @@ context("Receivable test with Page Details", () => {
 
           expect(el).match(/WIP/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
@@ -1359,7 +1335,7 @@ context("Receivable test with Page Details", () => {
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
     });
 
@@ -1373,7 +1349,7 @@ context("Receivable test with Page Details", () => {
   context("Verify PDF while document is in WIP (step 2)", () => {
     context("Verify email notification for Receivable form", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           after: dateAfterEmailShouldArrive,
@@ -1415,8 +1391,7 @@ context("Receivable test with Page Details", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${releasedFormId}${filetime}_WIP2.zip`;
+            downloadFile  =  `${releasedFormId}${fileTimeFormat}_WIP2.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -1510,10 +1485,10 @@ context("Receivable test with Page Details", () => {
 
           expect(el).match(/WIP/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
@@ -1737,7 +1712,7 @@ context("Receivable test with Page Details", () => {
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
     });
 
@@ -1792,8 +1767,7 @@ context("Receivable test with Page Details", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${releasedFormId}${filetime}_PENDING.zip`;
+            downloadFile  =  `${releasedFormId}${fileTimeFormat}_PENDING.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -1888,10 +1862,10 @@ context("Receivable test with Page Details", () => {
 
           expect(el).match(/Pending Approval/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
@@ -1918,7 +1892,7 @@ context("Receivable test with Page Details", () => {
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
     });
 
@@ -1973,8 +1947,7 @@ context("Receivable test with Page Details", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${releasedFormId}${filetime}_rel.zip`;
+            downloadFile  =  `${releasedFormId}${fileTimeFormat}_rel.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -2037,7 +2010,7 @@ context("Receivable test with Page Details", () => {
 
           expect(el).match(/image.jpg/);
 
-          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${pdfDocRelDate}`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Receivable\nPOT-00001 - rev 1 - New Purchase Order/);
@@ -2069,10 +2042,10 @@ context("Receivable test with Page Details", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
@@ -2135,19 +2108,24 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Select 'Receivable' form", () => {
-      cy.recSelectRecordFormFromMultiSelect({ recordType: "Receivable" });
-    });
-
-    it("Click on 'Details' tab", () => {
-      cy.drSelectDetailsTab();
+      cy.get(`div[data-cy^="field-selectType"]`).click().focused()
+        .arrowType("Receivable{downarrow}{enter}");
+      cy.unClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Search for API PO document and select it", () => {
-      cy.get("input[data-cy^=\"porec-rece\"]").autocompleteSelect("New Purchase Order");
+      cy.drSelectDetailsTab();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.DocRevPreview], () => {
+          cy.get("input[data-cy^=\"porec-rece\"]").click().focused().autocompleteSelect("New Purchase Order");
+        });
     });
 
     it("Verify requester is present on receivable", () => {
-      cy.get("input[data-cy^=\"requestor\"]").should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get("input[data-cy^=\"po-requestor\"]").should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
     });
 
     it("Verify supplier is present on receivable", () => {

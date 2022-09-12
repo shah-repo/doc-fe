@@ -8,7 +8,6 @@ import SummaryField from "../../common/summary/NewBase";
 import SummaryFieldWithHtml from "../../common/summary/NewBaseWithHtml";
 import FormMessage from "../../components/forms/FormMessage";
 import FormProgress from "../../components/forms/FormProgress";
-import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { FB } from "../../form.builder";
 import { ChangeRequestFormValues } from "../form/types";
 import Approvers from "./approvers";
@@ -67,9 +66,8 @@ const Presenter: React.FunctionComponent<Props> = ({
         />
         <div className={classes.fbContainer} ref={FBContainer}/>
         <Approvers dataProp={dataProp.approvals}/>
-        <DocumentRevisionOutputInfo formDocument={dataProp.formDocument}/>
       </Grid>
     </Box>
   ); };
 
-export default Presenter;
+(Presenter);

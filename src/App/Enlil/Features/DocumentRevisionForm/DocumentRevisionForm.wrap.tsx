@@ -1,12 +1,13 @@
 import { useFormikContext } from "formik";
-import { cloneDeep, get } from "lodash";
-import React, { useEffect } from "react";
+import { cloneDeep, get, isEmpty } from "lodash";
+import React, { useCallback, useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../../ui/constants/urls";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBDocTypeGroup, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
 import FBLeftPanelState from "../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state";
+import FBStore from "../../../../ui/form.builder/FBStore/FBStore";
 
 export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps>(
   Component: React.FunctionComponent<T>,
@@ -35,6 +36,15 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       autosave: _formState?.autosave || false,
     });
     const { document: { outputRevision = false } = {} } = workspaceState || {};
+
+    const getDAMPayload = useCallback((damData) => ({
+      [FBDAMFields.DAM]: damData?.["approvalMatrix"],
+      [FBDAMFields.DAR]: damData?.["approvalRoles"],
+    }), []);
+
+    if (props.isDAM && !isEmpty(FBStore.damData?.approvalMatrix)) {
+      props.formInput = { ...props?.formInput, ...getDAMPayload(FBStore.damData) };
+    }
     const approvalMatrixState = (props.isDAM && !approvalMatrixFieldState) ? (
       FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
         formValue: cloneDeep(props?.formInput),
@@ -47,12 +57,9 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
       () => approvalMatrixState?.data,
       (data) => {
         if (_documentRevisionFormState?.documentType?.group === FBDocTypeGroup.DAM) {
-          const damData = {
-            [FBDAMFields.DAM]: data?.["approvalMatrix"],
-            [FBDAMFields.DAR]: data?.["approvalRoles"],
-          };
-          formik.setFieldValue("formInput", damData);
-          _formState?.setValue("formInput", damData);
+          formik.setFieldValue("formInput", getDAMPayload(data));
+          _formState?.setValue("formInput", getDAMPayload(data));
+          FBStore.damData = cloneDeep(data);
           formik.submitForm();
         }
       }
@@ -135,7 +142,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               _tabsState,
               _formState,
               autosaveEnabled,
-              schema: _documentRevisionFormState?.schema,
+              schema: props?.documentRevision?.schema || _documentRevisionFormState?.schema,
               workspaceState,
               isCreateUrl,
             }}

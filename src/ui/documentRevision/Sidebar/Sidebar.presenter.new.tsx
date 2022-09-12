@@ -58,8 +58,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
                       item.details.dataCy : `${item.type}-icon`}
                     ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}
                     onClick={() => handleMenuIconClick(index)}
-                    className={classes.iconButtonNew}
-                  >
+                    className={classNames(classes.iconButtonNew, { [classes.bgIsActiveTab]: indexNumber === index })}>
                     {(!loading || item.type !== "bookmarks") && item.icon}
                     {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
                   </IconButton>
@@ -68,7 +67,8 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
             )
           )}
         </Box>
-        <Box width={233} display="flex" flexGrow={1} height="calc(100vh - 180px)"
+        <Box data-cy={`${sidebarList[indexNumber].details.title}-detail`}
+          width={233} display="flex" flexGrow={1} height="calc(100vh - 180px)"
           className={classNames(classes.references, "containing-box-scrollbar")}>
           {sidebarList[indexNumber].details.component}
         </Box>

@@ -1,4 +1,5 @@
 import { Button } from "@material-ui/core";
+import cx from "classnames";
 import { hasIn, isString } from "lodash";
 import React from "react";
 import { FBButtonProps, FBLabelLocaleProps, FBText } from "..";
@@ -14,16 +15,18 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
   isHover = false,
   showNewButton = false,
   style,
+  size,
   className,
+  newVariant,
   ...props
 }) => {
-  const classes = FBButtonStyles({ isHover });
+  const classes = FBButtonStyles({ isHover, newVariant, size });
   if (showNewButton) {
     return (
       <Button
         {...{ color, variant }}
         {...props}
-        type="button"
+        type={props.type ?? "button"}
         data-cy={dataCy}
         style={{
           ...style,
@@ -45,19 +48,20 @@ const FBButton: React.FunctionComponent<FBButtonProps> = ({
           />
         )}
       </Button>
-    ); }
+    );
+  }
 
   return (
     <Button
-      {...{ color, variant }}
+      {...{ color, variant, size }}
       {...props}
-      type="button"
+      type={props.type ?? "button"}
       data-cy={dataCy}
       style={{
         ...style,
         ...hidden && { display: "none" },
       }}
-      className={(props.startIcon || props.endIcon) ? className : `${classes.fbBtn} ${className}`}
+      className={cx(classes.fbBtn, className)}
     >
       {isString(label) && (
         <FBText locale={label} />

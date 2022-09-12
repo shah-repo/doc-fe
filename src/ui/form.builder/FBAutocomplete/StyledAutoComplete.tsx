@@ -15,7 +15,6 @@ export const StyledPopupAutoComplete = withStyles((theme) => ({
 
 export const StyledChip = withStyles((theme) => ({
   label: {
-    paddingTop: "5px",
-    paddingBottom: "5px",
+    padding: "5px 8px",
   },
 }))(Chip);

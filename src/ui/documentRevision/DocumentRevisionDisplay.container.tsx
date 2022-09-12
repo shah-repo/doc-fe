@@ -1,6 +1,6 @@
 import { get } from "lodash";
 import React, { useCallback, useEffect, useMemo } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { DocumentRevisionSummary } from "../../App";
 import { getHasPermission } from "../../common/utils/selectors";
 import { authSelectors } from "../../state/ducks/auth";
@@ -80,9 +80,17 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
     }
   }, [documentRevisionId, loadDocumentRevision]);
 
+  const dispatch = useDispatch();
+  const loadDocumentRevisions = useCallback(() => {
+    if (documentId) {
+      dispatch(documentRevisionsActions.loadDocument(documentId));
+    }
+  }, [dispatch, documentId]);
+
   useEffect(() => {
     loadDocumentRevisionAction();
-  }, [loadDocumentRevisionAction]);
+    loadDocumentRevisions();
+  }, [loadDocumentRevisionAction, loadDocumentRevisions]);
 
   const operators = get(selectedDocument, "document.operators", []);
   const availableOperators = operators.map((operator) => operator.user.email);

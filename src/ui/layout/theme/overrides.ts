@@ -1,6 +1,6 @@
 import { Theme } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { Overrides } from "@material-ui/core/styles/overrides";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { WhiteLabelingColors } from "../../../state/ducks/company/types";
 import { FBClasses } from "../../form.builder/defaults/layout";
 import Colors from "./utils/colors";
@@ -150,8 +150,7 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
         right: "10px",
       },
       select: {
-        paddingLeft: appTheme.spacing(0.5),
-        borderRadius: "4px",
+        padding: appTheme.spacing(1.625, 3, 1.625, 1.5),
       },
     },
     MuiPopover: {
@@ -232,7 +231,7 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
             borderWidth: "0px!important",
           },
           "& input": {
-            padding: "0px!important",
+            padding: "13px!important",
           },
           "&[data-cy='password'] fieldset": {
             borderWidth: "1px!important",
