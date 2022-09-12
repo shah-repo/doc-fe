@@ -1173,12 +1173,12 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
-      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick();
+      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
     });
 
     it(`Select '${USERS[1].name}' for Coordinator`, () => {
-      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
+      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
     });
 
@@ -1191,11 +1191,11 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
-      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Select 'Preventative Maintenance form' for preventative maintenance required", () => {
@@ -1217,11 +1217,11 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Select document 'Yes' for calibration required", () => {
-      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true });
     });
 
     it("Select 'Calibration form' for calibration required", () => {
-      cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick();
+      cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
       cy.unClick();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();

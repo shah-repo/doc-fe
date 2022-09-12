@@ -3,7 +3,9 @@ import moment from "moment";
 import "moment-timezone";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
+import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
+import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import { CompletedOnDateOptions, ReleasedDateOptions } from "./types";
 
 export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
@@ -65,6 +67,23 @@ export const trainingCompletedOnDateOption = () => [
     value: moment().add(7, "d").startOf("day").toISOString(),
   },
 ];
+
+export const getVersionNumber = (documentRevisionId) => {
+  const {
+    document: {
+      documentType: {
+        groupOptions = [],
+      },
+    }, revision, revisionStage, revisionChangeType, subRevision,
+  } = store.getState().documentRevisions.byId[documentRevisionId];
+
+  return generateRevisionNumber( revision, revisionStage, subRevision, revisionChangeType, undefined,
+    checkIsDocumentRecord(groupOptions),
+  );
+};
+
+
+export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange];
 
 // Disabled because of ENC-7826
 /* export const shouldHaveNoResponse = (dataToSubmit: any, documentRevision: DocumentRevision) => {

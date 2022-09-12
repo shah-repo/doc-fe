@@ -46,15 +46,51 @@ declare global {
       fbSelectCustomFieldToAdd(params: { name: string }): Chainable<Subject>;
       fbEnterPlaceholder(params: { placeholder: string }): Chainable<Subject>;
       fbEnterLabel(params: { label: string }): Chainable<Subject>;
+      fbCheckFieldsExistSectionList(...list: string[]): Chainable<Subject>;
       fbCheckFieldsExistInputsList(...list: string[]): Chainable<Subject>;
       fbCheckFieldsExistApprovalsList(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsExistCustomControlsList(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsExistInstructionsList(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsExistButtonsList(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsExistActionsList(...list: string[]): Chainable<Subject>;
+      fbCheckFieldsExistFavoritesList(...list: string[]): Chainable<Subject>;
       fbCheckFieldsDoesntExistOnInputsList(...list: string[]): Chainable<Subject>;
       fbCheckFieldsDoesntExistOnApprovalsList(...list: string[]): Chainable<Subject>;
       fbEditHiddenBtn(): Chainable<Subject>;
       fbEnterNameValue(params: { name: string; value: string | number }): Chainable<Subject>;
       fbFieldRequiredIf(params: { name: string; value: string | number }): Chainable<Subject>;
       fbFieldRequiredIfIn(params: { name: string }): Chainable<Subject>;
+      verifyFieldConfigExist(): Chainable<Subject>;
+      verifySetRulesExist(): Chainable<Subject>;
+      VerifyFBfieldLabel(): Chainable<Subject>;
+      VerifyFBfieldURL(): Chainable<Subject>;
+      verifyOptions(): Chainable<Subject>;
+      VerifyFBfieldPlaceholder(): Chainable<Subject>;
+      VerifyFBfieldSelectOptions(): Chainable<Subject>;
+      VerifyFBfieldRowNumber(): Chainable<Subject>;
+      VerifyFBfieldRevisionDisabled(): Chainable<Subject>;
+      VerifyFBfieldDeletionDisabled(): Chainable<Subject>;
+      VerifyFBfieldCopyableValue(): Chainable<Subject>;
+      VerifyFBfieldIncludeNotes(): Chainable<Subject>;
+      VerifyFBfieldSetCurrentDate(): Chainable<Subject>;
+      VerifyFBfieldDisablePastDates(): Chainable<Subject>;
+      verifyIncludeOther(): Chainable<Subject>;
+      verifyIncludeNone(): Chainable<Subject>;
+      verifyMultiSelect(): Chainable<Subject>;
+      verifyIncludeQRScan(): Chainable<Subject>;
+      VerifyFBfieldInspectionSection(): Chainable<Subject>;
+      VerifySetRuleswithAllSections(): Chainable<Subject>;
+      verifyFieldRequired(): Chainable<Subject>;
+      verifyFieldRequiredIf(): Chainable<Subject>;
+      verifyFieldRequiredIfIn(): Chainable<Subject>;
+      verifyFieldRequiredWith(): Chainable<Subject>;
+      verifyFieldRequiredWithout(): Chainable<Subject>;
+      verifyFieldRequiredDocumentStatus(): Chainable<Subject>;
+      verifyFieldRequiredDocumentType(): Chainable<Subject>;
+      fbVerifySectionsOnAddField(...list: string[]): Chainable<Subject>;
+      fbVerifySectionsNotOnAddField(...list: string[]): Chainable<Subject>;
       fbVerifyOptions(...list: string[]): Chainable<Subject>;
+      VerifyFBfieldDescriptionOptions(...list: string[]): Chainable<Subject>;
       fbVerifyCheckboxValue(...list: string[]): Chainable<Subject>;
       fbVerifyNameValue(params: { name: string; value: string }): Chainable<Subject>;
       fbEnterParagraph(params: { paragraph: string }): Chainable<Subject>;
@@ -104,7 +140,7 @@ Cypress.Commands.add("fbAddNewFieldOption", () => {
 
 Cypress.Commands.add("fbAddNewField", () => {
   cy.unClick();
-  cy.get("button[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
+  cy.get("button[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true, multiple: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
@@ -181,6 +217,19 @@ Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   });
 });
 
+Cypress.Commands.add("fbCheckFieldsExistSectionList", (...list: string[]) => {
+  cy.get(`[data-cy="Section-btn"]`).arrowClick();
+
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).eq(0).should("exist");
+    cy.get(`[data-cy="${item}"]`).arrowClick();
+    cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+    cy.wait(2000);
+    cy.get(`[data-cy="Section-btn"]`).arrowClick();
+    cy.wait(1000);
+  });
+});
+
 Cypress.Commands.add("fbCheckFieldsExistInputsList", (...list: string[]) => {
   cy.get(`[data-cy="Inputs"]`).arrowClick();
 
@@ -191,6 +240,46 @@ Cypress.Commands.add("fbCheckFieldsExistInputsList", (...list: string[]) => {
 
 Cypress.Commands.add("fbCheckFieldsExistApprovalsList", (...list: string[]) => {
   cy.get(`[data-cy="Approvals-btn"]`).arrowClick();
+
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("fbCheckFieldsExistCustomControlsList", (...list: string[]) => {
+  cy.get(`[data-cy="Custom Controls"]`).arrowClick();
+
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("fbCheckFieldsExistInstructionsList", (...list: string[]) => {
+  cy.get(`[data-cy="Instructions"]`).arrowClick();
+
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("fbCheckFieldsExistButtonsList", (...list: string[]) => {
+  cy.get(`[data-cy="Buttons"]`).arrowClick();
+
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("fbCheckFieldsExistActionsList", (...list: string[]) => {
+  cy.get(`[data-cy="Actions"]`).arrowClick();
+
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("fbCheckFieldsExistFavoritesList", (...list: string[]) => {
+  cy.get(`[data-cy="Favorites"]`).arrowClick();
 
   list.forEach((item) => {
     cy.get(`[data-cy="${item}"]`).should("exist");
@@ -299,6 +388,127 @@ Cypress.Commands.add("fbEnterNameValue", (params: { name: string; value: string 
   cy.get(`input[name^="${params.name}"]`).clear().arrowType(params.value).arrowClick();
 });
 
+Cypress.Commands.add("verifyFieldConfigExist", () => {
+  cy.get(`[data-cy="fb-editor-mode-config-0"]`).should("exist");
+});
+
+Cypress.Commands.add("verifySetRulesExist", () => {
+  cy.get(`[data-cy="fb-editor-mode-validation-1"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldLabel", () => {
+  cy.get(`[data-cy="form.builder.label"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldURL", () => {
+  cy.get(`[data-cy="URL"]`).should("exist");
+});
+
+Cypress.Commands.add("verifyOptions", () => {
+  cy.get(`[data-cy="form.builder.options"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldDescriptionOptions", () => {
+  cy.get(`[data-cy="form.builder.description.options"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldPlaceholder", () => {
+  cy.get(`[data-cy="form.builder.placeholder"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldSelectOptions", () => {
+  cy.get(`[data-cy="form.builder.select.options"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldRowNumber", () => {
+  cy.get(`[data-cy="form.builder.rowNumber"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldRevisionDisabled", () => {
+  cy.get(`input[value^="reviseDisabled"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldDeletionDisabled", () => {
+  cy.get(`input[value^="deleteDisabled"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldCopyableValue", () => {
+  cy.get(`input[value^="copyableValue"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldIncludeNotes", () => {
+  cy.get(`input[value^="includeNotes"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldSetCurrentDate", () => {
+  cy.get(`input[value^="defaultCurrentDate"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldDisablePastDates", () => {
+  cy.get(`input[value^="disablePastDates"]`).should("exist");
+});
+
+Cypress.Commands.add("verifyIncludeOther", () => {
+  cy.get(`input[value^="includeContext"]`).should("exist");
+});
+
+Cypress.Commands.add("verifyIncludeNone", () => {
+  cy.get(`input[value^="includeNone"]`).should("exist");
+});
+
+Cypress.Commands.add("verifyMultiSelect", () => {
+  cy.get(`input[value^="multiple"]`).should("exist");
+});
+
+Cypress.Commands.add("verifyIncludeQRScan", () => {
+  cy.get(`input[value^="includeQRScan"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifyFBfieldInspectionSection", () => {
+  cy.get(`input[value^="inspectionSection"]`).should("exist");
+});
+
+Cypress.Commands.add("VerifySetRuleswithAllSections", () => {
+  cy.get(`input[value^="default"]`).should("exist");
+  cy.get(`input[value^="visibility"]`).should("exist");
+  cy.get(`input[value^="disabled"]`).should("exist");
+  cy.verifyFieldRequired();
+  cy.verifyFieldRequiredIf();
+  cy.verifyFieldRequiredIfIn();
+  cy.verifyFieldRequiredWith();
+  cy.verifyFieldRequiredWithout();
+  cy.verifyFieldRequiredDocumentStatus();
+  cy.verifyFieldRequiredDocumentType();
+});
+
+Cypress.Commands.add("verifyFieldRequired", () => {
+  cy.get("input[name=\"validators.required\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyFieldRequiredIf", () => {
+  cy.get("input[name=\"validators.required_if\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyFieldRequiredIfIn", () => {
+  cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyFieldRequiredWith", () => {
+  cy.get("[name=\"validators.required_with\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyFieldRequiredWithout", () => {
+  cy.get("[name=\"validators.required_without\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyFieldRequiredDocumentStatus", () => {
+  cy.get("[name=\"validators.required_document_status\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyFieldRequiredDocumentType", () => {
+  cy.get("[name=\"validators.required_document_type\"]").should("exist");
+});
+
 Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string }) => {
   cy.get("input[name=\"validators.required_if\"]").arrowClick();
   cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(params.name);
@@ -313,6 +523,18 @@ Cypress.Commands.add("fbFieldRequiredIfIn", (params: { name: string}) => {
 Cypress.Commands.add("fbVerifyCheckboxValue", (...list: string[]) => {
   list.forEach(function(item) {
     cy.get(`input[value="${item}"]`).should("be.checked");
+  });
+});
+
+Cypress.Commands.add("fbVerifySectionsOnAddField", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("exist");
+  });
+});
+
+Cypress.Commands.add("fbVerifySectionsNotOnAddField", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get(`[data-cy="${item}"]`).should("not.exist");
   });
 });
 

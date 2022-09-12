@@ -364,6 +364,7 @@ context("PO test", () => {
       SystemRequirement("REQ-1410");
       cy.get("[name=\"date\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wait(2000);
     });
 
     it("Check Tax box", () => {
@@ -378,11 +379,18 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wait(2000);
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+      cy.poAddNewFieldItem();
+      cy.wait(2000);
+    });
+
+    it("Enter Supplier Part Number", () => {
+      SystemRequirement("REQ-1410");
+      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
     });
 
     it("Enter Quantity Ordered", () => {
@@ -400,11 +408,6 @@ context("PO test", () => {
       cy.poSelectGLCode();
     });
 
-    it("Enter Supplier Part Number", () => {
-      SystemRequirement("REQ-1410");
-      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
-    });
-
     it("Enter number of Units", () => {
       SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
@@ -414,6 +417,7 @@ context("PO test", () => {
       SystemRequirement("REQ-1410");
       cy.get("[name=\"date\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wait(2000);
     });
 
     it("Check Tax box", () => {
@@ -428,7 +432,7 @@ context("PO test", () => {
     });
 
     it("Save PO", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Check line items have unique IDs", () => {
@@ -520,7 +524,7 @@ context("PO test", () => {
           });
         }).as("response");
 
-        cy.get("[data-cy^=\"requestor-\"]").autocompleteSelect(`${USERS[1].name}`);
+        cy.get("[data-cy^=\"po-requestor-\"]").autocompleteSelect(`${USERS[1].name}`);
       });
     });
 
@@ -589,16 +593,6 @@ context("PO test", () => {
 
       it("navigate to Details tab", () => {
         cy.drSelectDetailsTab();
-      });
-
-      it("Add an Approval", () => {
-        cy.wait(5000);
-        cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'Submit for Approval' button", () => {
@@ -765,6 +759,7 @@ context("PO test", () => {
       SystemRequirement("REQ-1420");
       cy.get("[name=\"date\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wait(2000);
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
@@ -776,7 +771,7 @@ context("PO test", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+      cy.poAddNewFieldItem();
     });
 
     it("Click on 'Service' select option", () => {
@@ -786,10 +781,12 @@ context("PO test", () => {
 
     it("Click on 'Add' inside PO dialog box", () => {
       cy.get("button[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
+      cy.wait(2000);
     });
 
     it("Save PO", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wait(2000);
     });
 
     it("navigate to Details tab", () => {
@@ -798,10 +795,12 @@ context("PO test", () => {
 
     it("Select Supplier", () => {
       cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00004");
+      cy.wait(2000);
     });
 
     it("Save PO", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wait(2000);
     });
 
     it("navigate to Line Items", () => {
@@ -825,6 +824,7 @@ context("PO test", () => {
     it("Enter Shipping Cost", () => {
       cy.poShippingCost({ number: "2" });
       cy.unClick();
+      cy.wait(2000);
     });
 
     it("Check Subtotal value", () => {
@@ -842,6 +842,10 @@ context("PO test", () => {
       SystemRequirement("REQ-1460");
       cy.poConvertedToDollarsMessage();
       cy.checkToastMessage({ exists: false });
+    });
+
+    it("Save PO", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   });
 
@@ -866,11 +870,13 @@ context("PO test", () => {
 
     it("Save PO", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.wait(2000);
     });
 
     it("Add Required Date", () => {
       cy.get("[name^=\"ordered-\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wait(2000);
     });
 
     it("Add an Approval", () => {
@@ -880,6 +886,11 @@ context("PO test", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Select '${USERS[1].name}' for Requestor`, () => {
+      cy.get("[data-cy^=\"po-requestor-\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
 
     it("Save PO", () => {

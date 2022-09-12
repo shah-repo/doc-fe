@@ -64,7 +64,7 @@ context("Status Bar of newly created ARs", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
@@ -74,7 +74,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -203,7 +203,7 @@ context("Status Bar of newly created ARs", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -227,7 +227,54 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      cy.arAddApproverOnApproverList({ approver: USERS[1].email });
+    });
+  });
+
+  context("Verify last save status with manual save", () => {
+    it("Verify 'Last saved' text should exist", () => {
+      cy.get("header").contains("Last saved").should("exist");
+      cy.get("header").contains("Last saved").should("be.visible");
+    });
+
+    it("Enter new description", () => {
+      cy.get("#title").arrowType("New Ar title");
+    });
+
+    it("Save the document", () => {
+      cy.get("#submit").arrowClick();
+    });
+
+    it("Verify 'Last saved a few seconds ago' text should exist", () => {
+      cy.get("header").contains("Last saved a few seconds ago").should("exist");
+      cy.get("header").contains("ast saved a few seconds ago").should("be.visible");
+    });
+  });
+
+  context("Verify last save status with auto save", () => {
+    it("Turn on 'auto save'", () => {
+      cy.cmpTurnOnAutosave();
+    });
+
+    it("Verify 'Last saved' text should exist", () => {
+      cy.get("header").contains("Last saved").should("exist");
+      cy.get("header").contains("Last saved").should("be.visible");
+    });
+
+    it("Enter new description", () => {
+      cy.get("#title").clear();
+      cy.get("#title").arrowType("New Ar title2");
+    });
+
+
+    it("Verify 'Last saved a few seconds ago' text should exist", () => {
+      cy.get("header").contains("Last saved a few seconds ago").should("exist");
+      cy.get("header").contains("ast saved a few seconds ago").should("be.visible");
+    });
+
+    it("Turn on 'auto save'", () => {
+      cy.cmpTurnOffAutosave();
+      cy.pause();
     });
   });
 
@@ -243,11 +290,8 @@ context("Status Bar of newly created ARs", () => {
     it("Verify Save button in status bar", () => {
       cy.get("button[data-cy=\"common.save\"]").should("be.visible");
       cy.arSaveApiCall();
-    });
 
-    // it(`Verify 'Last saved: ' exist in Statusbar`, () => {
-    //   cy.get("[class*=\"makeStyles-lastEdited\"]").contains(`Last saved: `);
-    // });
+    });
 
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
       SystemRequirement("REQ-2800");
@@ -258,6 +302,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
+      cy.pause();
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
@@ -327,6 +372,7 @@ context("Status Bar of newly created ARs", () => {
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
   });
+
 
   context("Approve the AR", () => {
     it("Approve the AR", () => {

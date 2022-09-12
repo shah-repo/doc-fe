@@ -53,7 +53,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
   ));
   const genRateEquipmentDetail = () => (map(materialData.equipment, (o, topIndex: number) =>
     <>
-      <ListItem  className={classes.meqListItem} key={o.docId}>
+      <ListItem className={classes.meqListItem} key={o.docId}>
         <ListItemText className={classes.fontNormal14}>
           {o.docId} {o.title}</ListItemText>
         <ListItemText className={classes.fontNormal12}>
@@ -110,7 +110,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
                 </Grid>
               </AccordionSummary>
               <AccordionDetails  className= {classes.expanSionPannelPadding}>
-                <List>
+                <List data-cy="materialInfo" >
                   {genRateMaterialDetail()}
                 </List>
               </AccordionDetails>
@@ -144,7 +144,7 @@ const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ m
 
               </AccordionSummary>
               <AccordionDetails  className={classes.expanSionPannelPadding}>
-                <List>
+                <List data-cy="equipmentInfo">
                   {genRateEquipmentDetail()}
                 </List>
               </AccordionDetails>

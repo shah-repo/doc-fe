@@ -154,6 +154,7 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
           onClick={openDialog}
           id="AttachmentFieldPresenter-linkButton"
           className={classes.linkButton}
+          disabled={disabled}
         >
           <Text translation="common.upload.files" />
         </Button>

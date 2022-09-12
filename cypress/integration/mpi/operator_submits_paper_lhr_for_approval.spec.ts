@@ -544,15 +544,16 @@ context("Owner submits LHR for approval", () => {
 
       it(`Assign operator '${USERS[2].name}'`, () => {
         cy.drAssignDocumentTo({ username: USERS[2].name });
+        cy.wait(2000);
       });
 
       it("Add an Approver 1", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
         cy.unClick();
       });
 
       it("Add an Approver 2", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[3].email });
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[3].name);
         cy.unClick();
       });
 
@@ -561,6 +562,16 @@ context("Owner submits LHR for approval", () => {
           lhrUrl = url;
         });
         cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Check history - added approvers should be displayed", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+          cy.drSelectHistoryTab();
+        });
+        cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+          .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
+        cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+          .should("contain.text", "Approver Added").and("contain.text", USERS[2].name);
       });
     });
   });
@@ -609,8 +620,16 @@ context("Owner submits LHR for approval", () => {
     });
 
     it(`Add ${USERS[1].name} approver`, () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
       cy.unClick();
+      cy.wait(3000);
+    });
+
+    it("Check history - added and removed approvers should be displayed", () => {
+      cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+        .should("contain.text", "Approver Added").and("contain.text", USERS[1].name);
+      cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+        .should("contain.text", "Approver Removed").and("contain.text", USERS[3].name);
     });
 
     it("Submit LHR for approval", () => {

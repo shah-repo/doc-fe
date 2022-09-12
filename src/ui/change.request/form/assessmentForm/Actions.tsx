@@ -51,7 +51,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
 
   return (
     <Grid
-      container={true}
+      container
       alignItems="center"
       justify="flex-end"
       direction="row"

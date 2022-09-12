@@ -29,4 +29,5 @@ export interface MaterialEqProps {
 
 export interface MaterialEqContainerProps {
   documentRevisionId?: string;
+  inView: boolean;
 }
