@@ -177,7 +177,7 @@ Cypress.Commands.add("fbNavToTableOverview", () => {
 Cypress.Commands.add("fbSelectItemFromNewFieldList", (params: { section: string; field: string }) => {
   cy.get(`[data-cy="${params.section}"]`).arrowClick();
   cy.get(`li > [data-cy='${params.field}']`).contains(new RegExp((params.field)
-    .replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")).arrowClick({ force: true });
+    .replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")).arrowClick();
 });
 
 Cypress.Commands.add("fbEnterPOLabelName", (params: { name: string }) => {

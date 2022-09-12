@@ -645,7 +645,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    it(`Verify 'Revise Document' exists in statusbar`, () => {
+    it(`Verify 'Revise Document' does not exists in statusbar`, () => {
       cy.contains("[data-cy=\"updateRecord\"]").should("not.be.exist");
     });
 
