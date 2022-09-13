@@ -6,12 +6,12 @@ import { useIntl } from "react-intl";
 import { SMText } from "../../../App";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/tabExpand.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { Equipment, LotItem, Material, MaterialEqProps } from "./FBMaterailEqInfo.types";
+import { EquipmentItemProps, LotItem, MaterialEqProps, MaterialItemProps, PanelData, PanelProps } from "./FBMaterailEqInfo.types";
 import useStyles, { useItemStatusStyles } from "./FBMaterialEqInfo.styles";
 
 const DATE_FORMAT = MomentFormats.BriefDate;
 
-const MaterialItem = ({ item, classes }: { item: Material; classes: ReturnType<typeof useStyles>}) => (
+const MaterialItem: React.FC<MaterialItemProps> = ({ item, classes }) => (
   <>
     <ListItemText>
       {item.docId && `${item.docId} -`} {item.title} | {item.unit} : {item.quantity}
@@ -29,7 +29,7 @@ const MaterialItem = ({ item, classes }: { item: Material; classes: ReturnType<t
   </>
 );
 
-const EquipmentItem = ({ item, classes }: { item: Equipment; classes: ReturnType<typeof useStyles>}) => {
+const EquipmentItem: React.FC<EquipmentItemProps> = ({ item, classes }) => {
   const intl = useIntl();
 
   return (
@@ -63,8 +63,8 @@ const EquipmentItem = ({ item, classes }: { item: Equipment; classes: ReturnType
   );
 };
 
-const Panel = ({ panel, data, expanded, togglePanel, loading, classes }) => {
-  const PanelItem = panel.item;
+const Panel: React.FC<PanelProps> = ({ panel, data, expanded, loading, classes, togglePanel }) => {
+  const PanelItem = panel.itemComponent;
   const itemClasses = useItemStatusStyles();
 
   return (
@@ -85,7 +85,7 @@ const Panel = ({ panel, data, expanded, togglePanel, loading, classes }) => {
               label={{
                 locale: "common.items.count",
                 values: {
-                  count: data.length,
+                  count: String(data.length),
                 },
               }}
               boxProps={{ className: classes.panelSummaryCount }}
@@ -95,7 +95,7 @@ const Panel = ({ panel, data, expanded, togglePanel, loading, classes }) => {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.panelDetails}>
           <List className={classes.panelDetailsList}>
-            {data.map((item: Material | Equipment, pos: number) => (
+            {data.map((item, pos: number) => (
               <ListItem
                 key={`${item.docId}-${item.title}`}
                 divider={pos < data.length - 1}
@@ -113,16 +113,16 @@ const Panel = ({ panel, data, expanded, togglePanel, loading, classes }) => {
   );
 };
 
-const panels = [
+const panels: PanelData[] = [
   {
     dataKey: "materials",
     title: "form.builder.materials",
-    item: MaterialItem,
+    itemComponent: MaterialItem,
   },
   {
     dataKey: "equipment",
     title: "form.builder.equipment",
-    item: EquipmentItem,
+    itemComponent: EquipmentItem,
   },
 ];
 
@@ -195,9 +195,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
                 key={panel.dataKey}
                 onClick={jumpToPanel(panel.dataKey)}
                 selected={expandedPanels.includes(panel.dataKey)}
-                classes={{
-                  root: classes.navItem,
-                }}
+                className={classes.navItem}
               >
                 <SMText label={panel.title} />
               </MenuItem>

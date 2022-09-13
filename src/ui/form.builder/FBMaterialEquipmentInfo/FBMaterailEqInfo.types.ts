@@ -1,5 +1,6 @@
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Colors from "../../layout/theme/utils/colors";
+import useStyles from "./FBMaterialEqInfo.styles";
 
 export enum FBMEQItemStatus {
   Removed = "removed",
@@ -63,4 +64,29 @@ export interface MaterialEqProps {
 export interface MaterialEqContainerProps {
   documentRevision?: DocumentRevision;
   inView: boolean;
+}
+
+type MaterialEqClasses = ReturnType<typeof useStyles>;
+
+export interface PanelData {
+  dataKey: string;
+  title: string;
+  itemComponent: React.FC<MaterialItemProps> | React.FC<EquipmentItemProps>;
+}
+
+export interface MaterialItemProps {
+  item: Material;
+  classes: MaterialEqClasses;
+}
+export interface EquipmentItemProps {
+  item: Equipment;
+  classes: MaterialEqClasses;
+}
+export interface PanelProps {
+  panel: PanelData;
+  data: Material[] | Equipment[];
+  expanded: boolean;
+  loading?: boolean;
+  classes: MaterialEqClasses;
+  togglePanel: () => void;
 }
