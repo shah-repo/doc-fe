@@ -97,7 +97,7 @@ const Panel = ({ panel, data, expanded, togglePanel, loading, classes }) => {
           <List className={classes.panelDetailsList}>
             {data.map((item: Material | Equipment, pos: number) => (
               <ListItem
-                key={item.docId}
+                key={`${item.docId}-${item.title}`}
                 divider={pos < data.length - 1}
                 className={cx(classes.panelDetailsListItem, {
                   [itemClasses[item.status ?? ""]]: item.status,
