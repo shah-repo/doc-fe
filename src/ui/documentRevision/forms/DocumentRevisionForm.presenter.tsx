@@ -288,36 +288,37 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Grid>
           {isEB && (
             <Grid item xs={12}>
-              <FBEBPart name="childrenParts" />
-            </Grid>
-          )}
-          {isPart && documentRevision?.parentParts && (
-            <Grid item xs={12}>
-              <BuildsContainer
-                dataProp={flatten([documentRevision?.parentParts])}
-                label="common.part.of"
-                isDraft={isDocRevStatusDraft || isRevised}
-              />
-            </Grid>
-          )}
-          {isEB && documentRevision?.parent && (
-            <Grid item xs={6}>
-              <BuildsContainer
-                dataProp={flatten([documentRevision.parent])}
-                label="common.previous.build"
-                docRevId={docRevId}
-                showRemoveButton={isDocRevStatusDraft || isDocRevStatusInPendingChange}
-                isDraft={isDocRevStatusDraft || isRevised}
-              />
-            </Grid>
-          )}
-          {isEB && documentRevision?.children && (
-            <Grid item xs={6}>
-              <BuildsContainer
-                dataProp={documentRevision.children}
-                label="common.next.build"
-                isDraft={isDocRevStatusDraft || isRevised}
-              />
+              <FBEBPart name="childrenParts">
+                {isEB && documentRevision?.parent && (
+                  <Grid item xs={6}>
+                    <BuildsContainer
+                      dataProp={flatten([documentRevision.parent])}
+                      label="common.previous.build"
+                      docRevId={docRevId}
+                      showRemoveButton={isDocRevStatusDraft || isDocRevStatusInPendingChange}
+                      isDraft={isDocRevStatusDraft || isRevised}
+                    />
+                  </Grid>
+                )}
+                {isEB && documentRevision?.children && (
+                  <Grid item xs={6}>
+                    <BuildsContainer
+                      dataProp={documentRevision.children}
+                      label="common.next.build"
+                      isDraft={isDocRevStatusDraft || isRevised}
+                    />
+                  </Grid>
+                )}
+              </FBEBPart>
+              {isPart && documentRevision?.parentParts && (
+                <Grid item xs={12}>
+                  <BuildsContainer
+                    dataProp={flatten([documentRevision?.parentParts])}
+                    label="common.part.of"
+                    isDraft={isDocRevStatusDraft || isRevised}
+                  />
+                </Grid>
+              )}
             </Grid>
           )}
           {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft && (
