@@ -7,7 +7,7 @@ import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate 
 import { withSMTabs } from "../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
+import { TabInfo, TabTypeOptions } from "../../../state/ducks/documentRevisions/documentType/types";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../form.builder";
@@ -139,7 +139,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
                       return (
                         <SMBox key={index} {...{ py: 2 }}>
-                          {tabType === "MIXED" && showTabContent && changeRequest &&
+                          {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
                               <FBWorkspace
                                 isPortal={false}
                                 initialValues={cloneDeep(changeRequest?.formInput)}
@@ -150,7 +150,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 mode={mode}
                               />
                           }
-                          {tabType === "DYNAMIC" && showTabContent &&
+                          {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
                             _formState?.mode !== FBWorkspaceModeOptions.NONE &&
                             <FBWorkspace
                               isPortal={false}
