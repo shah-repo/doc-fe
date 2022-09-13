@@ -1,10 +1,10 @@
-import { isEqual, keys, union, unionBy } from "lodash";
+import { isEqual, keys, omit, union, unionWith } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { FBMeqState, FBPartItemStatus } from "..";
+import { FBMeqState } from "..";
 import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
 import FB from "../helpers/FB";
-import { Equipment, Material, MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
+import { Equipment, FBMEQItemStatus, Material, MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
 import FBMaterialInfoPresenter from "./FBMaterialEqInfo.presenter";
 import FBMaterialEqInfoPresenterNext from "./FBMaterialEqInfo.presenter.next";
 
@@ -34,29 +34,32 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
   }, [meqState, inView, documentRevision]);
 
   useEffect(() => {
-    if (inView) {
+    if (inView && showDiff) {
       meqState.getMeqDetail(documentRevision?.parent?.id, callBack(setParentMaterialData));
     }
-  }, [showDiff, includeDiff, meqState, inView, documentRevision]);
-
+  }, [showDiff, meqState, inView, documentRevision]);
 
   const getItemStatus = (
     childItem: Material | Equipment | undefined,
     parentItem: Material | Equipment | undefined
-  ): FBPartItemStatus => {
+  ): FBMEQItemStatus => {
     if (isEqual(childItem, parentItem)) {
-      return "none";
+      return FBMEQItemStatus.None;
     } else if (childItem && parentItem) {
-      return "updated";
+      return FBMEQItemStatus.Updated;
     } else if (childItem) {
-      return "added";
+      return FBMEQItemStatus.Added;
     } else {
-      return "removed";
+      return FBMEQItemStatus.Removed;
     }
   };
 
   const calculateSectionDiff = <K extends (Material | Equipment)[]>(childItems: K, parentItems: K): K => {
-    const allItems = unionBy(childItems, parentItems, (compare) => [compare.docId, compare.title].join());
+    const allItems = unionWith(
+      childItems,
+      parentItems,
+      (value, other) => isEqual(omit(value, ["quantity", "unit"]), omit(other, ["quantity", "unit"]))
+    );
 
     return allItems.map((item) => {
       const childItem = childItems.find((el) => el.docId === item.docId && el.title === item.title);
