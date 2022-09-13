@@ -200,7 +200,7 @@ Cypress.Commands.add("fbAddNewFieldButton", () => {
 });
 
 Cypress.Commands.add("fbAddLabelName", (params: { name: string }) => {
-  cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(params.name, { force: true });
+  cy.get("[data-cy=\"fb-editor-field-textfield\"]>div>input").arrowType(params.name, { force: true });
 });
 
 Cypress.Commands.add("fbGroupName", (params: { name: string }) => {
