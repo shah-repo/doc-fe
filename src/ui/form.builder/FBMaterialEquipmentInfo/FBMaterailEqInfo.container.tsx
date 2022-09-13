@@ -5,20 +5,19 @@ import { FBMeqState } from "..";
 import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
 import FB from "../helpers/FB";
 import { Equipment, FBMEQItemStatus, Material, MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
-import FBMaterialInfoPresenter from "./FBMaterialEqInfo.presenter";
-import FBMaterialEqInfoPresenterNext from "./FBMaterialEqInfo.presenter.next";
+import FBMaterialEqInfoPresenter from "./FBMaterialEqInfo.presenter";
 
 const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProps> = ({
   documentRevision,
   inView,
 }) => {
   const meqState = FB.useRef(FBMeqState);
+  const loading = useObserver(() => meqState.loading);
   const [showDiff, setShowDiff] = useState(false);
   const [currentData, setCurrentData] = useState<MaterialAndEquipment>({ equipment: [], materials: [] });
   const [parentMaterialData, setParentMaterialData] = useState<MaterialAndEquipment>({ equipment: [], materials: [] });
   const includeDiff = (
-    checkIsDocumentEB(documentRevision?.document?.documentType.groupOptions)
-    && Boolean(documentRevision?.parent)
+    checkIsDocumentEB(documentRevision?.document?.documentType.groupOptions) && Boolean(documentRevision?.parent)
   );
 
   const callBack = (
@@ -83,11 +82,9 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
 
   const materialData = showDiff ? calculateDataDiff(currentData, parentMaterialData) : currentData;
 
-  const loading = useObserver(() => meqState.loading);
-
   return (
     <>
-      <FBMaterialEqInfoPresenterNext
+      <FBMaterialEqInfoPresenter
         {...{
           materialData,
           showDiff,
@@ -96,17 +93,7 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
         }}
         handleShowDiffChange={setShowDiff}
       />
-      <FBMaterialInfoPresenter
-        {...{
-          materialData,
-          showDiff,
-          includeDiff,
-        }}
-        handleShowDiffChange={setShowDiff}
-      />
     </>
   );
 };
 export default FBMaterialEqInfoContainer;
-
-
