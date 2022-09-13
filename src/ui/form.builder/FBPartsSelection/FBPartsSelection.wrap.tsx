@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { find } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
@@ -18,6 +19,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     index,
     filteredOptions,
     isDocumentLHR,
+    lhrSelectedPartValue,
     name = "",
     ...props
   }: T) => {
@@ -32,6 +34,8 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     if (!isOutput) {
       defaultValue = editorConfig?.id;
     }
+
+    lhrSelectedPartValue = formState?.initialValues[name || ""] ?? null;
 
     // MARK: @reactions
     useEffect(() => reaction(
@@ -79,7 +83,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     // MARK: @methods
 
     // MARK: @observer
-
+    console.log(props);
     return Component({
       ...(props as T),
       isOutput,
@@ -90,6 +94,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
       name,
       filteredOptions,
       isDocumentLHR,
+      lhrSelectedPartValue,
     });
   };
 
