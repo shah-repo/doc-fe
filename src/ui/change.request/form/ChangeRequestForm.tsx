@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { BoxProps } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { cloneDeep, map } from "lodash";
@@ -7,8 +6,8 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from "../../../App";
 import { withSMTabs } from "../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
-import { changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 import { TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
@@ -56,7 +55,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   _formState?.setAutosave(autosave);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
-  // const classes = styles({ isDrawerOpen });
 
   const changeSidebarOpenStatus = (status) => {
     setOpen(status);
@@ -66,12 +64,11 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   // eslint-disable-next-line dot-notation
   const docTypeGroup = (changeRequest as ChangeRequest)["documentType"].group ?? "OTHER";
   const tabConfig = useSelector((state: ApplicationState) =>
-    changeRequestsSelectors.getTabConfiguration(state, docTypeGroup));
+    documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
 
   const onTabChange = (event, newValue, tabConfig) => {
-    // console.log(event, newValue, tabConfig);
     _tabsState?.setValue(newValue);
     _tabsState?.setTabID(tabConfig[newValue].tabId);
   };
@@ -91,7 +88,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         minHeight: "calc(70%)",
         bgcolor: Colors.alabaster,
       }}
-      // values={toChangeRequestFormValues(changeRequest as ChangeRequest)}
       values={formValues.values}
       header= {
         <FormHeader {...{ changeRequest, asyncState }}/>
@@ -134,8 +130,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
                       const showTabContent = _tabsState?.tabID === tabInfo.tabId;
-
-                      // console.log(tabType, showTabContent, _formState);
 
                       return (
                         <SMBox key={index} {...{ py: 2 }}>

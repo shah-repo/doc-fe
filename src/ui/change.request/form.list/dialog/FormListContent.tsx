@@ -20,9 +20,6 @@ const FormListContent: React.FunctionComponent<Props> = ({
   handleTemplateSelection,
 }) => {
   const classes = styles();
-  // const [chosenTypeId, setchosenTypeId] = useState<string>("");
-  // const [ chosenFormId, setChosenFormId ] = useState<string>("");
-
   const [chosenOption, setChosenOption] = useState<TemplateOption>();
 
   const renderForm = (props: FormikProps<SelectTemplateFormValues>) => (
@@ -36,11 +33,11 @@ const FormListContent: React.FunctionComponent<Props> = ({
         options={templateOptions}
         onClick={(option) => { setFormValues(option); }}
       />
-      <FormListActions {...{ dialog, createCr }}/>
+      <FormListActions {...{ dialog, createChangeRequest }}/>
     </DialogContent>
   );
 
-  const createCr = () => {
+  const createChangeRequest = () => {
     handleTemplateSelection(chosenOption as TemplateOption);
   };
 

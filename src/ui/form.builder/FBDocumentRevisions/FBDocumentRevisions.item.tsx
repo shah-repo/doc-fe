@@ -70,7 +70,6 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
       label="form.builder.description.of.change"
       dataCy="common.description"
       disabled={true}
-      // {...{ disabled }}
       rules="required"
       rows={3}
     />
@@ -79,7 +78,6 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
       label="form.builder.justification.of.change"
       dataCy="cr.justification"
       disabled={true}
-      // {...{ disabled }}
       rules="required"
       rows={3}
     />

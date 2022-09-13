@@ -5,7 +5,6 @@ import { OptionType } from "../../../ui/components/forms/fields/Autocomplete/typ
 import { ApplicationState } from "../../reducers";
 import { AsyncState } from "../../types";
 import { Audit, AuditGroupType } from "../audit/types";
-import { DocumentGroupType, TabInfo } from "../documentRevisions/documentType/types";
 
 const allIds = (state: ApplicationState) => state.changeRequests.allIds;
 const byId = (state: ApplicationState) => state.changeRequests.byId;
@@ -90,9 +89,6 @@ const getLoadListAsyncState = (state: ApplicationState): AsyncState => state.cha
 const getLoadApproversAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadApproversAsyncInfo;
 const getLoadAuditAsyncState = (state: ApplicationState): AsyncState => state.changeRequests.loadAuditAsyncInfo;
 
-const getTabConfiguration = (state: ApplicationState, group: DocumentGroupType): TabInfo[] =>
-  state.documentType.tabsConfiguration[group];
-
 export default {
   byId,
   getChangeRequestsList,
@@ -106,5 +102,4 @@ export default {
   getAudit,
   getAssignessList,
   makeGetAudit,
-  getTabConfiguration,
 };
