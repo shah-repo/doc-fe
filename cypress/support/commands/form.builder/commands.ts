@@ -576,7 +576,7 @@ Cypress.Commands.add("fbVerifyCheckboxName", (...list: string[]) => {
 });
 
 Cypress.Commands.add("fbClickButton", (params: { el: string }) => {
-  cy.get(`button[data-cy="${params.el}"]`).arrowClick();
+  cy.get(`button[data-cy="${params.el}"]`).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
