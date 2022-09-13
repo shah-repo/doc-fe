@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { find } from "lodash";
 import { reaction } from "mobx";
 import React, { useEffect } from "react";
@@ -83,7 +82,6 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     // MARK: @methods
 
     // MARK: @observer
-    console.log(props);
     return Component({
       ...(props as T),
       isOutput,
