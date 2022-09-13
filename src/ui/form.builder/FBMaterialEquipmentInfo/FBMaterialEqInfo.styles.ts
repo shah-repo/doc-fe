@@ -1,6 +1,32 @@
 import { makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
-import { FBMEQItemStatus, FBMEQItemStatusBg, FBMEQItemStatusBorder } from "./FBMaterailEqInfo.types";
+import { FBMEQItemStatus } from "./FBMaterailEqInfo.types";
+
+const FBMEQItemStatusBorder: Record<FBMEQItemStatus, Colors> = {
+  [FBMEQItemStatus.Removed]: Colors.opal_red,
+  [FBMEQItemStatus.Added]: Colors.light_green,
+  [FBMEQItemStatus.Updated]: Colors.gray,
+  [FBMEQItemStatus.None]: Colors.medium_blue,
+};
+
+const FBMEQItemStatusBg: Record<FBMEQItemStatus, Colors> = {
+  [FBMEQItemStatus.Removed]: Colors.medium_red,
+  [FBMEQItemStatus.Added]: Colors.pale_green,
+  [FBMEQItemStatus.Updated]: Colors.platinum_gray,
+  [FBMEQItemStatus.None]: Colors.light_blue,
+};
+
+export const useItemStatusStyles = makeStyles((theme) =>
+  Object.keys(FBMEQItemStatus).reduce((styles, key) => ({
+    ...styles,
+    [FBMEQItemStatus[key]]: {
+      backgroundColor: FBMEQItemStatusBg[FBMEQItemStatus[key]],
+      borderColor: FBMEQItemStatusBorder[FBMEQItemStatus[key]],
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+    },
+  }), {})
+);
 
 export default makeStyles((theme) => ({
   root: {
@@ -130,15 +156,3 @@ export default makeStyles((theme) => ({
     },
   },
 }));
-
-export const useItemStatusStyles = makeStyles((theme) =>
-  Object.keys(FBMEQItemStatus).reduce((styles, key) => ({
-    ...styles,
-    [FBMEQItemStatus[key]]: {
-      backgroundColor: FBMEQItemStatusBg[FBMEQItemStatus[key]],
-      borderColor: FBMEQItemStatusBorder[FBMEQItemStatus[key]],
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
-    },
-  }), {})
-);
