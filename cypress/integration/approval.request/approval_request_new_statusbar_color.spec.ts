@@ -1,6 +1,5 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
 import faker from "faker";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -27,6 +26,8 @@ const approvalRequestName = "Approval request for testing 1";
 const approvalRequestName2 = "Approval request for testing 2";
 const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
+let docLastUpdatedTime;
+let thirdEmployee;
 
 context("Status Bar of newly created ARs", () => {
   before(() => {
@@ -65,6 +66,7 @@ context("Status Bar of newly created ARs", () => {
         }).then((response) => {
           createdCompany = response;
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
@@ -227,28 +229,29 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].name);
+      // cy.arAddApproverOnApproverList({ approver: USERS[1].email });
     });
   });
 
-  context("Verify last save status with manual save", () => {
-    it("Verify 'Last saved' text should exist", () => {
-      cy.get("header").contains("Last saved").should("exist");
-      cy.get("header").contains("Last saved").should("be.visible");
+  context("Verify DRAFT statusbar items", () => {
+    it("Verify DRAFT Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Approval RequestsAR-00001 Rev DRAFT`,
+        breadcrump: true,
+      });
     });
 
-    it("Enter new description", () => {
-      cy.get("#title").arrowType("New Ar title");
+    it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Approval Requests",
+        docId: "AR-00001",
+        revision: "Rev",
+      });
     });
 
-    it("Save the document", () => {
-      cy.get("#submit").arrowClick();
-    });
-
-    it("Verify 'Last saved a few seconds ago' text should exist", () => {
-      cy.get("header").contains("Last saved a few seconds ago").should("exist");
-      cy.get("header").contains("ast saved a few seconds ago").should("be.visible");
-    });
   });
 
   context("Verify last save status with auto save", () => {
@@ -266,46 +269,114 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#title").arrowType("New Ar title2");
     });
 
-
     it("Verify 'Last saved a few seconds ago' text should exist", () => {
       cy.get("header").contains("Last saved a few seconds ago").should("exist");
-      cy.get("header").contains("ast saved a few seconds ago").should("be.visible");
+      cy.get("header").contains("Last saved a few seconds ago").should("be.visible");
     });
 
     it("Turn on 'auto save'", () => {
       cy.cmpTurnOffAutosave();
-      cy.pause();
     });
   });
 
-  context("Verify DRAFT statusbar items", () => {
-    it("Verify DRAFT Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-      cy.verifyListItemExistsOnHeader({
-        listItem:
-            `Approval RequestsAR-00001 Rev DRAFT`,
-        breadcrump: true,
-      });
+  context("Verify last save status with manual save  with wait time 2 min", () => {
+    it("Verify 'Last saved' text should exist", () => {
+      cy.get("header").contains("Last saved").should("exist");
+      cy.get("header").contains("Last saved").should("be.visible");
     });
 
+    it("Enter new title", () => {
+      cy.get("#title").clear();
+      cy.get("#title").arrowType("New Ar title");
+    });
+
+    it("Save the document", () => {
+      docLastUpdatedTime = new Date().getTime();
+      cy.get("#submit").arrowClick();
+      cy.wait(60000 * 2);
+    });
+
+    it("Verify 'Last saved 2 minutes ago' text should display", () => {
+      cy.get("header").contains("Last saved 2 minutes ago").should("exist");
+      cy.get("header").contains("Last saved 2 minutes ago").should("be.visible");
+    });
+  });
+
+  context("Logout and login back and verify last saved time", () => {
+    it("Log out", () => {
+      cy.authLogout();
+    });
+
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: thirdEmployee.id });
+    });
+
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Filter ar by name and status, and select it", () => {
+      SystemRequirement("REQ-0830");
+      cy.arClearFilters();
+      cy.arFilterARListByNameAndStatus({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify 'Last saved a few seconds ago' text should exist", () => {
+      let timeDiff = (new Date().getTime() - docLastUpdatedTime) / 1000;
+      timeDiff = Math.floor(timeDiff / 60);
+      cy.get("header").contains(`${timeDiff} minutes`).should("exist");
+      cy.get("header").contains(`${timeDiff} minutes`).should("be.visible");
+    });
+
+    it("Log out", () => {
+      cy.authLogout();
+    });
+
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
+    });
+
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Filter ar by name and status, and select it", () => {
+      SystemRequirement("REQ-0830");
+      cy.arClearFilters();
+      cy.arFilterARListByNameAndStatus({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+  });
+
+  context("Verify button in status bar", () => {
     it("Verify Save button in status bar", () => {
-      cy.get("button[data-cy=\"common.save\"]").should("be.visible");
+      cy.get("button[data-cy='common.save']").should("be.visible");
       cy.arSaveApiCall();
-
     });
+
+    it("Verify 'Send to review' in status bar", () => {
+      cy.get("[data-cy='transitionButton']").should("be.visible");
+    });
+  });
+
+  context("Verify 3 dots  statusbar items", () => {
 
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
       SystemRequirement("REQ-2800");
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"void-button\"]").should("be.visible");
-      cy.get("[data-cy=\"void-button\"]").arrowClick();
-      cy.get("button[data-cy=\"AlertDialog-cancelButton\"]").arrowClick();
+      cy.get("[data-cy='void-button']").should("be.visible");
+      cy.get("[data-cy='void-button']").arrowClick();
+      cy.get("button[data-cy='AlertDialog-cancelButton']").arrowClick();
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
-      cy.pause();
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
-      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+      cy.get("[data-cy='exportToEmail']").should("be.visible");
+      cy.get("[data-cy='exportToEmail']").arrowClick();
     });
 
     it("Check if 'Change Owner' button exists", () => {
@@ -315,8 +386,13 @@ context("Status Bar of newly created ARs", () => {
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
 
+    it("Verify header is fixed when page scroll", () => {
+      cy.get(".hide-scroll").scrollTo("bottom");
+      cy.get("header").should("be.visible");
+    });
+
     it("Verify 'Send to review' in status bar", () => {
-      cy.get("[data-cy=\"transitionButton\"]").should("be.visible");
+      cy.get("[data-cy='transitionButton']").should("be.visible");
       cy.arClickSendToReview();
     });
 
@@ -337,38 +413,34 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Verify Save button in status bar", () => {
-      cy.get("[class*=\"MuiButton-label WithStyles\"]").contains("Save");
-      cy.get("[class*=\"MuiButton-label WithStyles\"]").contains("Save").arrowClick();
+      cy.get("[class*='MuiButton-label WithStyles']").contains("Save");
+      cy.get("[class*='MuiButton-label WithStyles']").contains("Save").arrowClick();
     });
 
-    // it(`Verify 'Last saved: ' exist in Statusbar`, () => {
-    //   cy.get("[class*=\"makeStyles-lastEdited\"]").contains(`Last saved: `);
-    // });
-
     it("Verify 'Reject submission' button in status bar", () => {
-      cy.get("[data-cy=\"transition-reject\"]").contains("Reject submission").arrowClick();
-      cy.get("[class=\"MuiButton-label\"]").contains("Cancel").arrowClick();
+      cy.get("[data-cy='transition-reject']").contains("Reject submission").arrowClick();
+      cy.get("[class='MuiButton-label']").contains("Cancel").arrowClick();
     });
 
     it("Verify 'Withdraw submission' button in status bar", () => {
-      cy.get("[data-cy=\"change.request.withdraw.alert\"]").contains("Withdraw submission").arrowClick();
-      cy.get("[class=\"MuiButton-label\"]").contains("Cancel").arrowClick();
+      cy.get("[data-cy='change.request.withdraw.alert']").contains("Withdraw submission").arrowClick();
+      cy.get("[class='MuiButton-label']").contains("Cancel").arrowClick();
     });
 
     it("Verify 'Approve submission' button in status bar", () => {
-      cy.get("[data-cy=\"transition-approve\"]").contains("Approve submission").arrowClick();
-      cy.get("[class=\"MuiButton-label\"]").contains("Cancel").arrowClick();
+      cy.get("[data-cy='transition-approve']").contains("Approve submission").arrowClick();
+      cy.get("[class='MuiButton-label']").contains("Cancel").arrowClick();
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
-      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+      cy.get("[data-cy='exportToEmail']").should("be.visible");
+      cy.get("[data-cy='exportToEmail']").arrowClick();
     });
 
     it(`Click on 3 dots and verify 'Change Owner' option exists`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"changeOwner\"]").contains("Change Owner").arrowClick();
+      cy.get("[data-cy='changeOwner']").contains("Change Owner").arrowClick();
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
   });
@@ -378,9 +450,9 @@ context("Status Bar of newly created ARs", () => {
     it("Approve the AR", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"transition-approve\"]").contains("Approve submission").arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+          cy.get("[data-cy='transition-approve']").contains("Approve submission").arrowClick();
+          cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy='passwordConfirm']").arrowClick();
         });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -398,17 +470,17 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Verify 'Close' button is in statusbar", () => {
-      cy.get("button[data-cy=\"transition-closed\"]").contains("Close").should("exist");
+      cy.get("button[data-cy='transition-closed']").contains("Close").should("exist");
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").should("not.be.exist");
+      cy.get("[class*='makeStyles-lastEdited']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
-      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+      cy.get("[data-cy='exportToEmail']").should("be.visible");
+      cy.get("[data-cy='exportToEmail']").arrowClick();
     });
 
     it("Click on 3 dots and verify 'Change Owner' button exists", () => {
@@ -425,10 +497,10 @@ context("Status Bar of newly created ARs", () => {
 
   context("Close the AR", () => {
     it("Close the AR and verify AR status is Closed", () => {
-      cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+      cy.get("[data-cy='transition-closed']").first().arrowClick();
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PostCloseAR], () => {
-          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+          cy.get("[data-cy='AlertDialog-continueButton']").arrowClick();
         });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -446,13 +518,13 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").should("not.be.exist");
+      cy.get("[class*='makeStyles-lastEdited']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
-      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+      cy.get("[data-cy='exportToEmail']").should("be.visible");
+      cy.get("[data-cy='exportToEmail']").arrowClick();
     });
 
     it("Click on 3 dots and verify 'Change Owner' button exists", () => {
@@ -482,9 +554,9 @@ context("Status Bar of newly created ARs", () => {
 
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"void-button\"]").should("be.visible");
-      cy.get("[data-cy=\"void-button\"]").arrowClick();
-      cy.get("[data-cy=\"AlertDialog-continueButton\"]").contains("Yes, I'm sure").arrowClick();
+      cy.get("[data-cy='void-button']").should("be.visible");
+      cy.get("[data-cy='void-button']").arrowClick();
+      cy.get("[data-cy='AlertDialog-continueButton']").contains("Yes, I'm sure").arrowClick();
     });
 
     it(`Check doc status as ${STATUS_TYPES_LABEL.VOIDED}`, () => {
@@ -502,13 +574,13 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").should("not.be.exist");
+      cy.get("[class*='makeStyles-lastEdited']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
-      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+      cy.get("[data-cy='exportToEmail']").should("be.visible");
+      cy.get("[data-cy='exportToEmail']").arrowClick();
     });
 
     it("Click on 3 dots and verify 'Change Owner' button exists", () => {
@@ -559,7 +631,7 @@ context("Status Bar of newly created ARs", () => {
     it("Add 'Implementation Task' to AR", () => {
       cy.fbClickAddNewHiddenBtn();
       cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
-      cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
+      cy.get("[data-cy='label']").arrowType("Implementation Task");
       cy.fbAddField();
     });
 
@@ -602,7 +674,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].name);
     });
 
     it("Click on Save", () => {
@@ -613,19 +685,19 @@ context("Status Bar of newly created ARs", () => {
   context("Add implementation task and continue AR creation flow", () => {
     it("Fill all fields and add 'Implementation Task'", () => {
       SystemRequirement("REQ-0710");
-      cy.get("[data-cy=\"fb-control-btn\"]").arrowClick();
-      cy.get("[data-cy=\"title\"]").arrowType("Task One");
-      cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
-      cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[1].email}`);
+      cy.get("[data-cy='fb-control-btn']").arrowClick();
+      cy.get("[data-cy='title']").arrowType("Task One");
+      cy.get("[data-cy='description']").next().arrowType("Task Description");
+      cy.get("[data-cy='assigned']").autocompleteSelect(`${USERS[1].email}`);
       cy.poAddDateRequired();
       cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+        cy.get("[data-cy='fb-control-btn']").contains(new RegExp("^Add$", "g")).arrowClick();
       });
     });
 
     it("Add description 'Test' to trigger autosave", () => {
-      cy.get("[data-cy=\"field-description\"]").click();
-      cy.get("[data-cy=\"field-description\"]").clear().arrowType("Test").wait(2000);
+      cy.get("[data-cy='field-description']").click();
+      cy.get("[data-cy='field-description']").clear().arrowType("Test").wait(2000);
       cy.unClick();
     });
 
@@ -660,17 +732,17 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Verify 'Close' button is in statusbar", () => {
-      cy.get("button[data-cy=\"transition-closed\"]").contains("Close").should("exist");
+      cy.get("button[data-cy='transition-closed']").contains("Close").should("exist");
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get("[class*=\"makeStyles-lastEdited\"]").should("not.be.exist");
+      cy.get("[class*='makeStyles-lastEdited']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
-      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+      cy.get("[data-cy='exportToEmail']").should("be.visible");
+      cy.get("[data-cy='exportToEmail']").arrowClick();
     });
 
     it("Click on 3 dots and verify 'Change Owner' button exists", () => {
