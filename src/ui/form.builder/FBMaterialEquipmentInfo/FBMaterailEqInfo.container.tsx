@@ -22,9 +22,7 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
 
   const callBack = (
     setter: Dispatch<SetStateAction<MaterialAndEquipment>>
-  ) => (data: MaterialAndEquipment) => {
-    setter(data);
-  };
+  ) => setter;
 
   useEffect(() => {
     if (inView) {
