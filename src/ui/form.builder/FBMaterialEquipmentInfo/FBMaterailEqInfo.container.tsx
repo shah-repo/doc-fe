@@ -4,7 +4,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FBMeqState } from "..";
 import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
 import FB from "../helpers/FB";
-import { Equipment, FBMEQItemStatus, Material, MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
+import { FBMEQItemStatus, MaterialAndEquipment, MaterialEqContainerProps, MaterialItem } from "./FBMaterailEqInfo.types";
 import FBMaterialEqInfoPresenter from "./FBMaterialEqInfo.presenter";
 
 const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProps> = ({
@@ -37,8 +37,8 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
   }, [showDiff, meqState, inView, documentRevision]);
 
   const getItemStatus = (
-    childItem: Material | Equipment | undefined,
-    parentItem: Material | Equipment | undefined
+    childItem: MaterialItem | undefined,
+    parentItem: MaterialItem | undefined
   ): FBMEQItemStatus => {
     if (isEqual(childItem, parentItem)) {
       return FBMEQItemStatus.None;
@@ -52,9 +52,9 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
     return FBMEQItemStatus.Removed;
   };
 
-  const normalizeItem = (item) => omit(item, ["quantity", "unit"]);
+  const normalizeItem = (item: MaterialItem) => omit(item, ["quantity", "unit"]);
 
-  const calculateSectionDiff = <K extends (Material | Equipment)[]>(childItems: K, parentItems: K): K => {
+  const calculateSectionDiff = <K extends (MaterialItem)[]>(childItems: K, parentItems: K): K => {
     const allItems = unionWith(
       childItems,
       parentItems,

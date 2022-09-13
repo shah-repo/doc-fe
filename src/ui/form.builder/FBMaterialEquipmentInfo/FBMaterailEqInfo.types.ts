@@ -66,14 +66,15 @@ export interface MaterialEqContainerProps {
   inView: boolean;
 }
 
+
 type MaterialEqClasses = ReturnType<typeof useStyles>;
 
+export type MaterialItem = (Material | Equipment);
 export interface PanelData {
   dataKey: string;
   title: string;
-  itemComponent: React.FC<MaterialItemProps> | React.FC<EquipmentItemProps>;
+  itemComponent: React.ComponentType<MaterialItemProps> | React.ComponentType<EquipmentItemProps>;
 }
-
 export interface MaterialItemProps {
   item: Material;
   classes: MaterialEqClasses;
