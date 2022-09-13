@@ -30,6 +30,8 @@ interface Props {
   documentTypeId?: string;
 }
 
+const schemaFieldsWithoutNormalisation = ["approvals", "section", "subsection", "stepsection", "teststep"];
+
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDocRevStatusDraft,
   type,
@@ -135,12 +137,9 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
     }
     const predefinedSchema = scheme?.map((e) => {
       if (
-        e.type === "approvals" ||
-        e.type === "section" ||
-        e.type === "subsection" ||
-        e.type === "stepsection" ||
-        e.type === "teststep" || !docTypeHasDefaultNote ||
-        (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && e.includeNotes)) {
+        schemaFieldsWithoutNormalisation.includes(e.type as string)
+        || !docTypeHasDefaultNote
+        || (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && e.includeNotes)) {
         return e;
       }
       if (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && !e.includeNotes) {
