@@ -15,7 +15,7 @@ export interface LotItem {
   unit: string;
 }
 
-interface GenericItem {
+export interface GenericItem {
   docId: string;
   title: string;
   status?: FBMEQItemStatus;
@@ -52,8 +52,6 @@ export interface MaterialEqContainerProps {
 }
 
 type MaterialEqClasses = ReturnType<typeof useStyles>;
-
-export type MaterialItem = (Material | Equipment);
 
 export interface PanelData {
   dataKey: string;
