@@ -8,6 +8,7 @@ import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox,
 import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
 import { withSMForm } from "../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc";
 import { withSMTabs } from "../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
+import { emptyFunction } from "../../../../../../../common/utils/helpers";
 import { authSelectors } from "../../../../../../../state/ducks/auth";
 import { documentTypeSelectors } from "../../../../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../../../../state/ducks/documentRevisions/documentType/types";
@@ -36,8 +37,6 @@ interface ContainerProps {
 interface ComponentProps extends ContainerProps {
   formik: FormikProps<DocumentRevisionFormValues>;
 }
-
-const emptyFunction = () => undefined;
 
 const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   docRevId,

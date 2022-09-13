@@ -14,15 +14,18 @@ const StyledTooltip = (props: TooltipProps) => {
 };
 
 const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> = ({
+  children,
   handleFormPreview,
   importSchema,
   exportSchema,
   includeTransport,
   previewDisabled,
+  ...boxProps
 }) => {
   const classes = FBWorkspaceBottomBarStyles();
+
   return (
-    <Box display="flex" className="formOptionsBox" justifyContent="center" p={1}>
+    <Box display="flex" className="formOptionsBox" justifyContent="center" p={1} { ...boxProps }>
       <Grid container justify="space-between" alignItems="center" className={classes.formOptionsBox}>
         <Grid item>
           <Typography className={classes.formOptionsText}>

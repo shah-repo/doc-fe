@@ -1,23 +1,18 @@
 import { Formik, FormikProps } from "formik";
 import { cloneDeep } from "lodash";
-import React, { useEffect } from "react";
-import { useIntl } from "react-intl";
+import { useObserver } from "mobx-react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
-import { ReactComponent as EyeIcon } from "../../../assets/images/eye-icon-references.svg";
-import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
+import { SMFormHOCProps } from "../../../App";
+import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { FBDocumentRevisionProps } from "../../../state/ducks/documentRevisions/types";
 import { AsyncState } from "../../../state/types";
-import Sidebar from "../../common/components/Sidebar";
 import styles from "../../common/style/styles";
-import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
-import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
-import { FB, FBBookmarkState, FBProvider, FBWorkspace } from "../../form.builder";
-import ChangeRequestAuditContainer from "../audit/Audit.container";
-import CRReferences from "../references/Reference";
-import AssessmentFormPresenter from "./assessmentForm/AssessmentForm.presenter";
+import { FB, FBBookmarkState, FBProvider, FBWorkspaceModeOptions } from "../../form.builder";
+import FBDataStore from "../../form.builder/FBStore/FBDataStore";
+import ChangeRequestForm from "./ChangeRequestForm";
 import { ChangeRequestFormValues } from "./types";
 
 
@@ -32,7 +27,7 @@ interface OwnProps {
 
 export let changeRequestFormOnScreenContext = React.createContext<boolean>(false);
 
-type ChangeRequestFormContainerProps = OwnProps;
+type ChangeRequestFormContainerProps = OwnProps & SMFormHOCProps;
 
 const ChangeRequestFormContainer: React.FunctionComponent<
   ChangeRequestFormContainerProps
@@ -43,98 +38,68 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   changeRequest,
   doNotPrompt,
   chosenForm,
+  _formState,
 }) => {
-  const FBContainer = React.useRef(null);
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
+
+  const calcInitialValues = useMemo(() => {
+    initialValues.formInput = FBDataStore?.refreshData?.formInput ?? initialValues.formInput;
+
+    return {
+      ...initialValues,
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialValues, FBDataStore?.refreshData]);
+
+  useObserver(() => {
+    calcInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? calcInitialValues.formInput;
+  });
+
+  const formInput = useMemo(() =>
+    calcInitialValues ? cloneDeep(calcInitialValues.formInput) : {}
+  , [calcInitialValues]);
 
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
   }, []);
 
-  const intl = useIntl();
+  const changeOpenStatus = (isDrawerOpen) => {
+    setOpen(isDrawerOpen);
+  };
+
   const [isDrawerOpen, setOpen] = React.useState(true);
   const classes = styles({ isDrawerOpen });
+
   const schemaData = changeRequest
     ? changeRequest.formDocument?.formTemplate?.schema
     : chosenForm?.formTemplate?.schema;
 
+  _formState?.setMode(FBWorkspaceModeOptions.FORM);
+
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
-    <FBWorkspace
-      portalContainer={FBContainer}
-      isPortal={true}
-      initialValues={cloneDeep(changeRequest?.formInput)}
-      changeRequest={cloneDeep(changeRequest)}
-      autosave={autosaveEnabled}
-      withoutBottomBar={true}
+    <ChangeRequestForm
+      formValues={props}
+      asyncState={asyncState}
+      changeRequest={changeRequest}
+      doNotPrompt={doNotPrompt}
+      changeOpenStatus={changeOpenStatus}
       schema={schemaData}
-      mode="form"
-    >
-      <AssessmentFormPresenter
-        asyncState={asyncState}
-        changeRequest={changeRequest}
-        chosenForm={chosenForm}
-        doNotPrompt={doNotPrompt}
-        sidebar={changeRequest && <Sidebar sidebarList={sidebarList}
-          isDrawerOpen={isDrawerOpen} setOpen={setOpen} fromEdit={true} />}
-        {...props}
-        {...{ FBContainer }}
-      />
-    </FBWorkspace>
-
+      mode={FBWorkspaceModeOptions.FORM}
+      withoutBottomBar={true}
+      autosave={autosaveEnabled}
+      _formState={_formState}
+      formInput={formInput}
+      {...props}
+    />
   );
-
-  const sidebarList: SidebarTypes[] = [
-    {
-      icon: <EyeIcon />,
-      type: "references",
-      details: {
-        shouldShow: true,
-        title:
-          intl?.formatMessage({
-            id: "common.references",
-          }) || "",
-        component: (
-          <CRReferences
-            chosenForm={chosenForm}
-            changeRequest={changeRequest}
-          />
-        ),
-      },
-    },
-    {
-      icon: <TimelineIcon />,
-      type: "history",
-      details: {
-        shouldShow: Boolean(changeRequest),
-        dataCy: "timeline-icon",
-        title: intl.formatMessage({
-          id: "document.revision.history",
-        }),
-        component: changeRequest ? <ChangeRequestAuditContainer {...{ changeRequest, isDrawerOpen }} />
-          : null,
-      },
-    },
-    {
-      icon: <BookmarkIcon />,
-      type: "bookmarks",
-      details: {
-        shouldShow: true,
-        dataCy: "bookmark-icon",
-        title: intl.formatMessage({
-          id: "document.revision.bookmarks",
-        }),
-        component: <Bookmarks fromAR={true} />,
-      },
-    },
-  ];
 
   return (
     <FBProvider {...{ bookmarkState }}>
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <Formik
-            initialValues={initialValues}
+            initialValues={calcInitialValues}
             onSubmit={onSubmit}
             enableReinitialize={true}
           >
@@ -146,4 +111,4 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   );
 };
 
-export default ChangeRequestFormContainer;
+export default withSMForm(ChangeRequestFormContainer);
