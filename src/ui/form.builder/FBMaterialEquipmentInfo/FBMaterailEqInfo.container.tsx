@@ -81,12 +81,12 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
     }), {}) as T;
   };
 
-  const materialData = showDiff ? calculateDataDiff(currentData, parentMaterialData) : currentData;
+  const data = showDiff ? calculateDataDiff(currentData, parentMaterialData) : currentData;
 
   return (
     <FBMaterialEqInfoPresenter
       {...{
-        materialData,
+        data,
         showDiff,
         includeDiff,
         loading,

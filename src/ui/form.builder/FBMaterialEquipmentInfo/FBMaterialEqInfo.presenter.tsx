@@ -127,7 +127,7 @@ const panels: PanelData[] = [
 ];
 
 const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
-  materialData,
+  data,
   showDiff,
   includeDiff,
   handleShowDiffChange,
@@ -179,7 +179,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
             <Panel
               key={panel.dataKey}
               panel={panel}
-              data={materialData[panel.dataKey]}
+              data={data[panel.dataKey]}
               expanded={expandedPanels.includes(panel.dataKey)}
               togglePanel={togglePanel(panel.dataKey)}
               loading={loading}

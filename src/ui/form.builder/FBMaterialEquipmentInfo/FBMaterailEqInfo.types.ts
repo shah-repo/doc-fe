@@ -15,22 +15,22 @@ export interface LotItem {
   unit: string;
 }
 
-interface Material {
+interface GenericItem {
   docId: string;
   title: string;
+  status?: FBMEQItemStatus;
+}
+
+interface Material extends GenericItem {
   revision: string;
   quantity: number;
   unit: string;
   lots: LotItem[];
-  status?: string;
 }
 
-interface Equipment {
-  docId: string;
-  title: string;
+interface Equipment extends GenericItem {
   nextCalibration: Date;
   nextPm: Date;
-  status?: string;
 }
 
 export interface MaterialAndEquipment {
@@ -39,7 +39,7 @@ export interface MaterialAndEquipment {
 }
 
 export interface MaterialEqProps {
-  materialData: MaterialAndEquipment;
+  data: MaterialAndEquipment;
   includeDiff: boolean;
   showDiff: boolean;
   loading?: boolean;
@@ -51,23 +51,26 @@ export interface MaterialEqContainerProps {
   inView: boolean;
 }
 
-
 type MaterialEqClasses = ReturnType<typeof useStyles>;
 
 export type MaterialItem = (Material | Equipment);
+
 export interface PanelData {
   dataKey: string;
   title: string;
   itemComponent: React.ComponentType<MaterialItemProps> | React.ComponentType<EquipmentItemProps>;
 }
+
 export interface MaterialItemProps {
   item: Material;
   classes: MaterialEqClasses;
 }
+
 export interface EquipmentItemProps {
   item: Equipment;
   classes: MaterialEqClasses;
 }
+
 export interface PanelProps {
   panel: PanelData;
   data: Material[] | Equipment[];
