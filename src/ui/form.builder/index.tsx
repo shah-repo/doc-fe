@@ -209,7 +209,6 @@ export { default as FBPOReceiveFormActions } from "./FBPOReceiveForm/FBPOReceive
 export * from "./FBPOReceiveForm/FBPOReceiveForm.types";
 export { default as FBProcedureState } from "./FBProcedure/FBProcedure.state";
 export * from "./FBProcedure/FBProcedure.types";
-export { default as FBProcedureDiff } from "./FBProcedureDiff/FBProcedureDiff";
 export { default as FBProcedureDiffState } from "./FBProcedureDiff/FBProcedureDiff.state";
 export * from "./FBProcedureDiff/FBProcedureDiff.types";
 export { default as FBProcedureForm } from "./FBProcedureForm/FBProcedureForm";
