@@ -15,7 +15,7 @@ export interface LotItem {
   unit: string;
 }
 
-export interface Material {
+interface Material {
   docId: string;
   title: string;
   revision: string;
@@ -25,7 +25,7 @@ export interface Material {
   status?: string;
 }
 
-export interface Equipment {
+interface Equipment {
   docId: string;
   title: string;
   nextCalibration: Date;

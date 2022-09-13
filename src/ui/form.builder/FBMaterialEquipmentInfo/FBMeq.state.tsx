@@ -4,7 +4,7 @@ import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
 class FBMeqState {
-  getMeqApi = new FBRequest<Document, null>(FBEndpoint.MaterialAndEquipment);
+  private getMeqApi = new FBRequest<Document, null>(FBEndpoint.MaterialAndEquipment);
 
   public getMeqDetail = (id: string | undefined, callback) => {
     if (!id) { return; }
