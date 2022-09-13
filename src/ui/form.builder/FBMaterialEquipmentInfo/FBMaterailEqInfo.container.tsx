@@ -52,16 +52,18 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
     return FBMEQItemStatus.Removed;
   };
 
+  const normalizeItem = (item) => omit(item, ["quantity", "unit"]);
+
   const calculateSectionDiff = <K extends (Material | Equipment)[]>(childItems: K, parentItems: K): K => {
     const allItems = unionWith(
       childItems,
       parentItems,
-      (value, other) => isEqual(omit(value, ["quantity", "unit"]), omit(other, ["quantity", "unit"]))
+      (value, other) => isEqual(normalizeItem(value), normalizeItem(other))
     );
 
     return allItems.map((item) => {
-      const childItem = find(childItems, omit(item, ["quantity", "unit"]));
-      const parentItem = find(parentItems, omit(item, ["quantity", "unit"]));
+      const childItem = find(childItems, normalizeItem(item));
+      const parentItem = find(parentItems, normalizeItem(item));
 
       return {
         ...item,
@@ -82,17 +84,15 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
   const materialData = showDiff ? calculateDataDiff(currentData, parentMaterialData) : currentData;
 
   return (
-    <>
-      <FBMaterialEqInfoPresenter
-        {...{
-          materialData,
-          showDiff,
-          includeDiff,
-          loading,
-        }}
-        handleShowDiffChange={setShowDiff}
-      />
-    </>
+    <FBMaterialEqInfoPresenter
+      {...{
+        materialData,
+        showDiff,
+        includeDiff,
+        loading,
+      }}
+      handleShowDiffChange={setShowDiff}
+    />
   );
 };
 export default FBMaterialEqInfoContainer;
