@@ -8,14 +8,14 @@ export enum FBMEQItemStatus {
   None = "none"
 }
 
-export const FBMEQItemStatusBorder: Record<FBMEQItemStatus, string> = {
+export const FBMEQItemStatusBorder: Record<FBMEQItemStatus, Colors> = {
   [FBMEQItemStatus.Removed]: Colors.opal_red,
   [FBMEQItemStatus.Added]: Colors.light_green,
   [FBMEQItemStatus.Updated]: Colors.gray,
   [FBMEQItemStatus.None]: Colors.medium_blue,
 };
 
-export const FBMEQItemStatusBg: Record<FBMEQItemStatus, string> = {
+export const FBMEQItemStatusBg: Record<FBMEQItemStatus, Colors> = {
   [FBMEQItemStatus.Removed]: Colors.medium_red,
   [FBMEQItemStatus.Added]: Colors.pale_green,
   [FBMEQItemStatus.Updated]: Colors.platinum_gray,
