@@ -1,12 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
-import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
-import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
-import { momentInPST } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -14,11 +11,11 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 let createdCompany;
 let loginResponse;
 let secondEmployee;
-let clinicalProtocolDocumentType;
-let group;
 let asyncTasksGroup;
-const documentRevisionName = "New document for testing AR";
-const approvalRequestFormName = "Approval request form template";
+const approvalRequestFormName = "Approval request form title";
+const approvalRequestFormDesc = "Approval request form title description";
+const approvalRequestDocName = "Approval request document title";
+const approvalRequestDocDesc = "Approval request document title description";
 
 context("Status Bar of New Enlil items approved via regular AR", () => {
   before(() => {
@@ -56,7 +53,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         }).then((response) => {
           createdCompany = response;
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
+          // clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
       });
@@ -71,45 +68,45 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
     });
 
-    it("[API]Creates document revision for approval", (done: any) => {
-      cy.grpGetGroupByName({
-        sessionId: loginResponse.sessionId,
-        employeeId: secondEmployee.id,
-        groupName: "Everyone",
-      }).then((response) => {
-        group = response;
-        cy.drCreateDocumentRevision({
-          payload: {
-            attachments: [],
-            description: "<p>Test Doc Rev Description</p>",
-            document: {
-              docId: "CP-00004",
-              documentType: {
-                id: clinicalProtocolDocumentType[0].id,
-              },
-              securityList: {
-                operators: [],
-                securityEmployees: [],
-                securityGroups: [
-                  {
-                    id: group.body[0].id,
-                  },
-                ],
-              },
-            },
-            name: documentRevisionName,
-            referenceTo: [],
-            retrain: false,
-            revisionChangeType: RevisionChangeType.NextRevision,
-            revisionStage: 3,
-          },
-          employeeId: secondEmployee.id as unknown as string,
-          sessionId: loginResponse.sessionId as unknown as string,
-        }).then(() => {
-          done();
-        });
-      });
-    });
+    // it("[API]Creates document revision for approval", (done: any) => {
+    //   cy.grpGetGroupByName({
+    //     sessionId: loginResponse.sessionId,
+    //     employeeId: secondEmployee.id,
+    //     groupName: "Everyone",
+    //   }).then((response) => {
+    //     group = response;
+    //     cy.drCreateDocumentRevision({
+    //       payload: {
+    //         attachments: [],
+    //         description: "<p>Test Doc Rev Description</p>",
+    //         document: {
+    //           docId: "CP-00004",
+    //           documentType: {
+    //             id: clinicalProtocolDocumentType[0].id,
+    //           },
+    //           securityList: {
+    //             operators: [],
+    //             securityEmployees: [],
+    //             securityGroups: [
+    //               {
+    //                 id: group.body[0].id,
+    //               },
+    //             ],
+    //           },
+    //         },
+    //         name: documentRevisionName,
+    //         referenceTo: [],
+    //         retrain: false,
+    //         revisionChangeType: RevisionChangeType.NextRevision,
+    //         revisionStage: 3,
+    //       },
+    //       employeeId: secondEmployee.id as unknown as string,
+    //       sessionId: loginResponse.sessionId as unknown as string,
+    //     }).then(() => {
+    //       done();
+    //     });
+    //   });
+    // });
 
     it("[API]Get group", (done: any) => {
       cy.grpGetGroupByName({
@@ -145,13 +142,117 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
+  });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
+  context("Create a new form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it(`Enter title ${approvalRequestFormName}`, () => {
+      cy.drEnterDocumentTitle({ name: approvalRequestFormName });
+    });
+
+    it(`Enter description as ${approvalRequestFormDesc}`, () => {
+      cy.drEnterDocumentDescription({ description: approvalRequestFormDesc });
+    });
+
+    it("Click on 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click on 'Approval request' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+    });
+
+    it("Select 'Alpha' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Alpha" });
     });
   });
 
-  context("Create approval request", () => {
+  context(`Click save document and verify ${STATUS_TYPES_LABEL.DRAFT} Statusbar items`, () => {
+    it("Click save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
+    it(`Check doc Draft status as ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+      cy.arCheckTitleInEditableAndMatches({ name: approvalRequestFormName });
+    });
+  });
+
+  context(`Verify Statusbar for Icon, Landing page, Doc ID, Rev stage, Status and breadcrump`, () => {
+    it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Document ListFM-00002 Rev ADRAFT`,
+        breadcrump: true,
+      });
+    });
+
+    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
+    });
+
+    it(`Click on 3 dots and verify 'Void' option exists`, () => {
+      SystemRequirement("REQ-2800");
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("[data-cy=\"void-button\"]").should("be.visible");
+      cy.get("[data-cy=\"void-button\"]").arrowClick();
+      cy.get("button[data-cy=\"AlertDialog-cancelButton\"]").arrowClick();
+    });
+
+    it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
+      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+    });
+
+    it(`Verify statusbar conataining DRAFT is still visible`, () => {
+      cy.get("div[data-cy=\"HeaderInfo-status\"]").should("be.visible");
+    });
+
+    it(`Verify DRAFT statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+    });
+  });
+
+  context("Click on save button and check for 'Last saved' exists in statusbar", () => {
+    it(`Change document description as 'Change description'`, () => {
+      cy.drEnterDocumentDescription({ description: "Change description" });
+    });
+
+    it("Click on Save button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it(`Verify again 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
+    });
+  });
+
+  context("Create approval request document and save it", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
@@ -160,25 +261,17 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.arClickCreateAnAR();
     });
 
-    it("Enter title AR title", () => {
-      cy.arEnterApprovalRequestTitle({ title: "Approval request form" });
+    it(`Enter AR title as ${approvalRequestDocName}`, () => {
+      cy.arEnterApprovalRequestTitle({ title: approvalRequestDocName });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    it(`Enter description as ${approvalRequestDocDesc}`, () => {
+      cy.arEnterApprovalRequestDescription({ description: approvalRequestDocDesc });
     });
 
     it("Add first document revision", () => {
       cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Add second document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
+      cy.arChoseSpecificProposedDocument({ name: "FM-00002" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
@@ -190,8 +283,6 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email, noWait: true });
-      cy.arAddApproverOnApproverList({ approver: USERS[3].email, noWait: true });
     });
 
     it("Save AR", () => {
@@ -199,269 +290,118 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
   });
 
-  context("Check the dashboard", () => {
-    it("AR should not appear on My Feed since AR is still in Draft", () => {
-      cy.navigToDashboard();
-      cy.contains("No pending actions").should("exist");
-    });
-
-    it("AR should appear in Recent", () => {
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
+  context("Click on AR 'Send To Review'", () => {
+    it("Send AR to review", () => {
+      cy.contains("Send to review").arrowClick();
     });
   });
 
-  context("Create another AR and check dashboard", () => {
+  context("Verify AR is 'IN REVIEW' state", () => {
+    it("Verify AR state as 'IN REVIEW'", () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Approval RequestsAR-00001 Rev`,
+        breadcrump: true,
+      });
+    });
+
+    it(`Check AR document status as ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
+      cy.arCheckTitleInEditableAndMatches({ name: approvalRequestDocName });
+    });
+  });
+
+  context("Navigate to document list and open the document", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clear document filter", () => {
+      cy.dlClearFilters();
+    });
+
+    it("Filter the list by document title", () => {
+      cy.dlFilterByDocTitle({ docTitle: approvalRequestFormName });
+    });
+
+    it("Open the first document in the list", () => {
+      cy.dlSelectFirstDocument();
+    });
+  });
+
+  context(`Verify the document Statusbar items as ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+    it(`Check doc status as ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
+      cy.arCheckTitleInEditableAndMatches({ name: approvalRequestFormName });
+    });
+
+    it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Document ListFM-00002 Rev AIN REVIEW`,
+        breadcrump: true,
+      });
+    });
+
+    it("Check if 'Change Owner' button exists", () => {
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
+      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
+    });
+
+    it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+    });
+
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").eq(0).scrollIntoView();
+    });
+
+    it(`Verify statusbar conataining IN REVIEW is still visible`, () => {
+      cy.get("div[data-cy=\"HeaderInfo-status\"]").contains("IN REVIEW").should("be.visible");
+    });
+  });
+
+  context("Click on the AR ID link and verify AR opens in new tab", () => {
+    it(`Click on the AR ID link`, () => {
+      cy.get("a#ChangeRequestLink-linkButton").should("contain", "AR-").invoke("removeAttr", "target").click();
+    });
+
+    it(`Verify AR opens in a new tab`, () => {
+      cy.url().should("include", "/preview");
+      cy.go("back");
+    });
+  });
+
+  context("Go back to the AR and reject the AR", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
-      cy.arClickCreateAnAR();
+    it("Clear Filter", () => {
+      cy.arClearFilters();
     });
 
-    it("Enter AR title", () => {
-      cy.arEnterApprovalRequestTitle({ title: "Second AR" });
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestDocName, status: "IN_REVIEW" });
     });
 
-    it("Enter description", () => {
-      cy.arEnterApprovalRequestDescription({ description: "test" });
-    });
-
-    it("Add document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00006" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
-    });
-
-    it("Save AR", () => {
-      cy.arSaveApiCall();
-    });
-
-    it("Check that in Recent tab, the latest open should appear on top", () => {
-      SystemRequirement("REQ-4990");
-      cy.navigToDashboard();
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00002")
-        .and("contain.text", "Second AR");
-
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(1)
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
-    });
-  });
-
-  context("Send AR to review and check dashboard", () => {
-    it("Send AR to review", () => {
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(1).find("a").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.arClickSendToReview();
-      cy.wait(1000);
-      cy.arVerifyStatus({ status: "IN REVIEW" });
-    });
-
-    it("Goto dashboard", () => {
-      cy.navigToDashboard();
-    });
-
-    it("AR in review present on dashboard", () => {
-      cy.contains("IN REVIEW").parent().parent().parent().parent()
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "IN REVIEW")
-        .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
-        .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`)
-        .and("contain.text", `${USERS[2].name}`)
-        .and("contain.text", `${USERS[3].name}`);
-    });
-
-    it("Hovering on the status should highlight it", () => {
-      cy.contains("IN REVIEW").parent().parent().parent().parent()
-        .find(".MuiChip-root").trigger("mouseover");
-      cy.contains("IN REVIEW").parent().parent().parent().parent()
-        .find(".MuiChip-root").should("have.css", "background-color", "rgb(48, 128, 234)");
-    });
-
-    it("click on status or approvers should open the email modal box", () => {
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
-        .find("a").arrowClick();
-      cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").last().arrowClick();
-      cy.contains("IN REVIEW").parent().parent().parent().parent()
-        .find(".MuiGrid-root").eq(2).arrowClick();
-      cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
-      cy.get("button[aria-label=close]").last().arrowClick();
-    });
-
-    it("Clicking on the arrow should show the AR details", () => {
-      cy.contains("IN REVIEW").parent().parent().parent().parent().parent().parent().parent()
-        .find("svg").eq(0).arrowClick();
-      cy.contains("IN REVIEW").parent().parent().parent().parent().parent().parent().parent().next()
-        .find("ul div").eq(0)
-        .should("contain.text", "New document for testing AR");
-    });
-
-    it("Close line item by click arrow", () => {
-      cy.contains("IN REVIEW").parent().parent().parent().parent().parent().parent().parent()
-        .find("svg").eq(0).arrowClick();
-    });
-
-    it("Hovering AR line item should display buttons", () => {
-      cy.contains("needs your approval for").trigger("mouseover");
-      cy.contains("needs your approval for").parent().parent().parent().parent().parent()
-        .find(".MuiBox-root").eq(0)
-        .find("svg").should("have.length", 3);
-      cy.contains("needs your approval for").parent().parent().parent().parent().parent()
-        .find(".MuiBox-root").eq(0)
-        .find("[data-cy=\"transition-approve\"]").should("exist");
-      cy.contains("needs your approval for").parent().parent().parent().parent().parent()
-        .find(".MuiBox-root").eq(0)
-        .find("[data-cy=\"transition-reject\"]").should("exist");
-    });
-  });
-
-  context(`For ${USERS[2].name}, AR request should display on dashboard`, () => {
-    it(`Login as ${USERS[2].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-    });
-
-    it("For User 2 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
-        .and("contain.text", "needs your approval for")
-        .and("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
-    });
-
-    it("Hovering AR line item should display buttons", () => {
-      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-        .find("svg").should("have.length", 3);
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-        .find("[data-cy=\"transition-approve\"]").should("exist");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-        .find("[data-cy=\"transition-reject\"]").should("exist");
-    });
-
-    it("Clicking on the arrow should show the AR details", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).next()
-        .find("ul div").eq(0)
-        .should("contain.text", "New document for testing AR");
-    });
-
-    it("Close line item by click arrow", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-    });
-
-    it("Approve the AR", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApproveNew], () => {
-          cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick().wait(1000);
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
-    });
-
-    it("After approve, AR should appear in Recent items", () => {
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
-    });
-  });
-
-  context(`Check ${USERS[1].name} dashboard notifications`, () => {
-    it(`Login as ${USERS[1].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-    });
-
-    it("AR in review present on dashboard with 2 approvers", () => {
-      cy.contains("IN REVIEW").parent().parent().parent().parent()
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "IN REVIEW")
-        .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
-        .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`)
-        .and("contain.text", `${USERS[3].name}`);
-    });
-  });
-
-  context(`For ${USERS[3].name}, AR request should display on dashboard`, () => {
-    it(`Login as ${USERS[3].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[3].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-    });
-
-    it("For User 3 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
-        .and("contain.text", "needs your approval for")
-        .and("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
-    });
-
-    it("Hovering AR line item should display buttons", () => {
-      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-        .find("svg").should("have.length", 3);
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-        .find("[data-cy=\"transition-approve\"]").should("exist");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-        .find("[data-cy=\"transition-reject\"]").should("exist");
-    });
-
-    it("Clicking on the arrow should show the AR details", () => {
-      SystemRequirement("REQ-4970");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).next()
-        .find("ul div").eq(0)
-        .should("contain.text", "New document for testing AR");
-    });
-
-    it("Close line item by click arrow", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-    });
-
-    it("Reject the AR", () => {
-      cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
-      cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover");
+    it("Reject AR", () => {
       cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
@@ -471,557 +411,265 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
   });
 
-  context(`Check ${USERS[1].name} dashboard notifications`, () => {
-    it(`Login as ${USERS[1].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+  context("Navigate to document list and open it", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
     });
 
-    it("There should be a notification that User 3 has rejected AR", () => {
-      SystemRequirement("REQ-4980");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "REJECTED")
-        .and("contain.text", USERS[3].name);
+    it("Clear document filter", () => {
+      cy.dlClearFilters();
     });
 
-    it("Open AR", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .find(".MuiGrid-root").eq(2).find("a").arrowClick();
+    it("Filter the list by document title", () => {
+      cy.dlFilterByDocTitle({ docTitle: approvalRequestFormName });
     });
 
-    it("Status should be 'DRAFT'", () => {
-      cy.arVerifyStatus({ status: "DRAFT" });
-    });
-
-    it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+    it("Open the first document in the list", () => {
+      cy.dlSelectFirstDocument();
     });
   });
 
-  context("Approve AR by all 3 approvers", () => {
-    it("Goto dashboard", () => {
-      cy.navigToDashboard();
-    });
-
-    it(`Approve the AR by ${USERS[1].name}`, () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApproveNew], () => {
-          cy.contains("needs your approval for").trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick().wait(1000);
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
-    });
-
-    it(`Login as ${USERS[2].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+  context(`Verify the document Statusbar items as ${STATUS_TYPES_LABEL.PENDING_CHANGE}`, () => {
+    it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Document ListFM-00002 Rev APENDING CHANGE`,
+        breadcrump: true,
       });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it(`Approve the AR by ${USERS[2].name}`, () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApproveNew], () => {
-          cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick().wait(1000);
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
     });
 
-    it(`Login as ${USERS[3].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[3].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+    it(`Click on 3 dots and verify 'Save' option exists`, () => {
+      SystemRequirement("REQ-2800");
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible");
+      cy.recClickSaveBtn();
+    });
+
+    it("Check if 'Change Owner' button exists", () => {
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
+      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
       });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it(`Approve the AR by ${USERS[3].name}`, () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApproveNew], () => {
-          cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick().wait(1000);
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+    });
+
+    it(`Verify statusbar conataining DRAFT is still visible`, () => {
+      cy.get("div[data-cy=\"HeaderInfo-status\"]").should("be.visible");
+    });
+
+    it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
     });
   });
 
-  context(`Check ${USERS[1].name} notifications on dashboard`, () => {
-    it(`Login as ${USERS[1].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+  context("Click on save button and check for 'Last saved' exists in statusbar", () => {
+    it(`Change document description as 'Change description'`, () => {
+      cy.drEnterDocumentDescription({ description: "Change description 1" });
     });
 
-    it("there should be a notification that AR has been approved", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "APPROVED");
+    it("Click on Save button", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Hovering AR line item should display buttons", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Approval request formisAPPROVED")
-        .trigger("mouseover");
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Approval request formisAPPROVED")
-        .parent()
-        .parent()
-        .parent()
-        .find(".MuiBox-root").eq(0)
-        .find("svg").should("have.length", 2);
-    });
-
-    it("Close popup should open on click close button", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Approval request formisAPPROVED")
-        .parent()
-        .parent()
-        .parent()
-        .find(".MuiBox-root").eq(0)
-        .find("svg").eq(0).arrowClick();
-
-      cy.get("#simple-modal-title").should("exist").and("have.text", "Close Approval Request");
-    });
-
-    it("Close AR and verify notification on dashboard should be closed", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-          cy.get("#confirmEffectiveDate").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
-        .and("contain.text", "CLOSED");
+    it(`Verify again 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
     });
   });
 
-  context("Create a document and express release it with additional approvers and check AR process", () => {
+  context("Go back to the AR - Submit for approval and approve it", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
-      cy.arClickCreateAnAR();
+    it("Clear Filter", () => {
+      cy.arClearFilters();
     });
 
-    it("Enter title AR title", () => {
-      cy.arEnterApprovalRequestTitle({ title: "Approval request form1" });
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestDocName, status: "DRAFT" });
     });
 
-    it("Enter description", () => {
-      cy.arEnterApprovalRequestDescription({ description: "description" });
+    it("Send AR to review", () => {
+      cy.contains("Send to review").arrowClick();
     });
 
-    it("Add document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00007" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "form1 description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "form1 justification" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
-    });
-
-    it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email, noWait: true });
-    });
-
-    it("Save AR", () => {
-      cy.arSaveApiCall();
-    });
-
-    it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
-    });
-
-    it("Verify AR status is 'IN_REVIEW'", () => {
-      cy.arVerifyStatus({ status: "IN REVIEW" });
-    });
-
-    it("Goto dashboard", () => {
-      cy.navigToDashboard();
-    });
-
-    it("AR in review present on dashboard", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1")
-        .and("contain.text", "IN REVIEW")
-        .and("contain.text", "pending approvals from");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(1)
-        .find("span").eq(0)
-        .should("contain.text", `${USERS[2].name}`);
-    });
-
-    it(`Login as ${USERS[2].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-    });
-
-    it("For User 2 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
-        .and("contain.text", "needs your approval for")
-        .and("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1");
-    });
-
-    it("Hovering AR line item should display buttons", () => {
-      cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-        .find("svg").should("have.length", 3);
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-        .find("[data-cy=\"transition-approve\"]").should("exist");
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-        .find("[data-cy=\"transition-reject\"]").should("exist");
-    });
-
-    it("Clicking on the arrow should show the AR details", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).next()
-        .find("ul div").eq(0)
-        .should("contain.text", "New document for testing AR");
-    });
-
-    it("Close line item by click arrow", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-    });
-
-    it("Approve the AR", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.ChangeRequestApproveNew], () => {
-          cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick().wait(1000);
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
-    });
-
-    it("After approve, AR should appear in Recent items", () => {
-      cy.get("#scrollable-auto-tab-1").arrowClick();
-      cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1");
-    });
-
-    it(`Login as ${USERS[1].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-    });
-
-    it("there should be a notification that AR has been approved", () => {
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1")
-        .and("contain.text", "APPROVED");
-    });
-
-    it("Close popup should open on click close button", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00003Approval request form1isAPPROVED")
-        .trigger("mouseover")
-        .parent()
-        .parent()
-        .parent()
-        .find(".MuiBox-root").eq(0)
-        .find("svg").eq(0).arrowClick();
-
-      cy.get("#simple-modal-title").should("exist").and("have.text", "Close Approval Request");
-    });
-
-    it("Close AR and verify notification on dashboard should be closed", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-          cy.get("#confirmEffectiveDate").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1")
-        .and("contain.text", "CLOSED");
-    });
-  });
-
-  context("Navigate to DRAFT approval request and approve request", () => {
-    it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
-    });
-
-    it("Clear filters", () => {
-      cy.alClearFilters();
-    });
-
-    it("Filter AR by title as 'Second AR'", () => {
-      cy.alFilterByTitle({ title: "Second AR" });
-    });
-
-    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
-      cy.alFilterByOwner({ owner: USERS[1].name });
-    });
-
-    it("Filter list by STATUS as DRAFT", () => {
-      cy.alFilterByStatus({ status: "DRAFT" });
-    });
-
-    it("Verify filter by STATUS as DRAFT", () => {
-      cy.alVerifyFilterByStatus({ status: "DRAFT" });
-    });
-
-    it("Click on DRAFT", () => {
-      cy.get(`td[data-grid-col-index="3"]`).should("contain.text", "DRAFT").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Add approver", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
-    it("Send to review", () => {
-      cy.arClickSendToReview();
-    });
-
-    it("Click approve submission", () => {
+    it("Approve AR", () => {
       cy.arApproveAR();
     });
 
-    it("Click Close button", () => {
-      cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+    it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
+    });
+  });
+
+  context("Navigate to document list and open the document", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
     });
 
-    it("Select option No", () => {
-      cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
+    it("Clear document filter", () => {
+      cy.dlClearFilters();
     });
 
-    it("Advance Effective Date to 30 days from now", () => {
-      const effectiveDate = momentInPST().add(30, "days");
-      const month = effectiveDate.format("MMM");
-      const day = effectiveDate.format("D");
+    it("Filter the list by document title", () => {
+      cy.dlFilterByDocTitle({ docTitle: approvalRequestFormName });
+    });
 
-      cy.get("[aria-label=\"change date\"]").arrowClick();
+    it("Open the first document in the list", () => {
+      cy.dlSelectFirstDocument();
+    });
+  });
 
-      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
-        const monthYearText = $el.text();
-        if (!monthYearText.includes(month)) {
-          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
-        }
+  context(`Verify document Statusbar items as ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+    it(`Check doc status as ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.APPROVED });
+      cy.arCheckTitleInEditableAndMatches({ name: approvalRequestFormName });
+    });
 
-        cy.wait(500);
-
-        cy.get("button.MuiPickersDay-day")
-          .not(".MuiPickersDay-hidden")
-          .each(($el) => {
-            const dayNumber = $el.text();
-            if (day === dayNumber) {
-              cy.wrap($el).arrowClick();
-            }
-          });
+    it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Document ListFM-00002 Rev APPROVED`,
+        breadcrump: true,
       });
+    });
 
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-          cy.get("#confirmEffectiveDate").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+    it("Check if 'Change Owner' button exists", () => {
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
+      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
+
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
+    });
+
+    it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+    });
+
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").eq(0).scrollIntoView();
+    });
+
+    it(`Verify statusbar conataining IN REVIEW is still visible`, () => {
+      cy.get("div[data-cy=\"HeaderInfo-status\"]").contains("IN REVIEW").should("be.visible");
     });
   });
 
-  context("Verify the AR in APPROVED State", () => {
-    it("Navigate to ar list", () => {
+  context("Navigate back to AR list and close it", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Clear filters", () => {
-      cy.alClearFilters();
+    it("Clear Filter", () => {
+      cy.arClearFilters();
     });
 
-    it("Filter AR by title as 'Second AR'", () => {
-      cy.alFilterByTitle({ title: "Second AR" });
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestDocName, status: "APPROVED" });
     });
 
-    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
-      cy.alFilterByOwner({ owner: USERS[1].name });
-    });
-
-    it("Filter list by STATUS as APPROVED", () => {
-      cy.alFilterByStatus({ status: "APPROVED" });
-    });
-
-    it("Verify filter by STATUS as APPROVED", () => {
-      cy.alVerifyFilterByStatus({ status: "APPROVED" });
+    it("Close AR", () => {
+      cy.get(`[data-cy="transition-closed"]`).contains("Closed").arrowClick();
     });
   });
 
-  context("Set time travel to Day 29", () => {
-    it("Navigate to async tasks", () => {
-      cy.navigToAsyncTasks();
+  context("Navigate to document list and open the document", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
     });
 
-    it("Select task TIME_TRAVEL_COMPANY", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    it("Clear document filter", () => {
+      cy.dlClearFilters();
     });
 
-    it("Select 29 days to time travel", () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 29 });
+    it("Filter the list by document title", () => {
+      cy.dlFilterByDocTitle({ docTitle: approvalRequestFormName });
     });
 
-    it("On Next Task, SELECT_ALL", () => {
-      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+    it("Open the first document in the list", () => {
+      cy.dlSelectFirstDocument();
     });
   });
 
-  context("Verify the AR is still in APPROVED State", () => {
-    it("Navigate to ar list", () => {
-      cy.navigToApprovalRequestList();
+  context(`Verify document Statusbar items as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+    it(`Check doc status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.arCheckTitleInEditableAndMatches({ name: approvalRequestFormName });
     });
 
-    it("Clear filters", () => {
-      cy.alClearFilters();
+    it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Document ListFM-00002 Rev ARELEASED`,
+        breadcrump: true,
+      });
     });
 
-    it("Filter AR by title as 'Second AR'", () => {
-      cy.alFilterByTitle({ title: "Second AR" });
+    it("Check if 'Change Owner' button exists", () => {
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
 
-    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
-      cy.alFilterByOwner({ owner: USERS[1].name });
+    it("Check if 'Send To Email' button exists", () => {
+      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
+      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
 
-    it("Filter list by STATUS as APPROVED", () => {
-      cy.alFilterByStatus({ status: "APPROVED" });
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
     });
 
-    it("Verify filter by STATUS as APPROVED", () => {
-      cy.alVerifyFilterByStatus({ status: "APPROVED" });
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
+    });
+
+    it(`Verify the statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+    });
+
+    it("Scroll down to the bottom of the page", () => {
+      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").eq(0).scrollIntoView();
+    });
+
+    it(`Verify statusbar conataining RELEASED is still visible`, () => {
+      cy.get("div[data-cy=\"HeaderInfo-status\"]").contains("RELEASED").should("be.visible");
     });
   });
 
-  context("Set time travel to Day 30", () => {
-    it("Navigate to async tasks", () => {
-      cy.navigToAsyncTasks();
-    });
 
-    it("Select task TIME_TRAVEL_COMPANY", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-    });
-
-    it("Select 1 day to time travel", () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 1 });
-    });
-
-    it("On Next Task, SELECT_ALL", () => {
-      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Verify the time travel will appear in History list as 'Requested'", () => {
-      cy.get("tr.k-master-row").should("have.length", 2);
-      cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`).eq(0)
-        .should("contain.text", "TIME_TRAVEL_COMPANY");
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="3"]`).eq(0)
-        .should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
-    });
-
-    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
-      cy.wait(5000);
-      cy.reload();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
-      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
-        .should("contain.text", "COMPLETE");
-    });
-  });
-
-  context("Verify the AR is in auto CLOSED State", () => {
-    it("Navigate to ar list", () => {
-      cy.navigToApprovalRequestList();
-    });
-
-    it("Clear filters", () => {
-      cy.alClearFilters();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Filter AR by title as 'Second AR'", () => {
-      cy.alFilterByTitle({ title: "Second AR" });
-    });
-
-    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
-      cy.alFilterByOwner({ owner: USERS[1].name });
-    });
-
-    it("Filter list by STATUS as CLOSED", () => {
-      cy.alFilterByStatus({ status: "CLOSED" });
-    });
-
-    it("Verify filter by STATUS as CLOSED", () => {
-      cy.alVerifyFilterByStatus({ status: "CLOSED" });
-    });
-  });
 });
 
 export { };
