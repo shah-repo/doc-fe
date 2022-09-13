@@ -1,4 +1,4 @@
-import { isEqual, keys, omit, union, unionWith } from "lodash";
+import { find, isEqual, keys, omit, union, unionWith } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FBMeqState } from "..";
@@ -61,8 +61,8 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
     );
 
     return allItems.map((item) => {
-      const childItem = childItems.find((el) => el.docId === item.docId && el.title === item.title);
-      const parentItem = parentItems.find((el) => el.docId === item.docId && el.title === item.title);
+      const childItem = find(childItems, omit(item, ["quantity", "unit"]));
+      const parentItem = find(parentItems, omit(item, ["quantity", "unit"]));
 
       return {
         ...item,
