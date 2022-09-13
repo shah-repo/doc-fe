@@ -201,12 +201,10 @@ context(testName, () => {
   context(`Verify ${recordName}`, () => {
     it("Verify matrix details", () => {
       cy.drSelectMatrixDetailsTab();
-      cy.get(":nth-child(1) > .MuiIconButton-label > .MuiBox-root > .MuiSvgIcon-root").click();
       cy.get(".MuiTableBody-root")
         .should("contain", "LHRT-")
         .and("contain", "LHRT")
         .and("contain", "LHR Template");
-      cy.get("[data-cy=dialog-close]").click();
     });
   });
 
