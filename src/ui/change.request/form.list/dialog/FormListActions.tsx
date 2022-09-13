@@ -1,18 +1,15 @@
 import { Button, Grid } from "@material-ui/core";
 import React from "react";
-import { useHistory } from "react-router-dom";
 import Text from "../../../components/Text";
 import { DialogHandler } from "../../../hooks/useDialog";
 import { styles } from "../FormList.styles";
 
 interface Props {
   dialog: DialogHandler;
-  chosenTypeId: string;
-  chosenFormId: string;
+  createChangeRequest: () => void;
 }
-const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosenFormId, chosenTypeId }) => {
+const FormListActions: React.FunctionComponent<Props> = ({ dialog, createChangeRequest }) => {
   const classes = styles();
-  const history = useHistory();
 
   return (
     <Grid container spacing={1}>
@@ -35,7 +32,7 @@ const FormListActions: React.FunctionComponent<Props> = ({ dialog, chosenFormId,
           fullWidth
           id="FormList-continueButton"
           data-cy="create.approval.request.continue"
-          onClick={() => history.push(`/change_request/${chosenFormId}/create/${chosenTypeId}`)}
+          onClick={createChangeRequest}
         >
           <Text translation="common.continue" />
         </Button>
