@@ -1,5 +1,6 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
+import { FBMEQItemStatus, FBMEQItemStatusBg, FBMEQItemStatusBorder } from "./FBMaterailEqInfo.types";
 
 export default makeStyles((theme) => ({
   root: {
@@ -129,6 +130,18 @@ export default makeStyles((theme) => ({
     },
   },
 }));
+
+export const useItemStatusStyles = makeStyles((theme) =>
+  Object.keys(FBMEQItemStatus).reduce((styles, key) => ({
+    ...styles,
+    [FBMEQItemStatus[key]]: {
+      backgroundColor: FBMEQItemStatusBg[FBMEQItemStatus[key]],
+      borderColor: FBMEQItemStatusBorder[FBMEQItemStatus[key]],
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+    },
+  }), {})
+);
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({

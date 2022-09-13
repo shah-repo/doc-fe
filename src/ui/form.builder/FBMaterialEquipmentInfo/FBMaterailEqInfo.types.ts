@@ -1,4 +1,26 @@
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import Colors from "../../layout/theme/utils/colors";
+
+export enum FBMEQItemStatus {
+  Removed = "removed",
+  Added = "added",
+  Updated = "updated",
+  None = "none"
+}
+
+export const FBMEQItemStatusBorder: Record<FBMEQItemStatus, string> = {
+  [FBMEQItemStatus.Removed]: Colors.opal_red,
+  [FBMEQItemStatus.Added]: Colors.light_green,
+  [FBMEQItemStatus.Updated]: Colors.gray,
+  [FBMEQItemStatus.None]: Colors.medium_blue,
+};
+
+export const FBMEQItemStatusBg: Record<FBMEQItemStatus, string> = {
+  [FBMEQItemStatus.Removed]: Colors.medium_red,
+  [FBMEQItemStatus.Added]: Colors.pale_green,
+  [FBMEQItemStatus.Updated]: Colors.platinum_gray,
+  [FBMEQItemStatus.None]: Colors.light_blue,
+};
 
 export interface LotItem {
   lotId: string;

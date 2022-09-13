@@ -1,4 +1,5 @@
 import { Box, Button, Chip, CircularProgress, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, FormControlLabel, Grid, List, ListItem, ListItemText, MenuItem, MenuList, Switch } from "@material-ui/core";
+import cx from "classnames";
 import { remove } from "lodash";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
@@ -6,14 +7,14 @@ import { SMText } from "../../../App";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/tabExpand.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { Equipment, LotItem, Material, MaterialEqProps } from "./FBMaterailEqInfo.types";
-import useStyles from "./FBMaterialEqInfo.styles";
+import useStyles, { useItemStatusStyles } from "./FBMaterialEqInfo.styles";
 
 const DATE_FORMAT = MomentFormats.BriefDate;
 
 const MaterialItem = ({ item, classes }: { item: Material; classes: ReturnType<typeof useStyles>}) => (
   <>
     <ListItemText>
-      {item.docId} - {item.title} | {item.unit} : {item.quantity}
+      {item.docId && `${item.docId} -`} {item.title} | {item.unit} : {item.quantity}
     </ListItemText>
     <ListItemText>
       {item.lots && item.lots.map((lot: LotItem) => (
@@ -21,7 +22,7 @@ const MaterialItem = ({ item, classes }: { item: Material; classes: ReturnType<t
           className={classes.chip}
           key={lot.lotId}
           size="small"
-          label={`Lot ${lot.lotId || ""} | ${lot.partId || "N/A"} | ${lot.quantity || ""} ${lot.unit || ""}`}
+          label={`Lot ${lot.lotId ?? ""} | ${lot.partId ?? "N/A"} | ${lot.quantity ?? ""} ${lot.unit ?? ""}`}
         />
       ))}
     </ListItemText>
@@ -34,7 +35,7 @@ const EquipmentItem = ({ item, classes }: { item: Equipment; classes: ReturnType
   return (
     <>
       <ListItemText>
-        {item.docId} - {item.title}
+        {item.docId && `${item.docId} -`} {item.title}
       </ListItemText>
       <ListItemText>
         {item.nextCalibration && (
@@ -64,6 +65,7 @@ const EquipmentItem = ({ item, classes }: { item: Equipment; classes: ReturnType
 
 const Panel = ({ panel, data, expanded, togglePanel, loading, classes }) => {
   const PanelItem = panel.item;
+  const itemClasses = useItemStatusStyles();
 
   return (
     <Box key={panel.dataKey} className={classes.panel}>
@@ -94,7 +96,13 @@ const Panel = ({ panel, data, expanded, togglePanel, loading, classes }) => {
         <ExpansionPanelDetails className={classes.panelDetails}>
           <List className={classes.panelDetailsList}>
             {data.map((item: Material | Equipment, pos: number) => (
-              <ListItem key={item.docId} divider={pos < data.length - 1} className={classes.panelDetailsListItem}>
+              <ListItem
+                key={item.docId}
+                divider={pos < data.length - 1}
+                className={cx(classes.panelDetailsListItem, {
+                  [itemClasses[item.status ?? ""]]: item.status,
+                })}
+              >
                 <PanelItem item={item} classes={classes} />
               </ListItem>
             ))}
@@ -121,6 +129,7 @@ const panels = [
 const FBMaterialEqInfoPresenterNext: React.FC<MaterialEqProps> = ({
   materialData,
   showDiff,
+  includeDiff,
   handleShowDiffChange,
   loading,
 }) => {
@@ -138,25 +147,27 @@ const FBMaterialEqInfoPresenterNext: React.FC<MaterialEqProps> = ({
 
   return (
     <Box className={classes.root}>
-      <Box className={classes.diffSwitch}>
-        <FormControlLabel
-          className={classes.switchLabel}
-          control={
-            <Switch
-              classes={{
-                root: classes.switchRoot,
-                switchBase: classes.switchBase,
-                thumb: classes.switchThumb,
-                track: classes.switchTrack,
-                checked: classes.switchChecked,
-              }}
-              checked={showDiff}
-              onChange={(e, checked) => handleShowDiffChange(checked)}
-            />
-          }
-          label={<SMText label="form.builder.prev.build.changes" boxProps={{ className: classes.switchLabel }} />}
-        />
-      </Box>
+      {includeDiff && (
+        <Box className={classes.diffSwitch}>
+          <FormControlLabel
+            className={classes.switchLabel}
+            control={
+              <Switch
+                classes={{
+                  root: classes.switchRoot,
+                  switchBase: classes.switchBase,
+                  thumb: classes.switchThumb,
+                  track: classes.switchTrack,
+                  checked: classes.switchChecked,
+                }}
+                checked={showDiff}
+                onChange={(e, checked) => handleShowDiffChange(checked)}
+              />
+            }
+            label={<SMText label="form.builder.prev.build.changes" boxProps={{ className: classes.switchLabel }} />}
+          />
+        </Box>
+      )}
       <Grid container spacing={3}>
         <Grid item xs={9}>
           <Box mb={1}>
