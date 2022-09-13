@@ -378,7 +378,7 @@ context("Mpi Layout", () => {
 
 
         it("Upload attachment 'video.mp4'", () => {
-          cy.get("[data-cy='albumMediaButton']").arrowClick();
+          cy.get("[data-cy='albumMediaButton']").arrowClick({ force: true });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
             cy.pmUploadAttachment({ fileName: "video.mp4" });
           });
