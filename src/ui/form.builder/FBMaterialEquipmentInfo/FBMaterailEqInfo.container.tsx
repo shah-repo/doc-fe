@@ -42,13 +42,14 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
   ): FBMEQItemStatus => {
     if (isEqual(childItem, parentItem)) {
       return FBMEQItemStatus.None;
-    } else if (childItem && parentItem) {
-      return FBMEQItemStatus.Updated;
-    } else if (childItem) {
-      return FBMEQItemStatus.Added;
-    } else {
-      return FBMEQItemStatus.Removed;
     }
+    if (childItem && parentItem) {
+      return FBMEQItemStatus.Updated;
+    }
+    if (childItem) {
+      return FBMEQItemStatus.Added;
+    }
+    return FBMEQItemStatus.Removed;
   };
 
   const calculateSectionDiff = <K extends (Material | Equipment)[]>(childItems: K, parentItems: K): K => {
