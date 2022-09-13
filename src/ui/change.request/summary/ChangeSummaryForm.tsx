@@ -15,6 +15,7 @@ import { FBWorkspaceMode } from "../../form.builder/types/workspace";
 import Colors from "../../layout/theme/utils/colors";
 import ChangeRequestSidebar from "../form/ChangeRequest.sidebar";
 import { toChangeRequestFormValues } from "../form/transform";
+import Approvers from "./approvers";
 import ChangeSummaryFormHeader from "./ChangeSummaryFormHeader";
 import SummaryHeader from "./SummaryHeader";
 
@@ -140,6 +141,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       return (
                         <SMBox key={index} {...{ py: 2 }}>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
+                            <>
                               <FBWorkspace
                                 isPortal={false}
                                 initialValues={cloneDeep(changeRequest?.formInput)}
@@ -149,6 +151,9 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 schema={schema}
                                 mode={mode}
                               />
+                              <Approvers dataProp={changeRequest.approvals}/>
+                            </>
+
                           }
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
                             _formState?.mode !== FBWorkspaceModeOptions.NONE &&
