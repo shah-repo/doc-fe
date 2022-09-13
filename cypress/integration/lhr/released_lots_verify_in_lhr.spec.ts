@@ -1,5 +1,5 @@
-// / <reference types="Cypress" />
-
+// eslint-disable-next-line spaced-comment
+/// <reference types="Cypress" />
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
@@ -656,6 +656,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it(`Select '${CSPartDocumentTitle}'  Part `, () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"lot_part\"]").focus().arrowType(CSPartDocumentTitle);
       cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
     });
@@ -821,18 +822,19 @@ context("Released_lots_verify_in_lhr", () => {
 
         it("Select MPI document for step #1 in LHRt", () => {
           cy.wait(2000);
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+            $el.trigger("click");
+          });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
       });
 
       context("Release LHRt", () => {
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
         it("Approve and release LHRt document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
@@ -842,6 +844,7 @@ context("Released_lots_verify_in_lhr", () => {
 
   context("Create LHR", () => {
     it("Click create new document from LHRt", () => {
+      cy.wait(1000);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.GetAutocompleteOptions], () => {
@@ -935,7 +938,7 @@ context("Released_lots_verify_in_lhr", () => {
         () => {
           cy.listLoadingElementShouldNotExist();
           cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
-            .autocompleteSelect(USERS[1].email);
+            .autocompleteSelect(USERS[1].name);
         });
     });
 
@@ -1066,7 +1069,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Select approvals", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       cy.unClick();
     });
 
@@ -1166,7 +1169,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Select approvals", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       cy.unClick();
     });
 

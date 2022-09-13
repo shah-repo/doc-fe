@@ -557,7 +557,7 @@ context("Unreleased LOT in LHR", () => {
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
+        cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
           cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         });
@@ -573,14 +573,22 @@ context("Unreleased LOT in LHR", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          cy.wait(2000);
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
+            $el.trigger("click");
+          });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
+          cy.wait(1000);
         });
 
         it("Save LHRT document", () => {
           cy.get("[data-cy=DocumentRevisionForm-submit] > .MuiButton-label").arrowClick();
+          cy.wait(1000);
         });
       });
 
@@ -593,6 +601,7 @@ context("Unreleased LOT in LHR", () => {
             () => {
               cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
             });
+          cy.wait(1000);
         });
       });
     });
