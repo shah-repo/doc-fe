@@ -91,7 +91,7 @@ const Panel: React.FC<PanelProps> = ({ panel, data, expanded, loading, classes, 
               boxProps={{ className: classes.panelSummaryCount }}
             />
           )}
-          {loading && <CircularProgress size={12} />}
+          {loading && <CircularProgress size={14} />}
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.panelDetails}>
           <List className={classes.panelDetailsList}>
