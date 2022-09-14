@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import React, { useMemo } from "react";
+import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { DocumentRevision, FBOutputDocumentType, RevisionChangeType } from "../../state/ducks/documentRevisions/types";
+import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
+import { DocumentRevision, RevisionChangeType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
@@ -29,17 +29,11 @@ interface StateProps {
   proposedDocId: string;
 }
 
-interface RouteParams {
-  docRevId: string;
-  pmFormId: string;
-  equipmentSection: string;
-}
-
 type DocumentRevisionCreateContainerProps =
   & StateProps
   & OwnProps
   & DispatchProps
-  & RouteComponentProps<RouteParams>;
+  & RouteComponentProps;
 
 const mapStateToProps = (state: ApplicationState): StateProps => ({
   proposedDocId: documentsSelectors.getProposedDocId(state),
@@ -72,14 +66,8 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   proposedDocId,
   loadDocument,
   isNewVersion,
-  match,
 }) => {
-  const dispatch = useDispatch();
-  const { pmFormId } = match.params;
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
-  const isCreateMaintenance = match.path.includes("create_maintenance");
-  const pmForm = useSelector((state: ApplicationState) =>
-    documentRevisionsSelectors.getDocumentRevision(state, pmFormId || ""));
 
   const initialValues = useMemo(() => {
     if (type === "newVersion") {
@@ -95,38 +83,6 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentRevision?.id, type, history.location.state]);
   type = history.location.state ?? false ? "newOutput" : type;
-
-  useEffect(() => {
-    if (!isCreateMaintenance) {
-      return;
-    }
-    dispatch(documentRevisionsActions.load(pmFormId));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCreateMaintenance]);
-
-  if (isCreateMaintenance) {
-    const { docRevId, equipmentSection } = match.params;
-    const pmFormOutput = pmForm?.formTemplate?.outputDocumentTypes;
-    // REQ: It only has to be populated if there is one output type
-    if (pmFormOutput?.length === 1) {
-      initialValues.document = {
-        ...initialValues.document,
-        documentType: pmFormOutput[0] as FBOutputDocumentType,
-      };
-    }
-    initialValues.parentEquipment = {
-      id: docRevId,
-    };
-    initialValues.equipmentSection = equipmentSection;
-    initialValues.formTemplate = undefined;
-    initialValues.formInput = {
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      equipment_id: docRevId,
-    };
-    initialValues.formDocument = {
-      ...pmForm,
-    };
-  }
 
   const async = useAsync<DocumentRevision>({
     onSuccess: (createdDocumentRevision?) => {
@@ -160,8 +116,6 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
         proposedDocId,
         type,
         isNewVersion,
-        pmFormId,
-        pmForm,
       }}
     />
   );

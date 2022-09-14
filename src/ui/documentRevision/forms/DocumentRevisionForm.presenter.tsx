@@ -34,9 +34,7 @@ import RevisionStage from "./presenters/RevisionStage";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
 
-interface Props
-  extends FormikProps<DocumentRevisionFormValues>
-{
+interface Props extends FormikProps<DocumentRevisionFormValues> {
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
   showRevisionTypeChange?: boolean;
@@ -46,7 +44,6 @@ interface Props
   canChangeOwnerShip: boolean;
   type?: DocumentCloneType;
   showAdministrativeAndVoidChange: boolean;
-  pmFormId?: string;
   releasedDocRev?: DocumentRevision;
   redlineActive: boolean;
   mode: FBWorkspaceMode;
@@ -71,7 +68,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setFieldValue,
   type,
   showAdministrativeAndVoidChange,
-  pmFormId,
   releasedDocRev,
   redlineActive,
   mode,
@@ -121,9 +117,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const documentTypeId = values.document?.documentType?.id || "";
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
-  const outputDocumentTypes = pmFormId ?
-    initialValues.outputDocumentTypes :
-    initialValues.formDocument?.formTemplate?.outputDocumentTypes;
+  const outputDocumentTypes = initialValues.formDocument?.formTemplate?.outputDocumentTypes;
   const { isVisible } = useDocumentTypeSelect(documentTypeId);
   const isDocIdVisible = useDocId(documentTypeId).isVisible;
   const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
