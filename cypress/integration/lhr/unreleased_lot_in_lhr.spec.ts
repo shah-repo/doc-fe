@@ -657,8 +657,8 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #${currentDate}01`)
-        .contains(`LOT #${currentDate}01`).should("not.exist");
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").should("not.contain.value", `LOT #${currentDate}01`);
     });
 
     it("Lot dialog should close", () => {
@@ -677,7 +677,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click on LOT", () => {
-      cy.get("[data-grid-col-index=\"0\"]").arrowClick();
+      cy.get("[data-grid-col-index=\"0\"]").arrowClick({ force: true });
     });
 
     it("Add an Approval", () => {
@@ -686,7 +686,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click on approve and submit", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true }).wait(1000);
     });
 
     it("Click on approve", () => {
@@ -744,8 +744,9 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]")
-        .autocompleteSelect(`LOT #${currentDate}01`);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").arrowType(`LOT #${currentDate}01`);
+      cy.get("ul>li[role=option]").contains(`LOT #${currentDate}01`).arrowClick();
       cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}01 | `);
     });
 

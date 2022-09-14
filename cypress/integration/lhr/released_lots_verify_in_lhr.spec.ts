@@ -592,10 +592,11 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromFormRecord();
-      cy.wait(2000);
     });
 
     it("Enter title", () => {
+      cy.wait(3000);
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"field-name\"]").should("exist");
       cy.get("[data-cy=\"field-name\"]").arrowClick({ force: true }).wait(1000);
       cy.get("[data-cy=\"field-name\"]").arrowType("CSL with part selection");
@@ -632,15 +633,15 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Open CSL form", () => {
       cy.drClickOnSpecificDocFromList({ item: FORMNAME });
-      cy.wait(2000);
     });
 
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromFormRecord();
-      cy.wait(2000);
     });
 
     it("Enter title", () => {
+      cy.wait(3000);
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"field-name\"]").should("exist");
       cy.get("[data-cy=\"field-name\"]").arrowClick({ force: true }).wait(1000);
       cy.get("[data-cy=\"field-name\"]").arrowType("CSL2 with part selection");
@@ -685,7 +686,6 @@ context("Released_lots_verify_in_lhr", () => {
         });
 
         it("Finalize and release button click'", () => {
-          cy.wait(2000);
           cy.recFinalizeAndReleaseRecord();
         });
 
@@ -900,14 +900,15 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]")
-        .autocompleteSelect(`LOT #${currentDate}02`);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").arrowType(`LOT #${currentDate}02`);
+      cy.get("ul>li[role=option]").contains(`LOT #${currentDate}02`).arrowClick();
       cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}02 | `);
     });
 
     it(`LOT #${currentDate}01 should not be present`, () => {
-      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}01`)
-        .contains(`LOT #${currentDate}01`).should("not.exist");
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").clear().should("not.contain.value", `LOT #${currentDate}01`);
     });
 
     it("Lot dialog should close", () => {
@@ -926,10 +927,12 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on LOT", () => {
-      cy.get("[data-grid-col-index=\"0\"]").arrowClick();
+      cy.wait(1000);
+      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Click on DETAILS", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
     });
 
@@ -1007,14 +1010,16 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]")
-        .autocompleteSelect(`LOT #${currentDate}02`);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").clear().arrowType(`LOT #${currentDate}02`);
+      cy.get("ul>li[role=option]").contains(`LOT #${currentDate}02`).arrowClick();
       cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}02 | `);
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]").clear()
-        .autocompleteSelect(`LOT #${currentDate}01`);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").clear().arrowType(`LOT #${currentDate}01`);
+      cy.get("ul>li[role=option]").contains(`LOT #${currentDate}01`).arrowClick();
       cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}01 | `);
     });
 
@@ -1034,7 +1039,8 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on LOT", () => {
-      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick();
+      cy.wait(1000);
+      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Revise document", () => {
@@ -1057,7 +1063,8 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on LOT", () => {
-      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick();
+      cy.wait(1000);
+      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Revise document", () => {
@@ -1065,6 +1072,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on Details", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
     });
 
@@ -1078,6 +1086,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on Details", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").should("exist");
       cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
     });
@@ -1137,12 +1146,15 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it(`LOT #${currentDate}02 should be present`, () => {
-      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}02`);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").arrowType(`LOT #${currentDate}02`);
+      cy.get("ul>li[role=option]").contains(`LOT #${currentDate}02`).arrowClick();
+      cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}02 | `);
     });
 
     it(`LOT #${currentDate}01 should not be present`, () => {
-      cy.get("[data-cy=\"usedOverride\"]").clear().autocompleteSelect(`LOT #${currentDate}01`)
-        .contains(`LOT #${currentDate}01`).should("not.exist");
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").should("not.contain.value", `LOT #${currentDate}01`);
     });
 
     it("Lot dialog should close", () => {
@@ -1161,10 +1173,12 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on LOT", () => {
-      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick();
+      cy.wait(1000);
+      cy.get("[data-grid-col-index=\"0\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Click on Details", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
     });
 
@@ -1178,6 +1192,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on Details", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").should("exist");
       cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
     });
@@ -1237,14 +1252,16 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]")
-        .autocompleteSelect(`LOT #${currentDate}02`);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").clear().arrowType(`LOT #${currentDate}02`);
+      cy.get("ul>li[role=option]").contains(`LOT #${currentDate}02`).arrowClick();
       cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}02 | `);
     });
 
     it("Select Lot", () => {
-      cy.get("[data-cy=\"usedOverride\"]").clear()
-        .autocompleteSelect(`LOT #${currentDate}01`);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"usedOverride\"]").clear().arrowType(`LOT #${currentDate}01`);
+      cy.get("ul>li[role=option]").contains(`LOT #${currentDate}01`).arrowClick();
       cy.get("[data-cy=\"usedOverride\"]").should("contain.value", `LOT #${currentDate}01 | `);
     });
 
