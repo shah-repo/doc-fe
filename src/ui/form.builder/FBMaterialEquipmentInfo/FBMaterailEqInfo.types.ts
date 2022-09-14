@@ -56,16 +56,11 @@ type MaterialEqClasses = ReturnType<typeof useStyles>;
 export interface PanelData {
   dataKey: string;
   title: string;
-  itemComponent: React.ComponentType<MaterialItemProps> | React.ComponentType<EquipmentItemProps>;
+  itemComponent: React.ComponentType<ItemProps<Material>> | React.ComponentType<ItemProps<Equipment>>;
 }
 
-export interface MaterialItemProps {
-  item: Material;
-  classes: MaterialEqClasses;
-}
-
-export interface EquipmentItemProps {
-  item: Equipment;
+export interface ItemProps<T> {
+  item: T;
   classes: MaterialEqClasses;
 }
 

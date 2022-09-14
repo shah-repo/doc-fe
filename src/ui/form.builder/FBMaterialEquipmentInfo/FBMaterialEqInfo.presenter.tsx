@@ -6,12 +6,12 @@ import { useIntl } from "react-intl";
 import { SMText } from "../../../App";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/tabExpand.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { EquipmentItemProps, LotItem, MaterialEqProps, MaterialItemProps, PanelData, PanelProps } from "./FBMaterailEqInfo.types";
+import { Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from "./FBMaterailEqInfo.types";
 import useStyles, { useItemStatusStyles } from "./FBMaterialEqInfo.styles";
 
 const DATE_FORMAT = MomentFormats.BriefDate;
 
-const MaterialItem: React.FC<MaterialItemProps> = ({ item, classes }) => (
+const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (
   <>
     <ListItemText>
       {item.docId && `${item.docId} -`} {item.title} | {item.unit} : {item.quantity}
@@ -29,7 +29,7 @@ const MaterialItem: React.FC<MaterialItemProps> = ({ item, classes }) => (
   </>
 );
 
-const EquipmentItem: React.FC<EquipmentItemProps> = ({ item, classes }) => {
+const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
   const intl = useIntl();
 
   return (
