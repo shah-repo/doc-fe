@@ -12,7 +12,6 @@ import {
   FBEBPartState,
   FBEditorCustomControlState,
   FBEditorState,
-  FBEQMaintenanceHistoryState,
   FBEQMaintenanceState,
   FBFieldWrapperState,
   FBFilePresenterState,
@@ -79,7 +78,6 @@ export interface FBProviderProps {
   procedureDiffState?: FBProcedureDiffState;
   partsState?: FBPartsState;
   eqMaintenanceState?: FBEQMaintenanceState;
-  eqMaintenanceHistoryState?: FBEQMaintenanceHistoryState;
   ebPartState?: FBEBPartState;
   textFieldWithRangeState?: FBTextFieldWithRangeState;
   filesPresenterState?: FBFilesPresenterState;
