@@ -300,7 +300,6 @@ context("Document Field Owners Test", () => {
 
     it("Add Approver on document", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
-      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Submit for Approval", () => {
