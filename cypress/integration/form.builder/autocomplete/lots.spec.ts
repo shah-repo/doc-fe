@@ -810,7 +810,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
