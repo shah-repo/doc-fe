@@ -37,8 +37,8 @@ const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProp
   }, [showDiff, meqState, inView, documentRevision]);
 
   const getItemStatus = (
-    childItem: GenericItem | undefined,
-    parentItem: GenericItem | undefined
+    childItem?: GenericItem,
+    parentItem?: GenericItem
   ): FBMEQItemStatus => {
     if (isEqual(childItem, parentItem)) {
       return FBMEQItemStatus.None;

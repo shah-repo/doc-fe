@@ -21,14 +21,14 @@ export interface GenericItem {
   status?: FBMEQItemStatus;
 }
 
-interface Material extends GenericItem {
+export interface Material extends GenericItem {
   revision: string;
   quantity: number;
   unit: string;
   lots: LotItem[];
 }
 
-interface Equipment extends GenericItem {
+export interface Equipment extends GenericItem {
   nextCalibration: Date;
   nextPm: Date;
 }
@@ -71,7 +71,7 @@ export interface EquipmentItemProps {
 
 export interface PanelProps {
   panel: PanelData;
-  data: Material[] | Equipment[];
+  data: (Material & Equipment)[];
   expanded: boolean;
   loading?: boolean;
   classes: MaterialEqClasses;

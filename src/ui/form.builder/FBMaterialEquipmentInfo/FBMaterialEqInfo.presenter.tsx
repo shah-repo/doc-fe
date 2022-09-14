@@ -95,7 +95,7 @@ const Panel: React.FC<PanelProps> = ({ panel, data, expanded, loading, classes, 
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.panelDetails}>
           <List className={classes.panelDetailsList}>
-            {data.map((item, pos: number) => (
+            {data.map((item, pos) => (
               <ListItem
                 key={`${item.docId}-${item.title}`}
                 divider={pos < data.length - 1}
