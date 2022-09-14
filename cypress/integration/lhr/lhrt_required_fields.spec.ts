@@ -474,7 +474,7 @@ context("LHRt required fields test", () => {
 
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.drCloseApproveAndReleaseDialog();
-      cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
+      cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       });
