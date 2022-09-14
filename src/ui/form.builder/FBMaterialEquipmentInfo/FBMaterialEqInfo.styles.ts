@@ -22,8 +22,6 @@ export const useItemStatusStyles = makeStyles((theme) =>
     [FBMEQItemStatus[key]]: {
       backgroundColor: FBMEQItemStatusBg[FBMEQItemStatus[key]],
       borderColor: FBMEQItemStatusBorder[FBMEQItemStatus[key]],
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
     },
   }), {})
 );
@@ -70,7 +68,7 @@ export default makeStyles((theme) => ({
     fontSize: 13,
   },
   panelDetails: {
-    padding: theme.spacing(0, 2, .5, 6),
+    padding: theme.spacing(0, 2, .5, 5),
     margin: theme.spacing(-2, 0, 0),
   },
   panelDetailsList: {
@@ -84,7 +82,7 @@ export default makeStyles((theme) => ({
     lineHeight: 1.25,
   },
   panelDetailsListItem: {
-    padding: theme.spacing(.75, 0),
+    padding: theme.spacing(.75, 1),
     display: "block",
   },
   diffSwitch: {
