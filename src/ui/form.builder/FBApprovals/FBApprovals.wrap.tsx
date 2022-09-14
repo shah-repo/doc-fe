@@ -179,8 +179,9 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         const deletedApproverIndex = findIndex(document?.approvals, (a) =>
           a.approverId === approver && a.status === ChangeRequestStatus.Draft as string);
         const approval = find(approvalsState?.getApprovals, (a) => a.approver?.id === approver);
-        document?.approvals && document.approvals[deletedApproverIndex] &&
-         (document.approvals[deletedApproverIndex].status = ApprovalStatus.Abandoned);
+        if (document?.approvals?.[deletedApproverIndex]) {
+          document.approvals[deletedApproverIndex].status = ApprovalStatus.Abandoned;
+        }
         approvalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
           const id  = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
