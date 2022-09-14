@@ -1,5 +1,5 @@
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBPartsSelectionProps } from "..";
+import { DocRevOption, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBPartsSelectionProps } from "..";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { withFBPartsSelection } from "./FBPartsSelection.wrap";
 
@@ -17,8 +17,8 @@ const FBPartsSelection: React.FunctionComponent<FBPartsSelectionProps> = ({
   if (urlValues) {
     const hasDataForOptionId = Boolean(FBAutocompleteAsyncStore.data.get(optionId));
     if (hasDataForOptionId) {
-      const existingOptions = Array.from(FBAutocompleteAsyncStore.data.get(optionId).values());
-      const hasDataForUrlValue = existingOptions.filter((option: any) => option.id === lhrSelectedPartValue);
+      const existingOptions: DocRevOption[] = Array.from(FBAutocompleteAsyncStore.data.get(optionId).values());
+      const hasDataForUrlValue = existingOptions.filter((option: DocRevOption) => option.id === lhrSelectedPartValue);
       // length 0 implies that data exists but is stale, hence reset
       if (hasDataForUrlValue.length === 0) {
         FBAutocompleteAsyncStore.reset(optionId);
