@@ -6,6 +6,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
@@ -440,7 +441,9 @@ context("po withdraw submission", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      });
     });
 
     it("Verify Requestor", () => {
@@ -478,6 +481,8 @@ context("po withdraw submission", () => {
 
     it("Add an Approval", () => {
       cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
@@ -491,7 +496,9 @@ context("po withdraw submission", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      });
     });
 
     it("Verify Requestor", () => {
