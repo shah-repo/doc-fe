@@ -38,10 +38,6 @@ declare global {
   }
 }
 
-Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
-  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
-});
-
 Cypress.Commands.add("verifyStatusbarPosition", (params: { position: string}) => {
   cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "position", params.position);
 });
