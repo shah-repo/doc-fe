@@ -775,7 +775,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Verify header is fixed when page scroll", () => {
-        cy.get(".hide-scroll").scrollTo("bottom");
+        cy.get("#SMBodyTmpl").scrollTo("bottom", { ensureScrollable: false });
         cy.get("header").should("be.visible");
       });
     });
@@ -856,7 +856,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Verify header is fixed when page scroll", () => {
-          cy.get(".hide-scroll").scrollTo("bottom");
+          cy.get(".hide-scroll>div>div>div").scrollTo("bottom");
           cy.get("header").should("be.visible");
         });
       });
@@ -902,7 +902,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Verify header is fixed when page scroll", () => {
-      cy.get(".hide-scroll").scrollTo("bottom");
+      cy.get(".hide-scroll>div>div>div").scrollTo("bottom");
       cy.get("header").should("be.visible");
     });
   });
@@ -977,7 +977,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Verify header is fixed when page scroll", () => {
-        cy.get(".hide-scroll").scrollTo("bottom");
+        cy.get(".hide-scroll>div>div>div").scrollTo("bottom");
         cy.get("header").should("be.visible");
       });
     });
@@ -1055,7 +1055,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Verify header is fixed when page scroll", () => {
-        cy.get(".hide-scroll").scrollTo("bottom");
+        cy.get(".hide-scroll>div>div>div").scrollTo("bottom", { ensureScrollable: false });
         cy.get("header").should("be.visible");
       });
     });
