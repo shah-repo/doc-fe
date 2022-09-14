@@ -270,9 +270,9 @@ context("Approval request form layout verification", () => {
     });
 
     it("Choose newly AR Form template", () => {
-      cy.get("div[data-cy=\"field-select-form\"]>#FormList-selectForm").arrowClick();
+      cy.get("div[data-cy='field-select-form']>#FormList-selectForm").arrowClick();
       cy.get("div[id^=react-select]").contains(approvalRequestFormName).arrowClick();
-      cy.get("[data-cy=\"create.approval.request.continue\"]").arrowClick();
+      cy.get("[data-cy='create.approval.request.continue']").arrowClick();
     });
 
     it("Enter title AR title: " + approvalRequestTitle, () => {
@@ -280,7 +280,7 @@ context("Approval request form layout verification", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.get("[data-cy=\"description\"]").first().arrowClick({ force: true }).wait(1000);
+      cy.get("[data-cy='description']").first().arrowClick({ force: true }).wait(1000);
       cy.get(`[data-cy="description"] [contenteditable]`).first().clear().arrowType("AR form description");
     });
 
@@ -306,7 +306,7 @@ context("Approval request form layout verification", () => {
 
       context("Verify Document tab`", () => {
         it("Navigate to document tab", () => {
-          cy.get("[data-cy=\"tabId.documents\"]").arrowClick({ force: true });
+          cy.get("[data-cy='tabId.documents']").arrowClick({ force: true });
         });
 
         it("Verify add document", () => {

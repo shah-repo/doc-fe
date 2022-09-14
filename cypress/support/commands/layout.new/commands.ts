@@ -248,9 +248,9 @@ Cypress.Commands.add("verifyTitleIsHighlightedonHover", () => {
 });
 
 Cypress.Commands.add("verifyDescriptionIsHighlightedonHover", () => {
-  cy.get("[data-cy='description']").trigger("mouseover");
+  cy.get("[data-cy='description']").eq(0).trigger("mouseover");
   cy.get("[data-cy='description']>div").should("have.css", "background-color", "rgb(235, 237, 242)");
-  cy.get("[data-cy='description']").trigger("mouseout");
+  cy.get("[data-cy='description']").eq(0).trigger("mouseout");
 });
 
 Cypress.Commands.add("verifyTitleNotHighlightedonHover", () => {
@@ -260,9 +260,9 @@ Cypress.Commands.add("verifyTitleNotHighlightedonHover", () => {
 });
 
 Cypress.Commands.add("verifyDescriptionNotHighlightedonHover", () => {
-  cy.get("[data-cy='description']").trigger("mouseover");
+  cy.get("[data-cy='description']").eq(0).trigger("mouseover");
   cy.get("[data-cy='description']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
-  cy.get("[data-cy='description']").trigger("mouseout");
+  cy.get("[data-cy='description']>div").eq(0).trigger("mouseout");
 });
 
 
