@@ -477,7 +477,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.get("[data-cy=\"description\"]").last().click()
+      cy.get("[data-cy=\"description\"]").last().click();
       cy.get("[data-cy=\"description\"]").last().arrowType("LHRT AR").wait(2000);
       cy.unClick();
     });
