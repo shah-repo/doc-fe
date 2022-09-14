@@ -150,19 +150,19 @@ isContext("Test for banner test in demo", () => {
     });
 
     it(`Enters company name '${newCompanyName1}'`, () => {
-      cy.get("[name^=company-name-]").arrowType(newCompanyName1);
+      cy.get("[name^=company-name-]").focus().arrowType(newCompanyName1);
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr1}'`, () => {
-      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr1);
+      cy.get("[name^=company-abbreviation-]").focus().arrowType(newCompanyAbbr1);
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
+      cy.get("[name^=company-admin-email-]").focus().arrowType(USERS[1].email);
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
-      cy.get("[name*=\"approved-dam-json-is-used-\"]").check("Yes");
+      cy.get("[name*=\"approved-dam-json-is-used-\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Upload DOM JSON", () => {
@@ -170,7 +170,7 @@ isContext("Test for banner test in demo", () => {
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-      cy.get("[name*=\"approved-page-details-json-is-used-\"]").check("Yes");
+      cy.get("[name*=\"approved-page-details-json-is-used-\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Upload Page Details JSON", () => {
@@ -178,7 +178,7 @@ isContext("Test for banner test in demo", () => {
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-      cy.get("[name*=\"approved-navigation-json-is-used-\"]").check("Yes");
+      cy.get("[name*=\"approved-navigation-json-is-used-\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Upload Navigation JSON", () => {
@@ -190,7 +190,7 @@ isContext("Test for banner test in demo", () => {
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
+      cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick({ force: true });
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 
@@ -229,19 +229,19 @@ isContext("Test for banner test in demo", () => {
     });
 
     it(`Enters company name '${newCompanyName2}'`, () => {
-      cy.get("[name^=company-name-]").arrowType(newCompanyName2);
+      cy.get("[name^=company-name-]").focus().arrowType(newCompanyName2);
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr1}'`, () => {
-      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr2);
+      cy.get("[name^=company-abbreviation-]").focus().arrowType(newCompanyAbbr2);
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
+      cy.get("[name^=company-admin-email-]").focus().arrowType(USERS[1].email);
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
-      cy.get("[name*=\"approved-dam-json-is-used-\"]").check("Yes");
+      cy.get("[name*=\"approved-dam-json-is-used-\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Upload DOM JSON", () => {
@@ -249,7 +249,7 @@ isContext("Test for banner test in demo", () => {
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-      cy.get("[name*=\"approved-page-details-json-is-used-\"]").check("Yes");
+      cy.get("[name*=\"approved-page-details-json-is-used-\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Upload Page Details JSON", () => {
@@ -257,7 +257,7 @@ isContext("Test for banner test in demo", () => {
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-      cy.get("[name*=\"approved-navigation-json-is-used-\"]").check("Yes");
+      cy.get("[name*=\"approved-navigation-json-is-used-\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Upload Navigation JSON", () => {
