@@ -31,16 +31,11 @@ declare global {
       verifyReferencesTabAsActive(): Chainable;
       openRevisionsTabAndVerifyCurrentRevision(rev: string): Chainable;
       verifyStatusbarBgcolor(params: {bcolor: string}): Chainable;
-      verifyStatusbarPosition(params: {position: string}): Chainable;
       verifyLastSavedExists(): Chainable;
       verifyLastSavedNotExists(): Chainable;
     }
   }
 }
-
-Cypress.Commands.add("verifyStatusbarPosition", (params: { position: string}) => {
-  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "position", params.position);
-});
 
 Cypress.Commands.add("verifyTitleDescriptionFields", () => {
   cy.get("[data-cy=\"field-name\"]").should("exist");
