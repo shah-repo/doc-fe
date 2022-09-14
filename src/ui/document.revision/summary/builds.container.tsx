@@ -1,4 +1,4 @@
-import { BoxProps } from "@material-ui/core";
+import { BoxProps, Grid } from "@material-ui/core";
 import React from "react";
 import { DataProps } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -38,7 +38,9 @@ const BuildsContainer: React.FunctionComponent<Props> = ({
     async.start(removeAction, docRevId, async);
   };
   return (
-    <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, showRemoveButton, labelProps, labelFont }}/>
+    <Grid xs={12}>
+      <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, showRemoveButton, labelProps, labelFont }}/>
+    </Grid>
   );
 };
 

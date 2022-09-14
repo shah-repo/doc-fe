@@ -1,42 +1,40 @@
 import { Box } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
 import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps, FBProvider } from "..";
-import Colors from "../../layout/theme/utils/colors";
+import useStyles from "./FBFieldWrapper.styles";
 import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
 const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   fieldWrapperState,
-  inputProps: { index, designDisabled } = {},
+  inputProps: { index = 0 } = {},
   toolsVisible = false,
   markDownVisible = false,
   onMouseOver,
   onMouseLeave,
-  topBarMargin,
-  grabMargin,
   addToolVisible,
   inputProps,
+  isDragged,
+  mt,
+  mb,
   ...props
-}) => (
-  <FBProvider {...{ fieldWrapperState }}>
-    <Box {...{ onMouseOver, onMouseLeave }} className={`fb-field-wrapper-${inputProps?.name}`}>
-      <FBFieldTopBar
-        visibility={toolsVisible}
-        mb={topBarMargin}
-        {...{ inputProps }}
-      />
-      <Box
-        border={toolsVisible === "visible" ? `2px solid ${Colors.dodger_blue}` : "none"}
-        borderRadius={toolsVisible === "visible" ? "4px 0px 4px 4px" : 0}
-        p={1.25}
-      >
-        <Box display="flex" flexDirection="row">
-          <Box width="100%">{props.children}</Box>
+}) => {
+  const classes = useStyles({ mt, mb, isDragged });
+
+  return (
+    <FBProvider {...{ fieldWrapperState }}>
+      <Box {...{ onMouseOver, onMouseLeave }} className={cx(`fb-field-wrapper-${inputProps?.name}`, classes.root)}>
+        <Box className={classes.tools} visibility={toolsVisible}>
+          <FBFieldTopBar visibility={toolsVisible} {...{ inputProps }} />
+          <FBFieldBottomBar visibility={addToolVisible} {...{ index }} />
+        </Box>
+        <Box className={classes.field}>
+          {props.children}
         </Box>
         {markDownVisible && <FBFieldMarkDown {...{ index }} />}
       </Box>
-      <FBFieldBottomBar visibility={toolsVisible} {...{ index }} mt={1.25} />
-    </Box>
-  </FBProvider>
-);
+    </FBProvider>
+  );
+};
 
 export default withFBFieldWrapper(FBFieldWrapper);

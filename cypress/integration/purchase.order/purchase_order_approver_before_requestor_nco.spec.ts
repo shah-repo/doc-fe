@@ -1,9 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { receivingReleasedDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
@@ -164,19 +164,19 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Enters company name '${newCompanyName}'`, () => {
-      cy.get("[name^=company-name-]").arrowType(newCompanyName);
+      cy.get("[name^=company-name-]").arrowType(newCompanyName, { force: true });
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
-      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
+      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
     });
 
     it(`Enters company email '${ownerEmail}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(ownerEmail);
+      cy.get("[name^=company-admin-email-]").arrowType(ownerEmail, { force: true });
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
-      cy.get(`[name*="approved-dam-json-is-used-"]`).check("Yes");
+      cy.get(`[name*="approved-dam-json-is-used-"]`).check("Yes", { force: true });
     });
 
     it("Upload DOM JSON", () => {
@@ -184,7 +184,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-      cy.get(`[name*="approved-page-details-json-is-used-"]`).check("Yes");
+      cy.get(`[name*="approved-page-details-json-is-used-"]`).check("Yes", { force: true });
     });
 
     it("Upload Page Details JSON", () => {
@@ -192,7 +192,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-      cy.get(`[name*="approved-navigation-json-is-used-"]`).check("Yes");
+      cy.get(`[name*="approved-navigation-json-is-used-"]`).check("Yes", { force: true });
     });
 
     it("Upload Navigation JSON", () => {
@@ -204,7 +204,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.get(`[data-cy="albumMediaButton"]`).eq(0).arrowClick();
+      cy.get(`[data-cy="albumMediaButton"]`).eq(0).arrowClick({ force: true });
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 
@@ -756,7 +756,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify Date Required", () => {
-      cy.get("[data-cy='formattedDate']").eq(0).should("have.text", moment().format("MM/DD/YYYY"));
+      cy.get("[data-cy='formattedDate']").eq(0)
+        .should("have.text", receivingReleasedDate);
     });
 
     it("Verify Unit", () => {
@@ -803,8 +804,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
     it(`Select '${USERS[2].name}' for Requestor`, () => {
       cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
       cy.unClick();
-      cy.get(`[data-cy^="po-requestor-"]`).arrowClick().wait(1000);
-      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+      cy.get(`[data-cy^="po-requestor-"]`).arrowClick({ force: true }).wait(1000);
+      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick({ force: true });
     });
 
     it("Save document", () => {
@@ -897,7 +898,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify Date Required", () => {
-      cy.get("[data-cy='formattedDate']").eq(0).should("have.text", moment().format("MM/DD/YYYY"));
+      cy.get("[data-cy='formattedDate']").eq(0)
+        .should("have.text", receivingReleasedDate);
     });
 
     it("Verify Unit", () => {
