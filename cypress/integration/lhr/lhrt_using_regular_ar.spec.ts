@@ -473,11 +473,12 @@ context("LHRt using regular AR test", () => {
 
     it("Enter title AR title", () => {
       cy.arEnterApprovalRequestTitle({ title: "LHRT AR" });
+      cy.unClick();
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.get("[data-cy=\"field-description\"]").click();
-      cy.get("[data-cy=\"field-description\"]").arrowType("LHRT AR").wait(2000);
+      cy.get("[data-cy=\"description\"]").last().click()
+      cy.get("[data-cy=\"description\"]").last().arrowType("LHRT AR").wait(2000);
       cy.unClick();
     });
 
@@ -487,10 +488,6 @@ context("LHRt using regular AR test", () => {
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
     it("Add first Approver'", () => {
@@ -527,9 +524,9 @@ context("LHRt using regular AR test", () => {
 
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("[name=\"lhr-selected-part\"]").find("button").last().arrowClick();
+        cy.get("[name=\"lhr-selected-part\"]").find("button").last().arrowClick({ force: true });
       });
-      cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
+      cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
       cy.get("ul>li[role=option]").contains("Part document").arrowClick();
     });
 
