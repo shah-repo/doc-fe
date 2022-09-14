@@ -8,6 +8,7 @@ import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/docu
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { FB, FBBookmarkState, FBProvider } from "../form.builder";
+import FBStore from "../form.builder/FBStore/FBStore";
 import useDocumentTitle from "../hooks/useDocumentTitle";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
 import { getDocRevIdToRedirect, shouldRedirectToLatestReleased } from "./helpers/redirect";
@@ -66,7 +67,7 @@ DocumentRevisionManagerContainerProps
   useEffect(() => () => {
     documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
     documentRevisionTypeGroupsFromDocListContext = React.createContext<undefined | DocumentGroupType>(undefined);
-
+    FBStore.selectedApprover = [];
   }, []);
 
   if (shouldRedirectToLatestReleased(documentRevisions, documentRevisionId)) {
