@@ -121,7 +121,7 @@ Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; val
 Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
   cy.get("[data-cy=\"title\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
