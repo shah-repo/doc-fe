@@ -635,12 +635,12 @@ context("Verify the user is able to create LHRT", () => {
     });
 
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").arrowType("12");
+      cy.get("[name=\"lot_quantity\"]").focus().arrowType("12");
     });
 
     it(`Select '${CSPartDocumentTitle}' for Part Number`, () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
+      cy.get("[data-cy=\"lot_part\"]").focus().arrowType(CSPartDocumentTitle);
       cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
     });
 
@@ -810,7 +810,7 @@ context("Verify the user is able to create LHRT", () => {
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.closeAllAlertMessages();
       cy.drCloseApproveAndReleaseDialog();
-      cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
+      cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       });
@@ -862,7 +862,7 @@ context("Verify the user is able to create LHRT", () => {
     });
 
     it("Verify the user is able to select ‘Revision Stage’", () => {
-      cy.get("[data-cy=RevisionTypeChange-administrativeChange]").click();
+      cy.get("[data-cy=RevisionTypeChange-administrativeChange]").click({ force: true });
     });
 
     it("Click save document", () => {
@@ -1092,7 +1092,7 @@ context("Verify the user is able to create LHRT", () => {
       cy.ebApprove();
     });
 
-    it("visit the LHR", () => {
+    it("Visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
         CyRoutes.GetSpecificDocumentType,
@@ -1107,10 +1107,7 @@ context("Verify the user is able to create LHRT", () => {
     });
 
     it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Submit for approval", () => {

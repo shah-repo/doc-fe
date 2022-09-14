@@ -465,7 +465,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Select 'Part document' for Part to be Manufactured", () => {
-      cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
+      cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       });
