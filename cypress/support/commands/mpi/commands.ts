@@ -26,6 +26,7 @@ declare global {
       mpiAddEquipmentParameterToStep(params: {numbOfStep: integer; equipmentDescription: string}): Chainable;
       mpiStartStep(params: {stepNumber: number}): Chainable;
       mpiClickNotStarted(params: {stepNumber: number}): Chainable;
+      selectLot(params: {lotDateSuffix: string}): Chainable;
     }
   }
 }
@@ -146,4 +147,11 @@ Cypress.Commands.add("mpiSelectRedLine", () => {
   cy.get("[data-cy='HeaderMenuButton']").arrowClick();
   cy.get("[data-cy='redlineButton']").arrowClick();
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("selectLot", (params: {lotDateSuffix: string}) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.wait(2000);
+  cy.get("input[data-cy=usedOverride]").arrowClick();
+  cy.get("ul>li[role=option]").contains(`LOT #${params.lotDateSuffix}01 | MT-00004.1`).arrowClick();
 });
