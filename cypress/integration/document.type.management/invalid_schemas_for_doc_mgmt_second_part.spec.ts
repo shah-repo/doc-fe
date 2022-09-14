@@ -215,8 +215,8 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessageIsEqual({
-          message: "Found duplicate index '1'.",
+        cy.checkToastMessageContains({
+          message: "indices reused: 1",
         });
         cy.closeAllAlertMessages();
       });
