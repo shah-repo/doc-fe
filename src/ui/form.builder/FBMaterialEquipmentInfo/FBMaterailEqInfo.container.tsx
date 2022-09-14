@@ -1,87 +1,41 @@
-import { find, isEqual, keys, omit, union, unionWith } from "lodash";
 import { useObserver } from "mobx-react";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { FBMeqState } from "..";
+import React, { useEffect, useState } from "react";
+import { FBMaterailEqInfoState } from "..";
 import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
 import FB from "../helpers/FB";
-import { FBMEQItemStatus, GenericItem, MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
+import { MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
+import { calculateDataDiff } from "./FBMaterailEqInfo.utils";
 import FBMaterialEqInfoPresenter from "./FBMaterialEqInfo.presenter";
 
-const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProps> = ({
+const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
   documentRevision,
   inView,
 }) => {
-  const meqState = FB.useRef(FBMeqState);
-  const loading = useObserver(() => meqState.loading);
   const [showDiff, setShowDiff] = useState(false);
-  const [currentData, setCurrentData] = useState<MaterialAndEquipment>({ equipment: [], materials: [] });
-  const [parentMaterialData, setParentMaterialData] = useState<MaterialAndEquipment>({ equipment: [], materials: [] });
   const includeDiff = (
     checkIsDocumentEB(documentRevision?.document?.documentType.groupOptions) && Boolean(documentRevision?.parent)
   );
 
-  const callBack = (
-    setter: Dispatch<SetStateAction<MaterialAndEquipment>>
-  ) => setter;
+  const itemsState = FB.useRef(FBMaterailEqInfoState);
+  const [currentData, parentData, loading] = useObserver(() => ([
+    itemsState.currentItems,
+    itemsState.parentItems,
+    itemsState.loading,
+  ]));
 
   useEffect(() => {
-    if (inView) {
-      meqState.getMeqDetail(documentRevision?.id, callBack(setCurrentData));
+    if (inView && documentRevision) {
+      itemsState.fetchCurrentItems(documentRevision.id);
     }
-  }, [meqState, inView, documentRevision]);
+  }, [documentRevision, inView, itemsState]);
 
   useEffect(() => {
-    if (inView && showDiff) {
-      meqState.getMeqDetail(documentRevision?.parent?.id, callBack(setParentMaterialData));
+    if (inView && documentRevision?.parent && showDiff && !parentData) {
+      itemsState.fetchParentItems(documentRevision.parent?.id);
     }
-  }, [showDiff, meqState, inView, documentRevision]);
+  }, [documentRevision, inView, itemsState, parentData, showDiff]);
 
-  const getItemStatus = (
-    childItem?: GenericItem,
-    parentItem?: GenericItem
-  ): FBMEQItemStatus => {
-    if (isEqual(childItem, parentItem)) {
-      return FBMEQItemStatus.None;
-    }
-    if (childItem && parentItem) {
-      return FBMEQItemStatus.Updated;
-    }
-    if (childItem) {
-      return FBMEQItemStatus.Added;
-    }
-    return FBMEQItemStatus.Removed;
-  };
-
-  const normalizeItem = (item: GenericItem) => omit(item, ["quantity", "unit"]);
-
-  const calculateSectionDiff = <K extends (GenericItem)[]>(childItems: K, parentItems: K): K => {
-    const allItems = unionWith(
-      childItems,
-      parentItems,
-      (value, other) => isEqual(normalizeItem(value), normalizeItem(other))
-    );
-
-    return allItems.map((item) => {
-      const childItem = find(childItems, normalizeItem(item));
-      const parentItem = find(parentItems, normalizeItem(item));
-
-      return {
-        ...item,
-        status: getItemStatus(childItem, parentItem),
-      };
-    }) as K;
-  };
-
-  const calculateDataDiff = <T extends MaterialAndEquipment>(child: T, parent: T): T => {
-    const allKeys = union(keys(child), keys(parent));
-
-    return allKeys.reduce((acc, key) => ({
-      ...acc,
-      [key]: calculateSectionDiff(child[key], parent[key]),
-    }), {}) as T;
-  };
-
-  const data = showDiff ? calculateDataDiff(currentData, parentMaterialData) : currentData;
+  const data = showDiff && parentData ? calculateDataDiff(currentData, parentData) : currentData;
 
   return (
     <FBMaterialEqInfoPresenter

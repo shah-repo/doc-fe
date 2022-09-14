@@ -1,5 +1,6 @@
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import useStyles from "./FBMaterialEqInfo.styles";
+import React from "react";
 
 export enum FBMEQItemStatus {
   Removed = "removed",
@@ -39,7 +40,7 @@ export interface MaterialAndEquipment {
 }
 
 export interface MaterialEqProps {
-  data: MaterialAndEquipment;
+  data?: MaterialAndEquipment;
   includeDiff: boolean;
   showDiff: boolean;
   loading?: boolean;
@@ -66,7 +67,7 @@ export interface ItemProps<T> {
 
 export interface PanelProps {
   panel: PanelData;
-  data: (Material & Equipment)[];
+  data?: (Material & Equipment)[];
   expanded: boolean;
   loading?: boolean;
   classes: MaterialEqClasses;

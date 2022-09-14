@@ -63,13 +63,14 @@ const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
   );
 };
 
-const Panel: React.FC<PanelProps> = ({ panel, data, expanded, loading, classes, togglePanel }) => {
+const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, classes, togglePanel }) => {
   const PanelItem = panel.itemComponent;
   const itemClasses = useItemStatusStyles();
+  const haveData = data?.length > 0;
 
   return (
     <Box key={panel.dataKey} className={classes.panel}>
-      <ExpansionPanel {...{ expanded }}>
+      <ExpansionPanel expanded={expanded && haveData}>
         <ExpansionPanelSummary
           classes={{
             root: classes.panelSummary,
@@ -80,12 +81,12 @@ const Panel: React.FC<PanelProps> = ({ panel, data, expanded, loading, classes, 
           expandIcon={<ExpandIcon fontSize="small" />}
         >
           <SMText label={panel.title} boxProps={{ className: classes.panelSummaryTitle }} />
-          {!loading && data.length > 0 && (
+          {!loading && haveData && (
             <SMText
               label={{
                 locale: "common.items.count",
                 values: {
-                  count: String(data.length),
+                  count: String(data?.length),
                 },
               }}
               boxProps={{ className: classes.panelSummaryCount }}
@@ -179,7 +180,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
             <Panel
               key={panel.dataKey}
               panel={panel}
-              data={data[panel.dataKey]}
+              data={data?.[panel.dataKey]}
               expanded={expandedPanels.includes(panel.dataKey)}
               togglePanel={togglePanel(panel.dataKey)}
               loading={loading}
