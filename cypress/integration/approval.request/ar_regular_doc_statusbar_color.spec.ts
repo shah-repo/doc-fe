@@ -546,7 +546,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     it("Verify Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Document ListFM-00002 Rev APPROVED`,
+            `Document ListFM-00002 Rev AAPPROVED`,
         breadcrump: true,
       });
     });
@@ -599,7 +599,16 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Close AR", () => {
-      cy.get(`[data-cy="transition-closed"]`).contains("Closed").arrowClick();
+      cy.get(`[data-cy="transition-closed"]`).contains("Close").arrowClick();
+    });
+
+    it("Select option Yes", () => {
+      cy.get("button[id=\"AlertDialog-continueButton\"]").contains("Yes").arrowClick();
+    });
+
+    it(`Check doc status as ${STATUS_TYPES_LABEL.CLOSED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.CLOSED });
+      cy.arCheckTitleInEditableAndMatches({ name: approvalRequestDocName });
     });
   });
 
@@ -635,6 +644,10 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
     });
 
+    it(`Verify 'Revise Document' exists in statusbar`, () => {
+      cy.get(`[data-cy="updateRecord"]`).should("exist");
+    });
+
     it("Check if 'Change Owner' button exists", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
@@ -642,6 +655,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -669,7 +683,99 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
   });
 
+  context("Create a new document and release it", () => {
+    it("Navigate to Document list", () => {
+      cy.navigToDocumentList();
+    });
 
+    it("Click on 'Create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter title 'Bulk create form'", () => {
+      cy.drEnterDocumentTitle({ name: "Bulk create form" });
+    });
+
+    it("Enter description 'Bulk create form description'", () => {
+      cy.drEnterDocumentDescription({ description: "Bulk create form description" });
+    });
+
+    it("Select 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Bulk Create" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release it", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Click on 'Revise Document' and select 'OBS' and leave in Draft", () => {
+    it("Click on 'Revise document'", () => {
+      cy.pause();
+      cy.drClickReviseDocument();
+    });
+
+    it("Select 'Obsolete' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Obsolete" });
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    // it("Approve and release document", () => {
+    //   cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    // });
+  });
+
+  context("Create a new AR and link it to it - Approve the AR", () => {
+    it(`Create a new AR link with the document and approve the AR`, () => {
+      cy.pause();
+    });
+  });
+
+  context("Verify OBSOLETE Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status", () => {
+    it("Verify OBSOLETE Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status", () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Document ListFM-00002 Rev OBS`,
+        breadcrump: true,
+      });
+    });
+
+    it(`Verify 'Revise Document' does not exists in statusbar`, () => {
+      cy.contains("[data-cy=\"updateRecord\"]").should("not.be.exist");
+    });
+
+    it(`Verify 'Send to Email' exists in statusbar`, () => {
+      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
+      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+    });
+
+    it(`Verify 'Change Owner' exists in statusbar`, () => {
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+    });
+
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
+    });
+
+    it(`Verify the statusbar background-color as RED(#EC2B00)`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
+    });
+  });
 });
 
 export { };
