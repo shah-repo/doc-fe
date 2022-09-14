@@ -14,7 +14,7 @@ import ControlsContainer from "../form/assessmentForm/AssessmentFormControls.con
 
 interface Props extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
-  canChangeOwnerShip: boolean;
+  canChangeOwnership: boolean;
   errors: FormikErrors<any>;
   canEdit: boolean;
   displayLastSaved: boolean;
@@ -23,7 +23,7 @@ interface Props extends DataProps<ChangeRequest> {
 const SummaryHeader: React.FunctionComponent<Props> = ({
   dataProp,
   dataProp: { state, title, crId, id, formDocument },
-  canChangeOwnerShip,
+  canChangeOwnership,
   asyncState,
   errors,
   canEdit,

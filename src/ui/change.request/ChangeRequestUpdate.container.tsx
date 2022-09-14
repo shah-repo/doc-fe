@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import { debounce, isEmpty } from "lodash";
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -29,7 +29,7 @@ interface OwnProps {
   changeRequest: ChangeRequest;
 }
 
-export type ChangeRequestUpdateContainerProps = OwnProps &
+type ChangeRequestUpdateContainerProps = OwnProps &
 DispatchProps &
 StateProps;
 
@@ -37,9 +37,8 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   currentUserEmail: authSelectors.currentUserEmail(state),
 });
 
-export const ChangeRequestUpdateContainer: React.FunctionComponent<
-ChangeRequestUpdateContainerProps
-> = ({ save, changeRequest, currentUserEmail, loadAudit }) => {
+const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
+  { save, changeRequest, currentUserEmail, loadAudit }) => {
 
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
@@ -77,11 +76,13 @@ ChangeRequestUpdateContainerProps
     );
   };
 
+  const debouncedSubmit = debounce(onSubmit, 1000);
+
   return (
     <FormContext.Provider value={{ submitOnChange: true }}>
       <ChangeRequestFormContainer
         asyncState={async.asyncState}
-        onSubmit={onSubmit}
+        onSubmit={debouncedSubmit}
         initialValues={initialValues}
         changeRequest={changeRequest}
         doNotPrompt={doNotPrompt}

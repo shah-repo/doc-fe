@@ -48,7 +48,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     const isBlock = type && BlockTypeField.includes(type);
     const isFirst = position === 1;
     const mt = isFirst || isDragged ? 0 : isBlock ? 6 : 3.5;
-    const mb = isSection ? -1 : 2;
+    const mb = isSection ? -0.5 : 2;
 
     return useObserver(() => Component({
       ...(props as T),
