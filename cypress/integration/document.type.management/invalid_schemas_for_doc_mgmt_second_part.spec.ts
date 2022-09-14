@@ -215,8 +215,8 @@ context("document type management error validations", () => {
       });
 
       it("Verify error message", () => {
-        cy.checkToastMessageContains({
-          message: "indices reused: 1",
+        cy.checkToastMessageIsEqual({
+          message: "The details tab has elements with the following indices reused: 1",
         });
         cy.closeAllAlertMessages();
       });
