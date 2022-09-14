@@ -5,7 +5,7 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover, FBPurchaseOrderItemType } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_REQUESTOR_COMPONENT_NAME, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
@@ -95,17 +95,18 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
-    const checkProductPartExists = (poItems: FBPurchaseOrderValue) =>
-      poItems?.items?.some((item) => item.type === "product" && item.partNumberDocId
+    const checkServiceOrProductPartExists = (poItems: FBPurchaseOrderValue) => poItems?.items?.some((item) =>
+      item.type === FBPurchaseOrderItemType.SERVICE
+      || (item.type === FBPurchaseOrderItemType.PRODUCT && item.partNumberDocId)
     );
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
       (poItems) => {
         const previousPOItems = poApprovalsState.getPrevPOItems;
-        const isProductPartsExist = checkProductPartExists(poItems);
-        const isPrevProductPartsExist = checkProductPartExists(previousPOItems);
+        const isServiceOrProductPartExist = checkServiceOrProductPartExists(poItems);
+        const isPrevServiceOrProductPartExist = checkServiceOrProductPartExists(previousPOItems);
         poApprovalsState.setPrevPOItems(poItems);
-        hasPOItems.current = !(isProductPartsExist || isPrevProductPartsExist);
+        hasPOItems.current = !(isServiceOrProductPartExist || isPrevServiceOrProductPartExist);
         outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -121,15 +122,15 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       const prevRequesterValue = prevRequester.current;
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
 
-      const hasProductPart = checkProductPartExists(poItems);
+      const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
       const hasRequesterInApprovers = approvers?.includes(requester);
       const hasPrevRequesterInApprovers = approvers?.includes(prevRequesterValue);
 
-      if (requester && !hasRequesterInApprovers && hasProductPart) {
+      if (requester && !hasRequesterInApprovers && hasServiceOrProductPart) {
         return addApprover([requester]);
       }
 
-      if (requester && hasRequesterInApprovers && !hasProductPart) {
+      if (requester && hasRequesterInApprovers && !hasServiceOrProductPart) {
         return removeApprover([requester]);
       }
 
@@ -312,7 +313,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
 
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
-      if (!checkProductPartExists(poItems)) {
+      if (!checkServiceOrProductPartExists(poItems)) {
         disabledOptions = [];
       }
     }

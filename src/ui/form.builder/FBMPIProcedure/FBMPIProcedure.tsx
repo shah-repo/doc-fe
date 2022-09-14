@@ -3,8 +3,8 @@ import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBInput, FBMapWrapper, FBMPIProcedureItem, FBMPIProcedureProps, FBProcedureItemType, FBProvider, FBTextEditor } from "..";
 import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
-import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/add_filled.svg";
-import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/clone_filled.svg";
+import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/icon_add.svg";
+import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/icon_clone.svg";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBMPIProcedure } from "./FBMPIProcedure.wrap";
 
@@ -31,9 +31,8 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
       borderBottom={1}
     >
       <FBProvider {...{ mpiProcedureState }}>
-        {/* TODO: As per design editor title and button should be in line */}
         {!isPreview && (
-          <Box display="flex" flexDirection="row-reverse" mt={3.125}>
+          <Box display="flex" flexDirection="row-reverse" mb={-2.5} position="relative" zIndex={1}>
             <StyledTooltip placement="top" title="form.builder.clone.step">
               <CloneIcon
                 data-cy="form.builder.clone.step"

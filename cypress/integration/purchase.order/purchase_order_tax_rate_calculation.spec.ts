@@ -9,7 +9,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { POPart } from "../../utils/constants/documentTypes/part";
-import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
+import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -68,7 +68,7 @@ context("Search PO item with correct order date format", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               POPart,
-              PurchaseOrderTest,
+              PurchaseOrderDocType,
             ],
             acctCodes: ["code 1", "code 2"],
             addresses: ["Address 1", "Address 2"],
@@ -509,7 +509,7 @@ context("Search PO item with correct order date format", () => {
           });
 
           it(`Select '${USERS[1].name}' for Requestor`, () => {
-            cy.get("[data-cy^=requestor]").arrowClick();
+            cy.get("[data-cy^=po-requestor]").arrowClick();
             cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
           });
 
@@ -605,10 +605,6 @@ context("Search PO item with correct order date format", () => {
           it("navigate to Details tab", () => {
             cy.drSelectDetailsTab();
             cy.wait(2000);
-          });
-
-          it("Add an Approval", () => {
-            cy.poAddApproverOnApproverList({ approver: USERS[1].name });
           });
 
           it("Click 'Submit for Approval' button", () => {

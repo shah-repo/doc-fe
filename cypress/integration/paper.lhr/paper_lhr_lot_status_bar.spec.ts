@@ -706,7 +706,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083001RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22091401RD");
     });
 
     context("Right side:", () => {
@@ -716,16 +716,19 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Last save should be present", () => {
-        cy.contains("Last saved:").should("be.exist");
+        cy.get("header").contains("Last saved").should("exist");
+        cy.get("header").contains("Last saved").should("be.visible");
       });
 
       it("Enter initial quantity", () => {
         cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist");
         cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.unClick();
       });
 
       it("Check Last save should be present in autosave", () => {
-        cy.contains("Last saved:").should("be.exist");
+        cy.get("header").contains("Last saved a few seconds ago").should("exist");
+        cy.get("header").contains("Last saved a few seconds ago").should("be.visible");
       });
 
       it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
@@ -771,8 +774,9 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
       });
 
-      it(`Position of the status bar STATIC`, () => {
-        cy.verifyStatusbarPosition({ position: "static" });
+      it("Verify header is fixed when page scroll", () => {
+        cy.get(".hide-scroll").scrollTo("bottom");
+        cy.get("header").should("be.visible");
       });
     });
 
@@ -805,6 +809,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
+        cy.wait(5000);
         cy.pmSubmitForApproval();
       });
     });
@@ -817,7 +822,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
           docId: "LHR-00001",
           revision: "Rev A",
         });
-        cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083001RD");
+        cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22091401RD");
       });
 
       context("Right Side:", () => {
@@ -850,8 +855,9 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
           cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
         });
 
-        it(`Position of the status bar STATIC`, () => {
-          cy.verifyStatusbarPosition({ position: "static" });
+        it("Verify header is fixed when page scroll", () => {
+          cy.get(".hide-scroll").scrollTo("bottom");
+          cy.get("header").should("be.visible");
         });
       });
 
@@ -874,7 +880,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
 
   context("Check the status bar content", () => {
     it("Check Last save should be present in autosave", () => {
-      cy.contains("Last saved:").should("not.exist");
+      cy.get("header").contains("Last saved").should("not.exist");
     });
 
     it("Send to email button visible & functional", () => {
@@ -895,8 +901,9 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
 
-    it(`Position of the status bar STATIC`, () => {
-      cy.verifyStatusbarPosition({ position: "static" });
+    it("Verify header is fixed when page scroll", () => {
+      cy.get(".hide-scroll").scrollTo("bottom");
+      cy.get("header").should("be.visible");
     });
   });
 
@@ -917,6 +924,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
+      cy.wait(5000);
       cy.pmSubmitForApproval();
     });
 
@@ -941,12 +949,12 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083001RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22091401RD");
     });
 
     context("Right Side:", () => {
       it("Check Last save should be present in autosave", () => {
-        cy.contains("Last saved:").should("not.exist");
+        cy.get("header").contains("Last saved").should("not.exist");
       });
 
       it("Send to email button visible & functional", () => {
@@ -968,8 +976,9 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
       });
 
-      it(`Position of the status bar STATIC`, () => {
-        cy.verifyStatusbarPosition({ position: "static" });
+      it("Verify header is fixed when page scroll", () => {
+        cy.get(".hide-scroll").scrollTo("bottom");
+        cy.get("header").should("be.visible");
       });
     });
   });
@@ -984,8 +993,8 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       cy.drClickReviseDocument();
     });
 
-    it("Select Obsolete revision option", () => {
-      cy.get("[id=\"RevisionTypeChange-obsolete\"]").arrowClick();
+    it("Select Void revision option", () => {
+      cy.get("[id=\"RevisionTypeChange-obsolete\"]").arrowClick({ force: true });
     });
 
     it("Add an Approval", () => {
@@ -996,15 +1005,16 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApproval();
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
     });
 
     it("Provide description & Click Yes", () => {
       cy.get("[name='voidDescription']").arrowType("Voiding the document");
-      cy.get("[data-cy='fb-control-btn]'").click();
+      cy.get("button[data-cy='fb-control-btn']").arrowClick({ force: true });
     });
 
     it("Approve Paper LHR for VOIDED", () => {
+      cy.wait(5000);
       cy.lhrApprove();
     });
   });
@@ -1012,17 +1022,17 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
   context("Check the content of the status bar VOIDED version:", () => {
     it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       cy.verifyHeaderInfoContent({
-        status: STATUS_TYPES_LABEL.VOIDED,
+        status: STATUS_TYPES_LABEL.OBSOLETE,
         title: "LHR",
         docId: "LHR-00001",
-        revision: "Rev A",
+        revision: "Rev Void",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083001RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22091401RD");
     });
 
     context("Right Side:", () => {
       it("Check Last save should be present in autosave", () => {
-        cy.contains("Last saved:").should("not.exist");
+        cy.get("header").contains("Last saved").should("not.exist");
       });
 
       it("Send to email button visible & functional", () => {
@@ -1044,8 +1054,9 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
       });
 
-      it(`Position of the status bar STATIC`, () => {
-        cy.verifyStatusbarPosition({ position: "static" });
+      it("Verify header is fixed when page scroll", () => {
+        cy.get(".hide-scroll").scrollTo("bottom");
+        cy.get("header").should("be.visible");
       });
     });
   });

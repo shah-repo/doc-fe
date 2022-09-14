@@ -378,7 +378,7 @@ context("Receivable test with Page Details", () => {
                 ],
               },
               {
-                name: "requestor-k740hxlb",
+                name: "po-requestor-autocomplete",
                 type: "autocomplete",
                 index: 2,
                 label: "Requestor",
@@ -457,19 +457,13 @@ context("Receivable test with Page Details", () => {
                 applicableValidationSchema: true,
               },
               {
-                name: "approvals-built-in",
-                type: "approvals",
+                name: "fb-po-approvals-l7rbwkqp",
+                type: "poapprovals",
                 index: 6,
-                label: "Approvals",
+                label: "form.builder.approvals",
                 tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
+                deleteDisabled: false,
                 uniqueSchemaItem: true,
-                validationAttribute: "Approvals",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
               },
             ],
           },
@@ -734,7 +728,7 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Select Requestor", () => {
-        cy.get("[data-cy^=requestor]").arrowClick();
+        cy.get("[data-cy^=po-requestor]").arrowClick();
         cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         cy.unClick();
       });
@@ -873,14 +867,6 @@ context("Receivable test with Page Details", () => {
       context("Approve Purchase Order document", () => {
         it("Click on 'Details' tab", () => {
           cy.drSelectDetailsTab();
-        });
-
-        it("Add an Approval", () => {
-          cy.get("input[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick({ force: true });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("input[data-cy=\"fb-approvals-approvals-built-in\"]").autocompleteSelect(USERS[1].name);
-          });
-          cy.unClick();
         });
 
         it("Save PO", () => {
@@ -1118,7 +1104,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Verify requester is present on receivable", () => {
-      cy.get("input[data-cy^=\"requestor\"]").should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get("input[data-cy^=\"po-requestor\"]").should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
     });
 
     it("Verify supplier is present on receivable", () => {
@@ -2139,7 +2125,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Verify requester is present on receivable", () => {
-      cy.get("input[data-cy^=\"requestor\"]").should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get("input[data-cy^=\"po-requestor\"]").should("have.attr", "value", `${USERS[1].name} - ${USERS[1].email}`);
     });
 
     it("Verify supplier is present on receivable", () => {

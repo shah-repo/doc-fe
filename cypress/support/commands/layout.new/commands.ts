@@ -10,6 +10,8 @@ declare global {
       verifyTitleDescriptionFields(): Chainable;
       verifyDefaultFields(): Chainable;
       verifyDocumentHeaderDetails(): Chainable;
+      verifyListItemExistsOnHeader(params: {listItem: string; breadcrump?: boolean}): Chainable<Subject>;
+      verifySelectedTab(params: {tab: string}): Chainable;
       verifyFixedTab(): Chainable;
       verifyApprovalsField(): Chainable;
       verifyFormOptionsVisibility(): Chainable;
@@ -30,6 +32,8 @@ declare global {
       openRevisionsTabAndVerifyCurrentRevision(rev: string): Chainable;
       verifyStatusbarBgcolor(params: {bcolor: string}): Chainable;
       verifyStatusbarPosition(params: {position: string}): Chainable;
+      verifyLastSavedExists(): Chainable;
+      verifyLastSavedNotExists(): Chainable;
     }
   }
 }
@@ -61,6 +65,18 @@ Cypress.Commands.add("verifyDocumentHeaderDetails", () => {
   cy.get("span[data-cy=\"HeaderInfo-docId\"]").should("exist");
   cy.get("div[data-cy=\"HeaderInfo-Rev\"]").should("exist");
   cy.get("div[data-cy=\"HeaderInfo-status\"]").should("exist");
+});
+
+Cypress.Commands.add("verifyListItemExistsOnHeader", (params: { listItem: string; breadcrump?: boolean}) => {
+  cy.get("div[data-cy=\"Header-listIcon\"]").should("exist");
+  cy.get("[class*=makeStyles-headerSection]>div").contains(params.listItem).should("exist");
+  if (params.breadcrump) {
+    cy.get(`li[class*="MuiBreadcrumbs-separator"]>svg`).should("exist");
+  }
+});
+
+Cypress.Commands.add("verifySelectedTab", (params: {tab: string}) => {
+  cy.get(`[data-cy="tabId.${params.tab}"]`).parent().parent().should("have.class", "Mui-selected");
 });
 
 Cypress.Commands.add("verifyFixedTab", () => {
@@ -212,4 +228,20 @@ Cypress.Commands.add("openRevisionsTabAndVerifyCurrentRevision", (rev) => {
   });
 });
 
+Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
+  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
+});
 
+Cypress.Commands.add("verifyLastSavedExists", () => {
+  // eslint-disable-next-line max-len
+  const tmpRegex = new RegExp(`Last saved [0-9]+ minutes ago|Last saved a minute ago|Last saved a few minutes ago|Last saved a few seconds ago`, "gi");
+  cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+    .contains(tmpRegex);
+});
+
+Cypress.Commands.add("verifyLastSavedNotExists", () => {
+  // eslint-disable-next-line max-len
+  const tmpRegex = new RegExp(`Last saved [0-9]+ minutes ago|Last saved a minute ago|Last saved a few minutes ago|Last saved a few seconds ago`, "gi");
+  cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+    .should("not.contain", tmpRegex);
+});

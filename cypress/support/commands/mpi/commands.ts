@@ -93,11 +93,11 @@ Cypress.Commands.add("mpiAddMaterialParameterToStep", (params: {
   numbOfStep: integer;
   material: string;}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
+    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick({ force: true });
   });
   cy.listLoadingElementShouldNotExist();
-  cy.get("[data-cy=\"title\"]").arrowType(params.material);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowType(params.material, { force: true });
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -140,4 +140,10 @@ Cypress.Commands.add("mpiStartStep", (params: {stepNumber: number}) => {
 
 Cypress.Commands.add("mpiClickNotStarted", (params: {stepNumber: number}) => {
   cy.get("[data-cy=\"form.builder.step.noStarted\"]").eq(params.stepNumber - 1).arrowClick();
+});
+
+Cypress.Commands.add("mpiSelectRedLine", () => {
+  cy.get("[data-cy='HeaderMenuButton']").arrowClick();
+  cy.get("[data-cy='redlineButton']").arrowClick();
+  cy.checkToastMessage({ exists: false });
 });

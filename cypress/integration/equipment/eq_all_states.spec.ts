@@ -196,7 +196,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                   },
                   {
                     index: 4,
@@ -211,7 +211,7 @@ context("Equipment maintenance for checking History in all states", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     applicableValidationSchema: true,
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     validationAttribute: "Calibration",
                   },
                 ],
