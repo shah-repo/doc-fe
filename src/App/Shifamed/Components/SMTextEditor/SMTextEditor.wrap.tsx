@@ -7,6 +7,7 @@ import React, { useMemo, useState } from "react";
 import { useIntl } from "react-intl";
 import { SM, SMTextEditorProps, SMTextEditorState, SMTextLocaleProps } from "../../..";
 import { FB } from "../../../../ui/form.builder";
+import { useFormContext } from "../../../../ui/components/forms/FormContext";
 
 export const withSMTextEditor = <T extends SMTextEditorProps>(
   Component: React.FunctionComponent<T>,
@@ -30,6 +31,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
     const intl = useIntl();
     const [isTextClamped, setIsTextClamped] = useState(false);
     const formik = useFormikContext();
+    const { submitForm } = useFormContext();
     const { _formState, _documentRevisionFormState } = SM.useStores();
     const { workspaceState } = FB.useStores();
     formValue = _formState?.getValue(name);
@@ -117,7 +119,7 @@ export const withSMTextEditor = <T extends SMTextEditorProps>(
       if (_formState?.getValue(name) === htmlContent) { return; }
       formik.setFieldValue(name, htmlContent);
       _formState?.setValue(name, htmlContent);
-      _documentRevisionFormState?.save(name, htmlContent);
+      submitForm();
     };
 
     editorRef = (ref) =>
