@@ -64,13 +64,13 @@ const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
 };
 
 const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, classes, togglePanel }) => {
-  const PanelItem = panel.itemComponent;
   const itemClasses = useItemStatusStyles();
-  const haveData = data?.length > 0;
+  const PanelItem = panel.itemComponent;
+  const haveData = Boolean(data.length);
 
   return (
     <Box key={panel.dataKey} className={classes.panel}>
-      <ExpansionPanel expanded={expanded && haveData}>
+      <ExpansionPanel expanded={expanded}>
         <ExpansionPanelSummary
           classes={{
             root: classes.panelSummary,
@@ -86,7 +86,7 @@ const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, clas
               label={{
                 locale: "common.items.count",
                 values: {
-                  count: String(data?.length),
+                  count: String(data.length),
                 },
               }}
               boxProps={{ className: classes.panelSummaryCount }}
@@ -96,17 +96,20 @@ const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, clas
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.panelDetails}>
           <List className={classes.panelDetailsList}>
-            {data.map((item, pos) => (
-              <ListItem
-                key={`${item.docId}-${item.title}`}
-                divider={pos < data.length - 1}
-                className={cx(classes.panelDetailsListItem, {
-                  [itemClasses[item.status ?? ""]]: item.status,
-                })}
-              >
-                <PanelItem item={item} classes={classes} />
-              </ListItem>
-            ))}
+            {haveData ?
+              data.map((item, pos) => (
+                <ListItem
+                  key={`${item.docId}-${item.title}`}
+                  divider={pos < data.length - 1}
+                  className={cx(classes.panelDetailsListItem, {
+                    [itemClasses[item.status ?? ""]]: item.status,
+                  })}
+                >
+                  <PanelItem item={item} classes={classes} />
+                </ListItem>
+              )) :
+              <ListItem className={classes.panelDetailsListItem}><SMText label="common.none" /></ListItem>
+            }
           </List>
         </ExpansionPanelDetails>
       </ExpansionPanel>
