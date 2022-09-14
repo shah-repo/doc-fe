@@ -27,7 +27,6 @@ const FBTrainingInfoContainer: React.FunctionComponent<
       method: "post",
       url: TRAINING_RECORDS_SEARCH_URL,
       data: {
-        isCompleted: "true",
         filters: [
           {
             field: "documentRevision.id",
@@ -48,6 +47,7 @@ const FBTrainingInfoContainer: React.FunctionComponent<
               },
             },
             completedAt: true,
+            completedAtAfter: true,
             dueOn: true,
           },
         ],
