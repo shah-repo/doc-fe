@@ -37,6 +37,8 @@ let createdLHRtDocument;
 let lotId;
 let dateAfterEmailShouldArrive;
 let emailsFromInbox;
+let lhrDocUrl;
+let lhrsDocUrl;
 
 
 context("Email format Verification after LHR released", () => {
@@ -921,6 +923,9 @@ context("Email format Verification after LHR released", () => {
 
     it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.url().then((url: any) => {
+        lhrDocUrl = url;
+      });
       cy.wait(2000);
     });
 
@@ -966,6 +971,9 @@ context("Email format Verification after LHR released", () => {
 
     it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.url().then((url: any) => {
+        lhrsDocUrl = url;
+      });
     });
 
     it("Complete the step", () => {
@@ -1020,8 +1028,12 @@ context("Email format Verification after LHR released", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            `Part CS-00005 Part document, ${lotId}, Step #1 (PI-00008 MPI created with`,
+          contains: [
+            `Hello <b>${USERS[1].name},</b><br>`,
+            "Part CS-00005 Part document, <a href=",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">${lotId}</a>, <a`,
+            `${lhrsDocUrl.substring(lhrsDocUrl.length - 100)}">Step #1</a> (PI-00008 MPI created with`,
+            "API, Rev 1) has been completed.",
             createdCompany.id],
         }];
 
