@@ -270,7 +270,7 @@ Cypress.Commands.add("drSelectProcedureTab", () => {
 });
 
 Cypress.Commands.add("drSelectMaterialsAndEquipmentTab", () => {
-  cy.get("[data-cy=\"tabId.materialsandequipment\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.materialsandequipment\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
