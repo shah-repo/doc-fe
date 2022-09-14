@@ -50,6 +50,7 @@ Cypress.Commands.add("mpiAddStep", () => {
 });
 
 Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
+  checkParameter: boolean;
   numbOfStep: integer;
   material: string;
   quntity: string;
@@ -58,12 +59,14 @@ Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
     cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   });
   cy.listLoadingElementShouldNotExist();
-  cy.get("[name=\"LHRTparameter\"]").uncheck();
+  params.checkParameter ? cy.get("[name=\"LHRTparameter\"]").check() : cy.get("[name=\"LHRTparameter\"]").uncheck();
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.material).arrowClick();
-  cy.get("[name=\"quantity\"]").arrowType(params.quntity);
-  cy.wait(500);
-  cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.unit);
+  if (!params.checkParameter) {
+    cy.get("[name=\"quantity\"]").arrowType(params.quntity);
+    cy.wait(500);
+    cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.unit);
+  }
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

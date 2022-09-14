@@ -26,10 +26,14 @@ let createdPartFormDocument;
 let createdLotFromLHR;
 let createdCSPartDocument;
 let group;
+let equipmentDocument;
+let equipmentDocumentType;
+
 const groupEveryone = "Everyone";
 const ARForm = "AR Form";
 const MPI = "Manufacturing Process Instructions";
 const CSPartDocumentTitle = "Part document";
+const equipmentTitle = "Equipment one";
 
 let lhrDocUrl1;
 
@@ -77,7 +81,7 @@ context("Verify the user is able to create LHRT", () => {
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           cslDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, CSLDocType.documentTypeName);
           csPartDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, CSPart.documentTypeName);
-
+          equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           done();
         });
       });
@@ -600,6 +604,65 @@ context("Verify the user is able to create LHRT", () => {
         done();
       });
     });
+
+    it("[API]Create equipment one", () => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Equipment one</p>",
+              document: {
+                docId: "ET-00003",
+                documentType: {
+                  id: equipmentDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: equipmentTitle,
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            equipmentDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: equipmentDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            });
+          });
+        });
+      });
+    });
+
   });
 
   context("Login user", () => {
@@ -702,10 +765,24 @@ context("Verify the user is able to create LHRT", () => {
 
     it("Add 'CS Part' as Material to step #1", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
+        cy.mpiAddMaterialDocumentToStep({
+          checkParameter: true,
+          numbOfStep: 1,
+          material: CSPartDocumentTitle,
+          quntity: "3",
+          unit: "Each",
+        });
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add 'Equipment one'", () => {
+      cy.mpiAddEquipmentToStep({
+        checkParameter: true,
+        numbOfStep: 1,
+        equipment: equipmentTitle,
+      });
     });
 
     context("Release MPI", () => {
@@ -719,19 +796,6 @@ context("Verify the user is able to create LHRT", () => {
         });
       });
     });
-
-    context("Verify Materials", () => {
-      it("Select Procedure tab", () => {
-        cy.drSelectProcedureTab();
-      });
-
-      it("Verify materials of clone of Step #1", () => {
-        cy.contains("Step #1").parentsUntil("li")
-          .find("[data-cy=\"form.builder.mpi.procedure.materials.title\"]")
-          .should("have.text", `CS-02001 - ${CSPartDocumentTitle} | Qty: 3 each`);
-      });
-    });
-
   });
 
   context("Create LHRT document", () => {
@@ -845,6 +909,36 @@ context("Verify the user is able to create LHRT", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Define parameter A", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+        cy.get(`[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall"]`)
+          .eq(0).arrowClick();
+        cy.get("[data-cy=\"title\"]").arrowClick();
+        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Define parameter B", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+        cy.get(`[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall"]`)
+          .eq(1).arrowClick();
+        cy.get("[data-cy=\"title\"]").arrowClick();
+        cy.get("ul>li[role=option]").contains(equipmentTitle).arrowClick();
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
       it("Approve and release LHRt document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
@@ -917,6 +1011,55 @@ context("Verify the user is able to create LHRT", () => {
         cy.get("[name^=\"lhr-step-\"]").autocompleteSelect("MPI document");
         cy.unClick();
       });
+    });
+
+    it("Click 'LHR Step' 1", () => {
+      cy.get("[data-cy=\"LHR Step 2\"]").arrowClick();
+    });
+
+    it("Verify alert messages", () => {
+      cy.get(`[data-cy="form.builder.mpi.procedure.materials.title.id"]`).eq(0).should("contain", CSPartDocumentTitle);
+      cy.get(`[data-cy="form.builder.mpi.procedure.equipment.title.id"]`).eq(0).should("contain", equipmentTitle);
+    });
+
+    it("Approve and release LHRt document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+    });
+
+    it("Verify error message", () => {
+      cy.checkToastMessageIsEqual({
+        message: "Parameters from MPI are not defined.",
+      });
+      cy.closeAllAlertMessages();
+      cy.drCloseApproveAndReleaseDialog();
+    });
+
+    it("Define parameter A", () => {
+      cy.get(`[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall"]`)
+        .eq(2).arrowClick({ force: true });
+      cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+      cy.get("[name=\"quantity\"]").arrowType("3");
+      cy.wait(500);
+      cy.get("[data-cy=\"unit\"]").autocompleteSelect("1");
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Define parameter B", () => {
+      cy.get(`[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall"]`)
+        .eq(3).arrowClick({ force: true });
+      cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.wait(500);
+      cy.get("ul>li[role=option]").contains(equipmentTitle).arrowClick();
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release LHRt document", () => {
@@ -1023,7 +1166,7 @@ context("Verify the user is able to create LHRT", () => {
       cy.ebApprove();
     });
 
-    it("visit the LHR", () => {
+    it("Visit the LHR", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
         CyRoutes.GetSpecificDocumentType,
