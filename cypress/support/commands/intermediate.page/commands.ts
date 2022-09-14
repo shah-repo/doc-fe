@@ -350,7 +350,7 @@ Cypress.Commands.add("intPageVerifyAddFieldNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyFormOptionsExist", () => {
-  cy.get(`button[data-cy="FBWorkspace-clickView"]`).should("exist")
+  cy.get(`button[data-cy="FBWorkspace-clickView"]`).should("exist").should("be.enabled")
     .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
   cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).should("exist")
     .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");

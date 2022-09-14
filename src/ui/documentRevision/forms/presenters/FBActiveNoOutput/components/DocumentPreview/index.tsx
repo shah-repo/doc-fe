@@ -29,6 +29,7 @@ import DocumentRevisionFormPresenter from "../../../../DocumentRevisionForm.pres
 import { DocumentRevisionFormValues } from "../../../../types";
 import styles from "./styles";
 import { withSMForm } from "../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc";
+import { emptyFunction } from "../../../../../../../common/utils/helpers";
 
 interface ContainerProps {
   docRevId?: string;
@@ -39,8 +40,6 @@ interface ContainerProps {
 interface ComponentProps extends ContainerProps {
   formik: FormikProps<DocumentRevisionFormValues>;
 }
-
-const emptyFunction = () => undefined;
 
 const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   docRevId,

@@ -93,11 +93,11 @@ Cypress.Commands.add("mpiAddMaterialParameterToStep", (params: {
   numbOfStep: integer;
   material: string;}) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
+    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick({ force: true });
   });
   cy.listLoadingElementShouldNotExist();
-  cy.get("[data-cy=\"title\"]").arrowType(params.material);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowType(params.material, { force: true });
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

@@ -4,12 +4,24 @@ import { SMBox, SMText } from "../../../App";
 import { styles as CRStyles, tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse_icon.svg";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
+
 import { FBTooltip } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
 
+import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
+
+import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
+import { ReactComponent as EyeIcon } from "../../../assets/images/eye-icon-references.svg";
+import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
+
+import { useIntl } from "react-intl";
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import ChangeRequestAuditContainer from "../../change.request/audit/Audit.container";
+import CRReferences from "../../change.request/references/Reference";
+import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
+
 interface Props {
-  sidebarList: SidebarTypes[];
+  changeRequest: ChangeRequest;
   setOpen: (value: boolean) => void;
   isDrawerOpen: boolean;
   fromEdit?: boolean;
@@ -20,14 +32,61 @@ const StyledTooltip = (props: TooltipProps) => {
   return <FBTooltip arrow placement="left" classes={classes} {...props} />;
 };
 
-const Sidebar: React.FunctionComponent<Props> = ({
-  sidebarList,
+const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
+  changeRequest,
   isDrawerOpen,
   setOpen,
   fromEdit,
 }) => {
+
+  const intl = useIntl();
+
   const [tab, setTab] = useState(0);
   const crClasses = CRStyles(isDrawerOpen);
+
+  const sidebarList: SidebarTypes[] = [
+    {
+      icon: <EyeIcon />,
+      type: "references",
+      details: {
+        shouldShow: true,
+        title:
+          intl?.formatMessage({
+            id: "common.references",
+          }) || "",
+        component: (
+          <CRReferences
+            changeRequest={changeRequest}
+          />
+        ),
+      },
+    },
+    {
+      icon: <TimelineIcon />,
+      type: "history",
+      details: {
+        shouldShow: Boolean(changeRequest),
+        dataCy: "timeline-icon",
+        title: intl.formatMessage({
+          id: "document.revision.history",
+        }),
+        component: changeRequest ?
+          <ChangeRequestAuditContainer changeRequest={changeRequest} isDrawerOpen={isDrawerOpen} />
+          : null,
+      },
+    }, {
+      icon: <BookmarkIcon />,
+      type: "bookmarks",
+      details: {
+        shouldShow: true,
+        dataCy: "bookmark-icon",
+        title: intl.formatMessage({
+          id: "document.revision.bookmarks",
+        }),
+        component: <Bookmarks fromAR={true} />,
+      },
+    },
+  ];
 
   return (
     <Box
@@ -77,10 +136,12 @@ const Sidebar: React.FunctionComponent<Props> = ({
         borderTop={1}
         borderColor={Colors.medium_gray}
       >
-        <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList, setTab }} />
+        <SidebarContainer
+          sidebarList = {sidebarList}
+          {...{ isDrawerOpen, setOpen, setTab }} />
       </SMBox>
     </Box>
   );
 };
 
-export default Sidebar;
+export default ChangeRequestSidebar;
