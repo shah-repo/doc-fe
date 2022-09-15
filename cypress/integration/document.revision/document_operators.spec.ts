@@ -173,6 +173,7 @@ context("Document Operators Access Test", () => {
 
   context("Fill in document attributes", () => {
     it("Enters title 'New Document Revision'", () => {
+      cy.reload();
       cy.drEnterDocumentTitle({ name: "New Document Revision" });
     });
 

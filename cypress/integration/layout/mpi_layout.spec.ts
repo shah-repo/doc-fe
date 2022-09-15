@@ -527,11 +527,11 @@ context("Mpi Layout", () => {
         });
 
         it("Verify material", () => {
-          cy.get("[data-cy='materialInfo'] span").should("have.text", "MT-00004 - Material one | sets : 9");
+          cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
+            .should("have.text", "MT-00004 - Material one | sets : 9");
         });
-
         it("Verify equipment", () => {
-          cy.get("[data-cy='equipmentInfo'] span").should("have.text", "ET-00003 Equipment one");
+          cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(0).should("have.text", "ET-00003 - Equipment one");
         });
 
       });
