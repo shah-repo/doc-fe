@@ -466,7 +466,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Select radio button of without copyableValue checkbox Equipment Maintenance", () => {
-      cy.get("input[name^=\"eq-wo-ch-\"]").eq(-1).arrowClick();
+      cy.get("input[name^=\"eq-wo-ch-\"]").eq(-1).arrowClick({ force: true });
     });
 
     it("Enter Justification of without copyableValue checkbox Equipment Maintenance", () => {

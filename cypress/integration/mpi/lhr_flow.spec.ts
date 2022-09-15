@@ -1331,13 +1331,8 @@ context("LHR flow", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
-          });
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -1346,30 +1341,14 @@ context("LHR flow", () => {
       context("Add another step with different MPI on document ", () => {
         it("Add LHR step", () => {
           SystemRequirement("REQ-3150");
-          cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "LHR Step" });
-          });
-          cy.listLoadingElementShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.fbAddNewFieldButton();
-          });
+          cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Select MPI document created with API for step #2 in LHRt", () => {
-          cy.get("[data-cy=\"LHR Step 2\"]").arrowClick();
-
-          cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
-            CyRoutes.GetAutocompleteOptions,
-            CyRoutes.PatchDocRev], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
-          });
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(1).arrowClick({ force: true });
+          cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -1414,6 +1393,7 @@ context("LHR flow", () => {
 
       context("Add parameter materials and equipment", () => {
         it("Click 'LHR Step'", () => {
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
           cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
         });
 
@@ -1494,7 +1474,8 @@ context("LHR flow", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wait(2000);
     });
 
     it("Add note to'End Quantity'", () => {
@@ -1514,7 +1495,7 @@ context("LHR flow", () => {
         lhrDocUrl = url;
       });
       SystemRequirement("REQ-3180");
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDateSuffix + "02RD");
+      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDateSuffix + "02");
     });
 
     context("Complete first step in LHR", () => {
@@ -1771,7 +1752,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
           cy.wait(2000);
         });
 

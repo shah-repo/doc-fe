@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, get, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
+import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -10,7 +10,7 @@ import { Approval } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { DocumentStatus } from "../../../state/ducks/documents/types";
+import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
@@ -168,16 +168,25 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         const { id } = workspaceState || {};
         if (!id) { return; }
         dispatch(documentRevisionsActions.loadAudit(id));
+        if (!workspaceState?.autosave) { return; }
+        workspaceState?.saveDocRev(formState?.getValues());
       }));
     }
 
     function removeApprover(ids?: string[]) {
       if (!ids) { return; }
       map(ids, (approver) => {
+        const deletedApproverIndex = findIndex(document?.approvals, (a) =>
+          a.approverId === approver && a.status === ChangeRequestStatus.Draft as string);
         const approval = find(approvalsState?.getApprovals, (a) => a.approver?.id === approver);
+        if (document?.approvals?.[deletedApproverIndex]) {
+          document.approvals[deletedApproverIndex].status = ApprovalStatus.Abandoned;
+        }
         approvalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
           const id  = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+          if (!workspaceState?.autosave) { return; }
+          workspaceState?.saveDocRev(formState?.getValues());
         });
       });
     }

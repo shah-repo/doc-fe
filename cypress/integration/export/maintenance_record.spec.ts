@@ -185,7 +185,7 @@ context("Export maintenance record", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -201,7 +201,7 @@ context("Export maintenance record", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -571,7 +571,7 @@ context("Export maintenance record", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
       cy.unClick();
     });
 
@@ -580,17 +580,17 @@ context("Export maintenance record", () => {
     });
 
     it("Select 'CAL/PM' tab", () => {
-      cy.get("[data-cy=\"tabId.calpmhistory\"]").arrowClick();
+      cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
-      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Select document 'Yes' for calibration required", () => {
-      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true });
     });
 
     it("Save document", () => {
@@ -749,7 +749,6 @@ context("Export maintenance record", () => {
 
       it("Save the document", () => {
         cy.drClickCreateDocumentWithApiCall();
-        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

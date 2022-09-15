@@ -23,7 +23,7 @@ export const styles = makeStyles(() =>
       "top": HEADER_HEIGHT,
       "bottom": 0,
       "right": 0,
-      "backgroundColor": Colors.light_gray,
+      "backgroundColor": Colors.alabaster,
       "scrollbarWidth": "none",
       "&::-webkit-scrollbar": {
         display: "none",

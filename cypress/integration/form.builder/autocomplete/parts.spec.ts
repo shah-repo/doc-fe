@@ -622,7 +622,8 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Checkbox option 1 checked", () => {
-        cy.get(`input[type="checkbox"][value="1"]`).last().check();
+        cy.unClick();
+        cy.get(`input[type="checkbox"][value="1"]`).last().check({ force: true });
       });
 
       it("Save document", () => {
@@ -634,20 +635,21 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Select make vs buy", () => {
-        cy.get("[id$=\"make-vs-buy\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Make").arrowClick();
+        cy.get("[id$=\"make-vs-buy\"]").arrowClick({ force: true });
+        cy.get("ul[role=listbox]>li").contains("Make").arrowClick({ force: true });
       });
 
       it("Select traceability required", () => {
-        cy.get("[value=\"Traceability required\"]").check();
+        cy.get("[value=\"Traceability required\"]").check({ force: true });
       });
 
       it("Select 'Yes' for Serialized option", () => {
-        cy.get("[name=\"serialized\"][value=\"Yes\"]").check();
+        cy.unClick();
+        cy.get("[name=\"serialized\"][value=\"Yes\"]").check({ force: true });
       });
 
       it("Select serialization", () => {
-        cy.get("[id$=\"select-serialization\"]").arrowClick();
+        cy.get("[id$=\"select-serialization\"]").arrowClick({ force: true });
         cy.get("ul[role=listbox]>li").contains("Select Provided Serialization").arrowClick();
       });
 

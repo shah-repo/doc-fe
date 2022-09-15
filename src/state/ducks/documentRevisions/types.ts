@@ -9,6 +9,7 @@ import { Approval, Id, Nullable, Owner, User } from "../common/types";
 import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from "./documentType/types";
+import { Employee } from "../company/types";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -46,6 +47,7 @@ export interface DocumentRevisionDocument {
   smartReferencesTo?: SmartReference[];
   smartReferencesFrom?: SmartReference[];
   typeSpecificConfig?: TypeSpecificConfig;
+  operators?: Employee[];
 }
 
 export interface SecurityList {

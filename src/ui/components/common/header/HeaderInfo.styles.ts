@@ -92,11 +92,8 @@ export const styles = makeStyles((theme: Theme) =>
       "fontSize": "14px",
       "color": Colors.white,
       "textDecoration": "none",
-      "cursor": "pointer",
       "& a": {
         color: Colors.white,
-        textDecoration: "underline",
-        cursor: "pointer",
       },
     },
     whiteDot: {
@@ -120,7 +117,6 @@ export const styles = makeStyles((theme: Theme) =>
       textTransform: "uppercase",
       alignItems: "center",
       justifyContent: "center",
-      cursor: "pointer",
     },
     GREEN_STATUS: {
       color: Colors.green_blue,
