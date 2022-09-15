@@ -765,8 +765,7 @@ context("Verify the user is able to create LHRT", () => {
 
     it("Add 'CS Part' as Material to step #1", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.mpiAddMaterialDocumentToStep({
-          checkParameter: true,
+        cy.mpiAddMaterialDocumentToStepWithLHRT({
           numbOfStep: 1,
           material: CSPartDocumentTitle,
           quntity: "3",
