@@ -465,6 +465,8 @@ context("Export Engineering Build doc", () => {
 
       it("Click Cancel draft", () => {
         cy.drCancelDraftButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify export", () => {
