@@ -832,6 +832,7 @@ context("Released_lots_verify_in_lhr", () => {
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
         });
       });
 
