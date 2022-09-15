@@ -189,51 +189,71 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Click on 'Details' tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
     });
 
     it(`Enters company name '${newCompanyName}'`, () => {
-      cy.get("[name^=company-name-]").arrowType(newCompanyName);
+      cy.get("[name^=company-name-]").arrowType(newCompanyName, { force: true });
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
-      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
+      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
+      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email, { force: true });
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
-      cy.get("[name*='approved-dam-json-is-used-']").check("Yes");
+      cy.get("[name*='approved-dam-json-is-used']").eq(0)
+        .should("have.value", "Yes").click({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload DOM JSON", () => {
       cy.atchUploadDOMJSONForNCO({ fileName: "po_dam.json", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-      cy.get("[name*='approved-page-details-json-is-used-']").check("Yes");
+      cy.get("[name*='approved-page-details-json-is-used-']").eq(0)
+        .should("have.value", "Yes").click({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Page Details JSON", () => {
       cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-      cy.get("[name*='approved-navigation-json-is-used-']").check("Yes");
+      cy.get("[name*='approved-navigation-json-is-used-']").eq(0)
+        .should("have.value", "Yes").click({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Navigation JSON", () => {
       cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Users List JSON", () => {
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.get("[data-cy='albumMediaButton']").eq(0).arrowClick();
+      cy.get("[data-cy='albumMediaButton']").eq(0).arrowClick({ force: true });
       cy.pmUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
@@ -447,6 +467,115 @@ context("Add Requestor as an approver of the PO", () => {
         startingNumber: "1", revisionStage: "Numeric", group: "PO",
         equipmentProdEnforce: "No", category: "Purchase Order",
       });
+    });
+  });
+
+  context("Create Form PO Approval matrix", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'POAM Form'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Form" });
+    });
+
+    it("Enters description 'POAM Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'PO Approval Matrix' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Create POAM document for PO", () => {
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enters title 'POAM Document'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Document" });
+    });
+
+    it("Enters description 'POAM Doc description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Doc description" });
+    });
+
+    it("Navigate to MatrixDetails tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Click on 'Add Item'", () => {
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+    });
+
+    it("Enter Level Name value to be '1'", () => {
+      cy.poAMEnterLevelName({ name: "1" });
+    });
+
+    it("Enter Limit value to be '5000'", () => {
+      cy.poAMEnterLimit({ limit: "5000" });
+    });
+
+    it(`Select Users '${USERS[1].name}'`, () => {
+      cy.poAMSelectUsers(USERS[1].name);
+    });
+
+    it("Add first POAM level", () => {
+      cy.poAddPOButtonClick();
+    });
+
+    it("Click on 'Add Item'", () => {
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+    });
+
+    it("Enter Level Name value to be '2'", () => {
+      cy.poAMEnterLevelName({ name: "2" });
+    });
+
+    it("Enter Limit value to be '25000'", () => {
+      cy.poAMEnterLimit({ limit: "25000" });
+    });
+
+    it(`Select Users '${USERS[2].name}'`, () => {
+      cy.poAMSelectUsers(USERS[2].name);
+    });
+
+    it("Add second POAM level", () => {
+      cy.poAddPOButtonClick();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -746,6 +875,21 @@ context("Add Requestor as an approver of the PO", () => {
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[2].name} - ${USERS[2].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Verify that if the Requestor fulfills the PO approval level", () => {
+    it("Check approval icon if it's gray", () => {
+      cy.poAMCheckApprovalIconIfItsGray();
+    });
+
+    it("Check if selected approver has approval signature right by his name", () => {
+      cy.poAMCheckIfApproverHasApprovalSign();
+      cy.unClick();
+    });
+
+    it("Check approval icon if it's colored", () => {
+      cy.poAMCheckApprovalIconIfItsRed();
     });
   });
 
