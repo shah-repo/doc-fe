@@ -437,6 +437,7 @@ context("po withdraw submission", () => {
 
   context("Create PO document in pending approval state ", () => {
     it("Navigate to PO", () => {
+      cy.wait(1000);
       cy.navigToPurchaseOrder();
     });
 
@@ -674,16 +675,17 @@ context("po withdraw submission", () => {
     });
 
     it("Verify Requestor Added as User 1 ", () => {
-      cy.get("[data-cy=\"form.builder.audit.STRING_NEW\"]").eq(1).contains("Requestor Added")
+      cy.get("[data-cy='form.builder.audit.STRING_NEW']").contains("Requestor Added")
         .should("exist");
-      cy.get("[class^=\"makeStyles-auditValue-\"]").eq(4).contains("Giovanni Reynolds enlil.testmail+cy1@gmail.com")
+      cy.get("[data-cy='form.builder.audit.STRING_NEW']").next()
+        .contains("Giovanni Reynolds enlil.testmail+cy1@gmail.com")
         .should("exist");
     });
 
     it("Verify Approver Added as User 1 ", () => {
-      cy.get("[data-cy=\"change-key-2-0\"]").contains("Approver Added")
+      cy.get("[data-cy='change-key-2-0']").contains("Approver Added")
         .should("exist");
-      cy.get("[class^=\"makeStyles-auditValue-\"]").eq(2).contains("Giovanni Reynolds")
+      cy.get("[data-cy='change-key-2-0']").parent().next().contains("Giovanni Reynolds")
         .should("exist");
     });
   });
