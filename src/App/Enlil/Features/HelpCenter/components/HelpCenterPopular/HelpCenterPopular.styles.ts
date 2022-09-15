@@ -1,6 +1,6 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 
-export default makeStyles((theme: Theme) => ({
+export default makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2.5),
     borderTop: `1px solid ${theme.palette.divider}`,

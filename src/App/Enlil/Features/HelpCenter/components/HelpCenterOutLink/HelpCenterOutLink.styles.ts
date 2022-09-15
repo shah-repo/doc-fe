@@ -1,7 +1,7 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
 
-export default makeStyles((theme: Theme) => ({
+export default makeStyles((theme) => ({
   root: {
     display: "flex",
     alignItems: "center",
