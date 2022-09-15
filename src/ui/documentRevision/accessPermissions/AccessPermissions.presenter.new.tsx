@@ -1,11 +1,10 @@
-import { Avatar, Box, Collapse, Grid, List, ListItem, ListItemSecondaryAction, ListItemText, TooltipProps, Typography } from "@material-ui/core";
+import { Avatar, Box, Collapse, Grid, List, ListItem, ListItemSecondaryAction, ListItemText, Typography } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import { filter, isEmpty, isEqual, some, truncate } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import Select, { components, OptionProps } from "react-select";
-import { tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as CloseIcon } from "../../../assets/images/delete_icon.svg";
 import { Group } from "../../../state/ducks/auth/types";
 import { Owner, TypographySize } from "../../../state/ducks/common/types";
@@ -13,10 +12,10 @@ import { documentRevisionsActions } from "../../../state/ducks/documentRevisions
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
-import { FBTooltip } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import Colors from "../../layout/theme/utils/colors";
+import { StyledTooltip } from "../forms/presenters/AvailableReferences.new";
 import { styles } from "./AccessPermissions.styles.new";
 
 interface OwnProps {
@@ -32,11 +31,6 @@ interface OwnProps {
 }
 
 type AccessPermissionsPresenterProps = OwnProps;
-
-const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="top" classes={classes} {...props} />;
-};
 
 const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPresenterProps> = ({
   availableApprovers,
@@ -186,7 +180,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
     setGroupsOpen(!groupsOpen);
   };
 
-  const truncateLable = (label) => truncate(label, { length: 30, omission: " ..." });
+  const truncateLabel = (label) => truncate(label, { length: 30, omission: " ..." });
 
   const Option = (props: OptionProps<OptionType>) => {
     const { data } = props;
@@ -194,14 +188,12 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
       return (
         <components.Option {...props} >
           <StyledTooltip title={data.label}>
-            <>{truncateLable(data.label)}</>
+            <>{truncateLabel(data.label)}</>
           </StyledTooltip>
         </components.Option>
       );
     }
-    else {
-      return (<components.Option {...props} />);
-    }
+    return (<components.Option {...props} />);
   };
 
   return (
