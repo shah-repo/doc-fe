@@ -38,7 +38,6 @@ export type FBWorkspaceProps =
   document?: DocumentRevision;
   changeRequest?: ChangeRequest;
   autosave?: boolean;
-  includeProcedureDiff?: boolean;
   // Temp portal flag. This will be removed once the RichTextEditor double mounting is fixed
   isPortal?: boolean;
   isStarterRequired?: () => boolean;
