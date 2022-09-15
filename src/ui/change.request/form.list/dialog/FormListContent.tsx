@@ -11,15 +11,16 @@ import FormListActions from "./FormListActions";
 interface Props {
   dialog: DialogHandler;
   templateOptions: TemplateOption[];
+  handleTemplateSelection: (option: TemplateOption) => void;
 }
 
 const FormListContent: React.FunctionComponent<Props> = ({
   dialog,
   templateOptions,
+  handleTemplateSelection,
 }) => {
   const classes = styles();
-  const [chosenTypeId, setchosenTypeId] = useState<string>("");
-  const [ chosenFormId, setChosenFormId ] = useState<string>("");
+  const [chosenOption, setChosenOption] = useState<TemplateOption>();
 
   const renderForm = (props: FormikProps<SelectTemplateFormValues>) => (
     <DialogContent classes={{ root: classes.dialogContent }}>
@@ -32,19 +33,22 @@ const FormListContent: React.FunctionComponent<Props> = ({
         options={templateOptions}
         onClick={(option) => { setFormValues(option); }}
       />
-      <FormListActions {...{ dialog, chosenFormId, chosenTypeId }}/>
+      <FormListActions {...{ dialog, createChangeRequest }}/>
     </DialogContent>
   );
 
+  const createChangeRequest = () => {
+    handleTemplateSelection(chosenOption as TemplateOption);
+  };
+
   const setFormValues = (option) => {
-    setchosenTypeId(option.docTypeId);
-    setChosenFormId(option.value);
+    setChosenOption(option);
   };
 
   return (
     <FormContext.Provider value={{ submitOnChange: false }}>
       <Formik
-        initialValues={{ chosenFormId: "" }}
+        initialValues={{ chosenOption: "" }}
         onSubmit={setFormValues}
       >
         {renderForm}

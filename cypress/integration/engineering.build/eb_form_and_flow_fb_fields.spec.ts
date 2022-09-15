@@ -767,7 +767,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Edit Component", () => {
-      cy.get("[data-cy='edit-schema-item']").eq(0).arrowClick({ force: true });
+      cy.fbClickLabelEditHiddenBtn({ label: "EB Procedure" });
       cy.get("[data-cy='label']").clear();
       cy.fbEnterLabel({ label: "EB Procedure Edited" });
       cy.fbAddField();
@@ -779,7 +779,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Add component again", () => {
-      cy.fbAddNewFieldWhenHidden();
+      cy.get("[data-cy='form.builder.add.field']").eq(0).arrowClick({ force: true });
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
       cy.get("[value=\"copyableValue\"]").check();
       cy.fbAddField();
@@ -833,7 +833,7 @@ context("Procedure and parts flow test", () => {
 
     context("Move & Edit & Remove component", () => {
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.get("[data-cy='form.builder.add.field']").eq(0).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for eb test" });
         cy.fbAddField();
@@ -845,7 +845,7 @@ context("Procedure and parts flow test", () => {
         cy.get(`[class="drag-handle"]`).eq(3)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
-        cy.get(`[class="drag-handle"]`).eq(1)
+        cy.get(`[class="drag-handle"]`).eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
         cy.unClick();
@@ -858,7 +858,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true });
+        cy.fbClickLabelEditHiddenBtn({ label: "Textfield for eb test" });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for eb test Edited" });
         cy.fbAddField();
@@ -880,20 +880,8 @@ context("Procedure and parts flow test", () => {
         cy.get(`button[id="DocumentByTypeListPresenter-openDocRev"]`).arrowClick();
       });
 
-      it("Enter title 'Test Engineering Build'", () => {
-        cy.drEnterDocumentTitle({ name: "Test Engineering Build" });
-      });
-
-      it("Enter description 'Test Engineering Build description'", () => {
-        cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
-      });
-
-      it("Add the new part in the Part field", () => {
-        cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("PRT-00001 - rev 1 - Part document");
-      });
-
       it("Add component", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.get("[data-cy='form.builder.add.field']").eq(0).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for eb test" });
         cy.fbAddField();
@@ -918,7 +906,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Edit Component", () => {
-        cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+        cy.fbClickLabelEditHiddenBtn({ label: "Textfield for eb test" });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for eb test Edited" });
         cy.fbAddField();
@@ -928,6 +916,18 @@ context("Procedure and parts flow test", () => {
         cy.fbClickRemoveBtn({ label: "Textfield for eb test Edited" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Enter title 'Test Engineering Build'", () => {
+        cy.drEnterDocumentTitle({ name: "Test Engineering Build" });
+      });
+
+      it("Enter description 'Test Engineering Build description'", () => {
+        cy.drEnterDocumentDescription({ description: "Test Engineering Build description" });
+      });
+
+      it("Add the new part in the Part field", () => {
+        cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("PRT-00001 - rev 1 - Part document");
       });
 
       it("Upload attachment", () => {
@@ -1048,7 +1048,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Add component", () => {
-          cy.fbAddNewFieldWhenHidden();
+          cy.get("[data-cy='form.builder.add.field']").eq(0).arrowClick({ force: true });
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
           cy.fbAddLabelName({ name: "Textfield for eb test" });
           cy.fbAddField();
@@ -1066,7 +1066,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Edit Component", () => {
-          cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+          cy.fbClickLabelEditHiddenBtn({ label: "Textfield for eb test" });
           cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
           cy.fbAddLabelName({ name: "Textfield for eb test Edited" });
           cy.fbAddField();

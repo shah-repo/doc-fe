@@ -1,4 +1,4 @@
-import { Box, BoxProps, createStyles, IconButton, ListItem, makeStyles, Tooltip, Typography } from "@material-ui/core";
+import { Box, BoxProps, createStyles, Grid, IconButton, ListItem, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import { HighlightOffOutlined } from "@material-ui/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -98,24 +98,26 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
     ));
 
   const buildsEmptyRenderer = () => (
-    <Box ml={isDraft ? 0 : 2}>
+    <Box>
       <Typography variant="h5" style={labelFont}>
         <Text message="common.none"/>
       </Typography>
     </Box>
   );
   return (
-    <Box pb={3}>
-      <ListItem data-cy="BuildsPresenter-label" disableGutters>
-        <Typography variant="h6" style={labelProps}>
-          <Text message={label} />
-        </Typography>
-      </ListItem>
-      <Box display="flex" ml={isDraft ? 0 : 2}>
-        {referencesRenderer()}
+    <Grid xs={6}>
+      <Box pb={3} pt={3}>
+        <ListItem data-cy="BuildsPresenter-label" disableGutters>
+          <Typography variant="h6" style={labelProps}>
+            <Text message={label} />
+          </Typography>
+        </ListItem>
+        <Box display="flex">
+          {referencesRenderer()}
+        </Box>
+        {!dataProp.length && buildsEmptyRenderer()}
       </Box>
-      {!dataProp.length && buildsEmptyRenderer()}
-    </Box>
+    </Grid>
   );
 };
 

@@ -30,13 +30,14 @@ export const withFBSortable = <T extends FBSortableProps>(
 
     const isHiddenByRules = (item: FBSchemaProps) => workspaceState?.hiddenFieldsByRules?.has(item.name as string);
 
-    const SortableItem = SortableElement(({ value }: { value: FBSchemaProps }) => (
+    const SortableItem = SortableElement(({ value, position }: { value: FBSchemaProps; position: number }) => (
       <Observer>
         {() => (
           <li style={{ listStyleType: "none", display: isHiddenByRules(value) ? "none" : "block" }}>
             <FBFieldWrapper
               key={`fb-sortable-wrapper-${value.index}`}
               inputProps={value as FBInputProps}
+              position={position}
             >
               {schemaField(value)}
             </FBFieldWrapper>
@@ -45,14 +46,16 @@ export const withFBSortable = <T extends FBSortableProps>(
       </Observer>
     ));
 
+    let position = 0;
     const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
       if (schemaItem.deleted || schemaItem.hidden ||
         (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
+      position++;
       return (
         <SortableItem
           key={`fb-sortable-item-${index}`}
           value={{ ...schemaItem, index }}
-          {...{ index }}
+          {...{ index, position }}
         />
       );
     }));
