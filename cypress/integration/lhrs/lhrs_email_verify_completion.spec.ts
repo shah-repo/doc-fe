@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -34,11 +35,11 @@ let createdPartDocument;
 let LHRtDocumentType;
 let LHRDocumentType;
 let createdLHRtDocument;
-let lotId;
 let dateAfterEmailShouldArrive;
 let emailsFromInbox;
 let lhrDocUrl;
 let lhrsDocUrl;
+const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 
 context("Email format Verification after LHR released", () => {
@@ -1031,9 +1032,9 @@ context("Email format Verification after LHR released", () => {
           contains: [
             `Hello <b>${USERS[1].name},</b><br>`,
             "Part CS-00005 Part document, <a href=",
-            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">${lotId}</a>, <a`,
-            `${lhrsDocUrl.substring(lhrsDocUrl.length - 100)}">Step #1</a> (PI-00008 MPI created with`,
-            "API, Rev 1) has been completed.",
+            `${lhrDocUrl.substring(lhrDocUrl.length - 100)}">LOT #${lotDateSuffix}01RD</a>, <a`,
+            `${lhrsDocUrl.substring(lhrsDocUrl.length - 100)}">Step #1</a> (PI-00008 MPI created with API, Rev`,
+            "1) has been completed.",
             createdCompany.id],
         }];
 
