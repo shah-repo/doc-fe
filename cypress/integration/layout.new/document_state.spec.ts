@@ -2596,7 +2596,7 @@ context(
 
         it("Approve the record", () => {
           cy.wait(3000);
-          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+          cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
           cy.unClick();
           cy.wrapWithWaitOnApiCalls(
@@ -2617,19 +2617,12 @@ context(
           it("Revise document with 'Void' option", () => {
             cy.drClickReviseDocument();
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
-            // cy.drChooseTypeOfRevisionChangeOption({ option: "OBS" });
-            // cy.get("#RevisionTypeChange-obsolete > span.MuiButtonBase-root").contains("Obsolete").arrowClick();
-            // cy.get("#RevisionTypeChange-obsolete > span.MuiButtonBase-root");
-            // cy.get("#RevisionTypeChange-obsolete .MuiIconButton-label > input").arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.drChooseTypeOfRevisionChangeOption({ option: "Obsolete" });
-            // cy.get("revisionChangeType").get("revisionChangeType")
-            // cy.get("[type=\"radio\"]").check("OBSOLETE");
-
-            // cy.drClickCreateDocumentWithoutApiCall();
             cy.wait(3000);
             cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[1].name}`);
             cy.drApproveAndReleaseDialog();
-
             cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
             cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
             cy.progressBarShouldNotExist();
@@ -2656,10 +2649,10 @@ context(
       context("Check the content of the status bar", () => {
         it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
           cy.verifyHeaderInfoContent({
-            status: STATUS_TYPES_LABEL.VOID,
+            status: STATUS_TYPES_LABEL.OBSOLETE,
             title: "Document List",
             docId: "TC-00001",
-            revision: "OBS",
+            revision: "Rev OBS",
           });
         });
 
