@@ -766,12 +766,16 @@ context("Verify the user is able to create LHRT", () => {
 
     it("Add 'CS Part' as Material to step #1", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.mpiAddMaterialDocumentToStepWithLHRT({
-          numbOfStep: 1,
-          material: CSPartDocumentTitle,
-          quntity: "3",
-          unit: "Each",
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+          cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
         });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[name=\"LHRTparameter\"]").check();
+        cy.get("[data-cy=\"title\"]").arrowClick();
+        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
