@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import { Box } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import { compact, concat, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
-import { reaction } from "mobx";
+import { reaction, toJS } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
@@ -16,6 +17,8 @@ import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/docume
 import Colors from "../../layout/theme/utils/colors";
 import FBDataStore from "../FBStore/FBDataStore";
 import FBPOApprovalsState from "./FBPOApprovals.state";
+
+const EMPTY_GROUP = "empty";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -50,6 +53,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     dialogState = FB.useRef(FBDialogState);
     const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
     const updateApprovers = isDocumentRevisionInDraft(document?.status) && !isAdministrativeChange;
+    console.log(document);
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
@@ -114,11 +118,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ), []);
 
     function checkLineItems() {
+      console.log("checkLineItems");
       if (!updateApprovers) {
         return;
       }
 
-      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      let poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      if (FBDataStore?.refreshData?.formInput) {
+        poItems = FBDataStore?.refreshData?.formInput[PO_ITEMS_COMPONENT_NAME];
+      }
+
+      console.log(" poItems ", toJS(poItems));
       const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
       const prevRequesterValue = prevRequester.current;
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
@@ -146,6 +156,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (data) => {
         concatApprovals(data);
         FBDataStore.setPoApprovals(data);
+
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -205,7 +216,19 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => reaction(
+      () => Object.values((poApprovalsState?.groups as {})).length,
+      () => {
+        checkLineItems();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     const checkGroups = (id: string) => {
+      if (Object.values((poApprovalsState?.groups as {})).length === 0) {
+        // No required approvals for the docRevision
+        return EMPTY_GROUP;
+      }
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
       const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
@@ -234,9 +257,11 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       if (!id) { return; }
       if (!ids) { return; }
       const groupName = checkGroups(ids[0]);
+      console.log(difference(ids, availableApprovers).length === 0 );
       if (
         poApprovalsState.getDidMountPhase &&
-        difference(ids, availableApprovers).length === 0
+        ( difference(ids, availableApprovers).length === 0
+        || groupName === EMPTY_GROUP )
       ) {
         return;
       }
