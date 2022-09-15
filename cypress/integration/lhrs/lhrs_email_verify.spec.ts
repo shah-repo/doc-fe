@@ -911,7 +911,10 @@ context("Email format Verification after LHR released", () => {
     });
 
     it("Select build type Prod", () => {
-      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
+      cy.contains("Build Type").scrollIntoView().should("be.visible");
+      cy.contains("Build Type").arrowClick({ force: true }).wait(1000);
+      cy.get("[value='R&D']").check();
+      cy.wait(2000);
     });
 
     it("Save the document", () => {
@@ -928,6 +931,7 @@ context("Email format Verification after LHR released", () => {
 
     it("Open LHR step", () => {
       cy.get("[data-cy='LHR Step 1']").arrowClick({ force: true });
+      cy.wait(3000);
     });
 
     it("Click on Start Step button", () => {
