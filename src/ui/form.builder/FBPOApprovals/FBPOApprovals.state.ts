@@ -63,8 +63,8 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
     map(this.approvals, (approval) => {
       map(this.groups, (group) => {
-        // eslint-disable-next-line max-len
-        if ((group.joinedEmployees as string[]).includes(approval.approverId || "") && group.type === "REVISION_APPROVAL") {
+        if ((group.joinedEmployees as string[]).includes(approval.approverId || "")
+          && group.type === "REVISION_APPROVAL") {
           filteredCheckedGroups.push(group);
         }
       });
@@ -122,7 +122,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
         return this.approvalApi.onError(error);
       }
       this.approvalApi.data = data;
-      this.onSuccess(); // solves the race condition
+      this.onSuccess();
       this.approvalApi.onSuccess(); // removes the loader
       callback?.();
     });
