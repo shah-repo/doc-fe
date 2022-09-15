@@ -9,7 +9,7 @@ import AsyncGate from "../components/AsyncGate";
 import { CHANGE_REQUEST_PREVIEW_URL, CHANGE_REQUEST_UPDATE_URL } from "../constants/urls";
 import ChangeRequestUpdateContainer from "./ChangeRequestUpdate.container";
 import ChangeRequestSockets from "./Sockets";
-import SummaryContainer from "./summary/container";
+import ChangeRequestSummaryContainer from "./summary/container";
 import { ContainerDispatchProps, ContainerOwnProps, ContainerStateProps } from "./utils/types";
 
 type DispatchProps = ContainerDispatchProps;
@@ -35,7 +35,8 @@ const Container: React.FunctionComponent<Props> = ({
 
   const loadAction = () => load(changeRequestId);
   const updateRenderer = () => <ChangeRequestUpdateContainer changeRequest={dataProp} />;
-  const summaryRenderer = () => <SummaryContainer dataProp={dataProp} currentUserEmail={currentUserEmail} />;
+  const summaryRenderer = () =>
+    <ChangeRequestSummaryContainer changeRequest={dataProp} currentUserEmail={currentUserEmail} />;
 
   return (
     <AsyncGate asyncState={loadAsyncState} asyncAction={loadAction} startActionOnMount={true}>
