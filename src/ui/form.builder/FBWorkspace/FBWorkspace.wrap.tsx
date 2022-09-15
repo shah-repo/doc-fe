@@ -8,7 +8,6 @@ import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes,
 import { SM } from "../../../App";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
-import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
 
 // Disable missing translation message for the non translation cases.
 
@@ -37,7 +36,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     changeRequest,
     autosave = false,
     schema,
-    includeProcedureDiff,
     ...props
   }: T) => {
 
@@ -118,15 +116,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       });
     }, [formInput, workspaceState]);
 
-    const { groupOptions: formGroupOptions } = document?.document?.documentType || {};
-    // We should include document type in FB
-    // We can't ignore that FB is not standalone package anymore
-    const { parent } = document || {};
-    includeProcedureDiff = (
-      checkIsDocumentEB(formGroupOptions) &&
-      Boolean(parent)
-    );
-
     React.useEffect(() => {
       reaction(
         () => workspaceState?.loadAudit,
@@ -186,7 +175,6 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
       workspaceState,
       snackbarState,
       autosave,
-      includeProcedureDiff,
       _tabsState,
       isStarterRequired,
     });

@@ -397,6 +397,114 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
   });
 
+  context("Create Form PO Approval matrix", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'POAM Form'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Form" });
+    });
+
+    it("Enters description 'POAM Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'PO Approval Matrix' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Create POAM document for PO", () => {
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enters title 'POAM Document'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Document" });
+    });
+
+    it("Enters description 'POAM Doc description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Doc description" });
+    });
+
+    it("Navigate to MatrixDetails tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Click on 'Add Item'", () => {
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+    });
+
+    it("Enter Level Name value to be '1'", () => {
+      cy.poAMEnterLevelName({ name: "1" });
+    });
+
+    it("Enter Limit value to be '5000'", () => {
+      cy.poAMEnterLimit({ limit: "5000" });
+    });
+
+    it(`Select Users '${USERS[1].name}'`, () => {
+      cy.poAMSelectUsers(USERS[1].name);
+    });
+
+    it("Add first POAM level", () => {
+      cy.poAddPOButtonClick();
+    });
+
+    it("Click on 'Add Item'", () => {
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+    });
+
+    it("Enter Level Name value to be '2'", () => {
+      cy.poAMEnterLevelName({ name: "2" });
+    });
+
+    it("Enter Limit value to be '25000'", () => {
+      cy.poAMEnterLimit({ limit: "25000" });
+    });
+
+    it(`Select Users '${USERS[2].name}'`, () => {
+      cy.poAMSelectUsers(USERS[2].name);
+    });
+
+    it("Add second POAM level", () => {
+      cy.poAddPOButtonClick();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
   context("Create Form Part document to create Part", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
@@ -593,7 +701,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Enter number of Units", () => {
-      cy.poNumberOfUnits({ number: "2" });
+      cy.poNumberOfUnits({ number: "100" });
     });
 
     it("Check Tax option", () => {
@@ -686,6 +794,19 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.unClick();
     });
 
+    it("Check approval icon if it's gray", () => {
+      cy.poAMCheckApprovalIconIfItsGray();
+    });
+
+    it("Check if selected approver has approval signature right by his name", () => {
+      cy.poAMCheckIfApproverHasApprovalSign();
+      cy.unClick();
+    });
+
+    it("Check approval icon if it's colored", () => {
+      cy.poAMCheckApprovalIconIfItsRed();
+    });
+
     context("Submit for Approval and verify PO can be released", () => {
       it("Click on Submit for approval", () => {
         cy.pmSubmitForApproval();
@@ -773,7 +894,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").should("have.text", "$30.93");
+      cy.get("[data-cy='poTotal']").should("have.text", "$566.25");
     });
   });
 
