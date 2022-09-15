@@ -1725,7 +1725,9 @@ context("Receiving landing page test", () => {
     });
 
     it("Save PO", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Shipping Cost", () => {
@@ -1816,12 +1818,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Create Receiving Record", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Receivable");
-      });
+      cy.recSelectRecordFormFromMultiSelect({ recordType: "Receivable" });
     });
 
     it("Add approver", () => {
@@ -1834,7 +1831,8 @@ context("Receiving landing page test", () => {
 
     it("Save the form", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to detail tab", () => {
@@ -1867,7 +1865,7 @@ context("Receiving landing page test", () => {
       cy.get("[name='received']").arrowType("3");
     });
 
-    it("Ssave", () => {
+    it("Save", () => {
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
     });
 
@@ -1878,27 +1876,26 @@ context("Receiving landing page test", () => {
 
     it("Save the form", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on create lot", () => {
       cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
-      cy.get("[name^='received']").arrowType("100");
+      cy.get("[name^='received']").arrowType("200");
       cy.get("[data-cy='lotType']").arrowClick({ force: true })
         .autocompleteSelect("Lots");
-
       cy.wrapWithWaitOnApiCalls([], () => {
         cy.get("[data-cy='lotForm']").arrowClick({ force: true })
           .autocompleteSelect("New Lot from Purchase Order Form");
       });
-
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
-      cy.wait(2000);
     });
 
     it("Save the form", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
