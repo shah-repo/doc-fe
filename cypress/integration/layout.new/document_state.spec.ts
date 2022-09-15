@@ -1422,7 +1422,7 @@ context(
       });
     });
 
-    xcontext(`Create a new form with an output of internal type Receivable`, () => {
+    context(`Create a new form with an output of internal type Receivable`, () => {
       context("Create Receivable with form", () => {
         context("Start document creation flow", () => {
           it("Navigates to document list", () => {
@@ -1787,7 +1787,7 @@ context(
             status: STATUS_TYPES_LABEL.VOID,
             title: "Receiving",
             docId: "RCT-00001",
-            revision: "OBS",
+            revision: "Rev Void",
           });
         });
 
