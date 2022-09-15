@@ -1,8 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -15,7 +15,6 @@ let secondEmployee;
 let adminEmployee;
 let RDdocumentType;
 
-const currentTime = moment().tz("America/Los_Angeles").format("hh:mm:ss A");
 
 context("Record inline Flow", () => {
   before(() => {
@@ -237,42 +236,23 @@ context("Record inline Flow", () => {
     });
   });
 
-  context("Click save document and verify WIP Statusbar items", () => {
-    // it("Click save document", () => {
-    //   cy.drClickCreateDocumentWithApiCallForForms();
-    // });
-
-    // it(`Check last Saved Time`, () => {
-    //   cy.get(".makeStyles-lastEdited").should("contain.text", currentTime);
-    // });
-
+  context("verify WIP Statusbar items", () => {
     it(`Check doc status as ${STATUS_TYPES_LABEL.WIP}`, () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
-      cy.pause();
     });
 
-    // it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-    //   cy.verifyListItemExistsOnHeader({
-    //     listItem:
-    //       `Records RD-00003 Rev 1WIP`,
-    //     breadcrump: true,
-    //   });
-    // });
+    it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+          `RecordsRD-00003 Rev 1WIP`,
+        breadcrump: true,
+      });
+    });
 
-    // it(`Verify 'Last saved: ' exist in statusbar`, () => {
-    //   cy.get("[class*=\"makeStyles-lastEdited\"]").contains(`Last saved: `);
-    // });
-
-    // it(`Check the last saved time less less than 2 mins`, () => {
-    //   cy.get("[class*=\"makeStyles-lastEdited\"]").contains("Last saved: ").then(($el: any) => {
-    //     const timeDuration = $el.text().trim().match(/Last saved: (.*)/)[1].trim();
-    //     expect(timeDuration).isBetween(currentTime, lastSavedTime).format("mm");
-    //     //  moment(end.diff(startTime)).format("m[m] s[s]")
-    //     const duration = moment(currentTime.diff(lastSavedTime)).format("hh:mm:ss a");
-    //     cy.log(duration);
-    //     // const timeDiff = currentTime.diff(lastSavedTime, "minutes");
-    //   });
-    // });
+    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
+    });
 
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
@@ -288,8 +268,12 @@ context("Record inline Flow", () => {
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
 
-    it("Check if 'Send To Email' button exists", () => {
+    it("Check if 'Void' button exists", () => {
       cy.get("#HeaderMenuButton").arrowClick();
+      cy.get(`[data-cy="void-button"]`).should("be.visible").should("not.be.disabled");
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -298,19 +282,20 @@ context("Record inline Flow", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+      cy.closeAllAlertMessages();
     });
 
     it("Scroll down to the bottom of the page", () => {
       cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
     });
 
-    // it(`Verify statusbar conataining WIP is still visible`, () => {
-    //   cy.get("div[data-cy=\"HeaderInfo-status\"]").should("be.visible");
-    // });
+    it(`Verify statusbar conataining WIP is still visible`, () => {
+      cy.get("div[data-cy=\"HeaderInfo-status\"]").should("be.visible");
+    });
 
-    // it(`Verify WIP statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
-    //   cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
-    // });
+    it(`Verify WIP statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+    });
   });
 
   context("Fill in document attributes", () => {
@@ -320,11 +305,21 @@ context("Record inline Flow", () => {
     });
 
     it("Click on Save", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
+      cy.get(`[data-cy="DocumentRevisionForm-submit"]`).arrowClick();
+      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+        .contains("Auto-saving, please wait…");
     });
 
+    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
+    });
+
+    it("Add reference", () => {
+      cy.drSelectReferences("FM-00001 - 1 - AR Form");
+    });
+  });
+
+  context("Assign and approve first Inline Approval", () => {
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -336,6 +331,57 @@ context("Record inline Flow", () => {
           cy.get("[name*=\"fb-ia-inline-field\"] input")
             .autocompleteSelect(`${USERS[2].name}`, { force: true });
         });
+    });
+
+    it("Send request for approval", () => {
+      cy.get("[data-cy=\"form.builder.request.approval\"]").first().arrowClick();
+    });
+
+    it("Approve first Inline Approval", () => {
+      cy.inlineApproval();
+    });
+
+    it("Check inline record creation default to numeric revision", () => {
+      cy.drClickRevisionsSidePanel();
+      cy.recCheckRevisionStage({ stage: "Revision 2" });
+      cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).contains("Revision 1")
+        .and("contain.text", "Last Signed");
+    });
+
+    it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+          `RecordsRD-00003 Rev 2WIP`,
+        breadcrump: true,
+      });
+    });
+
+    it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+    });
+
+    it("Check if 'Void' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get(`[data-cy="void-button"]`).should("be.visible").should("not.be.disabled");
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible").should("not.be.disabled");
+      cy.get("#HeaderMenu").click();
+    });
+
+    it(`Verify WIP statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+    });
+  });
+
+  context("Assign and approve second Inline Approval", () => {
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Select approver for second inline", () => {
@@ -350,95 +396,82 @@ context("Record inline Flow", () => {
       cy.get("[data-cy=\"form.builder.request.approval\"]").first().arrowClick();
     });
 
-    it("Check inline record creation default to numeric revision", () => {
-      cy.drClickRevisionsSidePanel();
-      cy.recCheckRevisionStage({ stage: "Revision 1" });
-    });
-
-    it("Check approve button is not disabled", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").should("not.be.disabled");
-    });
-
-    it("Click on Save", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
-    });
-  });
-
-  context("Approve first Inline Approval", () => {
-    it("Approve first Inline Approval", () => {
-      cy.inlineApproval();
-    });
-
-    // it("Check system creates new major revision after inline approve", () => {
-    //   cy.drClickRevisionsSidePanel();
-    //   cy.recCheckRevisionStage({ stage: "Revision 2" });
-    //   cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).contains("Revision 1")
-    //     .and("contain.text", "Last Signed");
-    // });
-  });
-
-  context("Approve second Inline Approval", () => {
-    it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
     it("Approve second Inline Approval", () => {
       cy.inlineApproval();
     });
 
-    // it("Check system creates new major revision after inline approve", () => {
-    //   cy.drClickRevisionsSidePanel();
-    //   cy.recCheckRevisionStage({ stage: "Revision 2" });
-    //   cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).contains("Revision 1")
-    //     .and("contain.text", "Last Signed");
-    // });
+    it("Check system creates new major revision after inline approve", () => {
+      cy.drClickRevisionsSidePanel();
+      cy.recCheckRevisionStage({ stage: "Revision 3" });
+      cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).contains("Revision 2")
+        .and("contain.text", "Last Signed");
+      cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).contains("Revision 1")
+        .and("contain.text", "Archive");
+    });
+
+    it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+          `RecordsRD-00003 Rev 3WIP`,
+        breadcrump: true,
+      });
+    });
+
+    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
+      cy.verifyLastSavedExists();
+    });
+
+    it("Check if 'Finalize and Release' button exists", () => {
+      cy.get(`[data-cy="ApproveAndRelease-button"]`).should("be.visible").should("not.be.disabled");
+    });
+
+    it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").should("not.be.disabled");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+    });
+
+    it("Check if 'Void' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get(`[data-cy="void-button"]`).should("be.visible").should("not.be.disabled");
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible").should("not.be.disabled");
+      cy.get("#HeaderMenu").click();
+    });
+
+    it(`Verify WIP statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+    });
   });
 
-  context("Approve and Release document", () => {
+  context("Click on Finalize and Release", () => {
     it("Approve and release it", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.drClickRevisionsSidePanel();
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
-      });
-
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.drClickRevisionsSidePanel();
-        cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-      });
       cy.recApproveAndReleaseInlineRecord();
     });
-  });
 
-  context("Check only last record is shown on list and that it is in alpha state", () => {
-    it("Navigate to records", () => {
-      cy.navigToRecords();
-    });
-
-    it("Clear filters", () => {
-      cy.dlClearFilters();
-    });
-
-    it("Check if there is only one record in list", () => {
-      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
-    });
-
-    it("Filter record by name and status, and select it", () => {
-      cy.recFilterByTitle({ revision: "Record Document Revision" });
-      cy.wait(1000);
-      cy.recFilterByStatus({ status: "Released" });
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetRequiredApproversDocRev,
-      ], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
+    it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+          `RecordsRD-00003 Rev ARELEASED`,
+        breadcrump: true,
       });
     });
 
-    it("Verify record is in alpha state", () => {
-      cy.drClickRevisionsSidePanel();
-      cy.recCheckRevisionStage({ stage: "Revision A" });
+    it("Check if 'Update Record' button exists", () => {
+      cy.get(`[data-cy="updateRecord"]`).should("be.visible").should("not.be.disabled");
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.get(`[data-cy="exportToEmail"]`).should("be.visible").should("not.be.disabled");
+    });
+
+    it(`Verify WIP statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
   });
 });
