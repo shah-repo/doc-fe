@@ -1078,7 +1078,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.2`", () => {
@@ -1096,7 +1096,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.345`", () => {
@@ -1114,7 +1114,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.0345`", () => {
@@ -1160,7 +1160,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.1856767676`", () => {
@@ -1178,7 +1178,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.2898767885`", () => {
@@ -1196,7 +1196,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.8989765434`", () => {
@@ -1248,7 +1248,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.8999999990111`", () => {
@@ -1384,7 +1384,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.63`", () => {
@@ -1402,7 +1402,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.46`", () => {
@@ -1420,7 +1420,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.451`", () => {
@@ -1438,7 +1438,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.0451`", () => {
@@ -1483,7 +1483,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.1856767677`", () => {
@@ -1501,7 +1501,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.2898767888`", () => {
@@ -1519,7 +1519,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.8989765433`", () => {
@@ -1571,7 +1571,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lotDateSuffix });
+      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
     });
 
     it("Select quantity in lot dialog `0.8999999990111`", () => {
