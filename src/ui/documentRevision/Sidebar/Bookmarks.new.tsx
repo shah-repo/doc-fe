@@ -13,7 +13,7 @@ import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/do
 import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { ApplicationState } from "../../../state/reducers";
 import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
-import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
+import { FB, FBBookmarkItem, FBDocTypeGroup, FBMapWrapper, FBTooltip } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./Bookmarks.new.styles";
 
@@ -36,7 +36,7 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks, 
 
   const documentRevision = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, (_documentRevisionFormState?.documentRevision?.id || "")));
-  const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
+  const docTypeGroup = get(documentRevision?.document?.documentType, "group", FBDocTypeGroup.OTHER);
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
   const tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
@@ -52,8 +52,9 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks, 
     if (isUndefined(tabIndex) || tabIndex < 0) {
       return;
     }
-    if (tabConfig)
-    { _tabsState?.setTabID(tabConfig[tabIndex]?.tabId); }
+    if (tabConfig) {
+      _tabsState?.setTabID(tabConfig[tabIndex]?.tabId);
+    }
     if (tabIndex === _tabsState?.value) {
       history.push(`#${hash}`);
     } else {

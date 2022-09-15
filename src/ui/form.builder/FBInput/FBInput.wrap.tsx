@@ -16,6 +16,7 @@ import { useFormContext } from "../../components/forms/FormContext";
 import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
+import { FBDocTypeGroup } from "../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBOnChange } from "./FBInput.onchange";
 
@@ -297,7 +298,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     const documentRevision = useSelector((state: ApplicationState) =>
       documentRevisionsSelectors.getDocumentRevision(state, (_documentRevisionFormState?.documentRevision?.id || "")));
-    const docTypeGroup = get(documentRevision?.document?.documentType, "group", "OTHER");
+    const docTypeGroup = get(documentRevision?.document?.documentType, "group", FBDocTypeGroup.OTHER);
     const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
     const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
