@@ -1827,7 +1827,7 @@ context(
       });
     });
 
-    xcontext(`Create a new form with an output of internal type Engineering Build`, () => {
+    context(`Create a new form with an output of internal type Engineering Build`, () => {
       context("Create Engineering Build with form", () => {
         context("Start document creation flow", () => {
           it("Navigates to document list", () => {
@@ -2154,7 +2154,7 @@ context(
 
       context(
         `Update the Engineering Build and select revision stage “Void” → Complete the voiding process until 
-      the item goes to ${STATUS_TYPES_LABEL.VOID} state`,
+      the item goes to ${STATUS_TYPES_LABEL.VOIDED} state`,
         () => {
           it("Revise document with 'Void' option", () => {
             cy.drClickReviseDocument();
@@ -2189,10 +2189,10 @@ context(
       context("Check the content of the status bar", () => {
         it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
           cy.verifyHeaderInfoContent({
-            status: STATUS_TYPES_LABEL.VOID,
+            status: STATUS_TYPES_LABEL.VOIDED,
             title: "Records",
             docId: "EB-00001",
-            revision: "OBS",
+            revision: "Rev Void",
           });
         });
 
