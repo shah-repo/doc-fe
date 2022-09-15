@@ -64,7 +64,8 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks, 
 
   return (
     <Box m={1.875}>
-      <FBMapWrapper<FBBookmarkItem[]> collection={bookmarks?.sort((a, b) => ((a?.name || "") > (b?.name || "")  ? 1 : -1)) || []}>
+      <FBMapWrapper<FBBookmarkItem[]>
+        collection={bookmarks?.sort((a, b) => ((a?.name || "") > (b?.name || "")  ? 1 : -1)) || []}>
         {(bookmark: FBBookmarkItem, index) => {
           const { name: hash, label = "", tabIndex } = bookmark;
           const link = window.location.href.split("#");
