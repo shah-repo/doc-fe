@@ -28,6 +28,7 @@ let createdCSPartDocument;
 let group;
 let equipmentDocument;
 let equipmentDocumentType;
+let docLink;
 
 const groupEveryone = "Everyone";
 const ARForm = "AR Form";
@@ -945,12 +946,144 @@ context("Verify the user is able to create LHRT", () => {
       it("Verify LHRT is in RELEASED status", () => {
         cy.drCheckDocumentStatus({ status: "RELEASED" });
         cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
+        cy.url().then((url: string) => { docLink = url; });
       });
+    });
+  });
+
+  context("Create & Release LHR", () => {
+    it("Click create new document from LHRt", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.drCreateNewDocumentFromForm();
+        cy.url().then((url: any) => {
+          lhrDocUrl1 = url;
+        });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter initial quantity", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.unClick();
+      });
+    });
+
+    it("Select 'Production' build type", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[value=\"Production\"]").check();
+        cy.unClick();
+      });
+    });
+
+    it("Add 'Due Date'", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poAddDateRequired();
+        cy.unClick();
+      });
+    });
+
+    it("Click save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+    });
+
+    it("Click 'START MPI'", () => {
+      cy.mpiStartStep({ stepNumber: 1 });
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Enter 'Start quantity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("8");
+      cy.unClick();
+    });
+
+    it("Enter 'Accepted quantity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("5");
+      cy.unClick();
+    });
+
+    it("Enter 'Rejected quantity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("3");
+      cy.unClick();
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(2000);
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Complete step", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Approve step", () => {
+      cy.ebApprove();
+    });
+
+    it("Visit the LHR", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
+        CyRoutes.GetSpecificDocumentType,
+      ], () => {
+        cy.visit(lhrDocUrl1);
+      });
+    });
+
+    it("Add approval", () => {
+      cy.get(`[data-cy^="fb-approvals"]`).should("exist");
+      cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Click save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
+    it("Submit for approval", () => {
+      cy.lhrSubmitForApproval();
+    });
+
+    it("Approve approval", () => {
+      cy.lhrApprove();
+    });
+
+    it(`Verify status is 'RELEASED'`, () => {
+      cy.drCheckDocumentStatus({ status: "RELEASED" });
     });
   });
 
   context("Revise LHRT", () => {
     it("Click Revise button", () => {
+      cy.visit(docLink);
       cy.drClickReviseDocument();
     });
 
