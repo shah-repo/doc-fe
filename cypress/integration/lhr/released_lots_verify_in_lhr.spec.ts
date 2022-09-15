@@ -671,6 +671,7 @@ context("Released_lots_verify_in_lhr", () => {
         it("Add inline approver", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
             () => {
+              cy.wait(2000);
               cy.listLoadingElementShouldNotExist();
               cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
                 .autocompleteSelect(USERS[1].name);
@@ -932,8 +933,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on DETAILS", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+      cy.drSelectDetailsTab();
     });
 
     it("Add inline approver", () => {
@@ -1072,8 +1072,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on Details", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+      cy.drSelectDetailsTab();
     });
 
     it("Select approvals", () => {
@@ -1082,13 +1081,11 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on approve and submit", () => {
-      cy.get("[data-cy=ApproveAndRelease-button] > .MuiButton-label").arrowClick().wait(1000);
+      cy.lhrSubmitForApproval();
     });
 
     it("Click on Details", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").should("exist");
-      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+      cy.drSelectDetailsTab();
     });
 
     it("Click on approve", () => {
@@ -1178,8 +1175,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on Details", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+      cy.drSelectDetailsTab();
     });
 
     it("Select approvals", () => {
@@ -1188,13 +1184,11 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on approve and submit", () => {
-      cy.get("[data-cy=ApproveAndRelease-button] > .MuiButton-label").arrowClick().wait(1000);
+      cy.lhrSubmitForApproval();
     });
 
     it("Click on Details", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").should("exist");
-      cy.get("[data-cy=\"tabId.details\"] > .MuiBox-root").arrowClick();
+      cy.drSelectDetailsTab();
     });
 
     it("Click on approve", () => {
