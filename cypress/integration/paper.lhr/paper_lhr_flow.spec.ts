@@ -406,15 +406,15 @@ context("Paper Lot History Record", () => {
 
   context("Verify predefined fields are displayed", () => {
     it("Check 'Part to be Manufactured' is not displayed", () => {
-      cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Part to be Manufactured is a required field.");
+      cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The Part to be Manufactured is a required field.");
     });
 
     it("Check 'Build Type' is displayed", () => {
-      cy.get("[data-cy=\"Build Type\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Build Type is a required field.");
+      cy.get("[data-cy=\"Build Type\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The Build Type is a required field.");
       cy.get("[data-cy=\"Build Type\"]").parent().parent().parent().parent()
         .should("contain.html", `role="radiogroup"`);
       cy.get("[name=\"lhr-build-type\"]").eq(0).should("have.value", "R&D");
@@ -422,15 +422,15 @@ context("Paper Lot History Record", () => {
     });
 
     it("Check 'Initial Quantity' is displayed", () => {
-      cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Initial Quantity is a required field.");
+      cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The Initial Quantity is a required field.");
     });
 
     it("Check 'End Quantity' is displayed", () => {
-      cy.get("[data-cy=\"End Quantity\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The End Quantity is a required field.");
+      cy.get("[data-cy=\"End Quantity\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The End Quantity is a required field.");
     });
 
     it("Check 'Approvals' is displayed", () => {
@@ -701,27 +701,27 @@ context("Paper Lot History Record", () => {
   });
 
   context("Verify all data and predefined fields are present", () => {
-    it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
-      cy.get(`[name="lhr-selected-part"]`).parent().parent()
-        .contains("The Part to be Manufactured is a required field.");
-    });
+    // it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
+    //   cy.get(`[name="lhr-selected-part"]`).parent().parent()
+    //     .contains("The Part to be Manufactured is a required field.");
+    // });
 
     it("Verify 'Build Type' is displayed", () => {
-      cy.get("[data-cy=\"Build Type\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Build Type is a required field.");
+      cy.get("[data-cy=\"Build Type\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The Build Type is a required field.");
     });
 
     it("Verify 'Initial Quantity' is displayed", () => {
-      cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Initial Quantity is a required field.");
+      cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The Initial Quantity is a required field.");
     });
 
     it("Verify 'End Quantity' is displayed", () => {
-      cy.get("[data-cy=\"End Quantity\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The End Quantity is a required field.");
+      cy.get("[data-cy=\"End Quantity\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The End Quantity is a required field.");
     });
 
     it("Verify TextField with validation is diplayed", () => {
@@ -988,27 +988,27 @@ context("Paper Lot History Record", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
-      cy.get(`[name="lhr-selected-part"]`).parent().parent()
-        .contains("The Part to be Manufactured is a required field.");
-    });
+    // it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
+    //   cy.get(`[name="lhr-selected-part"]`).parent().parent()
+    //     .contains("The Part to be Manufactured is a required field.");
+    // });
 
     it("Verify 'Build Type' is displayed", () => {
-      cy.get("[data-cy=\"Build Type\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Build Type is a required field.");
+      cy.get("[data-cy=\"Build Type\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The Build Type is a required field.");
     });
 
     it("Verify 'Initial Quantity' is displayed", () => {
-      cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Initial Quantity is a required field.");
+      cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The Initial Quantity is a required field.");
     });
 
     it("Verify 'End Quantity' is displayed", () => {
-      cy.get("[data-cy=\"End Quantity\"]").should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The End Quantity is a required field.");
+      cy.get("[data-cy=\"End Quantity\"]").should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The End Quantity is a required field.");
     });
 
     it("Verify TextField with validation is diplayed", () => {
@@ -1117,15 +1117,15 @@ context("Paper Lot History Record", () => {
       cy.get("#HeaderInfo-subtitle").should("contain.text", `${lotIdRef}01`);
     });
 
-    it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
-      cy.get(`[name="lhr-selected-part"]`).parent().parent()
-        .contains("The Part to be Manufactured is a required field.");
-    });
+    // it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
+    //   cy.get(`[name="lhr-selected-part"]`).parent().parent()
+    //     .contains("The Part to be Manufactured is a required field.");
+    // });
 
     it("Verify 'Build Type' is displayed", () => {
-      cy.get(`[data-cy="Build Type"]`).should("exist")
-        .parent().parent().parent().parent().next()
-        .should("have.text", "The Build Type is a required field.");
+      cy.get(`[data-cy="Build Type"]`).should("exist");
+      // .parent().parent().parent().parent().next()
+      // .should("have.text", "The Build Type is a required field.");
     });
 
     it("Verify 'Initial Quantity' is displayed", () => {
@@ -1403,6 +1403,7 @@ context("Paper Lot History Record", () => {
         expect(el).match(/Part to be Manufactured\nPRT-00001 - 1 Part document1/);
 
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Initial Quantity\n10/);
 
@@ -1632,6 +1633,7 @@ context("Paper Lot History Record", () => {
         expect(el).match(/Part to be Manufactured\nPRT-00001 - 1 Part document1/);
 
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Initial Quantity\n10/);
 
@@ -1847,7 +1849,6 @@ context("Paper Lot History Record", () => {
       cy.listLoadingElementShouldNotExist();
     });
   });
-  // TODO: further code need to be validated once void document related issue (ENC-12647) gets fixed
 
   context(`Revise paper LHR document`, () => {
     it("Click Revise document", () => {
@@ -1886,21 +1887,15 @@ context("Paper Lot History Record", () => {
     });
   });
 
-  context(`Void paper LHR and verify document status as VOIDED and Send to Email`, () => {
-    it(`Click 'Void' and 'Yes, Im sure'`, () => {
-
-      cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy=\"void-button\"]").arrowClick();
-      cy.get("[data-cy=\"AlertDialog-continueButton\"]").contains("Yes, I'm sure").arrowClick();
-    });
-
-    it(`Check doc status as ${STATUS_TYPES_LABEL.VOIDED}`, () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.VOIDED });
-      cy.arCheckTitleInEditableAndMatches({ name: "Void" });
+  context(`Verify document status as ${STATUS_TYPES_LABEL.OBSOLETE} and Send to Email`, () => {
+    it(`Check doc status as ${STATUS_TYPES_LABEL.OBSOLETE}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.OBSOLETE });
+      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev Void");
     });
 
     it("Check if 'Send To Email' button exists", () => {
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
 
@@ -1953,7 +1948,7 @@ context("Paper Lot History Record", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          downloadFile  =  `${releasedFormId}${fileTimeFormat}_rel.zip`;
+          downloadFile  =  `${releasedFormId}-A-2__${fileTimeFormat}_void.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -1976,7 +1971,7 @@ context("Paper Lot History Record", () => {
         });
 
       const pdffile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""),
-        `${releasedFormId}-A.pdf`);
+        `${releasedFormId}-A-2-Void.pdf`);
       cy.readFile(pdffile).its("length").should("be.gt", 500);
     });
   });
@@ -1986,7 +1981,7 @@ context("Paper Lot History Record", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${releasedFormId}-A.pdf`,
+          fileName: `${releasedFormId}-A-2-Void.pdf`,
         }).then((cdata) => {
         expect(cdata.numpages).eq(1);
         expect(cdata.text).match(/Page 1 of 1/);
@@ -2003,42 +1998,18 @@ context("Paper Lot History Record", () => {
     it("Verify page 1 for paper LHR", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
-        // eslint-disable-next-line max-len
-        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nPRT-00001, REV 1, PART DOCUMENT1`, "gi" );
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
+        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nN/A`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Attachments\nNone/);
 
-        expect(el).match(/Part to be Manufactured\nPRT-00001 - 1 Part document1/);
-
+        expect(el).not.match(/Part to be Manufactured\nPRT-00001 - 1 Part document1/);
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
+        expect(el).not.match(tmpRegex);
 
-        expect(el).match(/Initial Quantity\n10/);
+        expect(el).not.match(/dummy.pdf/);
 
-        expect(el).match(/End Quantity\n25/);
-
-        expect(el).match(/fb-textfield\nLHR textfield/);
-
-        expect(el).match(/fb-textfield-1\nNone/);
-
-        expect(el).match(/Checkbox/);
-        expect(el).match(/1 2 3/);
-
-        tmpRegex = new RegExp( `\\((.*)\\) fb-fileupload`, "gi" );
-        expect(el).match(tmpRegex);
-
-        // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
-        tmpRegex  = (el).match(/\((.*)\)\sfb-fileupload/);
-        imageFile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", ""), tmpRegex[1], "dummy.pdf");
-
-        expect(el).match(/dummy.pdf/);
-
-        expect(el).match(/APPROVALS\nNone/);
-
-        expect(el).match(/WIP/);
+        expect(el).match(/Obsolete/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -2051,10 +2022,6 @@ context("Paper Lot History Record", () => {
 
         expect(el).match(/Page 1 of 1/);
       }
-    });
-
-    it(`Verify uploaded file exists in downloaded directory`, () => {
-      cy.readFile(imageFile).its("length").should("be.gt", 0);
     });
   });
 });
