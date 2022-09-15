@@ -122,7 +122,8 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
         return this.approvalApi.onError(error);
       }
       this.approvalApi.data = data;
-      this.approvalApi.onSuccess();
+      this.onSuccess(); // solves the race condition
+      this.approvalApi.onSuccess(); // removes the loader
       callback?.();
     });
   };

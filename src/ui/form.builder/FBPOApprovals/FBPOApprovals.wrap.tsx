@@ -5,10 +5,10 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover, FBPurchaseOrderItemType } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderItemType, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { PO_REQUESTOR_COMPONENT_NAME, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
+import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
@@ -107,7 +107,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const isPrevServiceOrProductPartExist = checkServiceOrProductPartExists(previousPOItems);
         poApprovalsState.setPrevPOItems(poItems);
         hasPOItems.current = !(isServiceOrProductPartExist || isPrevServiceOrProductPartExist);
-        outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
+        // makes API call on every change in overview tab.
+        // outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
