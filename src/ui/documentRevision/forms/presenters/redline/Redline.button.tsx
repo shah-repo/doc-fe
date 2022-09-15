@@ -30,7 +30,7 @@ const RedlineButton: React.FunctionComponent<Props> = ({
   const handleClick = () => {
     _formState?.setMode("formDesign");
     dispatch(companyActions.redlineConfig(true));
-    dispatch(companyActions.autosaveConfig());
+    // dispatch(companyActions.autosaveConfig());
   };
 
   if (!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild) {
