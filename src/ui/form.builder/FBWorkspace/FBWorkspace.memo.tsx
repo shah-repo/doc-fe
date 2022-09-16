@@ -6,6 +6,7 @@ import {
   FBSchema,
   FBStarter,
   FBWorkspaceBottomBar,
+  FBWorkspaceModeOptions,
   FBWorkspaceProps,
   FBWorkspaceSocket,
 } from "..";
@@ -55,6 +56,8 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   const group: DocumentGroupType =
     docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
+  const inDesignMode = mode === FBWorkspaceModeOptions.DESIGN || mode === FBWorkspaceModeOptions.FORMDESIGN;
+
   return (
     <Box>
       <FBWorkspaceSocket />
@@ -86,7 +89,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
             <Text translation="form.builder.add.step" />
           </Button>
         )}
-      {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
+      {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} mt={inDesignMode ? 6 : 0} />}
     </Box>
   );
 };

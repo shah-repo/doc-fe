@@ -369,7 +369,7 @@ context("Mpi Layout", () => {
         });
 
         it("Add 'Material one' to step #1", () => {
-          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Set(s)" });
         });
 
         it("Add 'Equipment one' to step #1", () => {
@@ -435,7 +435,7 @@ context("Mpi Layout", () => {
         it("Verify materials are copied", () => {
           cy.get("[data-cy='form.builder.mpi.procedure.materials.title']").eq(1).scrollIntoView();
           cy.get("[data-cy='form.builder.mpi.procedure.materials.title']>div")
-            .eq(1).should("have.text", "MT-00004 - Material one | Qty: 3 each");
+            .eq(1).should("have.text", "MT-00004 - Material one | Qty: 3 sets");
         });
 
         it("Verify equipments are copied", () => {
@@ -470,7 +470,7 @@ context("Mpi Layout", () => {
           });
 
           it("Add 'Material one' to step #3", () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 3, material: "Material one", quntity: "3", unit: "Each" });
+            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 3, material: "Material one", quntity: "3", unit: "Set(s)" });
           });
 
           it("Add 'Equipment one' to step #3", () => {
@@ -515,6 +515,24 @@ context("Mpi Layout", () => {
             cy.get(".formOptionsBox").should("exist");
           });
         });
+      });
+
+      context("Verify material and Equipment tab", () => {
+        it("Navigate to material and equipment tab", () => {
+          cy.drSelectMaterialsAndEquipmentTab();
+        });
+
+        it("Click on expand all", () => {
+          cy.get("[data-cy='common.expand.all']").arrowClick();
+        });
+
+        it("Verify material", () => {
+          cy.get("[data-cy='materialInfo'] span").should("have.text", "MT-00004 - Material one | sets : 9");
+        });
+
+        it("Verify equipment", () => {
+          cy.get("[data-cy='equipmentInfo'] span").should("have.text", "ET-00003 Equipment one");
+        });
 
       });
 
@@ -535,6 +553,20 @@ context("Mpi Layout", () => {
         it("check the training chekbox", () => {
           cy.get("[data-cy='field-retrain'] input[type=checkbox]").check();
           cy.get("[data-cy='tabId.training']").should("exist");
+        });
+
+        it("Navigate to training Tab", () => {
+          cy.drSelectTrainingTab();
+        });
+
+        it("Check training tab is empty and verify training related text", () => {
+          cy.get("#sm-tabpanel-3 svg").should("exist");
+          cy.get("#sm-tabpanel-3 p").should("contain.text",
+            "Training can be assigned to this document once it is released");
+        });
+
+        it("Navigate to procedure Tab", () => {
+          cy.drSelectProcedureTab();
         });
       });
 
@@ -558,8 +590,9 @@ context("Mpi Layout", () => {
         });
 
         it("It is fixed as the user scrolls up or down", () => {
-          cy.get("#sm-tabpanel-0").scrollIntoView().should("be.visible");
+          cy.get("#sm-tabpanel-1").scrollTo("bottom");
           cy.get("[data-cy='References']").should("be.visible");
+          cy.get("#sm-tabpanel-1").scrollTo("top");
         });
 
         it("Verify References selection Add Remove", () => {
@@ -649,10 +682,29 @@ context("Mpi Layout", () => {
           });
         });
       });
+
+      context("Training related verification after released", () => {
+
+        it("Navigate to overview tab", () => {
+          cy.drSelectOverviewTab();
+        });
+
+        it("Verify 'Complete training button', 'Ack text'", () => {
+          cy.get("#Presenter-FBWorkspace p").should("contain.text", "Click here to acknowledge training completion");
+          cy.get("[data-cy='training-complete']").should("exist");
+        });
+
+      });
+
+
     });
   });
 
   context("Verify all fields are displayed in the tabs as it should", () => {
+    it("Verify title and description field no longger heighlighted", () => {
+      cy.get(`h5[data-cy='field-name']`).trigger("mouseover");
+      cy.get(`h5[data-cy='field-name']`).should("not.have.attr", "style");
+    });
 
     it("Verify that it contains Overview, Procedure, Material and Equipment", () => {
       cy.verifyTabs("overview", "procedure", "materialsandequipment");
@@ -705,6 +757,43 @@ context("Mpi Layout", () => {
       cy.get("[data-cy='changeOwner']").should("be.visible");
     });
   });
+
+  context("Complete the training and verify training tab", () => {
+
+    it("Navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Verify 'Complete training button', 'Ack text'", () => {
+      cy.get("#Presenter-FBWorkspace p").should("contain.text", "Click here to acknowledge training completion");
+      cy.get("[data-cy='training-complete']").should("exist");
+    });
+
+    it("Check for training text inside dialog box and complete training", () => {
+      cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCompleteTraining], () => {
+          cy.get("[data-cy='training-complete']").arrowClick();
+          cy.get("[data-cy='training.acknowladge.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy='passwordConfirm']").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+
+    it("Navigate to training tab", () => {
+      cy.drSelectTrainingTab();
+    });
+
+    it("Verify that the user is listed under ‘Training Completed’ list", () => {
+      cy.get("#Presenter-FBWorkspace ul").should("contain.text", "Training Completed");
+      cy.get("#Presenter-FBWorkspace ul").should("contain.text", USERS[1].name);
+    });
+
+  });
+
+
 });
 
 export { };

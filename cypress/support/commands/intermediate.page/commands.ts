@@ -13,6 +13,7 @@ declare global {
       intPageVerifyDescriptionViewMoreNotExist(): Chainable<Subject>;
       intPageVerifyDocTypeExist(): Chainable<Subject>;
       intPageVerifyDocIdIsEditable(): Chainable<Subject>;
+      intPageVerifyDocIdIsNotEditable(): Chainable<Subject>;
       intPageVerifyRevisionStageExist(): Chainable<Subject>;
       intPageVerifyTrainingRequiredExist(): Chainable<Subject>;
       intPageVerifySelectedUsersExist(): Chainable<Subject>;
@@ -33,6 +34,7 @@ declare global {
       intPageVerifyApproversNotExist(): Chainable<Subject>;
       intPageVerifyApprovalsExist(): Chainable<Subject>;
       intPageVerifyApprovalsNotExist(): Chainable<Subject>;
+      intPageVerifyAddDocumentExist(): Chainable<Subject>;
       intPageVerifyAddDocumentExistDisabled(): Chainable<Subject>;
       intPageVerifyAddDocumentNotExist(): Chainable<Subject>;
       intPageVerifyAddFieldExist(): Chainable<Subject>;
@@ -123,6 +125,8 @@ declare global {
       intPageVerifyPartToBeManufacturedNotExist(): Chainable<Subject>;
       intPageVerifyBuildTypeExist(): Chainable<Subject>;
       intPageVerifyBuildTypeNotExist(): Chainable<Subject>;
+      intPageVerifyDueDateExist(): Chainable<Subject>;
+      intPageVerifyDueDateNotExist(): Chainable<Subject>;
       intPageVerifyLHRStepExist(): Chainable<Subject>;
       intPageVerifyLHRStepNotExist(): Chainable<Subject>;
       intPageVerifyPoStatusExist(): Chainable<Subject>;
@@ -243,6 +247,10 @@ Cypress.Commands.add("intPageVerifyDocIdIsEditable", () => {
   cy.get(`input[id="document.docId"]`).should("not.be.disabled");
 });
 
+Cypress.Commands.add("intPageVerifyDocIdIsNotEditable", () => {
+  cy.get(`input[id="document.docId"]`).should("be.disabled");
+});
+
 Cypress.Commands.add("intPageVerifyRevisionStageExist", () => {
   cy.get(`[data-cy="field-revisionStage"]`).should("exist");
 });
@@ -321,6 +329,10 @@ Cypress.Commands.add("intPageVerifyApprovalsNotExist", () => {
   cy.get(`[data-cy="form.builder.approvals"]`).should("not.exist");
 });
 
+Cypress.Commands.add("intPageVerifyAddDocumentExist", () => {
+  cy.get(`[data-cy="fb.add.document"]`).should("exist").should("not.be.disabled");
+});
+
 Cypress.Commands.add("intPageVerifyAddDocumentExistDisabled", () => {
   cy.get(`[data-cy="fb.add.document"]`).should("exist").should("be.disabled");
 });
@@ -338,7 +350,7 @@ Cypress.Commands.add("intPageVerifyAddFieldNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyFormOptionsExist", () => {
-  cy.get(`button[data-cy="FBWorkspace-clickView"]`).should("exist")
+  cy.get(`button[data-cy="FBWorkspace-clickView"]`).should("exist").should("be.enabled")
     .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
   cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).should("exist")
     .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
@@ -688,6 +700,14 @@ Cypress.Commands.add("intPageVerifyBuildTypeNotExist", () => {
   cy.get(`[data-cy="Build Type"]`).should("not.exist");
 });
 
+Cypress.Commands.add("intPageVerifyDueDateExist", () => {
+  cy.get(`[data-cy="Due Date"]`).should("exist");
+});
+
+Cypress.Commands.add("intPageVerifyDueDateNotExist", () => {
+  cy.get(`[data-cy="Due Date"]`).should("not.exist");
+});
+
 Cypress.Commands.add("intPageVerifyLHRStepExist", () => {
   cy.get(`[data-cy^="LHR Step"]`).should("exist");
 });
@@ -961,7 +981,7 @@ Cypress.Commands.add("intPageVerifySelectOutputDocumentTypeNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyDownloadExcelTemplateExist", () => {
-  cy.get(`button [data-cy="Download Excel Template"]`).should("exist");
+  cy.get(`[data-cy="Download Excel Template"]`).parent().parent("button").should("exist").should("not.be.disabled");
 });
 
 Cypress.Commands.add("intPageVerifyDownloadExcelTemplateExistDisabled", () => {
@@ -1009,7 +1029,7 @@ Cypress.Commands.add("intPageVerifySpecificationTabExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyCalPmHistoryTabExist", () => {
-  cy.get(`[data-cy="tabId.calpmhistory"]`).should("exist");
+  cy.get(`[data-cy="tabId.specification"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifyTrainingTabExist", () => {

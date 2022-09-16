@@ -11,7 +11,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocDraftDayMonth, pdfDocDraftyear, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
+import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocDraftDay, pdfDocDraftDayMonth, pdfDocDraftMonth, pdfDocDraftyear, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -2132,10 +2132,12 @@ context("Autocomplete 'Equipment' test", () => {
         expect(el).match(/Instructions\nInstructions for preventative maintenance/);
 
         expect(el).match(/History/);
-        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocDraftDayMonth},\n${pdfDocDraftyear}`, "gi" );
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocDraftMonth}[\n]?${pdfDocDraftDay},[\n]? ${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftDayMonth},\n${pdfDocDraftyear}`, "gi" );
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftDayMonth},[\n]?${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${equimentDueDaysFmt}`, "gi" );

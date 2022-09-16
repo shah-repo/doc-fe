@@ -582,7 +582,7 @@ context("All regular users on new dashboard", () => {
       });
 
       it(`Select '${USERS[1].name}' for Requestor`, () => {
-        cy.get("[data-cy^=requestor]").arrowClick();
+        cy.get("[data-cy^=po-requestor]").arrowClick();
         cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
 
