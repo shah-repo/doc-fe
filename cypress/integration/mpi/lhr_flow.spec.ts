@@ -1395,11 +1395,6 @@ context("LHR flow", () => {
       });
 
       context("Add parameter materials and equipment", () => {
-        xit("Click 'LHR Step'", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
-        });
-
         it("Add material parameter", () => {
           cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
           cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
