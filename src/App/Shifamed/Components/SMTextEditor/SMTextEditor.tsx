@@ -66,7 +66,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
-            <ClickAwayListener onClickAway={onAway} mouseEvent="onMouseDown">
+            <ClickAwayListener onClickAway={onAway} mouseEvent="onMouseUp">
               <Box
                 borderColor={Colors.hint_gray}
                 borderRadius={4}
