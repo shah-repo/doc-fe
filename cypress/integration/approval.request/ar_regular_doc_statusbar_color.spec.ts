@@ -161,19 +161,19 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         .contains(tmpRegex);
     });
 
-    // it(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
-    //   cy.wait(60 * 1000 + 2000);
-    //   const tmpRegex = new RegExp(`Last saved a minute ago`, "gi");
-    //   cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
-    //     .contains(tmpRegex);
-    // });
+    it(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
+      cy.wait(60 * 1000 + 2000);
+      const tmpRegex = new RegExp(`Last saved a minute ago`, "gi");
+      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+        .contains(tmpRegex);
+    });
 
-    // it(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
-    //   cy.wait(60 * 1000 + 2000);
-    //   const tmpRegex = new RegExp(`Last saved 2 minutes ago`, "gi");
-    //   cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
-    //     .contains(tmpRegex);
-    // });
+    it(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
+      cy.wait(60 * 1000 + 2000);
+      const tmpRegex = new RegExp(`Last saved 2 minutes ago`, "gi");
+      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+        .contains(tmpRegex);
+    });
 
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
       SystemRequirement("REQ-2800");
@@ -718,9 +718,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    // it("Approve and release document", () => {
-    //   cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-    // });
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
   });
 
   context("Create a new AR and link it to it - Approve the AR", () => {
