@@ -1236,7 +1236,6 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Check calibration status", () => {
-        cy.reload();
         const calibrationComplianceDate = moment().tz("America/Los_Angeles")
           .add(365, "days")
           .format("ddd, MMMM D, YYYY");
