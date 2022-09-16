@@ -306,7 +306,7 @@ Cypress.Commands.add("drSelectOverviewTab", () => {
 
 Cypress.Commands.add("drSelectPrimaryOwner", (params: { owner: string; noWait?: bool }) => {
   cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick({ force: true });
-  cy.get("ul>li[role=\"option\"]").contains(params.owner).arrowClick();
+  cy.get("ul>li[role=\"option\"]").contains(params.owner).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drRemoveReferences", (params: {reference: string}) => {
