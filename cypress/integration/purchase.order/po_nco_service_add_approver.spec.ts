@@ -982,9 +982,8 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check approvers automatically added", () => {
-      cy.pause();
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).scrollIntoView().should("contain", `${USERS[2].name} - ${USERS[2].email}`);
-      cy.pause();
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).scrollIntoView().should("contain",
+        `${USERS[2].name} - ${USERS[2].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
