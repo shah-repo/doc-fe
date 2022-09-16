@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 import { Approval } from "aws-sdk/clients/codecommit";
 import { compact, filter, isEmpty, map, values } from "lodash";
-import { action, computed, observable, set, toJS } from "mobx";
+import { action, computed, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -58,9 +57,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
   };
 
   public onSuccess() {
-    console.log("Calling on success");
     this.setGroups(this.data);
-    console.log(toJS(this.approvals));
     const filteredCheckedGroups = map(this.approvals, (approval) => values(this.groups)?.find((group) =>
       group.name === approval.signatureGroupName));
 
@@ -74,13 +71,11 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
     });
 
     this.checkedGroups = compact(filteredCheckedGroups);
-    console.log(this.checkedGroups);
     this.setIsRequiredApprovals();
     super.onSuccess();
   }
 
   private setGroups = (data) => {
-    console.log("Calling setGroups", toJS(data));
     this.groups = (data || []).reduce((group, item) => {
       group[item.id] = {
         ...item,
