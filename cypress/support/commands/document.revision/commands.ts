@@ -672,7 +672,7 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
 
 Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {
   cy.get("[data-cy=\"field-revisionChangeType\"]");
-  cy.get("label").contains(params.option).arrowClick();
+  cy.get("label").contains(params.option).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: string }) => {

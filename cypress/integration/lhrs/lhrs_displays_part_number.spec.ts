@@ -787,7 +787,8 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document (revised EFM-10605)", { force: true });
+          cy.get("input[data-cy=\"lhrstep-built-in\"]")
+            .autocompleteSelect("MPI document (revised EFM-10605)", { force: true });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
