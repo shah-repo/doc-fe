@@ -18,6 +18,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     index,
     filteredOptions,
     isDocumentLHR,
+    lhrSelectedPartValue,
     name = "",
     ...props
   }: T) => {
@@ -32,6 +33,8 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     if (!isOutput) {
       defaultValue = editorConfig?.id;
     }
+
+    lhrSelectedPartValue = formState?.initialValues ? formState?.initialValues.name : "";
 
     // MARK: @reactions
     useEffect(() => reaction(
@@ -79,7 +82,6 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     // MARK: @methods
 
     // MARK: @observer
-
     return Component({
       ...(props as T),
       isOutput,
@@ -90,6 +92,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
       name,
       filteredOptions,
       isDocumentLHR,
+      lhrSelectedPartValue,
     });
   };
 
