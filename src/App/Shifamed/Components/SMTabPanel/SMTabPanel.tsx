@@ -15,7 +15,7 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   return (
     <Observer>
       {() => (
-        <SMBox
+        <SMBox style={{ height: "340px" }}
           hidden={_tabsState?.value !== index}
           id={`sm-tabpanel-${index}`}
           className={classes.content}
