@@ -20,6 +20,8 @@ const reference = {
   valueCode: "FM-00001",
 };
 
+const owner = USERS[1].name;
+
 context(
   `Scenario 2.1 Status bar design of new items approved via approval block (Regular Record).`,
   () => {
@@ -332,12 +334,11 @@ context(
 
       context("Add an approver and submit for approval → The record will be in “In Review”", () => {
         it("Add Approver to approvals list", () => {
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+          cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
         it("Click on Submit For Approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          cy.listLoadingElementShouldNotExist();
+          cy.pmSubmitForApproval();
         });
       });
 
@@ -386,7 +387,7 @@ context(
           });
 
           it("Click on Submit For Approval", () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            cy.pmSubmitForApproval();
           });
         });
       });
@@ -462,11 +463,11 @@ context(
 
             it("Add Approver to approvals list", () => {
               cy.wait(3000);
-              cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+              cy.pmAddApproverOnApproverList({ approver: owner });
             });
 
             it("Click on Submit For Approval", () => {
-              cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+              cy.pmSubmitForApproval();
             });
 
             it("Approve the record", () => {
@@ -511,11 +512,11 @@ context(
 
         it("Add Approver to approvals list", () => {
           cy.wait(3000);
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+          cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
         it("Click on Submit For Approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.pmSubmitForApproval();
         });
 
         it("Approve the record", () => {

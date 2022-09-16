@@ -20,6 +20,8 @@ const reference = {
   valueCode: "FM-00001",
 };
 
+const owner = USERS[1].name;
+
 context(`Scenario 2.1 Status bar design of new items approved via approval block (EB).`, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -218,18 +220,26 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
     });
 
+    context("Fill in Form attributes", () => {
+      it("Enters title 'EB Title'", () => {
+        cy.drEnterDocumentTitle({ name: "Engineering Build Title" });
+      });
+
+      it("Enters description 'EB description'", () => {
+        cy.drEnterDocumentDescription({ description: "Engineering Build description" });
+      });
+    });
+
     context(
       `Add an approver and submit for approval → The Engineering Build will be in 
       ${STATUS_TYPES_LABEL.IN_REVIEW}`,
       () => {
         it("Add Approver to approvals list", () => {
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-          cy.listLoadingElementShouldNotExist();
+          cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
         it("Click on Submit For Approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          cy.listLoadingElementShouldNotExist();
+          cy.pmSubmitForApproval();
         });
       }
     );
@@ -278,8 +288,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Click on Submit For Approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          cy.listLoadingElementShouldNotExist();
+          cy.pmSubmitForApproval();
         });
       });
     });
@@ -355,11 +364,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
           it("Add Approver to approvals list", () => {
             cy.wait(3000);
-            cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+            cy.pmAddApproverOnApproverList({ approver: owner });
           });
 
           it("Click on Submit For Approval", () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            cy.pmSubmitForApproval();
           });
 
           it("Approve the Engineering Build", () => {
@@ -404,11 +413,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       it("Add Approver to approvals list", () => {
         cy.wait(3000);
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.pmAddApproverOnApproverList({ approver: owner });
       });
 
       it("Click on Submit For Approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.pmSubmitForApproval();
       });
 
       it("Approve the record", () => {

@@ -243,7 +243,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Click on Submit For Approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.pmSubmitForApproval();
       });
     });
 
@@ -287,7 +287,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Click on Submit For Approval", () => {
           cy.wait(3000);
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.pmSubmitForApproval();
         });
       });
     });
@@ -350,7 +350,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           });
 
           it("Click on Submit For Approval", () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            cy.pmSubmitForApproval();
           });
 
           it("Approve the PO", () => {
@@ -401,7 +401,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Click on Submit For Approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.pmSubmitForApproval();
       });
 
       it("Approve the PO", () => {

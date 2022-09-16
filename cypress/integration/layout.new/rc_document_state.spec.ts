@@ -20,6 +20,8 @@ const reference = {
   valueCode: "FM-00001",
 };
 
+const owner = USERS[1].name;
+
 context(`Scenario 2.1 Status bar design of new items approved via approval block (RC).`, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -223,12 +225,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       ${STATUS_TYPES_LABEL.PENDING_APPROVAL}`,
       () => {
         it("Add Approver to approvals list", () => {
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+          cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
         it("Click on Submit For Approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          cy.listLoadingElementShouldNotExist();
+          cy.pmSubmitForApproval();
         });
       }
     );
@@ -277,8 +278,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Click on Submit For Approval", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          cy.listLoadingElementShouldNotExist();
+          cy.pmSubmitForApproval();
         });
       });
     });
@@ -353,11 +353,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
           it("Add Approver to approvals list", () => {
             cy.wait(3000);
-            cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+            cy.pmAddApproverOnApproverList({ approver: owner });
           });
 
           it("Click on Submit For Approval", () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            cy.pmSubmitForApproval();
           });
 
           it("Approve the Receiving", () => {
@@ -404,11 +404,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       it("Add Approver to approvals list", () => {
         cy.wait(3000);
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.pmAddApproverOnApproverList({ approver: owner });
       });
 
       it("Click on Submit For Approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.pmSubmitForApproval();
       });
 
       it("Approve the record", () => {
