@@ -2310,7 +2310,9 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Select button to switch", () => {
-      cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").last().arrowClick();
+      cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").then(() => {
+        cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").last().arrowClick();
+      });
     });
   });
 
