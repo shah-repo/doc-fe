@@ -33,6 +33,10 @@ declare global {
       verifyStatusbarBgcolor(params: {bcolor: string}): Chainable;
       verifyLastSavedExists(): Chainable;
       verifyLastSavedNotExists(): Chainable;
+      verifyTitleIsHighlightedonHover(): Chainable;
+      verifyDescriptionIsHighlightedonHover(): Chainable;
+      verifyTitleNotHighlightedonHover(): Chainable;
+      verifyDescriptionNotHighlightedonHover(): Chainable;
     }
   }
 }
@@ -236,3 +240,29 @@ Cypress.Commands.add("verifyLastSavedNotExists", () => {
   cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
     .should("not.contain", tmpRegex);
 });
+
+Cypress.Commands.add("verifyTitleIsHighlightedonHover", () => {
+  cy.get("#field-name").trigger("mouseover");
+  cy.get("#field-name>div>div").should("have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("#field-name").trigger("mouseout");
+});
+
+Cypress.Commands.add("verifyDescriptionIsHighlightedonHover", () => {
+  cy.get("[data-cy='description']").eq(0).trigger("mouseover");
+  cy.get("[data-cy='description']>div").should("have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("[data-cy='description']").eq(0).trigger("mouseout");
+});
+
+Cypress.Commands.add("verifyTitleNotHighlightedonHover", () => {
+  cy.get("#field-name").trigger("mouseover");
+  cy.get("#field-name>div>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("#field-name").trigger("mouseout");
+});
+
+Cypress.Commands.add("verifyDescriptionNotHighlightedonHover", () => {
+  cy.get("[data-cy='description']").eq(0).trigger("mouseover");
+  cy.get("[data-cy='description']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("[data-cy='description']>div").eq(0).trigger("mouseout");
+});
+
+
