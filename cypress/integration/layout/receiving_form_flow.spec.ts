@@ -1882,7 +1882,7 @@ context("Receiving landing page test", () => {
 
     it("Click on create lot", () => {
       cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
-      cy.get("[name^='received']").arrowType("200");
+      cy.get("[name^='received']").arrowType("100");
       cy.get("[data-cy='lotType']").arrowClick({ force: true })
         .autocompleteSelect("Lots");
       cy.wrapWithWaitOnApiCalls([], () => {
