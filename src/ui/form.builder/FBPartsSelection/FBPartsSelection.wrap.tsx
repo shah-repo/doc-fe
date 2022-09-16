@@ -34,7 +34,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
       defaultValue = editorConfig?.id;
     }
 
-    lhrSelectedPartValue = formState?.initialValues[name || ""] ?? null;
+    lhrSelectedPartValue = formState?.initialValues ? formState?.initialValues.name : "";
 
     // MARK: @reactions
     useEffect(() => reaction(
