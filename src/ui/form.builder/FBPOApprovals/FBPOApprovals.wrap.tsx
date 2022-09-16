@@ -2,7 +2,7 @@
 import { Box } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import { compact, concat, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
-import { reaction, toJS } from "mobx";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
@@ -123,13 +123,11 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         return;
       }
 
-      let poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
-      if (FBDataStore?.refreshData?.formInput) {
-        poItems = FBDataStore?.refreshData?.formInput[PO_ITEMS_COMPONENT_NAME];
-      }
+      const formInputToConsider = FBDataStore?.refreshData?.formInput ?? workspaceState?.formInput ?? {};
+      const poItems = formInputToConsider[PO_ITEMS_COMPONENT_NAME];
 
-      console.log(" poItems ", toJS(poItems));
-      const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      console.log(workspaceState?.formInput, formInputToConsider);
+      const requester = formInputToConsider[PO_REQUESTOR_COMPONENT_NAME];
       const prevRequesterValue = prevRequester.current;
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
 
@@ -137,11 +135,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       const hasRequesterInApprovers = approvers?.includes(requester);
       const hasPrevRequesterInApprovers = approvers?.includes(prevRequesterValue);
 
+      console.log(`requester: ${requester}, hasRequesterInApprovers - ${hasRequesterInApprovers}, prevRequesterValue - ${prevRequesterValue},hasServiceOrProductPart - ${hasServiceOrProductPart}`);
+
       if (requester && !hasRequesterInApprovers && hasServiceOrProductPart) {
         return addApprover([requester]);
       }
 
       if (requester && hasRequesterInApprovers && !hasServiceOrProductPart) {
+        return removeApprover([requester]);
+      }
+
+      if (requester && hasRequesterInApprovers && !prevRequesterValue) {
         return removeApprover([requester]);
       }
 
@@ -200,13 +204,24 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     // On requester change.
     useEffect(() => reaction(
-      () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
-      (requester) => {
+      () => (FBDataStore?.refreshData?.formInput as {})[PO_REQUESTOR_COMPONENT_NAME],
+      () => {
+        prevRequester.current = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
         checkLineItems();
-        prevRequester.current = requester;
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
+      // prevRequester.current = requester;
+    ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []);
+
+    // useEffect(() => reaction(
+    //   () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
+    //   (requester) => {
+    //     prevRequester.current = requester;
+    //     checkLineItems();
+    //   }
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // ), []);
 
     useEffect(() => {
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
