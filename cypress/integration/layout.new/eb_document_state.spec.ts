@@ -224,10 +224,12 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       () => {
         it("Add Approver to approvals list", () => {
           cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click on Submit For Approval", () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
         });
       }
     );
@@ -277,6 +279,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Click on Submit For Approval", () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -405,12 +408,12 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Click on Submit For Approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
 
       it("Approve the record", () => {
         cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+        cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
         cy.unClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {

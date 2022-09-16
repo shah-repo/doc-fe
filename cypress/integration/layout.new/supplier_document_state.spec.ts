@@ -240,10 +240,12 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       () => {
         it("Add Approver to approvals list", () => {
           cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click on Submit For Approval", () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
         });
       }
     );
@@ -293,6 +295,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Click on Submit For Approval", () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -368,6 +371,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           it("Add Approver to approvals list", () => {
             cy.wait(3000);
             cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Click on Submit For Approval", () => {
@@ -419,10 +423,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       it("Add Approver to approvals list", () => {
         cy.wait(3000);
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on Submit For Approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").click();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
 
       it("Approve the record", () => {
