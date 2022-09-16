@@ -216,7 +216,7 @@ Cypress.Commands.add("lhrSubmitForApproval", () => {
 });
 
 Cypress.Commands.add("pmToggleChangesFromPrevBuild", () => {
-  cy.get("[name=\"fb-procedure-diff\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.prev.build.changes\"]").arrowClick();
 });
 
 Cypress.Commands.add("pmClearFilters", () => {
