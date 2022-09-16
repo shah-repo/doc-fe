@@ -118,10 +118,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         return;
       }
 
-      const formInputToConsider = FBDataStore?.refreshData?.formInput ?? workspaceState?.formInput ?? {};
-      const poItems = formInputToConsider[PO_ITEMS_COMPONENT_NAME];
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
 
-      const requester = formInputToConsider[PO_REQUESTOR_COMPONENT_NAME];
+      const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+
       const prevRequesterValue = prevRequester.current;
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
 
@@ -137,10 +137,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         return removeApprover([requester]);
       }
 
-      if (requester && hasRequesterInApprovers && !prevRequesterValue) {
-        return removeApprover([requester]);
-      }
-
       if (!requester && prevRequesterValue && hasPrevRequesterInApprovers) {
         return removeApprover([prevRequesterValue]);
       }
@@ -152,7 +148,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (data) => {
         concatApprovals(data);
         FBDataStore.setPoApprovals(data);
-
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -172,6 +167,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    // This runs when you manually remove an approver from the list
     useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (fieldValue: string[]) => {
@@ -196,14 +192,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     // On requester change.
     useEffect(() => reaction(
-      () => (FBDataStore?.refreshData?.formInput as {})[PO_REQUESTOR_COMPONENT_NAME],
-      () => {
-        prevRequester.current = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
+      (requester) => {
         checkLineItems();
+        prevRequester.current = requester;
       }
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
 
     useEffect(() => {
@@ -216,8 +211,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     useEffect(() => reaction(
       () => Object.values((poApprovalsState?.groups as {})).length,
-      () => {
-        checkLineItems();
+      (length) => {
+        if (length > 0) {
+          checkLineItems();
+        }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
