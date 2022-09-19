@@ -16,5 +16,6 @@
   "modifyObstructiveCode": false,
   "env": {
     "TEST_COMPANY_REPLICA_NAME": "test"
-  }
+  },
+  "scrollBehavior": "center"
 }

@@ -266,8 +266,8 @@ context("LHRs email notifications", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect(MPIDocumentTitle);
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect(MPIDocumentTitle, { force: true });
         });
       });
 
@@ -348,7 +348,11 @@ context("LHRs email notifications", () => {
       it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
       it("Click 'Submit for Approval' button", () => {
+        cy.wait(5000);
         cy.pmSubmitForApproval();
       });
       it("Click 'Approve' button", () => {
@@ -378,6 +382,7 @@ context("LHRs email notifications", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
+        cy.wait(5000);
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
@@ -456,6 +461,7 @@ context("LHRs email notifications", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
       it("Click 'Submit for Approval' button", () => {
+        cy.wait(5000);
         cy.pmSubmitForApproval();
       });
       it("Click 'Approve' button", () => {
@@ -485,6 +491,7 @@ context("LHRs email notifications", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
+        cy.wait(5000);
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
@@ -572,6 +579,7 @@ context("LHRs email notifications", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
       it("Click 'Submit for Approval' button", () => {
+        cy.wait(5000);
         cy.pmSubmitForApproval();
       });
       it("Click 'Approve' button", () => {
@@ -601,6 +609,7 @@ context("LHRs email notifications", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
+        cy.wait(5000);
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
@@ -804,6 +813,7 @@ context("LHRs email notifications", () => {
         });
 
         it("Click 'Submit for Approval' button", () => {
+          cy.wait(5000);
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
           });
@@ -832,7 +842,6 @@ context("LHRs email notifications", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
             cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
           });
-          cy.wait(2000);
         });
 
         it("Add a second Approval", () => {
@@ -843,6 +852,7 @@ context("LHRs email notifications", () => {
         });
 
         it("Click 'Submit for Approval' button", () => {
+          cy.wait(5000);
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
           });
