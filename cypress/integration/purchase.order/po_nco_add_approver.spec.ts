@@ -237,7 +237,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document for create company", () => {
@@ -628,8 +628,10 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Add an Approver'", () => {
-      cy.get("[data-cy^='fb-po-approvals-']").click()
-        .autocompleteSelect(USERS[2].name, { force: true });
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {

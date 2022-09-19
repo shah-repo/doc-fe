@@ -371,9 +371,6 @@ context("Autosave LHR", () => {
     it("Add first Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
-    it("Save Document'", () => {
-      cy.drSaveDocumentWithoutaudit();
-    });
 
     it("Add second Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
@@ -459,7 +456,8 @@ context("Autosave LHR", () => {
             res.setThrottle(10);
           });
         }).as("response");
-        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowClick({ force: true })
+          .clear().arrowType("2");
         cy.unClick();
         cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
       });

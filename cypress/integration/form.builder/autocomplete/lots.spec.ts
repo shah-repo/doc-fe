@@ -802,15 +802,18 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Add two approvers", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.wait(2000);
         cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
       });
 
       it("remove one approver", () => {
         cy.pmDeleteApproverFromApproverList({ approver: `${USERS[1].name} - ${USERS[1].email}` });
+        cy.wait(2000);
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.wait(2000);
       });
     });
 
