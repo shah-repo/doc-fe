@@ -378,7 +378,7 @@ context("Mpi Layout", () => {
 
 
         it("Upload attachment 'video.mp4'", () => {
-          cy.get("[data-cy='albumMediaButton']").arrowClick();
+          cy.get("[data-cy='albumMediaButton']").arrowClick({ force: true });
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
             cy.pmUploadAttachment({ fileName: "video.mp4" });
           });
@@ -527,11 +527,11 @@ context("Mpi Layout", () => {
         });
 
         it("Verify material", () => {
-          cy.get("[data-cy='materialInfo'] span").should("have.text", "MT-00004 - Material one | sets : 9");
+          cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
+            .should("have.text", "MT-00004 - Material one | sets : 9");
         });
-
         it("Verify equipment", () => {
-          cy.get("[data-cy='equipmentInfo'] span").should("have.text", "ET-00003 Equipment one");
+          cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(0).should("have.text", "ET-00003 - Equipment one");
         });
 
       });
@@ -573,6 +573,7 @@ context("Mpi Layout", () => {
       context("Validate Right Side Panel", () => {
 
         it("Verify that right side panel opens by default to the References tab", () => {
+          cy.pause();
           cy.get("[data-cy='References']").should("exist");
           cy.get("[data-cy='generalInfo']").should("be.visible");
         });
@@ -657,6 +658,17 @@ context("Mpi Layout", () => {
             cy.get("[data-cy='bookmark-icon']").arrowClick();
             cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
           });
+
+          it("Click on book mark verify user is navigate to the bookmarked field", () => {
+            cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
+            cy.get("[data-cy^='fb-approvals']").should("be.visible");
+          });
+
+          it("Click on procedure book mark verify procedure block is visible", () => {
+            cy.get("[data-cy='Bookmarks-detail'] p").eq(1).arrowClick();
+            cy.get("#fb-mpi-procedure-section-built-in").should("be.visible");
+          });
+
         });
 
       });
@@ -693,10 +705,7 @@ context("Mpi Layout", () => {
           cy.get("#Presenter-FBWorkspace p").should("contain.text", "Click here to acknowledge training completion");
           cy.get("[data-cy='training-complete']").should("exist");
         });
-
       });
-
-
     });
   });
 
