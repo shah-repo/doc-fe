@@ -1,20 +1,20 @@
-enum Modules {
+export enum Module {
   General = "General",
   Dashboard = "Dashboard",
   DocumentList = "Document List",
   ApprovalRequests = "Approval Requests",
-  Records = "Records",
-  PurchaseOrders = "Purchase Orders",
-  Equipment = "Equipment",
-  Suppliers = "Suppliers",
-  Receiving = "Receiving",
-  Parts = "Parts",
-  EngineeringBuilds = "Engineering Builds",
-  LHR = "LHR",
-  LOTs = "LOTs",
   UserManagement = "User Management",
   GroupManagement = "Group Management",
   Training = "Training",
+  EB = "EB",
+  Equipment = "Equipment",
+  Lhr = "Lhr",
+  Lot = "Lot",
+  Parts = "Parts",
+  PurchaseOrder = "Purchase Order",
+  Receive = "Receive",
+  Record = "Record",
+  Supplier = "Supplier",
+  TrainingCurriculums = "Training Curriculums",
+  WorkOrder = "Work Order",
 }
-
-export default Modules;
