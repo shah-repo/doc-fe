@@ -16,14 +16,14 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   const { _documentRevisionFormState } = SM.useStores();
   const classes = useStyles();
 
-  const isEQ =
-  checkIsDocumentEquipment(_documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions);
+  const isEQ = checkIsDocumentEquipment(
+    _documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions
+  );
 
   return (
     <Box visibility={visibility} className={classes.root}>
       <FBButton
-        label={(_tabsState?.tabID === "specification" && isEQ)
-          ? "form.builder.addEquiSpec" : "form.builder.add.field"}
+        label={(_tabsState?.tabID === "specification" && isEQ) ? "form.builder.addEquiSpec" : "form.builder.add.field"}
         dataCy="form.builder.add.field"
         size="medium"
         variant="contained"
