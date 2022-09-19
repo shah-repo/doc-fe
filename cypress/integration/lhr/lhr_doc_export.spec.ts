@@ -1055,15 +1055,15 @@ context("LHR Export Verification", () => {
       cy.get("tr.k-master-row").first().arrowClick();
     });
 
+    it("Select build type Prod", () => {
+      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
+    });
+
     it("Select Approval", () => {
       cy.wrapWithWaitOnApiCalls([
       ], () => {
         cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
       });
-    });
-
-    it("Select build type Prod", () => {
-      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
     });
 
     it("Save the document", () => {

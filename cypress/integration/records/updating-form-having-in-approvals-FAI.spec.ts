@@ -302,10 +302,12 @@ context(testName, () => {
       cy.get("[data-cy=HeaderMenuButton]").arrowClick();
       cy.get("#UpgradeToLatest-upgrade").arrowClick();
       cy.get("#UpgradeToLatest-proceed").arrowClick();
+      cy.wait(1000);
     });
 
     it("Select approvals", () => {
       cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
+      cy.wait(3000);
     });
 
     it("Click Approve And Release", () => {
@@ -340,10 +342,12 @@ context(testName, () => {
       cy.get("[data-cy=HeaderMenuButton]").arrowClick();
       cy.get("#UpgradeToLatest-upgrade").arrowClick();
       cy.get("#UpgradeToLatest-proceed").arrowClick();
+      cy.wait(1000);
     });
 
     it("Select approvals", () => {
       cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
+      cy.wait(3000);
     });
 
     it("Click Approve And Release", () => {
