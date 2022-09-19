@@ -1229,7 +1229,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick({force: true});
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
           cy.elUploadAttachment({
             fileName: "test.jpg",
