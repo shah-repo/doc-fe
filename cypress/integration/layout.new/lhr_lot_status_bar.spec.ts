@@ -38,6 +38,8 @@ const reference = {
   valueCode: "LOT #22041301",
 };
 
+const owner = USERS[1].name;
+
 context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -853,7 +855,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Last save should be present", () => {
-        cy.contains("Last saved:").should("be.exist");
+        cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
       });
 
       it("Enter initial quantity", () => {
@@ -862,7 +864,12 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Check Last save should be present in autosave", () => {
-        cy.contains("Last saved:").should("be.exist");
+        cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+      });
+
+      it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+        cy.wait(120000);
+        cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved 2 minutes ago");
       });
 
       it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
@@ -929,7 +936,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Add Approver to approvals list", () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      cy.pmAddApproverOnApproverList({ approver: owner });
     });
   });
 
@@ -992,7 +999,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Last save should be present", () => {
-        cy.contains("Last saved:").should("be.exist");
+        cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
       });
 
       it("Select Procedure tab", () => {
@@ -1024,7 +1031,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Last save should be present", () => {
-        cy.contains("Last saved:").should("be.exist");
+        cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
       });
 
       context(
@@ -1084,7 +1091,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Right side:", () => {
       it("Last save should not be present", () => {
-        cy.contains("Last saved:").should("not.exist");
+        cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
       });
 
       it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1142,15 +1149,15 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       // cy.get("#HeaderInfo-subtitle").should("have.text", "LHR-00001");
     });
 
-    context(`The status bar is BLUE(${Colors.dodger_blue})`, () => {
+    context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
       it(`Color of Header status bar is BLUE(${Colors.dodger_blue})`, () => {
-        cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
       });
     });
 
     context("Right side:", () => {
       it("Last save should not be present", () => {
-        cy.contains("Last saved:").should("not.exist");
+        cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
       });
 
       it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1202,7 +1209,9 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       it("Open revisions tab, click and Revision A is Superseded", () => {
         cy.drClickRevisionsSidePanel();
-        cy.get(`[data-cy="revision"]`).eq(1).should("include.text", "Revision A  - Superseded");
+        cy.get(`[data-cy="revision"]`).eq(1).invoke("text").then((text) => {
+          expect(text.replace(/\u00a0/g, " ")).equal("Revision A  - Superseded");
+        });
       });
     }
   );
@@ -1231,7 +1240,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.contains("Last saved:").should("not.exist");
+          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1279,7 +1288,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Right side:", () => {
       it("Last save should not be present", () => {
-        cy.contains("Last saved:").should("not.exist");
+        cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
       });
 
       it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1344,7 +1353,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.contains("Last saved:").should("not.exist");
+          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1368,11 +1377,12 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Add Approver to approvals list", () => {
-          // cy.get("[name^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+          cy.get("[name^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
+          // cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
         it("Click on Submit For Approval", () => {
+          // cy.pmSubmitForApproval();
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
 
@@ -1415,7 +1425,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
   context("Select Admin Change and release Rev A.2  → Rev A.1 is in Superseded state", () => {
     it("Add Approver to approvals list", () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
     });
 
     it("Click on Submit For Approval", () => {
@@ -1436,7 +1446,9 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     it("Open revisions tab, click and Revision A is Superseded", () => {
       cy.drClickRevisionsSidePanel();
-      cy.get(`[data-cy="revision"]`).eq(1).should("include.text", "Revision A.1  - Superseded");
+      cy.get(`[data-cy="revision"]`).eq(1).invoke("text").then((text) => {
+        expect(text.replace(/\u00a0/g, " ")).equal("Revision A.1  - Superseded");
+      });
     });
   });
 
@@ -1459,7 +1471,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Right side:", () => {
       it("Last save should not be present", () => {
-        cy.contains("Last saved:").should("not.exist");
+        cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
       });
 
       it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1520,7 +1532,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Right side:", () => {
       it("Last save should not be present", () => {
-        cy.contains("Last saved:").should("not.exist");
+        cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
       });
 
       it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1573,7 +1585,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Last save should be present", () => {
-          cy.contains("Last saved:").should("be.exist");
+          cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1592,7 +1604,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(500);
           cy.poAMCheckForAlertMessage();
         });
 
@@ -1619,11 +1631,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Add Approver to approvals list", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.pmAddApproverOnApproverList({ approver: owner });
       });
 
       it("Click on Submit For Approval", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.pmSubmitForApproval();
       });
 
       it(`Status is in ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -1648,7 +1660,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
         context("Right side:", () => {
           it("Last save should not be present", () => {
-            cy.contains("Last saved:").should("not.exist");
+            cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
           });
 
           it("Click 'Withdraw Submission' button", () => {
@@ -1659,7 +1671,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           });
 
           it("Click on Submit For Approval", () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            cy.pmSubmitForApproval();
           });
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1716,7 +1728,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.contains("Last saved:").should("not.exist");
+          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1739,4 +1751,3 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 });
 
 export { };
-
