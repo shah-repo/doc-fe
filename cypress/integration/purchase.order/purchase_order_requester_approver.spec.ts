@@ -57,7 +57,7 @@ context("po_requestor_as_an_approver", () => {
         password: CONFIG.SUPERADMIN_PASSWORD,
       }).then((response) => {
         adminEmployeeLoginResponse = response;
-        multipleCompanies = response.employees.length > 0;
+        multipleCompanies = adminEmployeeLoginResponse.employees.length > 0;
 
         cy.cmpCreateCompany({
           specFilePath: __filename,
@@ -953,9 +953,7 @@ context("po_requestor_as_an_approver", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -965,7 +963,9 @@ context("po_requestor_as_an_approver", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      });
     });
 
     it("Enter description 'New Purchase Order'", () => {

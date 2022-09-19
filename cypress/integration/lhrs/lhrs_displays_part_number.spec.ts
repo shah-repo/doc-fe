@@ -318,7 +318,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     it(`Select '${CSPartDocumentTitle}' for Part Number`, () => {
       cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
-      cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+      cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
     });
 
     it("Click create document", () => {
@@ -384,7 +384,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to procedure tab", () => {
@@ -465,7 +465,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+          cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -482,7 +482,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document", { force: true });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -621,7 +621,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
       it(`Select '${CSPartDocumentTitle}' for Part Number`, () => {
         cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
-        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
         cy.unClick();
       });
 
@@ -770,7 +770,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+          cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -787,7 +787,8 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document (revised EFM-10605)");
+          cy.get("input[data-cy=\"lhrstep-built-in\"]")
+            .autocompleteSelect("MPI document (revised EFM-10605)", { force: true });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
