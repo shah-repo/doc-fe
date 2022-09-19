@@ -717,7 +717,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick({force: true});
         cy.wrapWithWaitOnApiCalls([ ], () => {
           cy.elUploadAttachment({
             fileName: "image.png",
@@ -816,7 +816,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick({force: true});
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
           cy.elUploadAttachment({
             fileName: "test.jpg",
@@ -941,7 +941,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick({force: true});
         cy.wrapWithWaitOnApiCalls([ ], () => {
           cy.elUploadAttachment({
             fileName: "image.png",
@@ -1020,7 +1020,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick({force: true});
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
           cy.elUploadAttachment({
             fileName: "test.jpg",
@@ -1153,7 +1153,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick({force: true});
         cy.wrapWithWaitOnApiCalls([ ], () => {
           cy.elUploadAttachment({
             fileName: "image.png",
@@ -1229,7 +1229,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
+        cy.get("[data-cy=\"albumMediaButton\"]").arrowClick({force: true});
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
           cy.elUploadAttachment({
             fileName: "test.jpg",
@@ -1251,7 +1251,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for Approval", () => {

@@ -911,10 +911,6 @@ context("DAM approvals in LHR", () => {
         });
       });
 
-      it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
-      });
-
       it("Complete step", () => {
         cy.pmSubmitForApproval();
       });
@@ -961,14 +957,6 @@ context("DAM approvals in LHR", () => {
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
-      });
-
-      it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.checkToastMessage({ exists: false });
       });
 
       it("Log out user", () => {

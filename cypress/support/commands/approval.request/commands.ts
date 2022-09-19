@@ -275,9 +275,9 @@ Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description
 
 Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
-    cy.get("div[data-cy=\"field-select-form\"]>#FormList-selectForm").arrowClick();
-    cy.get("div[id^=react-select]").contains(params.formTitle).arrowClick();
-    cy.get("[data-cy=\"create.approval.request.continue\"]").arrowClick();
+    cy.get(`div[data-cy="field-select-form"]>#FormList-selectForm div[class*="-control"]`).arrowClick({ force: true });
+    cy.get("div[id^=react-select]").contains(params.formTitle).arrowClick({ force: true });
+    cy.get("[data-cy='create.approval.request.continue']").arrowClick({ force: true });
   });
 });
 

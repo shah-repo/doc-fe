@@ -955,7 +955,7 @@ context("Create company with JSON's", () => {
         cy.drSelectHistoryTab();
       });
 
-      cy.get("[class^='MuiListItemText-root MuiListItemText-multiline']").eq(1).contains(USERS[1].name);
+      cy.get(`[data-cy="change-key-0"]`).contains(USERS[1].name);
       cy.get("time[data-cy='audit-time-0']")
         .contains((poCreationDate1 || poCreationDate2));
     });

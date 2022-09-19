@@ -37,7 +37,6 @@ export type DocumentRevisionFormProps =
   canChangeOwnerShip: boolean;
   isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
-  pmFormId?: string;
   document?: Document;
   redlineActive: boolean;
   isOutput: boolean;

@@ -8,11 +8,15 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
 import { SM } from "../../../App";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType/types";
 import { ApplicationState } from "../../../state/reducers";
 import { useFormContext } from "../../components/forms/FormContext";
+import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
+import { FBDocTypeGroup } from "../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBOnChange } from "./FBInput.onchange";
 
@@ -291,7 +295,13 @@ export const withFBInput = <T extends FBInputProps>(
         }
       );
     }, []);
-    const group = _documentRevisionFormState?.documentType?.group || "OTHER";
+
+    const documentRevision = useSelector((state: ApplicationState) =>
+      documentRevisionsSelectors.getDocumentRevision(state, (_documentRevisionFormState?.documentRevision?.id || "")));
+    const docTypeGroup = get(documentRevision?.document?.documentType, "group", FBDocTypeGroup.OTHER);
+    const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
+    const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+
     const tabConfig = useSelector((state: ApplicationState) =>
       documentTypeSelectors.getTabConfiguration(state, group));
     useEffect(() => {
