@@ -845,7 +845,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      // cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22082901");
     });
 
     context("Right side:", () => {
@@ -959,7 +958,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         docId: "Step #1",
         revision: "Rev A",
       });
-      // cy.get("#HeaderInfo-subtitle").should("have.text", "LHR-00001");
     });
 
     context(`The status bar is BLUE(${Colors.dodger_blue})`, () => {
@@ -1080,7 +1078,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         docId: "Step #1",
         revision: "Rev A",
       });
-      // cy.get("#HeaderInfo-subtitle").should("have.text", "LHR-00001");
     });
 
     context(`The status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
@@ -1146,7 +1143,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         docId: "Step #1",
         revision: "Rev A",
       });
-      // cy.get("#HeaderInfo-subtitle").should("have.text", "LHR-00001");
     });
 
     context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
@@ -1209,9 +1205,12 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       it("Open revisions tab, click and Revision A is Superseded", () => {
         cy.drClickRevisionsSidePanel();
-        cy.get(`[data-cy="revision"]`).eq(1).invoke("text").then((text) => {
-          expect(text.replace(/\u00a0/g, " ")).equal("Revision A  - Superseded");
-        });
+        cy.get(`[data-cy="revision"]`)
+          .eq(1)
+          .invoke("text")
+          .then((text) => {
+            expect(text.replace(/\u00a0/g, " ")).equal("Revision A  - Superseded");
+          });
       });
     }
   );
@@ -1229,7 +1228,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           docId: "Step #1",
           revision: "Rev A",
         });
-        // cy.get("#HeaderInfo-subtitle").should("have.text", "LHR-00001");
       });
 
       context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
@@ -1277,7 +1275,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      // cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083101RD");
     });
 
     context(`The status bar is ORANGE(${Colors.school_bus_yellow})`, () => {
@@ -1342,7 +1339,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           docId: "LHR-00001",
           revision: "Rev A",
         });
-        // cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083101RD");
       });
 
       context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
@@ -1367,7 +1363,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           cy.checkToastMessageContains({
             message: "File will be sent to your email shortly.",
           });
-          // cy.wait(2000);
           cy.closeAllAlertMessages();
         });
 
@@ -1378,11 +1373,9 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
         it("Add Approver to approvals list", () => {
           cy.get("[name^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
-          // cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
         it("Click on Submit For Approval", () => {
-          // cy.pmSubmitForApproval();
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
 
@@ -1406,7 +1399,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
   context("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
-      // cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
       cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
       cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
@@ -1446,9 +1438,12 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     it("Open revisions tab, click and Revision A is Superseded", () => {
       cy.drClickRevisionsSidePanel();
-      cy.get(`[data-cy="revision"]`).eq(1).invoke("text").then((text) => {
-        expect(text.replace(/\u00a0/g, " ")).equal("Revision A.1  - Superseded");
-      });
+      cy.get(`[data-cy="revision"]`)
+        .eq(1)
+        .invoke("text")
+        .then((text) => {
+          expect(text.replace(/\u00a0/g, " ")).equal("Revision A.1  - Superseded");
+        });
     });
   });
 
@@ -1460,7 +1455,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A.2",
       });
-      // cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22083101RD");
     });
 
     context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
@@ -1485,7 +1479,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
-        // cy.wait(2000);
         cy.closeAllAlertMessages();
       });
     });
@@ -1498,20 +1491,22 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context(`Click on the Lot linked in Referenced By field → The lot will open in a new Tab → 
-  The lot is in the “Released” state`, () => {
-    it("Open References Tab", () => {
-      cy.get("[data-cy=\"references-icon\"]").click();
-    });
+  context(
+    `Click on the Lot linked in Referenced By field → The lot will open in a new Tab → 
+  The lot is in the “Released” state`,
+    () => {
+      it("Open References Tab", () => {
+        cy.get("[data-cy=\"references-icon\"]").click();
+      });
 
-    it("Click on the references", () => {
-      cy.get("#ReferencePresenter-link").invoke("removeAttr", "target").click();
-    });
+      it("Click on the references", () => {
+        cy.get("#ReferencePresenter-link").invoke("removeAttr", "target").click();
+      });
 
-    it(`Status is in ${STATUS_TYPES_LABEL.RELEASED}`, () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-    });
-  }
+      it(`Status is in ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      });
+    }
   );
 
   context("Check the content of the status bar", () => {
@@ -1546,7 +1541,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
-        // cy.wait(2000);
         cy.closeAllAlertMessages();
       });
     });
@@ -1685,7 +1679,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
             cy.checkToastMessageContains({
               message: "File will be sent to your email shortly.",
             });
-            // cy.wait(2000);
             cy.closeAllAlertMessages();
           });
         });
@@ -1742,7 +1735,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           cy.checkToastMessageContains({
             message: "File will be sent to your email shortly.",
           });
-          // cy.wait(2000);
           cy.closeAllAlertMessages();
         });
       });
