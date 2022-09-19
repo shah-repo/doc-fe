@@ -157,7 +157,7 @@ export { default as FBLock } from "./FBLock/FBLock";
 export * from "./FBLock/FBLock.types";
 export { default as FBMapWrapper } from "./FBMapWrapper/FBMapWrapper";
 export * from "./FBMapWrapper/FBMapWrapper.types";
-export { default as FBMeqState } from "./FBMaterialEquipmentInfo/FBMeq.state";
+export { default as FBMaterailEqInfoState } from "./FBMaterialEquipmentInfo/FBMaterailEqInfo.state";
 export { default as FBMediaAlbum } from "./FBMediaAlbum/FBMediaAlbum";
 export { default as FBMediaAlbumState } from "./FBMediaAlbum/FBMediaAlbum.state";
 export * from "./FBMediaAlbum/FBMediaAlbum.types";
@@ -207,7 +207,6 @@ export { default as FBPOReceiveFormActions } from "./FBPOReceiveForm/FBPOReceive
 export * from "./FBPOReceiveForm/FBPOReceiveForm.types";
 export { default as FBProcedureState } from "./FBProcedure/FBProcedure.state";
 export * from "./FBProcedure/FBProcedure.types";
-export { default as FBProcedureDiff } from "./FBProcedureDiff/FBProcedureDiff";
 export { default as FBProcedureDiffState } from "./FBProcedureDiff/FBProcedureDiff.state";
 export * from "./FBProcedureDiff/FBProcedureDiff.types";
 export { default as FBProcedureForm } from "./FBProcedureForm/FBProcedureForm";

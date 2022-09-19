@@ -272,7 +272,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ && (
                             <FBMaterialEqInfoContainer
-                              documentRevisionId={documentRevision?.id}
+                              documentRevision={documentRevision}
                               inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                             />
                           )}
