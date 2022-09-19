@@ -917,10 +917,14 @@ context("Create company with JSON's", () => {
     it("Edit one or two fields & approve & release", () => {
       cy.dlSelectFirstDocument();
       cy.poSelectPOStatus({ status: "Cancelled" });
+      cy.wait(3000);
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
     });
 
     it("Approve & Release", () => {
-      cy.pmSubmitForApproval();
       cy.poApprove();
     });
 
