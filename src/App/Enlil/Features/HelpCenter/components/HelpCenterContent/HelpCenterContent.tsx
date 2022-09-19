@@ -16,7 +16,6 @@ interface Props {
 const HelpCenterContent: React.FC<Props> = ({ content, isOpen, handleCloseDialog }) => {
   const classes = useStyles();
 
-  // TODO Create generic system-wide dialog component
   return (
     <Dialog
       hideBackdrop

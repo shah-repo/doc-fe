@@ -6,7 +6,7 @@ import { ReactComponent as HelpIcon } from "../../../../assets/images/help-md.sv
 import useDialog from "../../../../ui/hooks/useDialog";
 import HelpCenterContent from "./components/HelpCenterContent/HelpCenterContent";
 import HelpCenterNavigation from "./components/HelpCenterNavigation/HelpCenterNavigation";
-import en from "./data/content-en.json";
+import en from "./data/content-en";
 import useAppModule from "./hooks/useAppModule";
 import usePreviousValue from "./hooks/usePreviousValue";
 
@@ -15,7 +15,6 @@ const helpContent = {
 };
 
 const HelpCenter: React.FC = () => {
-  // Navigation
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -24,20 +23,17 @@ const HelpCenter: React.FC = () => {
     setAnchorEl(null);
   };
 
-  // Content dialog
   const contentDialog = useDialog();
   const openContent = () => {
     closeMenu();
     contentDialog.open();
   };
 
-  // Module content
   const currentModule = useAppModule();
   const { locale, defaultLocale } = useIntl();
   const localizedContent = get(helpContent, locale, helpContent[defaultLocale]);
   const currentContent = get(localizedContent, currentModule, null);
 
-  // Subscribe to module changing
   const previousModule = usePreviousValue(currentModule);
   useEffect(() => {
     if (previousModule && currentModule !== previousModule) {

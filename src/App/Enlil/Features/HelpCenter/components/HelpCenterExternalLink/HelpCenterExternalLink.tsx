@@ -16,8 +16,6 @@ const HelpCenterExternalLink: React.FC<Props> = ({ href, children, className }) 
 
   return (
     <MenuItem
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
       component={Link}
       to={transformUrlWithEnv(href)}
       target="_blank"
