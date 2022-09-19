@@ -269,8 +269,16 @@ context("Mpi Layout", () => {
         });
 
         context("Verify description field", () => {
+          it("Verify description is highlighted on mouse over", () => {
+            cy.verifyDescriptionIsHighlightedonHover();
+          });
+
           it("Verify DescriptionToolBar", () => {
             cy.verifyDescriptionToolbar();
+          });
+
+          it("Click on description field editor should be opend", () => {
+            cy.get(".rdw-editor-wrapper").should("be.visible");
           });
 
           it("Enter a 1 line description", () => {
@@ -317,11 +325,29 @@ context("Mpi Layout", () => {
           it("Click on view more description should be expanded", () => {
             cy.get("[data-cy='description'] button").arrowClick();
             cy.get("div[class^='rdw-editor-toolbar']").should("exist");
+            cy.get(`[data-cy="description"] [contenteditable]`).first().scrollIntoView({ ensureScrollable: false });
+          });
+
+          it("on scroll after expand header should be fixed", () => {
+            cy.get("[data-cy='tabId.procedure']").scrollIntoView();
+            cy.get("header").should("be.visible");
+            cy.get("[data-cy='description']").eq(0).scrollIntoView();
           });
 
           it("Click on view less description should be collapsed", () => {
             cy.get("[data-cy='description'] button").arrowClick();
             cy.get("[data-cy='description'] .rdw-editor-toolbar").should("not.exist");
+          });
+
+          it("on scroll after collpased header should be fixed", () => {
+            cy.get("[data-cy='tabId.procedure']").scrollIntoView();
+            cy.get("header").should("be.visible");
+            cy.get("[data-cy='description']").eq(0).scrollIntoView();
+          });
+
+          it("on click of description description should be editable", () => {
+            cy.get(".DraftEditor-editorContainer").eq(0).arrowClick();
+            cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
           });
         });
       });
