@@ -791,11 +791,11 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it(`Verify Shipping cost`, () => {
-      cy.poCheckShippingCost({ cost: "0.0" });
+      cy.poCheckShippingCost({ cost: "0.00" });
     });
 
     it("Check Tax value", () => {
-      cy.poCheckTax({ number: "0.0" });
+      cy.get(`[name="po-items-built-in.tax"]`).contains("0.00");
     });
 
     it("Check Total value", () => {
@@ -982,7 +982,8 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check approvers automatically added", () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).scrollIntoView().should("contain",
+        `${USERS[2].name} - ${USERS[2].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1159,7 +1160,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check Tax value", () => {
-      cy.poCheckTax({ number: "0.0" });
+      cy.get(`[name="po-items-built-in.tax"]`).contains("0.00");
     });
 
     it("Check Total value", () => {

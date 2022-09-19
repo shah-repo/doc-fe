@@ -579,11 +579,11 @@ context("Paper LHR tab Layout", () => {
 
       it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
         cy.get("[data-cy='lhr-selected-part']").scrollIntoView();
-        cy.get("[data-cy='lhr-selected-part']").should("be.visible");
-        cy.get("[name='lhr_initial_quantity']").should("be.visible");
-        cy.get("[name='lhr-end-quantity']").should("be.visible");
+        cy.get("[data-cy='lhr-selected-part']").should("exist");
+        cy.get("[name='lhr_initial_quantity']").should("exist");
+        cy.get("[name='lhr-end-quantity']").should("exist");
         cy.get("#sm-tabpanel-0").scrollTo("bottom");
-        cy.get("[data-cy^='fb-approvals-fb-approvals']").should("be.visible");
+        cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
       });
 
       it("Verify Form option", () => {
@@ -647,14 +647,15 @@ context("Paper LHR tab Layout", () => {
         cy.get(`input[type="checkbox"][value="1"]`).last().check();
       });
 
+      it("Save the document", () => {
+        cy.drSaveDocumentWithoutaudit();
+      });
+
       it("Fill in Approval block and  Approve and release Record", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
       });
 
-      it("Save the document", () => {
-        cy.drSaveDocumentWithoutaudit();
-      });
     });
   });
 
@@ -710,11 +711,11 @@ context("Paper LHR tab Layout", () => {
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
-          cy.get("[data-cy='lhr-selected-part']").should("be.visible");
-          cy.get("[name='lhr_initial_quantity']").should("be.visible");
-          cy.get("[name='lhr-end-quantity']").should("be.visible");
+          cy.get("[data-cy='lhr-selected-part']").should("exist");
+          cy.get("[name='lhr_initial_quantity']").should("exist");
+          cy.get("[name='lhr-end-quantity']").should("exist");
           cy.get("#sm-tabpanel-0").scrollTo("bottom");
-          cy.get("[name^='fb-approvals-fb-approvals']").should("be.visible");
+          cy.get("[name^='fb-approvals-fb-approvals']").should("exist");
         });
 
         it("Verify Form option", () => {
@@ -845,18 +846,18 @@ context("Paper LHR tab Layout", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
+    it("Save the document", () => {
+      cy.drSaveDocumentWithoutaudit();
+    });
+
     it("Fill in Approval block and  Approve and release Record", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
     });
 
-    it("Save the document", () => {
-      cy.drSaveDocumentWithoutaudit();
-    });
-
     context("Verify Scroll", () => {
       it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
+        cy.get("[data-cy='timeline-icon']").arrowClick({ force: true });
       });
 
       it("Click and drag the scroll bar and verify that user can scroll history tab", () => {

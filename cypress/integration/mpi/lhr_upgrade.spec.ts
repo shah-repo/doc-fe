@@ -318,7 +318,7 @@ context("LHR Upgrade", () => {
 
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
-          cy.get("input[data-cy^=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          cy.get("input[data-cy^=\"lhrstep-built-in\"]").autocompleteSelect("MPI document", { force: true });
         });
       });
 

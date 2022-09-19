@@ -201,7 +201,7 @@ Cypress.Commands.add("ptSelectPartFormFromMultiSelect", (params: {partForm: stri
 
 Cypress.Commands.add("pmSubmitForApproval", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -216,7 +216,7 @@ Cypress.Commands.add("lhrSubmitForApproval", () => {
 });
 
 Cypress.Commands.add("pmToggleChangesFromPrevBuild", () => {
-  cy.get("[name=\"fb-procedure-diff\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.prev.build.changes\"]").arrowClick();
 });
 
 Cypress.Commands.add("pmClearFilters", () => {
