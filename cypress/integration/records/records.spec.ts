@@ -841,7 +841,7 @@ context("Records flow", () => {
     });
 
     it("Save Record'", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check doc WIP status and click on Send To Email", () => {

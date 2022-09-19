@@ -561,9 +561,7 @@ context("Export for LHR", () => {
     });
 
     it("Click save document", () => {
-      cy.drSaveDocumentWithoutaudit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 

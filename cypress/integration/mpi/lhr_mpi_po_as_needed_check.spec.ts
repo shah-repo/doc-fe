@@ -501,19 +501,14 @@ context("Mpi/Qpi test", () => {
         cy.drSelectDetailsTab();
       });
 
+      it(`Select '${USERS[1].name}' for Requestor`, () => {
+        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      });
+
       it("Select Order Date", () => {
         cy.get("input[name^=ordered]").parent().find("button").arrowClick();
         cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
-      });
-
-      it("Add an Approval", () => {
-        cy.wait(5000);
-        cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save PO document", () => {
