@@ -573,7 +573,6 @@ context("Mpi Layout", () => {
       context("Validate Right Side Panel", () => {
 
         it("Verify that right side panel opens by default to the References tab", () => {
-          cy.pause();
           cy.get("[data-cy='References']").should("exist");
           cy.get("[data-cy='generalInfo']").should("be.visible");
         });
