@@ -81,7 +81,6 @@ context("Paper LHR tab Layout", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
-          // paperLHRType = cmpFilterDocumentTypeIdByName(createdCompany, "Paper Lot History Record");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           done();
@@ -856,6 +855,7 @@ context("Paper LHR tab Layout", () => {
         cy.get("[name='lhr_initial_quantity']").should("exist");
       });
 
+      // steps : Required after blocker fixed
       // it("Click on confirm change", () => {
       //   cy.get("[data-cy='common.confirm.change']").arrowClick();
       // });
