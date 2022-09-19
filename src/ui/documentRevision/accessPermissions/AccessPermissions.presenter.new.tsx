@@ -1,10 +1,10 @@
 import { Avatar, Box, Collapse, Grid, List, ListItem, ListItemSecondaryAction, ListItemText, Typography } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
-import { filter, isEmpty, isEqual, some } from "lodash";
+import { filter, isEmpty, isEqual, some, truncate } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import Select, { components } from "react-select";
+import Select, { components, OptionProps } from "react-select";
 import { ReactComponent as CloseIcon } from "../../../assets/images/delete_icon.svg";
 import { Group } from "../../../state/ducks/auth/types";
 import { Owner, TypographySize } from "../../../state/ducks/common/types";
@@ -15,6 +15,7 @@ import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import Colors from "../../layout/theme/utils/colors";
+import { StyledTooltip } from "../forms/presenters/AvailableReferences.new";
 import { styles } from "./AccessPermissions.styles.new";
 
 interface OwnProps {
@@ -179,6 +180,22 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
     setGroupsOpen(!groupsOpen);
   };
 
+  const truncateLabel = (label) => truncate(label, { length: 30, omission: " ..." });
+
+  const Option = (props: OptionProps<OptionType>) => {
+    const { data } = props;
+    if (data?.label?.length > 30) {
+      return (
+        <components.Option {...props} >
+          <StyledTooltip title={data.label}>
+            <>{truncateLabel(data.label)}</>
+          </StyledTooltip>
+        </components.Option>
+      );
+    }
+    return (<components.Option {...props} />);
+  };
+
   return (
     <Box flexGrow={1}>
       <List disablePadding>
@@ -205,11 +222,14 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                     <Select
                       options={employeeSelectOptions}
                       menuPlacement={"auto"}
+                      styles={{
+                        option: (style) => ({ ...style, wordWrap: "break-word" }),
+                      }}
                       onChange={(e) => saveValue(e)}
                       placeholder={intl.formatMessage({
                         id: "document.revision.search.users",
                       })}
-                      components={{ DropdownIndicator }}
+                      components={{ DropdownIndicator, Option }}
                       value={
                         accessElement.value === "" || isGroup
                           ? null
