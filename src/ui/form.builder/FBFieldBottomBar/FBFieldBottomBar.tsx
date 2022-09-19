@@ -13,11 +13,11 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   index = 0,
 }) => {
   const { _tabsState } = SM.useStores();
-  const { _documentRevisionFormState } = SM.useStores() || {};
+  const { _documentRevisionFormState } = SM.useStores();
   const classes = useStyles();
 
   const isEQ =
-  checkIsDocumentEquipment(_documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions) || false;
+  checkIsDocumentEquipment(_documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions);
 
   return (
     <Box visibility={visibility} className={classes.root}>
