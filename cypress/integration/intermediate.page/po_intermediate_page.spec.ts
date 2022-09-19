@@ -349,7 +349,8 @@ context("Intermediate page validation", () => {
       cy.get(`[data-cy="description"] [contenteditable]`).contains("This is TA")
         .parent().parent().parent()
         .should("have.class", "public-DraftStyleDefault-depth0");
-      cy.get(`[data-cy="description"] [contenteditable]`).click().get(`[title="Ordered"]`).arrowClick();
+      cy.get(`[data-cy="description"] [contenteditable]`).click()
+        .type("{selectAll}").get(`[title="Ordered"]`).arrowClick();
     });
 
     it("Verify Description editor option 'Text align Left'", () => {
