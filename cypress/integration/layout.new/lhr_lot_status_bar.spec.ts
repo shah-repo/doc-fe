@@ -825,7 +825,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context(`Navigate to LHR and Verify Status is ${STATUS_TYPES_LABEL.WIP}`, () => {
+  xcontext(`Navigate to LHR and Verify Status is ${STATUS_TYPES_LABEL.WIP}`, () => {
     it("Navigate to LHR landing page", () => {
       cy.navigToLHR();
     });
@@ -837,7 +837,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Check the content of the status bar", () => {
+  xcontext("Check the content of the status bar", () => {
     it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.WIP,
@@ -912,14 +912,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
+  xcontext("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
       cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
       cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
-  context("Populate the fields - including adding some references and selecting R&D build type- ", () => {
+  xcontext("Populate the fields - including adding some references and selecting R&D build type- ", () => {
     it("Select 'R&D' build type", () => {
       cy.contains("Build Type").should("be.visible");
       cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
@@ -939,7 +939,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Start the step → LHR Step is created in WIP", () => {
+  xcontext("Start the step → LHR Step is created in WIP", () => {
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -950,7 +950,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Check the content of the status bar", () => {
+  xcontext("Check the content of the status bar", () => {
     it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.WIP,
@@ -993,7 +993,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Add Approver to approvals list", () => {
-        cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(USERS[1].name);
+        cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
       });
 
       it("Last save should be present", () => {
@@ -1053,14 +1053,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
+  xcontext("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
       cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
       cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
-  context("Click on “Complete step” and submit for approval → LHRS is “In Review” state", () => {
+  xcontext("Click on “Complete step” and submit for approval → LHRS is “In Review” state", () => {
     it("Click on “Complete step", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
     });
@@ -1070,7 +1070,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Check the content of the status bar", () => {
+  xcontext("Check the content of the status bar", () => {
     it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.IN_REVIEW,
@@ -1110,14 +1110,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
+  xcontext("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
       cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
       cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
-  context("Approve the submission → LHRS is in the “Completed” state ", () => {
+  xcontext("Approve the submission → LHRS is in the “Completed” state ", () => {
     it("Approve LHR", () => {
       cy.wait(3000);
       cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
@@ -1135,7 +1135,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Check the content of the status bar", () => {
+  xcontext("Check the content of the status bar", () => {
     it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.COMPLETED,
@@ -1167,20 +1167,20 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
+  xcontext("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
       cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
       cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
-  context(
+  xcontext(
     `Revise LHRS → Select “Admin Change” and Complete the step again → New revision is Completed and 
   Revision A is Superseded`,
     () => {
       it("Add Approver to approvals list", () => {
         cy.wait(1000);
-        cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(USERS[1].name);
+        cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
       });
 
       it("Click on Complete step to Complete the step again", () => {
@@ -1215,7 +1215,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     }
   );
 
-  context(`Open the Superseded revision → Check the content of the status bar`, () => {
+  xcontext(`Open the Superseded revision → Check the content of the status bar`, () => {
     it("Open the Superseded revision", () => {
       cy.get(`[data-cy="revision"]`).eq(1).click();
     });
@@ -1249,14 +1249,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
+  xcontext("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
       cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
       cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
-  context("Go back to the LHR and submit it for approval → LHR is “In Review”", () => {
+  xcontext("Go back to the LHR and submit it for approval → LHR is “In Review”", () => {
     it("Go back to the LHR", () => {
       cy.get("#HeaderInfo-subtitle").click();
     });
@@ -1267,7 +1267,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Check the content of the status bar", () => {
+  xcontext("Check the content of the status bar", () => {
     it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.IN_REVIEW,
@@ -1307,14 +1307,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
+  xcontext("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
       cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
       cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
-  context("Approve it → LHR is Released → Check the content of the status bar", () => {
+  xcontext("Approve it → LHR is Released → Check the content of the status bar", () => {
     it("Approve LHR", () => {
       cy.wait(3000);
       cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
@@ -1397,14 +1397,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
+  xcontext("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
       cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
       cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
-  context("Revise LHR → A new revision is created in WIP", () => {
+  xcontext("Revise LHR → A new revision is created in WIP", () => {
     it("Click 'Revise document' button", () => {
       cy.get("[data-cy=\"updateRecord\"]").click();
     });
@@ -1415,7 +1415,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Select Admin Change and release Rev A.2  → Rev A.1 is in Superseded state", () => {
+  xcontext("Select Admin Change and release Rev A.2  → Rev A.1 is in Superseded state", () => {
     it("Add Approver to approvals list", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
     });
@@ -1447,7 +1447,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Check the content of the status bar", () => {
+  xcontext("Check the content of the status bar", () => {
     it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.RELEASED,
@@ -1484,14 +1484,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Scroll down the page → The status bar should be fixed", () => {
+  xcontext("Scroll down the page → The status bar should be fixed", () => {
     it("Scroll down to the bottom of the page", () => {
       cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
       cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
     });
   });
 
-  context(
+  xcontext(
     `Click on the Lot linked in Referenced By field → The lot will open in a new Tab → 
   The lot is in the “Released” state`,
     () => {
@@ -1509,7 +1509,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     }
   );
 
-  context("Check the content of the status bar", () => {
+  xcontext("Check the content of the status bar", () => {
     it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.RELEASED,
@@ -1546,13 +1546,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context("Click on the references → They should open in a new tab", () => {
+  xcontext("Click on the references → They should open in a new tab", () => {
     it("Click on the references", () => {
       cy.get("#ReferencePresenter-link").click();
     });
   });
 
-  context("Revise the LOT → Lot is in WIP → Check the status bar content:", () => {
+  xcontext("Revise the LOT → Lot is in WIP → Check the status bar content:", () => {
     it("Click 'Update Record' button", () => {
       cy.get("[data-cy=\"updateRecord\"]").click();
     });
@@ -1598,7 +1598,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(500);
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ multiple: true, force: true }).wait(500);
           cy.poAMCheckForAlertMessage();
         });
 
@@ -1617,7 +1617,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
   });
 
-  context(
+  xcontext(
     "Add an approver and submit for approval → Lot is in Quarantine status  → Check the content of the status bar",
     () => {
       it("Navigate to Detail Tab", () => {
@@ -1629,7 +1629,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Click on Submit For Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
       });
 
       it(`Status is in ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -1686,7 +1686,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     }
   );
 
-  context("Approve the Lot → Click on Revision A (no status) → Check the content of the status bar", () => {
+  xcontext("Approve the Lot → Click on Revision A (no status) → Check the content of the status bar", () => {
     it("Navigate to Detail Tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -1740,6 +1740,325 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
     });
   });
+
+  xcontext("Scroll down the page → The status bar should be fixed", () => {
+    it("Scroll down to the bottom of the page", () => {
+      cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+    });
+  });
+
+  xcontext(`Go back to the LHR and open the completed LHR Step`, () => {
+    it("Navigate to LHR landing page", () => {
+      cy.navigToLHR();
+    });
+
+    it("Clear filter", () => {
+      cy.dlClearFilters();
+    });
+
+    it(`Filter document by status ${STATUS_TYPES_LABEL.RELEASED}, and select it`, () => {
+      cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick({ force: true });
+      cy.get("li").contains("Released").arrowClick().wait(500);
+      cy.get(`td[data-grid-col-index="1"]`).eq(0).arrowClick();
+    });
+
+    it(`Verify LHR Step is ${STATUS_TYPES_LABEL.COMPLETED}`, () => {
+      cy.get("[data-cy=\"completed-steps\"]").should("not.exist");
+    });
+  });
+
+  xcontext(
+    `Revise it → Select ${STATUS_TYPES_LABEL.VOID} as revision stage`,
+    () => {
+      // it("Add Approver to approvals list", () => {
+      //   cy.wait(1000);
+      //   cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
+      // });
+
+      // it("Click on Complete step to Complete the step again", () => {
+      //   cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      // });
+      it("Revise document with 'Void' option", () => {
+        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
+        // cy.drClickCreateDocumentWithoutApiCall();
+        cy.wait(3000);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").scrollIntoView().autocompleteSelect(owner);
+        // cy.drApproveAndReleaseDialog();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
+        cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+        // cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Approve LHR", () => {
+        cy.wait(3000);
+        cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
+        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        });
+        cy.checkToastMessage({ exists: false });
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it(`LHR is in the ${STATUS_TYPES_LABEL.OBSOLETE} state`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.OBSOLETE });
+      });
+
+      // it("Open revisions tab, click and Revision A is Superseded", () => {
+      //   cy.drClickRevisionsSidePanel();
+      //   cy.get(`[data-cy="revision"]`)
+      //     .eq(1)
+      //     .invoke("text")
+      //     .then((text) => {
+      //       expect(text.replace(/\u00a0/g, " ")).equal("Revision A  - Superseded");
+      //     });
+      // });
+    }
+  );
+
+  xcontext("Check the content of the status bar", () => {
+    it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.OBSOLETE,
+        title: "LHR",
+        docId: "LHR-00001",
+        revision: "Rev Void",
+      });
+    });
+
+    context(`The status bar is RED(${Colors.latest_red_varient})`, () => {
+      it(`Color of Header status bar is GREEN(${Colors.latest_red_varient})`, () => {
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
+      });
+    });
+
+    context("Right side:", () => {
+      it("Last save should not be present", () => {
+        cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+      });
+
+      it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+        cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+      });
+
+      it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+      email shortly`, () => {
+        cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+        cy.get("div.Toastify__toast-container").should("exist");
+        cy.checkToastMessageContains({
+          message: "File will be sent to your email shortly.",
+        });
+        cy.closeAllAlertMessages();
+      });
+    });
+  });
+
+  context(`Go back to the LHR and Create a new LHR`, () => {
+    it("Navigate to LHR landing page", () => {
+      cy.navigToLHR();
+    });
+
+    it("Click 'Initiate New LHR'", () => {
+      cy.supCreateNew();
+    });
+
+    it(`Select a document type "Lot History Record Test"`, () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
+        CyRoutes.GetFieldLocks], () => {
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+          .autocompleteSelect("Lot History Record Test");
+      });
+    });
+  });
+
+
+  context(`Start the LHR step and complete it`, () => {
+    it("Enter initial quantity", () => {
+      cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist");
+      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("20");
+    });
+
+    it("Select 'R&D' build type", () => {
+      cy.contains("Build Type").should("be.visible");
+      cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
+      cy.get("[value=\"R&D\"]").check();
+    });
+
+    it("Add 'Due Date'", () => {
+      cy.poAddDateRequired();
+    });
+
+    it("Add Approver to approvals list", () => {
+      cy.pmAddApproverOnApproverList({ approver: owner });
+    });
+
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Click 'START MPI'", () => {
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      cy.mpiStartStep({ stepNumber: 1 });
+    });
+
+    it("Add Approver to approvals list", () => {
+      cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Enter 'Start quantity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("8");
+      cy.unClick();
+    });
+
+    it("Enter 'Accepted quantity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("5");
+      cy.unClick();
+    });
+
+    it("Enter 'Rejected quantity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("3");
+      cy.unClick();
+    });
+
+    it("Click on “Complete step", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it("Approve LHR", () => {
+      cy.wait(3000);
+      cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`LHRS is in the ${STATUS_TYPES_LABEL.COMPLETED} state`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.COMPLETED });
+    });
+  });
+
+  context(`Revise the LHR step and choose “Void” in the revision stage → Check the content of the status bar`, () => {
+    it("Revise document with 'Void' option", () => {
+      // cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+      cy.drClickReviseDocument();
+      // cy.listLoadingElementShouldNotExist();
+      // cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
+      // // cy.drClickCreateDocumentWithoutApiCall();
+      // cy.wait(3000);
+      // cy.get("[data-cy^=fb-approvals-fb-approvals-]").scrollIntoView().autocompleteSelect(owner);
+      // // cy.drApproveAndReleaseDialog();
+      // cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      // cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
+      // cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+      // // cy.progressBarShouldNotExist();
+      // cy.listLoadingElementShouldNotExist();
+    });
+
+    context("Check the content of the status bar", () => {
+
+      it("Buttons changed to “Save”", () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible");
+      });
+
+      context(
+        `Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” options are displayed → 
+      Verify they’re functional`,
+        () => {
+          it("Cancel button in header menu exists", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
+            cy.get("[data-cy=\"cancelDraftButton\"]").should("be.visible");
+          });
+
+          it("Redline button in header menu exists", () => {
+            cy.get("[data-cy=\"redlineButton\"]").should("be.visible");
+          });
+
+          it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+          });
+        });
+    });
+  });
+
+  context(`Complete the process to void the LHRS → It changes to an ${STATUS_TYPES_LABEL.OBSOLETE} state → 
+  Check the content of the status bar`, () => {
+    it("Revise document with 'Void' option", () => {
+      // cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+      // cy.listLoadingElementShouldNotExist();
+      cy.unClick();
+      cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
+      // cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(3000);
+      cy.get("[data-cy^=fb-approvals-approvals-built-in]").click({ force: true }).autocompleteSelect(owner);
+      // cy.drApproveAndReleaseDialog();
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
+      cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+      // cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Approve LHR", () => {
+      cy.wait(3000);
+      cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`LHR is in the ${STATUS_TYPES_LABEL.OBSOLETE} state`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.OBSOLETE });
+    });
+
+    context("Check the content of the status bar", () => {
+      it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.OBSOLETE,
+          title: "LHR",
+          docId: "LHR-00001",
+          revision: "Rev Void",
+        });
+      });
+
+      context(`The status bar is RED(${Colors.latest_red_varient})`, () => {
+        it(`Color of Header status bar is GREEN(${Colors.latest_red_varient})`, () => {
+          cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
+        });
+      });
+
+      context("Right side:", () => {
+        it("Last save should not be present", () => {
+          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+        });
+
+        it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+          cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+        });
+      });
+    });
+
+  });
+
 });
 
 export { };
