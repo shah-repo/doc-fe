@@ -469,11 +469,11 @@ context("Verify New Layout for Seed Document", () => {
 
     context("Enter values for Details tab predefined schema fields", () => {
       it("Enters document title 'First document'", () => {
-        cy.get("[name^=document-title-]").arrowType("First document", { force: true });
+        cy.get("[data-cy^=document-title-]").arrowType("First document");
       });
 
       it("Select 'Form with output' value on 'Type of document to be created'", () => {
-        cy.get("[name^=type-of-document-to-be-created-]").eq(0).check({ force: true });
+        cy.get("[name^=type-of-document-to-be-created-]").eq(0).check();
       });
 
       it("Select 'Numeric' value on 'Default Revision Stage'", () => {
@@ -486,23 +486,23 @@ context("Verify New Layout for Seed Document", () => {
 
       it("Enters document description 'First document description'", () => {
         cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-          .click({ force: true }).arrowType("First document description", { force: true });
+          .click({ force: true }).arrowType("First document description");
       });
 
       it("Selects document type as 'Form'", () => {
-        cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick({ force: true });
+        cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
         cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul")
-          .contains("li", "Form").arrowClick({ force: true });
+          .contains("li", "Form").arrowClick();
       });
 
       it("Selects document type as 'Clinical Protocol'", () => {
-        cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick({ force: true });
+        cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick();
         cy.get("[id^=menu-define-the-output-of-that-form-]>div:nth-child(3)>ul")
-          .contains("li", "Clinical Protocol").arrowClick({ force: true });
+          .contains("li", "Clinical Protocol").arrowClick();
       });
 
       it("Selects 'No' training required option", () => {
-        cy.get("[name^=training-required-]").eq(1).arrowClick({ force: true });
+        cy.get("[name^=training-required-]").eq(1).arrowClick();
       });
     });
 
@@ -513,11 +513,11 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Check checkbox option", () => {
-        cy.get(`input[type="checkbox"][value="Option 1"]`).last().check({ force: true });
+        cy.get(`input[type="checkbox"][value="Option 1"]`).last().check();
       });
 
       it("Select radio button option", () => {
-        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick({ force: true });
+        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
       });
 
       it("Save document", () => {
