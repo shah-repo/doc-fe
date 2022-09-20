@@ -138,8 +138,8 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
 });
 
 Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
-  cy.get("[name=\"partNumber\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick();
+  cy.get("[name=\"partNumber\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poSelectPartNumberNew", (params: {partNo: string }) => {
@@ -232,7 +232,11 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
+<<<<<<< HEAD
   cy.get("[id$=\"po-status-built-in\"]").arrowClick();
+=======
+  cy.get("[id$=\"po-status-built-in\"]").arrowClick({ force: true });
+>>>>>>> demo
   cy.get("ul>li[role=option]").contains(params.status).arrowClick({ force: true });
 });
 

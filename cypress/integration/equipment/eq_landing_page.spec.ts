@@ -1133,7 +1133,7 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
         cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
-        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick({ force: true });
       });
 
       it("Save document", () => {
@@ -1218,7 +1218,7 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
         cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
-        cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick({ force: true });
       });
 
       it("Save document", () => {
@@ -1533,11 +1533,11 @@ context("NCO document type management", () => {
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
         cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
-        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick({ force: true });
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click on Equipment list", () => {
@@ -1610,7 +1610,7 @@ context("NCO document type management", () => {
       });
 
       it("Revise Equipment", () => {
-        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+        cy.get("[data-cy=\"updateRecord\"]").arrowClick({ force: true });
       });
 
       it("Navigate To specification", () => {

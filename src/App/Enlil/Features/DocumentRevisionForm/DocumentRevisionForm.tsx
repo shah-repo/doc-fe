@@ -45,10 +45,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   canChangeOwnerShip,
   isNewVersion,
   showAdministrativeAndVoidChange,
-  pmFormId,
   redlineActive,
   isOutput,
-  lastSavedTimestamp,
   email,
   isOwner,
   schema,
@@ -123,6 +121,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
@@ -214,10 +213,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                   isNewVersion,
                                   bannerPortal,
                                   showAdministrativeAndVoidChange,
-                                  pmFormId,
                                   redlineActive,
                                   isOutput,
-                                  lastSavedTimestamp,
                                   isDisabled,
                                   email,
                                   isOwner,
@@ -275,7 +272,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ && (
                             <FBMaterialEqInfoContainer
-                              documentRevisionId={documentRevision?.id}
+                              documentRevision={documentRevision}
                               inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                             />
                           )}

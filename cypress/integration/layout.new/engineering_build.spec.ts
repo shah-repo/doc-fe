@@ -746,9 +746,9 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add/Clone Step button", () => {
-            cy.get(`[data-cy="form.builder.add.step"]`).should("contain.text", "Add Step");
+            cy.get(`[data-cy="form.builder.add.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.add.step"]`).should("not.have.attr", "disabled");
-            cy.get(`[data-cy="form.builder.clone.step"]`).should("contain.text", "Clone Step");
+            cy.get(`[data-cy="form.builder.clone.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.clone.step"]`).should("not.have.attr", "disabled");
           });
 
@@ -759,8 +759,8 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add Material/Equipment button", () => {
-            cy.get(`[data-cy="form.builder.materials.btn"]`).should("contain.text", "Add Material");
-            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("contain.text", "Add Equipment");
+            cy.get(`[data-cy="form.builder.materials.btn"]`).should("exist");
+            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("exist");
           });
         });
 
@@ -1047,9 +1047,9 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add/Clone Step button", () => {
-            cy.get(`[data-cy="form.builder.add.step"]`).should("contain.text", "Add Step");
+            cy.get(`[data-cy="form.builder.add.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.add.step"]`).should("not.have.attr", "disabled");
-            cy.get(`[data-cy="form.builder.clone.step"]`).should("contain.text", "Clone Step");
+            cy.get(`[data-cy="form.builder.clone.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.clone.step"]`).should("not.have.attr", "disabled");
           });
 
@@ -1059,8 +1059,8 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add Material/Equipment button", () => {
-            cy.get(`[data-cy="form.builder.materials.btn"]`).should("contain.text", "Add Material");
-            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("contain.text", "Add Equipment");
+            cy.get(`[data-cy="form.builder.materials.btn"]`).should("exist");
+            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("exist");
           });
 
           it("Verify added Materials and Equipment", () => {

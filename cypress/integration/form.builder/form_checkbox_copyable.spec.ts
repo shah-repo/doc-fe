@@ -154,7 +154,7 @@ context("Copyable Checkbox test", () => {
         cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
         cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
-        cy.contains("ac-wi-ch").trigger("mouseover");
+        cy.contains("ac-wi-ch").trigger("mouseover", { force: true });
       });
 
       it("Add Autocomplete without checkboxes", () => {

@@ -291,14 +291,8 @@ context("Record type Document Layout verification", () => {
     });
 
     context("Validate Newly Added form builder fields in Details tab", () => {
-      xit("Verify fields in detail tab", () => {
-        cy.get("[data-cy^=textfield-for-inline-]").eq(0).should("exist");
-        cy.get("[data-cy^=textfield-for-inline-]").eq(1).should("exist");
-        cy.get("[data-cy^=fb-ia-inline-field-]").eq(0).should("exist");
-        cy.get("[data-cy^=fb-ia-inline-field-]").eq(1).should("exist");
-        cy.get("[data-cy^=text-field-]").eq(0).should("exist");
-        cy.get("[data-cy^=text-field-]").eq(0).should("exist");
-        cy.get("[name^=checkbox--]").eq(0).should("exist");
+      it("Verify fields in detail tab", () => {
+        cy.get("[data-cy='Checkbox']").should("be.visible");
         cy.get(".formOptionsBox").should("exist");
       });
 
@@ -388,7 +382,7 @@ context("Record type Document Layout verification", () => {
           cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         });
         it("Save Record'", () => {
-          cy.drSaveDocumentWithoutaudit();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("release button click'", () => {
