@@ -198,8 +198,7 @@ context("PO test with default enlil form", () => {
 
     context("Create purchase order", () => {
       it("Click on 'Purchase Order' on sidebar", () => {
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.wait(1000);
         cy.navigToPurchaseOrder();
       });
 

@@ -599,7 +599,7 @@ context("Create company with golden tenant", () => {
 
     it("Check DAM assigned approval roles", () => {
       const roles: string[] = [];
-      cy.get("table").eq(1).find("tbody tr td").each(($el) => {
+      cy.get(`[class*="wrapperStatus"] table:nth-child(1) tbody tr:nth-child(2) td`).each(($el) => {
         roles.push($el.text());
       });
       cy.wrap(roles).should("have.length", 12);

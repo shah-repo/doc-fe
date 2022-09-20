@@ -255,7 +255,7 @@ Cypress.Commands.add("drSelectReleasedVersionOfDocument", (params: { docVersion:
 });
 
 Cypress.Commands.add("drSelectDetailsTab", () => {
-  cy.get("[data-cy=\"tabId.details\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"tabCon-tabId.details\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -270,7 +270,7 @@ Cypress.Commands.add("drSelectProcedureTab", () => {
 });
 
 Cypress.Commands.add("drSelectMaterialsAndEquipmentTab", () => {
-  cy.get("[data-cy=\"tabId.materialsandequipment\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.materialsandequipment\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -306,7 +306,7 @@ Cypress.Commands.add("drSelectOverviewTab", () => {
 
 Cypress.Commands.add("drSelectPrimaryOwner", (params: { owner: string; noWait?: bool }) => {
   cy.get("[data-cy*='fb-primary-owner-eq']").eq(0).arrowClick({ force: true });
-  cy.get("ul>li[role=\"option\"]").contains(params.owner).arrowClick();
+  cy.get("ul>li[role=\"option\"]").contains(params.owner).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drRemoveReferences", (params: {reference: string}) => {
@@ -672,7 +672,7 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
 
 Cypress.Commands.add("drChooseTypeOfRevisionChangeOption", (params: { option: string }) => {
   cy.get("[data-cy=\"field-revisionChangeType\"]");
-  cy.get("label").contains(params.option).arrowClick();
+  cy.get("label").contains(params.option).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drDocumentFieldError", (params: { field: string; message: string }) => {
