@@ -19,7 +19,8 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   return (
     <Observer>
       {() => (
-        <SMBox {...boxProps} id="SMBodyTmpl"  className={classes.root} style={{ overflow: !_documentRevisionFormState?.expanded ? "unset" : "scroll" }} >
+        <SMBox {...boxProps} id="SMBodyTmpl"  className={classes.root}
+          style={{ overflow: !_documentRevisionFormState?.expanded ? "unset" : "scroll" }} >
           {_documentRevisionFormState?.expanded}
           <Tabs
             {...{ onChange }}
