@@ -340,7 +340,7 @@ context("NCO document type management", () => {
                   ],
                   applicableValidationSchema: true,
                   validationAttribute: "PM",
-                  tabId: "calpmhistory",
+                  tabId: "specification",
                 },
                 {
                   index: 4,
@@ -356,7 +356,7 @@ context("NCO document type management", () => {
                   ],
                   applicableValidationSchema: true,
                   validationAttribute: "Calibration",
-                  tabId: "calpmhistory",
+                  tabId: "specification",
                 },
                 {
                   name: "location-kngiboz9",
@@ -1132,8 +1132,8 @@ context("NCO document type management", () => {
 
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
-        cy.drSelectPrimaryOwner({ owner: USERS[2].name });
+        cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
+        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick({ force: true });
       });
 
       it("Save document", () => {
@@ -1217,8 +1217,8 @@ context("NCO document type management", () => {
 
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
-        cy.drSelectPrimaryOwner({ owner: USERS[1].name });
+        cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
+        cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick({ force: true });
       });
 
       it("Save document", () => {
@@ -1373,7 +1373,7 @@ context("NCO document type management", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1389,7 +1389,7 @@ context("NCO document type management", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -1532,12 +1532,12 @@ context("NCO document type management", () => {
 
       it("Change Primary Owner", () => {
         cy.landingPageLoadingElementShouldNotExist();
-        cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(1).arrowClick({ force: true });
-        cy.drSelectPrimaryOwner({ owner: USERS[2].name });
+        cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
+        cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick({ force: true });
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click on Equipment list", () => {
@@ -1610,7 +1610,7 @@ context("NCO document type management", () => {
       });
 
       it("Revise Equipment", () => {
-        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+        cy.get("[data-cy=\"updateRecord\"]").arrowClick({ force: true });
       });
 
       it("Navigate To specification", () => {

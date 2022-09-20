@@ -476,32 +476,26 @@ context("Receiving landing page test", () => {
     });
 
     it("move component", () => {
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get("[data-cy='Textfield for Receiving']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(`[class="drag-handle"]`).eq(2)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(`[class="drag-handle"]`).eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
-    });
-
-    it("move component", () => {
-      cy.get(`[class="drag-handle"]`).eq(0)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(1)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
+      cy.unClick();
     });
 
     it("Edit Component", () => {
-      cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
       cy.fbAddLabelName({ name: "Textfield for receiving Edited" });
       cy.fbAddField();
     });
 
     it("remove Component", () => {
-      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -635,32 +629,26 @@ context("Receiving landing page test", () => {
     });
 
     it("move component", () => {
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get("[data-cy='Textfield for new receiving']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(`[class="drag-handle"]`).eq(2)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(`[class="drag-handle"]`).eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
-    });
-
-    it("move component", () => {
-      cy.get(`[class="drag-handle"]`).eq(0)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(1)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
+      cy.unClick();
     });
 
     it("Edit Component", () => {
-      cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
       cy.fbAddLabelName({ name: "Textfield for new receiving Edited" });
       cy.fbAddField();
     });
 
     it("remove Component", () => {
-      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -809,7 +797,7 @@ context("Receiving landing page test", () => {
 
   context("Move & Edit & Remove component", () => {
     it("Verify Add field", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(0).contains("Add a Field")
+      cy.get("[data-cy=\"form.builder.add.field\"]").eq(0).contains("Add Field")
         .should("exist");
     });
 
@@ -821,6 +809,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Add component", () => {
+      cy.wait(2000);
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for LFPO" });
@@ -828,32 +817,26 @@ context("Receiving landing page test", () => {
     });
 
     it("move component", () => {
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get("[data-cy='Textfield for LFPO']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(`[class="drag-handle"]`).eq(7)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
+      cy.get(`[class="drag-handle"]`).eq(6)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
-    });
-
-    it("move component", () => {
-      cy.get(`[class="drag-handle"]`).eq(0)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(1)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
+      cy.unClick();
     });
 
     it("Edit Component", () => {
-      cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"edit-schema-item\"]").eq(6).arrowClick({ force: true });
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
       cy.fbAddLabelName({ name: "Textfield for LFPO Edited" });
       cy.fbAddField();
     });
 
     it("remove Component", () => {
-      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"remove-schema-item\"]").eq(6).arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -933,32 +916,25 @@ context("Receiving landing page test", () => {
     });
 
     it("move component", () => {
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get("[data-cy='Textfield for Another LFPO']").trigger("mouseover");
+      cy.wait(2000);
+      cy.get(`[class="drag-handle"]`).eq(7)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(0)
-        .realMouseMove(0, 0, { position: "center" })
-        .realMouseUp();
-    });
-
-    it("move component", () => {
-      cy.get(`[class="drag-handle"]`).eq(0)
-        .realMouseDown({ position: "center", button: "left" });
-      cy.wait(3000);
-      cy.get(`[class="drag-handle"]`).eq(1)
+      cy.get(`[class="drag-handle"]`).eq(6)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
     });
 
     it("Edit Component", () => {
-      cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"edit-schema-item\"]").eq(6).arrowClick({ force: true });
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
       cy.fbAddLabelName({ name: "Textfield for Another LFPO Edited" });
       cy.fbAddField();
     });
 
     it("remove Component", () => {
-      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+      cy.get("[data-cy=\"remove-schema-item\"]").eq(6).arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1749,7 +1725,9 @@ context("Receiving landing page test", () => {
     });
 
     it("Save PO", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Shipping Cost", () => {
@@ -1840,12 +1818,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Create Receiving Record", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Receivable");
-      });
+      cy.recSelectRecordFormFromMultiSelect({ recordType: "Receivable" });
     });
 
     it("Add approver", () => {
@@ -1858,7 +1831,8 @@ context("Receiving landing page test", () => {
 
     it("Save the form", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to detail tab", () => {
@@ -1891,7 +1865,7 @@ context("Receiving landing page test", () => {
       cy.get("[name='received']").arrowType("3");
     });
 
-    it("Ssave", () => {
+    it("Save", () => {
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
     });
 
@@ -1902,7 +1876,8 @@ context("Receiving landing page test", () => {
 
     it("Save the form", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on create lot", () => {
@@ -1910,19 +1885,17 @@ context("Receiving landing page test", () => {
       cy.get("[name^='received']").arrowType("100");
       cy.get("[data-cy='lotType']").arrowClick({ force: true })
         .autocompleteSelect("Lots");
-
       cy.wrapWithWaitOnApiCalls([], () => {
         cy.get("[data-cy='lotForm']").arrowClick({ force: true })
           .autocompleteSelect("New Lot from Purchase Order Form");
       });
-
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
-      cy.wait(2000);
     });
 
     it("Save the form", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {

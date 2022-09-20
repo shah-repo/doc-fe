@@ -997,15 +997,16 @@ context("LHR steps verification", () => {
       });
     });
 
+    it("Select build type Prod", () => {
+      cy.get("[value='R&D']").arrowClick();
+      cy.wait(3000);
+    });
+
     it("Select Approval", () => {
       cy.wrapWithWaitOnApiCalls([
       ], () => {
         cy.get("[data-cy^='fb-approvals']").autocompleteSelect(USERS[1].name);
       });
-    });
-
-    it("Select build type Prod", () => {
-      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
     });
 
     it("Save the document", () => {

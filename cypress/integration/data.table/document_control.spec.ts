@@ -783,7 +783,7 @@ context("Document list test", () => {
       });
 
       it("Save Record'", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("release button click'", () => {

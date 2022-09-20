@@ -422,7 +422,7 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Verify that it contains Overview, Specification, calpmhistory", () => {
-      cy.verifyTabs("overview", "specification", "calpmhistory");
+      cy.verifyTabs("overview", "specification");
     });
 
     it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
@@ -671,7 +671,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Fill the Eq status and Approver'", () => {
-        cy.get("[name='fb-default-eq-status']").eq(0).arrowClick({ force: true });
+        cy.get("[name='fb-default-eq-status']").eq(0).arrowClick().wait(2000);
         cy.get("[data-cy^='autocomplete-approvers']").autocompleteSelect(USERS[1].name);
       });
 
@@ -763,7 +763,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Verify tabs should visible Overview, Specification, calpmhistory", () => {
-        cy.verifyTabs("overview", "specification", "calpmhistory");
+        cy.verifyTabs("overview", "specification");
       });
 
       it("Button ‘New PM should be displayed", () => {
@@ -962,7 +962,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Verify tabs should visible Overview, Specification, calpmhistory", () => {
-        cy.verifyTabs("overview", "specification", "calpmhistory");
+        cy.verifyTabs("overview", "specification");
       });
     });
 

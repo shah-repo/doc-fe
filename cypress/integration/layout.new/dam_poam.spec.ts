@@ -15,7 +15,7 @@ const groupTwo = "Company Admin";
 
 const tablePOAM = [
   ["Level 1", 5000, "Everyone"],
-  ["Level 2", 25000, "Can be approver", "Groups ManagementUser Management"],
+  ["Level 2", 25000, "Can be approver", "Groups Management UnofficialUser Management"],
   ["Level 3", 100000, "Owner as approver", "User ManagementAsync Tasks", "Company Admin"],
 ];
 
@@ -168,6 +168,8 @@ context("DAM and POAM", () => {
         });
 
         it("Verify that Form Options should appear for this tab", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -639,6 +641,7 @@ context("DAM and POAM", () => {
 
         it("Verify that Form Options should appear for this tab", () => {
           cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -652,6 +655,7 @@ context("DAM and POAM", () => {
       context("Verify that Matrix Details tab contain", () => {
         it("Verify that Form Options should appear for this tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -766,7 +770,7 @@ context("DAM and POAM", () => {
           cy.poAMEnterLevelName({ name: "Level 2" });
           cy.poAMEnterLimit({ limit: "25000" });
           cy.get("[name=\"signatures.0.groups\"]").autocompleteSelect("Can be approver");
-          cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("Groups Management");
+          cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("Groups Management Unofficial");
           cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("User Management");
           cy.poAddPOButtonClick();
         });

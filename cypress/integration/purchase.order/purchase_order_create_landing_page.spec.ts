@@ -35,6 +35,7 @@ const partNumber = "PART NUMBER";
 const amount = "AMOUNT";
 const requestor = "REQUESTOR";
 const issueDate = "ORDER DATE";
+const currentDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
 const COLUMN_HEADERS = [
   "PO #",
   "REVISION",
@@ -86,7 +87,7 @@ const predefinedPOSchema = [
     ],
   },
   {
-    name: "requestor-k740hxlb",
+    name: "po-requestor-autocomplete",
     type: "autocomplete",
     index: 2,
     label: "Requestor",
@@ -517,9 +518,9 @@ context("Create company with JSON's", () => {
                 label: COLUMN_HEADERS[7],
                 fieldName: "irrelevant",
                 showOnWeb: true,
-                valuePath: "precalc.requestor-k740hxlb",
+                valuePath: "precalc.po-requestor-autocomplete",
                 sourcePath: [
-                  "formInput.requestor-k740hxlb",
+                  "formInput.po-requestor-autocomplete",
                   "formInput.po-requestor-autocomplete",
                 ],
                 showOnAndroid: true,
@@ -810,7 +811,7 @@ context("Create company with JSON's", () => {
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy^=\"requestor-\"]").arrowClick();
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
 
@@ -819,7 +820,8 @@ context("Create company with JSON's", () => {
     });
 
     it("Add an Approval", () => {
-      cy.poAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.wait(3000);
+      cy.get("[data-cy^=\"fb-po-approvals\"]").autocompleteSelect(USERS[1].email);
     });
   });
 
@@ -837,7 +839,7 @@ context("Create company with JSON's", () => {
       cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Draft");
       cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "New Supplier");
       cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[1].name);
-      cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", moment().format("MM/DD/YYYY"));
+      cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", currentDate);
     });
 
     it("Select 'Open' for PO status", () => {
@@ -909,16 +911,20 @@ context("Create company with JSON's", () => {
       cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "PRT-00001 - 1");
       cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$10.93");
       cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[1].name);
-      cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", moment().format("MM/DD/YYYY"));
+      cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", currentDate);
     });
 
     it("Edit one or two fields & approve & release", () => {
       cy.dlSelectFirstDocument();
       cy.poSelectPOStatus({ status: "Cancelled" });
+      cy.wait(3000);
+    });
+
+    it("Submit for approval", () => {
+      cy.pmSubmitForApproval();
     });
 
     it("Approve & Release", () => {
-      cy.pmSubmitForApproval();
       cy.poApprove();
     });
 
@@ -932,7 +938,7 @@ context("Create company with JSON's", () => {
       cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "PRT-00001 - 1");
       cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$10.93");
       cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[1].name);
-      cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", moment().format("MM/DD/YYYY"));
+      cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", currentDate);
     });
   });
 });

@@ -4,16 +4,18 @@ import { get } from "lodash";
 import React from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Link } from "react-router-dom";
-import { FBEQMaintenanceHistoryProps, FBMapWrapper, FBText } from "..";
+import { FBMapWrapper, FBText } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import Colors from "../../layout/theme/utils/colors";
-import { withFBEQMaintenanceHistory } from "./FBEQMaintenanceHistory.wrap";
 
-const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProps> = ({
+interface FBEQMaintenanceHistoryProps {
+  maintenanceHistory?: DocumentRevision[];
+}
+
+const FBEQMaintenanceHistory: React.FC<FBEQMaintenanceHistoryProps> = ({
   maintenanceHistory = [],
-  ...props
 }) => (
   <Box mb={5} fontWeight="fontWeightBold">
     <Box display="flex" alignItems="center" mb={1}>
@@ -44,8 +46,7 @@ const FBEQMaintenanceHistory: React.FunctionComponent<FBEQMaintenanceHistoryProp
         ); }
       }
     </FBMapWrapper>
-
   </Box>
 );
 
-export default withFBEQMaintenanceHistory(FBEQMaintenanceHistory);
+export default FBEQMaintenanceHistory;

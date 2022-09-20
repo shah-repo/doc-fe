@@ -214,7 +214,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                   },
                   {
                     index: 4,
@@ -230,7 +230,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "Calibration",
-                    tabId: "calpmhistory",
+                    tabId: "specification",
                   },
                   {
                     label: "form.builder.approvals",
@@ -1904,10 +1904,6 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
     it("Add approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-    });
-
-    it("Save LHRs", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Complete step", () => {

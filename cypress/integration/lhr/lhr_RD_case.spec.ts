@@ -713,7 +713,7 @@ context("LHR: RD case specs", () => {
 
     context("Release MPI", () => {
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release MPI document", () => {
@@ -792,7 +792,8 @@ context("LHR: RD case specs", () => {
         });
 
         it("Click 'LHR Step'", () => {
-          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+          cy.get(".MuiExpansionPanelSummary-content").eq(0).arrowClick();
+          cy.get("[data-cy='LHR Step 1']").arrowClick({ force: true });
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
@@ -806,7 +807,7 @@ context("LHR: RD case specs", () => {
 
       context("Release LHRt", () => {
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Approve and release LHRt document", () => {
@@ -891,7 +892,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.wait(2000);
     });
 
@@ -904,7 +905,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Complete step", () => {
@@ -929,13 +930,6 @@ context("LHR: RD case specs", () => {
       cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
-    });
-
     it("Submit for approval", () => {
       cy.lhrSubmitForApproval();
     });
@@ -957,20 +951,11 @@ context("LHR: RD case specs", () => {
     });
 
     it("Select 'R&D' build type", () => {
-      cy.contains("Build Type").should("be.visible");
-      cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
       cy.get("[value=\"R&D\"]").check();
     });
 
     it("Select button to switch", () => {
       cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").last().arrowClick();
-    });
-
-    it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
     });
 
     it("Validate Reference value", () => {
@@ -989,13 +974,6 @@ context("LHR: RD case specs", () => {
     it("Add approval", () => {
       cy.get(`[data-cy^="fb-approvals"]`).should("exist");
       cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
-    it("Click save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
     });
 
     it("Submit for approval", () => {

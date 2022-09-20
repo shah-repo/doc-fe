@@ -1,9 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { receivingReleasedDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
@@ -164,19 +164,19 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Enters company name '${newCompanyName}'`, () => {
-      cy.get("[name^=company-name-]").arrowType(newCompanyName);
+      cy.get("[name^=company-name-]").arrowType(newCompanyName, { force: true });
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
-      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
+      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
     });
 
     it(`Enters company email '${ownerEmail}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(ownerEmail);
+      cy.get("[name^=company-admin-email-]").arrowType(ownerEmail, { force: true });
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
-      cy.get(`[name*="approved-dam-json-is-used-"]`).check("Yes");
+      cy.get(`[name*="approved-dam-json-is-used-"]`).check("Yes", { force: true });
     });
 
     it("Upload DOM JSON", () => {
@@ -184,7 +184,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-      cy.get(`[name*="approved-page-details-json-is-used-"]`).check("Yes");
+      cy.get(`[name*="approved-page-details-json-is-used-"]`).check("Yes", { force: true });
     });
 
     it("Upload Page Details JSON", () => {
@@ -192,7 +192,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-      cy.get(`[name*="approved-navigation-json-is-used-"]`).check("Yes");
+      cy.get(`[name*="approved-navigation-json-is-used-"]`).check("Yes", { force: true });
     });
 
     it("Upload Navigation JSON", () => {
@@ -204,7 +204,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.get(`[data-cy="albumMediaButton"]`).eq(0).arrowClick();
+      cy.get(`[data-cy="albumMediaButton"]`).eq(0).arrowClick({ force: true });
       cy.pmUploadAttachment({ fileName: "image.jpg" });
     });
 
@@ -397,6 +397,114 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
   });
 
+  context("Create Form PO Approval matrix", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'POAM Form'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Form" });
+    });
+
+    it("Enters description 'POAM Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'PO Approval Matrix' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Create POAM document for PO", () => {
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enters title 'POAM Document'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Document" });
+    });
+
+    it("Enters description 'POAM Doc description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Doc description" });
+    });
+
+    it("Navigate to MatrixDetails tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Click on 'Add Item'", () => {
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+    });
+
+    it("Enter Level Name value to be '1'", () => {
+      cy.poAMEnterLevelName({ name: "1" });
+    });
+
+    it("Enter Limit value to be '5000'", () => {
+      cy.poAMEnterLimit({ limit: "5000" });
+    });
+
+    it(`Select Users '${USERS[1].name}'`, () => {
+      cy.poAMSelectUsers(USERS[1].name);
+    });
+
+    it("Add first POAM level", () => {
+      cy.poAddPOButtonClick();
+    });
+
+    it("Click on 'Add Item'", () => {
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+    });
+
+    it("Enter Level Name value to be '2'", () => {
+      cy.poAMEnterLevelName({ name: "2" });
+    });
+
+    it("Enter Limit value to be '25000'", () => {
+      cy.poAMEnterLimit({ limit: "25000" });
+    });
+
+    it(`Select Users '${USERS[2].name}'`, () => {
+      cy.poAMSelectUsers(USERS[2].name);
+    });
+
+    it("Add second POAM level", () => {
+      cy.poAddPOButtonClick();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
   context("Create Form Part document to create Part", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
@@ -555,7 +663,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select Order Date", () => {
-      cy.get("input[name^=po-order-date]").parent().find("button").arrowClick();
+      cy.get("input[name^=ordered-]").parent().find("button").arrowClick();
       cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
     });
 
@@ -572,7 +680,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Select Part Number", () => {
-      cy.poSelectPartNumber({ partNo: "PRT-00001 - 1" });
+      cy.poSelectPartNumber({ partNo: "PRT-00001" });
     });
 
     it("Enter Supplier Part Number", () => {
@@ -593,7 +701,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Enter number of Units", () => {
-      cy.poNumberOfUnits({ number: "2" });
+      cy.poNumberOfUnits({ number: "100" });
     });
 
     it("Check Tax option", () => {
@@ -686,6 +794,19 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.unClick();
     });
 
+    it("Check approval icon if it's gray", () => {
+      cy.poAMCheckApprovalIconIfItsGray();
+    });
+
+    it("Check if selected approver has approval signature right by his name", () => {
+      cy.poAMCheckIfApproverHasApprovalSign();
+      cy.unClick();
+    });
+
+    it("Check approval icon if it's colored", () => {
+      cy.poAMCheckApprovalIconIfItsRed();
+    });
+
     context("Submit for Approval and verify PO can be released", () => {
       it("Click on Submit for approval", () => {
         cy.pmSubmitForApproval();
@@ -728,7 +849,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Verify Order Date`, () => {
-      cy.get(`[name^="po-order-date"]`).should("not.have.value", "");
+      cy.get(`[name^="ordered-"]`).should("not.have.value", "");
     });
 
     it(`Check the Approval field contain ${ownerName} - ${ownerEmail}`, () => {
@@ -756,7 +877,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify Date Required", () => {
-      cy.get("[data-cy='formattedDate']").eq(0).should("have.text", moment().format("MM/DD/YYYY"));
+      cy.get("[data-cy='formattedDate']").eq(0)
+        .should("have.text", receivingReleasedDate);
     });
 
     it("Verify Unit", () => {
@@ -772,7 +894,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").should("have.text", "$30.93");
+      cy.get("[data-cy='poTotal']").should("have.text", "$566.25");
     });
   });
 
@@ -803,8 +925,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
     it(`Select '${USERS[2].name}' for Requestor`, () => {
       cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
       cy.unClick();
-      cy.get(`[data-cy^="po-requestor-"]`).arrowClick().wait(1000);
-      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+      cy.get(`[data-cy^="po-requestor-"]`).arrowClick({ force: true }).wait(1000);
+      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick({ force: true });
     });
 
     it("Save document", () => {
@@ -869,7 +991,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it(`Verify Order Date`, () => {
-      cy.get(`[name^="po-order-date"]`).should("not.have.value", "");
+      cy.get(`[name^="ordered-"]`).should("not.have.value", "");
     });
 
     it(`Check the Approval field contain ${USERS[2].name} - ${USERS[2].email}`, () => {
@@ -897,7 +1019,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify Date Required", () => {
-      cy.get("[data-cy='formattedDate']").eq(0).should("have.text", moment().format("MM/DD/YYYY"));
+      cy.get("[data-cy='formattedDate']").eq(0)
+        .should("have.text", receivingReleasedDate);
     });
 
     it("Verify Unit", () => {
