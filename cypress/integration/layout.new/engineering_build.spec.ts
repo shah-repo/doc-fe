@@ -1101,7 +1101,7 @@ context("Verify New Layout for EB Document", () => {
           cy.get(`[data-cy="common.expand.all"]`).arrowClick();
           cy.get(".MuiExpansionPanel-root")
             .should("contain.text", "PRT-00002 - Part for EB document | each : 2")
-            .and("contain.text", "ET-00001 Equipment document");
+            .and("contain.text", "ET-00001 - Equipment document");
         });
 
         it("Verify that Form Options should not appear for Materials&Equipment tab", () => {
@@ -1343,7 +1343,7 @@ context("Verify New Layout for EB Document", () => {
           cy.get(`[data-cy="common.expand.all"]`).arrowClick();
           cy.get(".MuiExpansionPanel-root")
             .should("contain.text", "PRT-00002 - Part for EB document | each : 2")
-            .and("contain.text", "ET-00001 Equipment document");
+            .and("contain.text", "ET-00001 - Equipment document");
         });
 
         it("Verify that Form Options should not appear for Materials&Equipment tab", () => {
