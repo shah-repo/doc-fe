@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL, TrainingStatus } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
@@ -31,7 +35,7 @@ let asyncTasksGroup;
 let releasedDoc1Id;
 let caGroup;
 
-context("Test for Training due", () => {
+context("Test for Training due", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

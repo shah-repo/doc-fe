@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
@@ -22,7 +25,7 @@ let developersGroup;
 let releasedDocId;
 let asyncTasksGroup;
 
-context("Training notifications for documents with approved and released revision", () => {
+context("Training notifications for documents with approved and released revision", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

@@ -46,6 +46,7 @@ CYPRESSARGS=(
   --browser $CYPRESS_BROWSER
   --headless
   --ci-build-id $CI_BUILD_ID
+  --env grepTags=$CYPRESS_INCLUDE_TAGS
 )
 
 if xvfb-run --help > /dev/null; then

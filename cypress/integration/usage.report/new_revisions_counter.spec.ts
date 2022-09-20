@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -117,7 +121,7 @@ const numberOfCreatedDocs: StructureFromPerCompanyReport[] = [
   },
 ];
 
-context("Usage report document counter for new revisions", () => {
+context("Usage report document counter for new revisions", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

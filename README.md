@@ -177,11 +177,19 @@ Optional environment variables:
 *NUMBER_OF_WORKERS* - number of workers :grin: , defaults to 4. Go as high as you can without having (too many?) specs failing due to timeouts or you system becomes unbearably slow.
 *CYPRESS_BROWSER* - browser to use. Defaults to 'chrome'. Options are 'chrome', 'chromium', 'firefox', 'electron'
 *CYPRESS_NO_COMMAND_LOG* - show empty command log. Defaults to false. It can increase speed of tests by ~20%
-
+*CYPRESS_INCLUDE_TAGS* - If any tag provided then only those specs will be executed
+Example
+```
+CYPRESS_INCLUDE_TAGS=@timetool ./scripts/cypress/run_in_parallel.sh All specs tagged as timetool will be executed 
+CYPRESS_INCLUDE_TAGS=-@timetool ./scripts/cypress/run_in_parallel.sh All specs tagged as timetool will be ignored 
+```
 Example
 ```
 NUMBER_OF_WORKERS=4 ./scripts/cypress/run_in_parallel.sh
 ```
+You can add tags in tests as below
+context("Description of the test", { tags: ["@timetool"] }, () => {}
+
 
 #### Take screenshots after every step
 Set env variable `CYPRESS_TAKE_SCREENSHOT_AFTER_EACH` to `true`

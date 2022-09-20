@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import { integer } from "aws-sdk/clients/cloudfront";
 import { float } from "aws-sdk/clients/lightsail";
 import faker from "faker";
@@ -189,7 +193,7 @@ const spentTimeFromReport: StructureFromSessionReport = {
   sessionTimeAproxNewUser: 0.0,
 };
 
-context("Test usage report is correctly counting documents", () => {
+context("Test usage report is correctly counting documents", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

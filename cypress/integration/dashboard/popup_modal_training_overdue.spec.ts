@@ -2,6 +2,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import "moment-timezone";
 import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
@@ -39,7 +42,7 @@ let emailsFromInbox: IMAPEmail[];
 let dateAfterEmailShouldArrive;
 let getEmailSetting;
 
-context("Email popup modal for training due", () => {
+context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
