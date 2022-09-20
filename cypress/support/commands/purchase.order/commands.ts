@@ -232,11 +232,7 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
-<<<<<<< HEAD
-  cy.get("[id$=\"po-status-built-in\"]").arrowClick();
-=======
   cy.get("[id$=\"po-status-built-in\"]").arrowClick({ force: true });
->>>>>>> demo
   cy.get("ul>li[role=option]").contains(params.status).arrowClick({ force: true });
 });
 
