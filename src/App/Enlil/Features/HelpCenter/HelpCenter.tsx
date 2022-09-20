@@ -7,7 +7,7 @@ import useDialog from "../../../../ui/hooks/useDialog";
 import HelpCenterContent from "./components/HelpCenterContent/HelpCenterContent";
 import HelpCenterNavigation from "./components/HelpCenterNavigation/HelpCenterNavigation";
 import en from "./data/content-en";
-import useAppModule from "./hooks/useAppModule";
+import useHelpModule from "./hooks/useHelpModule";
 import usePreviousValue from "./hooks/usePreviousValue";
 
 const helpContent = {
@@ -29,7 +29,7 @@ const HelpCenter: React.FC = () => {
     contentDialog.open();
   };
 
-  const currentModule = useAppModule();
+  const currentModule = useHelpModule();
   const { locale, defaultLocale } = useIntl();
   const localizedContent = get(helpContent, locale, helpContent[defaultLocale]);
   const currentContent = get(localizedContent, currentModule, null);
@@ -46,6 +46,8 @@ const HelpCenter: React.FC = () => {
       <IconButton color="inherit" size="small" onClick={openMenu}>
         <HelpIcon />
       </IconButton>
+      { currentModule }
+      { currentContent ? " / ✓" : " / ✕" }
       <HelpCenterNavigation
         anchorEl={anchorEl}
         hasGuide={Boolean(currentContent)}

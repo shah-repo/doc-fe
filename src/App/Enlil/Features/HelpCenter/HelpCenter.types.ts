@@ -1,3 +1,24 @@
+export enum HelpModule {
+  General = "General",
+  Dashboard = "Dashboard",
+  DocumentList = "Document List",
+  UserManagement = "User Management",
+  GroupManagement = "Group Management",
+  ApprovalRequests = "Approval Requests",
+  EB = "EB",
+  Lhr = "Lhr",
+  Lot = "Lot",
+  Parts = "Parts",
+  Record = "Record",
+  Receive = "Receive",
+  Supplier = "Supplier",
+  Training = "Training",
+  Equipment = "Equipment",
+  WorkOrder = "Work Order",
+  PurchaseOrder = "Purchase Order",
+  TrainingCurriculums = "Training Curriculums",
+}
+
 export enum HelpCenterItemType {
   Video = "VIDEO",
   Workflow = "WORKFLOW",

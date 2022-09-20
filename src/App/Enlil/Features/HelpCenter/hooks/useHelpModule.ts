@@ -3,51 +3,53 @@ import { useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import { SM } from "../../../..";
 import { documentRevisionsSelectors } from "../../../../../state/ducks/documentRevisions";
+import { pageDetailsSelectors } from "../../../../../state/ducks/pageDetails";
 import { ApplicationState } from "../../../../../state/reducers";
 import * as URL from "../../../../../ui/constants/urls";
-import { Module } from "../data/modules";
+import { HelpModule } from "../HelpCenter.types";
 
 interface RouteChecker {
-  module: Module;
+  module: HelpModule;
   check: (path: string) => boolean;
 }
 
 export const ROUTES: RouteChecker[] = [
   {
-    module: Module.Dashboard,
+    module: HelpModule.Dashboard,
     check: (path) => path === URL.HOME_URL,
   },
   {
-    module: Module.DocumentList,
+    module: HelpModule.DocumentList,
     check: (path) => path === URL.DOCUMENT_REVISION_LIST_URL,
   },
   {
-    module: Module.ApprovalRequests,
+    module: HelpModule.ApprovalRequests,
     check: (path) => path.startsWith(URL.CHANGE_REQUEST_LIST_URL),
   },
   {
-    module: Module.GroupManagement,
+    module: HelpModule.GroupManagement,
     check: (path) => path.startsWith(URL.GROUP_MANAGEMENT_ROOT_URL),
   },
   {
-    module: Module.UserManagement,
+    module: HelpModule.UserManagement,
     check: (path) => path.startsWith(URL.USER_MANAGEMENT_ROOT_URL),
   },
   {
-    module: Module.Training,
+    module: HelpModule.Training,
     check: (path) => path.startsWith(URL.TRAINING_URL),
   },
 ];
 
-export default function useAppModule(): Module {
+export default function useHelpModule(): HelpModule {
   const pathname = SM.pathname;
-  const cachedModule = useRef<Module>(Module.General);
+  const cachedModule = useRef(HelpModule.General);
+  const categoriesList = useSelector(pageDetailsSelectors.byCategory);
   const categoryMatch = useRouteMatch(URL.DOCUMENT_BY_CATEGORY_LIST_URL);
   const documentMatch = useRouteMatch(URL.DOCUMENT_REVISION_VERSION_URL);
   const documentRevision = useSelector(
     (state: ApplicationState) => documentRevisionsSelectors.getDocumentRevision(
       state,
-      documentMatch?.params?.documentRevisionId
+      documentMatch?.params.documentRevisionId,
     )
   );
 
@@ -58,19 +60,18 @@ export default function useAppModule(): Module {
     return cachedModule.current;
   }
 
-  let moduleName: string | undefined;
-  let currentModule = ROUTES.find((route) => route.check(pathname))?.module ?? Module.General;
+  let currentModule = ROUTES.find((route) => route.check(pathname))?.module ?? HelpModule.General;
 
-  if (categoryMatch) {
-    moduleName = categoryMatch.params.categoryName;
+  const category = categoriesList[
+    categoryMatch?.params.categoryName ?? documentRevision?.document?.documentType.category
+  ];
+
+  if (Object.values<string>(HelpModule).includes(category?.category)) {
+    currentModule = category.category as HelpModule;
   }
 
-  if (documentRevision) {
-    moduleName = documentRevision.document.documentType.category;
-  }
-
-  if (moduleName && Object.values<string>(Module).includes(moduleName)) {
-    currentModule = moduleName as Module;
+  if (category?.config?.helpModule) {
+    currentModule = category?.config.helpModule;
   }
 
   cachedModule.current = currentModule;

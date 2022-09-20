@@ -1,26 +1,26 @@
-import { Module } from "./modules";
+import { HelpCenterItemType, HelpModule } from "../HelpCenter.types";
 
 export default {
-  [Module.ApprovalRequests]: {
+  [HelpModule.ApprovalRequests]: {
     title: "Approval Request Help",
     items: [
       {
-        type: "VIDEO",
+        type: HelpCenterItemType.Video,
         title: "How to create an Approval Request?",
         videoId: "-ZtYP4oDwWY",
       },
       {
-        type: "VIDEO",
+        type: HelpCenterItemType.Video,
         title: "How to create an Express Approval Request",
         videoId: "-ZtYP4oDwWY",
       },
       {
-        type: "WORKFLOW",
+        type: HelpCenterItemType.Workflow,
         title: "Approval Request Workflow",
         url: "//help.dev.enlil.io/article_page_pdf.html",
       },
       {
-        type: "WORKFLOW",
+        type: HelpCenterItemType.Workflow,
         title: "Express Approval Request Workflow",
         url: "//help.dev.enlil.io/article_page_pdf.html",
       },
