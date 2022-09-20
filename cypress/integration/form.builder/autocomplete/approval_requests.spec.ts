@@ -4,7 +4,6 @@
 import moment from "moment";
 import "moment-timezone";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -90,10 +89,7 @@ context("Autocomplete 'Approval requests' test", () => {
       });
 
       it("Click Create Approval Request", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostChangeRequests], () => {
-            cy.get("[data-cy=\"navigation.createChangeRequest\"]").arrowClick();
-          });
+        cy.arSaveApiCall();
       });
 
       it("Add first approver to approval request on approver list", () => {
