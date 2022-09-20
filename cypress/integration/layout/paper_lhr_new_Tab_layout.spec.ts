@@ -662,17 +662,13 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Select a document type Paper Lot History Record and select a Form released", () => {
-      cy.wrapWithWaitOnApiCalls([], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Paper Lot History Record");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Paper Lot History Record");
     });
 
     it("Select a form Paper Lot History Record", () => {
-      cy.wrapWithWaitOnApiCalls([], () => {
-        cy.get("#MultipleFormTemplate-selectDocType input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Paper LHR Document Title");
-      });
+      cy.get("#MultipleFormTemplate-selectDocType input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Paper LHR Document Title");
     });
 
     context("Fill in the fields", () => {
@@ -725,17 +721,13 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Select a document type Paper Lot History Record and select a Form released", () => {
-      cy.wrapWithWaitOnApiCalls([], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Paper Lot History Record");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Paper Lot History Record");
     });
 
     it("Select a form Paper Lot History Record", () => {
-      cy.wrapWithWaitOnApiCalls([], () => {
-        cy.get("#MultipleFormTemplate-selectDocType input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Paper LHR Document Title");
-      });
+      cy.get("#MultipleFormTemplate-selectDocType input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Paper LHR Document Title");
     });
 
     context("Verify Created LHR Doc", () => {
@@ -855,7 +847,7 @@ context("Paper LHR tab Layout", () => {
         cy.get("[name='lhr_initial_quantity']").should("exist");
       });
 
-      // steps : Required after blocker fixed
+      // steps : Required after blocker fixed ENC-12588
       // it("Click on confirm change", () => {
       //   cy.get("[data-cy='common.confirm.change']").arrowClick();
       // });

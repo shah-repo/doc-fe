@@ -278,6 +278,7 @@ context("Mpi Layout", () => {
           });
 
           it("Click on description field editor should be opend", () => {
+            cy.get("[data-cy='description']").first().arrowClick().wait(1000);
             cy.get(".rdw-editor-wrapper").should("be.visible");
           });
 
