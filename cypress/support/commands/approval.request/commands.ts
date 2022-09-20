@@ -269,16 +269,17 @@ Cypress.Commands.add("arClearFilters", () => {
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"field-description\"]").arrowType(params.description)
+  cy.get("[class^=\"public-DraftStyleDefault-block\"]").arrowType(params.description, { force: true })
     .wait(500).unClick();
 });
 
 Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
-    cy.get(`div[data-cy="field-select-form"]>#FormList-selectForm div[class*="-control"]`).arrowClick({ force: true });
-    cy.get("div[id^=react-select]").contains(params.formTitle).arrowClick({ force: true });
-    cy.get("[data-cy='create.approval.request.continue']").arrowClick({ force: true });
-  });
+  // cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+  cy.get(`div[data-cy="field-select-form"]>#FormList-selectForm div[class*="-control"]`).arrowClick({ force: true });
+  cy.get("div[id^=react-select]").contains(params.formTitle).arrowClick({ force: true });
+  cy.get("[data-cy='create.approval.request.continue']").arrowClick({ force: true });
+  // });
+  cy.wait(7000);
 });
 
 Cypress.Commands.add("arClickAddDocument", () => {
@@ -353,7 +354,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
     CyRoutes.GetRequiredApproversDocRev,
   ],
   () => {
-    cy.get("[data-cy=\"transitionButton\"]").arrowClick();
+    cy.get("[data-cy=\"transitionButton\"]").arrowClick({ force: true });
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
