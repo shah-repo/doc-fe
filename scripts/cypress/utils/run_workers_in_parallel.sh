@@ -37,7 +37,7 @@ echo " "
 
 export CYPRESS_SKIP_ON_RUN_FAILURE=${CYPRESS_SKIP_ON_RUN_FAILURE:-true}
 
-function prepend() { while read line; do echo "Worker ${1} | $(date --iso-8601=seconds) | ${line}"; done; }
+function prepend() { while read line; do echo "Worker ${1} | $(date +%FT%T%z) | ${line}"; done; }
 function runNode() { 
   ./scripts/cypress/utils/run_node.sh 2>/dev/null | prepend "${1}" | tee -a $ENLIL_WORKER_LOG_FILE 2>/dev/null || true
  }
