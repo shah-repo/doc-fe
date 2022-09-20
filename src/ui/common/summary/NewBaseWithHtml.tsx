@@ -40,6 +40,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
       _documentRevisionFormState?.setExpanded(true);
       setBtnText(viewLess);
     }
+    
   };
 
   const showToggleButton = () => {

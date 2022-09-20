@@ -18,6 +18,10 @@ export default makeStyles({
     maxHeight: 44,
     position: "sticky",
   },
+  imp: {
+    top: 0,
+    backgroundColor: Colors.alabaster,
+  },
   tab: {
     width: "auto",
     minWidth: 40,
