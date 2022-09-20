@@ -473,7 +473,6 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Select 'Form with output' value on 'Type of document to be created'", () => {
-        cy.pause();
         cy.get("[name^=type-of-document-to-be-created-]").eq(0).check({ force: true });
       });
 
@@ -492,7 +491,8 @@ context("Verify New Layout for Seed Document", () => {
 
       it("Selects document type as 'Form'", () => {
         cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick({ force: true });
-        cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul").contains("li", "Form").arrowClick({ force: true });
+        cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul")
+          .contains("li", "Form").arrowClick({ force: true });
       });
 
       it("Selects document type as 'Clinical Protocol'", () => {
