@@ -43,7 +43,7 @@ const getReferenceValues = (
   return { highestRev, isReferencePart, canReferenceCreateInspection };
 };
 
-const StyledTooltip = (props: TooltipProps) => {
+export const StyledTooltip = (props: TooltipProps) => {
   const classes = tooltipStyles();
   return <FBTooltip arrow placement="top" classes={classes} {...props} />;
 };

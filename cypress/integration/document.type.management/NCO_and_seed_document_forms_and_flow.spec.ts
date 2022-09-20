@@ -380,7 +380,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("move Component", () => {
-      cy.get("[data-cy='Textfield for bulk import test']").trigger("mouseover");
+      cy.get("[data-cy='Textfield for bulk import test']").trigger("mouseover", { force: true });
       cy.wait(2000);
       cy.get(`[class="drag-handle"]`).eq(33)
         .realMouseDown({ position: "center", button: "left" });
@@ -684,7 +684,7 @@ context("NCO document type management with record doc type", () => {
 
   context("Fill out all the fields", () => {
     it("Enters document title 'Second document'", () => {
-      cy.get("[data-cy^=document-title-]").arrowType("Seed document");
+      cy.get("[name^=document-title-]").arrowType("Seed document");
     });
 
     it("Enters document description 'Second document description'", () => {

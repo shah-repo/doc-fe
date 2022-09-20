@@ -934,6 +934,7 @@ context("Autocomplete test", () => {
 
     it("Enter description 'test description'", () => {
       cy.drEnterDocumentDescription({ description: "test description" });
+      cy.wait(2000);
     });
 
     it("Navigate to Approval roles tab", () => {
