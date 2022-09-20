@@ -142,7 +142,7 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
         fileName: params.fileName,
         mimeType: "*",
         filePath: `fixtures/${params.fileName}`,
-      }, { force: true });
+      });
     });
   });
 });
