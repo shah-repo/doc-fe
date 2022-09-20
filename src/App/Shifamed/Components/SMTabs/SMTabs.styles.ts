@@ -18,7 +18,7 @@ export default makeStyles({
     maxHeight: 44,
     position: "sticky",
   },
-  imp: {
+  mpi: {
     top: 0,
     backgroundColor: Colors.alabaster,
   },
