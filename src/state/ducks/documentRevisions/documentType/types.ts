@@ -1,3 +1,4 @@
+import { HelpModule } from "../../../../App/Enlil/Features/HelpCenter/HelpCenter.types";
 import { FBSchemaProps } from "../../../../ui/form.builder";
 import { Translation } from "../../../../ui/translations/types";
 import { GroupTag } from "../../auth/types";
@@ -383,6 +384,10 @@ export const GroupWithGroupOptions =  {
   ],
 };
 
+interface PageDetailsConfig {
+  helpModule: HelpModule;
+}
+
 export interface PageDetailsColumn {
   label: Translation;
   sourcePath: string;
@@ -395,6 +400,7 @@ export interface PageDetails {
   id: string;
   addNewBtnLabel: string;
   columns: PageDetailsColumn[];
+  config: PageDetailsConfig;
   category: string;
   exportList: boolean;
 }

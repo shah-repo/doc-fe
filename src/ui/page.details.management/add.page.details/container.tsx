@@ -22,6 +22,7 @@ export const PageDetailsForm: React.FunctionComponent<Props> = ({
     category: "",
     addNewBtnLabel: "",
     columns: null,
+    config: null,
   };
 
   const addPageDetailsAction = useActionCreator(pageDetailsActions.addPageDetails);
