@@ -69,6 +69,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
           workspaceMode={mode}
         />
       )}
+      { _tabsState?.tabID === "procedure" && <FBStarter/>}
       {_tabsState?.tabID === "details" &&
         workspaceState?.mode === "design" &&
         [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (
