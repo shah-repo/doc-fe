@@ -746,23 +746,6 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     it(`Check doc Draft status as ${STATUS_TYPES_LABEL.DRAFT}`, () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
-
-    it("Submit for approval", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-    });
-
-    it("Select template", () => {
-      cy.get("#FormList-selectForm").arrowType(`${approvalRequestFormName}{enter}`);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Approve and release it", () => {
-      cy.get(`input[name="password"]`).click().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
   });
 
   context("Create a new AR and link it to newly created document - Approve the AR", () => {
@@ -840,6 +823,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     it("Send AR to review", () => {
       cy.contains("Send to review").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve the AR", () => {
@@ -851,7 +837,6 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
     });
 
     it("Close AR", () => {
