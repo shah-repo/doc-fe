@@ -48,9 +48,10 @@ class FB {
     // Some of the EQs have predefined schema
     const opitionSchema: FBSchemaProps[] = schema || formDocument.formTemplate.schema;
 
-    // Get all the PM or CAL fields
-    const fieldsByType = opitionSchema.filter((field) => field.type === "eqmaintenance" &&
-    field.editorConfig.type === type);
+    // Get all the PM or CAL fields with formInput value.
+    const fieldsByType = opitionSchema.filter((field) => (
+      field.type === "eqmaintenance" && field.editorConfig.type === type && formInput[field?.name as string]
+    ));
 
     // Find oldest due date if there is more than one PM or CAL
     const oldestDueDate = maxBy(fieldsByType, (field) =>
