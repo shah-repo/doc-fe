@@ -357,7 +357,6 @@ context("E-signature test", () => {
 
     it("Send to review", () => {
       cy.arClickSendToReview();
-      cy.reload();
     });
   });
 
@@ -728,16 +727,12 @@ context("E-signature test", () => {
       });
 
       it("Release EB and check if correct new name is shown", () => {
-        // cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         cy.wait(7000);
-        // });
         cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        // cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         cy.wait(7000);
-        // });
         cy.progressBarShouldNotExist();
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(newNameThirdApproverSecondTime);
       });
