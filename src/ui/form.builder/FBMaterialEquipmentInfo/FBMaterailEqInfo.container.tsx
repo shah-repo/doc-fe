@@ -24,15 +24,12 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
   ]));
 
   const isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);
-  const isFormEB = isForm && checkIsDocumentEB(
-    documentRevision?.formTemplate?.outputDocumentTypes[0]?.["groupOptions"]
-  );
 
   useEffect(() => {
-    if (inView && !isFormEB  && documentRevision) {
+    if (inView && !isForm && documentRevision) {
       itemsState.fetchCurrentItems(documentRevision.id);
     }
-  }, [documentRevision, inView, itemsState, isFormEB]);
+  }, [documentRevision, inView, itemsState, isForm]);
 
   useEffect(() => {
     if (inView && documentRevision?.parent && showDiff && !parentData) {
