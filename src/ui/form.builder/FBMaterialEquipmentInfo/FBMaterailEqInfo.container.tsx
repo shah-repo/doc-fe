@@ -1,7 +1,7 @@
 import { useObserver } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { FBMaterailEqInfoState } from "..";
-import { checkIsDocumentEB } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEB, checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import FB from "../helpers/FB";
 import { MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
 import { calculateDataDiff } from "./FBMaterailEqInfo.utils";
@@ -11,6 +11,7 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
   documentRevision,
   inView,
 }) => {
+  let isFormEB = false;
   const [showDiff, setShowDiff] = useState(false);
   const includeDiff = (
     checkIsDocumentEB(documentRevision?.document?.documentType.groupOptions) && Boolean(documentRevision?.parent)
@@ -22,12 +23,17 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
     itemsState.parentItems,
     itemsState.loading,
   ]));
+  const isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);
+
+  if (isForm) {
+    isFormEB = checkIsDocumentEB(documentRevision?.formTemplate?.outputDocumentTypes[0]?.["groupOptions"]);
+  }
 
   useEffect(() => {
-    if (inView && documentRevision) {
+    if (inView && !isFormEB  && documentRevision) {
       itemsState.fetchCurrentItems(documentRevision.id);
     }
-  }, [documentRevision, inView, itemsState]);
+  }, [isForm, documentRevision, inView, itemsState, isFormEB]);
 
   useEffect(() => {
     if (inView && documentRevision?.parent && showDiff && !parentData) {
