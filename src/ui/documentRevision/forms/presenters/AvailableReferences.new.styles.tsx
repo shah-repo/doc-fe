@@ -55,6 +55,7 @@ export const styles = makeStyles(() =>
     option: {
       fontSize: "14px",
       fontFamily: "Sora",
+      wordBreak: "break-all",
     },
   })
 );
