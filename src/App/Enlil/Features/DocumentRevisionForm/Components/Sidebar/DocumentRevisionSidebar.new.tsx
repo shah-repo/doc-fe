@@ -114,7 +114,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                         id: "common.references",
                       }) || "",
                     component: (
-                      <Box>
+                      <Box display="flex" flexGrow={1} flexDirection="column">
                         <ReferencesContainer
                           selectedDocument={selectedDocument}
                           edit={edit}
