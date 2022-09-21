@@ -7,6 +7,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -86,6 +87,7 @@ context("Test Supplier Landing Page for Supira", () => {
             remoteValidatorBundleName: "default",
             slackIntegrationEnabled: false,
             users: [USERS[2]],
+            documentTypes: [ReceivableTest],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -96,7 +98,7 @@ context("Test Supplier Landing Page for Supira", () => {
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
-          receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
+          receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable test");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
@@ -1312,9 +1314,16 @@ context("Test Supplier Landing Page for Supira", () => {
   });
 
   context("Create receiving document", () => {
-    it("Create new record button click", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.equipClickCreateNew();
+    it("Create Receiving Record", () => {
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
+    });
+
+    it("Select 'Receivable test' as document type", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
+        CyRoutes.GetFieldLocks], () => {
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+          .autocompleteSelect("Receivable test");
       });
     });
 
@@ -1348,6 +1357,10 @@ context("Test Supplier Landing Page for Supira", () => {
   context("Verify PART NUMBER/REV when RELEASED", () => {
     it("Navigate to Receivable landing page", () => {
       cy.navigToReceivableList();
+    });
+
+    it("Filter RECEIPT ID column", () => {
+      cy.get(`th[aria-colindex="1"] input`).arrowType("RC-00005");
     });
 
     it("Filter RECEIPT ID column", () => {
@@ -1418,8 +1431,12 @@ context("Test Supplier Landing Page for Supira", () => {
   });
 
   context("Verify PART NUMBER/REV when Released new one", () => {
-    it("Filter RC-00001", () => {
-      cy.get(`th[aria-colindex="1"] input`).arrowType("RC-00001");
+    it("Clear filters", () => {
+      cy.dlClearFilters();
+    });
+
+    it("Filter RCT-00001", () => {
+      cy.get(`th[aria-colindex="1"] input`).arrowType("RCT-00001");
     });
 
     it("Open first one in the list", () => {
@@ -1444,7 +1461,7 @@ context("Test Supplier Landing Page for Supira", () => {
 
     it("Verify value of PART NUMBER/REV value", () => {
       cy.get(`th[aria-colindex="2"] span.k-input`).arrowClick();
-      cy.get("ul>li[role=option]").contains("Current").arrowClick();
+      cy.get("ul>li[role=option]").contains("Released").arrowClick();
       cy.get("td[role=gridcell][data-grid-col-index='6']").eq(0).should("have.text", "PRT-00005 - 1");
     });
 

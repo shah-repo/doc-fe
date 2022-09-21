@@ -1,11 +1,26 @@
 import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
-import { isEmpty, lowerCase } from "lodash";
+import { lowerCase } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { AvailableMaintenanceForm, FB, FBEQMaintenanceProps, FBEQMaintenanceState } from "..";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import {
+  DocumentRevision,
+  DocumentRevisionStatus, FBOutputDocumentType,
+  RevisionChangeType,
+} from "../../../state/ducks/documentRevisions/types";
+import useAsync from "../../hooks/useAsync";
+import { toNewVersionRequestBody } from "../../documentRevision/forms/transform";
+import useActionCreator from "../../hooks/useActionCreator";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DocumentRevisionFormValues } from "../../documentRevision/forms/types";
+import { toastError } from "../../components/notifications";
+import { documentVersionPath } from "../../document.revision/utils/paths";
+import { useSelector } from "react-redux";
+import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import { filterSecurityGroupsForQms } from "../../documentType/list/helpers";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
 
 export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
   Component: React.FunctionComponent<T>
@@ -14,40 +29,41 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     handleAdd,
     eqMaintenanceState,
     isNewPMDisabled,
+    isNewPMLoading,
     pmFormId,
     name = "",
     editorConfig,
     availableMaintenanceForms,
     preventativeFormOptions,
     getOptionLabel,
+    maintenanceHistory,
     ...props
   }: T) => {
+    eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
 
-    // MARK: @config
     const { workspaceState, formState } = FB.useStores();
-    const fbEqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     const { id: docRevId, document: { status = "" } = {} } = workspaceState || {};
     const isEqStatusReleased = status === DocumentRevisionStatus.Released;
     const isTypePM = editorConfig.type?.includes("preventativeMaintenance");
     const complianceStatus = formState?.getFieldValue(`${name}.status`);
     const dueDate = formState?.getFieldValue(`${name}.complianceDueDate`);
     const complianceDueDate = dueDate && getFormattedDateString(dueDate, MomentFormats.DayMonthDateYearAlt);
-    availableMaintenanceForms = fbEqMaintenanceState?.availableMaintenanceFormsApi.data;
+    availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
 
     useEffect(() => {
-      fbEqMaintenanceState?.getAvailableMaintenanceForms();
+      eqMaintenanceState?.getAvailableMaintenanceForms();
+      eqMaintenanceState?.getMaintenanceHistory(docRevId as string);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    eqMaintenanceState = FB.useRef(FBEQMaintenanceState);
     pmFormId = formState?.getFieldValue(`${name}.preventativeForm`);
+    let lastReleasedMaintenanceForm: DocumentRevision | undefined;
     if (pmFormId && availableMaintenanceForms) {
       const maintenanceForm = availableMaintenanceForms?.find((e) => e.id === pmFormId);
-      const lastReleased = maintenanceForm?.documentRevisions?.find((rev) =>
+      lastReleasedMaintenanceForm = maintenanceForm?.documentRevisions?.find((rev) =>
         rev.status === DocumentRevisionStatus.Released);
-      pmFormId = lastReleased?.id;
+      pmFormId = lastReleasedMaintenanceForm?.id;
     }
-    // MARK: @reactions
 
     // Set new pm button disabled status.
     useEffect(() => reaction(
@@ -62,18 +78,81 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // MARK: @helpers
     function newPMDisabled(): boolean {
       return !(
         formState?.getFieldValue(`${name}.preventativeForm`) &&
         formState?.getFieldValue(`${name}.frequency`)
-      ) || !isEqStatusReleased || isEmpty(pmFormId);
+      ) || !isEqStatusReleased || !pmFormId || !lastReleasedMaintenanceForm
+        || Boolean(eqMaintenanceState?.newPMLoading);
     }
 
-    // MARK: @methods
-    handleAdd = () => {
-      if (!docRevId && !pmFormId) { return; }
-      window.open(`/document_revision/${pmFormId}/create_maintenance/${docRevId}/${name}`);
+    const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
+    const documentTypesById = useSelector(documentTypeSelectors.byId);
+
+    const create = useActionCreator(documentRevisionsActions.create);
+    const async = useAsync<DocumentRevision>({
+      onSuccess: (data) => {
+        eqMaintenanceState?.getMaintenanceHistory(docRevId as string);
+        window.open(
+          documentVersionPath(data?.id as string, data?.document?.id as string),
+          "_blank"
+        );
+        eqMaintenanceState?.setNewPMLoading(false);
+        eqMaintenanceState?.setNewPMDisabled(newPMDisabled());
+      },
+      onError: (error) => {
+        toastError(error);
+        eqMaintenanceState?.setNewPMLoading(false);
+        eqMaintenanceState?.setNewPMDisabled(newPMDisabled());
+      },
+    });
+
+    handleAdd = async () => {
+      if (!docRevId || !lastReleasedMaintenanceForm) {
+        return;
+      }
+
+      eqMaintenanceState?.setNewPMLoading(true);
+
+      const values: DocumentRevisionFormValues = {
+        formDocument: { id: lastReleasedMaintenanceForm.id },
+        parentEquipment: { id: docRevId },
+        equipmentSection: name,
+        revisionChangeType: RevisionChangeType.NextRevision,
+        name: "",
+        description: "",
+        revisionStage: 3,
+        retrain: false,
+        attachments: [],
+        referenceTo: [],
+        securityEmployees: [],
+        securityGroups: [],
+        operators: [],
+      };
+
+      // REQ: It only has to be populated if there is one output type
+      const pmFormOutput = lastReleasedMaintenanceForm?.formTemplate?.outputDocumentTypes;
+      if (pmFormOutput?.length === 1) {
+        const shortDocumentType = pmFormOutput[0] as FBOutputDocumentType;
+        const documentType = documentTypesById[shortDocumentType.id] ?? {};
+
+        try {
+          const { docId } = await eqMaintenanceState?.getProposedId(documentType.id);
+
+          values.document = {
+            docId,
+            documentType,
+          };
+        } catch (error) {
+          return async.errorHandler.execute(error);
+        }
+
+        values.securityGroups = filterSecurityGroupsForQms(documentType.isQms, groupOptions);
+      }
+
+      const body = toNewVersionRequestBody(values);
+
+      async.start(create, body, async);
     };
 
     const filterOutOption = (docRev: AvailableMaintenanceForm, inputValue: string ) => {
@@ -107,13 +186,11 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       return `${option.docId} - rev ${option.displayRevision} - ${option.name}`;
     };
 
-    // MARK: @observer
     useObserver(() => {
-      isNewPMDisabled = (
-        eqMaintenanceState?.newPMDisabled ||
-        newPMDisabled()
-      );
-      availableMaintenanceForms = fbEqMaintenanceState?.availableMaintenanceFormsApi.data;
+      isNewPMDisabled = eqMaintenanceState?.newPMDisabled || newPMDisabled();
+      isNewPMLoading = eqMaintenanceState?.newPMLoading || eqMaintenanceState?.availableMaintenanceFormsApi.loading;
+      availableMaintenanceForms = eqMaintenanceState?.availableMaintenanceFormsApi.data;
+      maintenanceHistory = eqMaintenanceState?.maintenanceHistoryApi.data?.[name];
     });
 
     return Component({
@@ -122,11 +199,13 @@ export const withFBEQMaintenance = <T extends FBEQMaintenanceProps>(
       complianceDueDate,
       complianceStatus,
       isNewPMDisabled,
+      isNewPMLoading,
       name,
       editorConfig,
       isTypePM,
       preventativeFormOptions,
       getOptionLabel,
+      maintenanceHistory,
     });
   };
 

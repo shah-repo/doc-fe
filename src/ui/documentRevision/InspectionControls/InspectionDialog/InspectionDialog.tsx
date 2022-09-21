@@ -1,8 +1,10 @@
 import { Button, Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import React from "react";
+import { Formik, Form } from "formik";
 import AutocompleteField from "../../../components/forms/fields/Autocomplete/Autocomplete";
 import Text from "../../../components/Text";
 import { InspectionDialogProps } from "../InspectionControls.types";
+import { emptyFunction } from "../../../../common/utils/helpers";
 
 /** For selecting a form and a document type of Inspection/FAI inspection record.
  * @param onFormSelect Action executed when user chooses a desired form.
@@ -21,7 +23,9 @@ const InspectionDialog: React.FunctionComponent<InspectionDialogProps> = ({
   docTypeOptions,
   isDocTypeInputDisabled,
 }) => {
-  if (!inspectionDialog.isOpen) { return null; }
+  if (!inspectionDialog.isOpen) {
+    return null;
+  }
 
   return (
     <Dialog open={inspectionDialog.isOpen}>
@@ -29,34 +33,38 @@ const InspectionDialog: React.FunctionComponent<InspectionDialogProps> = ({
         <Text translation="supplier.select.form" />
       </DialogTitle>
       <DialogContent>
-        <AutocompleteField
-          label="supplier.select.form"
-          size="md"
-          data-cy="inspection-form-autocomplete"
-          options={formOptions}
-          autocompleteProps={{ id: "inspection-form-autocomplete" }}
-          name="inspection-form-autocomplete"
-          onClick={(option) => onFormSelect(option.value, option.outputDocumentTypes)}
-        />
-        <AutocompleteField
-          label="supplier.select.type"
-          size="md"
-          data-cy="inspection-type-autocomplete"
-          options={docTypeOptions}
-          autocompleteProps={{ id: "inspection-type-autocomplete" }}
-          name="inspection-type-autocomplete"
-          onClick={(option) => onDocTypeSelect(option.value, option.formId)}
-          isDisabled={isDocTypeInputDisabled}
-        />
-        <Button
-          variant="text"
-          color="secondary"
-          onClick={inspectionDialog.close}
-          id="DocTypeListDialog-cancelButton"
-          data-cy="inspection-tye-cancel"
-        >
-          <Text translation="transition.action.cancel" />
-        </Button>
+        <Formik initialValues={{}} onSubmit={emptyFunction}>
+          <Form>
+            <AutocompleteField
+              label="supplier.select.form"
+              size="md"
+              data-cy="inspection-form-autocomplete"
+              options={formOptions}
+              autocompleteProps={{ id: "inspection-form-autocomplete", maxMenuHeight: 130 }}
+              name="inspection-form-autocomplete"
+              onClick={(option) => onFormSelect(option.value, option.outputDocumentTypes)}
+            />
+            <AutocompleteField
+              label="supplier.select.type"
+              size="md"
+              data-cy="inspection-type-autocomplete"
+              options={docTypeOptions}
+              autocompleteProps={{ id: "inspection-type-autocomplete", maxMenuHeight: 90 }}
+              name="inspection-type-autocomplete"
+              onClick={(option) => onDocTypeSelect(option.value, option.formId)}
+              isDisabled={isDocTypeInputDisabled}
+            />
+            <Button
+              variant="text"
+              color="secondary"
+              onClick={inspectionDialog.close}
+              id="DocTypeListDialog-cancelButton"
+              data-cy="inspection-tye-cancel"
+            >
+              <Text translation="transition.action.cancel" />
+            </Button>
+          </Form>
+        </Formik>
       </DialogContent>
     </Dialog>
   );

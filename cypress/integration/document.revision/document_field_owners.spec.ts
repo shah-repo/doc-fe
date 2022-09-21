@@ -153,7 +153,7 @@ context("Document Field Owners Test", () => {
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
       cy.drCreateNewDocumentFromForm();
-      cy.wait(2000);
+      cy.wait(5000);
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -300,7 +300,6 @@ context("Document Field Owners Test", () => {
 
     it("Add Approver on document", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
-      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Submit for Approval", () => {

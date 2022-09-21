@@ -11,12 +11,14 @@ interface OwnProps {
   name: string;
   documentTypeId?: string;
   disabled?: boolean;
+  value?: string;
 }
 
 type Props = OwnProps;
 
 const Title: React.FunctionComponent<Props> = ({
   documentTypeId = "",
+  name = "name",
   ...props
 }) => {
   const intl = useIntl();
@@ -32,6 +34,12 @@ const Title: React.FunctionComponent<Props> = ({
     [documents],
   );
 
+  if (options.length === 0 && props.value) {
+    options.push({
+      label: props.value,
+      value: props.value,
+    });
+  }
   if (!isVisible) {
     return null;
   }
@@ -39,7 +47,7 @@ const Title: React.FunctionComponent<Props> = ({
   return (
     <CustomLabelTooltip {...{ tooltipConfig }}>
       <CreatableField
-        name="name"
+        name={name}
         creatableProps={{ id: "Title-field" }}
         isDisabled={props.disabled}
         placeholder={intl.formatMessage({ id: "form.builder.enter.title" })}

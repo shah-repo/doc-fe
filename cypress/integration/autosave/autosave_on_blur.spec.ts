@@ -856,7 +856,7 @@ context("Autosave on blur", () => {
     });
 
     it("Add POAM item and check for autosave", () => {
-      cy.get("button[data-cy=\"fb-control-btn\"]").eq(4).arrowClick({ force: true });
+      cy.get(`[name^="fb-po-approval-matrix-"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
       cy.poAMEnterLevelName({ name: "2" });
       cy.poAMEnterLimit({ limit: "400" });
       cy.poAMSelectUsers(USERS[3].name);
@@ -916,17 +916,17 @@ context("Autosave on blur", () => {
     });
 
     it("Add Implementation task and check for autosave", () => {
-      cy.get("[data-cy=\"form.builder.add.implementation.task\"]").arrowClick();
+      cy.get("[data-cy=\"form.builder.add.implementation.task\"]").arrowClick({ force: true });
       cy.get("[data-cy=\"title\"]").arrowType("Task One");
       cy.get("#fb-mpiprocedure-ref-description").arrowClick({ force: true }).arrowType("Task Description");
-      cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[1].email}`);
+      cy.get("[data-cy=\"assigned\"]").focus().autocompleteSelect(`${USERS[1].email}`);
       cy.get("[name=\"dueDate\"]").parent().find("button").arrowClick({ force: true });
       // eslint-disable-next-line max-len
       cy.xpath(
         "//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]"
       ).last().click();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostTasks], () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").eq(-2).arrowClick();
+        cy.get("[data-cy=\"fb-control-btn\"]").eq(-2).arrowClick({ force: true });
       });
     });
 
@@ -1006,9 +1006,8 @@ context("Autosave on blur", () => {
       }).as("response");
 
       cy.unClick();
-      cy.get("[name^=\"fb-quantity-\"]").clear().arrowType("3");
-      cy.get("[data-cy=fb-quantity]").arrowClick();
-
+      cy.get("[name^=\"fb-quantity-\"]").click({ force: true }).clear().arrowType("3");
+      cy.get("[data-cy=fb-quantity]").arrowClick({ force: true });
       cy.wait("@response", { responseTimeout: 90 * 1000 });
     });
   });

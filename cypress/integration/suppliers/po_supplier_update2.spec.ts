@@ -543,6 +543,7 @@ context("DAM approvals in LHR", () => {
       it("Enter Supplier Description 'Supplier Description'", () => {
         cy.xpath("//div[@data-cy=\"description\"]/../div[2]").eq(-1).arrowClick();
         cy.get("#fb-mpiprocedure-ref-description").find("div[contenteditable]").arrowType("Supplier Description");
+        cy.wait(4000);
         cy.checkToastMessage({ exists: false });
       });
 
@@ -589,10 +590,6 @@ context("DAM approvals in LHR", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Click Save button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Release supplier", () => {

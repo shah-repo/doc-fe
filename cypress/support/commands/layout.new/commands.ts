@@ -11,12 +11,12 @@ declare global {
       verifyDefaultFields(): Chainable;
       verifyDocumentHeaderDetails(): Chainable;
       verifyListItemExistsOnHeader(params: {listItem: string; breadcrump?: boolean}): Chainable<Subject>;
-      verifyStatusbarBgcolor(params: {bcolor: string}): Chainable;
       verifySelectedTab(params: {tab: string}): Chainable;
       verifyFixedTab(): Chainable;
       verifyApprovalsField(): Chainable;
-      verifyFormOptionsVisibility(params: {visibility: boolean}): Chainable;
+      verifyFormOptionsVisibility(): Chainable;
       verifyExpandCollpase(): Chainable;
+      verifyRightSidePanelOtherTabs(): Chainable;
       verifyReferencesGeneralInfo(params: {user: string}): Chainable;
       verifyReferencesOtherInfo(): Chainable;
       verifyHistoryScroll(): Chainable;
@@ -30,7 +30,13 @@ declare global {
       verifyTabs(...tabs: string[]): Chainable;
       verifyReferencesTabAsActive(): Chainable;
       openRevisionsTabAndVerifyCurrentRevision(rev: string): Chainable;
-      // verifyStatusbarBgcolor(params: {bcolor: string}): Chainable;
+      verifyStatusbarBgcolor(params: {bcolor: string}): Chainable;
+      verifyLastSavedExists(): Chainable;
+      verifyLastSavedNotExists(): Chainable;
+      verifyTitleIsHighlightedonHover(): Chainable;
+      verifyDescriptionIsHighlightedonHover(): Chainable;
+      verifyTitleNotHighlightedonHover(): Chainable;
+      verifyDescriptionNotHighlightedonHover(): Chainable;
     }
   }
 }
@@ -64,10 +70,6 @@ Cypress.Commands.add("verifyListItemExistsOnHeader", (params: { listItem: string
   }
 });
 
-Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
-  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
-});
-
 Cypress.Commands.add("verifySelectedTab", (params: {tab: string}) => {
   cy.get(`[data-cy="tabId.${params.tab}"]`).parent().parent().should("have.class", "Mui-selected");
 });
@@ -81,16 +83,23 @@ Cypress.Commands.add("verifyApprovalsField", () => {
   cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
 });
 
-Cypress.Commands.add("verifyFormOptionsVisibility", (params: {visibility: boolean}) => {
-  const condition = params.visibility ? "exist" : "not.exist";
-  cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should(condition);
-  cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should(condition);
-  cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should(condition);
+Cypress.Commands.add("verifyFormOptionsVisibility", () => {
+  cy.get("button[data-cy=\"FBWorkspace-clickView\"]").should("be.visible");
+  cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").should("be.visible");
+  cy.get("[data-cy=\"FBWorkspace-importTemplate\"]").should("be.visible");
 });
 
 Cypress.Commands.add("verifyExpandCollpase", () => {
   cy.get("main span>button").eq(0).should("not.have.class", "maximize").click().should("have.class", "maximize");
   cy.get("main span>button").eq(0).arrowClick();
+});
+
+Cypress.Commands.add("verifyRightSidePanelOtherTabs", () => {
+  cy.get("[data-cy=\"note-icon\"]").should("be.visible");
+  cy.get("[data-cy=\"timeline-icon\"]").should("be.visible");
+  cy.get("[data-cy=\"permission-icon\"]").should("be.visible");
+  cy.get("[data-cy=\"bookmark-icon\"]").should("be.visible");
+  cy.get("[data-cy=\"cr-icon\"]").should("be.visible");
 });
 
 Cypress.Commands.add("verifyReferencesGeneralInfo", (params: {user: string}) => {
@@ -214,7 +223,40 @@ Cypress.Commands.add("openRevisionsTabAndVerifyCurrentRevision", (rev) => {
   });
 });
 
-// Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
-//   cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
-// });
+Cypress.Commands.add("verifyLastSavedExists", () => {
+  // eslint-disable-next-line max-len
+  const tmpRegex = new RegExp(`Last saved [0-9]+ minutes ago|Last saved a minute ago|Last saved a few minutes ago|Last saved a few seconds ago`, "gi");
+  cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+    .contains(tmpRegex);
+});
 
+Cypress.Commands.add("verifyLastSavedNotExists", () => {
+  // eslint-disable-next-line max-len
+  const tmpRegex = new RegExp(`Last saved [0-9]+ minutes ago|Last saved a minute ago|Last saved a few minutes ago|Last saved a few seconds ago`, "gi");
+  cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+    .should("not.contain", tmpRegex);
+});
+
+Cypress.Commands.add("verifyTitleIsHighlightedonHover", () => {
+  cy.get("#field-name").trigger("mouseover");
+  cy.get("#field-name>div>div").should("have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("#field-name").trigger("mouseout");
+});
+
+Cypress.Commands.add("verifyDescriptionIsHighlightedonHover", () => {
+  cy.get("[data-cy='description']").eq(0).trigger("mouseover");
+  cy.get("[data-cy='description']>div").should("have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("[data-cy='description']").eq(0).trigger("mouseout");
+});
+
+Cypress.Commands.add("verifyTitleNotHighlightedonHover", () => {
+  cy.get("#field-name").trigger("mouseover");
+  cy.get("#field-name>div>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("#field-name").trigger("mouseout");
+});
+
+Cypress.Commands.add("verifyDescriptionNotHighlightedonHover", () => {
+  cy.get("[data-cy='description']").eq(0).trigger("mouseover");
+  cy.get("[data-cy='description']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("[data-cy='description']>div").eq(0).trigger("mouseout");
+});

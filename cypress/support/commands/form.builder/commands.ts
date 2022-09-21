@@ -135,7 +135,7 @@ Cypress.Commands.add("fbRemoveLastAddedItem", () => {
 
 Cypress.Commands.add("fbAddNewFieldOption", () => {
   cy.unClick();
-  cy.contains("Add a Field").arrowClick({ force: true });
+  cy.contains("Add Field").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewField", () => {
@@ -144,7 +144,7 @@ Cypress.Commands.add("fbAddNewField", () => {
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHidden", () => {
-  cy.get("button[data-cy=\"form.builder.add.field\"]").contains("Add a Field").arrowClick({ force: true });
+  cy.get("button[data-cy=\"form.builder.add.field\"]").contains("Add Field").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
@@ -186,21 +186,21 @@ Cypress.Commands.add("fbEnterPOLabelName", (params: { name: string }) => {
 });
 
 Cypress.Commands.add("fbEnterLabel", (params: { label: string }) => {
-  cy.get("input[name=\"label\"]").arrowType(params.label).arrowClick();
+  cy.get("input[name=\"label\"]").arrowType(params.label).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbEnterPlaceholder", (params: { placeholder: string }) => {
-  cy.get("[data-cy=\"placeholder\"]>div>input").arrowType(params.placeholder).arrowClick();
+  cy.get("[data-cy=\"placeholder\"]>div>input").arrowType(params.placeholder).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbAddNewFieldButton", () => {
-  cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+  cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("fbAddLabelName", (params: { name: string }) => {
-  cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(params.name);
+  cy.get("[data-cy=\"fb-editor-field-textfield\"]>div>input").arrowType(params.name, { force: true });
 });
 
 Cypress.Commands.add("fbGroupName", (params: { name: string }) => {
@@ -576,7 +576,7 @@ Cypress.Commands.add("fbVerifyCheckboxName", (...list: string[]) => {
 });
 
 Cypress.Commands.add("fbClickButton", (params: { el: string }) => {
-  cy.get(`button[data-cy="${params.el}"]`).arrowClick();
+  cy.get(`button[data-cy="${params.el}"]`).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
@@ -586,7 +586,7 @@ Cypress.Commands.add("fbMouseOverByName", (params: { name: string }) => {
 Cypress.Commands.add("fbMouseOverByLabel", (params: { label: string }) => {
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
-  cy.contains(params.label).parent().trigger("mouseover").scrollIntoView({ offset: { top: -100, left: 0 } });
+  cy.contains(params.label).parent().trigger("mouseover", { force: true }).scrollIntoView({ offset: { top: -100, left: 0 } });
 });
 
 Cypress.Commands.add("fbVerifyElementVisibile", (params: { name: string; el: string }) => {

@@ -1,12 +1,12 @@
 import { Grid } from "@material-ui/core";
 import { map, startCase } from "lodash";
-import React, { useState } from "react";
+import React from "react";
 import { useIntl } from "react-intl";
 import { CHANGE_REQUEST_ROOT_URL_SEARCH } from "../../../state/ducks/changeRequest/constants";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
 import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
-import FromListContainer from "../form.list/FormList.container";
+import FormListContainer from "../form.list/FormList.container";
 import { KendoPresenterProps } from "./interfaces";
 
 
@@ -19,7 +19,7 @@ export function DocumentListPresenter({
   onRowClick,
 }: KendoPresenterProps) {
   const classes = KendoGridStyles();
-  const [dataToBeExported, setDataToBeExported] = useState<ChangeRequest[]>([]);
+  const [dataToBeExported, setDataToBeExported] = React.useState<ChangeRequest[]>([]);
   const handleExportData = (dataToBeExported: ChangeRequest[]) => {
     setDataToBeExported(dataToBeExported);
   };
@@ -32,7 +32,7 @@ export function DocumentListPresenter({
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
-        <FromListContainer {...{ headers, tableData: dataToBeExported }} />
+        <FormListContainer {...{ headers, tableData: dataToBeExported }} />
       </Grid>
       <Grid item xs={12} className={classes.kendoGridItem}>
         <KendoGrid
