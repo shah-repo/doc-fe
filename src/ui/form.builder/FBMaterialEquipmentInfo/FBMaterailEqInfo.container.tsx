@@ -11,7 +11,6 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
   documentRevision,
   inView,
 }) => {
-  let isFormEB = false;
   const [showDiff, setShowDiff] = useState(false);
   const includeDiff = (
     checkIsDocumentEB(documentRevision?.document?.documentType.groupOptions) && Boolean(documentRevision?.parent)
@@ -23,17 +22,17 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
     itemsState.parentItems,
     itemsState.loading,
   ]));
-  const isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);
 
-  if (isForm) {
-    isFormEB = checkIsDocumentEB(documentRevision?.formTemplate?.outputDocumentTypes[0]?.["groupOptions"]);
-  }
+  const isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);
+  const isFormEB = isForm && checkIsDocumentEB(
+    documentRevision?.formTemplate?.outputDocumentTypes[0]?.["groupOptions"]
+  );
 
   useEffect(() => {
     if (inView && !isFormEB  && documentRevision) {
       itemsState.fetchCurrentItems(documentRevision.id);
     }
-  }, [isForm, documentRevision, inView, itemsState, isFormEB]);
+  }, [documentRevision, inView, itemsState, isFormEB]);
 
   useEffect(() => {
     if (inView && documentRevision?.parent && showDiff && !parentData) {
