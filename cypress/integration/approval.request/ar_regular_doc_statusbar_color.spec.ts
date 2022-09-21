@@ -4,6 +4,7 @@
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -15,7 +16,11 @@ let asyncTasksGroup;
 const approvalRequestFormName = "Approval request form title";
 const approvalRequestFormDesc = "Approval request form title description";
 const approvalRequestDocName = "Approval request document title";
-const approvalRequestDocDesc = "Approval request document title description";
+const approvalRequestDocDesc = "Approval request document description";
+const approvalRequestDocName2 = "Approval request document two title";
+const approvalRequestDocDesc2 = "Approval request document two description";
+const bulkCreatedFormName = "Bulk created form title";
+const bulkCreatedFormDesc = "Bulk created form description";
 
 context("Status Bar of New Enlil items approved via regular AR", () => {
   before(() => {
@@ -103,7 +108,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
   });
 
-  context("Create a new form", () => {
+  context("Create a new form for approval request", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -207,10 +212,10 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it(`Verify statusbar conataining DRAFT is still visible`, () => {
-      cy.get("div[data-cy=\"HeaderInfo-status\"]").should("be.visible");
+      cy.get("div[data-cy=\"HeaderInfo-status\"]").contains("DRAFT").should("be.visible");
     });
 
-    it(`Verify DRAFT statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
+    it(`Verify statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
     });
   });
@@ -258,10 +263,6 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
     it("Add approvers to approval request on approver list", () => {
@@ -343,10 +344,6 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
     });
 
-    it(`Verify 'Last saved' does not exist in statusbar`, () => {
-      cy.verifyLastSavedNotExists();
-    });
-
     it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
     });
@@ -421,8 +418,24 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
     });
 
-    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
-      cy.verifyLastSavedExists();
+    it(`Verify 'Last saved a few seconds ago' exist in statusbar`, () => {
+      const tmpRegex = new RegExp(`Last saved a few seconds ago`, "gi");
+      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+        .contains(tmpRegex);
+    });
+
+    it(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
+      cy.wait(60 * 1000 + 2000);
+      const tmpRegex = new RegExp(`Last saved a minute ago`, "gi");
+      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+        .contains(tmpRegex);
+    });
+
+    it(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
+      cy.wait(60 * 1000 + 2000);
+      const tmpRegex = new RegExp(`Last saved 2 minutes ago`, "gi");
+      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+        .contains(tmpRegex);
     });
 
     it(`Click on 3 dots and verify 'Save' option exists`, () => {
@@ -453,12 +466,12 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
     });
 
-    it(`Verify statusbar conataining DRAFT is still visible`, () => {
+    it(`Verify statusbar conataining  ${STATUS_TYPES_LABEL.PENDING_CHANGE} is still visible`, () => {
       cy.get("div[data-cy=\"HeaderInfo-status\"]").should("be.visible");
     });
 
-    it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
-      cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+    it(`Verify tatusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
     });
   });
 
@@ -564,7 +577,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it(`Verify statusbar conataining IN REVIEW is still visible`, () => {
-      cy.get("div[data-cy=\"HeaderInfo-status\"]").contains("IN REVIEW").should("be.visible");
+      cy.get("div[data-cy=\"HeaderInfo-status\"]").contains("APPROVED").should("be.visible");
     });
   });
 
@@ -676,11 +689,11 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Enter title 'Bulk create form'", () => {
-      cy.drEnterDocumentTitle({ name: "Bulk create form" });
+      cy.drEnterDocumentTitle({ name: bulkCreatedFormName });
     });
 
     it("Enter description 'Bulk create form description'", () => {
-      cy.drEnterDocumentDescription({ description: "Bulk create form description" });
+      cy.drEnterDocumentDescription({ description: bulkCreatedFormDesc });
     });
 
     it("Select 'Form' document type from dropdown", () => {
@@ -699,14 +712,26 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Submit for approval", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it("Select template", () => {
+      cy.get("#FormList-selectForm").arrowType(`${approvalRequestFormName}{enter}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Approve and release it", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.get(`input[name="password"]`).click().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Click on 'Revise Document' and select 'OBS' and leave in Draft", () => {
     it("Click on 'Revise document'", () => {
-      cy.pause();
       cy.drClickReviseDocument();
     });
 
@@ -718,14 +743,146 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    it(`Check doc Draft status as ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
+
+    it("Submit for approval", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    });
+
+    it("Select template", () => {
+      cy.get("#FormList-selectForm").arrowType(`${approvalRequestFormName}{enter}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Approve and release it", () => {
+      cy.get(`input[name="password"]`).click().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
-  context("Create a new AR and link it to it - Approve the AR", () => {
-    it(`Create a new AR link with the document and approve the AR`, () => {
-      cy.pause();
+  context("Create a new AR and link it to newly created document - Approve the AR", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Click Create a Approval Request button", () => {
+      cy.arClickCreateAnAR();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+
+    it("Select template", () => {
+      cy.get("#FormList-selectForm").arrowType(`${approvalRequestFormName}{enter}`);
+      cy.get("[data-cy='create.approval.request.continue']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Enter AR title as ${approvalRequestDocName2}`, () => {
+      cy.arEnterApprovalRequestTitle({ title: approvalRequestDocName2 });
+    });
+
+    it(`Enter description as ${approvalRequestDocDesc2}`, () => {
+      cy.arEnterApprovalRequestDescription({ description: approvalRequestDocDesc2 });
+    });
+
+    it("Select Documents tab", () => {
+      cy.drSelectDocumentTab();
+    });
+
+    it("Add first document revision", () => {
+      cy.arClickAddDocument();
+      cy.arChoseSpecificProposedDocument({ name: "FM-00003" });
+      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
+      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
+      cy.arClickAddBtnOnAddDocumentsDialog();
+    });
+
+    it("Save AR", () => {
+      cy.arSaveApiCall();
+    });
+
+    it("Click on 'Change Details' tab", () => {
+      cy.arSelectChangeDetailsTab();
+    });
+
+    it("Add approvers to approval request on approver list", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
+    });
+
+    it("Save AR", () => {
+      cy.arSaveApiCall();
+    });
+  });
+
+  context("Navigate back to AR list and Approve AR and Close it", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear Filter", () => {
+      cy.arClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Filter approval by name and status, and select it", () => {
+      cy.arFilterARListByNameAndStatus({ title: approvalRequestDocName2, status: "DRAFT" });
+    });
+
+    it("Send AR to review", () => {
+      cy.contains("Send to review").arrowClick();
+    });
+
+    it("Approve the AR", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.get("[data-cy='transition-approve']").contains("Approve submission").arrowClick();
+          cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy='passwordConfirm']").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+
+    it("Close AR", () => {
+      cy.get(`[data-cy="transition-closed"]`).contains("Close").arrowClick();
+    });
+
+    it("Select option Yes", () => {
+      cy.get("button[id=\"AlertDialog-continueButton\"]").contains("Yes").arrowClick();
+    });
+
+    it(`Check doc status as ${STATUS_TYPES_LABEL.CLOSED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.CLOSED });
+      cy.arCheckTitleInEditableAndMatches({ name: approvalRequestDocName2 });
+    });
+  });
+
+  context("Navigate to document list and open the newly created document", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clear document filter", () => {
+      cy.dlClearFilters();
+    });
+
+    it("Filter the list by document title", () => {
+      cy.dlFilterByDocTitle({ docTitle: bulkCreatedFormName });
+    });
+
+    it("Open the first document in the list", () => {
+      cy.dlSelectFirstDocument();
     });
   });
 
@@ -733,7 +890,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     it("Verify OBSOLETE Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Document ListFM-00002 Rev OBS`,
+            `Document ListFM-00003 Rev OBSOBSOLETE`,
         breadcrump: true,
       });
     });
