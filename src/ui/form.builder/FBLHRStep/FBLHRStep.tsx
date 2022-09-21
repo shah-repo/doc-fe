@@ -73,9 +73,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   let operators: {stepId: string; user: User}[] = [];
   if (stepLHRs) {
     const status = stepLHRs.status;
-    if (isDocumentRevisionReleased(status)) {
-      operators = stepApproverList ?? documentOperators;
-    } else if (isDocumentRevisionInReview(status)) {
+    if (isDocumentRevisionReleased(status) || isDocumentRevisionInReview(status)) {
       operators = stepApproverList ?? documentOperators;
     } else if (isDocumentRevisionInDraft(status)) {
       operators = stepOperatorList ?? stepApproverList ?? documentOperators;
