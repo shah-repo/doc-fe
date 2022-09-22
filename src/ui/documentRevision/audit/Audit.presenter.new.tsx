@@ -294,12 +294,13 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         if (change.fbSchemaItem?.type === "fileupload" && !regex.test(change.field)) {
           try {
             const previousValue = JSON.parse(change.previousValue as string);
-            if (typeof previousValue === "object" && "id" in previousValue) {
-              change = {
-                ...change,
-                previousValue: previousValue.id,
-              };
+            if (typeof previousValue !== "object" || !("id" in previousValue)) {
+              return;
             }
+            change = {
+              ...change,
+              previousValue: previousValue.id,
+            };
           } catch (e) {
             return;
           }
