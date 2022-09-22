@@ -361,10 +361,6 @@ context("Approval request form", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
-    });
-
     it("Save AR", () => {
       cy.arSaveApiCall();
     });
