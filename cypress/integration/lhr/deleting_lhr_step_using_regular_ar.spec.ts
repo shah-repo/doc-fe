@@ -473,7 +473,6 @@ context("Deleting LHR Step using regular AR test", () => {
 
     it("Enter description 'AR from New form template for approval request'", () => {
       cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
-      cy.unClick();
     });
 
     it("Add created document revision", () => {
@@ -532,6 +531,20 @@ context("Deleting LHR Step using regular AR test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("input[data-cy^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
       });
+    });
+
+    it("Check materials step 1", () => {
+      cy.contains("LHR Step 1").parentsUntil("li")
+        .find("[data-cy='form.builder.mpi.procedure.materials.title']")
+        .eq(0)
+        .should("have.text", "MT-00004 - Material one | Qty: 1 sets");
+    });
+
+    it("Check equipment step 1", () => {
+      cy.contains("LHR Step 1").parentsUntil("li")
+        .find("[data-cy='form.builder.mpi.procedure.equipment.title']")
+        .eq(0)
+        .should("have.text", "ET-00003 - Equipment one");
     });
 
     it("Click save document", () => {
