@@ -21,7 +21,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
     <Observer>
       {() => (
         <SMBox {...boxProps} id="SMBodyTmpl" className={cx(classes.root,
-         { [classes.tabheader]: !_documentRevisionFormState?.expanded })}>
+          { [classes.tabheader]: !_documentRevisionFormState?.expanded })}>
           <Tabs
             {...{ onChange }}
             value={_tabsState?.value}
