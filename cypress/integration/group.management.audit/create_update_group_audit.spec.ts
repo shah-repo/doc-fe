@@ -4,6 +4,7 @@
 import { CONFIG } from "../../support/config";
 import { momentInPST } from "../../utils/constants/dateHandler";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 
 let createdCompany;
@@ -148,6 +149,7 @@ context("Group Creation Flow", () => {
   });
 
   context("Check if the history is created for first official group", () => {
+    SystemRequirement("REQ-2640");
     context("Check history in group managment page", () => {
       it("Open history panel", () => {
         cy.grpHistoryClickOpenButton();
@@ -342,6 +344,7 @@ context("Group Creation Flow", () => {
   });
 
   context("Check if the history is created for edited 'Group A'", () => {
+    SystemRequirement("REQ-2640");
     context("Check history in group managment page", () => {
       it("Open history panel", () => {
         cy.grpHistoryClickOpenButton();
