@@ -260,3 +260,7 @@ Cypress.Commands.add("verifyDescriptionNotHighlightedonHover", () => {
   cy.get("[data-cy='description']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
   cy.get("[data-cy='description']>div").eq(0).trigger("mouseout");
 });
+
+Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
+  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
+});

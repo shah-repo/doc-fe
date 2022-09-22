@@ -242,7 +242,9 @@ Cypress.Commands.add("arGetArDocumentByName", (params: {
 });
 
 Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) => {
-  cy.get("[data-cy=\"field-title\"]").arrowType(params.title);
+  cy.get("[data-cy=\"field-title\"]").arrowClick();
+  cy.get("[data-cy=\"field-title\"]").arrowType(`{selectAll}{selectAll}${params.title}`).wait(500);
+  cy.unClick();
 });
 
 Cypress.Commands.add(`arVerifySignatureIsNotMet`, (params: {title: string }) => {
@@ -269,8 +271,8 @@ Cypress.Commands.add("arClearFilters", () => {
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"field-description\"]").arrowType(params.description)
-    .wait(500).unClick();
+  cy.get("[data-cy=\"description\"]").eq(0).arrowType(params.description).wait(500);
+  cy.unClick();
 });
 
 Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {

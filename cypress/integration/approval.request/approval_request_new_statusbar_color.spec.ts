@@ -241,16 +241,6 @@ context("Status Bar of newly created ARs", () => {
         breadcrump: true,
       });
     });
-
-    it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
-      cy.verifyHeaderInfoContent({
-        status: STATUS_TYPES_LABEL.DRAFT,
-        title: "Approval Requests",
-        docId: "AR-00001",
-        revision: "Rev",
-      });
-    });
-
   });
 
   context("Verify last save status with auto save", () => {
@@ -263,9 +253,8 @@ context("Status Bar of newly created ARs", () => {
       cy.get("header").contains("Last saved").should("be.visible");
     });
 
-    it("Enter new description", () => {
-      cy.get("#title").clear();
-      cy.get("#title").arrowType("New Ar title2");
+    it("Enter new title", () => {
+      cy.arEnterApprovalRequestTitle({ title: "New Ar title2" });
     });
 
     it("Verify 'Last saved a few seconds ago' text should exist", () => {
@@ -273,7 +262,7 @@ context("Status Bar of newly created ARs", () => {
       cy.get("header").contains("Last saved a few seconds ago").should("be.visible");
     });
 
-    it("Turn on 'auto save'", () => {
+    it("Turn off 'auto save'", () => {
       cy.cmpTurnOffAutosave();
     });
   });
@@ -285,8 +274,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Enter new title", () => {
-      cy.get("#title").clear();
-      cy.get("#title").arrowType("New Ar title");
+      cy.arEnterApprovalRequestTitle({ title: "New Ar title" });
     });
 
     it("Save the document", () => {
@@ -349,21 +337,19 @@ context("Status Bar of newly created ARs", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it(`Verify statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+    });
   });
 
-  context("Verify button in status bar", () => {
+  context("Verify Save button in status bar", () => {
     it("Verify Save button in status bar", () => {
       cy.get("button[data-cy='common.save']").should("be.visible");
       cy.arSaveApiCall();
     });
-
-    it("Verify 'Send to review' in status bar", () => {
-      cy.get("[data-cy='transitionButton']").should("be.visible");
-    });
   });
 
   context("Verify 3 dots  statusbar items", () => {
-
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
       SystemRequirement("REQ-2800");
       cy.get("#HeaderMenuButton").arrowClick();
@@ -386,8 +372,8 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Verify header is fixed when page scroll", () => {
-      cy.get(".hide-scroll").scrollTo("bottom");
-      cy.get("header").should("be.visible");
+      cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
+      cy.get(`[class*="headerSection"]`).should("be.visible");
     });
 
     it("Verify 'Send to review' in status bar", () => {
@@ -405,10 +391,6 @@ context("Status Bar of newly created ARs", () => {
             `Approval RequestsAR-00001 Rev IN REVIEW`,
         breadcrump: true,
       });
-    });
-
-    it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
-      cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
     });
 
     it("Verify Save button in status bar", () => {
@@ -442,8 +424,15 @@ context("Status Bar of newly created ARs", () => {
       cy.get("[data-cy='changeOwner']").contains("Change Owner").arrowClick();
       cy.get(`[class*='makeStyles-closeIcon']`).arrowClick();
     });
-  });
 
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
+    });
+
+    it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+    });
+  });
 
   context("Approve the AR", () => {
     it("Approve the AR", () => {
@@ -472,10 +461,6 @@ context("Status Bar of newly created ARs", () => {
       cy.get("button[data-cy='transition-closed']").contains("Close").should("exist");
     });
 
-    it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get(".makeStyles-lastEdited").should("not.be.exist");
-    });
-
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy='exportToEmail']").should("be.visible");
@@ -489,8 +474,17 @@ context("Status Bar of newly created ARs", () => {
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
 
-    it(`Verify the statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
-      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+    it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
+      cy.get(".makeStyles-lastEdited").should("not.be.exist");
+    });
+
+    it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+    });
+
+    it("Verify header is fixed when page scroll", () => {
+      cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
+      cy.get(`[class*="headerSection"]`).should("be.visible");
     });
   });
 
@@ -535,6 +529,11 @@ context("Status Bar of newly created ARs", () => {
 
     it(`Verify the statusbar background-color as LIGHT GRAY(${Colors.medium_light_shade_gray})`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(162, 162, 162)" });
+    });
+
+    it("Verify header is fixed when page scroll", () => {
+      cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
+      cy.get(`[class*="headerSection"]`).should("be.visible");
     });
   });
 
@@ -591,6 +590,11 @@ context("Status Bar of newly created ARs", () => {
 
     it(`Verify VOIDED statusbar background-color as RED(${Colors.latest_red_varient})`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
+    });
+
+    it("Verify header is fixed when page scroll", () => {
+      cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
+      cy.get(`[class*="headerSection"]`).should("be.visible");
     });
   });
 
@@ -649,7 +653,10 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Choose newly AR Form template", () => {
-      cy.arSelectARForm({ formTitle: approvalRequestFormName });
+      cy.get("#FormList-selectForm").arrowType(`${approvalRequestFormName}{enter}`);
+      cy.get("[data-cy='create.approval.request.continue']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter title AR title: " + approvalRequestTitle, () => {
@@ -657,7 +664,11 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+      cy.arEnterApprovalRequestDescription({ description: "AR from New form template for approval request" });
+    });
+
+    it("Select Documents tab", () => {
+      cy.drSelectDocumentTab();
     });
 
     it("Add created document revision", () => {
@@ -668,12 +679,16 @@ context("Status Bar of newly created ARs", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    it("Save AR", () => {
+      cy.arSaveApiCall();
+    });
+
+    it("Click on 'Change Details' tab", () => {
+      cy.arSelectChangeDetailsTab();
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].name);
+      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
     });
 
     it("Click on Save", () => {
