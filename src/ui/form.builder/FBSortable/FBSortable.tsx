@@ -8,9 +8,6 @@ const FBSortable: React.FunctionComponent<FBSortableProps> = ({
   sortableState,
   ...props
 }) => {
-  if (items) {
-    items.sort((a, b) => b.props.index - a.props.index);
-  }
   const SortableList = SortableContainer(() => (
     <ul style={{ listStyleType: "none", padding: "0", margin: "0" }}>
       {items}

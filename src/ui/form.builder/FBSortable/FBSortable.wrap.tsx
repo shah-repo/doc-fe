@@ -60,6 +60,12 @@ export const withFBSortable = <T extends FBSortableProps>(
       );
     }));
 
+
+    if (items) {
+      const sectionOnTop = items.find((el) => (el?.props.value.type === "section"));
+      console.log(sectionOnTop);
+    }
+
     const onSortStart = ({ index }: SortStart) => {
       sortableState.setDraggedIndex(index);
     };

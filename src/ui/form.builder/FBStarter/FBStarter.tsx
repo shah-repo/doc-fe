@@ -17,7 +17,8 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
       <Box
         display="flex"
         className={"fbStarterAddField"}
-        my={1}
+        marginBottom={1}
+        marginTop={6}
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
       >
