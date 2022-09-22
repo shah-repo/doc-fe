@@ -33,7 +33,7 @@ const history = [
       { key: "Form Set To", value: "FM-00002 - revision 1 - New Part Form" },
       { key: "New owner", value: `${owner}` },
       { key: "Access granted to group", value: "Everyone" },
-      { key: "New status", value: `Set to Draft by ${owner}` },
+      { key: "New status", value: `${owner}` },
     ],
   },
 ];
@@ -800,7 +800,9 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Remove reference for document", () => {
-      cy.drRemoveReferences({ reference: "FM-00002" });
+      cy.get("div[data-cy=\"field-referenceTo\"]").contains("FM-00002")
+        .parent().parent().parent()
+        .find("svg").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
     });
   });
