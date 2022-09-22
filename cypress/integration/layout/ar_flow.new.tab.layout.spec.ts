@@ -578,41 +578,41 @@ context("Approval request form layout verification", () => {
 
 
   context("Approve and release document", () => {
-    it("Navigate to document tab", () => {
-      cy.drSelectDocumentTab();
-    });
+    // it("Navigate to document tab", () => {
+    //   cy.drSelectDocumentTab();
+    // });
 
-    it("Checkbox option 1 checked", () => {
-      cy.get(`input[type="checkbox"][value="1"]`).last().check();
-    });
+    // it("Checkbox option 1 checked", () => {
+    //   cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    // });
 
-    it("Save the doc", () => {
-      cy.get("[data-cy='common.save']").arrowClick();
-    });
+    // it("Save the doc", () => {
+    //   cy.get("[data-cy='common.save']").arrowClick();
+    // });
 
-    it("Click on Add Document", () => {
-      cy.get(`[data-cy="fb.add.document"]`).arrowClick({ force: true }).wait(2000);
-    });
+    // it("Click on Add Document", () => {
+    //   cy.get(`[data-cy="fb.add.document"]`).arrowClick({ force: true }).wait(2000);
+    // });
 
-    it("Enter description of change", () => {
-      cy.get(`[name="descriptionOfChange"]`).arrowType("Desc of change");
-    });
+    // it("Enter description of change", () => {
+    //   cy.get(`[name="descriptionOfChange"]`).arrowType("Desc of change");
+    // });
 
-    it("Enter description of change", () => {
-      cy.get(`[name="justificationOfChange"]`).arrowType("justification of change");
-    });
+    // it("Enter description of change", () => {
+    //   cy.get(`[name="justificationOfChange"]`).arrowType("justification of change");
+    // });
 
-    it("Select document", () => {
-      cy.get(`[data-cy="proposedDocumentRevision"]`).autocompleteSelect("FM-00002");
-    });
+    // it("Select document", () => {
+    //   cy.get(`[data-cy="proposedDocumentRevision"]`).autocompleteSelect("FM-00002");
+    // });
 
-    it("selct document", () => {
-      cy.get(`[data-cy="arAddDocumentDialogAddBtn"]`).arrowClick();
-    });
+    // it("selct document", () => {
+    //   cy.get(`[data-cy="arAddDocumentDialogAddBtn"]`).arrowClick();
+    // });
 
-    it("Save the doc", () => {
-      cy.get("[data-cy='common.save']").arrowClick();
-    });
+    // it("Save the doc", () => {
+    //   cy.get("[data-cy='common.save']").arrowClick();
+    // });
 
     it("Click on send to review button", () => {
       cy.get("[data-cy='transitionButton']").arrowClick();
@@ -621,21 +621,25 @@ context("Approval request form layout verification", () => {
     it("Approve submission", () => {
       cy.get("[data-cy='transition-approve']").first().arrowClick();
       cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.get("[data-cy='passwordConfirm']").arrowClick();
+      cy.get("[data-cy='passwordConfirm']").arrowClick().wait(5000);
     });
 
     it("Verify on mouse over title is not highlighted", () => {
-      cy.verifyTitleNotHighlightedonHover();
+      cy.get("#field-name").parent().trigger("mouseover");
+      cy.get("#field-name").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+      cy.get("#field-name").trigger("mouseout");
     });
 
     it("Verify on mouse over description is not highlighted", () => {
-      cy.verifyDescriptionNotHighlightedonHover();
+      cy.get("[data-cy='BaseWithhtml-editor']").eq(0).trigger("mouseover");
+      cy.get("[data-cy='BaseWithhtml-editor']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+      cy.get("[data-cy='BaseWithhtml-editor']>div").eq(0).trigger("mouseout");
     });
 
     it("Click on view more description should be expanded", () => {
-      cy.get("[data-cy='description'] button").arrowClick();
+      cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
       cy.get("div[class^='rdw-editor-toolbar']").should("not.exist");
-      cy.get("[data-cy='description'] button").contains("View less").should("be.visible");
+      cy.get("[data-cy='BaseWithhtml-editor'] button").contains("View less").should("be.visible");
       cy.get("[class*='descriptionSummaryEditorClass']").should("exist");
     });
 
@@ -645,10 +649,9 @@ context("Approval request form layout verification", () => {
     });
 
     it("click on  description field again field should collpase ", () => {
-      cy.get("[data-cy='description'] button").contains("View less").arrowClick();
-      cy.get("[data-cy='description'] button").contains("View more").should("be.visible");
+      cy.get("[data-cy='BaseWithhtml-editor'] button").contains("View less").arrowClick();
+      cy.get("[data-cy='BaseWithhtml-editor'] button").contains("View more").should("be.visible");
       cy.get("[data-text='true']").eq(0).should("be.visible");
-      cy.get("[data-text='true']").eq(1).should("be.visible");
       cy.get("[data-text='true']").eq(2).should("not.be.visible");
     });
 
