@@ -4,6 +4,7 @@ import React, { ReactNode } from "react";
 import { SM, SMBox, SMMap, SMTabPanel, SMTabsProps, SMText } from "../../..";
 import useStyles from "./SMTabs.styles";
 import { withSMTabsWrap } from "./SMTabs.wrap";
+import cx from "classnames";
 
 const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   onChange,
@@ -19,8 +20,8 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   return (
     <Observer>
       {() => (
-        <SMBox {...boxProps} id="SMBodyTmpl"  className={[classes.root,
-          !_documentRevisionFormState?.expanded ? classes.tabheader : ""].join(" ")} >
+        <SMBox {...boxProps} id="SMBodyTmpl" className={cx(classes.root,
+         { [classes.tabheader]: !_documentRevisionFormState?.expanded })}>
           <Tabs
             {...{ onChange }}
             value={_tabsState?.value}
