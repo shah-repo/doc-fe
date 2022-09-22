@@ -16,7 +16,6 @@ export default makeStyles((theme: Theme) =>
     }),
     field: {
       position: "relative",
-      // marginBottom: "60px",
     },
     tools: ({ isDragged }: StylesProps) => ({
       position: "absolute",
