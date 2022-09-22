@@ -346,12 +346,18 @@ context("Approval request form layout verification", () => {
 
   context("Verify description field", () => {
 
-    it("Verify title and description is highlighted on mouse over", () => {
+    it("Verify description is highlighted on mouse over", () => {
       cy.verifyDescriptionIsHighlightedonHover();
-      // cy.verifyTitleIsHighlightedonHover();
+    });
+
+    it("Verify title is highlighted on mouse over", () => {
+      cy.get("#field-title").trigger("mouseover");
+      cy.get("#field-title>div>div").should("have.css", "background-color", "rgb(235, 237, 242)");
+      cy.get("#field-title").trigger("mouseout");
     });
 
     it("Verify DescriptionToolBar not have option to change font size, or option to change font type", () => {
+      cy.pause();
       cy.verifyDescriptionToolbar();
     });
 
@@ -578,41 +584,6 @@ context("Approval request form layout verification", () => {
 
 
   context("Approve and release document", () => {
-    // it("Navigate to document tab", () => {
-    //   cy.drSelectDocumentTab();
-    // });
-
-    // it("Checkbox option 1 checked", () => {
-    //   cy.get(`input[type="checkbox"][value="1"]`).last().check();
-    // });
-
-    // it("Save the doc", () => {
-    //   cy.get("[data-cy='common.save']").arrowClick();
-    // });
-
-    // it("Click on Add Document", () => {
-    //   cy.get(`[data-cy="fb.add.document"]`).arrowClick({ force: true }).wait(2000);
-    // });
-
-    // it("Enter description of change", () => {
-    //   cy.get(`[name="descriptionOfChange"]`).arrowType("Desc of change");
-    // });
-
-    // it("Enter description of change", () => {
-    //   cy.get(`[name="justificationOfChange"]`).arrowType("justification of change");
-    // });
-
-    // it("Select document", () => {
-    //   cy.get(`[data-cy="proposedDocumentRevision"]`).autocompleteSelect("FM-00002");
-    // });
-
-    // it("selct document", () => {
-    //   cy.get(`[data-cy="arAddDocumentDialogAddBtn"]`).arrowClick();
-    // });
-
-    // it("Save the doc", () => {
-    //   cy.get("[data-cy='common.save']").arrowClick();
-    // });
 
     it("Click on send to review button", () => {
       cy.get("[data-cy='transitionButton']").arrowClick();
