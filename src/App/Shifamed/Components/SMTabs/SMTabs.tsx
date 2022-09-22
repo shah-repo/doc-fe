@@ -25,7 +25,8 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           <Tabs
             {...{ onChange }}
             value={_tabsState?.value}
-            className={[classes.tabs, !_documentRevisionFormState?.expanded ? classes.tabheader : ""].join(" ")}
+            className={cx(classes.tabs,
+              { [classes.tabheader]: !_documentRevisionFormState?.expanded })}
 
             TabIndicatorProps={{ className: classes.indicator }}
           >
