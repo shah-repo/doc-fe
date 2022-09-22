@@ -472,9 +472,7 @@ context("Deleting LHR Step using regular AR test", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      // cy.get("[data-cy=\"description\"]").click();
-      // cy.get("[data-cy=\"description\"]").arrowType("LHRT AR").wait(2000);
-      cy.drEnterDocumentDescription({ description: "LHRT AR" });
+      cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
       cy.unClick();
     });
 
@@ -485,10 +483,6 @@ context("Deleting LHR Step using regular AR test", () => {
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
-
-    // it("Click Create Approval Request", () => {
-    //   cy.arClickCreateApprovalRequestAfterCompletingForm();
-    // });
 
     it("Add first Approver'", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].name });
