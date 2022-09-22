@@ -18,9 +18,9 @@ export default makeStyles({
     maxHeight: 44,
     position: "sticky",
   },
-  mpi: {
+  tabheader: {
     top: 0,
-    backgroundColor: Colors.alabaster,
+    overflowY: "unset",
   },
   tab: {
     width: "auto",

@@ -19,13 +19,12 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   return (
     <Observer>
       {() => (
-        <SMBox {...boxProps} id="SMBodyTmpl"  className={classes.root}
-          style={{ overflow: !_documentRevisionFormState?.expanded ? "unset" : "scroll" }} >
-          {_documentRevisionFormState?.expanded}
+        <SMBox {...boxProps} id="SMBodyTmpl"  className={[classes.root,
+          !_documentRevisionFormState?.expanded ? classes.tabheader : ""].join(" ")} >
           <Tabs
             {...{ onChange }}
             value={_tabsState?.value}
-            className={[classes.tabs, !_documentRevisionFormState?.expanded ? classes.mpi : ""].join(" ")}
+            className={[classes.tabs, !_documentRevisionFormState?.expanded ? classes.tabheader : ""].join(" ")}
 
             TabIndicatorProps={{ className: classes.indicator }}
           >
