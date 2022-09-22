@@ -64,7 +64,7 @@ Cypress.Commands.add("verifyDocumentHeaderDetails", () => {
 
 Cypress.Commands.add("verifyListItemExistsOnHeader", (params: { listItem: string; breadcrump?: boolean}) => {
   cy.get("div[data-cy=\"Header-listIcon\"]").should("exist");
-  cy.get("[class*=makeStyles-headerSection]>div").contains(params.listItem).should("exist");
+  cy.get("[class*=makeStyles-headerSection]>div").eq(0).contains(params.listItem).should("exist");
   if (params.breadcrump) {
     cy.get(`li[class*="MuiBreadcrumbs-separator"]>svg`).should("exist");
   }
