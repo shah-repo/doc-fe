@@ -304,15 +304,15 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   </Grid>
                 )}
               </FBEBPart>
-              {isPart && documentRevision?.parentParts && (
-                <Grid item xs={12}>
-                  <BuildsContainer
-                    dataProp={flatten([documentRevision?.parentParts])}
-                    label="common.part.of"
-                    isDraft={isDocRevStatusDraft || isRevised}
-                  />
-                </Grid>
-              )}
+            </Grid>
+          )}
+          {isPart && documentRevision?.parentParts && (
+            <Grid item xs={12}>
+              <BuildsContainer
+                dataProp={flatten([documentRevision?.parentParts])}
+                label="common.part.of"
+                isDraft={isDocRevStatusDraft || isRevised}
+              />
             </Grid>
           )}
           {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft && (
