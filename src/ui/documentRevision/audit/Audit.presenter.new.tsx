@@ -8,6 +8,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { Approval, ApprovalStatus } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../state/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
@@ -16,7 +17,6 @@ import { FBApprovalAuditState, FBSchemaProps, FBText } from "../../form.builder"
 import { isTranslation } from "../../translations/types";
 import UserAvatarListItem from "../Sidebar/common/UserAvatarListItem";
 import { styles } from "./Audit.presenter.styles.new";
-
 interface OwnProps {
   audit: AuditGroupType;
   approvals: Approval[];
@@ -195,7 +195,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             };
           }
           if (last(valueKey) === "unit" || last(valueKey) === "quantity") {
-            const { document, name, displayRevision } = change.relatedEntity || {};
+            const { document, name, displayRevision } = change.relatedEntity as DocumentRevision || {};
             const material = `${document?.docId} - ${name} - rev ${displayRevision}`;
             fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
               {
@@ -226,7 +226,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               });
           }
           if (last(valueKey) === "unit" || last(valueKey) === "quantity") {
-            const { document, name, displayRevision } = change.relatedEntity || {};
+            const { document, name, displayRevision } = change.relatedEntity as DocumentRevision || {};
             const material = `${document?.docId} - ${name} - rev ${displayRevision}`;
             fbLabel = intl.formatMessage({ id: "form.builder.audit.relations" },
               {
@@ -274,17 +274,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         deletedReferences.push(change);
       } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
         // TODO: (in BE) since BE cannot make correct data for removing approvers.
-        const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
-        if (removedApproverById) {
+          const nextValue = (change.relatedEntity as Approval)?.approver
           change = {
             ...change,
             approvalStatus: change.nextValue as string,
             type: "ARRAY_DELETED",
             nextValue: {
-              ...removedApproverById.approver,
+              ...nextValue,
             },
           };
-        }
         deletedReferences.push(change);
       } else if (change.field === "schema" && change.type === "ARRAY_NEW") {
         return;
