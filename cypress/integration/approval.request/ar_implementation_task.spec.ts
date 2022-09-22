@@ -391,7 +391,6 @@ context("Approval request implementation tasks", () => {
 
   context("Check Implementation Task Status", () => {
     it(`Check Implementation task' status is ${STATUS_TYPES_LABEL.PENDING}`, () => {
-      cy.pause();
       SystemRequirement("REQ-0710");
       cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.PENDING });
     });
