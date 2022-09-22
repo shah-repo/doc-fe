@@ -291,7 +291,18 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       } else {
         // HACK for ENC-7509
         const regex = new RegExp(`^formInput\\.(?:${change.fbSchemaItem?.name})\\[[a-zA-Z0-z-]+\\]\\.id$`);
-        if (change.fbSchemaItem?.type === "fileupload" && !regex.test(change.field)) { return; }
+        if (change.fbSchemaItem?.type === "fileupload" && !regex.test(change.field)) {
+          const previousValue = typeof change.previousValue === "string" ?
+            JSON.parse(change.previousValue) :
+            change.previousValue;
+          if (!("id" in previousValue)) {
+            return;
+          }
+          change = {
+            ...change,
+            previousValue: previousValue.id,
+          };
+        }
         if (change.field === "redline") {
           if (change.type === "BOOLEAN_NEW" && change.nextValue === "false") { return; }
           change = {
