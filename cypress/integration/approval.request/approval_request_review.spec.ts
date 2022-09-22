@@ -181,6 +181,8 @@ context("Approval request form scenario", () => {
     });
 
     it("Add sample document one", () => {
+      cy.arSelectDocumentTab();
+      cy.wait(1000);
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
@@ -191,11 +193,13 @@ context("Approval request form scenario", () => {
     // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
       SystemRequirement("REQ-0940");
+      cy.arSelectChangeDetailsTab();
+      cy.wait(1000);
       cy.arAddApproverOnApproverList({ approver: USERS[20].email });
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
