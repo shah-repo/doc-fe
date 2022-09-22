@@ -200,7 +200,6 @@ context("Approval request form layout verification", () => {
       cy.verifyDescriptionIsHighlightedonHover();
     });
 
-
     context("Verify that Change details tab should be opened by default and that contains`", () => {
       it("Verify change detail tab open by default", () => {
         cy.isTabActive({ name: "changedetails", index: 0 });
@@ -232,7 +231,6 @@ context("Approval request form layout verification", () => {
         cy.get("[data-cy^='text-field']").should("exist");
         cy.get("[data-cy='Checkbox']").should("exist");
       });
-
 
       it("Verify FB fields added to AR form ", () => {
         cy.get("[name^=checkbox]").should("exist");
@@ -294,7 +292,6 @@ context("Approval request form layout verification", () => {
       });
 
       context("Verify that Change details tab should be opened by default and that contains`", () => {
-
         it("Verify change detail tab open by default", () => {
           cy.isTabActive({ name: "changedetails", index: 0 });
         });
@@ -345,7 +342,6 @@ context("Approval request form layout verification", () => {
   });
 
   context("Verify description field", () => {
-
     it("Verify description is highlighted on mouse over", () => {
       cy.verifyDescriptionIsHighlightedonHover();
     });
@@ -357,7 +353,6 @@ context("Approval request form layout verification", () => {
     });
 
     it("Verify DescriptionToolBar not have option to change font size, or option to change font type", () => {
-      cy.pause();
       cy.verifyDescriptionToolbar();
     });
 
@@ -434,7 +429,6 @@ context("Approval request form layout verification", () => {
   });
 
   context("fill the fields and save", () => {
-
     it("Navigate to document tab", () => {
       cy.unClick();
       cy.drSelectDocumentTab();
@@ -483,7 +477,6 @@ context("Approval request form layout verification", () => {
     it("Save the doc", () => {
       cy.get("[data-cy='common.save']").arrowClick();
     });
-
   });
 
   context("Validate Right Side Panel", () => {
@@ -555,7 +548,6 @@ context("Approval request form layout verification", () => {
         cy.get("[data-cy='Approval Request Details']").should("be.visible");
       });
     });
-
   });
 
   context("Verify Scroll", () => {
@@ -584,7 +576,6 @@ context("Approval request form layout verification", () => {
 
 
   context("Approve and release document", () => {
-
     it("Click on send to review button", () => {
       cy.get("[data-cy='transitionButton']").arrowClick();
     });
@@ -625,9 +616,7 @@ context("Approval request form layout verification", () => {
       cy.get("[data-text='true']").eq(0).should("be.visible");
       cy.get("[data-text='true']").eq(2).should("not.be.visible");
     });
-
   });
-
 });
 
 export { };
