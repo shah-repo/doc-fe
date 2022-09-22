@@ -242,7 +242,8 @@ Cypress.Commands.add("arGetArDocumentByName", (params: {
 });
 
 Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) => {
-  cy.get("[data-cy=\"field-title\"]").arrowType(params.title);
+  cy.get("[data-cy=\"field-title\"]").arrowClick();
+  cy.get("[data-cy=\"field-title\"]").arrowType(`{selectAll}{selectAll}${params.title}`).wait(500);
   cy.unClick();
 });
 
@@ -374,7 +375,7 @@ Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {
 });
 
 Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
-  cy.get("div[data-cy=addedDocuments]>div:nth-child(2)>button>span>a").arrowClick();
+  cy.get(`tr[data-grid-row-index="0"]`).arrowClick();
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {
