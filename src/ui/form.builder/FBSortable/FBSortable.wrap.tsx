@@ -46,8 +46,7 @@ export const withFBSortable = <T extends FBSortableProps>(
       </Observer>
     ));
 
-    let position = 0;
-    const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
+    let position = 0; let items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
       if (schemaItem.deleted || schemaItem.hidden ||
         (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
       position++;
@@ -60,10 +59,10 @@ export const withFBSortable = <T extends FBSortableProps>(
       );
     }));
 
-
     if (items) {
-      const sectionOnTop = items.find((el) => (el?.props.value.type === "section"));
-      console.log(sectionOnTop);
+      const sectionOnTop = items.find((el) => el?.props.value.type === "section");
+      const itemsWithoutSection = items.filter((el) => el?.props.value.type !== "section");
+      items = [ sectionOnTop, ...itemsWithoutSection];
     }
 
     const onSortStart = ({ index }: SortStart) => {
