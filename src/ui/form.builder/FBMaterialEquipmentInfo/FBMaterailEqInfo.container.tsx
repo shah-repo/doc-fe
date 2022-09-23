@@ -1,36 +1,54 @@
+import { useObserver } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import { FBMeqState } from "..";
-import { toastError } from "../../components/notifications";
+import { FBMaterailEqInfoState } from "..";
+import { checkIsDocumentEB, checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import FB from "../helpers/FB";
-import { MaterialAndEquipment, MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
-import FBMaterialInfoPresenter from "./FBMaterialEqInfo.presenter";
+import { MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
+import { calculateDataDiff } from "./FBMaterailEqInfo.utils";
+import FBMaterialEqInfoPresenter from "./FBMaterialEqInfo.presenter";
 
-const FBMaterialEqInfoContainer: React.FunctionComponent<MaterialEqContainerProps> =
-  ({ documentRevisionId, inView }) => {
-    const meqState = FB.useRef(FBMeqState);
-    const [materialData, setMaterialData] = useState<MaterialAndEquipment>({ equipment: [], materials: [] });
+const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
+  documentRevision,
+  inView,
+}) => {
+  const [showDiff, setShowDiff] = useState(false);
+  const includeDiff = (
+    checkIsDocumentEB(documentRevision?.document?.documentType.groupOptions) && Boolean(documentRevision?.parent)
+  );
 
-    const callBack = (data: MaterialAndEquipment, error)  => {
-      if (error) {
-        toastError(error.message);
-        return;
-      }
-      setMaterialData(data);
-    };
+  const itemsState = FB.useRef(FBMaterailEqInfoState);
+  const [currentData, parentData, loading] = useObserver(() => ([
+    itemsState.currentItems,
+    itemsState.parentItems,
+    itemsState.loading,
+  ]));
 
-    useEffect(() => {
-      if (inView) {
-        meqState.getMeqDetail(documentRevisionId, callBack);
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inView]);
+  const isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);
 
-    return (
-      <FBMaterialInfoPresenter
-        materialData={materialData}
-      />
-    );
-  };
+  useEffect(() => {
+    if (inView && !isForm && documentRevision) {
+      itemsState.fetchCurrentItems(documentRevision.id);
+    }
+  }, [documentRevision, inView, itemsState, isForm]);
+
+  useEffect(() => {
+    if (inView && documentRevision?.parent && showDiff && !parentData) {
+      itemsState.fetchParentItems(documentRevision.parent?.id);
+    }
+  }, [documentRevision, inView, itemsState, parentData, showDiff]);
+
+  const data = showDiff && parentData ? calculateDataDiff(currentData, parentData) : currentData;
+
+  return (
+    <FBMaterialEqInfoPresenter
+      {...{
+        data,
+        showDiff,
+        includeDiff,
+        loading,
+      }}
+      handleShowDiffChange={setShowDiff}
+    />
+  );
+};
 export default FBMaterialEqInfoContainer;
-
-

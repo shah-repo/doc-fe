@@ -8,7 +8,6 @@ import { AsyncState } from "../../../../state/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import { RouteParamsCreate } from "../../utils/types";
-import { formIdContext } from "./AssessmentForm.presenter";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 
 interface OwnProps {
@@ -16,6 +15,8 @@ interface OwnProps {
   asyncState: AsyncState;
 }
 type Props = OwnProps & RouteComponentProps<RouteParamsCreate>;
+
+const formIdContext = React.createContext<string | undefined>(undefined);
 
 const DocRevActions: React.FunctionComponent<Props> = ({
   changeRequest,

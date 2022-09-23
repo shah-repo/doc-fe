@@ -45,7 +45,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   canChangeOwnerShip,
   isNewVersion,
   showAdministrativeAndVoidChange,
-  pmFormId,
   redlineActive,
   isOutput,
   email,
@@ -214,7 +213,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                   isNewVersion,
                                   bannerPortal,
                                   showAdministrativeAndVoidChange,
-                                  pmFormId,
                                   redlineActive,
                                   isOutput,
                                   isDisabled,
@@ -227,8 +225,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 <FBWorkspace
                                   isPortal={false}
                                   document={{
-                                    ...formValues.values as unknown as DocumentRevision,
                                     ...documentRevision as unknown as DocumentRevision,
+                                    ...formValues.values as unknown as DocumentRevision,
                                   }}
                                   {... { autosaveEnabled, workspaceState }}
                                   initialValues={formInput}
@@ -274,7 +272,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ && (
                             <FBMaterialEqInfoContainer
-                              documentRevisionId={documentRevision?.id}
+                              documentRevision={documentRevision}
                               inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                             />
                           )}

@@ -891,10 +891,7 @@ context("Paper new process LHR", () => {
 
     it("Add approver", () => {
       cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
-    it("Save document", () => {
-      cy.lhrClickSaveDocument();
+      cy.wait(2000);
     });
   });
 

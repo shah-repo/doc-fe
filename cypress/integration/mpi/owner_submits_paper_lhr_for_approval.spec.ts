@@ -712,7 +712,7 @@ context("Owner submits LHR for approval", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("visit the LHR", () => {

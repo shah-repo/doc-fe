@@ -688,7 +688,18 @@
         "privateNumberPool": true,
         "defaultRevStage": null,
         "category": null,
-        "schema": null,
+        "schema": [{
+          "name": "po-levels-built-in",
+          "type": "poApprovalMatrix",
+          "index": 0,
+          "label": "Purchase Order Approval Matrix",
+          "applicableOn": [ "ON_STATE_TO_IN_REVIEW" ],
+          "validationAttribute": "Purchase Order Approval Matrix",
+          "applicableValidationSchema": true,
+          "deleteDisabled": true,
+          "deleteInFormDisabled": true,
+          "tabId": "details"
+        }],
         "fieldsConfig": {
           "E": {
             "visible": false,

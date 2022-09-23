@@ -195,7 +195,7 @@ context("Create company via API and create Suppliers document", () => {
 
   context("import form template and release the form", () => {
     it("Import template", () => {
-      cy.get("#fb-import-schema").attachFile("../downloads/Supira_Supplier_Form_Template.json");
+      cy.get("#fb-import-schema").attachFile("Supira_Supplier_Form_Template.json");
     });
 
     it("Approve and release document", () => {
