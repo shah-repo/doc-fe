@@ -1,4 +1,4 @@
-import { Box, ListItemIcon, ListItemText, MenuList } from "@material-ui/core";
+import { Box, CircularProgress, ListItemIcon, ListItemText, MenuList } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as PlayIcon } from "../../../../../../../../assets/images/play.svg";
 import Text from "../../../../../../../../ui/components/Text";
@@ -24,7 +24,11 @@ const HelpCenterVideoItem: React.FC<HelpCenterVideoItemData> = ({ title, url, vi
         </HelpCenterExternalLink>
       </MenuList>
       <Box className={classes.video}>
+        <Box className={classes.progress}>
+          <CircularProgress size={20} />
+        </Box>
         <iframe
+          className={classes.player}
           src={`//www.youtube.com/embed/${videoId}`}
           frameBorder="0"
           width="280"
