@@ -227,8 +227,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 <FBWorkspace
                                   isPortal={false}
                                   document={{
-                                    ...formValues.values as unknown as DocumentRevision,
                                     ...documentRevision as unknown as DocumentRevision,
+                                    ...formValues.values as unknown as DocumentRevision,
                                   }}
                                   {... { autosaveEnabled, workspaceState }}
                                   initialValues={formInput}
