@@ -1,0 +1,36 @@
+import { createMuiTheme as createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
+import * as React from "react";
+import { shape, spacing } from "./consts";
+import overrides from "./overrides";
+import palette from "./palete";
+import props from "./props";
+import shadows from "./shadows";
+import typography from "./typography";
+
+const baseTheme = createTheme({
+  palette,
+  shadows,
+  typography,
+  spacing,
+  shape,
+});
+
+const theme = createTheme({
+  ...baseTheme,
+  overrides: overrides(baseTheme),
+  props: props(baseTheme),
+});
+
+// eslint-disable-next-line no-console
+console.log(theme);
+
+const Theme: React.FunctionComponent = ({
+  children,
+}) => (
+  <ThemeProvider theme={theme}>
+    <CssBaseline />
+    {children}
+  </ThemeProvider>
+);
+
+export default Theme;
