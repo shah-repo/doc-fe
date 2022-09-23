@@ -275,14 +275,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         deletedReferences.push(change);
       } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
         // TODO: (in BE) since BE cannot make correct data for removing approvers.
-        const nextValue = (change.relatedEntity as Approval)?.approver;
         change = {
           ...change,
           approvalStatus: change.nextValue as string,
           type: "ARRAY_DELETED",
-          nextValue: {
-            ...nextValue,
-          },
+          nextValue: (change.relatedEntity as Approval)?.approver,
         };
         deletedReferences.push(change);
       } else if (change.field === "schema" && change.type === "ARRAY_NEW") {
