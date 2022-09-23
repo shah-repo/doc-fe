@@ -7,6 +7,7 @@ import { FBInlineApprovalBody } from "../FBInlineApproval/FBInlineApproval.types
 class FBDataStore {
   @observable public refreshData: DocumentRevision | undefined;
   @observable public poApprovals: FBInlineApprovalBody[] | Approval[] = [];
+  @observable public inlineApprovals: FBInlineApprovalBody[] | Approval[] = [];
 
   @action public setRefreshData = (value) => {
     set(this, "refreshData", value);
@@ -14,21 +15,25 @@ class FBDataStore {
   @action public clearPoApprovals = () => {
     set(this, "poApprovals", []);
   };
+  @action public clearInlineApprovals = () => {
+    set(this, "inlineApprovals", []);
+  };
 
-  @action public setPoApprovals = (approvals) => {
+  // key would be either "poApprovals", "inlineApprovals"
+  @action public setApprovals = (approvals, key) => {
     let result: FBInlineApprovalBody[] | Approval[];
     if (isArray(approvals)) {
-      result = [...this.poApprovals, ...approvals];
+      result = [...this[key], ...approvals];
     } else {
-      const approvalData = [...this.poApprovals];
+      const approvalData = [...this[key]];
       const previousIndex = findIndex(approvalData, (po) => po?.approverId === approvals.approverId);
       if (previousIndex < 0) {
-        result = [...this.poApprovals, ...[approvals]];
+        result = [...this[key], ...[approvals]];
       } else {
         result = map(approvalData, (el, index: number) => index === previousIndex ? approvals : el);
       }
     }
-    set(this, "poApprovals", result);
+    set(this, key, result);
   };
 }
 

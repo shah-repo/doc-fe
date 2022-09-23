@@ -25,10 +25,10 @@ import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
-import { checkIsDocumentEditableSchema, checkIsDocumentRecord, checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../helpers/checkDocumentGroup";
-import { getShouldShowUpgradeForRecord } from "../helpers/records";
+import { checkIsDocumentDAM, checkIsDocumentEditableSchema, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { getShouldShowUpgradeForRecord, isFormWithInlineApproval } from "../helpers/records";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
-import { DocumentRevisionFormValues } from "./types";
+import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from "./types";
 
 export interface FormHeaderContext {
   documentRevision: DocumentRevision;
@@ -147,16 +147,26 @@ DocumentRevisionFormContainerProps
       if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
         documentRevision.approvals = FBDataStore.poApprovals as Approval[];
       }
+
+      if (isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)) {
+        documentRevision.approvals = FBDataStore.inlineApprovals as Approval[];
+      }
     }
   });
 
   useEffect(() => {
     if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
-      FBDataStore.setPoApprovals(documentRevision.approvals);
+      FBDataStore.setApprovals(documentRevision.approvals, FBDataStoreApprovalKeys.PO_APPROVALS);
     }
+
+    if (isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)) {
+      FBDataStore.setApprovals(documentRevision.approvals, FBDataStoreApprovalKeys.INLINE_APPROVALS);
+    }
+
     return () => {
       FBDataStore.setRefreshData(undefined);
       FBDataStore.clearPoApprovals();
+      FBDataStore.clearInlineApprovals();
     };
   }, []);
 
