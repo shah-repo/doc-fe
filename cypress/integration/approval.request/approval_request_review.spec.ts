@@ -228,6 +228,8 @@ context("Approval request form scenario", () => {
 
     it("Check Document's description is non-editable", () => {
       SystemRequirement("REQ-0850");
+      cy.arSelectDocumentTab();
+      cy.wait(1000);
       cy.get("div[name$=\"descriptionOfChange\"]").should("have.attr", "disabled");
     });
 
@@ -244,6 +246,8 @@ context("Approval request form scenario", () => {
     //  approvers 'In_review' should be enabled now 'ENC-4797'
     it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
+      cy.arSelectChangeDetailsTab();
+      cy.wait(1000);
       cy.get("input[data-cy=\"fb-approvers-approvers\"]").should("not.be.disabled");
     });
   });
@@ -324,6 +328,7 @@ context("Approval request form scenario", () => {
 
     it("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
+      cy.arSelectDocumentTab();
       cy.arClickAddDocument();
       cy.arIsProposedDocumentEmpty();
       cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick();
