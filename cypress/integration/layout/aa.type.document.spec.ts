@@ -12,7 +12,7 @@ let loginResponse;
 let developersGroup;
 let adminEmployee;
 const scriptData = {
-  formId: "FM-00002",
+  formId: "FM-00003",
   secondformId: "AAD-01000",
 };
 
@@ -157,6 +157,61 @@ context("AA Document Layout verification", () => {
         cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Create AA Document form for migration", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter document title 'AA Document type", () => {
+      cy.drEnterDocumentTitle({ name: "Form migration AA Document Type Title" });
+    });
+
+    it("Enter document description 'AA document description'", () => {
+      cy.drEnterDocumentDescription({ description: "AA document description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Aa Document' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "AA Document" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+
+  });
+
+  context("Add FB text field ", () => {
+    it("Add textfield", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Approve and release FORM document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
   });
 
@@ -305,15 +360,16 @@ context("AA Document Layout verification", () => {
       cy.fbAddField();
     });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
     it("Verify Added fields in overview tab ", () => {
       cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
       cy.get("[data-cy^='textfield-for-inline']").should("exist");
       cy.get("[name^='checkbox-group-for-inline']").should("exist");
       cy.get("[data-cy='RadioBtnGroup for inline']").should("exist");
+
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Verify row with the Tabs is fixed, and that user should not be able to add/edit new Tabs", () => {
@@ -420,6 +476,10 @@ context("AA Document Layout verification", () => {
       cy.get(".formOptionsBox").should("exist");
     });
 
+    it("Enter value in text field", () => {
+      cy.get("[data-cy^='textfield-for-inline'] input").arrowType("test input");
+    });
+
     context("Verify description field", () => {
       it("Verify DescriptionToolBar", () => {
         cy.verifyDescriptionToolbar();
@@ -494,8 +554,11 @@ context("AA Document Layout verification", () => {
       cy.get(".formOptionsBox").should("not.exist");
     });
   });
+
+
   context("Verify that right side panel", () => {
     it("Navigate to document list", () => {
+      cy.cmpTurnOffAutosave();
       cy.navigToDocumentList();
       cy.dlClearFilters();
     });
@@ -519,9 +582,38 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify References selection", () => {
-      cy.get("[data-cy='referenceTo']").arrowClick();
+      cy.get("[data-cy='referenceTo']").arrowClick({ force: true });
       cy.drSelectReferences( "FM-00001" );
       cy.drRemoveReferences({ reference: "FM-00001" });
+    });
+  });
+
+  context("Verify form migration", () => {
+    it("Verify migrate form button is visible", () => {
+      cy.get("[data-cy=references-icon]").arrowClick();
+      cy.get("[data-cy='common.form.migration']").should("be.visible");
+    });
+
+    it("Click on migrate form button", () => {
+      cy.get("[data-cy='common.form.migration']").arrowClick();
+    });
+
+    it("Select form to be migrated", () => {
+      cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+      cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+    });
+
+    it("Select form to be migrated", () => {
+      cy.get("[data-cy^='field-textfield-for-inline']" ).arrowClick();
+      cy.get("[id^='react-select']").eq(1).autocompleteSelect("Textfield for inline");
+    });
+
+    it("Click on confirm change", () => {
+      cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+    });
+
+    it("Verify the existing field after migration", () => {
+      cy.get("[name^='textfield-for-inline']").should("exist");
     });
   });
 
@@ -692,7 +784,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify Reference tab Info", () => {
-      cy.verifyReferenceTab({ user: USERS[1], formId: scriptData.formId, shortName: "GR" });
+      cy.verifyReferenceTab({ user: USERS[1], formId: "FM-00002", shortName: "GR" });
     });
 
     it("Verify References selection", () => {
