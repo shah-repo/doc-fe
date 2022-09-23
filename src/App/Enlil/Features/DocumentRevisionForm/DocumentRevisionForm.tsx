@@ -13,7 +13,6 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import AttachmentsField from "../../../../ui/document.revision/form/attachments";
 import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
-import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
 import RedlineBanner from "../../../../ui/documentRevision/forms/presenters/redline/Redline.banner";
 import UpgradeToLatestContainer from "../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { checkIsDocumentLHR, checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
@@ -161,7 +160,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
             shouldShowUpgrade,
           }}
         />
-        <LHRBanner documentRevision={documentRevision}/>
         <Observer>
           {() => (
             <SMTemplate

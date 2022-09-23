@@ -6,10 +6,10 @@ import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest/types";
 import { Approval, Id, Nullable, Owner, User } from "../common/types";
-import { Employee } from "../company/types";
 import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from "./documentType/types";
+import { Employee } from "../company/types";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -81,35 +81,12 @@ export interface PDF {
   type: string;
 }
 
-interface LHR{
-  docRevId: string;
-  documentId: string;
-  label: string;
-}
-
-interface LOT{
-  label: string;
-}
-
-interface Part{
-  docRevId: string;
-  documentId: string;
-  label: string;
-}
-
-interface LSHS{
-  lhr: LHR;
-  lot: LOT;
-  part: Part;
-}
-
 interface Precalc {
   formDocId: string;
   revision: number;
   po_amount?: string;
   cali_due_date?: string;
   pm_due_date?: string;
-  lshs_subtitle?: LSHS;
 }
 
 interface DocumentsInLHRS {
