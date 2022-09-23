@@ -1,14 +1,14 @@
 import { makeStyles } from "@material-ui/core";
-import Colors from "../../../../../../ui/layout/theme/utils/colors";
 
 export default makeStyles((theme) => ({
   root: {
+    ...theme.typography.body2,
     display: "flex",
     alignItems: "center",
-    color: Colors.blue,
-    fontSize: "0.75rem",
+    color: theme.palette.primary.light,
+    marginTop: theme.spacing(.5),
   },
   icon: {
-    marginLeft: theme.spacing(0.5),
+    marginLeft: theme.spacing(.5),
   },
 }));

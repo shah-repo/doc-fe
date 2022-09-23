@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as HelpIcon } from "../../../../assets/images/help-md.svg";
 import useDialog from "../../../../ui/hooks/useDialog";
+import Theme from "../../../../ui/layout/theme-next";
 import HelpCenterContent from "./components/HelpCenterContent/HelpCenterContent";
 import HelpCenterNavigation from "./components/HelpCenterNavigation/HelpCenterNavigation";
 import en from "./data/content-en";
@@ -42,12 +43,10 @@ const HelpCenter: React.FC = () => {
   }, [contentDialog, currentModule, previousModule]);
 
   return (
-    <>
+    <Theme>
       <IconButton color="inherit" size="small" onClick={openMenu}>
         <HelpIcon />
       </IconButton>
-      { currentModule }
-      { currentContent ? " / ✓" : " / ✕" }
       <HelpCenterNavigation
         anchorEl={anchorEl}
         hasGuide={Boolean(currentContent)}
@@ -57,11 +56,11 @@ const HelpCenter: React.FC = () => {
       {currentContent && (
         <HelpCenterContent
           content={currentContent}
-          isOpen={contentDialog.isOpen}
+          opened={contentDialog.isOpen}
           handleCloseDialog={contentDialog.close}
         />
       )}
-    </>
+    </Theme>
   );
 };
 

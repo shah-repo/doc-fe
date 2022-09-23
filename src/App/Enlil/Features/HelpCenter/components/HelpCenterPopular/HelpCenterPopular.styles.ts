@@ -2,12 +2,16 @@ import { makeStyles } from "@material-ui/core";
 
 export default makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(2.5),
-    borderTop: `1px solid ${theme.palette.divider}`,
+    padding: theme.spacing(2.5, 2.5, 0),
+    borderTopWidth: 1,
+    borderTopStyle: "solid",
+    borderTopColor: theme.palette.divider,
   },
   list: {
-    marginTop: theme.spacing(1.5),
-    marginLeft: theme.spacing(-2.5),
-    marginRight: theme.spacing(-2.5),
+    margin: theme.spacing(1.5, -2.5, 1.5),
+  },
+  link: {
+    paddingLeft: theme.spacing(2.5),
+    paddingRight: theme.spacing(2.5),
   },
 }));

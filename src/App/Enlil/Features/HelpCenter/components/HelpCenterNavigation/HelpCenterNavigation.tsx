@@ -7,6 +7,7 @@ import { ReactComponent as SendIcon } from "../../../../../../assets/images/send
 import Text from "../../../../../../ui/components/Text";
 import staticLinks from "../../data/static-links";
 import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
+import useStyles from "./HelpCenterNavigation.styles";
 
 interface Props {
   anchorEl: HTMLElement | null;
@@ -20,50 +21,60 @@ interface GuidesItemProps {
   href: string;
   onClick: () => void;
   children: React.ReactNode;
+  className?: string;
 }
 
-const GuidesLink: React.FC<GuidesItemProps> = React.forwardRef(({ external, href, onClick, children }, ref) => (
-  external ? (
-    <HelpCenterExternalLink href={href}>
-      {children}
-    </HelpCenterExternalLink>
-  ) : (
-    <MenuItem onClick={onClick} innerRef={ref}>
-      {children}
-    </MenuItem>
+const GuidesLink: React.FC<GuidesItemProps> = React.forwardRef(
+  ({ external, href, onClick, children, className }, ref) => (
+    external ? (
+      <HelpCenterExternalLink href={href} className={className}>
+        {children}
+      </HelpCenterExternalLink>
+    ) : (
+      <MenuItem onClick={onClick} innerRef={ref} className={className}>
+        {children}
+      </MenuItem>
+    )
   )
-));
+);
 GuidesLink.displayName = "GuidesLink";
 
-const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, hasGuide, handleCloseMenu, handleOpenContent }) => (
-  <Menu
-    anchorEl={anchorEl}
-    open={Boolean(anchorEl)}
-    onClose={handleCloseMenu}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "right",
-    }}
-  >
-    <GuidesLink external={!hasGuide} href={staticLinks.Guides} onClick={handleOpenContent}>
-      <ListItemIcon><HelpIcon /></ListItemIcon>
-      <ListItemText><Text translation="help.guides" /></ListItemText>
-    </GuidesLink>
-    <HelpCenterExternalLink href={staticLinks.ReleaseNotes}>
-      <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
-      <ListItemText><Text translation="help.release.notes" /></ListItemText>
-    </HelpCenterExternalLink>
-    <HelpCenterExternalLink href={staticLinks.FAQs}>
-      <ListItemIcon><FAQsIcon /></ListItemIcon>
-      <ListItemText><Text translation="help.faqs" /></ListItemText>
-    </HelpCenterExternalLink>
-    <Divider />
-    <HelpCenterExternalLink href={staticLinks.Contact}>
-      <ListItemIcon><SendIcon /></ListItemIcon>
-      <ListItemText><Text translation="help.contact" /></ListItemText>
-    </HelpCenterExternalLink>
-  </Menu>
-);
+const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, hasGuide, handleCloseMenu, handleOpenContent }) => {
+  const classes = useStyles();
+
+  return (
+    <Menu
+      classes={{
+        paper: classes.paper,
+      }}
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleCloseMenu}
+      getContentAnchorEl={null}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+    >
+      <GuidesLink external={!hasGuide} href={staticLinks.Guides} onClick={handleOpenContent}>
+        <ListItemIcon><HelpIcon /></ListItemIcon>
+        <ListItemText><Text translation="help.guides" /></ListItemText>
+      </GuidesLink>
+      <HelpCenterExternalLink href={staticLinks.ReleaseNotes}>
+        <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
+        <ListItemText><Text translation="help.release.notes" /></ListItemText>
+      </HelpCenterExternalLink>
+      <HelpCenterExternalLink href={staticLinks.FAQs}>
+        <ListItemIcon><FAQsIcon /></ListItemIcon>
+        <ListItemText><Text translation="help.faqs" /></ListItemText>
+      </HelpCenterExternalLink>
+      <Divider variant="middle" component="li" />
+      <HelpCenterExternalLink href={staticLinks.Contact}>
+        <ListItemIcon><SendIcon /></ListItemIcon>
+        <ListItemText><Text translation="help.contact" /></ListItemText>
+      </HelpCenterExternalLink>
+    </Menu>
+  );
+};
 
 export default HelpCenterNavigation;

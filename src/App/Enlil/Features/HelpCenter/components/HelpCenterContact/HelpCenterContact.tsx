@@ -1,4 +1,5 @@
-import { Box, ListItemIcon, ListItemText, MenuList } from "@material-ui/core";
+import { ListItemIcon, ListItemText, MenuList } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
 import { ReactComponent as SendIcon } from "../../../../../../assets/images/send.svg";
 import Text from "../../../../../../ui/components/Text";
@@ -11,19 +12,17 @@ const HelpCenterContact: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <Box>
-      <MenuList disablePadding classes={{ root: classes.list }}>
-        <HelpCenterExternalLink href={StaticHelpLinks.Contact}>
-          <ListItemIcon><SendIcon /></ListItemIcon>
-          <ListItemText>
-            <Text translation="help.dint.find.what.you.need" />
-            <HelpCenterOutLink>
-              <Text translation="help.contact" />
-            </HelpCenterOutLink>
-          </ListItemText>
-        </HelpCenterExternalLink>
-      </MenuList>
-    </Box>
+    <MenuList className={classes.list} dense disablePadding>
+      <HelpCenterExternalLink className={cx(classes.link, classes.contact)} href={StaticHelpLinks.Contact}>
+        <ListItemIcon className={classes.icon}><SendIcon /></ListItemIcon>
+        <ListItemText className={classes.text}>
+          <Text translation="help.dint.find.what.you.need" />
+          <HelpCenterOutLink>
+            <Text translation="help.contact" />
+          </HelpCenterOutLink>
+        </ListItemText>
+      </HelpCenterExternalLink>
+    </MenuList>
   );
 };
 

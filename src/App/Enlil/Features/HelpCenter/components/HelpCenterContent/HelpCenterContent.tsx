@@ -1,6 +1,6 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
+import { ReactComponent as CloseIcon } from "../../../../../../assets/images/cross.svg";
 import Text from "../../../../../../ui/components/Text";
 import HelpCenterContact from "../HelpCenterContact/HelpCenterContact";
 import HelpCenterList from "../HelpCenterList/HelpCenterList";
@@ -9,11 +9,11 @@ import useStyles from "./HelpCenterContent.styles";
 
 interface Props {
   content: any;
-  isOpen: boolean;
+  opened: boolean;
   handleCloseDialog: () => void;
 }
 
-const HelpCenterContent: React.FC<Props> = ({ content, isOpen, handleCloseDialog }) => {
+const HelpCenterContent: React.FC<Props> = ({ content, opened, handleCloseDialog }) => {
   const classes = useStyles();
 
   return (
@@ -21,28 +21,26 @@ const HelpCenterContent: React.FC<Props> = ({ content, isOpen, handleCloseDialog
       hideBackdrop
       disableEnforceFocus
       classes={{
-        root: classes.dialogRoot,
-        paper: classes.dialogPaper,
-        container: classes.dialogContainer,
+        root: classes.root,
+        paper: classes.paper,
+        container: classes.container,
       }}
       scroll="paper"
-      open={isOpen}
+      open={opened}
     >
-      <DialogTitle disableTypography classes={{
-        root: classes.titleRoot,
-      }}>
-        <Typography variant="h6"><Text translation="help.title" /></Typography>
-        <IconButton style={{ padding: 0 }} size="small" onClick={handleCloseDialog}>
+      <DialogTitle>
+        <Typography variant="h6">
+          <Text translation="help.title" />
+        </Typography>
+        <IconButton className={classes.close} size="small" onClick={handleCloseDialog}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent classes={{
-        root: classes.contentRoot,
-      }} dividers>
+      <DialogContent className={classes.content} dividers>
         <HelpCenterList content={content} />
         <HelpCenterPopular />
       </DialogContent>
-      <DialogActions classes={{ root: classes.actionsRoot }}>
+      <DialogActions className={classes.actions}>
         <HelpCenterContact />
       </DialogActions>
     </Dialog>

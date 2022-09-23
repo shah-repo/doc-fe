@@ -3,11 +3,7 @@ import React from "react";
 import { ReactComponent as LinkOutIcon } from "../../../../../../assets/images/link-out.svg";
 import useStyles from "./HelpCenterOutLink.styles";
 
-interface Props {
-  children: React.ReactNode;
-}
-
-const HelpCenterOutLink: React.FC<Props> = ({ children }) => {
+const HelpCenterOutLink: React.FC = ({ children }) => {
   const classes = useStyles();
 
   return (

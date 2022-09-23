@@ -1,27 +1,24 @@
 import { makeStyles } from "@material-ui/core";
 
 export default makeStyles((theme) => ({
-  dialogRoot: {
+  root: {
     pointerEvents: "none",
   },
-  dialogContainer: {
+  container: {
     justifyContent: "flex-end",
     alignItems: "flex-start",
   },
-  dialogPaper: {
+  paper: {
     pointerEvents: "auto",
     maxWidth: theme.spacing(40),
   },
-  contentRoot: {
+  close: {
+    margin: theme.spacing(-.5),
+  },
+  content: {
     padding: 0,
   },
-  // TODO Move to overrides
-  titleRoot: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: theme.spacing(2),
-  },
-  actionsRoot: {
+  actions: {
     padding: 0,
   },
 }));

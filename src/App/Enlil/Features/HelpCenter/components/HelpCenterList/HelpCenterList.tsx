@@ -24,7 +24,7 @@ const HelpCenterList: React.FC<Props> = ({ content }) => {
 
   return (
     <Box className={classes.root}>
-      <Typography variant="h6">{content.title}</Typography>
+      <Typography variant="h4">{content.title}</Typography>
       <Box className={classes.list}>
         {content.items.map((item) => <HelpCenterItem {...item} key={item.title} />)}
       </Box>

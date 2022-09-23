@@ -13,17 +13,17 @@ const HelpCenterPopular: React.FC = () => {
 
   return (
     <Box className={classes.root}>
-      <Typography variant="h6"><Text translation="help.popular.resources" /></Typography>
-      <MenuList dense disablePadding classes={{ root: classes.list }}>
-        <HelpCenterExternalLink href={staticLinks.ReleaseNotes}>
+      <Typography variant="h4"><Text translation="help.popular.resources" /></Typography>
+      <MenuList className={classes.list} dense disablePadding>
+        <HelpCenterExternalLink className={classes.link} href={staticLinks.ReleaseNotes}>
           <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
           <ListItemText><Text translation="help.release.notes" /></ListItemText>
         </HelpCenterExternalLink>
-        <HelpCenterExternalLink href={staticLinks.FAQs}>
+        <HelpCenterExternalLink className={classes.link} href={staticLinks.FAQs}>
           <ListItemIcon><FAQsIcon /></ListItemIcon>
           <ListItemText><Text translation="help.faqs" /></ListItemText>
         </HelpCenterExternalLink>
-        <HelpCenterExternalLink href={staticLinks.Guides}>
+        <HelpCenterExternalLink className={classes.link} href={staticLinks.Guides}>
           <ListItemIcon><GuidesIcon /></ListItemIcon>
           <ListItemText><Text translation="help.view.all.guides" /></ListItemText>
         </HelpCenterExternalLink>

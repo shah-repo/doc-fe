@@ -1,11 +1,25 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core";
 
 export default makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2.5),
   },
   list: {
-    marginLeft: theme.spacing(-2.5),
-    marginRight: theme.spacing(-2.5),
+    margin: theme.spacing(1.5, -2.5, 0),
   },
 }));
+
+export const itemStyles = (theme: Theme) => ({
+  link: {
+    paddingLeft: theme.spacing(2.5),
+    paddingRight: theme.spacing(2.5),
+  },
+  text: {
+    ...theme.typography.body1,
+    lineHeight: 1.25,
+  },
+  icon: {
+    alignSelf: "flex-start",
+    marginTop: theme.spacing(.25),
+  },
+});
