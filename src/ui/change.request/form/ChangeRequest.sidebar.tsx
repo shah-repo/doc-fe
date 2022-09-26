@@ -1,24 +1,20 @@
-import { Box, IconButton, TooltipProps, Typography } from "@material-ui/core";
+import { Box, IconButton, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { SMBox, SMText } from "../../../App";
-import { styles as CRStyles, tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
+import { styles as CRStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse_icon.svg";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-
-import { FBTooltip } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
-
 import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
-
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
 import { ReactComponent as EyeIcon } from "../../../assets/images/eye-icon-references.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
-
 import { useIntl } from "react-intl";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import ChangeRequestAuditContainer from "../../change.request/audit/Audit.container";
 import CRReferences from "../../change.request/references/Reference";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
+import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
 
 interface Props {
   changeRequest: ChangeRequest;
@@ -26,11 +22,6 @@ interface Props {
   isDrawerOpen: boolean;
   fromEdit?: boolean;
 }
-
-const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="left" classes={classes} {...props} />;
-};
 
 const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
   changeRequest,

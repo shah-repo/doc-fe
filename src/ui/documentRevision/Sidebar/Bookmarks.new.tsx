@@ -1,19 +1,14 @@
-import { Box, IconButton, TooltipProps, Typography } from "@material-ui/core";
+import { Box, IconButton, Typography } from "@material-ui/core";
 import copy from "copy-to-clipboard";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { SM } from "../../../App";
-import { tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
-import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
+import { FB, FBBookmarkItem, FBMapWrapper } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./Bookmarks.new.styles";
-
-const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="top" classes={classes} {...props} />;
-};
+import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
 
 const Bookmarks: React.FC = () => {
   const history = useHistory();
@@ -60,7 +55,7 @@ const Bookmarks: React.FC = () => {
                   </Typography>
                 </Box>
               </Box>
-              <StyledTooltip title="common.copy.link">
+              <StyledTooltip placement="top" title="common.copy.link">
                 <IconButton
                   className={classes.iconButton}
                   size="small"

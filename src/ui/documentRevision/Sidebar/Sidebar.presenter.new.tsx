@@ -1,15 +1,15 @@
-import { Box, CircularProgress, Divider, Drawer, IconButton, TooltipProps, Typography } from "@material-ui/core";
+import { Box, CircularProgress, Divider, Drawer, IconButton, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { SM } from "../../../App";
-import { tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-down.svg";
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
 import Text from "../../components/Text";
-import { FB, FBTooltip } from "../../form.builder";
+import { FB } from "../../form.builder";
 import styles from "./styles.new";
 import { Sidebar } from "./types.new";
+import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
 
 interface Props {
   isDrawerOpen: boolean;
@@ -20,11 +20,6 @@ interface Props {
   onDrawerToggle: () => void;
   loading?: boolean;
 }
-
-const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="left" classes={classes} {...props} />;
-};
 
 const SidebarPresenter: React.FunctionComponent<Props> = ({
   isDrawerOpen,
