@@ -7,7 +7,7 @@ export const editorStyles = {
     borderBottom: `1px solid ${Colors.hint_gray}`,
     position: "sticky",
     top: 0,
-    zIndex: 2,
+    zIndex: 5,
   },
   editorStyle: {
     padding: "0 4px",

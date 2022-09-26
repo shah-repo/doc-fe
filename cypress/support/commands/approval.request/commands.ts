@@ -242,7 +242,9 @@ Cypress.Commands.add("arGetArDocumentByName", (params: {
 });
 
 Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) => {
-  cy.get("[data-cy=\"field-title\"]").arrowType(params.title);
+  cy.get("[data-cy=\"field-title\"]").arrowClick();
+  cy.get("[data-cy=\"field-title\"]").arrowType(`{selectAll}{selectAll}${params.title}`).wait(500);
+  cy.unClick();
 });
 
 Cypress.Commands.add(`arVerifySignatureIsNotMet`, (params: {title: string }) => {
@@ -269,15 +271,15 @@ Cypress.Commands.add("arClearFilters", () => {
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"field-description\"]").arrowType(params.description)
-    .wait(500).unClick();
+  cy.get("[data-cy=\"description\"]").eq(0).arrowType(params.description).wait(500);
+  cy.unClick();
 });
 
 Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
-    cy.get("div[data-cy=\"field-select-form\"]>#FormList-selectForm").arrowClick();
-    cy.get("div[id^=react-select]").contains(params.formTitle).arrowClick();
-    cy.get("[data-cy=\"create.approval.request.continue\"]").arrowClick();
+    cy.get(`div[data-cy="field-select-form"]>#FormList-selectForm div[class*="-control"]`).arrowClick({ force: true });
+    cy.get("div[id^=react-select]").contains(params.formTitle).arrowClick({ force: true });
+    cy.get("[data-cy='create.approval.request.continue']").arrowClick({ force: true });
   });
 });
 
@@ -373,7 +375,7 @@ Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {
 });
 
 Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
-  cy.get("div[data-cy=addedDocuments]>div:nth-child(2)>button>span>a").arrowClick();
+  cy.get(`tr[data-grid-row-index="0"]`).arrowClick();
 });
 
 Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; status: string }) => {

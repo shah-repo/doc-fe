@@ -4,12 +4,11 @@ import { Observer } from "mobx-react";
 import * as React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import {
-  DocumentRevisionFormProgressBar, DocumentRevisionFormHeader,
-  SMBox, SMTabs, SMTemplate, SM, SMTabsState, SMFormState,
-} from "../../../../../../../App";
-import { withSMTabs } from "../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
+import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from "../../../../../../../App";
 import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
+import { withSMForm } from "../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc";
+import { withSMTabs } from "../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
+import { emptyFunction } from "../../../../../../../common/utils/helpers";
 import { authSelectors } from "../../../../../../../state/ducks/auth";
 import { documentTypeSelectors } from "../../../../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../../../../state/ducks/documentRevisions/documentType/types";
@@ -28,8 +27,6 @@ import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../../hel
 import DocumentRevisionFormPresenter from "../../../../DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "../../../../types";
 import styles from "./styles";
-import { withSMForm } from "../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc";
-import { emptyFunction } from "../../../../../../../common/utils/helpers";
 
 interface ContainerProps {
   docRevId?: string;
@@ -242,7 +239,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       )}
                       {tabType === TabTypeOptions.TABS_MEQ && (
                         <FBMaterialEqInfoContainer
-                          documentRevisionId={documentRevision?.id}
+                          documentRevision={documentRevision}
                           inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                         />
                       )}

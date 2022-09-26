@@ -337,15 +337,6 @@ context(
           it("move component", () => {
             cy.get("[class*='fb-field-wrapper-fb-range-']").trigger("mouseover");
             cy.wait(2000);
-            cy.get(".drag-handle").eq(1)
-              .realMouseDown({ position: "center", button: "left" });
-            cy.wait(3000);
-            cy.get(".drag-handle").eq(0)
-              .realMouseMove(0, 0, { position: "center" })
-              .realMouseUp();
-          });
-
-          it("move component", () => {
             cy.get(".drag-handle").eq(0)
               .realMouseDown({ position: "center", button: "left" });
             cy.wait(3000);
@@ -368,7 +359,7 @@ context(
             cy.get(".MuiDialogContent-root>div>div")
               .eq(3)
               .then((element) => cy.wrap(element)
-                .xpath("(//div[contains(@data-cy, 'textfieldwithrange-3')])"));
+                .xpath("(//div[contains(@data-cy, 'textfieldwithrange-1')])"));
           });
 
           it("Verify Text field with range", () => {

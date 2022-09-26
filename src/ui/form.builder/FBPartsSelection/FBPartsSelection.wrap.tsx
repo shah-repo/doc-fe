@@ -18,7 +18,9 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     index,
     filteredOptions,
     isDocumentLHR,
+    lhrSelectedPartValue,
     name = "",
+    showErrorMsg,
     ...props
   }: T) => {
 
@@ -28,10 +30,13 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     const { documentType } = workspaceState?.document?.document || {};
     isDocumentLHR = checkIsDocumentLHR(documentType?.groupOptions);
     disabled = workspaceState?.mode === "preview" || workspaceState?.mode === "formPreview" || isDocumentLHR;
+    showErrorMsg = showErrorMsg || !disabled;
 
     if (!isOutput) {
       defaultValue = editorConfig?.id;
     }
+
+    lhrSelectedPartValue = formState?.initialValues ? formState?.initialValues.name : "";
 
     // MARK: @reactions
     useEffect(() => reaction(
@@ -79,9 +84,9 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
     // MARK: @methods
 
     // MARK: @observer
-
     return Component({
       ...(props as T),
+      showErrorMsg,
       isOutput,
       disabled,
       defaultValue,
@@ -90,6 +95,7 @@ export const withFBPartsSelection = <T extends FBPartsSelectionProps>(
       name,
       filteredOptions,
       isDocumentLHR,
+      lhrSelectedPartValue,
     });
   };
 

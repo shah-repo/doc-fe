@@ -13,6 +13,7 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import AttachmentsField from "../../../../ui/document.revision/form/attachments";
 import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
+import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
 import RedlineBanner from "../../../../ui/documentRevision/forms/presenters/redline/Redline.banner";
 import UpgradeToLatestContainer from "../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { checkIsDocumentLHR, checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
@@ -45,7 +46,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   canChangeOwnerShip,
   isNewVersion,
   showAdministrativeAndVoidChange,
-  pmFormId,
   redlineActive,
   isOutput,
   email,
@@ -161,6 +161,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
             shouldShowUpgrade,
           }}
         />
+        {documentRevision && <LHRBanner documentRevision={documentRevision}/>}
         <Observer>
           {() => (
             <SMTemplate
@@ -214,7 +215,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                   isNewVersion,
                                   bannerPortal,
                                   showAdministrativeAndVoidChange,
-                                  pmFormId,
                                   redlineActive,
                                   isOutput,
                                   isDisabled,
@@ -227,8 +227,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                                 <FBWorkspace
                                   isPortal={false}
                                   document={{
-                                    ...formValues.values as unknown as DocumentRevision,
                                     ...documentRevision as unknown as DocumentRevision,
+                                    ...formValues.values as unknown as DocumentRevision,
                                   }}
                                   {... { autosaveEnabled, workspaceState }}
                                   initialValues={formInput}
@@ -274,7 +274,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ && (
                             <FBMaterialEqInfoContainer
-                              documentRevisionId={documentRevision?.id}
+                              documentRevision={documentRevision}
                               inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                             />
                           )}

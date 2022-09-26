@@ -1444,7 +1444,7 @@ context("PO and parts ", () => {
     });
 
     it("Add approver", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
