@@ -83,7 +83,7 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks fromAR={true} />,
+        component: <Bookmarks />,
       },
     },
   ];
