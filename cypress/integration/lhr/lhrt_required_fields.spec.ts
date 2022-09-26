@@ -576,6 +576,10 @@ context("LHRt required fields test", () => {
   });
 
   context("Release LHRT", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
     });
