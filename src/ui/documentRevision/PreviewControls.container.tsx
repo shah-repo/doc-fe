@@ -346,8 +346,29 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (isExportable) {
     accessableButtons.push("exportToEmail");
   }
-  const initialButtons = accessableButtons.length >= 2 ? accessableButtons.slice(0, 2) : accessableButtons;
-  const restButtons = accessableButtons.length >= 2 ? accessableButtons.slice(2) : [];
+
+  let initialButtons: string[] = [];
+  let restButtons: string[] = [];
+
+  if (accessableButtons.length <= 2) {
+    initialButtons = [];
+    restButtons = [...accessableButtons];
+  }
+
+  function ownerOrEmail(ele: string) {
+    if (["changeowner", "exportToEmail"].includes(ele)) {
+      return ele;
+    }
+  }
+  if (accessableButtons.length >= 3) {
+    const elementsList = ["changeowner", "exportToEmail"];
+    const initialFilteredButtons = accessableButtons.filter((ele: string) => !elementsList.includes(ele));
+    const restFilteredButtons = accessableButtons.filter((ownerOrEmail));
+    initialButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(0, 2) : initialFilteredButtons;
+    restButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(2) : [];
+    restButtons = [...restButtons, ...restFilteredButtons];
+  }
+
 
   const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
     <>

@@ -164,6 +164,8 @@ export enum statusClassMapping {
   "Pending Change"="PENDING_STATUS",
   "IN_REVIEW" = "PENDING_STATUS",
   "Approved"="GREEN_STATUS",
+  "Quarantine" = "PENDING_STATUS",
+  "Accepted"="GREEN_STATUS",
   "Released"="GREEN_STATUS",
   "APPROVED" = "GREEN_STATUS",
   "Obsolete"="GRAY_STATUS",
