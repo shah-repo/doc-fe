@@ -43,7 +43,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
     const isStarterRequired =  () => (["design", "formDesign"].includes(workspaceState?.mode as string)) &&
-      !size(schema?.find((item) => _tabsState?.isTabActive(item.tabId) && !item.deleted));
+      !size(schema?.find((item) => item.tabId && _tabsState?.isTabActive(item.tabId) && !item.deleted));
     autosave = _formState?.autosave || false;
 
     if (isEmpty(workspaceState)) {
