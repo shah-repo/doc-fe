@@ -21,10 +21,7 @@ const theme = createTheme({
   props: props(baseTheme),
 });
 
-// eslint-disable-next-line no-console
-console.log(theme);
-
-const Theme: React.FunctionComponent = ({
+const Theme: React.FC = ({
   children,
 }) => (
   <ThemeProvider theme={theme}>
