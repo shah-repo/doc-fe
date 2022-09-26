@@ -36,7 +36,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
         type: "lhrstep",
         label: "LHR Step",
         index,
-        tabId: _tabsState?.tabID,
+        tabId: _tabsState?.activeTabId,
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         validationMode: "default",
         applicableValidationSchema: true,
@@ -61,7 +61,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   return (
     <Box>
       <FBWorkspaceSocket />
-      {isStarter &&  _tabsState?.tabID !== "calpmhistory" && <FBStarter />}
+      {isStarter &&  _tabsState?.activeTabId !== "calpmhistory" && <FBStarter />}
       {!isStarter && size(schema) > 0 && (
         <FBSchema
           {...{ schema }}
@@ -69,7 +69,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
           workspaceMode={mode}
         />
       )}
-      {_tabsState?.tabID === "details" &&
+      {_tabsState?.activeTabId === "details" &&
         workspaceState?.mode === "design" &&
         [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (
           <Button

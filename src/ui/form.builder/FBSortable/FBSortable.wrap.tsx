@@ -49,7 +49,7 @@ export const withFBSortable = <T extends FBSortableProps>(
     let position = 0;
     const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
       if (schemaItem.deleted || schemaItem.hidden ||
-        (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
+        (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.activeTabId)) { return; }
       position++;
       return (
         <SortableItem

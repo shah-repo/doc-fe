@@ -333,7 +333,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {showOutputSection ? (
             <>
               {(isPO || outputIsPO
-                ? _tabsState?.tabID !== "details" && (
+                ? _tabsState?.activeTabId !== "details" && (
                 <Grid item xs={12}>
                   <AttachmentsField
                     isDisabled={isDisabledInput}

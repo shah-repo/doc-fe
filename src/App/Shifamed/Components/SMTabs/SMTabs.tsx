@@ -40,7 +40,7 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
           </Tabs>
           <SMMap<ReactNode> collection={children}>
             {(child: ReactNode, index) => (
-              <SMTabPanel {...{ index, panelProps }} key={`sm-tabpanel-${index}`}>
+              <SMTabPanel {...{ tabId: tabs?.[index], panelProps }} key={`sm-tabpanel-${index}`}>
                 {child}
               </SMTabPanel>
             )}

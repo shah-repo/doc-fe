@@ -2,7 +2,7 @@
 import { Box } from "@material-ui/core";
 import { filter, get, includes, map, size } from "lodash";
 import { Observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, DocumentRevisionFormProps, DocumentRevisionHeader, DocumentRevisionLeftPanel, DocumentRevisionSidebar, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -25,7 +25,6 @@ import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTraini
 import { withDocumentRevisionFormWrap } from "./DocumentRevisionForm.wrap";
 
 const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> = ({
-  onTabChange,
   setDocId,
   onDirtyFlagChange,
   onScroll,
@@ -113,15 +112,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   }
 
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
-
-  useEffect(() => {
-    if (!tabConfig) {
-      return;
-    }
-    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabConfig]);
 
   return (
     <SMForm
@@ -184,14 +174,13 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               <Observer>
                 {() => (
                   <SMTabs
-                    onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                     tabs={tabLabels}
                     boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
-                      const showTabContent = _tabsState?.tabID === tabInfo.tabId;
+                      const showTabContent = _tabsState?.activeTabId === tabInfo.tabId;
                       return (
                         <SMBox
                           key={index}
@@ -275,10 +264,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           {tabType === TabTypeOptions.TABS_MEQ && (
                             <FBMaterialEqInfoContainer
                               documentRevision={documentRevision}
-                              inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
+                              inView = {_tabsState?.activeTabId === TabTypeOptions.TABS_MEQ}
                             />
                           )}
-                          {tabType === "TRAINING" && _tabsState?.value === trainingTabIndex && (
+                          {tabType === TabTypeOptions.TRAINING
+                            && _tabsState?.activeTabId === TabTypeOptions.TRAINING && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                             />

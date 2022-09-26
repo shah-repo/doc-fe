@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import { filter, get, includes, isEmpty, map, size } from "lodash";
 import { Observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormProgressBar, DocumentRevisionSidebar, DocumentRevisionSummaryHeader, DocumentRevisionSummaryProps, SMBox, SMForm, SMTabs, SMTemplate } from "../../..";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -23,7 +23,6 @@ import FBTrainingInfoContainer from "../DocumentRevisionForm/Components/FBTraini
 import { withDocumentRevisionSummaryWrap } from "./DocumentRevisionSummary.wrap";
 
 const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryProps> = ({
-  onTabChange,
   onScroll,
   _tabsState,
   _documentRevisionFormState,
@@ -67,7 +66,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   }
 
   const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const onSubmit = () => void 0;
 
@@ -91,14 +89,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       ele.stepIndex = obj?.[0]?.stepIndex;
     });
   }
-
-  useEffect(() => {
-    if (!tabConfig) {
-      return;
-    }
-    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabConfig]);
 
   return (
     <SMForm
@@ -139,7 +129,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
               <Observer>
                 {() => (
                   <SMTabs
-                    onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
                     tabs={tabLabels}
                     boxProps={{ px: 4.25 }}
                   >
@@ -204,11 +193,11 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           documentRevision.status !== DocumentRevisionStatus.Voided &&
                           <FBMaterialEqInfoContainer
                             documentRevision={documentRevision}
-                            inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
+                            inView = {_tabsState?.activeTabId === TabTypeOptions.TABS_MEQ}
                           />
                           }
                           {tabType === TabTypeOptions.TRAINING &&
-                          _tabsState?.value === trainingTabIndex && (
+                          _tabsState?.activeTabId === TabTypeOptions.TRAINING && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                             />

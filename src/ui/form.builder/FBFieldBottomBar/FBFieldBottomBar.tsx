@@ -23,7 +23,7 @@ const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   return (
     <Box visibility={visibility} className={classes.root}>
       <FBButton
-        label={(_tabsState?.tabID === "specification" && isEQ) ? "form.builder.addEquiSpec" : "form.builder.add.field"}
+        label={(_tabsState?.activeTabId === "specification" && isEQ) ? "form.builder.addEquiSpec" : "form.builder.add.field"}
         dataCy="form.builder.add.field"
         size="medium"
         variant="contained"
