@@ -2,6 +2,7 @@ import { findIndex, isArray, map } from "lodash";
 import { action, observable, set } from "mobx";
 import { Approval } from "../../../state/ducks/common/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
 import { FBInlineApprovalBody } from "../FBInlineApproval/FBInlineApproval.types";
 
 class FBDataStore {
@@ -26,12 +27,20 @@ class FBDataStore {
       result = [...this[key], ...approvals];
     } else {
       const approvalData = [...this[key]];
-      const previousIndex = findIndex(approvalData, (po) => po?.approverId === approvals.approverId);
+      let previousIndex = -1;
+      if (key === FBDataStoreApprovalKeys.PO_APPROVALS) {
+        previousIndex = findIndex(approvalData, (approval) => approval?.approverId === approvals.approverId);
+      } else if (key === FBDataStoreApprovalKeys.INLINE_APPROVALS) {
+        // There can be multiple inline approvals, & so the logic on approverId fails
+        previousIndex = findIndex(approvalData, (approval) => approval?.id === approvals.id);
+      }
+
       if (previousIndex < 0) {
         result = [...this[key], ...[approvals]];
       } else {
         result = map(approvalData, (el, index: number) => index === previousIndex ? approvals : el);
       }
+
     }
     set(this, key, result);
   };
