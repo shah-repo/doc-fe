@@ -61,7 +61,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   return (
     <Box>
       <FBWorkspaceSocket />
-      {isStarter &&  _tabsState?.activeTabId !== "calpmhistory" && <FBStarter />}
+      {isStarter && !_tabsState?.isTabActive("calpmhistory") && <FBStarter />}
       {!isStarter && size(schema) > 0 && (
         <FBSchema
           {...{ schema }}
@@ -69,7 +69,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
           workspaceMode={mode}
         />
       )}
-      {_tabsState?.activeTabId === "details" &&
+      {_tabsState?.isTabActive("details") &&
         workspaceState?.mode === "design" &&
         [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (
           <Button

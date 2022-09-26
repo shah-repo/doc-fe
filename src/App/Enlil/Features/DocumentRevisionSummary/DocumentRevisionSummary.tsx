@@ -53,19 +53,19 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
-      tabId: TabTypeOptions.TABS_MEQ,
+      tabId: TabTypeOptions.TABS_MEQ.toLowerCase(),
       type: TabTypeOptions.TABS_MEQ,
     }];
   }
   if (documentRevision.retrain && tabConfig) {
     tabConfig = [...tabConfig, {
       labelId: "tabId.training",
-      tabId: TabTypeOptions.TRAINING,
+      tabId: TabTypeOptions.TRAINING.toLowerCase(),
       type: TabTypeOptions.TRAINING,
     }];
   }
 
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const tabIds = tabConfig?.map(({ tabId }) => tabId);
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const onSubmit = () => void 0;
 
@@ -128,10 +128,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
             >
               <Observer>
                 {() => (
-                  <SMTabs
-                    tabs={tabLabels}
-                    boxProps={{ px: 4.25 }}
-                  >
+                  <SMTabs tabs={tabIds} boxProps={{ px: 4.25 }}>
                     {map(tabConfig, (tabInfo: TabInfo) => {
                       const tabType = tabInfo.type;
                       const { tabId } = tabInfo || {};
@@ -193,11 +190,10 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           documentRevision.status !== DocumentRevisionStatus.Voided &&
                           <FBMaterialEqInfoContainer
                             documentRevision={documentRevision}
-                            inView = {_tabsState?.activeTabId === TabTypeOptions.TABS_MEQ}
+                            inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
                           />
                           }
-                          {tabType === TabTypeOptions.TRAINING &&
-                          _tabsState?.activeTabId === TabTypeOptions.TRAINING && (
+                          {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                             />

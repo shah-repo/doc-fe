@@ -66,7 +66,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const tabIds = tabConfig?.map(({ tabId }) => tabId);
 
   return (
     <SMForm
@@ -109,13 +109,13 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
               <Observer>
                 {() => (
                   <SMTabs
-                    tabs={tabLabels}
+                    tabs={tabIds}
                     boxProps={{ px: 3.75, py: 2, stretchY: "100%", display: "flex", flexDirection: "column" }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
-                      const showTabContent = _tabsState?.activeTabId === tabInfo.tabId;
+                      const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
                         <SMBox key={index} {...{ py: 2 }}>

@@ -109,7 +109,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
-      tabId: TabTypeOptions.TABS_MEQ,
+      tabId: TabTypeOptions.TABS_MEQ.toLowerCase(),
       type: TabTypeOptions.TABS_MEQ,
     }];
   }
@@ -117,12 +117,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   if (formik.values?.retrain && tabConfig) {
     tabConfig = [...tabConfig, {
       labelId: "tabId.training",
-      tabId: TabTypeOptions.TRAINING,
+      tabId: TabTypeOptions.TRAINING.toLowerCase(),
       type: TabTypeOptions.TRAINING,
     }];
   }
 
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const tabIds = tabConfig?.map(({ tabId }) => tabId);
 
   useEffect(() => {
     _formState?.setValues(initialValues);
@@ -148,13 +148,14 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
           <Observer>
             {() => (
               <SMTabs
-                tabs={tabLabels}
+                tabs={tabIds}
                 boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                 panelProps={{ flex: 1 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
                   const tabType = tabInfo.type;
-                  const showTabContent = _tabsState?.activeTabId === tabInfo.tabId;
+                  const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
+
                   return (
                     <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
                       {tabType === TabTypeOptions.MIXED && <>
@@ -221,10 +222,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       {tabType === TabTypeOptions.TABS_MEQ && (
                         <FBMaterialEqInfoContainer
                           documentRevision={documentRevision}
-                          inView={_tabsState?.activeTabId === TabTypeOptions.TABS_MEQ}
+                          inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
                         />
                       )}
-                      {tabType === TabTypeOptions.TRAINING && _tabsState?.activeTabId === TabTypeOptions.TRAINING && (
+                      {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
                         <FBTrainingInfoContainer
                           documentRevisionId={documentRevision?.id}
                         />

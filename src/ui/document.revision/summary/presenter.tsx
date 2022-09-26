@@ -188,7 +188,7 @@ const Presenter: React.FunctionComponent<Props> = ({
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
         {isPO || includes(outputDocumentTypeName, "Purchase Order")
-          ? attachments && _tabsState?.activeTabId !== "details" && (
+          ? attachments && !_tabsState?.isTabActive("details") && (
             <Attachment
               isAttachmentEmpty={attachments.length < 1}
               docRevId={id}
