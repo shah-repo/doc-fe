@@ -161,7 +161,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
             shouldShowUpgrade,
           }}
         />
-        <LHRBanner documentRevision={documentRevision}/>
+        {documentRevision && <LHRBanner documentRevision={documentRevision}/>}
         <Observer>
           {() => (
             <SMTemplate
