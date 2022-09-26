@@ -355,17 +355,14 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     restButtons = [...accessableButtons];
   }
 
-  function ownerOrEmail(ele) {
-    if (ele === "changeowner") {
-      return "changeowner";
-    }
-    if (ele === "exportToEmail") {
-      return "exportToEmail";
+  function ownerOrEmail(ele: string) {
+    if (["changeowner", "exportToEmail"].includes(ele)) {
+      return ele;
     }
   }
-
   if (accessableButtons.length >= 3) {
-    const initialFilteredButtons = accessableButtons.filter((ele) => ele !== "changeowner" && ele !== "exportToEmail");
+    const elementsList = ["changeowner", "exportToEmail"];
+    const initialFilteredButtons = accessableButtons.filter((ele: string) => !elementsList.includes(ele));
     const restFilteredButtons = accessableButtons.filter((ownerOrEmail));
     initialButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(0, 2) : initialFilteredButtons;
     restButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(2) : [];
