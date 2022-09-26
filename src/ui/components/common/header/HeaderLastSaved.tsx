@@ -33,12 +33,12 @@ const HeaderLastSaved: React.FC<Props> = ({
       {loading ? (
         <>
           <CircularProgress color="inherit" size={12} className={classes.icon} />
-          <Text translation="form.builder.header.autoSaving" />
+          <Text dataCy="header.autoSaving" translation="form.builder.header.autoSaving" />
         </>
       ) : (
         <>
           <CloudIcon className={classes.icon} />
-          <Text translation="form.builder.header.lastSaved" values={{ lastSavedTimestamp }} />
+          <Text dataCy="header.lastSaved" translation="form.builder.header.lastSaved" values={{ lastSavedTimestamp }} />
         </>
       )}
     </Box>

@@ -2353,6 +2353,7 @@ context("Autosave LHR", () => {
 
   context("Release LHR", () => {
     it("Navig to LHR", () => {
+      cy.wait(2000);
       cy.navigToLHR();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();

@@ -368,7 +368,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Save record", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Create bulk records", () => {

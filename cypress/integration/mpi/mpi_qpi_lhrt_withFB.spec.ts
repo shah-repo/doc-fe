@@ -382,7 +382,7 @@ context("Mpi Template", () => {
       });
 
       it("Move component", () => {
-        cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+        cy.get("[data-cy='fb-textfield-1']").eq(0).trigger("mouseover");
         cy.wait(2000);
         cy.get(".drag-handle").eq(1)
           .realMouseDown({ position: "center", button: "left" });
@@ -747,7 +747,7 @@ context("Mpi Template", () => {
       });
 
       it("Move component", () => {
-        cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+        cy.get("[data-cy='fb-textfield-1']").eq(0).trigger("mouseover");
         cy.wait(2000);
         cy.get(".drag-handle").eq(1)
           .realMouseDown({ position: "center", button: "left" });
@@ -1305,7 +1305,7 @@ context("Mpi Template", () => {
         });
 
         it("Move component", () => {
-          cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+          cy.get("[data-cy='fb-textfield-1']").eq(0).trigger("mouseover");
           cy.wait(2000);
           cy.get(".drag-handle").eq(6)
             .realMouseDown({ position: "center", button: "left" });
@@ -1537,7 +1537,7 @@ context("Mpi Template", () => {
         });
 
         it("Move component", () => {
-          cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+          cy.get("[data-cy='fb-textfield-1']").eq(0).trigger("mouseover");
           cy.wait(2000);
           cy.get(".drag-handle").eq(5)
             .realMouseDown({ position: "center", button: "left" });

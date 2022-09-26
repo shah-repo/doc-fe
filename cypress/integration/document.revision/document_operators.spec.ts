@@ -158,6 +158,7 @@ context("Document Operators Access Test", () => {
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.wait(2000);
     });
   });
 

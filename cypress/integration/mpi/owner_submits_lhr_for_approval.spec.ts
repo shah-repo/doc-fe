@@ -996,10 +996,6 @@ context("Owner submits LHR for approval", () => {
       cy.unClick();
     });
 
-    it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
     });

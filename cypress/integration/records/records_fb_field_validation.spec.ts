@@ -886,12 +886,19 @@ context("Records flow", () => {
       it("Verify Favorites", () => {
         cy.get(`[data-cy="Inline Approval"]`).parent()
           .find("button").eq(1).click();
+        cy.wait(1000);
+        cy.get(`[data-cy="Inline Approval"]`).parent()
+          .find("button").eq(1).find("path").invoke("css", "fill").should("equal", "rgb(255, 216, 116)");
         cy.get(`input[placeholder^="Search"]`).clear();
         cy.fbVerifySectionsOnAddField("Favorites");
         cy.fbCheckFieldsExistFavoritesList("Inline Approval");
         cy.get(`[data-cy="Inline Approval"]`).parent()
           .find(`[class="MuiButtonBase-root MuiIconButton-root"]`).eq(0).click();
         cy.fbVerifySectionsNotOnAddField("Favorites");
+        cy.get(`[data-cy="Approvals-btn"]`).arrowClick();
+        cy.wait(1000);
+        cy.get(`[data-cy="Inline Approval"]`).parent()
+          .find("button").eq(1).find("path").invoke("css", "fill").should("equal", "rgb(200, 202, 207)");
       });
     });
 
