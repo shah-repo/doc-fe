@@ -301,4 +301,29 @@ export default {
       },
     ],
   },
+  [HelpModule.FAQ]: {
+    title: "Frequently Asked Questions",
+    items: [
+      {
+        type: HelpCenterItemType.Video,
+        title: "Commonly asked user questions",
+        videoId: "-ZtYP4oDwWY",
+      },
+      {
+        type: HelpCenterItemType.Workflow,
+        title: "All workflows",
+        url: "//help.dev.enlil.io/article_page_pdf.html",
+      },
+    ],
+  },
+  [HelpModule.ReleaseNotes]: {
+    title: "Release Notes",
+    items: [
+      {
+        type: HelpCenterItemType.Video,
+        title: "What’s new with Enlil",
+        videoId: "-ZtYP4oDwWY",
+      },
+    ],
+  },
 };

@@ -1,6 +1,8 @@
 export enum HelpModule {
+  FAQ = "FAQ",
   General = "General",
   Dashboard = "Dashboard",
+  ReleaseNotes = "Release Notes",
   DocumentList = "Document List",
   UserManagement = "User Management",
   GroupManagement = "Group Management",
