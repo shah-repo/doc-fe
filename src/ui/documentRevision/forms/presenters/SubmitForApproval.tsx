@@ -27,6 +27,7 @@ interface Props {
   updatedAt?: string;
   currentDocumentType?: DocumentType;
   renderAsButton?: boolean;
+  isBuildType?: boolean;
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
@@ -37,6 +38,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   updatedAt,
   currentDocumentType,
   renderAsButton,
+  isBuildType,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const classes = styles();
@@ -65,6 +67,9 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const save = useActionCreator(documentRevisionsActions.save);
 
   const releaseRecord = () => {
+    if (!isBuildType) {
+      return toastError("The Build Type is a required field");
+    }
     releaseAsync.start(
       applyTransition,
       docRevId,
