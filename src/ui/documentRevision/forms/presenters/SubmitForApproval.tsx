@@ -17,7 +17,7 @@ import FBStore from "../../../form.builder/FBStore/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { checkIsDocumentMPIOutput } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../helpers/checkDocumentGroup";
 import { styles } from "./FinalizeAndRelease.styles";
 
 interface Props {
@@ -48,6 +48,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
+  const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
   const label = isTypeMpiOutput ? "record.complete.step" : "record.submit.for.approval";
   const releaseAsync = useAsync({
     onError: (error) => {
@@ -69,7 +70,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const save = useActionCreator(documentRevisionsActions.save);
 
   const releaseRecord = () => {
-    if (!hasBuildType && currentDocumentType?.category === "Lhr") {
+    if (!hasBuildType && isLhrDoc) {
       return toastError(intl.formatMessage({ id: "form.builder.lhr.build.type.error.message" }));
     }
     releaseAsync.start(
