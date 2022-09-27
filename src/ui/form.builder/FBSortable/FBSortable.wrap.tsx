@@ -60,7 +60,7 @@ export const withFBSortable = <T extends FBSortableProps>(
     }));
 
     if (items) {
-      items.sort((el1, el2) => el2?.props.index - el1?.props.index);
+      items.sort((el1: JSX.Element | undefined, el2: JSX.Element | undefined) => el2?.props.index - el1?.props.index);
     }
 
     const onSortStart = ({ index }: SortStart) => {
@@ -75,7 +75,6 @@ export const withFBSortable = <T extends FBSortableProps>(
         return;
       }
       const newSchema: FBSchemaProps[] = arrayMove(schema, oldIndex, newIndex);
-      console.log("schema ", schema, "newSchema: ", newSchema);
       workspaceState?.setSchema(newSchema);
     };
 
