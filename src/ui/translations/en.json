@@ -954,6 +954,7 @@
   "form.builder.part": "Part",
   "form.builder.lhrt.parameter": "LHRT Parameter",
   "form.builder.lhrt.error.message": "Please choose the Part.",
+  "form.builder.lhr.build.type.error.message": "The Build Type is a required field",
   "form.builder.scheduled.part": "Scheduled Part",
   "form.builder.part.lot": "Part Lot",
   "form.builder.select.existing.part": "Select a part",
