@@ -487,6 +487,30 @@ context("Layout Verification of EQ", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Add EQUIPMENT SECTIONS FOR PM", () => {
+      fbclickOnAddCalPM();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+      cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
+      cy.get("input[value='preventativeMaintenance']").arrowClick();
+      cy.fbAddField();
+    });
+
+    it("Add EQUIPMENT SECTIONS FOR CAL", () => {
+      fbclickOnAddCalPM();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+      cy.fbEnterNameValue({ name: "label", value: "Calibration" });
+      cy.get("input[value='calibration']").arrowClick();
+      cy.fbAddField();
+    });
+
+    it("Save the document", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
+      cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
@@ -525,6 +549,7 @@ context("Layout Verification of EQ", () => {
       cy.get(".formOptionsBox").should("exist");
     });
   });
+
 
   context("Release EQ", () => {
     it("Approve and release  document", () => {
@@ -588,30 +613,6 @@ context("Layout Verification of EQ", () => {
         cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
         cy.get("#sm-tabpanel-0").should("be.hidden");
         cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
-      });
-
-      it("Add EQUIPMENT SECTIONS FOR PM", () => {
-        fbclickOnAddCalPM();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
-        cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
-        cy.get("input[value='preventativeMaintenance']").arrowClick();
-        cy.fbAddField();
-      });
-
-      it("Add EQUIPMENT SECTIONS FOR CAL", () => {
-        fbclickOnAddCalPM();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
-        cy.fbEnterNameValue({ name: "label", value: "Calibration" });
-        cy.get("input[value='calibration']").arrowClick();
-        cy.fbAddField();
-      });
-
-      it("Save the document", () => {
-        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
-        cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -1134,10 +1135,25 @@ context("Layout Verification of EQ", () => {
           cy.get("[data-cy='bookmark-icon']").arrowClick();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
+
+        it("Navigate to specification tab", () => {
+          cy.drSelectSpecificationTab();
+        });
+
+        it("Click on book mark verify user is navigate to the bookmarked field", () => {
+          cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
+          cy.get("[data-cy='Calibration']").should("be.visible");
+        });
+
+        it("Click on procedure book mark verify procedure block is visible", () => {
+          cy.get("[data-cy='Bookmarks-detail'] p").eq(1).arrowClick();
+          cy.get("[data-cy='Preventative Maintenance']").should("be.visible");
+        });
       });
 
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
+          cy.pause();
           cy.get("[data-cy='timeline-icon']").arrowClick();
         });
 
@@ -1149,15 +1165,6 @@ context("Layout Verification of EQ", () => {
   });
 
   // Doc approve using AR case
-
-  xcontext("Log in user, select company", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-      });
-    });
-  });
-
 
   context("Approve and release EQ using AR", () => {
 
@@ -1215,22 +1222,6 @@ context("Layout Verification of EQ", () => {
 
       it("Navigate to specification tab", () => {
         cy.drSelectSpecificationTab();
-      });
-
-      it("Add EQUIPMENT SECTIONS FOR PM", () => {
-        fbclickOnAddCalPM();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
-        cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
-        cy.get("input[value='preventativeMaintenance']").arrowClick();
-        cy.fbAddField();
-      });
-
-      it("Add EQUIPMENT SECTIONS FOR CAL", () => {
-        fbclickOnAddCalPM();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
-        cy.fbEnterNameValue({ name: "label", value: "Calibration" });
-        cy.get("input[value='calibration']").arrowClick();
-        cy.fbAddField();
       });
 
       it(`Enter text field value`, () => {
