@@ -1,5 +1,6 @@
 import { Box, Grid } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
+import CancelIcon from "@material-ui/icons/Cancel";
 import SuccessIcon from "@material-ui/icons/CheckCircle";
 import { capitalize, isEmpty } from "lodash";
 import { Observer } from "mobx-react";
@@ -54,22 +55,27 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
                     fontSize: "12px",
                     lineHeight: "15px",
                     alignItems: "center",
+                    position: "absolute",
                   }}
                   color={Colors.almost_black}
                 >
                   {fileUploadState?.unzipStatus === FBUnzipStatus.DONE ?
                     <SuccessIcon fontSize="small" style={{ color: Colors.latest_green_varient }} />
                     : (fileUploadState?.unzipStatus === FBUnzipStatus.PROCESSING ?
-                      <CachedIcon fontSize="small" style={{ color: Colors.font_gray }} /> : null)
+                      <CachedIcon fontSize="small" style={{ color: Colors.font_gray }} /> :
+                      <CancelIcon fontSize="small" style={{ color: Colors.latest_red_varient }} />)
                   }
                   <b style={{ marginLeft: "10px" }}>
                     {fileUploadState?.unzipStatus === FBUnzipStatus.PROCESSING ?
-                      `${capitalize(fileUploadState?.unzipStatus)}...` : capitalize(fileUploadState?.unzipStatus)
+                      `${capitalize(fileUploadState?.unzipStatus)}...` :
+                      (fileUploadState?.unzipStatus === FBUnzipStatus.FAILED) ?
+                        `${capitalize(fileUploadState?.unzipStatus)}, please try again` :
+                        capitalize(fileUploadState?.unzipStatus)
                     }
                   </b>
                 </Box>}
                 </Grid>
-                <Grid item xs={12} style={{ maxWidth: "fit-content", minWidth: "7.6875em" }}>
+                <Grid item xs={12} style={{ maxWidth: "fit-content" }}>
                   <FBButton
                     key={`fb-zip-attachment-button-${name}`}
                     label={"form.builder.unzip.files"}
