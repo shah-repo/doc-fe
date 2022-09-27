@@ -89,7 +89,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
             <Text translation="form.builder.add.step" />
           </Button>
         )}
-      {_tabsState?.tabID === "procedure" && <FBStarter />}
+      {_tabsState?.tabID  && <FBStarter />}
       {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} mt={inDesignMode ? 6 : 0} />}
     </Box>
   );
