@@ -5,10 +5,10 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover, FBPurchaseOrderItemType } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderItemType, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { PO_REQUESTOR_COMPONENT_NAME, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
+import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
@@ -16,6 +16,8 @@ import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/docume
 import Colors from "../../layout/theme/utils/colors";
 import FBDataStore from "../FBStore/FBDataStore";
 import FBPOApprovalsState from "./FBPOApprovals.state";
+
+const EMPTY_GROUP = "empty";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -107,7 +109,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const isPrevServiceOrProductPartExist = checkServiceOrProductPartExists(previousPOItems);
         poApprovalsState.setPrevPOItems(poItems);
         hasPOItems.current = !(isServiceOrProductPartExist || isPrevServiceOrProductPartExist);
-        outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -118,7 +119,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
 
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+
       const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+
       const prevRequesterValue = prevRequester.current;
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
 
@@ -164,6 +167,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    // This runs when you manually remove an approver from the list
     useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (fieldValue: string[]) => {
@@ -196,6 +200,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+
     useEffect(() => {
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       poApprovalsState.setPrevPOItems(poItems);
@@ -204,7 +209,21 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => reaction(
+      () => Object.values((poApprovalsState?.groups as {})).length,
+      (length) => {
+        if (length > 0) {
+          checkLineItems();
+        }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     const checkGroups = (id: string) => {
+      if (Object.values((poApprovalsState?.groups as {})).length === 0) {
+        // No required approvals for the docRevision
+        return EMPTY_GROUP;
+      }
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
       const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
@@ -235,7 +254,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       const groupName = checkGroups(ids[0]);
       if (
         poApprovalsState.getDidMountPhase &&
-        difference(ids, availableApprovers).length === 0
+        ( difference(ids, availableApprovers).length === 0
+        || groupName === EMPTY_GROUP )
       ) {
         return;
       }
