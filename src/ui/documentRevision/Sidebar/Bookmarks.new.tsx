@@ -5,10 +5,9 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { SM } from "../../../App";
 import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
-import { FB, FBBookmarkItem, FBMapWrapper } from "../../form.builder";
+import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./Bookmarks.new.styles";
-import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
 
 const Bookmarks: React.FC = () => {
   const history = useHistory();
@@ -55,7 +54,7 @@ const Bookmarks: React.FC = () => {
                   </Typography>
                 </Box>
               </Box>
-              <StyledTooltip placement="top" title="common.copy.link">
+              <FBTooltip title="common.copy.link">
                 <IconButton
                   className={classes.iconButton}
                   size="small"
@@ -63,7 +62,7 @@ const Bookmarks: React.FC = () => {
                 >
                   <CopyIcon />
                 </IconButton>
-              </StyledTooltip>
+              </FBTooltip>
             </Box>
           );
         }}

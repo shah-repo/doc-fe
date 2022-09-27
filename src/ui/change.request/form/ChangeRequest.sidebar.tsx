@@ -1,7 +1,7 @@
 import { Box, IconButton, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { SMBox, SMText } from "../../../App";
-import { styles as CRStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
+import CRStyles from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse_icon.svg";
 import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
 import Colors from "../../layout/theme/utils/colors";
@@ -14,7 +14,7 @@ import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import ChangeRequestAuditContainer from "../../change.request/audit/Audit.container";
 import CRReferences from "../../change.request/references/Reference";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
-import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
+import { FBTooltip } from "../../form.builder";
 
 interface Props {
   changeRequest: ChangeRequest;
@@ -90,7 +90,8 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
     >
       <Box display="flex" height={48} alignItems="center">
         <Box width={48} textAlign="center" className={crClasses.iconBox}>
-          <StyledTooltip
+          <FBTooltip
+            placement="left"
             title={
               isDrawerOpen ? (
                 <SMText label="common.minimize" />
@@ -105,7 +106,7 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
             >
               <CollapseIcon />
             </IconButton>
-          </StyledTooltip>
+          </FBTooltip>
         </Box>
         <Box width={233}>
           {isDrawerOpen && (

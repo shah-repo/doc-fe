@@ -22,7 +22,7 @@ import { isTranslation } from "../../../translations/types";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 import { styles } from "./AvailableReferences.new.styles";
-import { StyledTooltip } from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
+import { FBTooltip } from "../../../form.builder";
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean;
@@ -259,9 +259,9 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
             className={classes.chipRoot}
             label={
               <Typography className={classes.chip}>
-                <StyledTooltip placement="top" title={option.label}>
+                <FBTooltip title={option.label}>
                   <>{truncateLable(option.label)}</>
-                </StyledTooltip>
+                </FBTooltip>
               </Typography>}
             disabled={option.deleteDisabled}
             deleteIcon={<DeleteIcon  className={classes.deleteIcon} />}

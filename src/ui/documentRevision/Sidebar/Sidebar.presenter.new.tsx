@@ -6,10 +6,9 @@ import { SM } from "../../../App";
 import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-down.svg";
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
 import Text from "../../components/Text";
-import { FB } from "../../form.builder";
+import { FB, FBTooltip } from "../../form.builder";
 import styles from "./styles.new";
 import { Sidebar } from "./types.new";
-import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
 
 interface Props {
   isDrawerOpen: boolean;
@@ -47,7 +46,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
           {sidebarList.map((item, index) =>
             item.details.shouldShow && (
               <Box key={item.details.title}>
-                <StyledTooltip title={item.details.title}>
+                <FBTooltip placement="left" title={item.details.title}>
                   <IconButton
                     data-cy={item.details.dataCy !== undefined ?
                       item.details.dataCy : `${item.type}-icon`}
@@ -57,7 +56,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
                     {(!loading || item.type !== "bookmarks") && item.icon}
                     {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
                   </IconButton>
-                </StyledTooltip>
+                </FBTooltip>
               </Box>
             )
           )}

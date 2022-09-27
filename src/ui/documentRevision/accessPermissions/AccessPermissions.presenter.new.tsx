@@ -15,8 +15,8 @@ import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import Colors from "../../layout/theme/utils/colors";
-import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
 import { styles } from "./AccessPermissions.styles.new";
+import { FBTooltip } from "../../form.builder";
 
 interface OwnProps {
   availableApprovers: OptionType[];
@@ -187,9 +187,9 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
     if (data?.label?.length > 30) {
       return (
         <components.Option {...props} >
-          <StyledTooltip title={data.label}>
+          <FBTooltip placement="left" title={data.label}>
             <>{truncateLabel(data.label)}</>
-          </StyledTooltip>
+          </FBTooltip>
         </components.Option>
       );
     }
