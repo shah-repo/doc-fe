@@ -128,7 +128,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         formValues,
         documentTypesById,
         _documentRevisionFormState?.schema,
-        _tabsState?.tabID
+        _tabsState?.activeTabId
       );
     }
     _formState?.setMode(mode);
