@@ -59,7 +59,7 @@ export const withFBSortable = <T extends FBSortableProps>(
       );
     }));
 
-    if (items) {
+    if (Array.isArray(items)) {
       items.sort((el1: JSX.Element | undefined, el2: JSX.Element | undefined) => el2?.props.index - el1?.props.index);
     }
 
