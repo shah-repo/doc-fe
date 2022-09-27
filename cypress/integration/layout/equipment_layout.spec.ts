@@ -846,6 +846,14 @@ context("Layout Verification of EQ", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
+      it("Verify tabs", () => {
+        cy.verifyTabs("overview", "details");
+      });
+
+      it("Verify revision is Alfa", () => {
+        cy.get("[data-cy='HeaderInfo-Rev']").should("have.text", "Rev A");
+      });
+
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
       });
@@ -899,6 +907,14 @@ context("Layout Verification of EQ", () => {
 
       it("Navigate to details tab", () => {
         cy.drSelectDetailsTab();
+      });
+
+      it("Verify tabs", () => {
+        cy.verifyTabs("overview", "details");
+      });
+
+      it("Verify revision is Alfa", () => {
+        cy.get("[data-cy='HeaderInfo-Rev']").should("have.text", "Rev A");
       });
 
       it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -961,11 +977,62 @@ context("Layout Verification of EQ", () => {
       it("Verify tabs should visible Overview, Specification, calpmhistory", () => {
         cy.verifyTabs("overview", "specification");
       });
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
+      it("Verify that Specification tab displays History", () => {
+        cy.get("[data-cy='document.revision.history']").eq(0).scrollIntoView();
+        cy.get("[data-cy='maintenanceHistory']").eq(0).should("exist");
+        cy.get("[data-cy='maintenanceHistory'] a").eq(0).contains("MR-00002").should("exist");
+      });
+
+      it("Verify it displays Cal/PM Due Date, link for Cal/PM is created and displayed", () => {
+        cy.get("[data-cy='maintenance.status']").eq(0).should("exist");
+        cy.get("[data-cy='form.builder.pm']").should("exist");
+        cy.get("[data-cy='common.due.date']").eq(0).should("exist");
+      });
+
+      it("Check calibration status is in complience for next 5 days", () => {
+        const calibrationComplianceDate = moment().tz("America/Los_Angeles")
+          .add(5, "days")
+          .format("ddd, MMMM D, YYYY");
+        cy.get("[data-cy=\"maintenance.status\"]")
+          .eq(0).then(($el) => {
+            const text = $el.text().replace(/\u00a0/g, "");
+            expect(text).to.contain(`PMDone - Due date: ${calibrationComplianceDate}`);
+          });
+      });
+
+      it("Verify link open", () => {
+        cy.get("[data-cy='maintenanceHistory'] a").eq(0).invoke("removeAttr", "target").click();
+        cy.listLoadingElementShouldNotExist();
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.RELEASED,
+          title: "Records",
+          docId: "MR-00002",
+          revision: "Rev A",
+        });
+      });
+
+      it("Navigate back to EQ", () => {
+
+        cy.navigToEquipment();
+        cy.dlClearFilters();
+      });
+
+      it("Select 'EQ-00001'", () => {
+        cy.dlFilterByDocId({ docId: "EQ-00001" });
+        cy.dlSelectFirstDocument();
+      });
+
     });
 
 
     context("Validate Right Side Panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
+
         cy.get("[data-cy='References']").should("exist");
         cy.get("[data-cy='generalInfo']").should("be.visible");
       });
@@ -1343,7 +1410,7 @@ context("Layout Verification of EQ", () => {
         });
 
         it("Verify  cal selected form contains FM-00005 ", () => {
-          cy.get("[data-cy^='calibration- qfgnm ']").should("have.value",
+          cy.get("[data-cy^='calibration-']").should("have.value",
             "FM-00005 - rev 1 - Calibration form"
           );
         });
@@ -1390,6 +1457,14 @@ context("Layout Verification of EQ", () => {
 
         it("Navigate to Details tab", () => {
           cy.drSelectDetailsTab();
+        });
+
+        it("Verify tabs", () => {
+          cy.verifyTabs("overview", "details");
+        });
+
+        it("Verify revision is Alfa", () => {
+          cy.get("[data-cy='HeaderInfo-Rev']").should("have.text", "Rev A");
         });
 
         it(`Select maintainer '${USERS[1].name}'`, () => {
@@ -1481,6 +1556,14 @@ context("Layout Verification of EQ", () => {
 
         it("Navigate to details tab", () => {
           cy.drSelectDetailsTab();
+        });
+
+        it("Verify tabs", () => {
+          cy.verifyTabs("overview", "details");
+        });
+
+        it("Verify revision is Alfa", () => {
+          cy.get("[data-cy='HeaderInfo-Rev']").should("have.text", "Rev A");
         });
 
         it(`Select maintainer '${ADMIN_USER.name}'`, () => {
