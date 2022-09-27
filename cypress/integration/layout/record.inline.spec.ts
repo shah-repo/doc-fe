@@ -156,6 +156,121 @@ context("Record inline Flow", () => {
     });
   });
 
+  context("FORM document creation flow for migration", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Fill in document attributes", () => {
+      it("Enter title 'Inline Form Document Revision'", () => {
+        cy.drEnterDocumentTitle({ name: "Migration form title" });
+      });
+
+      it("Enter description 'Inline Form Document Revision description'", () => {
+        cy.drEnterDocumentDescription({ description: "Inline Form Document Revision description" });
+      });
+
+      it("Select 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Record Document' output document type from dropdown", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Record one" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Click on Save", () => {
+        cy.wrapWithWaitOnApiCalls([], () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Add textfield", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add inline approval", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+        cy.fbEnterNameValue({ name: "label", value: "Inline field" });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
+        cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add Checkbox group", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+        cy.fbGroupOptions("1", "2", "3");
+        cy.fbOpenValidation();
+        cy.fbFieldRequired();
+        cy.fbAddNewFieldButton();
+      });
+
+      it(`Add 'Text Field' as 'TEXT FIELD'`, () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
+        cy.fbOpenValidation();
+        cy.get("input[value^='visibility']").check();
+        cy.fbFieldRequiredIfIn({ name: "Checkbox" });
+        cy.fbSelectCheckboxValue("3");
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add second textfield", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "Second textfield for inline" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add second inline approval", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+        cy.fbEnterNameValue({ name: "label", value: "Second inline field" });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
+        cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
+        cy.fbAddField();
+      });
+
+      // it("Approve and relesed", () => {
+      //   cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      // });
+    });
+
+    context("Release document", () => {
+      it("Approve and release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+  });
+
   context("FORM document creation flow", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
@@ -297,7 +412,7 @@ context("Record inline Flow", () => {
         cy.verifyHeaderInfoContent({
           status: STATUS_TYPES_LABEL.DRAFT,
           title: "Document List",
-          docId: "FM-00002",
+          docId: "FM-00003",
           revision: "Rev 1",
         });
       });
@@ -327,7 +442,13 @@ context("Record inline Flow", () => {
 
     it("Click on create new and chose 'Record one'", () => {
       cy.recCreateRecordFromLandingPage();
-      cy.recSelectRecordFormFromMultiSelect({ recordType: "Record one" });
+      cy.get("[data-cy=\"field-selectType\"]").arrowClick().wait(2000);
+      cy.get("div[id^=react-select]").contains("Record one").arrowClick().wait(2000);
+    });
+
+    it("Select the form", () => {
+      cy.get("[data-cy='field-selectForm']").arrowClick();
+      cy.get("[id^='react-select']").eq(1).autocompleteSelect("Inline Form Document Revision");
     });
 
     context("Fill in document attributes", () => {
@@ -444,7 +565,7 @@ context("Record inline Flow", () => {
           cy.verifyHeaderInfoContent({
             status: STATUS_TYPES_LABEL.WIP,
             title: "Records",
-            docId: "RD-00003",
+            docId: "RD-00004",
             revision: "Rev 1",
           });
         });
@@ -470,7 +591,7 @@ context("Record inline Flow", () => {
 
     context("Validate Right Side Panel", () => {
       it("Verify Reference tab Info", () => {
-        cy.verifyReferenceTab({ user: USERS[2], formId: "FM-00002", shortName: "HB" });
+        cy.verifyReferenceTab({ user: USERS[2], formId: "FM-00003", shortName: "HB" });
       });
 
       it("Verify References selection Add Remove", () => {
@@ -526,9 +647,98 @@ context("Record inline Flow", () => {
         });
         verifyHistoryContent(history, groupOne);
       });
+      // comment out after book mark apprear need to uncomment
+      // context("Verify book mark", () => {
+      //   it("Verify Book Mark Navigation", () => {
+      //     cy.get("[data-cy='bookmark-icon']").arrowClick();
+      //     cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+      //   });
+
+      //   it("Click on approval block user should be navigated to the section", () => {
+      //     cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
+      //     cy.get("[data-cy^='fb-approvals']").should("be.visible");
+      //   });
+      // });
+
+      context("Verify form migration", () => {
+
+        it("Verify migrate form button is visible", () => {
+          cy.get("[data-cy=references-icon]").arrowClick();
+          cy.get("[data-cy='common.form.migration']").should("be.visible");
+        });
+
+        it("Click on migrate form button", () => {
+          cy.get("[data-cy='common.form.migration']").arrowClick();
+        });
+
+        it("Select form to be migrated", () => {
+          cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+          cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+        });
+
+        it("Mapped text field", () => {
+          cy.get("[data-cy^='field-textfield-for-inline']" ).arrowClick();
+          cy.get("[id^='react-select']").contains("Textfield for inline").arrowClick();
+        });
+
+        it("Mapped in line field", () => {
+          cy.get("[data-cy^='field-inline-field']" ).arrowClick();
+          cy.get("[id^='react-select']").contains("Inline field").arrowClick();
+        });
+
+        it("Mapped checkbox", () => {
+          cy.get("[data-cy^='field-checkbox']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(3).autocompleteSelect("checkbox");
+        });
+
+        it("Mapped TEXT FIELD", () => {
+          cy.get("[data-cy^='field-text-field']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(4).autocompleteSelect("TEXT FIELD");
+        });
+
+        it("Second textfield for inline Select form to be migrated", () => {
+          cy.get("[data-cy^='field-second-textfield-for-inline']" ).arrowClick();
+          cy.get("[id^='react-select']").contains("Second textfield for inline").arrowClick();
+        });
+
+        it(" Second inline field Select form to be migrated", () => {
+          cy.get("[data-cy^='field-second-inline-field']" ).arrowClick();
+          cy.get("[id^='react-select']").contains("Second inline field").arrowClick();
+        });
+
+        it(" Approvals Select form to be migrated", () => {
+          cy.get("[data-cy^='field-fb-approvals']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(7).autocompleteSelect("form.builder.approvals");
+        });
+
+        it("Click on confirm change", () => {
+          cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+        });
+
+        it("Navigate to details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Verify the existing field after migration", () => {
+          cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
+        });
+
+        it("Verify Reference tab form info should have id 'FM-00002'", () => {
+          cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+        });
+      });
     });
 
     context("Approve Inline Approval", () => {
+      it("Select approver for first inline", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+          () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.get("[name*='fb-ia-inline-field'] input")
+              .autocompleteSelect(`${USERS[2].name}`, { force: true });
+          });
+      });
+
       it("Approve first Inline Approval", () => {
         cy.drSelectDetailsTab();
         cy.listLoadingElementShouldNotExist();
@@ -587,6 +797,15 @@ context("Record inline Flow", () => {
           cy.get("[data-cy^='form.builder.approval.pending']")
             .first()
             .should("have.text", "Inline approval pending");
+        });
+
+        it("Select approver for first inline", () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
+            () => {
+              cy.listLoadingElementShouldNotExist();
+              cy.get("[name*='fb-ia-inline-field'] input")
+                .autocompleteSelect(`${USERS[2].name}`, { force: true });
+            });
         });
 
         it("Approve first Inline Approval", () => {
@@ -703,9 +922,13 @@ context("Record inline Flow", () => {
     });
 
     it("Verify Book Mark Navigation", () => {
-      cy.verifyReferenceTab({ user: USERS[2], formId: "", shortName: "HB" });
       cy.get("[data-cy='bookmark-icon']").arrowClick();
       cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+    });
+
+    it("Click on approval block user should be navigated to the section", () => {
+      cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
+      cy.get("[data-cy^='fb-approvals']").should("be.visible");
     });
 
     context("Check document history", () => {

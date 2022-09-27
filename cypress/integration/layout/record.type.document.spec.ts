@@ -158,6 +158,78 @@ context("Record type Document Layout verification", () => {
       it("Save document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
+
+      it("Approve and released", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+  });
+
+
+  context("Create a required form for Record Document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Fill in document attributes", () => {
+      it("Enter title 'Inline Form Document Revision'", () => {
+        cy.drEnterDocumentTitle({ name: "Inline Form Document Revision" });
+      });
+
+      it("Enter description 'Inline Form Document Revision description'", () => {
+        cy.drEnterDocumentDescription({ description: "Inline Form Document Revision description" });
+      });
+
+      it("Select 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Record Document' output document type from dropdown", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Record one" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Add Checkbox group", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+        cy.fbGroupOptions("1", "2", "3");
+        cy.fbOpenValidation();
+        cy.fbFieldRequired();
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Navigate to Overview Tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
     });
 
     context("Validate created form document", () => {
@@ -195,7 +267,7 @@ context("Record type Document Layout verification", () => {
           cy.verifyHeaderInfoContent({
             status: STATUS_TYPES_LABEL.DRAFT,
             title: "Document List",
-            docId: "FM-00002",
+            docId: "FM-00003",
             revision: "Rev 1",
           });
         });
@@ -274,7 +346,7 @@ context("Record type Document Layout verification", () => {
         cy.verifyHeaderInfoContent({
           status: STATUS_TYPES_LABEL.DRAFT,
           title: "Records",
-          docId: "RD-00003",
+          docId: "RD-00004",
           revision: "Rev A",
         });
       });
@@ -308,7 +380,7 @@ context("Record type Document Layout verification", () => {
 
     context("Validate Right Side Panel", () => {
       it("Verify Reference tab Info", () => {
-        cy.verifyReferenceTab({ user: USERS[1], formId: "FM-00002", shortName: "GR" });
+        cy.verifyReferenceTab({ user: USERS[1], formId: "FM-00003", shortName: "GR" });
       });
 
       it("Verify References selection", () => {
@@ -368,19 +440,73 @@ context("Record type Document Layout verification", () => {
         verifyHistoryContent(history, groupOne);
       });
 
-
-      context("Fill and Approve Released", () => {
-
+      context("Verify form migration", () => {
         it("Checkbox option 1 checked", () => {
           cy.drSelectDetailsTab();
           cy.get("[data-cy='Checkbox']").should("be.visible");
           cy.get(`input[type="checkbox"][value="1"]`).last().check();
         });
 
+        it("Verify migrate form button is visible", () => {
+          cy.get("[data-cy=references-icon]").arrowClick();
+          cy.get("[data-cy='common.form.migration']").should("be.visible");
+        });
+
+        it("Click on migrate form button", () => {
+          cy.get("[data-cy='common.form.migration']").arrowClick();
+        });
+
+        it("Select form to be migrated", () => {
+          cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+          cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+        });
+
+        it("Select form to be migrated", () => {
+          cy.get("[data-cy^='field-checkbox']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(1).autocompleteSelect("checkbox");
+        });
+
+        it("Select form to be migrated", () => {
+          cy.get("[data-cy^='field-fb-approvals']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(1).autocompleteSelect("form.builder.approvals");
+        });
+
+        it("Click on confirm change", () => {
+          cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+        });
+
+        it("Navigate to details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Verify the existing field after migration", () => {
+          cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
+        });
+
+        it("Verify Reference tab form info should have id 'FM-00002'", () => {
+          cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+        });
+      });
+
+      context("Verify book mark", () => {
+        it("Verify Book Mark Navigation", () => {
+          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+        });
+
+        it("Click on approval block user should be navigated to the section", () => {
+          cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
+          cy.get("[data-cy^='fb-approvals']").should("be.visible");
+        });
+      });
+
+      context("Fill and Approve Released", () => {
+
         it(`Add first Approver as ${USERS[1].name}`, () => {
           cy.drSelectOverviewTab();
           cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         });
+
         it("Save Record'", () => {
           cy.drClickCreateDocumentWithoutApiCall();
         });
@@ -405,7 +531,7 @@ context("Record type Document Layout verification", () => {
     });
 
     it("Select the AA inline form", () => {
-      cy.dlFilterByDocId({ docId: "RD-00003" });
+      cy.dlFilterByDocId({ docId: "RD-00004" });
       cy.dlSelectFirstDocument();
     });
 
@@ -430,7 +556,7 @@ context("Record type Document Layout verification", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.RELEASED,
         title: "Records",
-        docId: "RD-00003",
+        docId: "RD-00004",
         revision: "Rev A",
       });
     });
