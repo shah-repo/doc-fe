@@ -1,7 +1,6 @@
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { useSelector } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router-dom";
 import { SM } from "../../../../App";
 import { authSelectors } from "../../../../state/ducks/auth";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -23,7 +22,7 @@ import { getFBSchemeByDocType } from "../../helpers/getFBSchemeByDocType";
 import { getActiveDocumentTypes } from "../transform";
 import { styles } from "./styles/DocIdInput.styles";
 
-interface Props extends RouteComponentProps {
+interface Props {
   isDocRevStatusDraft: boolean;
   type?: DocumentCloneType;
   outputDocumentTypes?: FBOutputDocumentType[];
@@ -31,13 +30,14 @@ interface Props extends RouteComponentProps {
   documentTypeId?: string;
 }
 
+const schemaFieldsWithoutNormalisation = ["approvals", "section", "subsection", "stepsection", "teststep"];
+
 const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   isDocRevStatusDraft,
   type,
   outputDocumentTypes = [],
   isDisabled = false,
   documentTypeId,
-  match,
 }) => {
   const { isVisible, label, tooltipConfig, validation: validators } = useDocumentTypeSelect(documentTypeId);
   const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores() || {};
@@ -64,10 +64,9 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
 
   const isDocTypeDisabled = (type === "newVersion" || isDocRevStatusDraft) || isDisabled;
   const isNewOutput = type === "newOutput";
-  const isCreateMaintenance = match.path.includes("create_maintenance");
 
   const options: SelectOption[] = React.useMemo(() => {
-    if ((isNewOutput || isCreateMaintenance) && outputDocumentTypes) {
+    if (isNewOutput && outputDocumentTypes) {
       return (outputDocumentTypes.filter((type) => type.active)).map((e) =>
         ({ value: e.id, text: e.documentTypeName }) as SelectOption
       );
@@ -89,7 +88,7 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
       ).map((docType) =>
         ({ value: docType.id, text: docType.documentTypeName })
       );
-  }, [isNewOutput, isCreateMaintenance, outputDocumentTypes, documentTypes, isDocTypeDisabled, currentUserTags]);
+  }, [isNewOutput, outputDocumentTypes, documentTypes, isDocTypeDisabled, currentUserTags]);
 
   const handleTypeChange = (
     event: React.ChangeEvent<{ name?: string; value: unknown }>
@@ -125,50 +124,45 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
         "document.documentType.id": typeId,
       };
       // TO DO: This needs clenaup
-      if (!isCreateMaintenance) { scheme = getFBSchemeByDocType(
+      scheme = getFBSchemeByDocType(
         formValues,
         documentTypesById,
         _documentRevisionFormState?.schema,
         _tabsState?.tabID
-      ); }
+      );
     }
-    if (!isCreateMaintenance) {
-      _formState?.setMode(mode);
-      if (isNewOutput) {
-        return;
+    _formState?.setMode(mode);
+    if (isNewOutput) {
+      return;
+    }
+    const predefinedSchema = scheme?.map((e) => {
+      if (
+        schemaFieldsWithoutNormalisation.includes(e.type as string)
+        || !docTypeHasDefaultNote
+        || (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && e.includeNotes)) {
+        return e;
       }
-      const predefinedSchema = scheme?.map((e) => {
-        if (
-          e.type === "approvals" ||
-          e.type === "section" ||
-          e.type === "subsection" ||
-          e.type === "stepsection" ||
-          e.type === "teststep" || !docTypeHasDefaultNote ||
-          (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && e.includeNotes)) {
-          return e;
-        }
-        if (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && !e.includeNotes) {
-          return {
-            ...e,
-            includeNotes: true,
-          };
-        }
+      if (docTypeHasDefaultNote && e.editorProperties?.includes("includeNotes") && !e.includeNotes) {
         return {
           ...e,
-          editorProperties: [
-            ...e.editorProperties || [],
-            "includeNotes" as FBEditorPropertiesType,
-          ],
           includeNotes: true,
         };
-      });
-      if (checkIsDocumentEditableSchema(type.groupOptions)) {
-        _formState?.setValue("schema", predefinedSchema);
-      } else {
-        _formState?.setValue("formTemplate.schema", predefinedSchema);
-        if (predefinedSchema.length) {
-          _documentRevisionFormState?.setFBSchema(predefinedSchema);
-        }
+      }
+      return {
+        ...e,
+        editorProperties: [
+          ...e.editorProperties || [],
+          "includeNotes" as FBEditorPropertiesType,
+        ],
+        includeNotes: true,
+      };
+    });
+    if (checkIsDocumentEditableSchema(type.groupOptions)) {
+      _formState?.setValue("schema", predefinedSchema);
+    } else {
+      _formState?.setValue("formTemplate.schema", predefinedSchema);
+      if (predefinedSchema.length) {
+        _documentRevisionFormState?.setFBSchema(predefinedSchema);
       }
     }
   };
@@ -197,4 +191,4 @@ const DocumentTypeSelect: React.FunctionComponent<Props> = ({
   );
 };
 
-export default withRouter(DocumentTypeSelect);
+export default DocumentTypeSelect;

@@ -13,9 +13,10 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import AttachmentsField from "../../../../ui/document.revision/form/attachments";
 import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
 import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms/DocumentRevisionForm.presenter";
+import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
 import RedlineBanner from "../../../../ui/documentRevision/forms/presenters/redline/Redline.banner";
 import UpgradeToLatestContainer from "../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
-import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentLHR, checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -45,10 +46,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   canChangeOwnerShip,
   isNewVersion,
   showAdministrativeAndVoidChange,
-  pmFormId,
   redlineActive,
   isOutput,
-  lastSavedTimestamp,
   email,
   isOwner,
   schema,
@@ -62,6 +61,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isMPI = checkIsDocumentMPI(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
@@ -123,7 +123,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabConfig]);
 
-
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
@@ -162,11 +161,15 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
             shouldShowUpgrade,
           }}
         />
+        {documentRevision && <LHRBanner documentRevision={documentRevision}/>}
         <Observer>
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
-              contentBoxProps={{ minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"), height: "auto" }}
+              contentBoxProps={{
+                minHeight: isMPI ? "100%" :  (((!isLHR && !isTypeMpiDoc) || isLHR)
+                  ? "20%" : "0px" ), height: "auto",
+              }}
               boxProps={{
                 overflow: (_documentRevisionFormState?.expanded ? "auto" :
                   (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
@@ -193,52 +196,57 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                         <SMBox
                           key={index}
                         >
-                          {tabType === "MIXED" && <>
-                            <DocumentRevisionFormPresenter
-                              {...formValues}
-                              releasedDocRev={_documentRevisionFormState?.releasedDocRev}
-                              {...{
-                                documentRevisions,
-                                documentRevision,
-                                showRevisionTypeChange,
-                                proposedDocId,
-                                setDocId,
-                                doNotPrompt,
-                                onDirtyFlagChange,
-                                documentTypesById,
-                                canChangeOwnerShip,
-                                type,
-                                isNewVersion,
-                                bannerPortal,
-                                showAdministrativeAndVoidChange,
-                                pmFormId,
-                                redlineActive,
-                                isOutput,
-                                lastSavedTimestamp,
-                                isDisabled,
-                                email,
-                                isOwner,
-                                mode,
-                              }}
-                            />
-                            {documentRevision && showTabContent &&  <FBWorkspace
-                              isPortal={false}
-                              document={{
-                                ...formValues.values as unknown as DocumentRevision,
-                                ...documentRevision as unknown as DocumentRevision,
-                              }}
-                              {... { autosaveEnabled, workspaceState }}
-                              initialValues={formInput}
-                              schema={schema}
-                            />}
-                          </>}
-                          {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" &&  (
+                          {tabType === "MIXED" && (
+                            <>
+                              <DocumentRevisionFormPresenter
+                                {...formValues}
+                                releasedDocRev={_documentRevisionFormState?.releasedDocRev}
+                                {...{
+                                  documentRevisions,
+                                  documentRevision,
+                                  showRevisionTypeChange,
+                                  proposedDocId,
+                                  setDocId,
+                                  doNotPrompt,
+                                  onDirtyFlagChange,
+                                  documentTypesById,
+                                  canChangeOwnerShip,
+                                  type,
+                                  isNewVersion,
+                                  bannerPortal,
+                                  showAdministrativeAndVoidChange,
+                                  redlineActive,
+                                  isOutput,
+                                  isDisabled,
+                                  email,
+                                  isOwner,
+                                  mode,
+                                }}
+                              />
+                              {documentRevision && showTabContent && (
+                                <FBWorkspace
+                                  isPortal={false}
+                                  document={{
+                                    ...documentRevision as unknown as DocumentRevision,
+                                    ...formValues.values as unknown as DocumentRevision,
+                                  }}
+                                  {... { autosaveEnabled, workspaceState }}
+                                  initialValues={formInput}
+                                  schema={schema}
+                                />
+                              )}
+                            </>
+                          )}
+                          {tabType === "DYNAMIC" && showTabContent && _formState?.mode !== "none" && (
                             <>
                               {tabInfo.tabId === "lineitems" && (
                                 <Box pb={3.75}>
-                                  {mode === FBWorkspaceModeOptions.FORM &&
-                                    <FBSection name={`fb-po-section-po-items-built-in`}
-                                      label="form.builder.po.details"  />}
+                                  {mode === FBWorkspaceModeOptions.FORM && (
+                                    <FBSection
+                                      name={`fb-po-section-po-items-built-in`}
+                                      label="form.builder.po.details"
+                                    />
+                                  )}
                                   <AttachmentsField
                                     isDisabled={isDisabledInput}
                                     isNewVersion={false}
@@ -266,12 +274,11 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ && (
                             <FBMaterialEqInfoContainer
-                              documentRevisionId={documentRevision?.id}
+                              documentRevision={documentRevision}
                               inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                             />
                           )}
-                          {tabType === "TRAINING" &&
-                          _tabsState?.value === trainingTabIndex && (
+                          {tabType === "TRAINING" && _tabsState?.value === trainingTabIndex && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                             />

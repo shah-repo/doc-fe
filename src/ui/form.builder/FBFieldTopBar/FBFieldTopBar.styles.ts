@@ -1,15 +1,30 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-export default makeStyles(() =>
-  createStyles({
-    toolsBox: {
-      padding: "8px",
-      width: "128px",
-      height: "35px",
-      background: Colors.dodger_blue,
-      borderRadius: "6px 6px 0px 0px",
-      cursor: "pointer",
-    },
-  })
-);
+const HEIGHT = 35;
+const WIDTH = 128;
+
+export default makeStyles((theme) => ({
+  root: {
+    position: "absolute",
+    right: 0,
+    left: 0,
+    top: -HEIGHT,
+    display: "flex",
+    justifyContent: "flex-end",
+    zIndex: 5,
+  },
+  tools: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: WIDTH,
+    height: HEIGHT,
+    padding: theme.spacing(1),
+    borderTopLeftRadius: theme.shape.borderRadius,
+    borderTopRightRadius: theme.shape.borderRadius,
+    background: Colors.dodger_blue,
+    color: Colors.white,
+    cursor: "pointer",
+  },
+}));

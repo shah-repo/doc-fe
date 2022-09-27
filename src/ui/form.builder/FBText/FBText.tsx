@@ -15,7 +15,7 @@ const FBText: React.FunctionComponent<FBTextProps> = ({
     <Box display="flex" style={labelProps}>
       <Text message={locale} {...{ values }} />
       {loading && (
-        <Box ml={1} mt={0.3}>
+        <Box ml={1} mb={-0.5}>
           <CircularProgress color="inherit" size={16} />
         </Box>
       )}

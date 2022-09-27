@@ -2,7 +2,7 @@ import { isEmpty } from "lodash";
 import * as Yup from "yup";
 import { Translation } from "../../../../translations/types";
 
-export const reactQuillEmptyString = "<p><br></p>";
+const reactQuillEmptyString = "<p><br></p>";
 
 export type Validator = (value: any) => Translation | undefined;
 

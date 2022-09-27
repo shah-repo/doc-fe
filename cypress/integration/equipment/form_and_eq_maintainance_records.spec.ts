@@ -688,7 +688,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("move Component", () => {
-        cy.get("[data-cy='Textfield for CAL']").trigger("mouseover");
+        cy.get("[data-cy='Textfield for CAL']").trigger("mouseover", { force: true });
         cy.wait(2000);
         cy.get(`[class="drag-handle"]`).eq(1)
           .realMouseDown({ position: "center", button: "left" });

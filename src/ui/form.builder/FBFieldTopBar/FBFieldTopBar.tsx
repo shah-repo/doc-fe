@@ -6,7 +6,7 @@ import { ReactComponent as DragHandleIcon } from "../../../assets/images/drag_ha
 import { ReactComponent as EditIcon } from "../../../assets/images/edit.svg";
 import { ReactComponent as RemoveIcon } from "../../../assets/images/remove.svg";
 import Colors from "../../layout/theme/utils/colors";
-import FBFieldTopBarStyles from "./FBFieldTopBar.styles";
+import useStyles from "./FBFieldTopBar.styles";
 import { withFBFieldTopBar } from "./FBFieldTopBar.wrap";
 
 const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
@@ -14,38 +14,24 @@ const FBFieldTopBar: React.FunctionComponent<FBFieldTopBarProps> = ({
   removeSchemaItem,
   markDownSchemaItem,
   inputProps: { deleteDisabled } = {},
-  visibility,
-  mb,
 }) => {
-  const classes = FBFieldTopBarStyles();
+  const classes = useStyles();
+
   return (
-    <Box display={visibility === "visible" ? "flex" : "none"} flexDirection="row-reverse"  mb={mb}>
-      <Grid
-        container
-        justify="space-between"
-        alignItems="center"
-        direction="row-reverse"
-        className={classes.toolsBox}
-      >
-        <Box zIndex={1000}>
-          <RemoveIcon
-            fill={deleteDisabled ? Colors.hint_gray : "none"}
-            className={deleteDisabled ? "schema-delete-disabled" : "schema-delete-enabled"}
-            data-cy={"remove-schema-item"}
-            {...!deleteDisabled && { onClick: removeSchemaItem }}
-          />
-        </Box>
-        <Box zIndex={1000}>
-          <EditIcon data-cy={"edit-schema-item"} onClick={editSchemaItem} />
-        </Box>
-        <Box zIndex={1000}>
-          <CodeIcon style={{ fill: Colors.white }} onClick={markDownSchemaItem} />
-        </Box>
-        <Box zIndex={1000}>
-          <DragHandleIcon className="drag-handle" />
-        </Box>
+    <Box className={classes.root}>
+      <Grid container className={classes.tools}>
+        <DragHandleIcon className="drag-handle" />
+        <CodeIcon onClick={markDownSchemaItem} />
+        <EditIcon onClick={editSchemaItem} data-cy={"edit-schema-item"} />
+        <RemoveIcon
+          fill={deleteDisabled ? Colors.hint_gray : "none"}
+          className={deleteDisabled ? "schema-delete-disabled" : "schema-delete-enabled"}
+          {...!deleteDisabled && { onClick: removeSchemaItem }}
+          data-cy={"remove-schema-item"}
+        />
       </Grid>
     </Box>
-  ); };
+  );
+};
 
 export default withFBFieldTopBar(FBFieldTopBar);

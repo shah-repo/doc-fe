@@ -7,4 +7,12 @@ export default (theme: Theme) =>
       marginBottom: theme.spacing(1),
       minWidth: 150,
     },
+    progressAttached: {
+      position: "absolute",
+      left: 10,
+      right: 10,
+      bottom: 10,
+      borderBottomLeftRadius: theme.shape.borderRadius,
+      borderBottomRightRadius: theme.shape.borderRadius,
+    },
   });

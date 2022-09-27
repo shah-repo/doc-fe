@@ -591,7 +591,8 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.navigToApprovalRequestList();
       cy.cmpClickCreateApprovalRequest();
       cy.arEnterApprovalRequestTitle({ title: "AR form" });
-      cy.arEnterApprovalRequestDescription({ description: "Description" });
+      cy.unClick();
+      cy.drEnterDocumentDescription({ description: "Description" });
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "approved doc2" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });

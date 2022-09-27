@@ -896,7 +896,7 @@ context("LFPO new layout verification", () => {
       });
 
       it("Approve and Release", () => {
-        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick({ force: true });
+        cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
@@ -1161,11 +1161,7 @@ context("LFPO new layout verification", () => {
 
     it("Fill in Approval block and  Approve and release Record", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
-    });
-
-    it("Save the document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.get("[data-cy='ApproveAndRelease-button']").arrowClick({ force: true });
     });
 
     it("Approve and Release", () => {

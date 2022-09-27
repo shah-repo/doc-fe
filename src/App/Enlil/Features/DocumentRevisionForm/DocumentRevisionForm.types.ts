@@ -37,11 +37,9 @@ export type DocumentRevisionFormProps =
   canChangeOwnerShip: boolean;
   isNewVersion?: boolean;
   showAdministrativeAndVoidChange: boolean;
-  pmFormId?: string;
   document?: Document;
   redlineActive: boolean;
   isOutput: boolean;
-  lastSavedTimestamp?: string;
   email: string;
   isOwner: boolean;
   schema: FBSchemaProps[];

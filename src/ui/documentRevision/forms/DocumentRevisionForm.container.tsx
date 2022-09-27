@@ -18,7 +18,6 @@ import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
-import { checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../documentRevision/helpers/checkDocumentGroup";
 import { FBWorkspaceMode } from "../../form.builder";
 import FBDataStore from "../../form.builder/FBStore/FBDataStore";
 import useDidMount from "../../hooks/useDidMount";
@@ -26,7 +25,7 @@ import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
-import { checkIsDocumentEditableSchema, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { checkIsDocumentEditableSchema, checkIsDocumentRecord, checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../helpers/checkDocumentGroup";
 import { getShouldShowUpgradeForRecord } from "../helpers/records";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues } from "./types";
@@ -39,7 +38,6 @@ export interface FormHeaderContext {
   mode: FBWorkspaceMode;
   asyncState: AsyncState;
   type?: DocumentCloneType;
-  lastSavedTimestamp?: string;
 }
 
 export let FormHeaderContext = React.createContext<FormHeaderContext | undefined>(undefined);
@@ -64,9 +62,6 @@ interface OwnProps {
   canChangeOwnerShip?: boolean;
   type?: DocumentCloneType;
   isNewVersion?: boolean;
-  pmFormId?: string;
-  pmForm?: DocumentRevision;
-  lastSavedTimestamp?: string;
 }
 
 type DocumentRevisionFormContainerProps = OwnProps & SMFormHOCProps;
@@ -88,9 +83,6 @@ DocumentRevisionFormContainerProps
   canChangeOwnerShip = false,
   type,
   isNewVersion,
-  pmFormId,
-  pmForm,
-  lastSavedTimestamp,
 }) => {
   const didMount = useDidMount();
   const bannerPortal = React.useRef(null);
@@ -144,12 +136,10 @@ DocumentRevisionFormContainerProps
       retrain,
       renderHTML,
       securityGroups,
-      outputDocumentTypes: pmForm ?
-        pmForm.formTemplate?.outputDocumentTypes as OptionType[] :
-        initialValues.formTemplate?.outputDocumentTypes as OptionType[],
+      outputDocumentTypes: initialValues.formTemplate?.outputDocumentTypes as OptionType[],
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canUpdateHTML, initialValues, groupOptions, pmForm, FBDataStore?.refreshData]);
+  }, [canUpdateHTML, initialValues, groupOptions, FBDataStore?.refreshData]);
 
   useObserver(() => {
     cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
@@ -184,7 +174,6 @@ DocumentRevisionFormContainerProps
   const { groupOptions: formGroupOptions } = cleanInitialValues.document?.documentType || {};
   const { docId: outputGroup } = cleanInitialValues.formDocument?.document || {};
   const isOutput =  Boolean(outputGroup && !isEmpty(outputGroup));
-  const pmFormSchema = pmForm?.formTemplate?.schema || [];
   const showAdministrativeAndVoidChange = isOutput && isAlphaReleased && isRecord;
   let mode: Partial<FBWorkspaceMode> = "none";
 
@@ -193,7 +182,7 @@ DocumentRevisionFormContainerProps
     (cleanInitialValues)?.formDocument?.formTemplate ||
     {}
   );
-  originScheme = pmForm ? pmFormSchema : cleanInitialValues?.schema || originScheme;
+  originScheme = cleanInitialValues?.schema || originScheme;
   const formInput = useMemo(() =>
     cleanInitialValues ? cloneDeep(cleanInitialValues.formInput) : {}
   , [cleanInitialValues]);
@@ -202,8 +191,6 @@ DocumentRevisionFormContainerProps
     mode = "design";
   } else if (outputGroup || !isEmpty(originScheme)) {
     mode = isEditableSchema ? "formDesign" : "form";
-  } else if (pmForm) {
-    mode = "form";
   }
   useEffect(() => {
     _formState?.setMode(mode);
@@ -224,7 +211,6 @@ DocumentRevisionFormContainerProps
     asyncState,
     type,
     mode,
-    lastSavedTimestamp,
   });
 
   const groupOptions1 = documentRevision?.document.documentType.groupOptions;
@@ -262,11 +248,9 @@ DocumentRevisionFormContainerProps
         canChangeOwnerShip,
         isNewVersion,
         showAdministrativeAndVoidChange,
-        pmFormId,
         document,
         redlineActive,
         isOutput,
-        lastSavedTimestamp,
         email,
         isOwner,
         autosaveEnabled,

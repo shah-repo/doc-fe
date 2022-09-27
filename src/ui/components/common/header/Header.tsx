@@ -18,8 +18,8 @@ const styles = makeStyles((theme: Theme) =>
       borderRadius: "6px",
     },
     appbar: {
-      top: "48px",
       zIndex: theme.zIndex.drawer + 1,
+      overflow: "hidden",
     },
     toolbar: (createUrl) => ({
       minHeight: createUrl ? "" : "84px",
@@ -41,7 +41,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
   const classes = styles(isCreateUrl);
   if ((SM.isNewLayout || SM.isNewCRLayout) && !isCreateUrl) {
     return (
-      <AppBar color="primary" className={classes.appbar} position="static">
+      <AppBar color="primary" className={classes.appbar} position="relative">
         <Toolbar className={classes.toolbar}>
           <Observer>
             {() => (
@@ -68,7 +68,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
   }
 
   return (
-    <AppBar color="primary" className={classes.appbar}>
+    <AppBar color="primary" className={classes.appbar} position="relative">
       <Toolbar className={classes.toolbar}>
         <Grid container={true}>
           {children}

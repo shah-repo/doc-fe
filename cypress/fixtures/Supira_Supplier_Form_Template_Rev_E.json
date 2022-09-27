@@ -1,0 +1,1527 @@
+[
+  {
+    "name": "primary-contact-s-kmdqtx3i",
+    "rows": 1,
+    "type": "textfield",
+    "index": 0,
+    "label": "Primary Contact(s):",
+    "rules": "|",
+    "tabId": "details",
+    "deleted": true,
+    "validators": {
+      "required_if": false,
+      "required_if_in": false
+    },
+    "placeholder": "[Enter Business and Quality Contacts or N/A]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "validationAttribute": "Primary Contact(s):",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "primary-contact-s-kmgj4dtv",
+    "rows": 1,
+    "type": "textfield",
+    "index": 1,
+    "label": "Primary Contact(s):",
+    "tabId": "details",
+    "placeholder": "[Enter Business and Quality Contacts or N/A]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "validationMode": "default",
+    "validationAttribute": "Primary Contact(s):",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-classification-kmdn5bx8",
+    "type": "section",
+    "index": 2,
+    "label": "Supplier Classification",
+    "tabId": "details",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "validationMode": "default",
+    "omitFinalValidation": true,
+    "validationAttribute": "Supplier Classification",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-stage-kkeopk90",
+    "type": "radiogroup",
+    "index": 3,
+    "label": "Supplier Stage:",
+    "tabId": "details",
+    "deleted": true,
+    "options": [
+      {
+        "text": "R&D",
+        "value": "R&D"
+      },
+      {
+        "text": "Production",
+        "value": "Production"
+      }
+    ],
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "default",
+    "validationAttribute": "Supplier Stage:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "quality-contact-khcix59x",
+    "rows": 1,
+    "type": "textfield",
+    "index": 4,
+    "label": "Quality Contact:",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "validators": {
+      "required_if": false
+    },
+    "placeholder": "[Enter Quality Contact here]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [],
+    "validationAttribute": "Quality Contact:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-level-khcjco9j",
+    "type": "radiogroup",
+    "index": 5,
+    "label": "Supplier Level:",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "options": [
+      {
+        "text": "Level 1",
+        "value": "Level 1"
+      },
+      {
+        "text": "Level 2",
+        "value": "Level 2"
+      },
+      {
+        "text": "Level 3",
+        "value": "Level 3"
+      }
+    ],
+    "validators": {
+      "required_if": false
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [],
+    "validationAttribute": "Supplier Level:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-use-kmdn6oi4",
+    "type": "select",
+    "index": 6,
+    "label": "Supplier Use:",
+    "tabId": "details",
+    "options": [
+      {
+        "text": "Production",
+        "value": "Production"
+      },
+      {
+        "text": "R&D/Prototype Only",
+        "value": "R&D/Prototype Only"
+      }
+    ],
+    "placeholder": "R&D/Prototype Only",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "default",
+    "validationAttribute": "Supplier Use:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "risk-classificaiton-kmdn7qrd",
+    "type": "select",
+    "index": 7,
+    "label": "Risk Classification:",
+    "rules": "required_if:supplier-use-kmdn6oi4,Production",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "options": [
+      {
+        "text": "Critical",
+        "value": "Critical"
+      },
+      {
+        "text": "Major ",
+        "value": "Major "
+      },
+      {
+        "text": "Minor",
+        "value": "Minor"
+      }
+    ],
+    "validators": {
+      "required_if": {
+        "name": "supplier-use-kmdn6oi4",
+        "value": "Production"
+      }
+    },
+    "placeholder": "[Select from List]",
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "validationAttribute": "Risk Classification:",
+    "deleteInFormDisabled": false,
+    "sampleItemsIndicator": {
+      "id": "",
+      "enabled": false,
+      "serialNumber": 0,
+      "sampleSection": false
+    },
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-assessment-kmdn81tr",
+    "type": "section",
+    "index": 8,
+    "label": "Supplier Assessment",
+    "rules": "required_if:supplier-use-kmdn6oi4,Production",
+    "tabId": "details",
+    "validators": {
+      "required_if": {
+        "name": "supplier-use-kmdn6oi4",
+        "value": "Production"
+      }
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "omitFinalValidation": true,
+    "validationAttribute": "Supplier Assessment",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-use-status-kmdn8t3m",
+    "type": "select",
+    "index": 9,
+    "label": "Supplier Use Status:",
+    "rules": "",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": true,
+    "options": [
+      {
+        "text": "Pending Evaluation",
+        "value": "Pending Evaluation"
+      },
+      {
+        "text": "Conditionally Approved",
+        "value": "Conditionally Approved"
+      },
+      {
+        "text": "Approved",
+        "value": "Approved"
+      },
+      {
+        "text": "Approved - Hold new business",
+        "value": "Approved - Hold new business"
+      },
+      {
+        "text": "Inactive",
+        "value": "Inactive"
+      }
+    ],
+    "validators": {
+      "required": false,
+      "required_if": false
+    },
+    "placeholder": "[Select from List]",
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "validationAttribute": "Supplier Use Status:",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-use-status-kx6tlz39",
+    "type": "checkboxgroup",
+    "index": 10,
+    "label": "Supplier Use Status:",
+    "rules": "required_if:supplier-use-kmdn6oi4,Production",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "options": [
+      {
+        "text": "Pending Evaluation",
+        "value": "Pending Evaluation"
+      },
+      {
+        "text": "Approved",
+        "value": "Approved"
+      },
+      {
+        "text": "Conditionally Approved",
+        "value": "Conditionally Approved"
+      },
+      {
+        "text": "Approved - Hold new business",
+        "value": "Approved - Hold new business"
+      },
+      {
+        "text": "Inactive",
+        "value": "Inactive"
+      }
+    ],
+    "validators": {
+      "required_if": {
+        "name": "supplier-use-kmdn6oi4",
+        "value": "Production"
+      }
+    },
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "validationAttribute": "Supplier Use Status:",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-type-select-all-that-apply-khcj0mww",
+    "type": "checkboxgroup",
+    "index": 11,
+    "label": "Supplier Type (Select all that apply):",
+    "rules": "required_if:supplier-use-kmdn6oi4,Production",
+    "tabId": "details",
+    "options": [
+      {
+        "text": "Contract Manufacturer",
+        "value": "Contract Manufacturer"
+      },
+      {
+        "text": "OEM Device Supplier",
+        "value": "OEM Device Supplier"
+      },
+      {
+        "text": "Distributor",
+        "value": "Distributor"
+      },
+      {
+        "text": "Product Component Supplier (Custom)",
+        "value": "Product Component Supplier (Custom)"
+      },
+      {
+        "text": "Off-the-Shelf Product Supplier",
+        "value": "Off-the-Shelf Product Supplier"
+      },
+      {
+        "text": "Manufacturing Materials",
+        "value": "Manufacturing Materials"
+      },
+      {
+        "text": "Equipment/Tooling/Fixture Supplier",
+        "value": "Equipment/Tooling/Fixture Supplier"
+      },
+      {
+        "text": "Consultant/Contractors",
+        "value": "Consultant/Contractors"
+      },
+      {
+        "text": "Service Provider",
+        "value": "Service Provider"
+      },
+      {
+        "text": "form.builder.other",
+        "value": "includeContext"
+      }
+    ],
+    "validators": {
+      "required_if": {
+        "name": "supplier-use-kmdn6oi4",
+        "value": "Production"
+      }
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "includeContext": true,
+    "validationMode": "visibility",
+    "editorProperties": [
+      "includeContext"
+    ],
+    "validationAttribute": "Supplier Type (Select all that apply):",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "is-this-a-product-related-khl5nzme",
+    "type": "radiogroup",
+    "index": 12,
+    "label": "Is this a service provider?",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "options": [
+      {
+        "text": "Yes",
+        "value": "Yes"
+      },
+      {
+        "text": "No",
+        "value": "No"
+      }
+    ],
+    "validators": {
+      "required_if": false
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [],
+    "validationAttribute": "Is this a service provider?",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "products-or-service-offered-khcj1av8",
+    "rows": 2,
+    "type": "textfield",
+    "index": 13,
+    "label": "Service Offered:",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "validators": {
+      "required_if": false
+    },
+    "placeholder": "[General description]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [],
+    "validationAttribute": "Service Offered:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "select-the-material-components-eft-that-supplier-provide-khmnc7b1",
+    "type": "autocomplete",
+    "index": 14,
+    "label": "Select the material, components, EFT that supplier provide?",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "multiple": true,
+    "optionId": "18",
+    "validators": {
+      "required_if": false
+    },
+    "placeholder": "[Select from the List]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [
+      "multiple"
+    ],
+    "validationAttribute": "Select the material, components, EFT that supplier provide?",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "is-this-supplier-ready-to-be-evaluated-khl6f3we",
+    "type": "radiogroup",
+    "index": 15,
+    "label": "Supplier Status:",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "options": [
+      {
+        "text": "Pending Evaluation",
+        "value": "Pending Evaluation"
+      },
+      {
+        "text": "Conditional Approval (Describe)",
+        "value": "Conditional Approval (Describe)"
+      },
+      {
+        "text": "Approve",
+        "value": "Approve"
+      },
+      {
+        "text": "Disqualified",
+        "value": "Disqualified"
+      },
+      {
+        "text": "Inactive",
+        "value": "Inactive"
+      }
+    ],
+    "validators": {
+      "required_if": false
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [],
+    "validationAttribute": "Supplier Status:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "describe-conditional-approve-khl6j7yz",
+    "rows": 3,
+    "type": "textfield",
+    "index": 16,
+    "label": "Describe Conditional Approval:",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "validators": {
+      "required_if": false
+    },
+    "placeholder": "[Describe here]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [],
+    "validationAttribute": "Describe Conditional Approval:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "evaluation-results-khcj85uz",
+    "type": "checkboxgroup",
+    "index": 17,
+    "label": "Support Documentation (Level 1 min. of 3, Level 2 min. of 2, Level 3 min. of 1 or N/A):",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "options": [
+      {
+        "text": "Successful Quality Site Audit",
+        "value": "Successful Quality Site Audit"
+      },
+      {
+        "text": "FDA Registration AND has had a favorable audit in the last 2 years",
+        "value": "FDA Registration AND has had a favorable audit in the last 2 years"
+      },
+      {
+        "text": "Quality Agreement",
+        "value": "Quality Agreement"
+      },
+      {
+        "text": "ISO Certification with appropriate scope",
+        "value": "ISO Certification with appropriate scope"
+      },
+      {
+        "text": "Documented Quality Management in place with Quality Manual on file",
+        "value": "Documented Quality Management in place with Quality Manual on file"
+      },
+      {
+        "text": "First Article Inspections Passed",
+        "value": "First Article Inspections Passed"
+      },
+      {
+        "text": "Favorable history supply medical device industry -or- favorable history supply company (summarize below)",
+        "value": "Favorable history supply medical device industry -or- favorable history supply company (summarize below)"
+      },
+      {
+        "text": "N/A",
+        "value": "N/A"
+      }
+    ],
+    "validators": {
+      "required_if": false
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [],
+    "validationAttribute": "Support Documentation (Level 1 min. of 3, Level 2 min. of 2, Level 3 min. of 1 or N/A):",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "attached-the-required-requirement-s-khcjhaut",
+    "type": "fileupload",
+    "index": 18,
+    "label": "Attach the required Requirement(s):",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "validators": {
+      "required_if": false
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [],
+    "validationAttribute": "Attach the required Requirement(s):",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "reference-additional-document-s-khmnf9h6",
+    "type": "autocomplete",
+    "index": 19,
+    "label": "Reference additional document(s):",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "multiple": true,
+    "optionId": "18",
+    "validators": {
+      "required_if": false
+    },
+    "placeholder": "[Select from the List]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [
+      "multiple"
+    ],
+    "validationAttribute": "Reference additional document(s):",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-capabilities-select-all-that-apply-kmdno6cc",
+    "type": "checkboxgroup",
+    "index": 20,
+    "label": "Supplier Capabilities (Select all that apply):",
+    "rules": "required_if_in:supplier-type-select-all-that-apply-khcj0mww,{\"0\":\"Contract Manufacturer\",\"1\":\"Component Supplier (Custom)\",\"2\":\"Product Component Supplier (Custom)\"}",
+    "tabId": "details",
+    "options": [
+      {
+        "text": "Plastic Injection Molding",
+        "value": "Plastic Injection Molding"
+      },
+      {
+        "text": "Metal Injection Molding",
+        "value": "Metal Injection Molding"
+      },
+      {
+        "text": "Machine Shop",
+        "value": "Machine Shop"
+      },
+      {
+        "text": "Extrusion",
+        "value": "Extrusion"
+      },
+      {
+        "text": "Labeling/Packaging",
+        "value": "Labeling/Packaging"
+      },
+      {
+        "text": "Cable/Wire Harnesses",
+        "value": "Cable/Wire Harnesses"
+      },
+      {
+        "text": "PCB Assembly",
+        "value": "PCB Assembly"
+      },
+      {
+        "text": "form.builder.other",
+        "value": "includeContext"
+      }
+    ],
+    "validators": {
+      "required_if_in": {
+        "name": "supplier-type-select-all-that-apply-khcj0mww",
+        "value": [
+          "Contract Manufacturer",
+          "Component Supplier (Custom)",
+          "Product Component Supplier (Custom)"
+        ]
+      }
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "includeContext": true,
+    "validationMode": "visibility",
+    "editorProperties": [
+      "includeContext"
+    ],
+    "validationAttribute": "Supplier Capabilities (Select all that apply):",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-services-select-all-that-apply-kmdnaz15",
+    "type": "checkboxgroup",
+    "index": 21,
+    "label": "Supplier Services (Select all that apply):",
+    "rules": "required_if_in:supplier-type-select-all-that-apply-khcj0mww,{\"0\":\"Service Provider\"}",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "options": [
+      {
+        "text": "Sterilization Services",
+        "value": "Sterilization Services"
+      },
+      {
+        "text": "Component Processing",
+        "value": "Component Processing"
+      },
+      {
+        "text": "Lab/Testing/Calibration Services",
+        "value": "Lab/Testing/Calibration Services"
+      },
+      {
+        "text": "Labeling/Translation Services",
+        "value": "Labeling/Translation Services"
+      },
+      {
+        "text": "Clinical Services",
+        "value": "Clinical Services"
+      },
+      {
+        "text": "Audit Services",
+        "value": "Audit Services"
+      },
+      {
+        "text": "Certification/Notified Body",
+        "value": "Certification/Notified Body"
+      },
+      {
+        "text": "Shipping/Distribution",
+        "value": "Shipping/Distribution"
+      },
+      {
+        "text": "form.builder.other",
+        "value": "includeContext"
+      }
+    ],
+    "validators": {
+      "required_if_in": {
+        "name": "supplier-type-select-all-that-apply-khcj0mww",
+        "value": [
+          "Service Provider"
+        ]
+      }
+    },
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "includeContext": true,
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [
+      "includeContext"
+    ],
+    "validationAttribute": "Supplier Services (Select all that apply):",
+    "deleteInFormDisabled": false,
+    "sampleItemsIndicator": {
+      "id": "",
+      "enabled": false,
+      "serialNumber": 0,
+      "sampleSection": false
+    },
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "consultant-contractors-description-kmdo54ov",
+    "rows": 2,
+    "type": "textfield",
+    "index": 22,
+    "label": "Consultant/Contractors Description:",
+    "rules": "required_if_in:supplier-type-select-all-that-apply-khcj0mww,{\"0\":\"Consultant/Contractors\"}",
+    "tabId": "details",
+    "validators": {
+      "required_if_in": {
+        "name": "supplier-type-select-all-that-apply-khcj0mww",
+        "value": [
+          "Consultant/Contractors"
+        ]
+      }
+    },
+    "placeholder": "[Describe the service the Consultant/Contractors provide]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "validationAttribute": "Consultant/Contractors Description:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "manufacturing-materials-description-kmdo7bhh",
+    "rows": 2,
+    "type": "textfield",
+    "index": 23,
+    "label": "Manufacturing Materials Description:",
+    "rules": "required_if_in:supplier-type-select-all-that-apply-khcj0mww,{\"0\":\"Manufacturing Materials\"}",
+    "tabId": "details",
+    "validators": {
+      "required_if_in": {
+        "name": "supplier-type-select-all-that-apply-khcj0mww",
+        "value": [
+          "Manufacturing Materials"
+        ]
+      }
+    },
+    "placeholder": "[Describe here]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "validationAttribute": "Manufacturing Materials Description:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "conditional-approval-kmdnd8ww",
+    "type": "subsection",
+    "index": 24,
+    "label": "Conditional Approval",
+    "rules": "required_if_in:supplier-use-status-kx6tlz39,{\"0\":\"Conditionally Approved\"}",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "validators": {
+      "required_if": false,
+      "required_if_in": {
+        "name": "supplier-use-status-kx6tlz39",
+        "value": [
+          "Conditionally Approved"
+        ]
+      }
+    },
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "omitFinalValidation": true,
+    "validationAttribute": "Conditional Approval",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "conditional-approval-rationale-kmdneifi",
+    "rows": 3,
+    "type": "textfield",
+    "index": 25,
+    "label": "Conditional Approval Rationale:",
+    "rules": "required_if_in:supplier-use-status-kx6tlz39,{\"0\":\"Conditionally Approved\"}",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "validators": {
+      "required_if": false,
+      "required_if_in": {
+        "name": "supplier-use-status-kx6tlz39",
+        "value": [
+          "Conditionally Approved"
+        ]
+      }
+    },
+    "placeholder": "[Describe why supplier is placed on Conditional Approval]",
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "validationAttribute": "Conditional Approval Rationale:",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "conditional-approval-conditions-check-all-that-apply-kmdnfbb6",
+    "type": "checkboxgroup",
+    "index": 26,
+    "label": "Conditional Approval Conditions (Select all that apply):",
+    "rules": "required_if_in:supplier-use-status-kx6tlz39,{\"0\":\"Conditionally Approved\"}",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "options": [
+      {
+        "text": "100% Inspection",
+        "value": "100% Inspection"
+      },
+      {
+        "text": "Enhanced Inspection",
+        "value": "Enhanced Inspection"
+      },
+      {
+        "text": "Supplier provided Enhanced Inspection",
+        "value": "Supplier provided Enhanced Inspection"
+      },
+      {
+        "text": "form.builder.other",
+        "value": "includeContext"
+      }
+    ],
+    "validators": {
+      "required_if": false,
+      "required_if_in": {
+        "name": "supplier-use-status-kx6tlz39",
+        "value": [
+          "Conditionally Approved"
+        ]
+      }
+    },
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [
+      "includeContext"
+    ],
+    "validationAttribute": "Conditional Approval Conditions (Select all that apply):",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "reference-action-item-record-s-kmgiy91y",
+    "type": "autocomplete",
+    "index": 27,
+    "label": "Reference Action Item Record(s) ",
+    "rules": "required_if_in:supplier-use-status-kx6tlz39,{\"0\":\"Conditionally Approved\"}",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "optionId": "18",
+    "validators": {
+      "required_if": false,
+      "required_if_in": {
+        "name": "supplier-use-status-kx6tlz39",
+        "value": [
+          "Conditionally Approved"
+        ]
+      }
+    },
+    "placeholder": "[Select from List ]",
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "validationAttribute": "Reference Action Item Record(s) ",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supply-items-kmdpfzy4",
+    "type": "subsection",
+    "index": 28,
+    "label": "Supply Items",
+    "rules": "required_if_in:supplier-type-select-all-that-apply-khcj0mww,{\"0\":\"Contract Manufacturer\",\"1\":\"Component Supplier (Custom)\",\"2\":\"OEM Device Supplier\",\"3\":\"Manufacturing Materials\",\"4\":\"Off-the-Shelf Item Supplier\",\"5\":\"Equipment/Tooling/Fixture Supplier\",\"6\":\"Product Component Supplier (Custom)\",\"7\":\"Off-the-Shelf Product Supplier\",\"8\":\"Distributor\"}",
+    "tabId": "details",
+    "validators": {
+      "required_if_in": {
+        "name": "supplier-type-select-all-that-apply-khcj0mww",
+        "value": [
+          "Contract Manufacturer",
+          "Component Supplier (Custom)",
+          "OEM Device Supplier",
+          "Manufacturing Materials",
+          "Off-the-Shelf Item Supplier",
+          "Equipment/Tooling/Fixture Supplier",
+          "Product Component Supplier (Custom)",
+          "Off-the-Shelf Product Supplier",
+          "Distributor"
+        ]
+      }
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "omitFinalValidation": true,
+    "validationAttribute": "Supply Items",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplied-parts-material-equipment-etc-kmdnq80p",
+    "type": "autocomplete",
+    "index": 29,
+    "label": "Supplied Parts, Material, Equipment, etc.",
+    "rules": "required_if_in:supplier-type-select-all-that-apply-khcj0mww,{\"0\":\"Contract Manufacturer\",\"1\":\"OEM Device Supplier\",\"2\":\"Component Supplier (Custom)\",\"3\":\"Distributor\",\"4\":\"Off-the-Shelf Item Supplier\",\"5\":\"Manufacturing Materials\",\"6\":\"Off-the-Shelf Product Supplier\",\"7\":\"Equipment/Tooling/Fixture Supplier\",\"8\":\"Product Component Supplier (Custom)\"}",
+    "tabId": "details",
+    "multiple": true,
+    "optionId": "18",
+    "validators": {
+      "required_if_in": {
+        "name": "supplier-type-select-all-that-apply-khcj0mww",
+        "value": [
+          "Contract Manufacturer",
+          "OEM Device Supplier",
+          "Component Supplier (Custom)",
+          "Distributor",
+          "Off-the-Shelf Item Supplier",
+          "Manufacturing Materials",
+          "Off-the-Shelf Product Supplier",
+          "Equipment/Tooling/Fixture Supplier",
+          "Product Component Supplier (Custom)"
+        ]
+      }
+    },
+    "placeholder": "[Select from List]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [
+      "multiple"
+    ],
+    "validationAttribute": "Supplied Parts, Material, Equipment, etc.",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supporting-documentation-kmdnqpyf",
+    "type": "subsection",
+    "index": 30,
+    "label": "Supporting Documentation ",
+    "rules": "required_if_in:supplier-use-status-kx6tlz39,{\"0\":\"Approved\",\"1\":\"Conditionally Approved\",\"2\":\"Approved - Hold new business\"}",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "validators": {
+      "required_if": false,
+      "required_if_in": {
+        "name": "supplier-use-status-kx6tlz39",
+        "value": [
+          "Approved",
+          "Conditionally Approved",
+          "Approved - Hold new business"
+        ]
+      }
+    },
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "omitFinalValidation": true,
+    "validationAttribute": "Supporting Documentation ",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "contracts-and-agreements-select-all-that-apply-kmdnrzre",
+    "type": "checkboxgroup",
+    "index": 31,
+    "label": "Contracts and Agreements (Select all that apply):",
+    "rules": "required_if_in:supplier-use-status-kx6tlz39,{\"0\":\"Conditionally Approved\",\"1\":\"Approved - Hold new business\",\"2\":\"Approved\"}",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "options": [
+      {
+        "text": "Non-Disclosure Agreement",
+        "value": "Non-Disclosure Agreement"
+      },
+      {
+        "text": "Supply Agreement/Contract",
+        "value": "Supply Agreement/Contract"
+      },
+      {
+        "text": "Quality Agreement",
+        "value": "Quality Agreement"
+      },
+      {
+        "text": "N/A",
+        "value": "N/A"
+      },
+      {
+        "text": "form.builder.other",
+        "value": "includeContext"
+      }
+    ],
+    "validators": {
+      "required_if": false,
+      "required_if_in": {
+        "name": "supplier-use-status-kx6tlz39",
+        "value": [
+          "Conditionally Approved",
+          "Approved - Hold new business",
+          "Approved"
+        ]
+      }
+    },
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [
+      "includeContext"
+    ],
+    "validationAttribute": "Contracts and Agreements (Select all that apply):",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supply-agreement-expiration-date-kmdo216q",
+    "type": "datepicker",
+    "index": 32,
+    "label": "Supply Agreement Expiration Date:",
+    "rules": "required_if_in:contracts-and-agreements-select-all-that-apply-kmdnrzre,{\"0\":\"Supply Agreement/Contract\"}",
+    "tabId": "details",
+    "validators": {
+      "required_if_in": {
+        "name": "contracts-and-agreements-select-all-that-apply-kmdnrzre",
+        "value": [
+          "Supply Agreement/Contract"
+        ]
+      }
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "validationMode": "visibility",
+    "validationAttribute": "Supply Agreement Expiration Date:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "audits-and-assessments-check-all-that-apply-kmdnsmyy",
+    "type": "checkboxgroup",
+    "index": 33,
+    "label": "Audits and Assessments (Select all that apply):",
+    "rules": "required_if_in:supplier-use-status-kx6tlz39,{\"0\":\"Approved\",\"1\":\"Conditionally Approved\",\"2\":\"Approved - Hold new business\"}",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "options": [
+      {
+        "text": "Site Quality Audit",
+        "value": "Site Quality Audit"
+      },
+      {
+        "text": "Supplier Self-Assessment",
+        "value": "Supplier Self-Assessment"
+      },
+      {
+        "text": "Third-party Supplier Audit",
+        "value": "Third-party Supplier Audit"
+      },
+      {
+        "text": "Quality System Assessment",
+        "value": "Quality System Assessment"
+      },
+      {
+        "text": "N/A",
+        "value": "N/A"
+      },
+      {
+        "text": "form.builder.other",
+        "value": "includeContext"
+      }
+    ],
+    "validators": {
+      "required_if": false,
+      "required_if_in": {
+        "name": "supplier-use-status-kx6tlz39",
+        "value": [
+          "Approved",
+          "Conditionally Approved",
+          "Approved - Hold new business"
+        ]
+      }
+    },
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [
+      "includeContext"
+    ],
+    "validationAttribute": "Audits and Assessments (Select all that apply):",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "certifications-and-licenses-select-all-that-apply-kmdnu2mb",
+    "type": "checkboxgroup",
+    "index": 34,
+    "label": "Certifications and Licenses (Select all that apply):",
+    "rules": "required_if_in:supplier-use-status-kx6tlz39,{\"0\":\"Approved\",\"1\":\"Conditionally Approved\",\"2\":\"Approved - Hold new business\"}",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "options": [
+      {
+        "text": "FDA Establishment Registration",
+        "value": "FDA Establishment Registration"
+      },
+      {
+        "text": "ISO Certification",
+        "value": "ISO Certification"
+      },
+      {
+        "text": "California FDB License",
+        "value": "California FDB License"
+      },
+      {
+        "text": "N/A",
+        "value": "N/A"
+      },
+      {
+        "text": "form.builder.other",
+        "value": "includeContext"
+      }
+    ],
+    "validators": {
+      "required_if": false,
+      "required_if_in": {
+        "name": "supplier-use-status-kx6tlz39",
+        "value": [
+          "Approved",
+          "Conditionally Approved",
+          "Approved - Hold new business"
+        ]
+      }
+    },
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "visibility",
+    "formValuesRules": {},
+    "editorProperties": [
+      "includeContext"
+    ],
+    "validationAttribute": "Certifications and Licenses (Select all that apply):",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "fda-establishment-registration-number-kmdnxlo4",
+    "rows": 1,
+    "type": "textfield",
+    "index": 35,
+    "label": "FDA Establishment Registration Number:",
+    "rules": "required_if_in:certifications-and-licenses-select-all-that-apply-kmdnu2mb,{\"0\":\"FDA Establishment Registration\"}",
+    "tabId": "details",
+    "validators": {
+      "required_if_in": {
+        "name": "certifications-and-licenses-select-all-that-apply-kmdnu2mb",
+        "value": [
+          "FDA Establishment Registration"
+        ]
+      }
+    },
+    "placeholder": "[Enter FDA registration number of contract manufacturer]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "validationMode": "visibility",
+    "validationAttribute": "FDA Establishment Registration Number:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "iso-certification-expiration-date-kmdnzm7q",
+    "type": "datepicker",
+    "index": 36,
+    "label": "ISO Certification Expiration Date:",
+    "rules": "required_if_in:certifications-and-licenses-select-all-that-apply-kmdnu2mb,{\"0\":\"ISO Certification\"}",
+    "tabId": "details",
+    "validators": {
+      "required_if_in": {
+        "name": "certifications-and-licenses-select-all-that-apply-kmdnu2mb",
+        "value": [
+          "ISO Certification"
+        ]
+      }
+    },
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "validationMode": "visibility",
+    "validationAttribute": "ISO Certification Expiration Date:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "attach-supporting-documentation-s-kmdo05ut",
+    "type": "fileupload",
+    "index": 37,
+    "label": "Attach Supporting Documentation(s):",
+    "tabId": "details",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "default",
+    "validationAttribute": "Attach Supporting Documentation(s):",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "reference-document-s-as-applicable-kmdo0w8d",
+    "type": "autocomplete",
+    "index": 38,
+    "label": "Reference Document(s) as applicable:",
+    "tabId": "details",
+    "multiple": true,
+    "optionId": "18",
+    "placeholder": "N/A",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "default",
+    "editorProperties": [
+      "multiple"
+    ],
+    "validationAttribute": "Reference Document(s) as applicable:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "comments-khcjjavx",
+    "rows": 3,
+    "type": "textfield",
+    "index": 39,
+    "label": "Comments:",
+    "rules": "",
+    "tabId": "details",
+    "deleted": true,
+    "validators": {
+      "required_if_in": false
+    },
+    "placeholder": "[Describe any additional comments (e.g. pending evaluation status, favorable history requirements,etc.) here]",
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "validationMode": "visibility",
+    "editorProperties": [],
+    "validationAttribute": "Comments:",
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "comments-kmdp6cux",
+    "rows": 2,
+    "type": "textfield",
+    "index": 40,
+    "label": "Comments:",
+    "rules": "",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "placeholder": "[Provide comments here or N/A]",
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "deleteDisabled": false,
+    "outputDisabled": false,
+    "validationMode": "default",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "validationAttribute": "Comments:",
+    "deleteInFormDisabled": false,
+    "sampleItemsIndicator": {
+      "id": "",
+      "enabled": false,
+      "serialNumber": 0,
+      "sampleSection": false
+    },
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "description-of-change-kx6tuho5",
+    "type": "section",
+    "index": 41,
+    "label": "Change Details",
+    "rules": "",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "default",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "omitFinalValidation": true,
+    "validationAttribute": "Change Details",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "supplier-change-details-select-all-that-apply-kx6twox0",
+    "type": "checkboxgroup",
+    "index": 42,
+    "label": "Supplier Change Details (Select all that apply):",
+    "rules": "",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "options": [
+      {
+        "text": "Add New Supplier",
+        "value": "Add New Supplier"
+      },
+      {
+        "text": "Change \"Supplier Use\"",
+        "value": "Change \"Supplier Use\""
+      },
+      {
+        "text": "Change \"Risk Classification\"",
+        "value": "Change \"Risk Classification\""
+      },
+      {
+        "text": "Change \"Use Status\"",
+        "value": "Change \"Use Status\""
+      },
+      {
+        "text": "Change \"Type/Capability\"",
+        "value": "Change \"Type/Capability\""
+      },
+      {
+        "text": "Add/Modify \"Supplied Items/Parts\"",
+        "value": "Add/Modify \"Supplied Items/Parts\""
+      },
+      {
+        "text": "Update Supporting Documentation/ References\"",
+        "value": "Update Supporting Documentation/ References\""
+      },
+      {
+        "text": "form.builder.other",
+        "value": "includeContext"
+      }
+    ],
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "default",
+    "formValuesRules": {},
+    "editorProperties": [
+      "includeContext"
+    ],
+    "validationAttribute": "Supplier Change Details (Select all that apply):",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "comments-kx6twy3x",
+    "rows": 3,
+    "type": "textfield",
+    "index": 43,
+    "label": "Comments:",
+    "rules": "",
+    "tabId": "details",
+    "hidden": false,
+    "deleted": false,
+    "placeholder": "",
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "default",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "validationAttribute": "Comments:",
+    "deleteInFormDisabled": false,
+    "applicableValidationSchema": true
+  },
+  {
+    "name": "approvals-kwm6zxqi",
+    "type": "approvals",
+    "index": 44,
+    "label": "Approvals",
+    "rules": "",
+    "tabId": "overview",
+    "hidden": false,
+    "deleted": false,
+    "rulesObject": {},
+    "applicableOn": [
+      "ON_STATE_TO_IN_REVIEW"
+    ],
+    "outputDisabled": false,
+    "validationMode": "default",
+    "formValuesRules": {},
+    "editorProperties": [],
+    "uniqueSchemaItem": true,
+    "validationAttribute": "Approvals",
+    "deleteInFormDisabled": false,
+    "sampleItemsIndicator": {
+      "id": "",
+      "enabled": false,
+      "serialNumber": 0,
+      "sampleSection": false
+    },
+    "applicableValidationSchema": true
+  }
+]

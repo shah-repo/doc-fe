@@ -19,7 +19,7 @@ const FBPOApprovalMatrix: React.FunctionComponent<FBPOApprovalMatrixFieldProps> 
   <Provider {...{ poamState, dialogState }}>
     <FBDialog />
     <FBInput {...{ name, autosave }} disabled={props.disabled} type="poApprovalMatrix">
-      <Box mt={3}>
+      <Box>
         <FBSection name={`fb-poam-section-${name}`} label={props.label}>
           <Box display="flex" flexDirection="row-reverse">
             <IconButton color="inherit" size="small" onClick={handleRevert} >

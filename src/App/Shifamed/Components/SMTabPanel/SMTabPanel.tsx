@@ -1,8 +1,8 @@
 import { Observer } from "mobx-react";
 import React from "react";
 import { SMBox, SMTabPanelProps } from "../../..";
+import useStyles from "./SMTabPanel.styles";
 import { withSMTabPanelWrap } from "./SMTabPanel.wrap";
-import styles from "./styles";
 
 const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   _tabsState,
@@ -10,7 +10,7 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   children,
   panelProps,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
 
   return (
     <Observer>

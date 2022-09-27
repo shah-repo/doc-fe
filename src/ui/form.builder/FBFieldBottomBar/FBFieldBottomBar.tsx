@@ -1,51 +1,38 @@
 import { Box } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import React, { useState } from "react";
+import React from "react";
 import { FBButton, FBFieldBottomBarProps } from "..";
 import { SM } from "../../../App";
-import Colors from "../../layout/theme/utils/colors";
+import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
 import { withFBStarter } from "../FBStarter/FBStarter.wrap";
+import useStyles from "./FBFieldBottomBar.styles";
 
 const FBFieldBottomBar: React.FunctionComponent<FBFieldBottomBarProps> = ({
   visibility,
   onClick,
   index = 0,
-  mt,
 }) => {
   const { _tabsState } = SM.useStores();
-  const [isHover, setIsHover] = useState(false);
-  return (<Box display={visibility === "visible" ? "flex" : "none"} mt={mt}
-    onMouseEnter={() => setIsHover(true)}
-    onMouseLeave={() => setIsHover(false)}>
-    <Box
-      border={0}
-      borderTop={1}
-      my="auto"
-      width="100%"
-      color={Colors.navy}
-      style={{ borderStyle: isHover ? "solid" : "dashed" }}
-    />
-    <FBButton
-      label={_tabsState?.tabID === "specification" ? "form.builder.addEquiSpec" : "form.builder.add.field"}
-      dataCy="form.builder.add.field"
-      size="medium"
-      variant="contained"
-      fullWidth={true}
-      isHover={isHover}
-      showNewButton ={true}
-      startIcon={<AddIcon fontSize="small" />}
-      onClick={() => onClick && onClick(index + 1)}
-    />
-    <Box
-      border={0}
-      borderTop={1}
-      my="auto"
-      width="100%"
-      color={Colors.navy}
-      style={{ borderStyle: isHover ? "solid" : "dashed" }}
-    />
-  </Box>);
+  const { _documentRevisionFormState } = SM.useStores();
+  const classes = useStyles();
 
+  const isEQ = checkIsDocumentEquipment(
+    _documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions
+  );
+
+  return (
+    <Box visibility={visibility} className={classes.root}>
+      <FBButton
+        label={(_tabsState?.tabID === "specification" && isEQ) ? "form.builder.addEquiSpec" : "form.builder.add.field"}
+        dataCy="form.builder.add.field"
+        size="medium"
+        variant="contained"
+        className={classes.button}
+        startIcon={<AddIcon fontSize="small" />}
+        onClick={() => onClick && onClick(index + 1)}
+      />
+    </Box>
+  );
 };
 
 export default withFBStarter(FBFieldBottomBar);

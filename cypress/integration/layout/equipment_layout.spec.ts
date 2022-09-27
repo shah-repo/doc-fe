@@ -671,7 +671,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Fill the Eq status and Approver'", () => {
-        cy.get("[name='fb-default-eq-status']").eq(0).arrowClick({ force: true });
+        cy.get("[name='fb-default-eq-status']").eq(0).arrowClick().wait(2000);
         cy.get("[data-cy^='autocomplete-approvers']").autocompleteSelect(USERS[1].name);
       });
 

@@ -1,13 +1,19 @@
 import { Box, IconButton, TooltipProps, Typography } from "@material-ui/core";
 import copy from "copy-to-clipboard";
-import { isUndefined } from "lodash";
+import { get, isUndefined } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { SM } from "../../../App";
 import { tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as CopyIcon } from "../../../assets/images/copy_outlined.svg";
-import { FB, FBBookmarkItem, FBMapWrapper, FBTooltip } from "../../form.builder";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType/types";
+import { ApplicationState } from "../../../state/reducers";
+import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
+import { FB, FBBookmarkItem, FBDocTypeGroup, FBMapWrapper, FBTooltip } from "../../form.builder";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./Bookmarks.new.styles";
 
@@ -25,8 +31,16 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks, 
   const history = useHistory();
   const classes = styles();
   const { bookmarkState } = FB.useStores();
-  const { _tabsState } = SM.useStores();
+  const { _tabsState, _documentRevisionFormState } = SM.useStores();
   const [selectedIndex, setSelectedIndex] = React.useState(undefined);
+
+  const documentRevision = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getDocumentRevision(state, (_documentRevisionFormState?.documentRevision?.id || "")));
+  const docTypeGroup = get(documentRevision?.document?.documentType, "group", FBDocTypeGroup.OTHER);
+  const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
+  const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
+  const tabConfig = useSelector((state: ApplicationState) => documentTypeSelectors.getTabConfiguration(state, group));
+
   useObserver(() => {
     bookmarks = bookmarkState?.bookmarks;
   });
@@ -38,6 +52,9 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks, 
     if (isUndefined(tabIndex) || tabIndex < 0) {
       return;
     }
+    if (tabConfig) {
+      _tabsState?.setTabID(tabConfig[tabIndex]?.tabId);
+    }
     if (tabIndex === _tabsState?.value) {
       history.push(`#${hash}`);
     } else {
@@ -45,9 +62,11 @@ const Bookmarks: React.FunctionComponent<SidebarPresenterProps> = ({ bookmarks, 
         history.push(`#${hash}`);
     }
   };
+
   return (
     <Box m={1.875}>
-      <FBMapWrapper<FBBookmarkItem[]> collection={bookmarks || []}>
+      <FBMapWrapper<FBBookmarkItem[]>
+        collection={bookmarks?.sort((a, b) => ((a?.name || "") > (b?.name || "")  ? 1 : -1)) || []}>
         {(bookmark: FBBookmarkItem, index) => {
           const { name: hash, label = "", tabIndex } = bookmark;
           const link = window.location.href.split("#");

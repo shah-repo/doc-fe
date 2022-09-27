@@ -1,181 +1,213 @@
-import { Box, Chip, Divider, Grid, List, ListItem, ListItemText } from "@material-ui/core";
-import Accordion from "@material-ui/core/ExpansionPanel";
-import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
-import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
-import { map } from "lodash";
-import React from "react";
+import { Box, Button, Chip, CircularProgress, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, FormControlLabel, Grid, List, ListItem, ListItemText, MenuItem, MenuList, Switch } from "@material-ui/core";
+import cx from "classnames";
+import { remove } from "lodash";
+import React, { useState } from "react";
 import { useIntl } from "react-intl";
-import SMText from "../../../App/Shifamed/Components/SMText/SMText";
-import { ReactComponent as CollapseIcon } from "../../../assets/images/tabCollapse.svg";
+import { SMText } from "../../../App";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/tabExpand.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import Colors from "../../layout/theme/utils/colors";
-import { MaterialEqProps } from "./FBMaterailEqInfo.types";
-import { styles } from "./FBMaterialEqInfo.styles";
+import { Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from "./FBMaterailEqInfo.types";
+import useStyles, { useItemStatusStyles } from "./FBMaterialEqInfo.styles";
 
-const FBMaterialEqInfoPresenter: React.FunctionComponent<MaterialEqProps> = ({ materialData }) => {
-  const classes = styles();
-  const unit = " Items";
+const DATE_FORMAT = MomentFormats.BriefDate;
+
+const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (
+  <>
+    <ListItemText>
+      {item.docId && `${item.docId} -`} {item.title} | {item.unit} : {item.quantity}
+    </ListItemText>
+    <ListItemText>
+      {item.lots && item.lots.map((lot: LotItem) => (
+        <Chip
+          className={classes.chip}
+          key={lot.lotId}
+          size="small"
+          label={`Lot ${lot.lotId ?? ""} | ${lot.partId ?? "N/A"} | ${lot.quantity ?? ""} ${lot.unit ?? ""}`}
+        />
+      ))}
+    </ListItemText>
+  </>
+);
+
+const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
   const intl = useIntl();
-  const nextCalText = intl.formatMessage({ id: "meq.chip.nextCalDate" }) + "";
-  const PreventMaintainanceText = intl.formatMessage({ id: "meq.chip.prevMaintance" });
-  const [isMaterialPannel, setIsMaterialPannel] = React.useState(false);
-  const [isEquipmentPannel, setIsEquipmentPannel] = React.useState(false);
-  const updatePanelState = (text) => (event: React.MouseEvent) => {
-    const result = text === "common.collapse.all" ? false : true;
-    setIsMaterialPannel(result);
-    setIsEquipmentPannel(result);
-    event.preventDefault();
-  };
-  const  predictExpandCollapseText = () => {
-    let text = "common.expand.all";
-    if (isMaterialPannel && isEquipmentPannel) {
-      text = "common.collapse.all";
-    }
-    return text;
-  };
-  const genRateMaterialDetail = () => (map(materialData.materials, (o, topIndex: number) =>
-    <>
-      <ListItem  className={classes.meqListItem} key={o.docId}>
-        <ListItemText
-          className={classes.fontNormal14}>{o.docId} - {o.title} | {o.unit} : {o.quantity}</ListItemText>
-        <ListItemText className={classes.fontNormal12} >
-          {
-            o.lots && o.lots.map((obj, index) => (
-              <Chip key={index} className={classes.chipStyle}
-                size="small"  label={constructLotDetail(obj)} />
-            ))
-          }
-        </ListItemText>
-        {++topIndex < materialData.materials.length && <Divider className={classes.dividerMargin} />}
-      </ListItem>
-    </>
-  ));
-  const genRateEquipmentDetail = () => (map(materialData.equipment, (o, topIndex: number) =>
-    <>
-      <ListItem  className={classes.meqListItem} key={o.docId}>
-        <ListItemText className={classes.fontNormal14}>
-          {o.docId} {o.title}</ListItemText>
-        <ListItemText className={classes.fontNormal12}>
-          {
-            o.nextCalibration &&
-          <Chip  className={classes.chipStyle}
-            size="small"  label={o.nextCalibration ? nextCalText +
-           getFormattedDateString(o.nextCalibration, MomentFormats.BriefDate) : ""} />
-          }
-          {o.nextPm &&
-          <Chip  className={classes.chipStyle}
-            size="small"  label={o.nextPm ? PreventMaintainanceText
-          + getFormattedDateString(o.nextPm, MomentFormats.BriefDate) : ""} />
-          }
-        </ListItemText>
-        {++topIndex < materialData.equipment.length && <Divider className={classes.dividerMargin} />}
-      </ListItem>
-    </>
-  ));
-  const constructLotDetail = (obj) => `Lot ${obj.lotId || ""} | ${obj.partId || "N/A"}
-   | ${obj.quantity || ""} ${obj.unit || ""}`;
+
   return (
     <>
+      <ListItemText>
+        {item.docId && `${item.docId} -`} {item.title}
+      </ListItemText>
+      <ListItemText>
+        {item.nextCalibration && (
+          <Chip
+            className={classes.chip}
+            size="small"
+            label={
+              intl.formatMessage({ id: "meq.chip.nextCalDate" })
+              + getFormattedDateString(item.nextCalibration, DATE_FORMAT)
+            }
+          />
+        )}
+        {item.nextPm && (
+          <Chip
+            className={classes.chip}
+            size="small"
+            label={
+              intl.formatMessage({ id: "meq.chip.prevMaintance" })
+              + getFormattedDateString(item.nextPm, DATE_FORMAT)
+            }
+          />
+        )}
+      </ListItemText>
+    </>
+  );
+};
+
+const Panel: React.FC<PanelProps> = ({ panel, data = [], expanded, loading, classes, togglePanel }) => {
+  const itemClasses = useItemStatusStyles();
+  const PanelItem = panel.itemComponent;
+  const haveData = Boolean(data.length);
+
+  return (
+    <Box key={panel.dataKey} className={classes.panel}>
+      <ExpansionPanel expanded={expanded}>
+        <ExpansionPanelSummary
+          classes={{
+            root: classes.panelSummary,
+            content: classes.panelSummaryContent,
+            expandIcon: classes.panelSummaryIcon,
+          }}
+          onClick={togglePanel}
+          expandIcon={<ExpandIcon fontSize="small" />}
+        >
+          <SMText label={panel.title} boxProps={{ className: classes.panelSummaryTitle }} />
+          {!loading && haveData && (
+            <SMText
+              label={{
+                locale: "common.items.count",
+                values: {
+                  count: String(data.length),
+                },
+              }}
+              boxProps={{ className: classes.panelSummaryCount }}
+            />
+          )}
+          {loading && <CircularProgress size={14} />}
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails className={classes.panelDetails}>
+          <List className={classes.panelDetailsList}>
+            {haveData ?
+              data.map((item, pos) => (
+                <ListItem
+                  key={`${item.docId}-${item.title}`}
+                  divider={pos < data.length - 1}
+                  className={cx(classes.panelDetailsListItem, {
+                    [itemClasses[item.status ?? ""]]: item.status,
+                  })}
+                >
+                  <PanelItem item={item} classes={classes} />
+                </ListItem>
+              )) :
+              <ListItem className={classes.panelDetailsListItem}><SMText label="common.none" /></ListItem>
+            }
+          </List>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
+    </Box>
+  );
+};
+
+const panels: PanelData[] = [
+  {
+    dataKey: "materials",
+    title: "form.builder.materials",
+    itemComponent: MaterialItem,
+  },
+  {
+    dataKey: "equipment",
+    title: "form.builder.equipment",
+    itemComponent: EquipmentItem,
+  },
+];
+
+const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
+  data,
+  showDiff,
+  includeDiff,
+  handleShowDiffChange,
+  loading,
+}) => {
+  const [expandedPanels, setExpanedPanels] = useState<string[]>([]);
+  const allPanelsExpaned = expandedPanels.length === panels.length;
+  const classes = useStyles();
+
+  const toggleAllPanels = () => setExpanedPanels(() => (
+    allPanelsExpaned ? [] : panels.map((panel) => panel.dataKey)
+  ));
+  const togglePanel = (key: string) => () => setExpanedPanels((state) => (
+    state.includes(key) ? remove(state, key) : [...state, key]
+  ));
+  const jumpToPanel = (key: string) => () => setExpanedPanels([key]);
+
+  return (
+    <Box className={classes.root}>
+      {includeDiff && (
+        <Box className={classes.diffSwitch}>
+          <FormControlLabel
+            className={classes.switchLabel}
+            control={
+              <Switch
+                classes={{
+                  root: classes.switchRoot,
+                  switchBase: classes.switchBase,
+                  thumb: classes.switchThumb,
+                  track: classes.switchTrack,
+                  checked: classes.switchChecked,
+                }}
+                checked={showDiff}
+                onChange={(e, checked) => handleShowDiffChange(checked)}
+              />
+            }
+            label={<SMText label="form.builder.prev.build.changes" boxProps={{ className: classes.switchLabel }} />}
+          />
+        </Box>
+      )}
       <Grid container spacing={3}>
         <Grid item xs={9}>
           <Box mb={1}>
-            <p className={classes.meqAccordianHeading}
-              onClick={updatePanelState(predictExpandCollapseText())} >
-              <SMText label={ predictExpandCollapseText()} /></p>
+            <Button variant="text" disableRipple className={classes.expandButton} onClick={toggleAllPanels}>
+              <SMText label={allPanelsExpaned ? "common.collapse.all" : "common.expand.all"} />
+            </Button>
           </Box>
-          <Box mb={1} >
-            <Accordion className={classes.panelBorder} expanded={isMaterialPannel} >
-              <AccordionSummary onClick={() => setIsMaterialPannel(!isMaterialPannel)}
-                className={`${classes.panelSummary} ${classes.tabCursor}`}
-                style={{ color: isMaterialPannel ? Colors.navy : "inherit" }} expandIcon={
-                  isMaterialPannel ? <ExpandIcon
-                    fontSize="small"
-                    className= {classes.expandIconStyle}
-                  /> :
-                    <CollapseIcon
-                      fontSize="small"
-                      className= {classes.tabCursor}
-                    />
-                }>
-                <Grid container spacing={3}>
-                  <Grid item xs={6} className={classes.gridHeadingPadding} >
-                    <SMText label={"form.builder.materials|s"} />
-                  </Grid>
-                  <Grid item xs={6} >
-                    <Box className={classes.qunatityText}>
-                      <SMText   label={materialData.materials.length ? materialData.materials.length + unit : ""} />
-                    </Box>
-                  </Grid>
-                </Grid>
-              </AccordionSummary>
-              <AccordionDetails  className= {classes.expanSionPannelPadding}>
-                <List>
-                  {genRateMaterialDetail()}
-                </List>
-              </AccordionDetails>
-            </Accordion>
-          </Box>
-          <Box>
-            <Accordion className={classes.panelBorder} expanded={isEquipmentPannel}>
-              <AccordionSummary onClick={() => setIsEquipmentPannel(!isEquipmentPannel)}
-                className={`${classes.panelSummary} ${classes.tabCursor}`}
-                style={{ color: isEquipmentPannel ? Colors.navy : "inherit" }}
-                expandIcon={
-                  isEquipmentPannel ? <ExpandIcon
-                    fontSize="small"
-                    className= {classes.expandIconStyle}
-                  /> :
-                    <CollapseIcon
-                      fontSize="small"
-                      className= {classes.tabCursor}
-                    />
-                }>
-                <Grid container spacing={3}>
-                  <Grid item xs={6} className={classes.gridHeadingPadding} >
-                    <SMText label={"form.builder.equipment"} />
-                  </Grid>
-                  <Grid item xs={6} >
-                    <Box className={classes.qunatityText}>
-                      <SMText  label={materialData.equipment.length ? materialData.equipment.length + unit : ""} />
-                    </Box>
-                  </Grid>
-                </Grid>
-
-              </AccordionSummary>
-              <AccordionDetails  className={classes.expanSionPannelPadding}>
-                <List>
-                  {genRateEquipmentDetail()}
-                </List>
-              </AccordionDetails>
-            </Accordion>
-          </Box>
+          {panels.map((panel) => (
+            <Panel
+              key={panel.dataKey}
+              panel={panel}
+              data={data?.[panel.dataKey]}
+              expanded={expandedPanels.includes(panel.dataKey)}
+              togglePanel={togglePanel(panel.dataKey)}
+              loading={loading}
+              classes={classes}
+            />
+          ))}
         </Grid>
         <Grid item xs={3}>
-          <Box className={classes.jumpToBolckpadding}>
-            <Box className={classes.fontText}><SMText label={"common.jump.to"} /></Box>
-            <Box className={classes.jumpToTextMargin}
-              style={{ background: isMaterialPannel ? Colors.light_cream_blue : "inherit" }}>
-              <p  className={classes.paraGraphMaterial}   onClick={() =>
-              { setIsMaterialPannel(true); setIsEquipmentPannel(false); }} >
-                <Box className={classes.jumpToTextPadding}>
-                  <SMText label={"form.builder.materials|s"} />
-                </Box>
-              </p>
-            </Box>
-            <Box mb={1} className={classes.jumpToTextMargin}
-              style={{ background: isEquipmentPannel ? Colors.light_cream_blue : "inherit" }}>
-              <p  className={classes.paraGraphEq}
-                onClick={() => { setIsMaterialPannel(false); setIsEquipmentPannel(true); }} >
-                <Box className={classes.jumpToTextPadding}>
-                  <SMText label={"form.builder.equipment"} />
-                </Box>
-              </p>
-            </Box>
-          </Box>
+          <SMText label={"common.jump.to"} boxProps={{ className: classes.navTitle }} />
+          <MenuList>
+            {panels.map((panel) => (
+              <MenuItem
+                key={panel.dataKey}
+                onClick={jumpToPanel(panel.dataKey)}
+                selected={expandedPanels.includes(panel.dataKey)}
+                className={classes.navItem}
+              >
+                <SMText label={panel.title} />
+              </MenuItem>
+            ))}
+          </MenuList>
         </Grid>
       </Grid>
-    </>
+    </Box>
   );
 };
 

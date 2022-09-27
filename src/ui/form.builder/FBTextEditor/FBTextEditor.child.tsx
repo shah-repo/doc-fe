@@ -85,7 +85,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
             removeBorder ? Colors.alabaster : isPreview ? "transparent" : disabled ? Colors.whitest_grey : Colors.white
           }
           borderRadius={4}
-          zIndex={1000}
+          zIndex={3}
           display="flex"
           style={{
             gridArea: "1/1",
