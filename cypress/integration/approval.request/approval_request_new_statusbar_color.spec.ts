@@ -264,8 +264,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Enter new description", () => {
-      cy.get("#title").clear();
-      cy.get("#title").arrowType("New Ar title2");
+      cy.arEnterApprovalRequestDescription({ description: "New Ar title2" });
     });
 
     it("Verify 'Last saved a few seconds ago' text should exist", () => {
@@ -285,8 +284,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Enter new title", () => {
-      cy.get("#title").clear();
-      cy.get("#title").arrowType("New Ar title");
+      cy.arEnterApprovalRequestTitle({ title: "New Ar title" });
     });
 
     it("Save the document", () => {
@@ -386,7 +384,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Verify header is fixed when page scroll", () => {
-      cy.get(".hide-scroll").scrollTo("bottom");
+      cy.get(".hide-scroll").scrollTo("bottom", { ensureScrollable: false });
       cy.get("header").should("be.visible");
     });
 
@@ -661,19 +659,23 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Add created document revision", () => {
+      cy.arSelectDocumentTab();
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.wait(3000);
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    it("Switch to change details tab", () => {
+      cy.arSelectChangeDetailsTab();
+      cy.wait(1000);
     });
 
     it("Add approvers to approval request on approver list", () => {
       cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].name);
+      cy.wait(3000);
     });
 
     it("Click on Save", () => {
@@ -685,6 +687,7 @@ context("Status Bar of newly created ARs", () => {
     it("Fill all fields and add 'Implementation Task'", () => {
       SystemRequirement("REQ-0710");
       cy.get("[data-cy='fb-control-btn']").arrowClick();
+      cy.get("[data-cy='fb-control-btn']").arrowClick();
       cy.get("[data-cy='title']").arrowType("Task One");
       cy.get("[data-cy='description']").next().arrowType("Task Description");
       cy.get("[data-cy='assigned']").autocompleteSelect(`${USERS[1].email}`);
@@ -695,9 +698,8 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Add description 'Test' to trigger autosave", () => {
-      cy.get("[data-cy='field-description']").click();
-      cy.get("[data-cy='field-description']").clear().arrowType("Test").wait(2000);
-      cy.unClick();
+      cy.get("[class^=\"public-DraftStyleDefault-block\"]").clear()
+        .arrowType("Test", { force: true });
     });
 
     it(`Check 'Implementation task' status is '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
@@ -751,8 +753,8 @@ context("Status Bar of newly created ARs", () => {
       cy.get(`[class*="makeStyles-closeIcon"]`).arrowClick();
     });
 
-    it(`Verify DRAFT statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
-      cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+    it(`Verify IMPLEMENTATION statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
   });
 });
