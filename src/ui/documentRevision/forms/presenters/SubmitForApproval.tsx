@@ -1,6 +1,7 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } from "@material-ui/core";
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
@@ -27,6 +28,7 @@ interface Props {
   updatedAt?: string;
   currentDocumentType?: DocumentType;
   renderAsButton?: boolean;
+  hasBuildType?: boolean;
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
@@ -37,6 +39,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   updatedAt,
   currentDocumentType,
   renderAsButton,
+  hasBuildType,
 }) => {
   const isNewLayout = SM.isNewLayout;
   const classes = styles();
@@ -61,10 +64,14 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
     },
   });
 
+  const intl = useIntl();
   const formState = FB.useRef(FBFormState, {});
   const save = useActionCreator(documentRevisionsActions.save);
 
   const releaseRecord = () => {
+    if (!hasBuildType) {
+      return toastError(intl.formatMessage({ id: "form.builder.lhr.build.type.error.message" }));
+    }
     releaseAsync.start(
       applyTransition,
       docRevId,
