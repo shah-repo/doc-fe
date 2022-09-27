@@ -16,10 +16,10 @@ let adminEmployee;
 let createdCompany;
 let adminEmployeeLoginResponse;
 let equipmentURL;
-let createdPMFormDocumentId;
-let createdCalibrationFormDocumentId;
-let pmSchemaField;
-let calibrationSchemaField;
+// let createdPMFormDocumentId;
+// let createdCalibrationFormDocumentId;
+// let pmSchemaField;
+// let calibrationSchemaField;
 
 const multipleCompanies = true;
 let pMFormId;
@@ -186,11 +186,11 @@ context("Equipment maintenance and calibration", () => {
 
         cy.wait("@response").then((res) => {
           if (res.response) {
-            const response = res.response.body;
+            // const response = res.response.body;
             // eslint-disable-next-line max-len
-            pmSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Preventative Maintenance");
+            // pmSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Preventative Maintenance");
             // eslint-disable-next-line max-len
-            calibrationSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Calibration");
+            // calibrationSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Calibration");
           }
         });
 
@@ -472,7 +472,7 @@ context("Equipment maintenance and calibration", () => {
     it("Approve and release form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       cy.url().then((url: any) => {
-        createdPMFormDocumentId = url.split("/").pop();
+        // createdPMFormDocumentId = url.split("/").pop();
       });
     });
 
@@ -947,7 +947,7 @@ context("Equipment maintenance and calibration", () => {
     it("Approve and release CAL form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       cy.url().then((url: any) => {
-        createdCalibrationFormDocumentId = url.split("/").pop();
+        // createdCalibrationFormDocumentId = url.split("/").pop();
       });
     });
 
