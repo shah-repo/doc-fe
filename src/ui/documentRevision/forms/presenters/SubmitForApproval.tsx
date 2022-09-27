@@ -69,7 +69,7 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   const save = useActionCreator(documentRevisionsActions.save);
 
   const releaseRecord = () => {
-    if (!hasBuildType) {
+    if (!hasBuildType && currentDocumentType?.category === "Lhr") {
       return toastError(intl.formatMessage({ id: "form.builder.lhr.build.type.error.message" }));
     }
     releaseAsync.start(
