@@ -2,9 +2,10 @@ import { Box, Grid } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import CancelIcon from "@material-ui/icons/Cancel";
 import SuccessIcon from "@material-ui/icons/CheckCircle";
-import { capitalize, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FBFileField, FBFilesPresenter, FBFZIPUploadProps, FBInput, FBProvider, FBUnzipStatus } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import FBButton from "../components/inputs/FBButton";
@@ -22,30 +23,44 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
   unzipStatus,
   fileUploadState,
   startUnzip,
-}) =>
-  <>
-    {!readonly && (
-      <FBFileField
-        key={`fb-zip-attachment-field-${name}`}
-        name={name}
-        disabled= {disableFileUpload || disabled}
-        typeToAccept=".zip"
-      />
-    )}
-    <Observer>
-      {() => (
-        <>
-          {!isEmpty(files) && (
-            <Grid container>
-              <Grid item xs={8}>
-                <FBFilesPresenter
-                  boxProps={{ mt: 2 }}
-                  {...{ files, disabled }}
-                />
-              </Grid>
-              <Grid item xs={4} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-                <Grid item xs={12} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-                  {fileUploadState?.unzipStatus &&
+}) => {
+  const intl = useIntl();
+  const getStatus = () => {
+    switch (fileUploadState?.unzipStatus) {
+      case FBUnzipStatus.DONE:
+        return intl.formatMessage({ id: "form.builder.unzip.status.done" });
+      case FBUnzipStatus.PROCESSING:
+        return intl.formatMessage({ id: "form.builder.unzip.status.processing" });
+      case FBUnzipStatus.FAILED:
+        return intl.formatMessage({ id: "form.builder.unzip.status.failed" });
+      default:
+        return "";
+    }
+  };
+  return (
+    <>
+      {!readonly && (
+        <FBFileField
+          key={`fb-zip-attachment-field-${name}`}
+          name={name}
+          disabled= {disableFileUpload || disabled}
+          typeToAccept=".zip"
+        />
+      )}
+      <Observer>
+        {() => (
+          <>
+            {!isEmpty(files) && (
+              <Grid container>
+                <Grid item xs={8}>
+                  <FBFilesPresenter
+                    boxProps={{ mt: 2 }}
+                    {...{ files, disabled }}
+                  />
+                </Grid>
+                <Grid item xs={4} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                  <Grid item xs={12} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                    {fileUploadState?.unzipStatus &&
                 <Box
                   css={{
                     display: "flex",
@@ -66,32 +81,27 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
                       <CancelIcon fontSize="small" style={{ color: Colors.latest_red_varient }} />)
                   }
                   <b style={{ marginLeft: "10px" }}>
-                    {fileUploadState?.unzipStatus === FBUnzipStatus.PROCESSING ?
-                      `${capitalize(fileUploadState?.unzipStatus)}...` :
-                      (fileUploadState?.unzipStatus === FBUnzipStatus.FAILED) ?
-                        `${capitalize(fileUploadState?.unzipStatus)}, please try again` :
-                        capitalize(fileUploadState?.unzipStatus)
-                    }
+                    {getStatus()}
                   </b>
                 </Box>}
-                </Grid>
-                <Grid item xs={12} style={{ maxWidth: "fit-content" }}>
-                  <FBButton
-                    key={`fb-zip-attachment-button-${name}`}
-                    label={"form.builder.unzip.files"}
-                    onClick={() => { startUnzip(); }}
-                    disabled= {disableUnzipButton || disabled}
-                  />
+                  </Grid>
+                  <Grid item xs={12} style={{ maxWidth: "fit-content" }}>
+                    <FBButton
+                      key={`fb-zip-attachment-button-${name}`}
+                      label={"form.builder.unzip.files"}
+                      onClick={() => { startUnzip(); }}
+                      disabled= {disableUnzipButton || disabled}
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          )}
-        </>
-      )}
-    </Observer>
-  </>;
-
-
+            )}
+          </>
+        )}
+      </Observer>
+    </>
+  );
+};
 const FBZIPUpload: React.FunctionComponent<FBFZIPUploadProps> = ({
   fileUploadState,
   ...props
