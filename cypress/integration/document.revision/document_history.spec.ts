@@ -236,7 +236,8 @@ context("Check Document History", () => {
     });
 
     it("Remove reference for document", () => {
-      cy.drRemoveReferences({ reference: "FM-00001" });
+      cy.get("[data-cy=\"field-referenceTo\"]").find("[role='button']").should("contain.text", "FM-00001")
+        .trigger("mouseover").find("svg").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
     });
 
