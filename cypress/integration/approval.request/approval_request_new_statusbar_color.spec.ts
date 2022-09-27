@@ -24,8 +24,6 @@ const documentRevisionName = "New document for testing approval request list";
 const documentRevisionName2 = "New document for testing approval request list two";
 const approvalRequestName = "Approval request for testing 1";
 const approvalRequestName2 = "Approval request for testing 2";
-const approvalRequestTitle = "Approval request from newly created form";
-const approvalRequestFormName = "New Approval request form template";
 let docLastUpdatedTime;
 let thirdEmployee;
 
@@ -478,8 +476,8 @@ context("Status Bar of newly created ARs", () => {
       cy.get(".makeStyles-lastEdited").should("not.be.exist");
     });
 
-    it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
-      cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
+    it(`Verify the statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
 
     it("Verify header is fixed when page scroll", () => {
@@ -595,179 +593,6 @@ context("Status Bar of newly created ARs", () => {
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
       cy.get(`[class*="headerSection"]`).should("be.visible");
-    });
-  });
-
-  context("Create new AR form with implementation task", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Click on 'create a document'", () => {
-      cy.cmpClickCreateNewDocument();
-    });
-
-    it("Enter title 'New Approval request form template'", () => {
-      cy.drEnterDocumentTitle({ name: approvalRequestFormName });
-    });
-
-    it("Enter description 'New form template for approval request'", () => {
-      cy.drEnterDocumentDescription({ description: "New form template for approval request" });
-    });
-
-    it("Click on 'Form' document type", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Add 'Implementation Task' to AR", () => {
-      cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
-      cy.get("[data-cy='label']").arrowType("Implementation Task");
-      cy.fbAddField();
-    });
-
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-    });
-  });
-
-  context("Create approval request with newly created form", () => {
-    it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
-    });
-
-    it("Click Create a Approval Request button", () => {
-      cy.arClickCreateAnAR();
-    });
-
-    it("Choose newly AR Form template", () => {
-      cy.get("#FormList-selectForm").arrowType(`${approvalRequestFormName}{enter}`);
-      cy.get("[data-cy='create.approval.request.continue']").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Enter title AR title: " + approvalRequestTitle, () => {
-      cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
-    });
-
-    it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "AR from New form template for approval request" });
-    });
-
-    it("Select Documents tab", () => {
-      cy.drSelectDocumentTab();
-    });
-
-    it("Add created document revision", () => {
-      cy.arClickAddDocument();
-      cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
-      cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
-      cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
-      cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Save AR", () => {
-      cy.arSaveApiCall();
-    });
-
-    it("Click on 'Change Details' tab", () => {
-      cy.arSelectChangeDetailsTab();
-    });
-
-    it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
-    });
-
-    it("Click on Save", () => {
-      cy.arSaveApiCall();
-    });
-  });
-
-  context("Add implementation task and continue AR creation flow", () => {
-    it("Fill all fields and add 'Implementation Task'", () => {
-      SystemRequirement("REQ-0710");
-      cy.get("[data-cy='fb-control-btn']").arrowClick();
-      cy.get("[data-cy='title']").arrowType("Task One");
-      cy.get("[data-cy='description']").next().arrowType("Task Description");
-      cy.get("[data-cy='assigned']").autocompleteSelect(`${USERS[1].email}`);
-      cy.poAddDateRequired();
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
-        cy.get("[data-cy='fb-control-btn']").contains(new RegExp("^Add$", "g")).arrowClick();
-      });
-    });
-
-    it("Add description 'Test' to trigger autosave", () => {
-      cy.get("[data-cy='field-description']").click();
-      cy.get("[data-cy='field-description']").clear().arrowType("Test").wait(2000);
-      cy.unClick();
-    });
-
-    it(`Check 'Implementation task' status is '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
-      SystemRequirement("REQ-0710");
-      cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-    });
-
-    it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
-    });
-
-    it("Approve AR", () => {
-      SystemRequirement("REQ-0920");
-      cy.arApproveAR();
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-
-    it(`Check approval request status is ${STATUS_TYPES_LABEL.IMPLEMENTATION}`, () => {
-      SystemRequirement("REQ-0020", "REQ-0730");
-      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
-    });
-  });
-
-  context("Verify IMPLEMENTATION Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-    it("Verify IMPLEMENTATION Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
-      cy.verifyListItemExistsOnHeader({
-        listItem:
-            `Approval RequestsAR-00004 Rev IMPLEMENTATION`,
-        breadcrump: true,
-      });
-    });
-
-    it("Verify 'Close' button is in statusbar", () => {
-      cy.get("button[data-cy='transition-closed']").contains("Close").should("exist");
-    });
-
-    it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get(".makeStyles-lastEdited").should("not.be.exist");
-    });
-
-    it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
-      cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("[data-cy='exportToEmail']").should("be.visible");
-      cy.get("[data-cy='exportToEmail']").arrowClick();
-    });
-
-    it("Click on 3 dots and verify 'Change Owner' button exists", () => {
-      cy.get("#HeaderMenuButton").arrowClick();
-      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
-      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
-    });
-
-    it(`Verify DRAFT statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
-      cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
     });
   });
 });
