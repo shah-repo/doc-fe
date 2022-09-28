@@ -16,10 +16,6 @@ let adminEmployee;
 let createdCompany;
 let adminEmployeeLoginResponse;
 let equipmentURL;
-// let createdPMFormDocumentId;
-// let createdCalibrationFormDocumentId;
-// let pmSchemaField;
-// let calibrationSchemaField;
 
 const multipleCompanies = true;
 let pMFormId;
@@ -183,16 +179,6 @@ context("Equipment maintenance and calibration", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
 
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-
-        cy.wait("@response").then((res) => {
-          if (res.response) {
-            // const response = res.response.body;
-            // eslint-disable-next-line max-len
-            // pmSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Preventative Maintenance");
-            // eslint-disable-next-line max-len
-            // calibrationSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Calibration");
-          }
-        });
 
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
@@ -471,9 +457,6 @@ context("Equipment maintenance and calibration", () => {
   context("Approve and release form", () => {
     it("Approve and release form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      cy.url().then((url: any) => {
-        // createdPMFormDocumentId = url.split("/").pop();
-      });
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
@@ -946,9 +929,6 @@ context("Equipment maintenance and calibration", () => {
   context("Approve and release form", () => {
     it("Approve and release CAL form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      cy.url().then((url: any) => {
-        // createdCalibrationFormDocumentId = url.split("/").pop();
-      });
     });
 
     it("Verify form released status and click on Send To Email", () => {
@@ -1283,18 +1263,6 @@ context("Equipment maintenance and calibration", () => {
     it("Enter title 'Preventative maintenance document'", () => {
       cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
     });
-
-    // it("Select document type 'Maintenance Record'", () => {
-    //   cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-    // });
-
-    // it("Select revision stage 'Numeric'", () => {
-    //   cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    // });
-
-    // it("Click create document", () => {
-    //   cy.drClickCreateDocumentWithApiCall();
-    // });
 
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
@@ -1829,18 +1797,6 @@ context("Equipment maintenance and calibration", () => {
     it("Enter title 'Calibration document'", () => {
       cy.drEnterDocumentTitle({ name: "Calibration document" });
     });
-
-    // it("Select document type 'Maintenance Record'", () => {
-    //   cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-    // });
-
-    // it("Select revision stage 'Numeric'", () => {
-    //   cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    // });
-
-    // it("Click create document", () => {
-    //   cy.drClickCreateDocumentWithApiCall();
-    // });
 
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
