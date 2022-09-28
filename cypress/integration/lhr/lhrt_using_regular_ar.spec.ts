@@ -477,9 +477,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.get("[data-cy=\"description\"]").last().click();
-      cy.get("[data-cy=\"description\"]").last().arrowType("LHRT AR").wait(2000);
-      cy.unClick();
+      cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 
     it("Add created document revision", () => {
@@ -520,6 +518,10 @@ context("LHRt using regular AR test", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(2000);
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Select 'Part document' for Part to be Manufactured", () => {
@@ -695,9 +697,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.get("[data-cy=\"field-description\"]").click();
-      cy.get("[data-cy=\"field-description\"]").arrowType("LHRT AR").wait(2000);
-      cy.unClick();
+      cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 
     it("Add created document revision", () => {
@@ -706,10 +706,6 @@ context("LHRt using regular AR test", () => {
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
     it("Add first Approver'", () => {
