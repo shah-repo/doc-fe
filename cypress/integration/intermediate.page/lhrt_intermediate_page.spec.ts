@@ -166,6 +166,77 @@ context("Intermediate page validation", () => {
     });
   });
 
+  context("Verify predefined fields are not deletable in preview layout tab", () => {
+    it("Click 'Preview Layout' button", () => {
+      cy.intPageClickPreviewLayout();
+    });
+
+    it("Check 'Part to be Manufactured' is not deletable", () => {
+      cy.get("[data-cy='Part to be Manufactured']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Initial Quantity' is not deletable", () => {
+      cy.get("[data-cy='Initial Quantity']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'End Quantity' is not deletable", () => {
+      cy.get("[data-cy='End Quantity']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Build Type' is not deletable", () => {
+      cy.get("[data-cy='Build Type']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Approvals' is not deletable", () => {
+      cy.get("[data-cy='Approvals']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Due Date' is not deletable", () => {
+      cy.get("[data-cy='Due Date']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Navigate to Detail Tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Check 'LHR Step 1' is not deletable", () => {
+      cy.get("[data-cy='LHR Step 1']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Close preview layout", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
+
   context("Verify predefined fields are not displayed", () => {
     it("Check 'Part to be Manufactured' is not displayed", () => {
       cy.intPageVerifyPartToBeManufacturedNotExist();
@@ -304,33 +375,57 @@ context("Intermediate page validation", () => {
     });
   });
 
-  context("Click 'Create Document' button and verify predefined fields are displayed", () => {
+  context("Click 'Create Document' button and verify predefined fields are displayed and can not be deleted", () => {
     it("Click on 'Create Document' button", () => {
       cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Check 'Part to be Manufactured' is displayed", () => {
       cy.intPageVerifyPartToBeManufacturedExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "Part to be Manufactured", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'Initial Quantity' is displayed", () => {
       cy.intPageVerifyInitialQuantityExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "Initial Quantity", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'End Quantity' is displayed", () => {
       cy.intPageVerifyEndQuantityExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "End Quantity", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'Build Type' is displayed", () => {
       cy.intPageVerifyBuildTypeExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "Build Type", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'Due Date' is displayed", () => {
       cy.intPageVerifyDueDateExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "Due Date", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'Approvals' is displayed", () => {
       cy.intPageVerifyApprovalsExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "Approvals", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Navigate to Detail Tab", () => {
@@ -339,6 +434,10 @@ context("Intermediate page validation", () => {
 
     it("Check 'Step #1' is displayed", () => {
       cy.intPageVerifyLHRStepExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "LHR Step 1", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
   });
 
