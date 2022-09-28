@@ -966,17 +966,16 @@ context("Receiving landing page test", () => {
 
   context("Release document", () => {
     it("Navigate to overview tab", () => {
-      cy.drSelectOverviewTab();
+      cy.drSelectOverviewTab().wait(2000);
     });
 
     it("Add an Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("[data-cy='fb-po-approvals']").autocompleteSelect(USERS[1].name);
-      });
+      cy.get("[data-cy^='fb-po-approvals']").arrowClick();
+      cy.get("[data-cy^='fb-po-approvals']").autocompleteSelect(USERS[1].name);
     });
 
     it("Save the document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click 'Submit for Approval' button", () => {

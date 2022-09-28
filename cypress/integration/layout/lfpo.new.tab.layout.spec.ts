@@ -7,6 +7,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { lotIdRef } from "../../utils/constants/dateHandler";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
@@ -859,6 +860,14 @@ context("LFPO new layout verification", () => {
         cy.get("[name='100-inspection-override']").should("exist");
         cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
         cy.get("[data-cy='lot_part']").should("exist");
+        cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
+      });
+
+      it("Verify Quantity, Part Number, Usable Quantity, comment", () => {
+        cy.get("[name='lot_quantity']").should("exist");
+        cy.get("[name='lot_usable_quantity']").should("exist");
+        cy.get("[data-cy='lot_part']").should("exist");
+        cy.get("#RenderHTML").should("exist");
       });
 
       it("Verify Form option exist", () => {
@@ -872,6 +881,15 @@ context("LFPO new layout verification", () => {
 
       it("Submit for approval", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+
+      it("Verify form is created and released", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.RELEASED,
+          title: "Document List",
+          docId: "LFPO00002",
+          revision: "Rev 1",
+        });
       });
 
       it("Click on create new", () => {
@@ -994,6 +1012,13 @@ context("LFPO new layout verification", () => {
 
     it("Click on create lot", () => {
       cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
+    });
+
+    it("Verify pop up window will open", () => {
+      cy.get("[data-cy='form.builder.po.create.a.lot']").contains("Create Lot").should("be.visible");
+    });
+
+    it("fill the fields", () => {
       cy.get("[name^='received']").arrowType("100");
       cy.get("[data-cy='lotType']").arrowClick({ force: true })
         .autocompleteSelect("Lots");
@@ -1002,13 +1027,28 @@ context("LFPO new layout verification", () => {
         cy.get("[data-cy='lotForm']").arrowClick({ force: true })
           .autocompleteSelect("LFPO Document Title");
       });
+    });
 
+    it("Enter Expiration date", () => {
+      cy.get(`.MuiDialogContent-root input[name="expirationDate"]`)
+        .parent().find("button").arrowClick({ force: true });
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
+    });
+
+    it("Create lot", () => {
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
     });
+
+    it("Verify Lot should be created and displayed in the table for that part", () => {
+      const lotId = lotIdRef + "03";
+      cy.get("[data-cy='lots'] span").contains(lotId).should("exist");
+    });
+
   });
 
   context("Verify created lot", () => {
     it("Navigate to Lot landing page", () => {
+      cy.pause();
       cy.navigToLots();
     });
 
