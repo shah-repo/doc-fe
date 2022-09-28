@@ -1,12 +1,17 @@
-import { Box, Grid, IconButton, Typography } from "@material-ui/core";
+import { Box, Grid, IconButton, TooltipProps, Typography } from "@material-ui/core";
 import React from "react";
-import { FBWorkspaceBottomBarProps, FBTooltip } from "..";
+import { FBTooltip, FBWorkspaceBottomBarProps } from "..";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export.svg";
 import { ReactComponent as ImportIcon } from "../../../assets/images/import.svg";
 import { ReactComponent as PreviewIcon } from "../../../assets/images/preview.svg";
 import Text from "../../components/Text";
-import FBWorkspaceBottomBarStyles from "./FBWorkspaceBottomBar.styles";
+import FBWorkspaceBottomBarStyles, { tooltipStyles } from "./FBWorkspaceBottomBar.styles";
 import { withFBWorkspaceBottomBar } from "./FBWorkspaceBottomBar.wrap";
+
+const StyledTooltip = (props: TooltipProps) => {
+  const classes = tooltipStyles();
+  return <FBTooltip arrow placement="top" classes={classes} {...props} />;
+};
 
 const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> = ({
   children,
@@ -43,9 +48,9 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
             className={classes.previewIcon}
             onClick={handleFormPreview}
           >
-            <FBTooltip title="form.builder.form.preview">
+            <StyledTooltip title="form.builder.form.preview">
               <PreviewIcon />
-            </FBTooltip>
+            </StyledTooltip>
           </IconButton>
           <IconButton
             size="small"
@@ -54,20 +59,19 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
             className={classes.exportIcon}
             onClick={exportSchema}
           >
-            <FBTooltip title="form.builder.export.template">
+            <StyledTooltip title="form.builder.export.template">
               <ExportIcon />
-            </FBTooltip>
+            </StyledTooltip>
           </IconButton>
           <IconButton
             size="small"
             data-cy="FBWorkspace-importTemplate"
-            disabled={!includeTransport}
-          >
-            <FBTooltip title="form.builder.import.template">
+            disabled={!includeTransport}>
+            <StyledTooltip title="form.builder.import.template">
               <label htmlFor="fb-import-schema">
                 <ImportIcon />
               </label>
-            </FBTooltip>
+            </StyledTooltip>
           </IconButton>
         </Grid>
       </Grid>

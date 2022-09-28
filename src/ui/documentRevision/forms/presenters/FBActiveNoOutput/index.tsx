@@ -83,7 +83,7 @@ const FBActiveNoOutput: React.FunctionComponent<Props> = ({
       formValue,
       documentTypesById,
       _documentRevisionFormState?.schema,
-      _tabsState?.activeTabId,
+      _tabsState?.tabID,
     );
 
     _documentRevisionFormState?.setFBSchema(scheme);
