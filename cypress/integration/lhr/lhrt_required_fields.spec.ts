@@ -624,7 +624,7 @@ context("LHRt required fields test", () => {
       cy.drCheckDocumentStatus({ status: "WIP" });
     });
 
-    it("Verify 'Part to be manufactured'", () => {
+    it("Verify 'Part to be manufactured' should display correct part set in LHRT", () => {
       cy.get("[data-cy=\"lhr-selected-part\"]").should("have.attr", "value", "PRT-00005 - rev 1 - Part document");
     });
 
@@ -632,7 +632,7 @@ context("LHRt required fields test", () => {
       cy.drSelectDetailsTab();
     });
 
-    it("Verify 'LHR step#1 and LHR step#2'", () => {
+    it("Verify 'LHR step#1 and LHR step#2' should display correct MPI set in LHRT", () => {
       cy.get("[data-cy=\"LHR Step 1\"]").arrowClick({ force: true });
       cy.get("[data-cy=\"lhrstep-built-in\"]").should("have.attr", "value", "PI-00008 - MPI created with API");
       cy.get("[data-cy=\"LHR Step 2\"]").arrowClick({ force: true });
