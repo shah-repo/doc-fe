@@ -223,10 +223,6 @@ Cypress.Commands.add("openRevisionsTabAndVerifyCurrentRevision", (rev) => {
   });
 });
 
-Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
-  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
-});
-
 Cypress.Commands.add("verifyLastSavedExists", () => {
   // eslint-disable-next-line max-len
   const tmpRegex = new RegExp(`Last saved [0-9]+ minutes ago|Last saved a minute ago|Last saved a few minutes ago|Last saved a few seconds ago`, "gi");
@@ -265,4 +261,6 @@ Cypress.Commands.add("verifyDescriptionNotHighlightedonHover", () => {
   cy.get("[data-cy='description']>div").eq(0).trigger("mouseout");
 });
 
-
+Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
+  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
+});

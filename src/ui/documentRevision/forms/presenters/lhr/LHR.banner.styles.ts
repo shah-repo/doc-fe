@@ -9,6 +9,7 @@ export const styles = makeStyles(() =>
       fontSize: "19px",
       lineHeight: "24px",
       color: Colors.black,
+      marginBottom: "15px",
     },
     blackDot: {
       width: "4px",

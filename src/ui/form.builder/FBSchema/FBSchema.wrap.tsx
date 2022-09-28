@@ -77,7 +77,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         const { disabled, outputDisabled } = schemaItem || {};
         const reviseDisabled = schemaItem.editorProperties?.includes("reviseDisabled");
         if (schemaItem.deleted || schemaItem.hidden ||
-          (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
+          (_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId))) { return; }
 
         position++;
         return (
@@ -105,7 +105,6 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
 
     useObserver(() => {
       schema = schemaState?.schema;
-      _tabsState?.setTabID(_tabsState.tabID);
     });
 
     return Component({
