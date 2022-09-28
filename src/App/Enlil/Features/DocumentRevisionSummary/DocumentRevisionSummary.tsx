@@ -65,7 +65,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     }];
   }
 
-  const tabIds = tabConfig?.map(({ tabId }) => tabId);
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
   const onSubmit = () => void 0;
 
@@ -128,7 +127,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
             >
               <Observer>
                 {() => (
-                  <SMTabs tabs={tabIds} boxProps={{ px: 4.25 }}>
+                  <SMTabs tabs={tabConfig} boxProps={{ px: 4.25 }}>
                     {map(tabConfig, (tabInfo: TabInfo) => {
                       const tabType = tabInfo.type;
                       const { tabId } = tabInfo || {};

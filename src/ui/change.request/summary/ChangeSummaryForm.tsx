@@ -68,8 +68,6 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
-  const tabIds = tabConfig?.map(({ tabId }) => tabId);
-
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
@@ -116,7 +114,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
               <Observer>
                 {() => (
                   <SMTabs
-                    tabs={tabIds}
+                    tabs={tabConfig}
                     boxProps={{ px: 3.75, py: 2, stretchY: "100%", display: "flex", flexDirection: "column" }}
                     panelProps={{ flex: 1 }}
                   >

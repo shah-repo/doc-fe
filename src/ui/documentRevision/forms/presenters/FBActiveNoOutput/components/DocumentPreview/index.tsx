@@ -122,8 +122,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     }];
   }
 
-  const tabIds = tabConfig?.map(({ tabId }) => tabId);
-
   useEffect(() => {
     _formState?.setValues(initialValues);
     _formState?.setMode(mode);
@@ -148,7 +146,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
           <Observer>
             {() => (
               <SMTabs
-                tabs={tabIds}
+                tabs={tabConfig}
                 boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                 panelProps={{ flex: 1 }}
               >

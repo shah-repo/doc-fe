@@ -111,8 +111,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
     } ];
   }
 
-  const tabIds = tabConfig?.map(({ tabId }) => tabId);
-
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
@@ -174,7 +172,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
               <Observer>
                 {() => (
                   <SMTabs
-                    tabs={tabIds}
+                    tabs={tabConfig}
                     boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                     panelProps={{ flex: 1 }}
                   >
