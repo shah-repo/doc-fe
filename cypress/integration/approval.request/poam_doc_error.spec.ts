@@ -112,20 +112,20 @@ context("Approval request landing page test", () => {
                   id: poamDocumentType[0].id,
                 }],
                 schema: [
-                  // {
-                  //   name: "po-levels-built-in",
-                  //   type: "poApprovalMatrix",
-                  //   index: 0,
-                  //   label: "Purchase Order Approval Matrix",
-                  //   tabId: "details",
-                  //   applicableOn: [
-                  //     "ON_STATE_TO_IN_REVIEW",
-                  //   ],
-                  //   deleteDisabled: true,
-                  //   validationAttribute: "Purchase Order Approval Matrix",
-                  //   deleteInFormDisabled: true,
-                  //   applicableValidationSchema: true,
-                  // },
+                  {
+                    name: "po-levels-built-in",
+                    type: "poApprovalMatrix",
+                    index: 0,
+                    label: "Purchase Order Approval Matrix",
+                    tabId: "details",
+                    applicableOn: [
+                      "ON_STATE_TO_IN_REVIEW",
+                    ],
+                    deleteDisabled: true,
+                    validationAttribute: "Purchase Order Approval Matrix",
+                    deleteInFormDisabled: true,
+                    applicableValidationSchema: true,
+                  },
                 ],
               },
 
@@ -151,54 +151,91 @@ context("Approval request landing page test", () => {
     });
 
     it("[API]Create POAM document", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          formDocument: {
-            id: createdPOAMform.id,
-          },
-          formInput: {
-            "po-levels-built-in": {
-              approvalLevels: [],
-            },
-          },
-          description: "<p>POAM</p>",
-          document: {
-            docId: "POAM-00001",
-            documentType: {
-              id: poamDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
       }).then((response) => {
-        createdPOAMdoc = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdPOAMdoc.id,
+        group = response;
+        cy.drCreateDocumentRevision({
           payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            attachments: [],
+            formDocument: {
+              id: createdPOAMform.id,
+            },
+            formInput: {
+              "po-levels-built-in": {
+                approvalLevels: [
+                  // {
+                  //   // id: "29f145c3-f0bb-43e6-8df9-38e339357a1b",
+                  //   signatures: [
+                  //     {
+                  //       id: "b4b6c0d1-eab2-48e4-b0c1-99211805601d",
+                  //       signatureStage: 1,
+                  //       groups: [
+                  //         {
+                  //           id: group.body[0].id,
+                  //         },
+                  //       ],
+                  //       employees: [],
+                  //     },
+                  //     {
+                  //       id: "f4bbbf1c-e3c5-4a38-9508-5176792614a8",
+                  //       signatureStage: 2,
+                  //       groups: [],
+                  //       employees: [],
+                  //     },
+                  //     {
+                  //       id: "6a81c552-4ceb-44cc-9279-f8a4f1abe449",
+                  //       signatureStage: 3,
+                  //       groups: [],
+                  //       employees: [],
+                  //     },
+                  //   ],
+                  //   limit: 1000,
+                  //   name: "ning title",
+                  // },
+                ],
+              },
+            },
+            description: "<p>POAM</p>",
+            document: {
+              docId: "POAM-00001",
+              documentType: {
+                id: poamDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "POAM doc",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
           },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdPOAMdoc = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdPOAMdoc.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => done());
+        });
       });
     });
   });
@@ -206,6 +243,129 @@ context("Approval request landing page test", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+  });
+
+  context("Open released document and revise it", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Open released document", () => {
+      cy.drFilterDocListByNameAndStatus({ title: "POAM doc", status: "Released" });
+    });
+
+    it("Click revise document", () => {
+      cy.drClickReviseDocument();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Matrix Details Tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("Click add item", () => {
+      cy.get(`[data-cy="form.builder.add.item"]`).arrowClick();
+      cy.get(`[data-cy="name"]`).arrowType("Level-1");
+      cy.get(`[data-cy="limit"]`).arrowType("1000");
+      cy.get(`[data-cy="signatures.0.groups"]`).autocompleteSelect("Everyone");
+      cy.get(`[data-cy="signatures.0.employees"]`).autocompleteSelect(USERS[1].name);
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Check Duplicate entry is not added", () => {
+      cy.get(`[data-cy="form.builder.add.item"]`).arrowClick();
+      cy.get(`[data-cy="name"]`).arrowType("Level-1");
+      cy.get(`[data-cy="limit"]`).arrowType("1000");
+      cy.get(`[data-cy="signatures.0.groups"]`).autocompleteSelect("Everyone");
+      cy.get(`[data-cy="signatures.0.employees"]`).autocompleteSelect(USERS[1].name);
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+      cy.pause();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    // it("Verify system is showing error for duplicate entry", () => {
+
+    // });
+
+    it("Click on the recently added level", () => {
+      cy.get("tbody>tr").eq(0).arrowClick();
+    });
+
+    it("Change level name", () => {
+      cy.get(`[data-cy="name"]`).arrowType("Level-1a");
+    });
+
+    it("Click add button", () => {
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
+
+    it("Save document and verify no error shown", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      // toast error check
+    });
+
+    it("Add another level", () => {
+      cy.get(`[data-cy="form.builder.add.item"]`).arrowClick();
+      cy.get(`[data-cy="name"]`).arrowType("Level-2");
+      cy.get(`[data-cy="limit"]`).arrowType("1000");
+      cy.get(`[data-cy="signatures.0.groups"]`).autocompleteSelect("Everyone");
+      cy.get(`[data-cy="signatures.0.employees"]`).autocompleteSelect(USERS[1].name);
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    // it("Verify system is showing error for duplicate entry", () => {
+
+    // });
+
+    it("Click on the recently added level", () => {
+      cy.get("tbody>tr").eq(0).arrowClick();
+    });
+
+    // it("Update level as original", () => {
+
+    // });
+
+    it("Click add button", () => {
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Click on the recently added level", () => {
+      cy.get("tbody>tr").eq(0).arrowClick();
+    });
+
+    it("Change level name to original", () => {
+      cy.get(`[data-cy="name"]`).arrowType("Level-1");
+    });
+
+    it("Click add button", () => {
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 });
