@@ -67,6 +67,52 @@ context("Verification of Equipment Specification", () => {
     });
   });
 
+  context("Create ES document for migration", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+  });
+  context("Fill ES document attributes", () => {
+    it("Verify predefiend fields title description doc id revision output type", () => {
+      cy.verifyPredefiendFields();
+    });
+
+    it("Enter document title 'ES document'", () => {
+      cy.drEnterDocumentTitle({ name: "Migration Equipment specification form" });
+    });
+
+    it("Fill ES document description", () => {
+      cy.drEnterDocumentDescription({ description: "Equipment specification description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Equipment specification' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Equipment Specification" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Click create document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
   context("Create ES document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
@@ -79,6 +125,7 @@ context("Verification of Equipment Specification", () => {
       });
     });
   });
+
   context("Fill ES document attributes", () => {
     it("Verify predefiend fields title description doc id revision output type", () => {
       cy.verifyPredefiendFields();
@@ -107,6 +154,8 @@ context("Verification of Equipment Specification", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
+
+
   });
 
 
@@ -115,7 +164,7 @@ context("Verification of Equipment Specification", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.DRAFT,
         title: "Document List",
-        docId: "FM-00002",
+        docId: "FM-00003",
         revision: "Rev 1",
       });
     });
@@ -164,6 +213,13 @@ context("Verification of Equipment Specification", () => {
       cy.fbGroupOptions("1", "2", "3");
       cy.fbOpenValidation();
       cy.fbFieldRequired();
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Section", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
+      cy.fbEnterNameValue({ name: "label", value: "Section1" });
       cy.fbAddNewFieldButton();
     });
 
@@ -371,6 +427,16 @@ context("Verification of Equipment Specification", () => {
           cy.get("[data-cy='bookmark-icon']").arrowClick();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
+
+        it("Navigate to overview tab", () => {
+          cy.drSelectOverviewTab();
+        });
+
+        it("Click on bookmarked section, section should be navigated", () => {
+          cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
+          cy.get("[data-cy='Section1']").should("be.visible");
+        });
+
       });
 
       context("Verify Scroll", () => {
@@ -387,6 +453,7 @@ context("Verification of Equipment Specification", () => {
 
     context("Fill the fields and Released", () => {
       it("Navigate to overview tab", () => {
+        cy.pause();
         cy.drSelectOverviewTab();
       });
 
