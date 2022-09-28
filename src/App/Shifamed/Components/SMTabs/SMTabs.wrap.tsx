@@ -1,32 +1,41 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import { SM, SMTabsProps } from "../../..";
 
-export const withSMTabsWrap = <T extends SMTabsProps>(
-  Component: React.FunctionComponent<T>,
-) => {
-  const Comp = ({
-    ...props
-  }: T) => {
-
-    // MARK: @config
+export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) => {
+  const Comp = (props: T) => {
+    const { tabs, onChange } = props;
     const { _tabsState } = SM.useStores();
 
-    // MARK: @state
+    // Set initial tab id.
+    useEffect(
+      () => {
+        if (!tabs || _tabsState?.activeTabId) {
+          return;
+        }
 
-    // MARK: @reactions
+        _tabsState?.setActiveTabId(tabs[0]);
+      },
+      [_tabsState, tabs]
+    );
 
-    // MARK: @helpers
-
-    // MARK: @methods
+    const handleChange: SMTabsProps["onChange"] = useCallback(
+      (event, newValue) => {
+        _tabsState?.setActiveTabId(newValue);
+        return onChange?.(event, newValue);
+      },
+      [_tabsState, onChange]
+    );
 
     return (
       <Component
         {...props}
         {...{ _tabsState }}
+        onChange={handleChange}
       />
     );
   };
 
   Comp.displayName = "withSMTabsWrap";
+
   return Comp;
 };

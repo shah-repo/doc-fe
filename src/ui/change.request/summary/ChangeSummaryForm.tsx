@@ -1,7 +1,7 @@
 import { BoxProps } from "@material-ui/core";
 import { cloneDeep, map } from "lodash";
 import { Observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from "../../../App";
 import { withSMTabs } from "../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -68,20 +68,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-
-  const onTabChange = (event, newValue, tabConfig) => {
-    _tabsState?.setValue(newValue);
-    _tabsState?.setTabID(tabConfig[newValue].tabId);
-  };
-
-  useEffect(() => {
-    if (!tabConfig) {
-      return;
-    }
-    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabConfig]);
+  const tabIds = tabConfig?.map(({ tabId }) => tabId);
 
   return (
     <SMForm
@@ -129,14 +116,13 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
               <Observer>
                 {() => (
                   <SMTabs
-                    onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
-                    tabs={tabLabels}
+                    tabs={tabIds}
                     boxProps={{ px: 3.75, py: 2, stretchY: "100%", display: "flex", flexDirection: "column" }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
-                      const showTabContent = _tabsState?.tabID === tabInfo.tabId;
+                      const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
                         <SMBox key={index} {...{ py: 2 }}>

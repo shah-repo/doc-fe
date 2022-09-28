@@ -1,7 +1,7 @@
 import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
 
-export const styles = makeStyles(() =>
+export default makeStyles(() =>
   createStyles({
     sidebar: (drawerOpen: boolean) => ({
       transition: drawerOpen
@@ -45,16 +45,5 @@ export const styles = makeStyles(() =>
       lineHeight: "18px",
       color: Colors.dark_jungle_green,
     },
-  }));
-
-
-export const tooltipStyles = makeStyles(() => ({
-  tooltip: {
-    backgroundColor: Colors.almost_black,
-    fontSize: "12px",
-    fontWeight: 400,
-  },
-  arrow: {
-    color: Colors.almost_black,
-  },
-}));
+  })
+);
