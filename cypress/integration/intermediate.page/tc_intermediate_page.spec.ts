@@ -189,6 +189,84 @@ context("Intermediate page validation", () => {
     });
   });
 
+  context("Verify predefined fields are not deletable in preview layout tab", () => {
+    it("Click 'Preview Layout' button", () => {
+      cy.intPageClickPreviewLayout();
+    });
+
+    it("Check 'Approvals' is not deletable", () => {
+      cy.get("[data-cy='form.builder.approvals']").eq(1).trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
+    it("Check 'PERIODIC TRAINING' is not deletable", () => {
+      cy.get("[data-cy='Periodic Training']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Documents to Train on' is not deletable", () => {
+      cy.get("[data-cy='Documents to be trained on']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Refresh/repeat training periodically?' is not deletable", () => {
+      cy.get("[data-cy='Refresh/repeat training periodically?']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Training Frequency (in days)' is not deletable", () => {
+      cy.get("[data-cy='Training refresh period (days)']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'TRAINEES DETAILS' is not deletable", () => {
+      cy.get("[data-cy='Trainees Details']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Groups to Train' is not deletable", () => {
+      cy.get("[data-cy='Select Groups to train']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Users to Train (if applicable)' is not deletable", () => {
+      cy.get("[data-cy='Select Users to train (if applicable)']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Close preview layout", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
   context("Verify 'Add Field' and 'Form Options' not displayed on page", () => {
     it("Verify 'Add Field' button not displayed", () => {
       cy.intPageVerifyAddFieldNotExist();
