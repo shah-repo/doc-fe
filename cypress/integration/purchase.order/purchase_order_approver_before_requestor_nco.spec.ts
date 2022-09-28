@@ -943,6 +943,14 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
       cy.unClick();
     });
+
+    it("Check if selected approver has approval signature right by his name", () => {
+      cy.contains("PO Approval sig").should("exist");
+    });
+
+    it("Check approval icon if it's colored", () => {
+      cy.poAMCheckApprovalIconIfItsRed();
+    });
   });
 
   context("Submit for Approval and verify PO can be released", () => {
