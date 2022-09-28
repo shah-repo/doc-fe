@@ -657,8 +657,6 @@ context("Receiving landing page test", () => {
         done();
       });
     });
-
-
   });
 
   context("Login user", () => {
@@ -704,6 +702,14 @@ context("Receiving landing page test", () => {
 
       it("Verify Predefiend fields and form Options", () => {
         cy.get(".formOptionsBox").should("exist");
+      });
+
+      it("Verify attachment field is visible", () => {
+        cy.get("#AttachmentFieldPresenter-field").should("be.visible");
+      });
+
+      it("Verify attachment field is visible", () => {
+        cy.get("[data-cy='fb-po-approvals']").should("exist");
       });
 
       it("Navigate to details Tab", () => {
@@ -814,6 +820,10 @@ context("Receiving landing page test", () => {
       cy.get("[data-cy='po-supplier-built-in']").should("exist");
     });
 
+    it("Verify receiving table exist", () => {
+      cy.get("[name='po-items-built-in']").should("exist");
+    });
+
     it("Verify form option visible in detail tab", () => {
       cy.get(".formOptionsBox").should("exist");
     });
@@ -823,6 +833,10 @@ context("Receiving landing page test", () => {
       cy.get("#sm-tabpanel-0").should("be.hidden");
       cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
+  });
+
+
+  context("Validate Right Side Panel", () => {
 
     it("Verify that right side panel opens by default to the References tab", () => {
       cy.get("[data-cy='References']").should("exist");
@@ -832,13 +846,17 @@ context("Receiving landing page test", () => {
     it("Verify that right side panel Expand and collapse", () => {
       cy.verifyExpandCollpase();
     });
-  });
 
-
-  context("Validate Right Side Panel", () => {
+    it("Verify eye icon", () => {
+      cy.get("[data-cy='references-icon']").should("be.visible");
+    });
 
     it("Verify Reference tab Info", () => {
       cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
+    });
+
+    it("Verify migrate form button", () => {
+      cy.get("[data-cy='common.form.migration']").should("be.visible");
     });
 
     it("Verify References selection Add Remove", () => {
