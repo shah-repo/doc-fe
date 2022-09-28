@@ -1295,10 +1295,6 @@ context("Dashboard notification font test", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
-    });
-
     it("Add approvers to approval request on approver list", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy^=\"fb-approvers-\"]").click().autocompleteSelect(USERS[2].email);
