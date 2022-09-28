@@ -35,7 +35,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
         type: "lhrstep",
         label: "LHR Step",
         index,
-        tabId: _tabsState?.tabID,
+        tabId: _tabsState?.activeTabId,
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         validationMode: "default",
         applicableValidationSchema: true,
@@ -64,7 +64,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
           workspaceMode={mode}
         />
       )}
-      {_tabsState?.tabID === "details" &&
+      {_tabsState?.isTabActive("details") &&
         workspaceState?.mode === "design" &&
         [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (
           <Button
@@ -84,7 +84,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
             <Text translation="form.builder.add.step" />
           </Button>
         )}
-      {isStarter && _tabsState?.tabID !== "calpmhistory" && <FBStarter index={size(schema)} />}
+      {isStarter && _tabsState?.isTabActive("calpmhistory") && <FBStarter index={size(schema)} />}
       {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
     </Box>
   );

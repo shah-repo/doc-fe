@@ -2,7 +2,7 @@ import { BoxProps } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { SMFormStateProps, SMProviderProps, SMTabsHOCProps } from "../../..";
 import { Id } from "../../../../state/ducks/common/types";
-import { DocumentType, DocumentTypeByIdState, TabInfo } from "../../../../state/ducks/documentRevisions/documentType/types";
+import { DocumentType, DocumentTypeByIdState } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { Document, DocumentRevision, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../../../state/ducks/documents";
 import { DocumentCloneType } from "../../../../ui/documentRevision/Clone.container";
@@ -20,7 +20,6 @@ export type DocumentRevisionFormProps =
 & SMTabsHOCProps
 & Pick<BoxProps, "onScroll">
 & {
-  onTabChange?: (event: any, newValue: number, tabConfig: TabInfo[]) => void;
   setDocId?: typeof documentsActions.setDocumentProposedId;
   onDirtyFlagChange?: ((dirty: boolean) => void);
   documentRevision: DocumentRevision;

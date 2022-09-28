@@ -1,22 +1,13 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, find, findIndex, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
 import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
 import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
-import { SM } from "../../../App";
-import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { DocumentGroupType } from "../../../state/ducks/documentRevisions/documentType/types";
-import { ApplicationState } from "../../../state/reducers";
 import { useFormContext } from "../../components/forms/FormContext";
-import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
-import { FBDocTypeGroup } from "../FBApprovalMatrixTable/FBApprovalMatrixTable.types";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { withFBOnChange } from "./FBInput.onchange";
 
@@ -84,9 +75,7 @@ export const withFBInput = <T extends FBInputProps>(
     includeNotes,
     ...props
   }: T) => {
-
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
-    const { _documentRevisionFormState } = SM.useStores();
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
@@ -296,23 +285,17 @@ export const withFBInput = <T extends FBInputProps>(
       );
     }, []);
 
-    const documentRevision = useSelector((state: ApplicationState) =>
-      documentRevisionsSelectors.getDocumentRevision(state, (_documentRevisionFormState?.documentRevision?.id || "")));
-    const docTypeGroup = get(documentRevision?.document?.documentType, "group", FBDocTypeGroup.OTHER);
-    const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
-    const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-
-    const tabConfig = useSelector((state: ApplicationState) =>
-      documentTypeSelectors.getTabConfiguration(state, group));
     useEffect(() => {
       if (!bookmarked) { return; }
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
-      const schemaItm = find(
+      const schemaItem = find(
         workspaceState?.schema,
         (schemaItem) => !!(schemaItem.name && name?.includes(schemaItem.name))
       );
-      const tabIndex = findIndex(tabConfig, (tab) => tab.tabId === schemaItm?.tabId);
-      bookmarkState?.addBookmark({ name, label, tabIndex });
+
+      if (schemaItem) {
+        bookmarkState?.addBookmark({ name, label, tabId: schemaItem.tabId });
+      }
     }, [bookmarked]);
 
     useEffect(() => {
