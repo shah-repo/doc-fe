@@ -182,7 +182,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Verify 'Details' tab is displayed", () => {
-        cy.get(`[data-cy="details"]`).should("exist");
+        cy.intPageVerifyDetailsTabExist();
       });
     });
 
@@ -303,7 +303,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Navigate to detail tab", () => {
-        cy.get("[data-cy=\"details\"]").arrowClick({ force: true });
+        cy.drSelectDetailsTab();
       });
 
       it("verify form preview button in Details Tab", () => {
@@ -313,7 +313,7 @@ context("Create new LHRT Layout Verification", () => {
 
     context("click on form preview button", () => {
       it("Navigate to overview tab", () => {
-        cy.get("[data-cy=\"overview\"]").arrowClick({ force: true });
+        cy.drSelectOverviewTab();
       });
 
       it("click on form preview button in Overview Tab", () => {
@@ -378,7 +378,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Navigate details tab", () => {
-        cy.get("[data-cy=\"details\"]").arrowClick({ force: true });
+        cy.drSelectDetailsTab();
       });
       it("Check 'Step #1' is displayed", () => {
         cy.intPageVerifyLHRStepExist();
