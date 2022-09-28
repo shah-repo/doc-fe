@@ -330,11 +330,12 @@ context("User Creation Flow", () => {
       });
     });
 
-    it(`Verify 'Approvers' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24}  font-weight ${FONT_WT_600} text-transform ${TEXT_TRANS_UPPER}`, () => {
-      cy.get(`[data-cy="form.builder.approvals"]`)
+    it(`Verify 'Approvals' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24}  font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="form.builder.approvals"]`).eq(0).scrollIntoView();
+      cy.get(`[data-cy="form.builder.approvals"]`).eq(0)
         .checkStylePropExists({
           content: "Approvals",
-          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600, "text-transform": TEXT_TRANS_UPPER },
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
         });
     });
 
@@ -473,9 +474,9 @@ context("User Creation Flow", () => {
     });
 
     it(`Verify added 'Blank Template' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
-      cy.get("[data-cy^=\"fb-blank-template\"]")
+      cy.get("[data-cy^=\"Fb Blank Template\"]")
         .checkStylePropExists({
-          content: "fb-blank-template",
+          content: "Fb Blank Template",
           props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
         });
     });
@@ -631,11 +632,11 @@ context("User Creation Flow", () => {
         });
     });
 
-    it(`Verify 'fb-blank-template' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'fb-blank-template' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_18} font-weight ${FONT_WT_400}`, () => {
       cy.get(`[data-cy="Bookmarks-detail"]`)
         .checkStylePropExists({
           content: "fb-blank-template",
-          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_18, "font-weight": FONT_WT_400 },
         });
     });
   });
