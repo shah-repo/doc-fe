@@ -3,7 +3,7 @@ import { SMBoxProps, SMFormProps, SMTabsHOCProps } from "../../..";
 export type SMTabPanelProps =
 & Pick<SMTabsHOCProps, "_tabsState">
 & {
-  tabId: string;
+  index: number;
   children: SMFormProps["children"];
   panelProps?: SMBoxProps;
 };

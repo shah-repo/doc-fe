@@ -61,7 +61,7 @@ export const getFBSchemeByDocType = (
 
       const tabConfig: TabInfo[] = documentTypeSelectors.getTabConfiguration(
         appStore.getState(), outputTypesWithGroups[0].group);
-      const tabId = get(tabConfig, "0.tabId", "details");
+      const tabLabel = get(tabConfig, "0.tabId", "details");
 
       finalScheme.push({
         label: "form.builder.approvals",
@@ -69,7 +69,7 @@ export const getFBSchemeByDocType = (
         deleteDisabled: false,
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
-        tabId,
+        tabId: tabLabel,
         index: indexLast + 1,
       });
     } else {
