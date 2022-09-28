@@ -159,7 +159,7 @@ DocumentRevisionFormContainerProps
       FBDataStore.setApprovals(documentRevision.approvals, FBDataStoreApprovalKeys.PO_APPROVALS);
     }
 
-    if (isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)) {
+    if (isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema)) {
       FBDataStore.setApprovals(documentRevision.approvals, FBDataStoreApprovalKeys.INLINE_APPROVALS);
     }
 
