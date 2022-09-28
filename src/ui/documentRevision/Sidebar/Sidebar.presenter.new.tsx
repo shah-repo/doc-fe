@@ -1,8 +1,9 @@
-import { Box, CircularProgress, Divider, Drawer, IconButton, Typography } from "@material-ui/core";
+import { Box, CircularProgress, Divider, Drawer, IconButton, TooltipProps, Typography } from "@material-ui/core";
 import classNames from "classnames";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { SM } from "../../../App";
+import { tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as SidebarCloseIcon } from "../../../assets/images/move-down.svg";
 import { ReactComponent as SidebarOpenIcon } from "../../../assets/images/move-up.svg";
 import Text from "../../components/Text";
@@ -19,6 +20,11 @@ interface Props {
   onDrawerToggle: () => void;
   loading?: boolean;
 }
+
+const StyledTooltip = (props: TooltipProps) => {
+  const classes = tooltipStyles();
+  return <FBTooltip arrow placement="left" classes={classes} {...props} />;
+};
 
 const SidebarPresenter: React.FunctionComponent<Props> = ({
   isDrawerOpen,
@@ -46,7 +52,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
           {sidebarList.map((item, index) =>
             item.details.shouldShow && (
               <Box key={item.details.title}>
-                <FBTooltip placement="left" title={item.details.title}>
+                <StyledTooltip title={item.details.title}>
                   <IconButton
                     data-cy={item.details.dataCy !== undefined ?
                       item.details.dataCy : `${item.type}-icon`}
@@ -56,7 +62,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
                     {(!loading || item.type !== "bookmarks") && item.icon}
                     {item.type === "bookmarks" && loading && <CircularProgress size={18} />}
                   </IconButton>
-                </FBTooltip>
+                </StyledTooltip>
               </Box>
             )
           )}
