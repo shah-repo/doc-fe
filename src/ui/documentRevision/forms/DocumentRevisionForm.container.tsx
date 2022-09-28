@@ -148,7 +148,7 @@ DocumentRevisionFormContainerProps
         documentRevision.approvals = FBDataStore.poApprovals as Approval[];
       }
 
-      if (isFormWithInlineApproval(documentRevision.formDocument?.formTemplate?.schema)) {
+      if (isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema)) {
         documentRevision.approvals = FBDataStore.inlineApprovals as Approval[];
       }
     }
