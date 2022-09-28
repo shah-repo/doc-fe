@@ -7,10 +7,5 @@ export default function themeProps(): ComponentsProps {
         elevation: 3,
       },
     },
-    MuiMenu: {
-      MenuListProps: {
-        disablePadding: true,
-      },
-    },
   };
 }

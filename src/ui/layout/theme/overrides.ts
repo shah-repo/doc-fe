@@ -181,29 +181,10 @@ export default function themeOverrides(appTheme: Theme, customColors: WhiteLabel
         fontFamily: "Sora, sans-serif;",
       },
     },
-    MuiMenu: {
-      paper: {
-        borderRadius: appTheme.spacing(0.5),
-      },
-      list: {
-        "& .MuiDivider-root": {
-          margin: `${appTheme.spacing(0.75)}px ${appTheme.spacing(2)}px`,
-        },
-      },
-    },
     MuiMenuItem: {
       root: {
         fontSize: "0.8rem",
         fontFamily: "Sora, sans-serif;",
-      },
-    },
-    MuiListItemIcon: {
-      root: {
-        "minWidth": 0,
-        "marginRight": appTheme.spacing(1.5),
-        "&$small": {
-          marginRight: appTheme.spacing(1),
-        },
       },
     },
     MuiListItemText: {
