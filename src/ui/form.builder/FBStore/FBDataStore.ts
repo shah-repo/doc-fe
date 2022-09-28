@@ -14,10 +14,10 @@ class FBDataStore {
     set(this, "refreshData", value);
   };
   @action public clearPoApprovals = () => {
-    set(this, "poApprovals", []);
+    set(this, FBDataStoreApprovalKeys.PO_APPROVALS, []);
   };
   @action public clearInlineApprovals = () => {
-    set(this, "inlineApprovals", []);
+    set(this, FBDataStoreApprovalKeys.INLINE_APPROVALS, []);
   };
 
   // key would be either "poApprovals", "inlineApprovals"
