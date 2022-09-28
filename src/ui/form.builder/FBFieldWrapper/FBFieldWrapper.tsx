@@ -28,10 +28,8 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
           <FBFieldTopBar visibility={toolsVisible} {...{ inputProps }} />
           <FBFieldBottomBar visibility={addToolVisible} {...{ index }} />
         </Box>
-        <Box marginBottom={4}>
-          <Box className={classes.field}>
-            {props.children}
-          </Box>
+        <Box className={classes.field}>
+          {props.children}
         </Box>
         {markDownVisible && <FBFieldMarkDown {...{ index }} />}
       </Box>

@@ -60,10 +60,6 @@ export const withFBSortable = <T extends FBSortableProps>(
       );
     }));
 
-    if (Array.isArray(items)) {
-      items.sort((el1: JSX.Element | undefined, el2: JSX.Element | undefined) => el2?.props.index - el1?.props.index);
-    }
-
     const onSortStart = ({ index }: SortStart) => {
       sortableState.setDraggedIndex(index);
     };

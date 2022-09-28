@@ -6,7 +6,6 @@ import {
   FBSchema,
   FBStarter,
   FBWorkspaceBottomBar,
-  FBWorkspaceModeOptions,
   FBWorkspaceProps,
   FBWorkspaceSocket,
 } from "..";
@@ -53,16 +52,12 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
     workspaceState?.document?.formTemplate?.outputDocumentTypes[0],
     "group"
   );
-  const group: DocumentGroupType =
-    docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
-
-  const inDesignMode = mode === FBWorkspaceModeOptions.DESIGN || mode === FBWorkspaceModeOptions.FORMDESIGN;
+  const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
   return (
     <Box>
       <FBWorkspaceSocket />
-      {isStarter &&  _tabsState?.tabID !== "calpmhistory" &&  _tabsState?.tabID !== "procedure" && <FBStarter />}
-      {!isStarter && size(schema) > 0 && (
+      {size(schema) > 0 && (
         <FBSchema
           {...{ schema }}
           schemaState={workspaceState}
@@ -89,8 +84,8 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
             <Text translation="form.builder.add.step" />
           </Button>
         )}
-      {_tabsState?.tabID  && <FBStarter />}
-      {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} mt={inDesignMode ? 6 : 0} />}
+      {isStarter && _tabsState?.tabID !== "calpmhistory" && <FBStarter index={size(schema)} />}
+      {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
     </Box>
   );
 };
