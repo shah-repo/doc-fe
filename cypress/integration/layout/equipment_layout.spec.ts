@@ -22,11 +22,7 @@ let group;
 let maintenanceRecordDocumentType;
 let createdPMForm;
 let createdCalibrationForm;
-
-// let pmSchemaFieldName;
-// let calibrationSchemaFieldName;
 let equipmentURL;
-
 let calDocId;
 let calId;
 
@@ -1153,7 +1149,6 @@ context("Layout Verification of EQ", () => {
 
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
-          cy.pause();
           cy.get("[data-cy='timeline-icon']").arrowClick();
         });
 
@@ -1418,7 +1413,6 @@ context("Layout Verification of EQ", () => {
         });
 
         it("Click on New CAL", () => {
-          // documentId , id
           cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
           cy.get("[data-cy='form.builder.new.calibration']").arrowClick();
           cy.wait("@response").then((res) => {

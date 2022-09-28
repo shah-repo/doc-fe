@@ -453,7 +453,6 @@ context("Verification of Equipment Specification", () => {
 
     context("Fill the fields and Released", () => {
       it("Navigate to overview tab", () => {
-        cy.pause();
         cy.drSelectOverviewTab();
       });
 
