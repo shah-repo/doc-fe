@@ -800,9 +800,7 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Remove reference for document", () => {
-      cy.get("div[data-cy=\"field-referenceTo\"]").contains("FM-00002")
-        .parent().parent().parent()
-        .find("svg").arrowClick({ force: true });
+      cy.drRemoveReferences({ reference: "FM-00002" });
       cy.progressBarShouldNotExist();
     });
   });
