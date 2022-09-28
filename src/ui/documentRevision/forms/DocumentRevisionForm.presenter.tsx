@@ -333,20 +333,20 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {showOutputSection ? (
             <>
               {(isPO || outputIsPO
-                ? !_tabsState?.isTabActive("details") && (
-                  <Grid item xs={12}>
-                    <AttachmentsField
-                      isDisabled={isDisabledInput}
-                      isNewVersion={false}
-                      docRevId={docRevId}
-                      isAttachmentEmpty={isAttachmentEmpty}
-                      containsRedline={false}
-                      docRevStatus={documentRevision?.status}
-                      documentRevision={documentRevision}
-                      documentTypeId={documentTypeId || ""}
-                    />
-                  </Grid>
-                ) : (
+                ? _tabsState?.tabID !== "details" && (
+                <Grid item xs={12}>
+                  <AttachmentsField
+                    isDisabled={isDisabledInput}
+                    isNewVersion={false}
+                    docRevId={docRevId}
+                    isAttachmentEmpty={isAttachmentEmpty}
+                    containsRedline={false}
+                    docRevStatus={documentRevision?.status}
+                    documentRevision={documentRevision}
+                    documentTypeId={documentTypeId || ""}
+                  />
+                </Grid>
+              ) : (
                   <Grid item xs={12}>
                     <AttachmentsField
                       isDisabled={isDisabledInput}

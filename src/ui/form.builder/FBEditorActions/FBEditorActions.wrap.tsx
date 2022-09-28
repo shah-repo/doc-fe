@@ -45,7 +45,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       });
 
       if ((!workspaceState?.getSchemaItemAt(index) || index === 0) && additionalSchema) {
-        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES, tabId: _tabsState?.activeTabId }));
+        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES, tabId: _tabsState?.tabID }));
         workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchemaWithInitialValues as FBSchemaProps[]));
         index = index + size(additionalSchema);
       }
@@ -128,7 +128,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder || validationAttribute,
-        tabId: _tabsState?.activeTabId,
+        tabId: _tabsState?.tabID,
       }, index);
       leftPanelState?.setIndex(index + 1 || 0);
 

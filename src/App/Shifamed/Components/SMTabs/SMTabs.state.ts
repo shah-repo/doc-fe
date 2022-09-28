@@ -1,11 +1,31 @@
-import { observable, action } from "mobx";
+import { action, observable, set } from "mobx";
+import { SMTabsStateProps } from "../../..";
 
-export default class SMTabsState {
-  @observable public activeTabId = "";
+class SMTabsState implements SMTabsStateProps {
+  // MARK: @config
 
-  @observable public isTabActive = (id: string) => this.activeTabId.toLowerCase() === id.toLowerCase();
+  // MARK: @observables
+  /**
+   * @cfg {number} Index value of the active tab.
+   */
+  @observable public value = 0;
+  @observable public tabID = "";
 
-  @action public setActiveTabId = (id: string) => {
-    this.activeTabId = id;
+  // MARK: @constructor
+
+  // MARK: @computed
+
+  // MARK: @actions
+  @action public setValue = (value = 0) => {
+    set(this, "value", value);
   };
+
+  @action public setTabID = (id) => {
+    set(this, "tabID", id);
+  };
+
+  // MARK: @helpers
+
 }
+
+export default SMTabsState;

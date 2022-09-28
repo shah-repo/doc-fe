@@ -90,7 +90,6 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       bookmarkState?.addBookmark({
         name: `fb-docrev-section-${name}-${documentRevision.id}`,
         label: `${docId} - ${docName}`,
-        tabId: "documents",
       }, at);
     }
 
