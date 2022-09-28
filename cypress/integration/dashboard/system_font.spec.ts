@@ -4,7 +4,7 @@
 // / <reference types="Cypress" />
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { FONT_SIZE_10, FONT_SIZE_12, FONT_SIZE_13, FONT_SIZE_14, FONT_SIZE_16, FONT_SIZE_19, FONT_SIZE_22_4, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_13, LINE_HT_15, LINE_HT_15_2, LINE_HT_15_96, LINE_HT_16, LINE_HT_18, LINE_HT_19_2, LINE_HT_19_5, LINE_HT_20, LINE_HT_20_02, LINE_HT_21, LINE_HT_21_28, LINE_HT_24, LINE_HT_25_6, LINE_HT_26_208, LINE_HT_27_17, sora, soraSansserif, TEXT_TRANS_UPPER } from "../../utils/constants/fonts_constants";
+import { FONT_SIZE_10, FONT_SIZE_12, FONT_SIZE_13, FONT_SIZE_14, FONT_SIZE_14_16, FONT_SIZE_16, FONT_SIZE_18, FONT_SIZE_19, FONT_SIZE_22_4, FONT_SIZE_26, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_13, LINE_HT_15, LINE_HT_15_12, LINE_HT_15_2, LINE_HT_15_96, LINE_HT_16, LINE_HT_18, LINE_HT_19_2, LINE_HT_19_5, LINE_HT_20, LINE_HT_20_02, LINE_HT_21, LINE_HT_21_28, LINE_HT_24, LINE_HT_24_78, LINE_HT_25_6, LINE_HT_25_74, LINE_HT_26_208, LINE_HT_27_17, LINE_HT_37_18, sora, soraSansserif, TEXT_TRANS_UPPER } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompanyA;
@@ -49,23 +49,28 @@ context("User Creation Flow", () => {
       });
     });
 
-    it("[API]Login first user", (done: any) => {
+    it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
         email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
+        multipleCompanies = loginResponse.employees.length > 1 ? true : false;
         done();
       });
     });
   });
 
-  context("Login first user", () => {
-    it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
+  context("Login with admin user", () => {
+    it("Logs user in", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.authLogin({
+        email: USERS[1].email,
+      });
     });
 
-    it("Selects company A", () => {
-      cy.cmpSelectCompany({ name: createdCompanyA.name, multiple: multipleCompanies });
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompanyA.name, multiple: true });
     });
   });
 
@@ -100,12 +105,13 @@ context("User Creation Flow", () => {
     });
   });
 
-  context("Login user to dashboard", () => {
-    it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({
-        USER: USERS[1],
-        employeeId: employeeLoginFirst.id,
-      });
+  context("Login with admin user", () => {
+    it("Submit empty login form", () => {
+      cy.authSubmitLogin();
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompanyA.name, multiple: true });
     });
   });
 
@@ -645,14 +651,66 @@ context("User Creation Flow", () => {
     });
   });
 
-  // context("Verify The side bar options Migration fonts", () => {
-  //   it("Verify The side bar options References fonts", () => {
-  //     // cy.get("[data-cy=\"references-icon\"]").arrowClick();
-  //     cy.pause();
-  //   });
-  //   //   it("Verify The side bar options MIgration fonts", () => {
-  //   //   });
-  // });
+  context("Verify The side bar options References fonts", () => {
+    it("Verify The side bar options References fonts", () => {
+      cy.get("[data-cy=\"references-icon\"]").arrowClick();
+    });
+
+    it(`Verify the side bar options 'References' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="References"]`)
+        .checkStylePropExists({
+          content: "References",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify the side bar 'General Info' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="generalInfo"]`)
+        .checkStylePropExists({
+          content: "General Info",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify the side bar owner font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="user-name"]`)
+        .checkStylePropExists({
+          content: USERS[1].name,
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify the side bar 'References' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="field-referenceTo"]`)
+        .checkStylePropExists({
+          content: "References",
+          props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify the side bar 'Training' font-size ${FONT_SIZE_13} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="training"]`)
+        .checkStylePropExists({
+          content: "Training",
+          props: { "font-size": FONT_SIZE_13, "font-family": soraSansserif, "line-height": LINE_HT_15, "font-weight": FONT_WT_600 },
+        });
+    });
+
+    it(`Verify the side bar 'Referenced By' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15_12} font-weight ${FONT_WT_600}`, () => {
+      cy.checkStylePropExists({
+        content: "Referenced By",
+        props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15_12, "font-weight": FONT_WT_600 },
+      });
+    });
+
+    it(`Verify the side bar 'Release Date' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="releaseDate"]`)
+        .checkStylePropExists({
+          content: "Release Date",
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15, "font-weight": FONT_WT_600 },
+        });
+    });
+  });
 
   context("Click on 'Approve and Release' button", () => {
     it("Click on Approve and Release button", () => {
@@ -813,12 +871,11 @@ context("User Creation Flow", () => {
       cy.get("#EditRemoveAddFields-done").contains("Done").arrowClick();
     });
 
-    it(`Verify 'TC333' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_25_6} font-weight ${FONT_WT_400}`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-title- MuiTypography-subtitle1\"]").last()
-        .checkStylePropExists({
-          content: "TC333",
-          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_25_6, "font-weight": FONT_WT_400 },
-        });
+    it(`Verify 'TC333' font-size ${FONT_SIZE_14_16} font-family ${soraSansserif} line-height ${LINE_HT_24_78} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "TC333",
+        props: { "font-size": FONT_SIZE_14_16, "font-family": soraSansserif, "line-height": LINE_HT_24_78, "font-weight": FONT_WT_400 },
+      });
     });
 
     it("'Close My Profile", () => {
@@ -860,20 +917,42 @@ context("User Creation Flow", () => {
     });
   });
 
-  context("Login first user", () => {
-    it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
+  context("Login with admin user", () => {
+    it("Logs user in", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.authLogin({
+        email: USERS[1].email,
+      });
     });
 
-    it("Selects company B", () => {
-      cy.cmpSelectCompany({ name: createdCompanyB.name, multiple: true });
+    it(`Selects company A`, () => {
+      cy.cmpSelectCompany({ name: createdCompanyA.name, multiple: true });
     });
   });
 
-  context("Switch company", () => {
-    it("Switch company", () => {
+  context(`Switch company B`, () => {
+    it("Click on User Menu", () => {
       cy.usrClickUserMenuButton();
       cy.usrClickSwitchCompanyButton();
+    });
+
+    it(`Verify  'Switch Company' font-size ${FONT_SIZE_26} font-family ${soraSansserif} line-height ${LINE_HT_37_18} font-weight ${FONT_WT_400}`, () => {
+      cy.get("#switchCompanyHeader")
+        .checkStylePropExists({
+          content: "Switch Company",
+          props: { "font-size": FONT_SIZE_26, "font-family": soraSansserif, "line-height": LINE_HT_37_18, "font-weight": FONT_WT_400 },
+        });
+    });
+
+    it(`Verify company B font-size ${FONT_SIZE_18} font-family ${soraSansserif} line-height ${LINE_HT_25_74} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: createdCompanyB.name,
+        props: { "font-size": FONT_SIZE_18, "font-family": soraSansserif, "line-height": LINE_HT_25_74, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Select Company B`, () => {
       cy.cmpSelectCompany({ name: createdCompanyB.name, multiple: true });
     });
   });
