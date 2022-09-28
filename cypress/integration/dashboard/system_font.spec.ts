@@ -7,12 +7,13 @@ import { CyRoutes } from "../../support/routes";
 import { FONT_SIZE_10, FONT_SIZE_12, FONT_SIZE_13, FONT_SIZE_14, FONT_SIZE_14_16, FONT_SIZE_16, FONT_SIZE_18, FONT_SIZE_19, FONT_SIZE_22_4, FONT_SIZE_26, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_13, LINE_HT_15, LINE_HT_15_12, LINE_HT_15_2, LINE_HT_15_96, LINE_HT_16, LINE_HT_18, LINE_HT_19_2, LINE_HT_19_5, LINE_HT_20, LINE_HT_20_02, LINE_HT_21, LINE_HT_21_28, LINE_HT_24, LINE_HT_24_78, LINE_HT_25_6, LINE_HT_25_74, LINE_HT_26_208, LINE_HT_27_17, LINE_HT_37_18, sora, soraSansserif, TEXT_TRANS_UPPER } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let multipleCompanies;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let employeeLoginFirst;
 let createdCompanyA;
 let createdCompanyB;
 let loginResponse;
-let multipleCompanies;
-let employeeLoginFirst;
-
 const docId = "DOC ID";
 const docRevision = "REVISION";
 const docTitle = "DOCUMENT TITLE";
