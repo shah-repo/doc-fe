@@ -1,4 +1,4 @@
-import { Box, IconButton, TooltipProps, Typography } from "@material-ui/core";
+import { Box, IconButton, Typography } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionSidebarProps, SMBox, SMText } from "../../../../..";
@@ -20,13 +20,8 @@ import RevisionHistory from "../../../../../../ui/documentRevision/Sidebar/Revis
 import SidebarContainer from "../../../../../../ui/documentRevision/Sidebar/Sidebar.container";
 import { FBTooltip } from "../../../../../../ui/form.builder";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
-import { styles, tooltipStyles } from "./DocumentRevisionSidebar.new.styles";
+import useStyles from "./DocumentRevisionSidebar.new.styles";
 import { withDocumentRevisionSidebarWrap } from "./DocumentRevisionSidebar.wrap";
-
-export const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="left" classes={classes} {...props} />;
-};
 
 const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarProps> = ({
   _documentRevisionFormState,
@@ -48,7 +43,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   intl,
   edit,
 }) => {
-  const classes = styles(_documentRevisionSidebarState?.open);
+  const classes = useStyles(_documentRevisionSidebarState?.open);
   const handleRightPanelToggle = () => {
     _documentRevisionSidebarState?.setOpen();
     _documentRevisionFormState?.setRightPanelOpen();
@@ -65,7 +60,8 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
         >
           <Box display="flex" height={48} alignItems="center">
             <Box width={48} textAlign="center" className={classes.iconBox}>
-              <StyledTooltip
+              <FBTooltip
+                placement="left"
                 title={
                   _documentRevisionSidebarState?.open ? (
                     <SMText label="common.minimize" />
@@ -80,7 +76,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                 >
                   <CollapseIcon />
                 </IconButton>
-              </StyledTooltip>
+              </FBTooltip>
             </Box>
             <Box width={233}>
               {_documentRevisionSidebarState?.open && (
