@@ -28,6 +28,7 @@ export const LINE_HT_15 = "15px";
 export const LINE_HT_15_2 = "15.2px";
 export const LINE_HT_15_12 = "15.12px";
 export const LINE_HT_15_96 = "15.96px";
+export const LINE_HT_16 = "16px";
 export const LINE_HT_18 = "18px";
 export const LINE_HT_19_5 = "19.5px";
 export const LINE_HT_20 = "20px";
@@ -50,7 +51,6 @@ export const LINE_HT_37_18 = "37.18px";
 export const LINE_HT_49_92 = "49.92px";
 export const LINE_HT_12 = "12px";
 export const LINE_HT_13 = "13px";
-export const LINE_HT_16 = "16px";
 export const LINE_HT_19_2 = "19.2px";
 export const LINE_HT_20_02 = "20.02px";
 

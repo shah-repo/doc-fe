@@ -80,14 +80,35 @@ context("User Creation Flow", () => {
       cy.authLogout();
     });
 
-    it("verify login confirmation page", () => {
+    it("Enter user's emailId and password", () => {
       cy.get("[data-cy=\"LoginFormPresenter-email\"]").arrowType(USERS[1].email);
       cy.unClick();
       cy.get("[data-cy=\"LoginFormPresenter-password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.unClick();
     });
 
-    it(`Verify login email address font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_15_2} font-weight ${FONT_WT_400}`, () => {
+    it(`Verify 'Sign in to Enlil' font-size ${FONT_SIZE_22_4} font-family ${soraSansserif} line-height ${LINE_HT_26_208} font-weight ${FONT_WT_400}`, () => {
+      cy.get("#LoginFormPresenter-title").checkStylePropExists({
+        content: "Sign in to Enlil",
+        props: { "font-size": FONT_SIZE_22_4, "font-family": soraSansserif, "line-height": LINE_HT_26_208, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'EMAIL ADDRESS' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_16} font-weight ${FONT_WT_400}`, () => {
+      cy.get(".MuiTypography-subtitle1").checkStylePropExists({
+        content: "EMAIL ADDRESS",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_16, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'PASSWORD' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_16} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "PASSWORD",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_16, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify emtered email address font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_15_2} font-weight ${FONT_WT_400}`, () => {
       cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", USERS[1].email)
         .should("have.css", "font-size", FONT_SIZE_16);
       cy.get("[data-cy=\"LoginFormPresenter-email\"]").should("have.value", USERS[1].email)
@@ -98,11 +119,19 @@ context("User Creation Flow", () => {
         .should("have.css", "font-weight", FONT_WT_400);
     });
 
+    it(`Verify 'Sign in' font-size ${FONT_SIZE_22_4} font-family ${soraSansserif} line-height ${LINE_HT_26_208} font-weight ${FONT_WT_400}`, () => {
+      cy.get(`[data-cy="LoginFormPresenter-submit"]`).checkStylePropExists({
+        content: "Sign in",
+        props: { "font-size": FONT_SIZE_22_4, "font-family": soraSansserif, "line-height": LINE_HT_26_208, "font-weight": FONT_WT_400 },
+      });
+    });
+
     it(`Verify 'Don't have an account' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
       cy.checkStylePropExists({
         content: "Don't have an account?",
         props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
       });
+      cy.pause();
     });
   });
 
