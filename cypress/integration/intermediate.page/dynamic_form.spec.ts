@@ -113,8 +113,11 @@ context(
             cy.intPageVerifyPreviewLayoutButtonNotExist();
           });
 
-          it("Verify Attachments and Output document type are not displayed", () => {
-            cy.get("[data-cy=\"albumMediaButton\"]").should("not.exist");
+          it("Verify Attachments is displayed", () => {
+            cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+          });
+
+          it("Verify Output document type are not displayed ", () => {
             cy.intPageVerifyOutputDocTypeNotExist();
           });
 

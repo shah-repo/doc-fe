@@ -109,7 +109,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
-      tabId: TabTypeOptions.TABS_MEQ.toLowerCase(),
+      tabId: TabTypeOptions.TABS_MEQ,
       type: TabTypeOptions.TABS_MEQ,
     }];
   }
@@ -117,12 +117,30 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   if (formik.values?.retrain && tabConfig) {
     tabConfig = [...tabConfig, {
       labelId: "tabId.training",
-      tabId: TabTypeOptions.TRAINING.toLowerCase(),
+      tabId: TabTypeOptions.TRAINING,
       type: TabTypeOptions.TRAINING,
     }];
   }
 
-  const tabIds = tabConfig?.map(({ tabId }) => tabId);
+  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
+  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
+
+  useEffect(() => {
+    if (!tabConfig) {
+      return;
+    }
+    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabConfig]);
+
+  const onTabChange = (_ev, newValue, tabConfig) => {
+    if (!tabConfig) {
+      return;
+    }
+
+    _tabsState?.setValue(newValue);
+    _tabsState?.setTabID(tabConfig[newValue].tabId);
+  };
 
   useEffect(() => {
     _formState?.setValues(initialValues);
@@ -148,14 +166,14 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
           <Observer>
             {() => (
               <SMTabs
-                tabs={tabIds}
+                onChange={(ev, newValue) => onTabChange(ev, newValue, tabConfig)}
+                tabs={tabLabels}
                 boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                 panelProps={{ flex: 1 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
                   const tabType = tabInfo.type;
-                  const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
-
+                  const showTabContent = _tabsState?.tabID === tabInfo.tabId;
                   return (
                     <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
                       {tabType === TabTypeOptions.MIXED && <>
@@ -222,10 +240,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       {tabType === TabTypeOptions.TABS_MEQ && (
                         <FBMaterialEqInfoContainer
                           documentRevision={documentRevision}
-                          inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
+                          inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
                         />
                       )}
-                      {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
+                      {tabType === TabTypeOptions.TRAINING && _tabsState?.value === trainingTabIndex && (
                         <FBTrainingInfoContainer
                           documentRevisionId={documentRevision?.id}
                         />

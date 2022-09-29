@@ -206,6 +206,10 @@ context("Create new LHRT Layout Verification", () => {
         cy.intPageVerifyTrainingRequiredExist();
       });
 
+      it("select 'Training required' field", () => {
+        cy.get("[id=\"Checkbox-box\"]").eq(1).arrowClick();
+      });
+
       it("Verify 'Revision Stage' and 'Training required' fields are in one line", () => {
         cy.get("[data-cy=\"field-revisionStage\"]").parent().parent()
           .should("have.class", "MuiGrid-grid-xs-6").next()
@@ -239,6 +243,10 @@ context("Create new LHRT Layout Verification", () => {
         cy.intPageVerifyBuildTypeExist();
       });
 
+      it("Check 'Due Date' is displayed", () => {
+        cy.get(`[data-cy="Due Date"]`).should("exist");
+      });
+
       it("Check 'Approvals' is displayed", () => {
         cy.intPageVerifyApprovalsExist();
       });
@@ -247,8 +255,43 @@ context("Create new LHRT Layout Verification", () => {
         cy.intPageVerifyPreviewLayoutButtonEnabled();
       });
 
+      it("part to be manufactured is editable", () => {
+        cy.get("[data-cy^=\"lhr-selected-part\"]").then(($el) => {
+          $el.trigger("click");
+          cy.unClick();
+        });
+      });
+
+      it("Initial Quantity is editable", () => {
+        cy.get("[data-cy^=\"lhr_initial_quantity\"]").then(($el) => {
+          $el.trigger("click");
+        });
+      });
+
+      it("End Quantity is editable", () => {
+        cy.get("[data-cy^=\"lhr-end-quantity\"]").then(($el) => {
+          $el.trigger("click");
+        });
+      });
+
+      it("Build Type is editable", () => {
+        cy.unClick();
+        cy.get("[value=\"R&D\"]").check({ force: true });
+      });
+
+      it("Approval is editable", () => {
+        cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").then(($el) => {
+          $el.trigger("click");
+          cy.unClick();
+        });
+      });
+
       it("Close Preview dialog", () => {
         cy.intPageClosePreviewDialog();
+      });
+
+      it("Make sure that none of the changes made in “Preview” mode were saved", () => {
+        cy.drIsTrainingRequired({ shouldBe: false });
       });
 
       it("Click create document", () => {
@@ -333,13 +376,16 @@ context("Create new LHRT Layout Verification", () => {
       it("Close Preview dialog", () => {
         cy.intPageClosePreviewDialog();
       });
+
+      it("Navigate details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+      it("Check 'Step #1' is displayed", () => {
+        cy.intPageVerifyLHRStepExist();
+      });
     });
 
     context("Add fields", () => {
-      it("Navigate to detail tab", () => {
-        cy.drSelectDetailsTab();
-      });
-
       it("Add TextField", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
@@ -386,6 +432,11 @@ context("Create new LHRT Layout Verification", () => {
 
       it("Verify fb-textfield tab", () => {
         cy.get("[data-cy='fb-textfield']").should("be.visible");
+      });
+
+      it("Verify Field1 is displayed and flagged as “Required”", () => {
+        cy.get("[data-cy='textfield-6']").contains("The fb-textfield is a required field.")
+          .should("exist");
       });
 
       it("Enter Add field 1 to visible add field 2 tab", () => {

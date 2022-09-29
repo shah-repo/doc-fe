@@ -103,6 +103,7 @@ context("Export Form doc", () => {
 
     it("Save the document", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.wait(2000);
     });
   });
 
@@ -116,6 +117,7 @@ context("Export Form doc", () => {
     context("Add Form with Released", () => {
       it("Approve and release the form", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.wait(2000);
       });
 
       it("Verify export", () => {
@@ -271,7 +273,7 @@ context("Export Form doc", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add Approver'", () => {

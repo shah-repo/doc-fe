@@ -308,7 +308,7 @@ context("Approval request form", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
@@ -359,10 +359,6 @@ context("Approval request form", () => {
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
     it("Save AR", () => {
@@ -774,7 +770,7 @@ context("Approval request form", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {

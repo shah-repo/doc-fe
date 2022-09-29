@@ -243,8 +243,7 @@ Cypress.Commands.add("arGetArDocumentByName", (params: {
 
 Cypress.Commands.add("arEnterApprovalRequestTitle", (params: {title: string }) => {
   cy.get("[data-cy=\"field-title\"]").arrowClick();
-  cy.get("[data-cy=\"field-title\"]").arrowType(`{selectAll}{selectAll}${params.title}`).wait(500);
-  cy.unClick();
+  cy.get("#Title-field input").invoke("val", "").arrowType(params.title).unClick();
 });
 
 Cypress.Commands.add(`arVerifySignatureIsNotMet`, (params: {title: string }) => {
@@ -271,16 +270,15 @@ Cypress.Commands.add("arClearFilters", () => {
 });
 
 Cypress.Commands.add("arEnterApprovalRequestDescription", (params: { description: string }) => {
-  cy.get("[data-cy=\"description\"]").eq(0).arrowType(params.description).wait(500);
-  cy.unClick();
+  cy.get("[class^=\"public-DraftStyleDefault-block\"]").clear().arrowType(params.description, { force: true })
+    .wait(500).unClick();
 });
 
 Cypress.Commands.add("arSelectARForm", (params: { formTitle: string }) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
-    cy.get(`div[data-cy="field-select-form"]>#FormList-selectForm div[class*="-control"]`).arrowClick({ force: true });
-    cy.get("div[id^=react-select]").contains(params.formTitle).arrowClick({ force: true });
-    cy.get("[data-cy='create.approval.request.continue']").arrowClick({ force: true });
-  });
+  cy.get(`div[data-cy="field-select-form"]>#FormList-selectForm div[class*="-control"]`).arrowClick({ force: true });
+  cy.get("div[id^=react-select]").contains(params.formTitle).arrowClick({ force: true });
+  cy.get("[data-cy='create.approval.request.continue']").arrowClick({ force: true });
+  cy.wait(7000);
 });
 
 Cypress.Commands.add("arClickAddDocument", () => {
@@ -355,7 +353,7 @@ Cypress.Commands.add("arClickSendToReview", () => {
     CyRoutes.GetRequiredApproversDocRev,
   ],
   () => {
-    cy.get("[data-cy=\"transitionButton\"]").arrowClick();
+    cy.get("[data-cy=\"transitionButton\"]").arrowClick({ force: true });
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
