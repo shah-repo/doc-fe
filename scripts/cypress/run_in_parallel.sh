@@ -52,12 +52,12 @@ export COMPOSE_PROJECT_NAME="enlil_$ENLIL_COMPOSE_PORT_RANGE_START"
 export CYPRESS_CACHE_FOLDER="cypress/cache/cypressLib"
 mkdir -p $CYPRESS_CACHE_FOLDER
 yarn install --frozen-lockfile
-# yarn cypress install
-# yarn cypress verify
+yarn cypress install
+yarn cypress verify
 
 source ./scripts/cypress/utils/make_results_dir.sh
 
-# ./scripts/cypress/utils/patch_director_port_in_cache.sh
+./scripts/cypress/utils/patch_director_port_in_cache.sh
 ./scripts/cypress/utils/generate_requirements_json_file.sh
 
 ./scripts/cypress/utils/delete_cache.sh
