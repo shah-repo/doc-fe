@@ -263,18 +263,10 @@ context("po_requestor_as_an_approver", () => {
       cy.authLogin({
         email: USERS[1].email,
       });
-      // cy.intercept({ method: "GET", pathname: "/api/v1/auth/sessionDetails" }, (req) => {
-      //   req.reply((res) => {
-      //     if (res.body !== "") {
-      //       loginResponse = res.body;
-      //     }
-      //   });
-      // }).as("response");
     });
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-      // cy.wait("@response");
     });
   });
 
@@ -1190,7 +1182,7 @@ context("po_requestor_as_an_approver", () => {
   });
 
   context("Add Requestor - Requestor should not be fulfilling PO level signature", () => {
-    it(`Select '${USERS[2].name}' for Requestor`, () => {
+    it(`Select '${USERS[4].name}' for Requestor`, () => {
       cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
       cy.unClick();
       cy.wait(1000);
@@ -1282,7 +1274,6 @@ context("po_requestor_as_an_approver", () => {
     it("User should not able to release PO, error message should appear", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
       cy.checkToastMessage({ exists: true });
-      cy.pause();
     });
   });
 
