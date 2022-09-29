@@ -1163,8 +1163,11 @@ context("po_requestor_as_an_approver", () => {
 
     it("Add an Approval", () => {
       cy.wait(1000);
-      cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[1].name);
+      cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[4].name);
       cy.wait(1000);
+    });
+    it("Check approver should not be fulfilling PO level signature", () => {
+      cy.poAMCheckApprovalIconIfItsGray();
     });
 
     it("Save document", () => {
@@ -1172,11 +1175,13 @@ context("po_requestor_as_an_approver", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
-    // xit("User should not able to release PO, error message should appear", () => {
-    // });
+    it("User should not able to release PO, error message should appear", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+      cy.checkToastMessage({ exists: true });
+    });
 
     it("Remove Approver'", () => {
-      cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick();
+      cy.contains(`${USERS[4].name} - ${USERS[4].email}`).parent().next().arrowClick();
     });
     it("Verify that Approver can be removed", () => {
       cy.wait(1000);
@@ -1191,7 +1196,7 @@ context("po_requestor_as_an_approver", () => {
       cy.wait(1000);
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[4].name).arrowClick();
       });
     });
     it("Check if selected approver has approval signature right by his name", () => {
@@ -1260,7 +1265,7 @@ context("po_requestor_as_an_approver", () => {
       it("Verify Added Requestor captured on history", () => {
         cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
           .should("exist");
-        cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[2].name)
+        cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[4].name)
           .should("exist");
       });
     });
@@ -1274,14 +1279,10 @@ context("po_requestor_as_an_approver", () => {
         cy.get(".MuiAutocomplete-tag span div").should("exist");
       });
     });
-    xcontext("Approve PO", () => {
-      it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
-      });
-
-      it("Approve PO", () => {
-        cy.ebApprove();
-      });
+    it("User should not able to release PO, error message should appear", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+      cy.checkToastMessage({ exists: true });
+      cy.pause();
     });
   });
 
