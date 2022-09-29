@@ -1288,12 +1288,12 @@ context("LFPO new layout verification", () => {
       cy.get("[id^='react-select']").eq(2).autocompleteSelect("Textfield for inline");
     });
 
-    it("Mapped field-lot_usable_quantity field", () => {
+    it("Mapped Usable Quantity field", () => {
       cy.get("[data-cy^='field-lot_usable_quantity']" ).arrowClick();
       cy.get("[id^='react-select']").eq(3).autocompleteSelect("Usable Quantity");
     });
 
-    it("Mapped field-lot_expiry_date field", () => {
+    it("Mapped Expiration Date field", () => {
       cy.get("[data-cy^='field-lot_expiry_date']" ).arrowClick();
       cy.get("[id^='react-select']").eq(4).autocompleteSelect("Expiration Date");
     });
@@ -1325,7 +1325,7 @@ context("LFPO new layout verification", () => {
 
     it("Verify data is migrated to new form field ", () => {
       cy.get("[name='lot_quantity']").should("have.value", "100");
-      cy.get("[name='textfield-for-inline']").should("be.visible");
+      cy.get("[name^='textfield-for-inline']").should("be.visible");
       cy.get("[name='lot_usable_quantity']").should("be.visible");
       cy.get("[data-cy='lot_part']").should("be.visible");
       cy.get("[data-cy='lot_part']").should("have.value", "PRT-00005 - rev 1 - Part document");
