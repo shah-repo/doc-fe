@@ -17,6 +17,8 @@ const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
 
 let createdCompany;
+let loginResponse;
+let poHTMLDocRevId;
 let adminEmployeeLoginResponse;
 let adminEmployee;
 let formDocumentType;
@@ -262,10 +264,18 @@ context("po_requestor_as_an_approver", () => {
       cy.authLogin({
         email: USERS[1].email,
       });
+      cy.intercept({ method: "GET", pathname: "/api/v1/auth/sessionDetails" }, (req) => {
+        req.reply((res) => {
+          if (res.body !== "") {
+            loginResponse = res.body;
+          }
+        });
+      }).as("response");
     });
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.wait("@response");
     });
   });
 
@@ -1693,7 +1703,33 @@ context("po_requestor_as_an_approver", () => {
         cy.ebApprove();
       });
     });
-
+  });
+  context("Verify that downloaded PDF display Requestor information", () => {
+    it("Navigate to Purchase Order list", () => {
+      cy.navigToPurchaseOrder();
+      cy.dlClearFilters();
+    });
+    it("Select created PO", () => {
+      cy.dlSelectFirstDocument();
+    });
+    it("[API]Get html document and verify PO number and Requestor information", () => {
+      cy.url().then((url: any) => {
+        poHTMLDocRevId = url.split("/").pop();
+        cy.request({
+          method: "GET",
+          url: `${CONFIG.BE_URL}/api/v1/document_revisions/generate_html/${poHTMLDocRevId}`,
+          headers: {
+            Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
+          },
+        }).then((response) => {
+          const responseBody = response.body.toString();
+          expect(responseBody)
+            .contains(`PO Number:          PO-00001-1`)
+            .and.contains("Requestor:")
+            .and.contains(USERS[1].name);
+        });
+      });
+    });
   });
   context("Navigate to dashboard Verify that notification is present for All approvers (Requestor and added Manually)", () => {
     it("Navigate to Dashboard", () => {
