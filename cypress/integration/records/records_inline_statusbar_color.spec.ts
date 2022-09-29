@@ -467,6 +467,7 @@ context("Record inline Flow", () => {
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get(`[data-cy="exportToEmail"]`).should("be.visible").should("not.be.disabled");
     });
 
