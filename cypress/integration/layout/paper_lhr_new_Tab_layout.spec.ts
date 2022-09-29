@@ -469,6 +469,57 @@ context("Paper LHR tab Layout", () => {
     });
   });
 
+  context("Sample FORM for migration", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Fill in document attributes", () => {
+      it("Enter title 'Paper LHR Document Title'", () => {
+        cy.drEnterDocumentTitle({ name: "Paper LHR Document For migration" });
+      });
+
+      it("Enter description 'Paper LHR Document form  description'", () => {
+        cy.drEnterDocumentDescription({ description: "Paper LHR Document form  description" });
+      });
+
+      it("Select 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Select 'Paper LHR' output document type from dropdown", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Paper Lot History Record" });
+      });
+
+      it("Click on Save", () => {
+        cy.wrapWithWaitOnApiCalls([], () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+      });
+
+      it("Add textfield", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "Textfield from migration" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Approve and released", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+  });
+
   context("FORM document creation flow", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
@@ -552,7 +603,7 @@ context("Paper LHR tab Layout", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.DRAFT,
         title: "Document List",
-        docId: "FM-00002",
+        docId: "FM-00003",
         revision: "Rev 1",
       });
     });
@@ -611,12 +662,13 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Select a document type Paper Lot History Record and select a Form released", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Paper Lot History Record");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Paper Lot History Record");
+    });
+
+    it("Select a form Paper Lot History Record", () => {
+      cy.get("#MultipleFormTemplate-selectDocType input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Paper LHR Document Title");
     });
 
     context("Fill in the fields", () => {
@@ -669,12 +721,13 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Select a document type Paper Lot History Record and select a Form released", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Paper Lot History Record");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Paper Lot History Record");
+    });
+
+    it("Select a form Paper Lot History Record", () => {
+      cy.get("#MultipleFormTemplate-selectDocType input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Paper LHR Document Title");
     });
 
     context("Verify Created LHR Doc", () => {
@@ -760,7 +813,7 @@ context("Paper LHR tab Layout", () => {
     it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
       cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
       cy.get("[data-cy='common.revision']").parent().should("contain.text",
         moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
     });
@@ -769,6 +822,40 @@ context("Paper LHR tab Layout", () => {
       it("Open revisions tab, click and verify current revision", () => {
         cy.openRevisionsTabAndVerifyCurrentRevision("A");
       });
+    });
+
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^=react-select]").contains("FM-00002").arrowClick();
+      });
+
+      it("Click on cancel changes", () => {
+        cy.get("[data-cy='common.cancel']").arrowClick();
+      });
+
+      it("Verify the existing field after migration", () => {
+        cy.get("[name='lhr_initial_quantity']").should("exist");
+      });
+
+      // steps : Required after blocker fixed ENC-12588
+      // it("Click on confirm change", () => {
+      //   cy.get("[data-cy='common.confirm.change']").arrowClick();
+      // });
+
+      // it("Verify text field from migrated form added here", () => {
+      //   cy.get("[name^='textfield-from-migration']").should("exist").wait(2000);
+      // });
+
     });
 
     context("Verify User able to add Groups or other user permissions", () => {
@@ -815,6 +902,11 @@ context("Paper LHR tab Layout", () => {
       it("Verify Book Mark Navigation", () => {
         cy.get("[data-cy='bookmark-icon']").arrowClick();
         cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+      });
+
+      it("Click on book mark verify user is navigate to the bookmarked field", () => {
+        cy.get("[data-cy='Bookmarks-detail'] p").arrowClick();
+        cy.get("[data-cy^='fb-approvals']").should("be.visible");
       });
     });
   });
@@ -972,7 +1064,7 @@ context("Paper LHR tab Layout", () => {
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
         cy.verifyReferenceInfo();
         cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
-        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
         cy.get("[data-cy='common.revision']").parent().should("contain.text",
           moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
       });
@@ -1035,6 +1127,11 @@ context("Paper LHR tab Layout", () => {
         it("Verify Book Mark Navigation", () => {
           cy.get("[data-cy='bookmark-icon']").arrowClick();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+        });
+
+        it("Click on book mark verify user is navigate to the bookmarked field", () => {
+          cy.get("[data-cy='Bookmarks-detail'] p").arrowClick();
+          cy.get("[data-cy^='fb-approvals']").should("be.visible");
         });
       });
     });
@@ -1163,7 +1260,7 @@ context("Paper LHR tab Layout", () => {
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
         cy.verifyReferenceInfo();
         cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
-        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
         cy.get("[data-cy='common.revision']").parent().should("contain.text",
           moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
       });
@@ -1219,6 +1316,11 @@ context("Paper LHR tab Layout", () => {
         it("Verify Book Mark Navigation", () => {
           cy.get("[data-cy='bookmark-icon']").arrowClick();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+        });
+
+        it("Click on book mark verify user is navigate to the bookmarked field", () => {
+          cy.get("[data-cy='Bookmarks-detail'] p").arrowClick();
+          cy.get("[data-cy^='fb-approvals']").should("be.visible");
         });
       });
     });

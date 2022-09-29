@@ -1,5 +1,6 @@
 import { Box, CircularProgress } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import { isEmpty } from "lodash";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBEQMaintenanceProps, FBInput, FBQuantityField, FBRadioGroup, FBSection, FBText, FBTextEditor } from "..";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
@@ -78,7 +79,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       rules={`required_if:${name}.requirements,Yes`}
       {...{ disabled, autosave }}
     />
-    <FBEQMaintenanceHistory maintenanceHistory={maintenanceHistory} />
+    {!isEmpty(maintenanceHistory) && <FBEQMaintenanceHistory maintenanceHistory={maintenanceHistory} />}
     {complianceDueDate &&
       <Box mb={3} data-cy="maintenance.status">
         <FBText

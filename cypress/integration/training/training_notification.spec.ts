@@ -677,6 +677,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
     });
 
@@ -824,6 +825,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
     });
 

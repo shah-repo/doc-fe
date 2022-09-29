@@ -794,13 +794,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.unClick();
     });
 
-    it("Check approval icon if it's gray", () => {
-      cy.poAMCheckApprovalIconIfItsGray();
-    });
-
     it("Check if selected approver has approval signature right by his name", () => {
-      cy.poAMCheckIfApproverHasApprovalSign();
-      cy.unClick();
+      cy.contains("PO Approval sig").should("exist");
     });
 
     it("Check approval icon if it's colored", () => {
@@ -882,7 +877,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify Unit", () => {
-      cy.get("[data-cy='unitPrice']").eq(0).should("have.text", "$2.00");
+      cy.get("[data-cy='unitPrice']").eq(0).should("have.text", "$100.00");
     });
 
     it("Verify tax rate", () => {
@@ -890,7 +885,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify tax value", () => {
-      cy.get("[name='po-items-built-in.tax']").should("have.text", "0.925000");
+      cy.get("[name='po-items-built-in.tax']").should("have.text", "46.250000");
     });
 
     it("Verify Grand Total", () => {
@@ -947,6 +942,14 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.get(".MuiAutocomplete-tag").should("have.class", "Mui-disabled");
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
       cy.unClick();
+    });
+
+    it("Check if selected approver has approval signature right by his name", () => {
+      cy.contains("PO Approval sig").should("exist");
+    });
+
+    it("Check approval icon if it's colored", () => {
+      cy.poAMCheckApprovalIconIfItsRed();
     });
   });
 
@@ -1024,7 +1027,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify Unit", () => {
-      cy.get("[data-cy='unitPrice']").eq(0).should("have.text", "$2.00");
+      cy.get("[data-cy='unitPrice']").eq(0).should("have.text", "$100.00");
     });
 
     it("Verify tax rate", () => {
@@ -1032,11 +1035,11 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Verify tax value", () => {
-      cy.get("[name='po-items-built-in.tax']").should("have.text", "0.925000");
+      cy.get("[name='po-items-built-in.tax']").should("have.text", "46.250000");
     });
 
     it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").should("have.text", "$30.93");
+      cy.get("[data-cy='poTotal']").should("have.text", "$566.25");
     });
   });
 });

@@ -11,6 +11,7 @@ let createdCompany;
 let loginResponse;
 let employeeLoginOwner;
 let employeeLoginShared;
+let reduceIndex = false;
 const owner = USERS[2].name;
 const sharedUser = USERS[1];
 const sharedUserTwo = USERS[3];
@@ -60,6 +61,7 @@ const history = [
   {
     owner,
     actions: [
+      { key: "Description changed", value: "Description Edited" },
       { key: "Attachments removed", value: "test_image.jpg" },
     ],
   },
@@ -349,14 +351,17 @@ context("Check Document History", () => {
 
     history.forEach((element, groupIndex) => {
       it(`Check owner name for group ${groupIndex + 1}`, () => {
-        cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
+        if (groupIndex > 9) {
+          cy.get(`[data-cy="change-key-${groupIndex - 1}"]`).should("have.text", element.owner);
+        } else {
+          cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
+        }
       });
-
+      reduceIndex = false;
       element.actions.forEach((action, index, identifier) => {
         it(`'${action.key}' as '${action.value}' exists`, () => {
           const typeOfChange = action.key;
           let contentOfChange = action.value;
-
           if (action.key === "New description" || action.key === "Description changed" ) {
             contentOfChange = "\n" + action.value + "\n";
           }
@@ -367,19 +372,29 @@ context("Check Document History", () => {
           }
           else {
             if (action.key === "Access granted to group") {
-              cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`).should(($identifier) =>  {
+              let grpIndex = groupIndex;
+              if (groupIndex > 9) { grpIndex = groupIndex - 1; }
+              cy.get(`[data-cy^="change-value-${grpIndex}-${index}"]`).should(($identifier) =>  {
                 expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
               });
             }
             else {
-              cy.get(`[data-cy^="change-value-${groupIndex}-${index}"]`)
+              let grpIndex = groupIndex;
+              if (reduceIndex && action.key !== "Attachments removed") {
+                grpIndex = groupIndex - 1;
+              }
+              cy.get(`[data-cy^="change-value-${grpIndex}-${index}"]`)
                 .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
                 .parent()
                 .parent()
                 .within(() => {
-                  cy.get(`[data-cy^=change-key-${groupIndex}-${index}]`).should("have.text", typeOfChange);
-                  cy.get(`[data-cy^=change-value-${groupIndex}-${index}]`).should("contain.text", contentOfChange);
+                  cy.get(`[data-cy^=change-key-${grpIndex}-${index}]`).should("have.text", typeOfChange);
+                  cy.get(`[data-cy^=change-value-${grpIndex}-${index}]`).should("contain.text", contentOfChange);
                 });
+              if (action.value === "Description Edited") {
+                reduceIndex = true;
+                return;
+              }
             }
           }
         });

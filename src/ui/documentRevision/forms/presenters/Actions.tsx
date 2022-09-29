@@ -209,6 +209,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const canShowCancelButton = isDocumentRevisionInDraft(status) && version > 1;
   const { isVisible } = useApproveAndRelease(documentTypeId);
   const canApprove = useSelector(getHasPermission(Permission.CR_OWNER_AS_APPROVER));
+  const hasBuildType = Boolean(documentRevision?.formInput?.["lhr-build-type"]);
 
   if (
     !isRecord ||
@@ -331,6 +332,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
           docRevOwner={owner?.user.name}
           updatedAt={getFormattedDateString(updatedAt, MomentFormats.DateTime)}
           renderAsButton={renderAsButton}
+          hasBuildType={hasBuildType}
           {...{
             revisionChangeType,
             currentDocumentType,
