@@ -269,6 +269,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -334,6 +335,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -475,6 +477,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });

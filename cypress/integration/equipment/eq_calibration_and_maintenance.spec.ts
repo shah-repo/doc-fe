@@ -16,10 +16,6 @@ let adminEmployee;
 let createdCompany;
 let adminEmployeeLoginResponse;
 let equipmentURL;
-let createdPMFormDocumentId;
-let createdCalibrationFormDocumentId;
-let pmSchemaField;
-let calibrationSchemaField;
 
 const multipleCompanies = true;
 let pMFormId;
@@ -184,16 +180,6 @@ context("Equipment maintenance and calibration", () => {
 
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
 
-        cy.wait("@response").then((res) => {
-          if (res.response) {
-            const response = res.response.body;
-            // eslint-disable-next-line max-len
-            pmSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Preventative Maintenance");
-            // eslint-disable-next-line max-len
-            calibrationSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Calibration");
-          }
-        });
-
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -289,6 +275,7 @@ context("Equipment maintenance and calibration", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -327,6 +314,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
+      cy.wait(2000);
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -469,9 +457,6 @@ context("Equipment maintenance and calibration", () => {
   context("Approve and release form", () => {
     it("Approve and release form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      cy.url().then((url: any) => {
-        createdPMFormDocumentId = url.split("/").pop();
-      });
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
@@ -491,6 +476,7 @@ context("Equipment maintenance and calibration", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -521,7 +507,7 @@ context("Equipment maintenance and calibration", () => {
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
         }];
-
+      cy.wait(2000);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
@@ -757,6 +743,7 @@ context("Equipment maintenance and calibration", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -799,6 +786,7 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
+      cy.wait(2000);
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -941,9 +929,6 @@ context("Equipment maintenance and calibration", () => {
   context("Approve and release form", () => {
     it("Approve and release CAL form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      cy.url().then((url: any) => {
-        createdCalibrationFormDocumentId = url.split("/").pop();
-      });
     });
 
     it("Verify form released status and click on Send To Email", () => {
@@ -963,6 +948,7 @@ context("Equipment maintenance and calibration", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1252,17 +1238,22 @@ context("Equipment maintenance and calibration", () => {
 
   context("Create Preventative Maintenance record", () => {
     it("Click 'NEW PM' on preventative maintenace section", () => {
-      cy.url().then((url: any) => {
-        const docIdFromUrl = url.split("/").pop();
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMFormDocumentId}/create_maintenance/${docIdFromUrl}/${pmSchemaField.name}`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.visit(newPMUrl);
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+      cy.wait("@response").then((res) => {
+        if (res.response) {
+          const response = res.response.body;
+          calDocId = response.documentId;
+          const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers], () => {
+            cy.visit(newUrl);
+          });
+        }
       });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -1271,18 +1262,6 @@ context("Equipment maintenance and calibration", () => {
 
     it("Enter title 'Preventative maintenance document'", () => {
       cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
-    });
-
-    it("Select document type 'Maintenance Record'", () => {
-      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-    });
-
-    it("Select revision stage 'Numeric'", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("navigate to Details tab", () => {
@@ -1318,6 +1297,7 @@ context("Equipment maintenance and calibration", () => {
 
     it("navigate to overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.wait(2000);
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
@@ -1414,6 +1394,7 @@ context("Equipment maintenance and calibration", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1590,6 +1571,7 @@ context("Equipment maintenance and calibration", () => {
 
     it("Verify there is no dashboard notifications", () => {
       SystemRequirement("REQ-2200");
+      cy.wait(1000);
       cy.cmpVerifyNoPendingActions();
     });
 
@@ -1639,6 +1621,7 @@ context("Equipment maintenance and calibration", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1788,16 +1771,23 @@ context("Equipment maintenance and calibration", () => {
       });
     });
 
-    it("Click 'NEW PM' on calibration section", () => {
-      cy.url().then((url: any) => {
-        const docIdFromUrl = url.split("/").pop();
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationFormDocumentId}/create_maintenance/${docIdFromUrl}/${calibrationSchemaField.name}`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.visit(newPMUrl);
-        });
+    it("Click on New CAL", () => {
+      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.get("[data-cy='form.builder.new.calibration']").arrowClick();
+      cy.wait("@response").then((res) => {
+        if (res.response) {
+          const response = res.response.body;
+          calDocId = response.documentId;
+          const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers], () => {
+            cy.visit(newUrl);
+          });
+        }
       });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -1806,18 +1796,6 @@ context("Equipment maintenance and calibration", () => {
 
     it("Enter title 'Calibration document'", () => {
       cy.drEnterDocumentTitle({ name: "Calibration document" });
-    });
-
-    it("Select document type 'Maintenance Record'", () => {
-      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-    });
-
-    it("Select revision stage 'Numeric'", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("navigate to Details tab", () => {
@@ -1951,6 +1929,7 @@ context("Equipment maintenance and calibration", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -2176,6 +2155,7 @@ context("Equipment maintenance and calibration", () => {
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
