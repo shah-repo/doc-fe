@@ -1850,7 +1850,7 @@ context("po_requestor_as_an_approver", () => {
     it("Select created PO", () => {
       cy.dlSelectFirstDocument();
     });
-    xit("[API]Get html document and verify PO number and Requestor information", () => {
+    it("[API]Get html document and verify PO number and Requestor information", () => {
       cy.url().then((url: any) => {
         poHTMLDocRevId = url.split("/").pop();
         cy.request({
@@ -1862,7 +1862,7 @@ context("po_requestor_as_an_approver", () => {
         }).then((response) => {
           const responseBody = response.body.toString();
           expect(responseBody)
-            .contains(`PO Number:          PO-00001-1`)
+            .contains(`PO Number: PO-00001-A`)
             .and.contains("Requestor:")
             .and.contains(USERS[3].name);
         });
