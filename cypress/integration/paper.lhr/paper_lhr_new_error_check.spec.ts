@@ -555,6 +555,7 @@ context("Paper new process LHR", () => {
 
   context("Navigate to LHR and Verify paper LHR status WIP and subtitle in LOT#YYMMDDXX format", () => {
     it(`Navigate to LHR`, () => {
+      cy.wait(2000);
       cy.navigToLHR();
     });
 
