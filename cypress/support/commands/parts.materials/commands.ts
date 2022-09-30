@@ -72,7 +72,7 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   partLotDoc?: string;
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
 
 
   cy.get("[data-cy=\"title\"]").arrowClick();
