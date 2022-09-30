@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -433,8 +434,8 @@ context("LHRt using regular AR test", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Verify LHRT is in DRAFT status", () => {
-      cy.drCheckDocumentStatus({ status: "DRAFT" });
+    it(`Verify LHRT is in ${STATUS_TYPES_LABEL.DRAFT} status`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.url().then((url: any) => { lhrtUrl = url; });
     });
 
@@ -635,8 +636,8 @@ context("LHRt using regular AR test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("LHRT should be RELEASED", () => {
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+    it(`LHRT should be ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
     it("Click Revise button", () => {
@@ -816,16 +817,16 @@ context("LHRt using regular AR test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("LHRT should be RELEASED", () => {
-      cy.drCheckDocumentStatus({ status: "RELEASED" });
+    it(`LHRT should be ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
     it("Click Create New button", () => {
       cy.drCreateNewDocumentFromForm();
     });
 
-    it("LHR is in WIP", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+    it(`LHR is in ${STATUS_TYPES_LABEL.WIP}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
     });
 
     it("Verify 'Part to be manufactured'", () => {
