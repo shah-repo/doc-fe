@@ -782,6 +782,10 @@ context("Receiving landing page test", () => {
       cy.verifyFixedTab();
     });
 
+    it("Verify Form opens to the Overview tab by default and it contains", () => {
+      cy.isTabActive({ name: "overview", index: 0 });
+    });
+
     context("Verify Overview  Tab", () => {
       it("Verify Header Info", () => {
         cy.verifyHeaderInfoContent({
@@ -836,7 +840,7 @@ context("Receiving landing page test", () => {
         cy.get("div").contains("Form Builder Library").parent().should("be.visible");
       });
 
-      it("Add textfield", () => {
+      it("Add Receive Purchase Order", () => {
         cy.fbAddNewFieldWhenHidden();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
         cy.fbEnterNameValue({ name: "label", value: "Receive PO" });
@@ -1002,50 +1006,6 @@ context("Receiving landing page test", () => {
 
     });
 
-  });
-
-  xcontext("Verify Layout for created receiving record in draft state", () => {
-    it("Verify that two tabs are displayed, Overview and Details tab", () => {
-      cy.get("[data-cy='tabId.overview']").should("exist");
-      cy.get("[data-cy='tabId.details']").should("exist");
-    });
-
-    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
-      cy.verifyFixedTab();
-    });
-
-    it("Verify Header Info", () => {
-      cy.verifyHeaderInfoContent({
-        status: STATUS_TYPES_LABEL.WIP,
-        title: "Receiving",
-        docId: "RCT-00002",
-        revision: "Rev A",
-      });
-    });
-
-    it("Navigate to details Tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
-      cy.get("[data-cy='porec-receivable-test']").should("exist");
-      cy.get("[data-cy='po-requestor-autocomplete']").should("exist");
-      cy.get("[data-cy='po-supplier-built-in']").should("exist");
-    });
-
-    it("Verify receiving table exist", () => {
-      cy.get("[name='po-items-built-in']").should("exist");
-    });
-
-    it("Verify form option visible in detail tab", () => {
-      cy.get(".formOptionsBox").should("exist");
-    });
-
-    it("Clicking on  other tabs should be closed and details tab should open", () => {
-      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
-      cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
-    });
   });
 
 
