@@ -18,7 +18,6 @@ import Colors from "../../layout/theme/utils/colors";
 import FBDataStore from "../FBStore/FBDataStore";
 import FBPOApprovalsState from "./FBPOApprovals.state";
 
-const EMPTY_GROUP = "empty";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -221,10 +220,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ), []);
 
     const checkGroups = (id: string) => {
-      if (Object.values((poApprovalsState?.groups as {})).length === 0) {
-        // No required approvals for the docRevision
-        return EMPTY_GROUP;
-      }
+      
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
       const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
@@ -255,8 +251,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       const groupName = checkGroups(ids[0]);
       if (
         poApprovalsState.getDidMountPhase &&
-        ( difference(ids, availableApprovers).length === 0
-        || groupName === EMPTY_GROUP )
+        ( difference(ids, availableApprovers).length === 0 )
       ) {
         return;
       }
