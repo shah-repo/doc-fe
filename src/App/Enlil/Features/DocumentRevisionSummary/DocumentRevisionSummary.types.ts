@@ -5,7 +5,6 @@ export type DocumentRevisionSummaryProps =
 & SMFormHOCProps
 & SMTabsHOCProps
 & Pick<Partial<DocumentRevisionFormProps>,
-| "onTabChange"
 | "onScroll"
 | "_documentRevisionFormState"
 | "schema">

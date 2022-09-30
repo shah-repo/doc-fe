@@ -563,7 +563,7 @@ context("Approval request form layout verification", () => {
   context("Training tab should not display", () => {
     it("Verify traing tab not exist", () => {
       cy.get("#Checkbox-box").should("not.exist");
-      cy.get("[data-cy='tabid.training']").should("not.exist");
+      cy.get("[data-cy='tabId.training']").should("not.exist");
     });
   });
 

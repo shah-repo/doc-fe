@@ -221,6 +221,10 @@ context("Approval request implementation tasks", () => {
       cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
     });
 
+    it("Select document tab", () => {
+      cy.arSelectDocumentTab();
+    });
+
     it("Add created document revision", () => {
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
@@ -231,7 +235,11 @@ context("Approval request implementation tasks", () => {
 
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
+    });
+
+    it("Select change detail tab", () => {
+      cy.arSelectChangeDetailsTab();
     });
 
     it("Add approvers to approval request on approver list", () => {
@@ -244,6 +252,11 @@ context("Approval request implementation tasks", () => {
   });
 
   context("Add implementation task and continue AR creation flow", () => {
+    it("Select Change Details Tab", () => {
+      cy.arSelectChangeDetailsTab();
+      cy.get("[data-cy=\"fb-control-btn\"]").arrowClick({ force: true });
+    });
+
     it("Fill all fields and add 'Implementation Task'", () => {
       SystemRequirement("REQ-0710");
       cy.get("[data-cy=\"fb-control-btn\"]").arrowClick({ force: true });
@@ -257,8 +270,8 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add description 'Test' to trigger autosave", () => {
-      cy.get("[data-cy=\"field-description\"]").click();
-      cy.get("[data-cy=\"field-description\"]").clear().arrowType("Test").wait(2000);
+      cy.get("[class^=\"public-DraftStyleDefault-block\"]").clear()
+        .arrowType("CR from New form template for approval request", { force: true });
       cy.unClick();
     });
 
@@ -398,6 +411,7 @@ context("Approval request implementation tasks", () => {
 
     it("Navigate to AR list", () => {
       cy.navigToApprovalRequestList();
+      cy.arClearFilters();
     });
 
     it(`Filter ${STATUS_TYPES_LABEL.APPROVED} by name and status, and select it`, () => {
