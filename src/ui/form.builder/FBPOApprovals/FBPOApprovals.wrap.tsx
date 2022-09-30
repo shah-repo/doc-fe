@@ -220,7 +220,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ), []);
 
     const checkGroups = (id: string) => {
-      
+
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
       const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
