@@ -1,5 +1,5 @@
 
-import { differenceBy, filter, isEmpty, map, size } from "lodash";
+import { differenceBy, filter, isEmpty, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
@@ -42,8 +42,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const dispatch = useDispatch();
     const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
-    const isStarterRequired =  () => (["design", "formDesign"].includes(workspaceState?.mode as string)) &&
-      !size(schema?.find((item) => item.tabId && _tabsState?.isTabActive(item.tabId) && !item.deleted));
+    const isStarterRequired = () => (["design", "formDesign"].includes(workspaceState?.mode as string));
     autosave = _formState?.autosave || false;
 
     if (isEmpty(workspaceState)) {

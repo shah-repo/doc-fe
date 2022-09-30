@@ -12,6 +12,7 @@ import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../s
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
+import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBDataStore from "../FBStore/FBDataStore";
@@ -147,7 +148,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => poApprovalsState?.approvalApi.data,
       (data) => {
         concatApprovals(data);
-        FBDataStore.setPoApprovals(data);
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -158,7 +159,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const filteredApprovals: FBInlineApprovalBody[] = compact(map(poApprovalsState.approvals, (approval) =>
           approval.approverId === data?.approverId ? data : approval
         ));
-        FBDataStore.setPoApprovals(data);
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
         poApprovalsState.setApprovals(getApprovals(filteredApprovals));
         if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
           window.location.reload();

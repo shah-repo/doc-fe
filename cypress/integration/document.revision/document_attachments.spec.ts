@@ -321,7 +321,7 @@ context("Document Attachment Flow", () => {
 
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Navigates to document list", () => {

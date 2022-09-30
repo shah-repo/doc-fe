@@ -35,7 +35,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
       >
         <FBDialog />
         <Box
-          bgcolor={Colors.whitest_grey}
+          bgcolor={Colors.athens_gray}
           fontWeight="fontWeightBold"
           display="flex"
           borderBottom={1}

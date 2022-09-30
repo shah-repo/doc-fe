@@ -310,7 +310,7 @@ Cypress.Commands.add("drSelectPrimaryOwner", (params: { owner: string; noWait?: 
 });
 
 Cypress.Commands.add("drRemoveReferences", (params: {reference: string}) => {
-  cy.get("div[data-tag-index]").contains(params.reference)
+  cy.get(`div[data-cy="field-referenceTo"]`).contains(params.reference)
     .parent().parent().parent()
     .find("svg").arrowClick({ force: true });
 });

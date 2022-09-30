@@ -224,6 +224,7 @@ Cypress.Commands.add("sendToEmail", () => {
 });
 
 Cypress.Commands.add("sendToEmailFromHeader", () => {
+  cy.get("#HeaderMenuButton").arrowClick();
   cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
   cy.get("div.Toastify__toast-container").should("exist");
 });

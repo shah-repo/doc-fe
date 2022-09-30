@@ -185,7 +185,6 @@ class FBWorkspaceState extends FBSchemaState {
     if (!id) { return; }
     this.loading = true;
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
-    this.setDirty(true);
     let body = {};
     switch (mode) {
       case "design":

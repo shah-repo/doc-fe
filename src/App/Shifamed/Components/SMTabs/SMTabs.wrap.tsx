@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback } from "react";
+import { isEmpty } from "lodash";
 import { SM, SMTabsProps } from "../../..";
 
 export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) => {
@@ -9,11 +10,11 @@ export const withSMTabsWrap = <T extends SMTabsProps>(Component: React.FC<T>) =>
     // Set initial tab id.
     useEffect(
       () => {
-        if (!tabs || _tabsState?.activeTabId) {
+        if (isEmpty(tabs) || _tabsState?.activeTabId) {
           return;
         }
 
-        _tabsState?.setActiveTabId(tabs[0]);
+        _tabsState?.setActiveTabId(tabs[0].tabId);
       },
       [_tabsState, tabs]
     );

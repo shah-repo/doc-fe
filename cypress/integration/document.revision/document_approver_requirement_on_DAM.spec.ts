@@ -1387,7 +1387,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add first approver to approval request on approver list", () => {
