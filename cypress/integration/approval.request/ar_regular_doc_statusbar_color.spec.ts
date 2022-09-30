@@ -166,14 +166,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         .contains(tmpRegex);
     });
 
-    it(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
+    xit(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
       cy.wait(60 * 1000 + 2000);
       const tmpRegex = new RegExp(`Last saved a minute ago`, "gi");
       cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
         .contains(tmpRegex);
     });
 
-    it(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
+    xit(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
       cy.wait(60 * 1000 + 2000);
       const tmpRegex = new RegExp(`Last saved 2 minutes ago`, "gi");
       cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
@@ -328,12 +328,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -424,14 +426,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         .contains(tmpRegex);
     });
 
-    it(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
+    xit(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
       cy.wait(60 * 1000 + 2000);
       const tmpRegex = new RegExp(`Last saved a minute ago`, "gi");
       cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
         .contains(tmpRegex);
     });
 
-    it(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
+    xit(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
       cy.wait(60 * 1000 + 2000);
       const tmpRegex = new RegExp(`Last saved 2 minutes ago`, "gi");
       cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
@@ -548,12 +550,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -645,6 +649,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
@@ -885,11 +890,13 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
 
     it(`Verify 'Change Owner' exists in statusbar`, () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 
