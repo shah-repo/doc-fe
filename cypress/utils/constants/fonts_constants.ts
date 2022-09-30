@@ -24,6 +24,7 @@ export const FONT_WT_500 = "500";
 export const FONT_WT_600 = "600";
 export const FONT_WT_700 = "700";
 
+export const LINE_HT_14 = "14px";
 export const LINE_HT_15 = "15px";
 export const LINE_HT_15_2 = "15.2px";
 export const LINE_HT_15_12 = "15.12px";
@@ -44,6 +45,7 @@ export const LINE_HT_25_6 = "25.6px";
 export const LINE_HT_25_74 = "25.74px";
 export const LINE_HT_26_208 = "26.208px";
 export const LINE_HT_26_6 = "21.6px";
+export const LINE_HT_27 = "27px";
 export const LINE_HT_27_17 = "27.17px";
 export const LINE_HT_33_6 = "33.6px";
 export const LINE_HT_34 = "34px";
