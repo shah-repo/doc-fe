@@ -23,7 +23,6 @@ export const withFBSortable = <T extends FBSortableProps>(
         ...schemaItem,
         autosave: isUnderWorkspace && workspaceState?.autosave,
         disabled: workspaceState?.isMode("design"),
-        showErrorMsg: !workspaceState?.isMode("design"),
         gutter: false,
       });
     };
