@@ -1055,7 +1055,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Scroll down the page → The status bar should be fixed", () => {
       it("Scroll down to the bottom of the page", () => {
-        cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+        cy.get("[data-cy='form-options-text']").scrollIntoView();
         cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
       });
     });
