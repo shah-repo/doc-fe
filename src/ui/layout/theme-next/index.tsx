@@ -1,4 +1,4 @@
-import { createMuiTheme as createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
+import { createMuiTheme as createTheme, ThemeProvider } from "@material-ui/core";
 import * as React from "react";
 import { shape, spacing } from "./consts";
 import overrides from "./overrides";
@@ -25,7 +25,7 @@ const Theme: React.FC = ({
   children,
 }) => (
   <ThemeProvider theme={theme}>
-    <CssBaseline />
+    {/* TODO Add ScopedCssBaseline here after upgrading MUI */}
     {children}
   </ThemeProvider>
 );
