@@ -477,7 +477,7 @@ context("Approval request form", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.get("[data-cy=\"field-description\"]").click();
+      cy.get(`#SMHeaderTmpl>[data-cy="description"]`).click();
       cy.arEnterApprovalRequestDescription({ description: "AR from New form template for approval request" });
       cy.unClick();
     });

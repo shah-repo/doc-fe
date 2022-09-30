@@ -337,10 +337,7 @@ Cypress.Commands.add("arAddApproverOnApproverListWithoutApiCall", (params: { app
 });
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
-  cy.wrapWithWaitOnApiCalls(
-    [CyRoutes.PostChangeRequests, CyRoutes.DocRevPreview], () => {
-      cy.get("[data-cy=\"navigation.createChangeRequest\"]").arrowClick();
-    });
+  cy.get("[data-cy=\"common.save\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
