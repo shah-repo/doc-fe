@@ -87,7 +87,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
                 <Text translation="form.builder.add.step" />
               </Button>
             )}
-          {isStarter && _tabsState?.isTabActive("calpmhistory") && <FBStarter index={size(schema)} />}
+          {isStarter && !_tabsState?.isTabActive("calpmhistory") && <FBStarter index={size(schema)} />}
           {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
         </Box>
       )}
