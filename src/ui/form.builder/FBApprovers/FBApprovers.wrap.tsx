@@ -163,6 +163,7 @@ export const withFBApprovers = <T extends FBApproversProps>(
       groups = approversState?.groups;
       loading = approversState?.loading;
       checkedGroups = approversState?.checkedGroups;
+      disabled =  !workspaceState?.changeRequest;
     });
 
     return Component({
