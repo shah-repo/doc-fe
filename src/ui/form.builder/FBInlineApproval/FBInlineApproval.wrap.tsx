@@ -102,7 +102,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // On requestApprovalTransition
     React.useEffect(() => reaction(
       () => inlineApprovalState?.requestApprovalApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        concatApprovals(data);
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -216,7 +219,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       const body = {
         docRev: pick(workspaceState?.document, "id"),
       } as FBRequestApprovalTransitionBody;
-      inlineApprovalState?.requestApprovalTransition("pending_by_field", id, body);
+      inlineApprovalState?.requestApprovalTransition("pending_by_field", id, body, () => {
+        const id  = workspaceState?.id;
+        if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+      });
     }
 
     // MARK: @methods
