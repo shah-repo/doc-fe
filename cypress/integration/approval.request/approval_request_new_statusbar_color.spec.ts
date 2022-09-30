@@ -366,7 +366,7 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='changeOwner-submit']`).arrowClick();
     });
 
     it("Verify header is fixed when page scroll", () => {
@@ -420,7 +420,7 @@ context("Status Bar of newly created ARs", () => {
     it(`Click on 3 dots and verify 'Change Owner' option exists`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy='changeOwner']").contains("Change Owner").arrowClick();
-      cy.get(`[class*='makeStyles-closeIcon']`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it(`Verify 'Last saved' does not exist in statusbar`, () => {
@@ -469,11 +469,11 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get(".makeStyles-lastEdited").should("not.be.exist");
+      cy.get("[data-cy='header.lastSaved']").should("not.be.exist");
     });
 
     it(`Verify the statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
@@ -509,7 +509,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get("[class*='makeStyles-lastEdited']").should("not.be.exist");
+      cy.get("[data-cy='header.lastSaved']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
@@ -522,7 +522,7 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it(`Verify the statusbar background-color as LIGHT GRAY(${Colors.medium_light_shade_gray})`, () => {
@@ -570,7 +570,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get(".makeStyles-lastEdited").should("not.be.exist");
+      cy.get("[data-cy='header.lastSaved']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
@@ -583,7 +583,8 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.pause();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it(`Verify VOIDED statusbar background-color as RED(${Colors.latest_red_varient})`, () => {
