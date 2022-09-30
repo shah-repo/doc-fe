@@ -962,7 +962,7 @@ context("po_requestor_as_an_approver", () => {
                   }
               </script>
               <script>
-                  document.getElementById("to-description").innerHTML = document.getElementById("to-description").innerHTML.replace(/(<((?!br|\/br)[^>]+)>)/gi, "");
+                  document.getElementById("to-description").innerHTML = document.getElementById("to-description").innerHTML.replace(/(<((?!br|/br)[^>]+)>)/gi, "");
 
                   function formatDate(date) {
                       if (!date) {
@@ -1306,7 +1306,6 @@ context("po_requestor_as_an_approver", () => {
     });
     context("Click to remove Approver and verify that Approver can not be removed", () => {
       it("Navigate to Approval block and try to remove Added requestor as an approver", () => {
-        cy.pause();
         cy.get(".MuiAutocomplete-tag").should("have.class", "Mui-disabled");
         cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
         cy.unClick();
