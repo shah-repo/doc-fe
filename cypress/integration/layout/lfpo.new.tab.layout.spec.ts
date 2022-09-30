@@ -1256,7 +1256,7 @@ context("LFPO new layout verification", () => {
       });
 
       it("Click on book mark 'Approval' Approval block should be navigated", () => {
-        cy.get("[data-cy='Bookmarks-detail'] p").arrowClick();
+        cy.get("[data-cy='Bookmarks-detail']").contains("Approvals").arrowClick();
         cy.get("[data-cy^='approvals']").should("be.visible");
       });
     });
@@ -1337,10 +1337,15 @@ context("LFPO new layout verification", () => {
       cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
     });
 
+    it("Verify form Id", () => {
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00002");
+    });
+
   });
 
   context("Verify Scroll", () => {
     it("Navigate to history tab", () => {
+      cy.pause();
       cy.get("[data-cy='timeline-icon']").arrowClick();
     });
 
