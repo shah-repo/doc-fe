@@ -166,14 +166,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         .contains(tmpRegex);
     });
 
-    xit(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
+    it(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
       cy.wait(60 * 1000 + 2000);
       const tmpRegex = new RegExp(`Last saved a minute ago`, "gi");
       cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
         .contains(tmpRegex);
     });
 
-    xit(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
+    it(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
       cy.wait(60 * 1000 + 2000);
       const tmpRegex = new RegExp(`Last saved 2 minutes ago`, "gi");
       cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
@@ -426,14 +426,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         .contains(tmpRegex);
     });
 
-    xit(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
+    it(`Wait for 1 minute. It should display 'Last saved a minute ago'`, () => {
       cy.wait(60 * 1000 + 2000);
       const tmpRegex = new RegExp(`Last saved a minute ago`, "gi");
       cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
         .contains(tmpRegex);
     });
 
-    xit(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
+    it(`Wait for another 1 minute. It should display 'Last saved 2 minutes ago'`, () => {
       cy.wait(60 * 1000 + 2000);
       const tmpRegex = new RegExp(`Last saved 2 minutes ago`, "gi");
       cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
