@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Chip, CircularProgress, TextField, TooltipProps, Typography } from "@material-ui/core";
+import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
@@ -8,7 +8,6 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { tooltipStyles } from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
@@ -18,12 +17,12 @@ import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
-import { FBTooltip } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
 import { isTranslation } from "../../../translations/types";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 import { styles } from "./AvailableReferences.new.styles";
+import { FBTooltip } from "../../../form.builder";
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean;
@@ -44,11 +43,6 @@ const getReferenceValues = (
   const isReferencePart = checkIsDocumentPart(docType?.groupOptions);
   const canReferenceCreateInspection = checkCanTypeCreateInspection(docType?.groupOptions);
   return { highestRev, isReferencePart, canReferenceCreateInspection };
-};
-
-export const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="top" classes={classes} {...props} />;
 };
 
 const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithFormik> = ({
@@ -265,9 +259,9 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
             className={classes.chipRoot}
             label={
               <Typography className={classes.chip}>
-                <StyledTooltip title={option.label}>
+                <FBTooltip title={option.label}>
                   <>{truncateLable(option.label)}</>
-                </StyledTooltip>
+                </FBTooltip>
               </Typography>}
             disabled={option.deleteDisabled}
             deleteIcon={<DeleteIcon  className={classes.deleteIcon} />}
