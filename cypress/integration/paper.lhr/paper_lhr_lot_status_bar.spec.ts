@@ -848,6 +848,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -894,6 +895,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Check if 'Change Owner' button header menu and is functional", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
       cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
     });
@@ -969,6 +971,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
         cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
       });
@@ -1047,6 +1050,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
         cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
       });
