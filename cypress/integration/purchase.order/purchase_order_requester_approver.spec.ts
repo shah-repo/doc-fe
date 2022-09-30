@@ -1142,8 +1142,7 @@ context("po_requestor_as_an_approver", () => {
     it("Verify Approver Added as User 1", () => {
       cy.get("[data-cy='form.builder.audit.STRING_NEW']").contains("Approver Added")
         .should("not.exist");
-
-      cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains("Giovanni Reynolds")
+      cy.get("[data-cy='form.builder.audit.STRING_NEW']").parent().contains("Giovanni Reynolds")
         .should("not.exist");
     });
   });
@@ -1257,7 +1256,7 @@ context("po_requestor_as_an_approver", () => {
       it("Verify Added Requestor captured on history", () => {
         cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
           .should("exist");
-        cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[4].name)
+        cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[4].name)
           .should("exist");
       });
     });
@@ -1301,13 +1300,13 @@ context("po_requestor_as_an_approver", () => {
       it("Verify Approver Added as User 2", () => {
         cy.get("[data-cy='change-key-0-0']").contains("Approver Added")
           .should("exist");
+        cy.get("[data-cy='change-key-0-0']").parent().siblings().contains(USERS[1].name);
 
-        cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[1].name)
-          .should("exist");
       });
     });
     context("Click to remove Approver and verify that Approver can not be removed", () => {
       it("Navigate to Approval block and try to remove Added requestor as an approver", () => {
+        cy.pause();
         cy.get(".MuiAutocomplete-tag").should("have.class", "Mui-disabled");
         cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
         cy.unClick();
@@ -1427,7 +1426,7 @@ context("po_requestor_as_an_approver", () => {
       it("Verify Added Requestor captured on history", () => {
         cy.get("[data-cy^='change-key-0-0']").contains("Approver Added")
           .should("exist");
-        cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[1].name)
+        cy.get("[data-cy^='change-key-0-0']").parent().siblings().contains(USERS[1].name)
           .should("exist");
       });
     });
@@ -1451,7 +1450,7 @@ context("po_requestor_as_an_approver", () => {
     it("Verify that history tab is capturing the changes - Removing requestor to the approval field", () => {
       cy.get("[data-cy^='form.builder.audit.STRING_DELETED']").contains("Requestor Deleted")
         .should("exist");
-      cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[1].name)
+      cy.get("[data-cy^='form.builder.audit.STRING_DELETED']").parent().siblings().contains(USERS[1].name)
         .should("exist");
     });
   });
@@ -1480,7 +1479,7 @@ context("po_requestor_as_an_approver", () => {
       it("Verify Added Requestor captured on history", () => {
         cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
           .should("exist");
-        cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[1].name)
+        cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[1].name)
           .should("exist");
       });
     });
@@ -1503,7 +1502,7 @@ context("po_requestor_as_an_approver", () => {
       cy.get("[data-cy^='change-key-']").contains("Approver Removed")
         .should("exist");
 
-      cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[1].name)
+      cy.get("[data-cy^='change-key-']").parent().contains(USERS[1].name)
         .should("exist");
     });
     context("Verify that Approver can be added manually and add Approver that fulfills PO level signature", () => {
@@ -1587,7 +1586,7 @@ context("po_requestor_as_an_approver", () => {
         it("Verify Added Requestor captured on history", () => {
           cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
             .should("exist");
-          cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[1].name)
+          cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[1].name)
             .should("exist");
         });
       });
@@ -1744,7 +1743,7 @@ context("po_requestor_as_an_approver", () => {
       it("Verify Added Requestor captured on history", () => {
         cy.get("[data-cy^='change-key-0-0']").contains("Approver Added")
           .should("exist");
-        cy.get("[class^=\"makeStyles-auditValue-\"]").eq(0).contains(USERS[1].name)
+        cy.get("[data-cy^='change-key-0-0']").parent().siblings().contains(USERS[1].name)
           .should("exist");
       });
     });
