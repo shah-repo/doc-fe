@@ -13,7 +13,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    onTabChange,
     onScroll,
     _documentRevisionFormState,
     document,
@@ -118,12 +117,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     );
     // MARK: @helpers
 
-    // MARK: @methods
-    onTabChange = (_ev, newValue, tabConfig) => {
-      _tabsState?.setValue(newValue);
-      _tabsState?.setTabID(tabConfig[newValue].tabId);
-    };
-
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onScroll = () => {};
 
@@ -136,7 +129,6 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
           <Component
             {...props as T}
             {...{
-              onTabChange,
               onScroll,
               _documentRevisionFormState,
               _tabsState,

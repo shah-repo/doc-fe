@@ -6,8 +6,7 @@ import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import { isEmpty } from "lodash";
 import React, { useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProcedureItemType, FBProvider, FBText } from "..";
-import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
+import { FBDialog, FBFilesPresenter, FBMapWrapper, FBMediaAlbumField, FBPartItemStatusBg, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemOmitAction, FBProcedureItemProps, FBProcedureItemType, FBProvider, FBText, FBTooltip } from "..";
 import Colors from "../../layout/theme/utils/colors";
 import { withFBProcedureItem } from "./FBProcedureItem.wrap";
 
@@ -36,7 +35,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
       >
         <FBDialog />
         <Box
-          bgcolor={Colors.whitest_grey}
+          bgcolor={Colors.athens_gray}
           fontWeight="fontWeightBold"
           display="flex"
           borderBottom={1}
@@ -56,8 +55,8 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
             <Box pt={1.8} pr={2}
               onMouseEnter={() => setIsHover(true)}
               onMouseLeave={() => setIsHover(false)}>
-              <StyledTooltip placement="top" title="form.builder.add">
-                { isHover ?
+              <FBTooltip title="form.builder.add">
+                {isHover ?
                   <AddCircleIcon style={{ color: Colors.almost_black, width: "17px", height: "17px" }}
                     data-cy= {`${FBProcedureItemLocale[type]}.btn`}
                     onClick={() => onClick?.()}
@@ -70,7 +69,7 @@ const FBProcedureItem: React.FunctionComponent<FBProcedureItemProps> = ({
                     {...{ disabled }}
                   />
                 }
-              </StyledTooltip>
+              </FBTooltip>
             </Box>
           )}
         </Box>
