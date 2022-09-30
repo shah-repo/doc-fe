@@ -38,7 +38,6 @@ export const withFBApprovers = <T extends FBApproversProps>(
       (revision) => checkIsDocumentPO(revision.document?.documentType?.groupOptions)));
     // ENC-6598 - app.approver for new structure, app for old structure
     defaultValue = formState?.getFieldValue(name)?.map((app) => app.approver || app);
-    disabled = !workspaceState?.changeRequest;
     onBlur = () => submitForm();
 
     React.useEffect(() => {
