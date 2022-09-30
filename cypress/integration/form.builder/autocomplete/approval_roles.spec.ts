@@ -123,6 +123,7 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Enter AR title 'test ar'", () => {
+        cy.wait(1000);
         cy.drEnterDocumentTitle({ name: "test ar" });
       });
 
