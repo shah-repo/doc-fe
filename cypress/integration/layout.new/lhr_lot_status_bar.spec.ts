@@ -865,7 +865,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
         });
 
-        xit("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+        it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
           cy.wait(120000);
           cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved 2 minutes ago");
         });
