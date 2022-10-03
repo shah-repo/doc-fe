@@ -95,7 +95,7 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
 
   const renderAuditRecords = () => (
     <>
-      <div className={classes.externalContainer}>
+      <div data-cy="externalContainer" className={classes.externalContainer}>
         <div className={classes.titleOuterContainer}>
           <div className={classes.titleContainer}>
             <Text translation="document.revision.history" />

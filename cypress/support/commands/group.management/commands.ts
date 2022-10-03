@@ -541,7 +541,7 @@ Cypress.Commands.add("grpHistoryVerifyRemovedParentGroups", (...list: string[]) 
 
 Cypress.Commands.add("grpHistoryVerifyRecordsCount", (params: { records: number }) => {
   cy.listLoadingElementShouldNotExist();
-  cy.get("div[class^=\"makeStyles-externalContainer-\"]").last().next()
+  cy.get("[data-cy='externalContainer']").last().next()
     .find("[data-cy=\"header-userInitials\"]").should("have.length", params.records);
 });
 
