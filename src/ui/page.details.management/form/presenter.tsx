@@ -1,7 +1,9 @@
 import { Box, Button, Grid, InputLabel, TextareaAutosize } from "@material-ui/core";
 import { Field, FormikProps } from "formik";
 import React from "react";
+import { HelpModule } from "../../../App/Enlil/Features/HelpCenter/HelpCenter.types";
 import InputField from "../../components/forms/fields/Input";
+import SelectField from "../../components/forms/fields/Select";
 import FormWrapper from "../../components/forms/FormWrapper";
 import Text from "../../components/Text";
 import { Translation } from "../../translations/types";
@@ -55,6 +57,12 @@ export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
             name="addNewBtnLabel"
             label="Add New Button Label"
             inputProps={{ id: "addNewBtnLabel" }}
+          />
+          <SelectField
+            options={Object.entries(HelpModule).map(([value, text]) => ({ value, text }))}
+            name="helpModule"
+            label="Help Module"
+            selectProps={{ id: "helpModule" }}
           />
           {autoSizerRenderer({ label: "Columns", name: "columns" })}
           {autoSizerRenderer({ label: "Config", name: "config" })}

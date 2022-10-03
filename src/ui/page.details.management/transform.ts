@@ -5,12 +5,16 @@ export const toPageDetailsInitialValues = (pageDetails: PageDetails) => ({
   ...pageDetails,
   columns: stringifyJSON(pageDetails.columns),
   config: stringifyJSON(pageDetails.config),
+  helpModule: pageDetails.config.helpModule,
 });
 
 export const toPageDetailsBodyValues = (values) => ({
   category: values.category,
   addNewBtnLabel: values.addNewBtnLabel,
   columns: parseJSON(values.columns),
-  config: parseJSON(values.config),
+  config: {
+    ...parseJSON(values.config),
+    helpModule: values.helpModule,
+  },
 });
 
