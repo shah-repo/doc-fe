@@ -160,8 +160,6 @@ context("Approval request form layout verification", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
       cy.fbGroupOptions("1", "2", "3");
-      cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
-      cy.get("[data-cy='fb-control-required']").arrowClick();
       cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -171,11 +169,15 @@ context("Approval request form layout verification", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
-      cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
-      cy.get("input[value^='visibility']").check();
-      cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).first().check();
+      cy.get("button[data-cy='fb-editor-actions-add']").first().contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Add section field Approval request details`, () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
+      cy.fbEnterNameValue({ name: "label", value: "Approval Request" });
       cy.get("button[data-cy='fb-editor-actions-add']").first().contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -207,6 +209,7 @@ context("Approval request form layout verification", () => {
 
       it("predefine schema fields except Approval request details", () => {
         cy.verifyPredefiendFields();
+        cy.get("#AttachmentFieldPresenter-field").should("exist");
       });
 
       it("Verify Approver block exist", () => {
@@ -235,6 +238,10 @@ context("Approval request form layout verification", () => {
       it("Verify FB fields added to AR form ", () => {
         cy.get("[name^=checkbox]").should("exist");
         cy.get("[data-cy^='text-field']").should("exist");
+      });
+
+      it("Verify section field Approval request", () => {
+        cy.get("[data-cy='Approval Request']").should("exist");
       });
 
       it("Verify that Form Options should appear on the document Tab", () => {
@@ -311,6 +318,7 @@ context("Approval request form layout verification", () => {
         });
 
         it("Verify FB fields added to AR form ", () => {
+          cy.get("[data-cy^='text-field']").should("exist");
           cy.get("[name^=checkbox]").should("exist");
         });
 
@@ -321,6 +329,14 @@ context("Approval request form layout verification", () => {
           cy.get("[name='descriptionOfChange']").should("exist");
           cy.get("[name='justificationOfChange']").should("exist");
           cy.get("[data-cy='dialog-close']").arrowClick();
+        });
+
+        it("Verify that predefined fields for Document tab is only Approval request details", () => {
+          cy.get("[data-cy='fb.add.document']").should("exist");
+        });
+
+        it("Verify section field Approval request", () => {
+          cy.get("[data-cy='Approval Request']").should("exist");
         });
 
         it("Verify that Form Options should appear on the document Tab", () => {
@@ -398,9 +414,10 @@ context("Approval request form layout verification", () => {
       cy.unClick();
     });
 
-    it("Click on view more description should be expanded", () => {
+    it("Click on view more description should be expanded ", () => {
       cy.get("[data-cy='description'] button").arrowClick();
       cy.get("div[class^='rdw-editor-toolbar']").should("exist");
+      cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
       cy.get(`[data-cy="description"] [contenteditable]`).first().scrollIntoView({ ensureScrollable: false });
     });
 
@@ -480,6 +497,12 @@ context("Approval request form layout verification", () => {
   });
 
   context("Validate Right Side Panel", () => {
+
+    it("Verify that right side panel opens by default to the References tab", () => {
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
+    });
+
     it("Verify It is expanded and collpased", () => {
       cy.verifyExpandCollpase();
     });
@@ -489,7 +512,7 @@ context("Approval request form layout verification", () => {
     });
 
     it("Verify it is fixed when user scroll", () => {
-      cy.get("[data-cy='References-detail'").scrollIntoView();
+      cy.get("[data-cy='generalInfo'").scrollTo("top", { ensureScrollable: false });
       cy.get("[data-cy='References'").should("be.visible");
     });
 
@@ -561,7 +584,7 @@ context("Approval request form layout verification", () => {
   });
 
   context("Training tab should not display", () => {
-    it("Verify traing tab not exist", () => {
+    it("Verify trainig tab not exist", () => {
       cy.get("#Checkbox-box").should("not.exist");
       cy.get("[data-cy='tabId.training']").should("not.exist");
     });
