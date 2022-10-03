@@ -462,6 +462,11 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
+    it("Verify it is fixed when user scroll", () => {
+      cy.get("[data-cy='generalInfo'").scrollTo("top", { ensureScrollable: false });
+      cy.get("[data-cy='References'").should("be.visible");
+    });
+
     it("Navigate to history tab", () => {
       cy.get("[data-cy='timeline-icon']").arrowClick();
     });
@@ -706,12 +711,13 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
-    it("Verify expand and collapse", () => {
-      cy.verifyExpandCollpase();
+    it("Verify it is fixed when user scroll", () => {
+      cy.get("[data-cy='generalInfo'").scrollTo("top", { ensureScrollable: false });
+      cy.get("[data-cy='References'").should("be.visible");
     });
 
-    xit("Verify it is fixed as the user scrolls up or down", () => {
-      cy.get("[data-cy='References']").should("exist");
+    it("Verify expand and collapse", () => {
+      cy.verifyExpandCollpase();
     });
 
     it("Verify Eye icon", () => {
@@ -901,6 +907,12 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy='References']").should("exist");
       cy.get("[data-cy='generalInfo']").should("be.visible");
     });
+
+    it("Verify it is fixed when user scroll", () => {
+      cy.get("[data-cy='generalInfo'").scrollTo("top", { ensureScrollable: false });
+      cy.get("[data-cy='References'").should("be.visible");
+    });
+
 
     it("Verify Reference tab Info", () => {
       cy.verifyRightSidePanelOtherTabs();
