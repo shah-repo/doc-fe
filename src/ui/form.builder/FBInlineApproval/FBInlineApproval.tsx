@@ -2,7 +2,7 @@ import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
-import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
+import { FB, FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
 import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import { FBFontStyle } from "../styles/FBFont.styles";
@@ -135,15 +135,22 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   inlineApprovalState,
   rules,
   ...props
-}) => (
-  <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
-    <FBDialog />
-    <FBInlinePendingApprovalSocket/>
-    <FBInlineApprovalSocket {...{ name }} />
-    <FBInput {...props} {...{ name, rules }} type="inlineapproval" labelProps={FBFontStyle.labelProps}>
-      <FBInlineApprovalChild {...props} {...{ name }}/>
-    </FBInput>
-  </FBProvider>
-);
+}) => {
+  const  { workspaceState } = FB.useStores();
+  const { document } = workspaceState || {};
+  const EQname = document?.formInput?.["fb-requipment-maintenance-section"];
+  const isPMform = Boolean(document?.["parentEquipment"]?.["formInput"]?.[EQname]?.preventativeForm);
 
+  props.disabled =  props.disabled && !isPMform;
+  return (
+    <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
+      <FBDialog />
+      <FBInlinePendingApprovalSocket/>
+      <FBInlineApprovalSocket {...{ name }} />
+      <FBInput {...props} {...{ name, rules }} type="inlineapproval" labelProps={FBFontStyle.labelProps}>
+        <FBInlineApprovalChild {...props} {...{ name }}/>
+      </FBInput>
+    </FBProvider>
+  );
+};
 export default withFBInlineApproval(FBInlineApproval);
