@@ -583,7 +583,6 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.pause();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
