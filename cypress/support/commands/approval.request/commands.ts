@@ -366,7 +366,7 @@ Cypress.Commands.add("arSaveApiCall", () => {
 });
 
 Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {
-  cy.get("div[data-cy=\"HeaderInfo-status\"]>span").should("contain", params.status);
+  cy.get(`div[data-cy="HeaderInfo-status"]`).should("contain", params.status);
 });
 
 Cypress.Commands.add("arClickOnFirstAddedDocument", () => {
