@@ -455,7 +455,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListNw({ approver: USERS[1].name });
     });
 
     it("Save training", () => {
@@ -553,6 +553,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Approve AR", () => {
+      cy.wait(2000);
       cy.arApproveARFromDashboard();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -784,6 +785,7 @@ context("Training notifications for documents with approved and released revisio
 
     it("5 records should be created", () => {
       cy.trClearFilters();
+      cy.listLoadingElementShouldNotExist();
       cy.get("tbody>tr").should("have.length", 5);
     });
 
@@ -853,6 +855,7 @@ context("Training notifications for documents with approved and released revisio
         CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
@@ -875,7 +878,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListNw({ approver: USERS[1].name });
     });
 
     it("Click Submit for Approval", () => {

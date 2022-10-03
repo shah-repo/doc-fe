@@ -3,8 +3,9 @@
 
 import faker from "faker";
 import { CONFIG } from "../../support/config";
-import { momentInPST } from "../../utils/constants/dateHandler";
+import { emailDateOffset, momentInPST } from "../../utils/constants/dateHandler";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompanyA;
 let createdCompanyB;
@@ -12,6 +13,7 @@ let createdCompanyC;
 let loginResponse;
 let multipleCompanies;
 let currentDate;
+let dateAfterEmailShouldArrive;
 
 const nameOfFirstUserToSignUp = faker.name.findName();
 const emailOfFirstUserToSignUp =
@@ -50,6 +52,7 @@ context("Sigle user multiple company test", () => {
         }).then((response) => {
           createdCompanyA = response;
           done();
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         });
       });
     });
@@ -99,7 +102,7 @@ context("Sigle user multiple company test", () => {
 
   context("Activate first user", () => {
     it("Verify activation email", () => {
-      cy.imapGetActivationLink({ userEmail: emailOfFirstUserToSignUp });
+      cy.imapGetActivationLink({ userEmail: emailOfFirstUserToSignUp, date: dateAfterEmailShouldArrive });
       cy.authEnterSignUpPassword();
       cy.authEnterSignUpConfirmPassword();
       cy.authClickSignIn();
@@ -246,6 +249,7 @@ context("Sigle user multiple company test", () => {
   });
 
   context(`Check if the change name history is created for ${nameOfFirstUserToSignUp}`, () => {
+    SystemRequirement("REQ-2640");
     it("Open history panel", () => {
       cy.usrHistoryClickOpenButton();
     });
@@ -386,6 +390,7 @@ context("Sigle user multiple company test", () => {
   });
 
   context(`Check if the change avatar history is created for ${nameOfFirstUserToSignUp}`, () => {
+    SystemRequirement("REQ-2640");
     it("Open history panel", () => {
       cy.usrHistoryClickOpenButton();
     });

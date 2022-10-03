@@ -1331,34 +1331,36 @@ context("LHR flow", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true }).wait(3000);
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").focus()
+            .autocompleteSelect("PI-00002", { force: true });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Verify indicator for parametrized Material", () => {
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
+          SystemRequirement("REQ-3630");
+          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]")
+            .should("have.text", "A: Parameter for material three | Qty: None ");
+          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]").parent().parent()
+            .should("have.css", "background-color", "rgb(252, 222, 222)");
         });
       });
 
       context("Add another step with different MPI on document ", () => {
         it("Add LHR step", () => {
           SystemRequirement("REQ-3150");
-          cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
+          cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick({ force: true });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Select MPI document created with API for step #2 in LHRt", () => {
           cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(1).arrowClick({ force: true });
-          cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
+          cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API", { force: true });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Verify indicator for parametrized Material", () => {
-          SystemRequirement("REQ-3630");
-          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]")
-            .should("have.text", "A: Parameter for material three | Qty: None ");
-          cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]").parent().parent()
-            .should("have.css", "background-color", "rgb(252, 222, 222)");
         });
 
         it("Verify indicator for parametrized Equipment", () => {
@@ -1383,6 +1385,7 @@ context("LHR flow", () => {
         });
 
         it("Verify error message", () => {
+          cy.wait(1000);
           cy.checkToastMessageIsEqual({
             message: "Parameters from MPI are not defined.",
           });
@@ -1392,14 +1395,10 @@ context("LHR flow", () => {
       });
 
       context("Add parameter materials and equipment", () => {
-        it("Click 'LHR Step'", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
-        });
-
         it("Add material parameter", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
           cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
-            .eq(0).arrowClick();
+            .eq(0).arrowClick({ force: true });
           cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"title\"]").arrowClick();
           cy.get("ul>li[role=option]").contains("Material three").arrowClick();
@@ -1410,6 +1409,7 @@ context("LHR flow", () => {
         });
 
         it("Add equipment parameter", () => {
+          cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
           cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
             .eq(1).arrowClick();
           cy.listLoadingElementShouldNotExist();
@@ -1495,7 +1495,7 @@ context("LHR flow", () => {
         lhrDocUrl = url;
       });
       SystemRequirement("REQ-3180");
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDateSuffix + "02");
+      cy.get("#HeaderInfo-subtitle").should("contains.text", " - LOT #" + lotDateSuffix + "02");
     });
 
     context("Complete first step in LHR", () => {

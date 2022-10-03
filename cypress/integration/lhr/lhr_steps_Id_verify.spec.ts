@@ -897,15 +897,15 @@ context("LHR steps verification", () => {
       });
     });
 
+    it("Select build type Prod", () => {
+      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
+    });
+
     it("Select Approval", () => {
       cy.wrapWithWaitOnApiCalls([
       ], () => {
         cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
       });
-    });
-
-    it("Select build type Prod", () => {
-      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
     });
 
     it("Save the document", () => {
@@ -931,10 +931,10 @@ context("LHR steps verification", () => {
     it("Verify start step button should be visible and having text 'Start Step'", () => {
       cy.get("[data-cy='form.builder.start.step']").should("contain.text", "Start Step");
       cy.get("[data-cy='form.builder.start.step']").should("be.visible");
+      cy.get("[data-cy='form.builder.start.step']").arrowClick({ force: true }).wait(2000);
     });
 
     it("Click on Start Step button. User should be redirected to the LHRS", () => {
-      cy.get("[data-cy='form.builder.start.step']").arrowClick({ force: true }).wait(2000);
       cy.get("[data-cy='HeaderInfo-docId']").should("contain.text", "Step #1");
       cy.get("#HeaderInfo-subtitle").should("contain.text", "LHR-00002");
       cy.get("#ApproveAndRelease-button").should("contain.text", "Complete Step");

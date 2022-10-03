@@ -268,6 +268,13 @@ context("Create company via API and create Suppliers document", () => {
       });
     });
 
+    it("Select Risk Classifications", () => {
+      cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
+      cy.unClick();
+      cy.wait(2000);
+    });
+
     it("Verify the status", () => {
       cy.get(`[data-cy="HeaderInfo-status"]`).contains(STATUS_TYPES_LABEL.DRAFT)
         .should("exist");
@@ -694,13 +701,6 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Navigate to Detail Tab", () => {
       cy.drSelectDetailsTab();
-    });
-
-    it("Select Risk Classifications", () => {
-      cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
-      cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
-      cy.unClick();
-      cy.wait(2000);
     });
 
     it("change supplier use status", () => {
