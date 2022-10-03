@@ -3,8 +3,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
 import React, { useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBInput, FBMapWrapper, FBMPIProcedureItem, FBMPIProcedureProps, FBProcedureItemType, FBProvider, FBTextEditor } from "..";
-import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
+import { FBInput, FBMapWrapper, FBMPIProcedureItem, FBMPIProcedureProps, FBProcedureItemType, FBProvider, FBTextEditor, FBTooltip } from "..";
 import { ReactComponent as OutlinedCloneIcon } from "../../../assets/images/clone.svg";
 import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/clone_dark.svg";
 import Colors from "../../layout/theme/utils/colors";
@@ -41,7 +40,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
             <Box display="flex" flexDirection="row-reverse" mb={-2.5} position="relative" zIndex={1}>
               <Box onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}>
-                <StyledTooltip placement="top" title="form.builder.clone.step">
+                <FBTooltip title="form.builder.clone.step">
                   { isHover ?
                     <CloneIcon
                       data-cy="form.builder.clone.step"
@@ -57,11 +56,11 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                       style={{ marginLeft: "15px", cursor: "pointer" }}
                     />
                   }
-                </StyledTooltip>
+                </FBTooltip>
               </Box>
               <Box onMouseEnter={() => setIsHoverAddIcon(true)}
                 onMouseLeave={() => setIsHoverAddIcon(false)}>
-                <StyledTooltip placement="top" title="form.builder.add">
+                <FBTooltip title="form.builder.add">
                   { isAddIconHover ?
                     <AddCircleIcon style={{ color: Colors.almost_black, width: "17px", height: "17px" }}
                       data-cy="form.builder.add.step"
@@ -75,7 +74,7 @@ const FBMPIProcedure: React.FunctionComponent<FBMPIProcedureProps> = ({
                       {...{ disabled }}
                     />
                   }
-                </StyledTooltip>
+                </FBTooltip>
               </Box>
             </Box>
           )}

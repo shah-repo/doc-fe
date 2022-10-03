@@ -141,8 +141,8 @@ Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByStatus", (params: {status: string }) => {
-  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
-  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).scrollIntoView().arrowClick({ force: true });
+  cy.get("li").contains(params.status).arrowClick({ force: true }).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 

@@ -188,7 +188,7 @@ context("Approval request form", () => {
     });
 
     it("Enter description 'New form template for approval request'", () => {
-      cy.drEnterDocumentDescription({ description: "New form template for approval request" });
+      cy.arEnterApprovalRequestDescription({ description: "New form template for approval request" });
     });
 
     it("Click on 'Form' document type", () => {
@@ -478,7 +478,7 @@ context("Approval request form", () => {
 
     it("Enter description 'AR from New form template for approval request'", () => {
       cy.get("[data-cy=\"field-description\"]").click();
-      cy.get("[data-cy=\"field-description\"]").arrowType("AR from New form template for approval request").wait(2000);
+      cy.arEnterApprovalRequestDescription({ description: "AR from New form template for approval request" });
       cy.unClick();
     });
 
