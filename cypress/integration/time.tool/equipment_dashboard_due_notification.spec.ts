@@ -1,6 +1,10 @@
 /* eslint-disable max-len */
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
 
 import "moment-timezone";
 import moment from "moment-timezone";
@@ -35,7 +39,7 @@ const ADMIN_USER = USERS[1];
 const equipmentTitleForm = `Equipment-Form`;
 const equipmentDocId = "EQ-00001";
 
-context("'Equipment' test with time tool", () => {
+context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

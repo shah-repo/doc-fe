@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
@@ -39,7 +42,7 @@ const dueDate = momentInPST().add(30, "days").format("l");
 const adjAssignDate = momentInPST().subtract(23, "days").format("l");
 const adjDueDate = momentInPST().add(30, "days").subtract(23, "days").format("l");
 
-context("Training notification test", () => {
+context("Training notification test", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
