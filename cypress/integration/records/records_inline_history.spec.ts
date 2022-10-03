@@ -280,16 +280,9 @@ context("Record inline history Flow", () => {
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostOrPatchDocRev,
-            CyRoutes.SessionDetails], () => {
-            cy.fbUnSelectCheckboxValue( "Red" );
-            cy.progressBarShouldNotExist();
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.fbUnSelectCheckboxValue( "Green" );
-            cy.unClick();
-          });
+          cy.fbUnSelectCheckboxValue( "Red" );
+          cy.progressBarShouldNotExist();
+          cy.fbUnSelectCheckboxValue( "Green" );
         });
 
         it("Check 'Blue' value on checkbox", () => {
@@ -342,6 +335,14 @@ context("Record inline history Flow", () => {
       });
 
       context("Check inline approval history on released document", () => {
+        it("Select approver for first inline", () => {
+          SystemRequirement("REQ-4340");
+          cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
+            cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
+            cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
+          });
+        });
+
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4350");
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
