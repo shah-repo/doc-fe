@@ -396,7 +396,7 @@ context("Self training test", () => {
     });
 
     it("Check if 'Send To Email' button is working", () => {
-      cy.get(`button[class^="MuiButtonBase-root MuiIconButton-root makeStyles-closeButton"]`)
+      cy.get(`[data-cy='closeIcon']`)
         .arrowClick();
     });
   });

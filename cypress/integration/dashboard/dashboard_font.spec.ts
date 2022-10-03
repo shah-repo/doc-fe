@@ -1895,26 +1895,26 @@ context("Dashboard notification font test", () => {
     });
 
     it(`Verify the popup window has PENDING text`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-pendingtitle\"]")
+      cy.get("[data-cy='pendingTitle']")
         .contains("PENDING");
     });
 
     it(`Verify the PENDING has font-size ${FONT_SIZE_12} form-family ${soraSansserif} line-height 18px font-weight ${FONT_WT_700}`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-pendingtitle\"]").checkStylePropExists({
+      cy.get("[data-cy='pendingTitle']").checkStylePropExists({
         content: "PENDING",
         props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_3, "font-weight": FONT_WT_700 },
       });
     });
 
     it(`Verify ${USERS[1].name} has font-size ${FONT_SIZE_28} form-family ${soraSansserif} font-weight ${FONT_WT_700}`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]").checkStylePropExists({
+      cy.get("[data-cy='listItemText']").checkStylePropExists({
         content: USERS[1].name,
         props: { "font-size": FONT_SIZE_28, "font-family": soraSansserif, "font-weight": FONT_WT_700 },
       });
     });
 
     it(`Close the popup window`, () => {
-      cy.get("[class^=\"MuiButtonBase-root MuiIconButton-root makeStyles-closemodel\"]")
+      cy.get("[data-cy='closeModel']")
         .arrowClick();
     });
   });
@@ -2067,7 +2067,7 @@ context("Dashboard notification font test", () => {
     });
 
     it(`Verify training status 'EMAIL ALL' font-size as ${FONT_SIZE_11} and form-family as ${soraSansserif} line-height ${FONT_SIZE_14} and font-weight ${FONT_WT_700}`, () => {
-      cy.get("[class^=\"MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-emailbutton\"]")
+      cy.get("[data-cy='emailButton']")
         .checkStylePropExists({
           content: "EMAIL ALL",
           props: { "font-size": FONT_SIZE_11, "font-family": soraSansserif, "line-height": FONT_SIZE_14, "font-weight": FONT_WT_700 },
@@ -2075,7 +2075,7 @@ context("Dashboard notification font test", () => {
     });
 
     it(`Verify training status ${USERS[2].name} font-size as ${FONT_SIZE_12_8} and form-family as ${soraSansserif}`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
+      cy.get("[data-cy='listItemText']")
         .checkStylePropExists({
           content: USERS[2].name,
           props: { "font-size": FONT_SIZE_12_8, "font-family": soraSansserif },
@@ -2083,7 +2083,7 @@ context("Dashboard notification font test", () => {
     });
 
     it(`Close training status popup window`, () => {
-      cy.get("[class^=\"MuiButtonBase-root MuiIconButton-root makeStyles-closemodel\"]")
+      cy.get("[data-cy='closeModel")
         .arrowClick();
     });
   });

@@ -23,7 +23,7 @@ const TrainingDetails: React.FunctionComponent<Props> =
     return (
       <>
         <IconButton className={classes.closeButton} onClick={dialog.close}>
-          <CloseIcon />
+          <CloseIcon data-cy="closeIcon"/>
         </IconButton>
         <DialogTitle>
           <Typography className={classes.dialogTitle}>

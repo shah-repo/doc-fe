@@ -121,6 +121,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
         <Grid item>
           <IconButton
             aria-label="close"
+            data-cy="closeModel"
             className={classes.closemodel}
             onClick={handleApiAlertModelClose}
           >
@@ -175,6 +176,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
         <Grid item>
           <IconButton
             aria-label="close"
+            data-cy="closeModel"
             className={classes.closemodel}
             onClick={handleEmailModelClose}
           >
@@ -209,6 +211,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                   <Typography
                     variant="h2"
                     component="h2"
+                    data-cy="pendingTitle"
                     className={classes.pendingtitle}
                     noWrap
                   >
@@ -248,6 +251,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     <Grid item>
                       <Button
                         onClick={() => handleSendEmail()}
+                        data-cy="emailButton"
                         className={classes.emailbutton}
                       >
                         <Text translation="email.button.title" />
@@ -288,6 +292,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     <Typography
                       component="span"
                       variant="h2"
+                      data-cy="listItemText"
                       className={classes.listitemtext}
                     >
                       {pending.userName}
@@ -352,6 +357,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     <Typography
                       component="span"
                       variant="h2"
+                      data-cy="listItemText"
                       className={classes.listitemtext}
                     >
                       {approved.userName}
