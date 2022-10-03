@@ -1,4 +1,4 @@
-import { findIndex, isArray, map } from "lodash";
+import { findIndex, isArray, map, unionBy } from "lodash";
 import { action, observable, set } from "mobx";
 import { Approval } from "../../../state/ducks/common/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
@@ -22,9 +22,13 @@ class FBDataStore {
 
   // key would be either "poApprovals", "inlineApprovals"
   @action public setApprovals = (approvals, key) => {
-    let result: FBInlineApprovalBody[] | Approval[];
+    let result: FBInlineApprovalBody[] | Approval[] = [];
     if (isArray(approvals)) {
-      result = [...this[key], ...approvals];
+      if (key === FBDataStoreApprovalKeys.INLINE_APPROVALS) {
+        result = unionBy([...approvals], [...this[key]], "id");
+      } else if (key === FBDataStoreApprovalKeys.PO_APPROVALS) {
+        result = [...this[key], ...approvals];
+      }
     } else {
       const approvalData = [...this[key]];
       let previousIndex = -1;
@@ -40,7 +44,6 @@ class FBDataStore {
       } else {
         result = map(approvalData, (el, index: number) => index === previousIndex ? approvals : el);
       }
-
     }
     set(this, key, result);
   };
