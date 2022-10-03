@@ -23,9 +23,6 @@ let group;
 let maintenanceRecordDocumentType;
 let createdPMForm;
 let createdCalibrationForm;
-
-let pmSchemaFieldName;
-let calibrationSchemaFieldName;
 let equipmentURL;
 
 const fbclickOnAddCalPM = () => {
@@ -606,13 +603,6 @@ context("Layout Verification of EQ", () => {
       it("Save the document", () => {
         cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
         cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-        cy.wait("@response").then((res) => {
-          if (res.response) {
-            const response = res.response.body;
-            pmSchemaFieldName = response.schema[6].name;
-            calibrationSchemaFieldName = response.schema[7].name;
-          }
-        });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
