@@ -213,12 +213,8 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select 'Supplier' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Supplier");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Supplier");
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -256,12 +252,8 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select 'Supplier' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Supplier");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Supplier");
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -304,12 +296,8 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select 'Supplier' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Supplier");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Supplier");
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -354,12 +342,8 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select 'Supplier' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Supplier");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Supplier");
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -442,12 +426,8 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select 'Supplier' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Supplier");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Supplier");
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -546,12 +526,8 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select 'Supplier' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Supplier");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Supplier");
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -638,12 +614,8 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select 'Supplier' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Supplier");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Supplier");
     });
 
     it("Enter 'Supplier Description'", () => {
