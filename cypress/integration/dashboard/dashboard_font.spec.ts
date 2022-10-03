@@ -1374,13 +1374,6 @@ context("Dashboard notification font test", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
-    it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-    });
-
-
     it("Click on 'Overview' tab", () => {
       cy.drSelectOverviewTab();
     });
@@ -1391,12 +1384,6 @@ context("Dashboard notification font test", () => {
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-    });
-
-    it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
     });
 
     it("Click Submit for Approval", () => {
@@ -1434,7 +1421,9 @@ context("Dashboard notification font test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.poAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.get("[data-cy^=\"fb-po-approvals\"]").scrollIntoView().arrowClick().wait(500);
+      cy.get("[data-cy^=\"fb-po-approvals\"]").autocompleteSelect(USERS[1].name).wait(500);
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approvals and check enfocment", () => {
@@ -1479,12 +1468,6 @@ context("Dashboard notification font test", () => {
       cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Click save document", () => {
-      cy.drSaveDocumentWithoutaudit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Select 'Details' tab", () => {
       cy.contains("Details").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
@@ -1504,12 +1487,6 @@ context("Dashboard notification font test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Click save document", () => {
-      cy.drSaveDocumentWithoutaudit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
