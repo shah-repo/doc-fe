@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { integer } from "aws-sdk/clients/cloudfront";
 import { each } from "lodash";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
@@ -14,7 +15,7 @@ declare global {
       dashRejectApprovalForListItem(params: {listItem: string}): Chainable<Subject>;
       dashVerifyNoPendingActions(): Chainable<Subject>;
       dashApproverFirstFromList(): Chainable<Subject>;
-      checkStylePropExists(params: {content: string; props: any}): Chainable<Subject>;
+      checkStylePropExists(params: {content: string; props: any; elem?: string; index?: integer}): Chainable<Subject>;
     }
   }
 }
@@ -73,10 +74,18 @@ Cypress.Commands.add("dashApproverFirstFromList", () => {
   cy.checkToastMessage({ exists: false });
 });
 
-Cypress.Commands.add("checkStylePropExists", (params: {content: string; props: any}) => {
+// eslint-disable-next-line max-len
+Cypress.Commands.add("checkStylePropExists", (params: {content: string; props: any; elem?: string; index?: integer}) => {
   each( params.props, ( value, name ) => {
-    cy.contains(params.content).should("have.css", name, value);
-  } );
+    if (params.elem && params.index) {
+      cy.get(params.elem).eq(params.index).contains(params.content).should("have.css", name, value);
+    } else if (params.elem && !params.index) {
+      cy.get(params.elem).contains(params.content).should("have.css", name, value);
+    }
+    else {
+      cy.contains(params.content).should("have.css", name, value);
+    }
+  });
 });
 
 export { };
