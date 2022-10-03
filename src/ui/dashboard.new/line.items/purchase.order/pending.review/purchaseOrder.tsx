@@ -222,9 +222,9 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
         disableRipple
       >
         {open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
+          <CollapseIcon className={classes.icon} data-cy="collapseIcon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
+          <ExpandIcon className={classes.icon}  data-cy="expandIcon" onClick={handleClick} />
         )}
         <ListItemIcon>
           <POIcon height={30} width={30} />

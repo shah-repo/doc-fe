@@ -187,11 +187,13 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           {openPending ? (
             <CollapseIcon
               className={classes.iconupdown}
+              data-cy="collapseIcon"
               onClick={handleClickPending}
             />
           ) : (
             <ExpandIcon
               className={classes.iconupdown}
+              data-cy="expandIcon"
               onClick={handleClickPending}
             />
           )}
@@ -307,6 +309,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           ) : (
             <ExpandIcon
               className={classes.iconupdown}
+              data-cy="expandIcon"
               onClick={handleClickApproved}
             />
           )}
