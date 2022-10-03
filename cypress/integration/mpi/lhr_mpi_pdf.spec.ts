@@ -1503,6 +1503,10 @@ context("Autosave LHR", () => {
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
     });
 
+    it("Click 'LHR Step'", () => {
+      cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
+    });
+
     it("Add equipment parameter", () => {
       cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
         .eq(1).arrowClick();
