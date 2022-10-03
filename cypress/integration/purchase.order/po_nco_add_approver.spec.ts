@@ -628,6 +628,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Add an Approver'", () => {
+      cy.wait(1000);
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
       cy.progressBarShouldNotExist();
@@ -776,9 +777,7 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Check the Approval field automatically Removed when requestor is Deleted", () => {
     it("Remove requestor", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
-      });
+      cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
     });
 
     it("Save document", () => {
@@ -1063,9 +1062,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Remove requestor", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
-      });
+      cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
     });
 
     it("Save document", () => {
