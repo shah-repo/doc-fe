@@ -1135,8 +1135,6 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy='training-status'] span").should("contain.text", "Complete");
     });
   });
-
-
 });
 
 export { };
