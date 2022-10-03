@@ -1,6 +1,7 @@
 import { Box, Button } from "@material-ui/core";
 import { get, isEqual, kebabCase, size } from "lodash";
 import React from "react";
+import { Observer } from "mobx-react";
 import {
   FB,
   FBSchema,
@@ -35,7 +36,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
         type: "lhrstep",
         label: "LHR Step",
         index,
-        tabId: _tabsState?.tabID,
+        tabId: _tabsState?.activeTabId,
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         validationMode: "default",
         applicableValidationSchema: true,
@@ -55,38 +56,42 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
   return (
-    <Box>
-      <FBWorkspaceSocket />
-      {size(schema) > 0 && (
-        <FBSchema
-          {...{ schema }}
-          schemaState={workspaceState}
-          workspaceMode={mode}
-        />
+    <Observer>
+      {() => (
+        <Box>
+          <FBWorkspaceSocket />
+          {size(schema) > 0 && (
+            <FBSchema
+              {...{ schema }}
+              schemaState={workspaceState}
+              workspaceMode={mode}
+            />
+          )}
+          {_tabsState?.isTabActive("details") &&
+            workspaceState?.mode === "design" &&
+            [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (
+              <Button
+                variant="outlined"
+                startIcon={<AddIcon />}
+                onClick={() => {
+                  addLHRStep();
+                }}
+                data-cy="form.builder.add.step"
+                style={{
+                  background: Colors.navy,
+                  color: Colors.white,
+                  border: `1px solid ${Colors.navy}`,
+                  borderRadius: "100px",
+                }}
+              >
+                <Text translation="form.builder.add.step" />
+              </Button>
+            )}
+          {isStarter && !_tabsState?.isTabActive("calpmhistory") && <FBStarter index={size(schema)} />}
+          {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
+        </Box>
       )}
-      {_tabsState?.tabID === "details" &&
-        workspaceState?.mode === "design" &&
-        [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (
-          <Button
-            variant="outlined"
-            startIcon={<AddIcon />}
-            onClick={() => {
-              addLHRStep();
-            }}
-            data-cy="form.builder.add.step"
-            style={{
-              background: Colors.navy,
-              color: Colors.white,
-              border: `1px solid ${Colors.navy}`,
-              borderRadius: "100px",
-            }}
-          >
-            <Text translation="form.builder.add.step" />
-          </Button>
-        )}
-      {isStarter && _tabsState?.tabID !== "calpmhistory" && <FBStarter index={size(schema)} />}
-      {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
-    </Box>
+    </Observer>
   );
 };
 export default React.memo(
