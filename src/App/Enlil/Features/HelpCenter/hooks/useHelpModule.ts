@@ -13,7 +13,7 @@ interface RouteChecker {
   check: (path: string) => boolean;
 }
 
-export const ROUTES: RouteChecker[] = [
+const ROUTES: RouteChecker[] = [
   {
     module: HelpModule.Dashboard,
     check: (path) => path === URL.HOME_URL,
