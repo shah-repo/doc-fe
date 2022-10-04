@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
+import { ReactComponent as RemoveReference } from "../../../../assets/images/trash.svg";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -263,7 +264,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 </FBTooltip>
               </Typography>}
             disabled={option.deleteDisabled}
-            deleteIcon={<img src="/delete_icon.svg" alt="Delete Icon"  className={classes.deleteIcon} />}
+            deleteIcon={<RemoveReference className={classes.deleteIcon}/>}
             onDelete={(e) => {
               onChange(e, value.filter((obj) => obj.value !== option.value));
             }}
