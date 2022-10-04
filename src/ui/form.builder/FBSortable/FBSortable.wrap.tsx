@@ -23,7 +23,6 @@ export const withFBSortable = <T extends FBSortableProps>(
         ...schemaItem,
         autosave: isUnderWorkspace && workspaceState?.autosave,
         disabled: workspaceState?.isMode("design"),
-        showErrorMsg: !workspaceState?.isMode("design"),
         gutter: false,
       });
     };
@@ -49,7 +48,7 @@ export const withFBSortable = <T extends FBSortableProps>(
     let position = 0;
     const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
       if (schemaItem.deleted || schemaItem.hidden ||
-        (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
+        (_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId))) { return; }
       position++;
       return (
         <SortableItem

@@ -144,6 +144,11 @@ DocumentRevisionFormContainerProps
   useObserver(() => {
     cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     if (didMount) {
+
+      if (documentRevision?.updatedAt && FBDataStore?.refreshData?.updatedAt) {
+        documentRevision.updatedAt = FBDataStore?.refreshData?.updatedAt;
+      }
+
       if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
         documentRevision.approvals = FBDataStore.poApprovals as Approval[];
       }
