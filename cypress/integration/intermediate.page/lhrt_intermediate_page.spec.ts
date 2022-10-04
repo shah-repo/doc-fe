@@ -204,7 +204,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Approvals' is not deletable", () => {
-      cy.get("[data-cy='Approvals']").trigger("mouseover");
+      cy.get("[data-cy='approvals-6']").trigger("mouseover");
       cy.get(`[data-cy="edit-schema-item"]`)
         .should("not.exist");
       cy.get(`[data-cy="remove-schema-item"]`)
@@ -412,32 +412,8 @@ context("Intermediate page validation", () => {
       });
     });
 
-    it("Check 'Due Date' is displayed", () => {
-      cy.intPageVerifyDueDateExist();
-      cy.fbVerifyElementClassByLabel({
-        label: "Due Date", el: "remove-schema-item",
-        class: "schema-delete-disabled",
-      });
-    });
-
-    it("Check 'Approvals' is displayed", () => {
-      cy.intPageVerifyApprovalsExist();
-      cy.fbVerifyElementClassByLabel({
-        label: "Approvals", el: "remove-schema-item",
-        class: "schema-delete-disabled",
-      });
-    });
-
     it("Navigate to Detail Tab", () => {
       cy.drSelectDetailsTab();
-    });
-
-    it("Check 'Step #1' is displayed", () => {
-      cy.intPageVerifyLHRStepExist();
-      cy.fbVerifyElementClassByLabel({
-        label: "LHR Step 1", el: "remove-schema-item",
-        class: "schema-delete-disabled",
-      });
     });
   });
 
