@@ -25,14 +25,14 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
 
   const isLHRT = checkIsDocumentLHRT(documentRevision?.document?.documentType?.groupOptions);
   const isMPI = checkIsDocumentMPI(documentRevision?.document?.documentType?.groupOptions);
-  let isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);
-  isForm = isForm && !isMPI && !isLHRT;
+  const isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);
+  const shouldFetch = !isForm || isLHRT || isMPI;
 
   useEffect(() => {
-    if (inView && !isForm && documentRevision) {
+    if (inView && shouldFetch && documentRevision) {
       itemsState.fetchCurrentItems(documentRevision.id);
     }
-  }, [documentRevision, inView, itemsState, isForm]);
+  }, [documentRevision, inView, itemsState, shouldFetch]);
 
   useEffect(() => {
     if (inView && documentRevision?.parent && showDiff && !parentData) {
