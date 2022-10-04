@@ -215,6 +215,7 @@ context("Add Requestor as an approver of the PO", () => {
       cy.atchUploadDOMJSONForNCO({ fileName: "po_dam.json", queue: 0 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
@@ -257,7 +258,9 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Save document", () => {
+      // cy.drClickCreateDocumentWithApiCallForForms();
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release document for create company", () => {
@@ -871,6 +874,10 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Check requestor is added", () => {
       cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Check approvers automatically added", () => {
@@ -881,17 +888,19 @@ context("Add Requestor as an approver of the PO", () => {
   });
 
   context("Verify that if the Requestor fulfills the PO approval level", () => {
-    it("Check approval icon if it's gray", () => {
-      cy.poAMCheckApprovalIconIfItsGray();
+    it("Reload the page and Check status as DRAFT", () => {
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if selected approver has approval signature right by his name", () => {
-      cy.poAMCheckIfApproverHasApprovalSign();
-      cy.unClick();
+      cy.contains("PO Approval sig");
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[2].name + " | DRAFT" + USERS[2].email);
     });
 
     it("Check approval icon if it's colored", () => {
-      cy.poAMCheckApprovalIconIfItsRed();
+      cy.poAMCheckApprovalIconIfItsGray();
     });
   });
 
