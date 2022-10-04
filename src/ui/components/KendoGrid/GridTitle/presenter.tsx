@@ -14,7 +14,7 @@ const GridTitle: React.FunctionComponent<Props> = ({ translation, title = "" }) 
   const gridTitle = translation ? intl.formatMessage({ id: translation }) : title;
   return (
     <Box>
-      <Typography className={classes.title}>{gridTitle}</Typography>
+      <Typography data-cy="gridTitle" className={classes.title}>{gridTitle}</Typography>
     </Box>
   );
 };
