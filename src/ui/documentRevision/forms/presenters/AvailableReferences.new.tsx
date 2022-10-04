@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import { debounce, isArray, map, some, truncate } from "lodash";
@@ -9,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
+import { ReactComponent as RemoveReference } from "../../../../assets/images/trash.svg";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -17,12 +17,12 @@ import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
+import { FBTooltip } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
 import { isTranslation } from "../../../translations/types";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 import { styles } from "./AvailableReferences.new.styles";
-import { FBTooltip } from "../../../form.builder";
 
 interface AvailableReferencesProps extends FieldOwnProps {
   disabled?: boolean;
@@ -264,7 +264,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 </FBTooltip>
               </Typography>}
             disabled={option.deleteDisabled}
-            deleteIcon={<DeleteIcon  className={classes.deleteIcon} />}
+            deleteIcon={<RemoveReference className={classes.deleteIcon}/>}
             onDelete={(e) => {
               onChange(e, value.filter((obj) => obj.value !== option.value));
             }}
