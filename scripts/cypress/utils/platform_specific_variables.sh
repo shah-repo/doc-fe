@@ -17,7 +17,7 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     echo "Windows not supported"
     exit 1
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
-    # 64 bits Windows NT platform
+    # 64 bits Windows NT platform 
     echo "Windows not supported"
     exit 1
 fi
