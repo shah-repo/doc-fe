@@ -931,9 +931,9 @@ context("Receiving landing page test", () => {
     });
 
     it("Click on receive all", () => {
-      cy.get("[data-cy='form.builder.receive']").arrowClick();
+      cy.get("[data-cy='fb-control-btn']").contains("Receive All").arrowClick();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
+      cy.wait(5000);
     });
 
     it("Verify that all Parts, non-Enlil parts and PO services should have received quantities", () => {
@@ -1150,6 +1150,7 @@ context("Receiving landing page test", () => {
 
     context("Verify form migration", () => {
       it("Navigate to overview tab and text field value", () => {
+        cy.pause();
         cy.get("[data-cy='references-icon']").arrowClick();
         cy.drSelectOverviewTab();
       });
@@ -1386,7 +1387,7 @@ context("Receiving landing page test", () => {
     it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
       cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00004");
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00008");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", currentFormattedDate);
     });
 
