@@ -419,7 +419,7 @@ context("Layout Verification of EQ", () => {
       });
     });
 
-    it("Verify that it contains Overview, Specification, calpmhistory", () => {
+    it("Verify that it contains Overview, Specification", () => {
       cy.verifyTabs("overview", "specification");
     });
 
@@ -436,6 +436,7 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Save the document", () => {
+      cy.pause();
       cy.drClickCreateDocumentWithoutApiCall();
     });
   });
@@ -1149,6 +1150,7 @@ context("Layout Verification of EQ", () => {
 
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
+          cy.pause();
           cy.get("[data-cy='timeline-icon']").arrowClick();
         });
 
