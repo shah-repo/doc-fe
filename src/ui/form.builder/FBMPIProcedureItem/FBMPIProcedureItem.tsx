@@ -24,8 +24,8 @@ import {
   FBProcedureItemType,
   FBProvider,
   FBText,
+  FBTooltip,
 } from "..";
-import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
 import { ReactComponent as WarningIcon } from "../../../assets/images/icon_warning.svg";
 import { MomentFormats } from "../../../common/utils/date";
 import Colors from "../../layout/theme/utils/colors";
@@ -84,7 +84,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
           <Box pt={1.6} pr={2}
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}>
-            <StyledTooltip placement="top" title="form.builder.add">
+            <FBTooltip title="form.builder.add">
               { isHover ?
                 <AddCircleIcon style={{ color: Colors.almost_black, width: "17px", height: "17px" }}
                   data-cy= {`${FBProcedureItemLocale[type]}.btn`}
@@ -98,7 +98,7 @@ const FBMPIProcedureItem: React.FunctionComponent<FBMPIProcedureItemProps> = ({
                   {...{ disabled }}
                 />
               }
-            </StyledTooltip>
+            </FBTooltip>
           </Box>
         )}
       </Box>

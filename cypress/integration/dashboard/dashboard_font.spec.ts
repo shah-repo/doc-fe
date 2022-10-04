@@ -3,6 +3,9 @@
 // eslint-disable-next-line spaced-comment
 // / <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
@@ -60,7 +63,7 @@ const lhrid = "LHR-00007";
 const rejArId = "AR-00009";
 const tcId = "TC-00001";
 
-context("Dashboard notification font test", () => {
+context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -1293,10 +1296,6 @@ context("Dashboard notification font test", () => {
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
     it("Add approvers to approval request on approver list", () => {

@@ -158,6 +158,7 @@ Cypress.Commands.add("verifyAddRemoveReference", ({ formId }) => {
   cy.get("[data-cy=\"references-icon\"]").arrowClick().wait(500);
   cy.get("[data-cy=\"referenceTo\"]").arrowClick();
   cy.drSelectReferences(formId);
+  cy.wait(1000);
   cy.drRemoveReferences({ reference: formId });
 });
 
@@ -256,9 +257,9 @@ Cypress.Commands.add("verifyTitleNotHighlightedonHover", () => {
 });
 
 Cypress.Commands.add("verifyDescriptionNotHighlightedonHover", () => {
-  cy.get("[data-cy='description']").eq(0).trigger("mouseover");
-  cy.get("[data-cy='description']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
-  cy.get("[data-cy='description']>div").eq(0).trigger("mouseout");
+  cy.get("[data-cy='BaseWithhtml-editor']").eq(0).trigger("mouseover");
+  cy.get("[data-cy='BaseWithhtml-editor']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("[data-cy='BaseWithhtml-editor']>div").eq(0).trigger("mouseout");
 });
 
 Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
