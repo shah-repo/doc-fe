@@ -17,7 +17,7 @@ import { User } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
-import { isDocumentRevisionInDraft, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
 import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
@@ -54,15 +54,33 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   const classes = FBLHRStepStyles();
 
   const documentOperators = workspaceState?.document?.document?.operators
-    ?.map(({ user }) => user) as User[];
+    ?.map(({ user }) => ({ stepId: user?.id, user }));
+
   const allEmployees = useSelector(companySelectors.getAllEmployees) || [];
   const getUserDetails = (userId: string) => allEmployees.find((obj) => obj.id === userId);
-  const approverList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]?.map((id) => ({
+
+  const stepApproverList = stepLHRs?.formInput?.["fb-approvals-approvals-built-in"]?.map((id) => ({
     stepId: id,
     user: getUserDetails(id)?.user,
   }));
-  const operators = approverList ?? documentOperators
-    ?.map((user) => ({ stepId: user.id, user }));
+
+  const stepOperatorList = stepLHRs?.document?.["operators"]?.map((operator) => ({
+    stepId: operator.id,
+    user: getUserDetails(operator.id)?.user,
+  }));
+
+
+  let operators: {stepId: string; user: User}[] = [];
+  if (stepLHRs) {
+    const status = stepLHRs.status;
+    if (isDocumentRevisionReleased(status) || isDocumentRevisionInReview(status)) {
+      operators = stepApproverList ?? documentOperators;
+    } else if (isDocumentRevisionInDraft(status)) {
+      operators = stepOperatorList ?? stepApproverList ?? documentOperators;
+    }
+  }
+
+  operators = operators?.map((user) => ({ stepId: user?.stepId, user: user?.user }));
 
   const getStatusInfo = (opert, operatorId: string) => {
     const approvers = stepLHRs?.id && opert ? opert[stepLHRs?.id] : [];

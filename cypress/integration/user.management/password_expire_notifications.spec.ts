@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import faker from "faker";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
@@ -30,7 +33,7 @@ const emailOfUserToSignUp =
 `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`.toLowerCase();
 const dateAfterEmailShouldArrive = new Date();
 
-context("Password expire flow", () => {
+context("Password expire flow", { tags: ["@timetool"] }, () => {
   context("[API]Prepare company", () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({

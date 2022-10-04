@@ -913,7 +913,7 @@ context("Create new LHRT Layout Verification", () => {
 
   context("Verify right side pannel", () => {
     it("Verify training tab should not visible", () => {
-      cy.get("[data-cy='tabid.training']").should("not.exist");
+      cy.get("[data-cy='tabId.training']").should("not.exist");
     });
 
     it("Verify that right side panel opens by default to the References tab", () => {

@@ -181,6 +181,8 @@ context("Approval request form scenario", () => {
     });
 
     it("Add sample document one", () => {
+      cy.arSelectDocumentTab();
+      cy.wait(1000);
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
@@ -191,11 +193,13 @@ context("Approval request form scenario", () => {
     // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
       SystemRequirement("REQ-0940");
+      cy.arSelectChangeDetailsTab();
+      cy.wait(1000);
       cy.arAddApproverOnApproverList({ approver: USERS[20].email });
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
@@ -224,6 +228,8 @@ context("Approval request form scenario", () => {
 
     it("Check Document's description is non-editable", () => {
       SystemRequirement("REQ-0850");
+      cy.arSelectDocumentTab();
+      cy.wait(1000);
       cy.get("div[name$=\"descriptionOfChange\"]").should("have.attr", "disabled");
     });
 
@@ -240,6 +246,8 @@ context("Approval request form scenario", () => {
     //  approvers 'In_review' should be enabled now 'ENC-4797'
     it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
+      cy.arSelectChangeDetailsTab();
+      cy.wait(1000);
       cy.get("input[data-cy=\"fb-approvers-approvers\"]").should("not.be.disabled");
     });
   });
@@ -320,6 +328,7 @@ context("Approval request form scenario", () => {
 
     it("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
+      cy.arSelectDocumentTab();
       cy.arClickAddDocument();
       cy.arIsProposedDocumentEmpty();
       cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick();

@@ -21,7 +21,7 @@ const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
     <FBProvider {...{ dialogState, supplierState }}>
       <FBDialog />
       <FBInput type="supplier">
-        <Box display="flex" alignItems="flex-end" mt={2.5}>
+        <Box display="flex" alignItems="flex-end" >
           <Box flexGrow={1}>
             <FBAutocompleteAsync
               placeholder="common.select"
