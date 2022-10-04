@@ -1345,7 +1345,6 @@ context("LFPO new layout verification", () => {
 
   context("Verify Scroll", () => {
     it("Navigate to history tab", () => {
-      cy.pause();
       cy.get("[data-cy='timeline-icon']").arrowClick();
     });
 
