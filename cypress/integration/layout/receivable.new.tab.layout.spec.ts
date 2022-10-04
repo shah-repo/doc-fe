@@ -1150,7 +1150,6 @@ context("Receiving landing page test", () => {
 
     context("Verify form migration", () => {
       it("Navigate to overview tab and text field value", () => {
-        cy.pause();
         cy.get("[data-cy='references-icon']").arrowClick();
         cy.drSelectOverviewTab();
       });
