@@ -1,3 +1,6 @@
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
@@ -33,7 +36,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     cy.saveLocalStorage();
   });
 
-  context("[API]Prepare company", () => {
+  context("[API]Prepare company", { tags: ["@timetool"] }, () => {
     it("[API]Creates company", (done: any) => {
       cy.authApiLogin({
         email: CONFIG.SUPERADMIN_EMAIL,

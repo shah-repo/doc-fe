@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
 import { LegalRecord } from "../../utils/constants/documentTypes/record";
@@ -12,7 +15,7 @@ let loginResponse;
 let adminEmployee;
 let asyncTasksGroup;
 
-context("Session logout after time travel flow", () => {
+context("Session logout after time travel flow", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
