@@ -142,6 +142,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
             .map((outputDoc) => ({ id: outputDoc.value })),
           schema,
         });
+        formik.setFieldValue("formInput", documentRevision?.formInput);
         break;
       case "form":
       case "formDesign":
