@@ -1,8 +1,8 @@
 import { map } from "lodash";
-import { useObserver, Observer } from "mobx-react";
+import { Observer, useObserver } from "mobx-react";
 import React from "react";
-import { arrayMove, SortableElement, SortEnd } from "react-sortable-hoc";
-import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState, FBSortableProps } from "..";
+import { arrayMove, SortableElement, SortEnd, SortStart } from "react-sortable-hoc";
+import { FB, FBFieldWrapper, FBInputProps, FBSchemaProps, FBSchemaState, FBSortableProps, FBSortableState } from "..";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
 
 export const withFBSortable = <T extends FBSortableProps>(
@@ -14,6 +14,8 @@ export const withFBSortable = <T extends FBSortableProps>(
 
     const { workspaceState } = FB.useStores();
     const { _tabsState } = SM.useStores();
+
+    const sortableState = FB.useRef<FBSortableState>(FBSortableState);
 
     const schemaField = (schemaItem: FBSchemaProps): React.ReactNode | undefined => {
       const isUnderWorkspace = workspaceState?.getSchemaItem(schemaItem.name);
@@ -27,13 +29,14 @@ export const withFBSortable = <T extends FBSortableProps>(
 
     const isHiddenByRules = (item: FBSchemaProps) => workspaceState?.hiddenFieldsByRules?.has(item.name as string);
 
-    const SortableItem = SortableElement(({ value }: { value: FBSchemaProps }) => (
+    const SortableItem = SortableElement(({ value, position }: { value: FBSchemaProps; position: number }) => (
       <Observer>
         {() => (
           <li style={{ listStyleType: "none", display: isHiddenByRules(value) ? "none" : "block" }}>
             <FBFieldWrapper
               key={`fb-sortable-wrapper-${value.index}`}
               inputProps={value as FBInputProps}
+              position={position}
             >
               {schemaField(value)}
             </FBFieldWrapper>
@@ -42,19 +45,27 @@ export const withFBSortable = <T extends FBSortableProps>(
       </Observer>
     ));
 
+    let position = 0;
     const items = useObserver(() => map(workspaceState?.getSchema(), (schemaItem, index: number) => {
       if (schemaItem.deleted || schemaItem.hidden ||
-        (_tabsState && schemaItem.tabId && schemaItem.tabId !==  _tabsState?.tabID)) { return; }
+        (_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId))) { return; }
+      position++;
       return (
         <SortableItem
           key={`fb-sortable-item-${index}`}
           value={{ ...schemaItem, index }}
-          {...{ index }}
+          {...{ index, position }}
         />
       );
     }));
 
+    const onSortStart = ({ index }: SortStart) => {
+      sortableState.setDraggedIndex(index);
+    };
+
     const onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
+      sortableState.setDraggedIndex(null);
+
       const schema = workspaceState?.schema;
       if (!schema) {
         return;
@@ -74,11 +85,12 @@ export const withFBSortable = <T extends FBSortableProps>(
       );
     };
 
-
     return Component({
       ...(props),
       items,
+      sortableState,
       onSortEnd,
+      onSortStart,
       shouldCancelStart,
     });
   };

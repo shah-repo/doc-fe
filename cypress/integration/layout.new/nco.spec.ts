@@ -150,6 +150,7 @@ context("Verify New Layout for NCO Document", () => {
 
           it("Verify that Form Options should appear for Overview tab", () => {
             cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+            cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
             cy.verifyFormOptionsVisibility();
           });
         });
@@ -267,6 +268,7 @@ context("Verify New Layout for NCO Document", () => {
 
             it("Verify that Form Options should appear for Overview tab", () => {
               cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+              cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
               cy.verifyFormOptionsVisibility();
             });
           });

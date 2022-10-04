@@ -218,7 +218,7 @@ context("Send PO Owner an email notification when a PO is approved", () => {
         });
 
         it(`Select '${USERS[1].name}' for Requestor`, () => {
-          cy.get("[data-cy^=requestor]").arrowClick();
+          cy.get("[data-cy^=po-requestor]").arrowClick();
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
 

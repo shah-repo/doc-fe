@@ -327,6 +327,7 @@ Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
 });
 
 Cypress.Commands.add("grpClickEditGroupWithName", (params: {name: string}) => {
+  cy.grpClearFilter();
   cy.get("tr.k-master-row").contains(params.name).parents("tr").find("button").arrowClick();
 });
 
@@ -466,6 +467,7 @@ Cypress.Commands.add("grpHistoryClickOpenButton", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetGroupsAudit, () => {
     cy.get("[data-cy=\"gm-open-history-panel\"]").arrowClick();
   });
+  cy.wait(500);
 });
 
 Cypress.Commands.add("grpHistoryVerifyAddedGroup", (params: { name: string }) => {

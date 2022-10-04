@@ -1,4 +1,4 @@
-import { Box, BoxProps, createStyles, IconButton, ListItem, makeStyles, Tooltip, Typography } from "@material-ui/core";
+import { Box, BoxProps, Grid, IconButton, ListItem, Tooltip, Typography } from "@material-ui/core";
 import { HighlightOffOutlined } from "@material-ui/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -8,42 +8,23 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
 import { documentVersionPath } from "../utils/paths";
+import { styles } from "./builds.presenter.styles";
 
 interface OwnProps {
   label: string;
   isDraft?: boolean;
   handleRemoveBuild: () => void;
   showRemoveButton?: boolean;
-  labelProps?: BoxProps;
   labelFont?: BoxProps;
 }
 
 type Props = OwnProps & DataProps<DocumentRevision[]>;
-
-const styles = makeStyles((theme) =>
-  createStyles({
-    chip: {
-      "border": `1px solid ${Colors.medium_blue}`,
-      "borderRadius": "3px",
-      "background": Colors.light_blue,
-      "&:hover": {
-        cursor: "pointer",
-      },
-      "marginTop": theme.spacing(2),
-    },
-    link: {
-      textDecoration: "none",
-      marginRight: "8px",
-    },
-  }));
-
 const BuildsPresenter: React.FunctionComponent<Props> = ({
   dataProp,
   label,
   isDraft,
   showRemoveButton,
   handleRemoveBuild,
-  labelProps,
   labelFont,
 }) => {
   const classes = styles();
@@ -60,8 +41,6 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
         flexDirection="row"
         alignItems="center"
         borderRadius={4}
-        border={1}
-        borderColor={Colors.medium_blue}
         bgcolor={Colors.light_blue}
       >
         <Link
@@ -70,17 +49,15 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
           target="_blank"
           data-cy={`BuildsPresenter-link-${label}`}
         >
-          <Tooltip title={docRev.name} data-cy="BuildsLink-tootlip" >
-            <Typography
-              id="BuildsPresenter-buildtext"
-              variant="caption"
-              color="primary"
-              noWrap={true}
-              style={labelFont}
-            >
-              {`${docRev.document?.docId} - ${stripTags(docRev.name)}`}
-            </Typography>
-          </Tooltip>
+          <Typography
+            id="BuildsPresenter-buildtext"
+            variant="caption"
+            color="primary"
+            noWrap={true}
+            className={classes.styleFont}
+          >
+            {`${docRev.document?.docId} - ${stripTags(docRev.name)}`}
+          </Typography>
         </Link>
         {showRemoveButton &&
         (<Tooltip id="tooltip-removeBuild" title={<Text translation="common.remove" />}>
@@ -98,24 +75,26 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
     ));
 
   const buildsEmptyRenderer = () => (
-    <Box ml={isDraft ? 0 : 2}>
-      <Typography variant="h5" style={labelFont}>
+    <Box>
+      <Typography variant="h5" className={classes.labelFont}>
         <Text message="common.none"/>
       </Typography>
     </Box>
   );
   return (
-    <Box pb={3} pl={2}>
-      <ListItem data-cy="BuildsPresenter-label" disableGutters>
-        <Typography variant="h6" style={labelProps}>
-          <Text message={label} />
-        </Typography>
-      </ListItem>
-      <Box display="flex" ml={isDraft ? 0 : 2}>
-        {referencesRenderer()}
+    <Grid xs={6}>
+      <Box pb={3} pt={3}>
+        <ListItem data-cy="BuildsPresenter-label" disableGutters>
+          <Typography variant="h6" className={classes.labelProps}>
+            <Text message={label} />
+          </Typography>
+        </ListItem>
+        <Box display="flex">
+          {referencesRenderer()}
+        </Box>
+        {!dataProp.length && buildsEmptyRenderer()}
       </Box>
-      {!dataProp.length && buildsEmptyRenderer()}
-    </Box>
+    </Grid>
   );
 };
 

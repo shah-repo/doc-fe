@@ -400,21 +400,25 @@ context("Export training curriculum", () => {
       cy.fbAddNewFieldButton();
     });
 
-
     it("Verify Edit, Move and Remove", () => {
       cy.get(`[data-cy="edit-schema-item"]`).last().arrowClick({ force: true });
       cy.fbEnterPlaceholder({ placeholder: " changed" });
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
+    });
+
+    it("Move component", () => {
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+      cy.wait(2000);
       cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
     });
-
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -546,12 +550,18 @@ context("Export training curriculum", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+    });
+
+    it("Move component", () => {
+      cy.get("[data-cy='approvals-1']").trigger("mouseover");
+      cy.wait(2000);
       cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
     });
   });
 
@@ -664,14 +674,19 @@ context("Export training curriculum", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.get(`[data-cy="remove-schema-item"]`).last().arrowClick({ force: true });
+    });
+
+    it("Move component", () => {
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover", { force: true });
+      cy.wait(2000);
       cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
     });
-
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -800,12 +815,18 @@ context("Export training curriculum", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      cy.get(".drag-handle").eq(1)
+    });
+
+    it("Move component", () => {
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover", { force: true });
+      cy.wait(2000);
+      cy.get(".drag-handle").eq(0)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
+      cy.get(".drag-handle").eq(1)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
     });
   });
 
@@ -1000,9 +1021,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -1014,9 +1033,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Open details tab", () => {
@@ -1087,6 +1104,3 @@ context("Export training curriculum", () => {
     });
   });
 });
-
-export { };
-

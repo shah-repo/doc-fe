@@ -1,28 +1,26 @@
-import { Box, Grid, IconButton, TooltipProps, Typography } from "@material-ui/core";
+import { Box, Grid, IconButton, Typography } from "@material-ui/core";
 import React from "react";
-import { FBTooltip, FBWorkspaceBottomBarProps } from "..";
+import { FBWorkspaceBottomBarProps, FBTooltip } from "..";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export.svg";
 import { ReactComponent as ImportIcon } from "../../../assets/images/import.svg";
 import { ReactComponent as PreviewIcon } from "../../../assets/images/preview.svg";
 import Text from "../../components/Text";
-import FBWorkspaceBottomBarStyles, { tooltipStyles } from "./FBWorkspaceBottomBar.styles";
+import FBWorkspaceBottomBarStyles from "./FBWorkspaceBottomBar.styles";
 import { withFBWorkspaceBottomBar } from "./FBWorkspaceBottomBar.wrap";
 
-const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="top" classes={classes} {...props} />;
-};
-
 const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> = ({
+  children,
   handleFormPreview,
   importSchema,
   exportSchema,
   includeTransport,
   previewDisabled,
+  ...boxProps
 }) => {
   const classes = FBWorkspaceBottomBarStyles();
+
   return (
-    <Box display="flex" className="formOptionsBox" justifyContent="center" p={1}>
+    <Box display="flex" className="formOptionsBox" justifyContent="center" p={1} { ...boxProps }>
       <Grid container justify="space-between" alignItems="center" className={classes.formOptionsBox}>
         <Grid item>
           <Typography className={classes.formOptionsText}>
@@ -45,9 +43,9 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
             className={classes.previewIcon}
             onClick={handleFormPreview}
           >
-            <StyledTooltip title="form.builder.form.preview">
+            <FBTooltip title="form.builder.form.preview">
               <PreviewIcon />
-            </StyledTooltip>
+            </FBTooltip>
           </IconButton>
           <IconButton
             size="small"
@@ -56,19 +54,20 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
             className={classes.exportIcon}
             onClick={exportSchema}
           >
-            <StyledTooltip title="form.builder.export.template">
+            <FBTooltip title="form.builder.export.template">
               <ExportIcon />
-            </StyledTooltip>
+            </FBTooltip>
           </IconButton>
           <IconButton
             size="small"
             data-cy="FBWorkspace-importTemplate"
-            disabled={!includeTransport}>
-            <StyledTooltip title="form.builder.import.template">
+            disabled={!includeTransport}
+          >
+            <FBTooltip title="form.builder.import.template">
               <label htmlFor="fb-import-schema">
                 <ImportIcon />
               </label>
-            </StyledTooltip>
+            </FBTooltip>
           </IconButton>
         </Grid>
       </Grid>

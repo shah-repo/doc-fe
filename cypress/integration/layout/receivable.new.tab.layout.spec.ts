@@ -42,6 +42,7 @@ let createdPODocument;
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 const todaysDate = moment().tz("America/Los_Angeles");
+const currentFormattedDate = moment().tz("America/Los_Angeles").format("YYYY.MM.DD");
 const todaysDateFormated = moment().tz("America/Los_Angeles").format("L");
 const LFPO =  {
   documentTypeName: "Lot From Purchase Order Form",
@@ -763,12 +764,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Select 'Receivable test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Receivable test");
-      });
+      cy.recSelectRecordFormFromMultiSelect({ recordType: "Receivable test" });
     });
 
     it("Navigate to detail tab", () => {
@@ -776,7 +772,6 @@ context("Receiving landing page test", () => {
     });
 
     it("Select Purchase order", () => {
-      cy.drSelectDetailsTab();
       cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
         .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
     });
@@ -814,7 +809,6 @@ context("Receiving landing page test", () => {
     });
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
-      cy.drSelectDetailsTab();
       cy.get("[data-cy='porec-receivable-test']").should("exist");
       cy.get("[data-cy='po-requestor-autocomplete']").should("exist");
       cy.get("[data-cy='po-supplier-built-in']").should("exist");
@@ -855,7 +849,7 @@ context("Receiving landing page test", () => {
       cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00004");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", moment().format("YYYY.MM.DD"));
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", currentFormattedDate);
     });
 
     context("Verify Revision", () => {
@@ -1130,7 +1124,7 @@ context("Receiving landing page test", () => {
       cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00004");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", moment().format("YYYY.MM.DD"));
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", currentFormattedDate);
     });
 
     context("Verify Revision", () => {

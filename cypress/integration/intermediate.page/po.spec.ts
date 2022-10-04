@@ -74,6 +74,10 @@ context(
         cy.drSelectDocumentType({ documentType: "Form" });
       });
 
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
       it("Select 'Record Document' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
       });

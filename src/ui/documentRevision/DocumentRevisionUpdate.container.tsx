@@ -2,7 +2,6 @@ import { debounce, get, has, isEmpty, map, pick, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DocumentRevisionSummary } from "../../App";
-import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
 import { authSelectors } from "../../state/ducks/auth";
 import { companyActions, companySelectors } from "../../state/ducks/company";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
@@ -12,6 +11,7 @@ import { compareValuesToSubmit } from "../components/forms/helpers";
 import { FBDAMFields } from "../form.builder";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
 import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
+import FBDataStore from "../form.builder/FBStore/FBDataStore";
 import FBStore from "../form.builder/FBStore/FBStore";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
@@ -22,7 +22,6 @@ import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from 
 import { DocumentRevisionFormValues } from "./forms/types";
 import { checkIsDocumentDAM } from "./helpers/checkDocumentGroup";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
-import FBDataStore from "../form.builder/FBStore/FBDataStore";
 
 interface Props {
   documentId?: string;
@@ -56,12 +55,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   // Disabled because of ENC-7826
   // const saveWithNoResponseAction = useActionCreator(documentRevisionsActions.saveWithNoResponse);
 
-  const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
-
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
-      setLastSavedTimestamp(getFormattedDateString(Date.now(), MomentFormats.Time));
       if (redlineActive) {
         dispatch(companyActions.redlineConfig(false));
       }
@@ -206,7 +202,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         canChangeOwnerShip={canChangeOwnerShip}
         showRevisionTypeChange
         isNewVersion={isNewVersion}
-        {...{ lastSavedTimestamp }}
       />
     </FormContext.Provider>
   );

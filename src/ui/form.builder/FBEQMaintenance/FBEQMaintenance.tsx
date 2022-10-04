@@ -1,5 +1,6 @@
-import { Box } from "@material-ui/core";
+import { Box, CircularProgress } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import { isEmpty } from "lodash";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBEQMaintenanceProps, FBInput, FBQuantityField, FBRadioGroup, FBSection, FBText, FBTextEditor } from "..";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
@@ -13,11 +14,13 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
   name,
   disabled,
   isNewPMDisabled,
+  isNewPMLoading,
   editorConfig = [],
   label,
   isTypePM,
   rules,
   autosave,
+  maintenanceHistory,
   ...props
 }) => (
   <FBInput showErrorMsg={false} {...{ name, rules, autosave }} {...props} type="eqmaintenance">
@@ -28,7 +31,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       <Box display="flex" flexDirection="row-reverse">
         <FBButton
           variant="text"
-          endIcon={<AddCircleIcon />}
+          endIcon={isNewPMLoading ? <CircularProgress size={14} color="inherit" /> : <AddCircleIcon />}
           label={isTypePM ? "form.builder.new.pm" : "form.builder.new.calibration"}
           style={{ margin: 0 }}
           onClick={handleAdd}
@@ -76,7 +79,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       rules={`required_if:${name}.requirements,Yes`}
       {...{ disabled, autosave }}
     />
-    <FBEQMaintenanceHistory {...{ name }}/>
+    {!isEmpty(maintenanceHistory) && <FBEQMaintenanceHistory maintenanceHistory={maintenanceHistory} />}
     {complianceDueDate &&
       <Box mb={3} data-cy="maintenance.status">
         <FBText

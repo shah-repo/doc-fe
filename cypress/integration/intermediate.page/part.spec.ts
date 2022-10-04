@@ -76,6 +76,9 @@ context(
           cy.drSelectDocumentType({ documentType: "Form" });
         });
 
+        it("Select 'Numeric' revision stage", () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
 
         it("Select 'Record Document' output document type from dropdown", () => {
           cy.drSelectOutputDocumentType({ documentType: "Parts" });
@@ -158,16 +161,6 @@ context(
             .should("have.text", "Make vs Buy");
         });
 
-        it("Button should have text Primary Supplier", () => {
-          cy.get("[data-cy='Primary Supplier']")
-            .should("have.text", "Primary Supplier");
-        });
-
-        it("Button should have text Other Suppliers", () => {
-          cy.get("[data-cy='Other Suppliers']")
-            .should("have.text", "Other Suppliers");
-        });
-
         it("Button should have text Unit of measure", () => {
           cy.get("[data-cy='Unit of measure']")
             .should("have.text", "Unit of measure");
@@ -176,16 +169,6 @@ context(
         it("Button should have text Traceability required", () => {
           cy.get("[data-cy='Traceability required']")
             .should("have.text", "Traceability required");
-        });
-
-        it("Button should have text Serialized", () => {
-          cy.get("[data-cy='Serialized']")
-            .should("have.text", "Serialized");
-        });
-
-        it("Button should have text Select serialization", () => {
-          cy.get("[data-cy='Select serialization']")
-            .should("have.text", "Select serialization");
         });
 
         it("Button should have text IQC Required", () => {

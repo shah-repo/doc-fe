@@ -8,23 +8,26 @@ import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/t
 import { AsyncState } from "../../../state/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
+import HeaderLastSaved from "../../components/common/header/HeaderLastSaved";
 import SubmitButton from "../../components/forms/SubmitButton";
 import ControlsContainer from "../form/assessmentForm/AssessmentFormControls.container";
 
 interface Props extends DataProps<ChangeRequest> {
   asyncState: AsyncState;
-  canChangeOwnerShip: boolean;
+  canChangeOwnership: boolean;
   errors: FormikErrors<any>;
   canEdit: boolean;
+  displayLastSaved: boolean;
 }
 
 const SummaryHeader: React.FunctionComponent<Props> = ({
   dataProp,
   dataProp: { state, title, crId, id, formDocument },
-  canChangeOwnerShip,
+  canChangeOwnership,
   asyncState,
   errors,
   canEdit,
+  displayLastSaved,
 }) => {
   const isNewLayout = SM.isNewCRLayout;
   const submitButtonRenderer = canEdit && (
@@ -40,6 +43,11 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
       <HeaderInfo status={state} id={crId} name={title}/>
       <Grid item={true} xs={6} justify="center">
         <Grid container={true} alignItems="center" justify="flex-end">
+          {displayLastSaved && dataProp?.updatedAt && (
+            <HeaderLastSaved
+              timestamp={dataProp.updatedAt}
+            />
+          )}
           {submitButtonRenderer}
           <ControlsContainer changeRequest={dataProp} errors={errors} />
         </Grid>

@@ -264,8 +264,8 @@ context("Intermediate page validation", () => {
         cy.intPageVerifySelectOutputDocumentTypeExist();
       });
 
-      it("Check 'DOWNLOAD EXCEL TEMPLATE button' is displayed (disabled)", () => {
-        cy.intPageVerifyDownloadExcelTemplateExistDisabled();
+      it("Check 'DOWNLOAD EXCEL TEMPLATE button' is displayed (clickable)", () => {
+        cy.intPageVerifyDownloadExcelTemplateExist();
       });
 
       it("Close Preview dialog", () => {
@@ -387,7 +387,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Make sure Field1 is displayed as 'Required' → As the user, enter a value that is different than 'X'", () => {
-      cy.get(".MuiFormHelperText-root.Mui-error").eq(1).contains("The fb-checkbox-group is a required field.");
+      cy.get(".MuiFormHelperText-root.Mui-error").eq(0).contains("The fb-checkbox-group is a required field.");
     });
 
     it("Make sure Field 2 remains Hidden", () => {
@@ -463,7 +463,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Make sure Field1 is displayed as 'Required' → As the user, enter a value that is different than 'X'", () => {
-      cy.get(".MuiFormHelperText-root.Mui-error").eq(1).contains("The fb-checkbox-group is a required field.");
+      cy.get(".MuiFormHelperText-root.Mui-error").eq(0).contains("The fb-checkbox-group is a required field.");
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
         .find("[value='option3']").eq(0).should("exist");
     });

@@ -14,14 +14,48 @@ export const styles = makeStyles(() =>
       "& .MuiAutocomplete-inputRoot": {
         paddingRight: "30px",
       },
+      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
+        transform: "translate(14px, 14px) scale(0.75)",
+        color: Colors.font_gray,
+      },
+    },
+    chipRoot: {
+      "whiteSpace": "normal",
+      "background": Colors.light_blue,
+      "borderRadius": "2px",
+      "height": "30px",
+      "margin": "10px 0",
+      "display": "flex",
+      "justifyContent": "space-between",
+      "& .MuiChip-label": {
+        paddingLeft: "6px",
+      },
+      "&:hover": {
+        "& $deleteIcon": {
+          visibility: "visible",
+        },
+      },
     },
     chip: {
       whiteSpace: "normal",
-      fontSize: "12px",
+      fontSize: "14px",
+      color: Colors.navy,
+      fontFamily: "Sora",
+      fontStyle: "normal",
+      fontWeight: 400,
+      lineHeight: "18px",
+    },
+    deleteIcon: {
+      "visibility": "hidden",
+      "color": Colors.latest_red_varient,
+      "&:hover": {
+        color: Colors.latest_red_varient,
+      },
     },
     option: {
       fontSize: "14px",
       fontFamily: "Sora",
+      overflowWrap: "anywhere",
     },
   })
 );

@@ -1,23 +1,24 @@
 import { Observer } from "mobx-react";
 import React from "react";
 import { SMBox, SMTabPanelProps } from "../../..";
+import useStyles from "./SMTabPanel.styles";
 import { withSMTabPanelWrap } from "./SMTabPanel.wrap";
-import styles from "./styles";
 
 const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   _tabsState,
-  index,
+  tabId,
+  tabIndex,
   children,
   panelProps,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
 
   return (
     <Observer>
       {() => (
         <SMBox
-          hidden={_tabsState?.value !== index}
-          id={`sm-tabpanel-${index}`}
+          hidden={!_tabsState?.isTabActive(tabId)}
+          id={`sm-tabpanel-${tabIndex ?? tabId}`}
           className={classes.content}
           {...panelProps}
         >

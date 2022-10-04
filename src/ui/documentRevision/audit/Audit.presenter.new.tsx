@@ -8,6 +8,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
 import { Approval, ApprovalStatus } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../state/types";
 import AuditFactory from "../../components/AuditFactory";
 import DateTime from "../../components/DateTime";
@@ -195,7 +196,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
             };
           }
           if (last(valueKey) === "unit" || last(valueKey) === "quantity") {
-            const { document, name, displayRevision } = change.relatedEntity || {};
+            const { document, name, displayRevision } = change.relatedEntity as DocumentRevision || {};
             const material = `${document?.docId} - ${name} - rev ${displayRevision}`;
             fbLabel = intl.formatMessage({ id: "form.builder.audit.field.step" },
               {
@@ -226,7 +227,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
               });
           }
           if (last(valueKey) === "unit" || last(valueKey) === "quantity") {
-            const { document, name, displayRevision } = change.relatedEntity || {};
+            const { document, name, displayRevision } = change.relatedEntity as DocumentRevision || {};
             const material = `${document?.docId} - ${name} - rev ${displayRevision}`;
             fbLabel = intl.formatMessage({ id: "form.builder.audit.relations" },
               {
@@ -274,24 +275,32 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         deletedReferences.push(change);
       } else if (change.field === "approvals.status" && change.nextValue === ApprovalStatus.Abandoned) {
         // TODO: (in BE) since BE cannot make correct data for removing approvers.
-        const removedApproverById = approvals.find(({ id }) => id === change.relatedEntity?.id );
-        if (removedApproverById) {
-          change = {
-            ...change,
-            approvalStatus: change.nextValue as string,
-            type: "ARRAY_DELETED",
-            nextValue: {
-              ...removedApproverById.approver,
-            },
-          };
-        }
+        change = {
+          ...change,
+          approvalStatus: change.nextValue as string,
+          type: "ARRAY_DELETED",
+          nextValue: (change.relatedEntity as Approval)?.approver,
+        };
         deletedReferences.push(change);
       } else if (change.field === "schema" && change.type === "ARRAY_NEW") {
         return;
       } else {
         // HACK for ENC-7509
         const regex = new RegExp(`^formInput\\.(?:${change.fbSchemaItem?.name})\\[[a-zA-Z0-z-]+\\]\\.id$`);
-        if (change.fbSchemaItem?.type === "fileupload" && !regex.test(change.field)) { return; }
+        if (change.fbSchemaItem?.type === "fileupload" && !regex.test(change.field)) {
+          try {
+            const previousValue = JSON.parse(change.previousValue as string);
+            if (typeof previousValue !== "object" || !("id" in previousValue)) {
+              return;
+            }
+            change = {
+              ...change,
+              previousValue: previousValue.id,
+            };
+          } catch (e) {
+            return;
+          }
+        }
         if (change.field === "redline") {
           if (change.type === "BOOLEAN_NEW" && change.nextValue === "false") { return; }
           change = {
@@ -404,11 +413,17 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     const parentGroupKey = auditGroup[0].groupKey;
     const parentIndex = auditGroup[0].index;
 
+    const isRemovingApproverAction = (
+      auditGroup[0].field === "approvals.status" && auditGroup[0].nextValue === ApprovalStatus.Abandoned
+    );
     return (
       <Box mb={1} key={`${auditGroup[0].groupId}`}>
         <Typography variant="subtitle1" className={classes.auditKey}>
           <Text dataCy={`change-key-${parentGroupKey}-${parentIndex}`}
-            message={`documentRevision.audit.${field}.${type}`} />
+            message={
+              isRemovingApproverAction
+                ? `documentRevision.audit.${field}.ARRAY_DELETED`
+                : `documentRevision.audit.${field}.${type}`} />
         </Typography>
         {auditGroup.map((change, index) => (
           <div

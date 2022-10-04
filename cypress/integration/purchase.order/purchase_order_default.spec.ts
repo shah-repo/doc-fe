@@ -198,8 +198,7 @@ context("PO test with default enlil form", () => {
 
     context("Create purchase order", () => {
       it("Click on 'Purchase Order' on sidebar", () => {
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.wait(1000);
         cy.navigToPurchaseOrder();
       });
 
@@ -235,7 +234,7 @@ context("PO test with default enlil form", () => {
         });
 
         it(`Select '${USERS[1].name}' for Requestor`, () => {
-          cy.get("[data-cy^=\"requestor-\"]").arrowClick();
+          cy.get("[data-cy^=\"po-requestor-\"]").arrowClick();
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
 
@@ -410,6 +409,10 @@ context("PO test with default enlil form", () => {
           cy.poCheckTax({ number: "1.850000" });
           cy.poCheckTotalAmount({ number: "$51.85" });
         });
+
+        it("Save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
       });
 
       context("Finish PO", () => {
@@ -426,13 +429,6 @@ context("PO test with default enlil form", () => {
 
         it("Enter 'contact.us@gmail.com' inside Contact Email", () => {
           cy.get("[name^=contact-email]").arrowType("contact.us@gmail.com");
-        });
-
-        it("Add an Approval", () => {
-          cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-          });
         });
 
         it("Save PO document", () => {

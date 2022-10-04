@@ -379,12 +379,18 @@ context("Mpi Template", () => {
         cy.fbAddNewFieldButton();
         cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
         cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      });
+
+      it("Move component", () => {
+        cy.get("[data-cy='fb-textfield-1']").eq(0).trigger("mouseover");
+        cy.wait(2000);
         cy.get(".drag-handle").eq(1)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(".drag-handle").eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
+        cy.unClick();
       });
 
       it("Select Procedure tab", () => {
@@ -622,12 +628,18 @@ context("Mpi Template", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+    });
+
+    it("Move component", () => {
+      cy.get("[id='fb-approvals-section-approvals-built-in']").trigger("mouseover");
+      cy.wait(2000);
       cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
     });
   });
 
@@ -732,12 +744,18 @@ context("Mpi Template", () => {
         cy.fbAddNewFieldButton();
         cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
         cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      });
+
+      it("Move component", () => {
+        cy.get("[data-cy='fb-textfield-1']").eq(0).trigger("mouseover");
+        cy.wait(2000);
         cy.get(".drag-handle").eq(1)
           .realMouseDown({ position: "center", button: "left" });
         cy.wait(3000);
         cy.get(".drag-handle").eq(0)
           .realMouseMove(0, 0, { position: "center" })
           .realMouseUp();
+        cy.unClick();
       });
 
       it("Select Procedure tab", () => {
@@ -974,15 +992,20 @@ context("Mpi Template", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+    });
+
+    it("Move component", () => {
+      cy.get("[id='fb-approvals-section-approvals-built-in']").trigger("mouseover");
+      cy.wait(2000);
       cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(0)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
+      cy.unClick();
     });
   });
-
 
   context("Create Lot with form", () => {
     context("Start document creation flow", () => {
@@ -1085,12 +1108,18 @@ context("Mpi Template", () => {
           cy.fbAddNewFieldButton();
           cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
           cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-          cy.get(".drag-handle").eq(1)
+        });
+
+        it("Move component", () => {
+          cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+          cy.wait(2000);
+          cy.get(".drag-handle").eq(6)
             .realMouseDown({ position: "center", button: "left" });
           cy.wait(3000);
-          cy.get(".drag-handle").eq(0)
+          cy.get(".drag-handle").eq(5)
             .realMouseMove(0, 0, { position: "center" })
             .realMouseUp();
+          cy.unClick();
         });
 
         it("Verify Initial Quantity disabled", () => {
@@ -1273,12 +1302,18 @@ context("Mpi Template", () => {
           cy.fbAddNewFieldButton();
           cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
           cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-          cy.get(".drag-handle").eq(1)
+        });
+
+        it("Move component", () => {
+          cy.get("[data-cy='fb-textfield-1']").eq(0).trigger("mouseover");
+          cy.wait(2000);
+          cy.get(".drag-handle").eq(6)
             .realMouseDown({ position: "center", button: "left" });
           cy.wait(3000);
-          cy.get(".drag-handle").eq(0)
+          cy.get(".drag-handle").eq(5)
             .realMouseMove(0, 0, { position: "center" })
             .realMouseUp();
+          cy.unClick();
         });
 
         it("Verify Part to be Manufactured disabled", () => {
@@ -1499,18 +1534,21 @@ context("Mpi Template", () => {
           cy.fbAddNewFieldButton();
           cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
           cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-          cy.get(".drag-handle").eq(1)
+        });
+
+        it("Move component", () => {
+          cy.get("[data-cy='fb-textfield-1']").eq(0).trigger("mouseover");
+          cy.wait(2000);
+          cy.get(".drag-handle").eq(5)
             .realMouseDown({ position: "center", button: "left" });
           cy.wait(3000);
-          cy.get(".drag-handle").eq(0)
+          cy.get(".drag-handle").eq(4)
             .realMouseMove(0, 0, { position: "center" })
             .realMouseUp();
+          cy.unClick();
         });
       });
 
     });
   });
 });
-
-export { };
-

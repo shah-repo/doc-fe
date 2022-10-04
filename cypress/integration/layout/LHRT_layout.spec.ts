@@ -730,7 +730,7 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Fill LHRt document description", () => {
-      cy.drEnterDocumentDescription({ description: "LHRt document description" });
+      cy.drEnterDocumentDescription({ description: "Lot histroy record template document description" });
     });
 
     it("Select 'LHRt' document type", () => {
@@ -741,7 +741,7 @@ context("Create new LHRT Layout Verification", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Select 'Lot History Record Test' output document type", () => {
+    it("Select 'Lot History Record' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
     });
 
@@ -846,6 +846,7 @@ context("Create new LHRT Layout Verification", () => {
       cy.get("[data-cy='form.builder.add.step']").should("exist");
     });
 
+
     it("Add LHR step", () => {
       cy.get("[data-cy='form.builder.add.step']").arrowClick();
       cy.progressBarShouldNotExist();
@@ -870,12 +871,51 @@ context("Create new LHRT Layout Verification", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Verify FB field Add textfield", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "Textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("remove text field", () => {
+      cy.get("[data-cy='remove-schema-item']").last().arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithoutApiCall().wait(5000);
+    });
+  });
+
+  context("Verify material and Equipment tab", () => {
+    it("Navigate to material and equipment tab", () => {
+      cy.drSelectMaterialsAndEquipmentTab();
+    });
+
+    it("Click on expand all", () => {
+      cy.get("[data-cy='common.expand.all']").arrowClick();
+    });
+
+    it("Verify material", () => {
+      cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
+        .should("have.text", "MT-00004 - Material one | sets : 2");
+      cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(1)
+        .should("have.text", "MT-00006 - Material two | boxes : 4");
+    });
+
+    it("Verify equipment", () => {
+      cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(0).should("have.text", "ET-00003 - Equipment one");
+      cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(1).should("have.text", "ET-00007 - Equipment two");
     });
   });
 
   context("Verify right side pannel", () => {
+    it("Verify training tab should not visible", () => {
+      cy.get("[data-cy='tabId.training']").should("not.exist");
+    });
+
     it("Verify that right side panel opens by default to the References tab", () => {
       cy.get("[data-cy='References']").should("exist");
       cy.get("[data-cy='generalInfo']").should("be.visible");
@@ -893,7 +933,6 @@ context("Create new LHRT Layout Verification", () => {
       cy.get("[data-cy^='fb-approvals-fb-approvals']").should("be.visible");
     });
   });
-
 
   context("Release LHRT", () => {
     it("Approve and release MPI document", () => {

@@ -91,6 +91,7 @@ class FBInlineApprovalState {
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
+    callback?: () => void
   ) => {
     if (!id) { return; }
     this.transitionApi.set({
@@ -98,6 +99,13 @@ class FBInlineApprovalState {
       url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
       method: "post",
+    }, (data, error) => {
+      if (error) {
+        return this.transitionApi.onError(error);
+      }
+      this.transitionApi.data = data;
+      this.transitionApi.onSuccess();
+      callback?.();
     });
   };
 
@@ -105,11 +113,19 @@ class FBInlineApprovalState {
     transition: FBInlineApprovalTransition,
     id: string,
     body: FBRequestApprovalTransitionBody,
+    callback?: () => void
   ) => this.requestApprovalApi.set({
     body,
     url: FBEndpoint.ApprovalsTransition,
     urlValues: { id, transition },
     method: "post",
+  }, (data, error) => {
+    if (error) {
+      return this.requestApprovalApi.onError(error);
+    }
+    this.requestApprovalApi.data = data;
+    this.requestApprovalApi.onSuccess();
+    callback?.();
   });
 
   public getDocument = (id?: string) => {

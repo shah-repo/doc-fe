@@ -8,7 +8,7 @@ const FBTimerField: React.FunctionComponent<FBTimerProps> = ({
 }) => {
   const classes = FBButtonStyles();
   return (
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="flex-end">
       <Box flexGrow={1}>
         <FBTextField {...props} />
       </Box>
@@ -16,7 +16,7 @@ const FBTimerField: React.FunctionComponent<FBTimerProps> = ({
         <FBButton
           label="form.builder.start.timer"
           dataCy="form.builder.start.timer"
-          size="medium"
+          size="large"
           variant="text"
           fullWidth={true}
           className={`${classes.button} ${classes.margin}`}

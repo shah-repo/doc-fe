@@ -1,18 +1,32 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import { ButtonProps } from "@material-ui/core/Button";
 import Colors from "../../layout/theme/utils/colors";
+
+type Props =
+  & Pick<ButtonProps, "size">
+  & {
+    newVariant?: boolean;
+    isHover?: boolean;
+  };
+
+const SIZES = {
+  large: 40,
+  medium: 36,
+  small: 32,
+};
 
 export default makeStyles(() =>
   createStyles({
-    root: (params) => ({
+    root: ({ newVariant, isHover }: Props) => ({
       "margin": "0px",
       "border": `1px dashed ${Colors.navy}`,
       "borderRadius": "100px",
-      "background": params.isHover ? (params.newVariant ? Colors.dodger_blue : Colors.navy) : Colors.white,
-      "color": params.isHover ? Colors.white : (params.newVariant ? Colors.dodger_blue : Colors.navy),
+      "background": isHover ? (newVariant ? Colors.dodger_blue : Colors.navy) : Colors.white,
+      "color": isHover ? Colors.white : (newVariant ? Colors.dodger_blue : Colors.navy),
       "&:hover": {
-        background: params.newVariant ? Colors.white : Colors.navy,
-        color: params.newVariant ? Colors.dodger_blue : Colors.white,
-        boxShadow: params.newVariant ? "none" : "",
+        background: newVariant ? Colors.white : Colors.navy,
+        color: newVariant ? Colors.dodger_blue : Colors.white,
+        boxShadow: newVariant ? "none" : "",
       },
     }),
     label: {
@@ -23,8 +37,8 @@ export default makeStyles(() =>
       "text-transform": "capitalize",
       "white-space": "nowrap",
     },
-    fbBtn: {
-      "height": "36px",
+    fbBtn: ({ size = "medium" }: Props) => ({
+      "height": SIZES[size],
       "borderRadius": "100px",
       "background": Colors.navy,
       "color": Colors.white,
@@ -38,7 +52,7 @@ export default makeStyles(() =>
       "&.Mui-disabled": {
         border: "none",
         backgroundColor: Colors.gains_boro,
-        color: Colors.spanish_gray,
+        color: Colors.white,
       },
       "&.MuiButton-outlinedPrimary": {
         "backgroundColor": Colors.white,
@@ -48,6 +62,6 @@ export default makeStyles(() =>
           background: Colors.background_white,
         },
       },
-    },
+    }),
   })
 );

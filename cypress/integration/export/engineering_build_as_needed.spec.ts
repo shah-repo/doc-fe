@@ -780,20 +780,13 @@ context("Procedure and parts flow test", () => {
     });
 
     context("Verify the imported field", () => {
-      it("Verify field materials", () => {
-        cy.get("[data-cy=\"form.builder.materials\"]").should("have.text", "Materials");
-      });
-
-      it("Verify field  Equipment", () => {
-        cy.get("[data-cy=\"form.builder.equipment\"]").eq(0).should("have.text", "Equipment");
-      });
 
       it("Verify field EB Procedure", () => {
-        cy.get("[data-cy=\"form.builder.procedure\"]").should("have.text", "EB Procedure");
+        cy.get("[data-cy='form.builder.procedure']").should("have.text", "EB Procedure");
       });
 
-      it("Verify field EB Procedure", () => {
-        cy.get("[data-cy=\"form.builder.step.number\"]").should("have.text", "Step #1");
+      it("Verify Step", () => {
+        cy.get("[data-cy='form.builder.step.number']").should("have.text", "Step #1");
       });
     });
 
@@ -838,7 +831,7 @@ context("Procedure and parts flow test", () => {
 
       it("Verify that 'As Needed' is added to unit in EB Material Section", () => {
         cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-          .eq(1).should("have.text", "MT-00001 - Materials document | ? | Qty: 2 as needed");
+          .should("have.text", "MT-00001 - Materials document | ? | Qty: 2 as needed");
       });
 
       it("Add equipment document ", () => {
@@ -883,7 +876,7 @@ context("Procedure and parts flow test", () => {
 
         it("Verify that 'As Needed' is added to unit in EB Material Section", () => {
           cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-            .eq(2).should("have.text", "MT-00001 - Materials document | ? | Qty: 5 as needed");
+            .eq(1).should("have.text", "MT-00001 - Materials document | ? | Qty: 5 as needed");
         });
       });
 
@@ -904,7 +897,7 @@ context("Procedure and parts flow test", () => {
 
         it("Verify that 'As Needed' is added to unit in EB Material Section", () => {
           cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-            .eq(3).should("have.text", "MT-00001 - Materials document | ? | Qty: 5 as needed");
+            .eq(2).should("have.text", "MT-00001 - Materials document | ? | Qty: 5 as needed");
         });
 
         it("Save the document", () => {
@@ -942,7 +935,7 @@ context("Procedure and parts flow test", () => {
 
         it("Verify that 'As Needed' is added to unit in EB Material Section", () => {
           cy.get("[data-cy=\"form.builder.procedure.materials.title\"]")
-            .eq(5).should("have.text", "PRT-00002 - Part for EB document | ? | Qty: 5 as needed");
+            .eq(3).should("have.text", "PRT-00002 - Part for EB document | ? | Qty: 5 as needed");
         });
 
         it("Add Approvers", () => {

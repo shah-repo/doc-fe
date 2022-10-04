@@ -74,7 +74,7 @@ export const purchaseOrderDefaultSchema: any = [
     ],
   },
   {
-    name: "requestor-k740hxlb",
+    name: "po-requestor-autocomplete",
     type: "autocomplete",
     index: 3,
     label: "Requestor",

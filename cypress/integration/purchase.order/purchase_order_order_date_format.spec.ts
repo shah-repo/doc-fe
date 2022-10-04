@@ -354,7 +354,7 @@ context("Search PO item with correct order date format", () => {
           });
 
           it(`Select '${USERS[1].name}' for Requestor`, () => {
-            cy.get("[data-cy^=requestor]").arrowClick();
+            cy.get("[data-cy^=po-requestor]").arrowClick();
             cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
           });
 
@@ -393,7 +393,7 @@ context("Search PO item with correct order date format", () => {
         });
 
         it(`Select '${USERS[1].name}' for Requestor`, () => {
-          cy.get("[data-cy^=requestor]").arrowClick();
+          cy.get("[data-cy^=po-requestor]").arrowClick();
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
 
@@ -456,7 +456,7 @@ context("Search PO item with correct order date format", () => {
         });
 
         it(`Select '${USERS[1].name}' for Requestor`, () => {
-          cy.get("[data-cy^=requestor]").arrowClick();
+          cy.get("[data-cy^=po-requestor]").arrowClick();
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
 
@@ -521,7 +521,7 @@ context("Search PO item with correct order date format", () => {
         });
 
         it(`Select '${USERS[1].name}' for Requestor`, () => {
-          cy.get("[data-cy^=requestor]").arrowClick();
+          cy.get("[data-cy^=po-requestor]").arrowClick();
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
 

@@ -268,10 +268,12 @@ context("Intermediate page validation", () => {
       });
 
       it("Check 'Documents to Train on' is displayed", () => {
+        cy.get(`.MuiDialogContent-root [value^="Documents"]`).check();
         cy.intPageVerifyDocumentsToBeTrainedOnExist();
       });
 
       it("Check 'Refresh/repeat training periodically?' is displayed", () => {
+        cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
         cy.intPageVerifyPeriodicTraningExist();
       });
 

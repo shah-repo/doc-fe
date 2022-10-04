@@ -34,6 +34,7 @@ declare global {
       intPageVerifyApproversNotExist(): Chainable<Subject>;
       intPageVerifyApprovalsExist(): Chainable<Subject>;
       intPageVerifyApprovalsNotExist(): Chainable<Subject>;
+      intPageVerifyAddDocumentExist(): Chainable<Subject>;
       intPageVerifyAddDocumentExistDisabled(): Chainable<Subject>;
       intPageVerifyAddDocumentNotExist(): Chainable<Subject>;
       intPageVerifyAddFieldExist(): Chainable<Subject>;
@@ -328,6 +329,10 @@ Cypress.Commands.add("intPageVerifyApprovalsNotExist", () => {
   cy.get(`[data-cy="form.builder.approvals"]`).should("not.exist");
 });
 
+Cypress.Commands.add("intPageVerifyAddDocumentExist", () => {
+  cy.get(`[data-cy="fb.add.document"]`).should("exist").should("not.be.disabled");
+});
+
 Cypress.Commands.add("intPageVerifyAddDocumentExistDisabled", () => {
   cy.get(`[data-cy="fb.add.document"]`).should("exist").should("be.disabled");
 });
@@ -345,7 +350,7 @@ Cypress.Commands.add("intPageVerifyAddFieldNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyFormOptionsExist", () => {
-  cy.get(`button[data-cy="FBWorkspace-clickView"]`).should("exist")
+  cy.get(`button[data-cy="FBWorkspace-clickView"]`).should("exist").should("be.enabled")
     .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
   cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).should("exist")
     .parent().parent().should("have.class", "MuiGrid-align-items-xs-center");
@@ -976,7 +981,7 @@ Cypress.Commands.add("intPageVerifySelectOutputDocumentTypeNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyDownloadExcelTemplateExist", () => {
-  cy.get(`button [data-cy="Download Excel Template"]`).should("exist");
+  cy.get(`[data-cy="Download Excel Template"]`).parent().parent("button").should("exist").should("not.be.disabled");
 });
 
 Cypress.Commands.add("intPageVerifyDownloadExcelTemplateExistDisabled", () => {

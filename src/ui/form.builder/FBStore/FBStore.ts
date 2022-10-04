@@ -1,5 +1,6 @@
 import { action, computed, observable, set } from "mobx";
 import { FBApprovalMatrixFieldData, FBAuditData } from "..";
+import { Approval } from "../../../state/ducks/common/types";
 import { SidebarType } from "../../documentRevision/Sidebar/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
@@ -14,6 +15,7 @@ class FBStore {
     approvalRoles: [],
     approvalMatrix: [],
   };
+  public selectedApprover: Approval[] =[] ;
 
   @computed public get isHistoryTabSelected() {
     return this.selectedTab === "history";

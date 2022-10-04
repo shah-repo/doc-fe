@@ -249,8 +249,8 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyApprovalRequestDetailsExist();
       });
 
-      it("Check 'Add a document' is displayed", () => {
-        cy.intPageVerifyAddDocumentExistDisabled();
+      it("Check 'Add a document' is displayed and button is clickable", () => {
+        cy.intPageVerifyAddDocumentExist();
       });
 
       it("Close Preview dialog", () => {
@@ -276,7 +276,7 @@ context("Intermediate page validation", () => {
       cy.intPageVerifyApprovalRequestDetailsExist();
     });
 
-    it("Check 'Add a document' is displayed", () => {
+    it("Check 'Add a document' is displayed and button is disabled", () => {
       cy.intPageVerifyAddDocumentExistDisabled();
     });
   });

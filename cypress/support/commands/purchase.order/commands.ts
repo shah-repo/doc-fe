@@ -138,8 +138,8 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
 });
 
 Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
-  cy.get("[name=\"partNumber\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick();
+  cy.get("[name=\"partNumber\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poSelectPartNumberNew", (params: {partNo: string }) => {
@@ -232,8 +232,8 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
-  cy.get("[id$=\"po-status-built-in\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.status).arrowClick();
+  cy.get("[id$=\"po-status-built-in\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.status).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
@@ -249,7 +249,7 @@ Cypress.Commands.add("poCheckTaxRate", (params: {taxRate: string}) => {
 });
 
 Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
-  cy.get(`[name="po-items-built-in.tax"]`).contains(params.number);
+  cy.get(`[name="po-items-built-in.tax"]`).should("have.value", params.number);
 });
 
 Cypress.Commands.add("poSelectOption", (params: {optionName: string}) => {
