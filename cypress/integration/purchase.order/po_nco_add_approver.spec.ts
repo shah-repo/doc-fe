@@ -756,12 +756,12 @@ context("Add Requestor as an approver of the PO", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
         cy.drSelectHistoryTab();
       });
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Added")
+      cy.get(`[data-cy='noPaddingMargin']`).eq(1).should("contain", "Requestor Added")
         .and("contain", USERS[2].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0)
+      cy.get(`[data-cy='noPaddingMargin']`).eq(0)
         .should("contain", "Approver Added").should("contain", USERS[2].name);
     });
   });
@@ -800,7 +800,7 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify that history tab is capturing requestor Deleted and approver Removed", () => {
     it("Check history entry for 'Requestor Deleted'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0).should("contain", "Requestor  Deleted")
+      cy.get(`[data-cy='noPaddingMargin']`).eq(0).should("contain", "Requestor  Deleted")
         .and("contain", USERS[2].name);
     });
   });
@@ -824,12 +824,12 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify that history tab is capturing requestor Updated and approver Added", () => {
     it("Check history entry for 'Requestor Updated'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Updated")
+      cy.get(`[data-cy='noPaddingMargin']`).eq(1).should("contain", "Requestor Updated")
         .and("contain", USERS[1].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0).should("contain", "Approver Added")
+      cy.get(`[data-cy='noPaddingMargin']`).eq(0).should("contain", "Approver Added")
         .should("contain", USERS[1].name);
     });
   });
@@ -1102,12 +1102,12 @@ context("Add Requestor as an approver of the PO", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
         cy.drSelectHistoryTab();
       });
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Updated")
+      cy.get(`[data-cy='noPaddingMargin']`).eq(1).should("contain", "Requestor Updated")
         .and("contain", USERS[2].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0)
+      cy.get(`[data-cy='noPaddingMargin']`).eq(0)
         .should("contain", "Approver Added").should("contain", USERS[2].name);
     });
   });
