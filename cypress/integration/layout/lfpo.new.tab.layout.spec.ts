@@ -7,6 +7,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { lotIdRef } from "../../utils/constants/dateHandler";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
@@ -748,6 +749,80 @@ context("LFPO new layout verification", () => {
     });
   });
 
+  context("Migration FORM document creation flow", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+
+    context("Verify Predefined fields", () => {
+      it("Verify Title, Description, Document Type, References, Document ID, output document", () => {
+        cy.verifyPredefiendFields();
+        cy.get("[data-cy='field-retrain']").should("exist");
+      });
+    });
+
+    context("Fill in document attributes", () => {
+      it("Enter title 'LFPO Document Title'", () => {
+        cy.drEnterDocumentTitle({ name: "Migration form" });
+      });
+
+      it("Enter description 'LFPO Document form Document Revision description'", () => {
+        cy.drEnterDocumentDescription({ description: "LFPO Document form Document Revision description" });
+      });
+
+      it("Select 'Form' document type 'Lot From Purchase Order Form' dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Lot From Purchase Order Form" });
+      });
+
+      it("Select 'Lots' output document type from dropdown", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Lots" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Upload attachement picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Creat form", () => {
+        cy.wrapWithWaitOnApiCalls([], () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+      });
+
+      it("Add textfield", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add Checkbox group", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+        cy.fbGroupOptions("1", "2", "3");
+        cy.fbOpenValidation();
+        cy.fbFieldRequired();
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Approve and released", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+  });
+
   context("FORM document creation flow", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
@@ -822,7 +897,7 @@ context("LFPO new layout verification", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.DRAFT,
         title: "Document List",
-        docId: "LFPO00002",
+        docId: "LFPO00007",
         revision: "Rev 1",
       });
     });
@@ -859,6 +934,14 @@ context("LFPO new layout verification", () => {
         cy.get("[name='100-inspection-override']").should("exist");
         cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
         cy.get("[data-cy='lot_part']").should("exist");
+        cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
+      });
+
+      it("Verify Quantity, Part Number, Usable Quantity, comment", () => {
+        cy.get("[name='lot_quantity']").should("exist");
+        cy.get("[name='lot_usable_quantity']").should("exist");
+        cy.get("[data-cy='lot_part']").should("exist");
+        cy.get("#RenderHTML").should("exist");
       });
 
       it("Verify Form option exist", () => {
@@ -872,6 +955,15 @@ context("LFPO new layout verification", () => {
 
       it("Submit for approval", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+
+      it("Verify form is created and released", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.RELEASED,
+          title: "Document List",
+          docId: "LFPO00007",
+          revision: "Rev 1",
+        });
       });
 
       it("Click on create new", () => {
@@ -994,6 +1086,13 @@ context("LFPO new layout verification", () => {
 
     it("Click on create lot", () => {
       cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
+    });
+
+    it("Verify pop up window will open", () => {
+      cy.get("[data-cy='form.builder.po.create.a.lot']").contains("Create Lot").should("be.visible");
+    });
+
+    it("fill the fields", () => {
       cy.get("[name^='received']").arrowType("100");
       cy.get("[data-cy='lotType']").arrowClick({ force: true })
         .autocompleteSelect("Lots");
@@ -1002,9 +1101,23 @@ context("LFPO new layout verification", () => {
         cy.get("[data-cy='lotForm']").arrowClick({ force: true })
           .autocompleteSelect("LFPO Document Title");
       });
+    });
 
+    it("Enter Expiration date", () => {
+      cy.get(`.MuiDialogContent-root input[name="expirationDate"]`)
+        .parent().find("button").arrowClick({ force: true });
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
+    });
+
+    it("Create lot", () => {
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
     });
+
+    it("Verify Lot should be created and displayed in the table for that part", () => {
+      const lotId = lotIdRef + "03";
+      cy.get("[data-cy='lots'] span").contains(lotId).should("exist");
+    });
+
   });
 
   context("Verify created lot", () => {
@@ -1014,7 +1127,7 @@ context("LFPO new layout verification", () => {
 
     it("Click to open that LOT", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="5"] input`).arrowType("LFPO00002");
+      cy.get(`[aria-colindex="5"] input`).arrowType("LFPO00007");
 
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick();
@@ -1100,7 +1213,7 @@ context("LFPO new layout verification", () => {
     it("Verify Referenced By,and Release date Item exist or not", () => {
       cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00002");
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00007");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", todaysDate.format("YYYY.MM.DD"));
     });
 
@@ -1141,7 +1254,93 @@ context("LFPO new layout verification", () => {
         cy.get("[data-cy='bookmark-icon']").arrowClick();
         cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       });
+
+      it("Click on book mark 'Approval' Approval block should be navigated", () => {
+        cy.get("[data-cy='Bookmarks-detail']").contains("Approvals").arrowClick();
+        cy.get("[data-cy^='approvals']").should("be.visible");
+      });
     });
+  });
+
+  context("Verify form migration", () => {
+
+    it("Verify migrate form button is visible", () => {
+      cy.get("[data-cy=references-icon]").arrowClick();
+      cy.get("[data-cy='common.form.migration']").should("be.visible");
+    });
+
+    it("Click on migrate form button", () => {
+      cy.get("[data-cy='common.form.migration']").arrowClick();
+    });
+
+    it("Select form to be migrated", () => {
+      cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+      cy.get("[id^='react-select']").contains("LFPO00002 - Migration form").arrowClick();
+    });
+
+    it("Mapped receivable field", () => {
+      cy.get("[data-cy^='field-lot_quantity']" ).arrowClick();
+      cy.get("[id^='react-select']").eq(1).autocompleteSelect("Initial Quantity");
+    });
+
+    it("Mapped receivable field", () => {
+      cy.get("[data-cy^='field-textfield-for-inline']" ).arrowClick();
+      cy.get("[id^='react-select']").eq(2).autocompleteSelect("Textfield for inline");
+    });
+
+    it("Mapped Usable Quantity field", () => {
+      cy.get("[data-cy^='field-lot_usable_quantity']" ).arrowClick();
+      cy.get("[id^='react-select']").eq(3).autocompleteSelect("Usable Quantity");
+    });
+
+    it("Mapped Expiration Date field", () => {
+      cy.get("[data-cy^='field-lot_expiry_date']" ).arrowClick();
+      cy.get("[id^='react-select']").eq(4).autocompleteSelect("Expiration Date");
+    });
+
+    it("Mapped Part Selection field", () => {
+      cy.get("[data-cy^='field-lot_part']" ).arrowClick();
+      cy.get("[id^='react-select']").eq(5).autocompleteSelect("Part Selection");
+    });
+
+    it("Mapped 100% Inspection Override field", () => {
+      cy.get("[data-cy^='field-100-inspection-override']" ).arrowClick();
+      cy.get("[id^='react-select']").eq(6).autocompleteSelect("100% Inspection Override");
+    });
+
+    it("Mapped Approval field", () => {
+      cy.get("[data-cy^='field-fb-approvals']" ).arrowClick();
+      cy.get("[id^='react-select']").eq(7).autocompleteSelect("form.builder.approvals");
+    });
+
+
+    it("Mapped Checkbox field", () => {
+      cy.get("[data-cy^='field-checkbox']" ).arrowClick();
+      cy.get("[id^='react-select']").eq(8).autocompleteSelect("Checkbox");
+    });
+
+    it("Click on confirm change", () => {
+      cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+    });
+
+    it("Verify data is migrated to new form field ", () => {
+      cy.get("[name='lot_quantity']").should("have.value", "100");
+      cy.get("[name^='textfield-for-inline']").should("be.visible");
+      cy.get("[name='lot_usable_quantity']").should("be.visible");
+      cy.get("[data-cy='lot_part']").should("be.visible");
+      cy.get("[data-cy='lot_part']").should("have.value", "PRT-00005 - rev 1 - Part document");
+    });
+
+    it("Verify Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {
+      cy.get("[name='lot_expiry_date']").should("exist");
+      cy.get("[name='100-inspection-override']").should("exist");
+      cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
+    });
+
+    it("Verify form Id", () => {
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00002");
+    });
+
   });
 
   context("Verify Scroll", () => {
@@ -1187,8 +1386,8 @@ context("LFPO new layout verification", () => {
 
     it("Click to open that LOT", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="5"] input`).arrowType("LFPO00002").wait(500);
-      cy.dlSelectFirstDocument();
+      cy.get(`[aria-colindex="5"] input`).arrowType("LFPO00007").wait(500);
+      cy.get(".k-grid").contains("Accepted").arrowClick();
     });
 
     it("Verify The top left of the page displays: Icon and document type, Rev stage, status (ACCEPTED)", () => {
@@ -1312,7 +1511,7 @@ context("LFPO new layout verification", () => {
     it("Verify Referenced By ,and Release date Item exist or not", () => {
       cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00002");
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00007");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", todaysDate.format("YYYY.MM.DD"));
     });
 

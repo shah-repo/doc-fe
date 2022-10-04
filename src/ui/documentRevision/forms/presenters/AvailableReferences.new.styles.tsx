@@ -47,7 +47,8 @@ export const styles = makeStyles(() =>
     },
     deleteIcon: {
       "visibility": "hidden",
-      "color": Colors.latest_red_varient,
+      "height": "14px",
+      "width": "13px",
       "&:hover": {
         color: Colors.latest_red_varient,
       },
