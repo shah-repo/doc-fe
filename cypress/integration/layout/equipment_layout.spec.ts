@@ -431,12 +431,16 @@ context("Layout Verification of EQ", () => {
       cy.isTabActive({ name: "overview", index: 0 });
     });
 
+    it("Verify EQ status", () => {
+      cy.get("[data-cy='EQ Status']").should("exist");
+    });
+
     it("Verify overview tab predefiend fields up to attachment", () => {
       cy.verifyPredefiendFields();
+      cy.get("#AttachmentFieldPresenter-field").should("exist");
     });
 
     it("Save the document", () => {
-      cy.pause();
       cy.drClickCreateDocumentWithoutApiCall();
     });
   });
