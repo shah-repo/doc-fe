@@ -669,13 +669,6 @@ context("Layout Verification of EQ", () => {
       cy.get("[name^='eq-textfield']").should("exist");
     });
 
-<<<<<<< HEAD
-    it("Verify Add Cal or PM is displayed", () => {
-      cy.get("[data-cy='form.builder.add.field']").should("exist");
-    });
-
-=======
->>>>>>> demo
     it("Verify that Form Options should  appear for this tab ", () => {
       cy.get(".formOptionsBox").should("exist");
     });
@@ -759,33 +752,6 @@ context("Layout Verification of EQ", () => {
         cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
       });
 
-<<<<<<< HEAD
-      it("Add EQUIPMENT SECTIONS FOR PM", () => {
-        fbclickOnAddCalPM();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
-        cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
-        cy.get("input[value='preventativeMaintenance']").arrowClick();
-        cy.fbAddField();
-      });
-
-      it("Add EQUIPMENT SECTIONS FOR CAL", () => {
-        fbclickOnAddCalPM();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
-        cy.fbEnterNameValue({ name: "label", value: "Calibration" });
-        cy.get("input[value='calibration']").arrowClick();
-        cy.fbAddField();
-      });
-
-      it("Save the document", () => {
-        cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
-        cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-=======
->>>>>>> demo
       it("Turn off autosave", () => {
         cy.cmpTurnOnAutosave();
       });
@@ -817,7 +783,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Verify Add Cal or PM is displayed", () => {
-        cy.get("[data-cy='form.builder.add.field']").should("exist");
+        cy.get("[data-cy='form.builder.addEquiSpec']").should("exist");
       });
 
       it("Verify that Form Options should  appear for this tab ", () => {
@@ -1025,7 +991,8 @@ context("Layout Verification of EQ", () => {
       it("Switch to specification tab", () => {
         cy.drSelectSpecificationTab();
       });
-      it("Click 'NEW CAL' on calibration section", () => {
+
+      it("Click on New CAL", () => {
         cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
         cy.get("[data-cy='form.builder.new.calibration']").arrowClick();
         cy.wait("@response").then((res) => {
@@ -1120,33 +1087,19 @@ context("Layout Verification of EQ", () => {
         });
       });
 
-<<<<<<< HEAD
-      it("Switch to specification tab", () => {
-        cy.drSelectSpecificationTab();
-        cy.wait(1000);
-      });
-
-      it("Click 'NEW PM' on Preventative Maintenance section", () => {
-=======
       it("Navigate to specification tab", () => {
         cy.drSelectSpecificationTab();
       });
 
       it("Click on 'New PM' on Preventative Maintenance section", () => {
->>>>>>> demo
         cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
         cy.get("[data-cy='form.builder.new.pm']").arrowClick();
         cy.wait("@response").then((res) => {
           if (res.response) {
             const response = res.response.body;
-<<<<<<< HEAD
-            const calDocId = response.documentId;
-            const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-=======
             calDocId = response.documentId;
             calId = response.id;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
->>>>>>> demo
             cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
               CyRoutes.GetAvailableApprovers], () => {
               cy.visit(newUrl);
@@ -1166,12 +1119,9 @@ context("Layout Verification of EQ", () => {
         cy.drEnterDocumentTitle({ name: "Preventative Maintenance" });
       });
 
-<<<<<<< HEAD
-=======
       it("Navigate to details tab", () => {
         cy.drSelectDetailsTab();
       });
->>>>>>> demo
 
       it("Verify tabs", () => {
         cy.verifyTabs("overview", "details");
