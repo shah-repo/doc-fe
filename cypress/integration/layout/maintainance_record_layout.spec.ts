@@ -569,6 +569,80 @@ context("Layout Verification of maintainance records", () => {
     });
   });
 
+  context("Create migration MR document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+  });
+  context("Fill MR document attributes", () => {
+    it("Verify predefiend fields title description doc id revision output type", () => {
+      cy.verifyPredefiendFields();
+    });
+
+    it("Enter document title 'MR document'", () => {
+      cy.drEnterDocumentTitle({ name: "Migration" });
+    });
+
+    it("Fill MR document description", () => {
+      cy.drEnterDocumentDescription({ description: "Maintenance Record  description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Maintenance Record' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Maintenance Record" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Add FB Fields", () => {
+    it("Navigate to details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Add textfield", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "Maintainance Record Textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Checkbox group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
+      cy.fbOpenValidation();
+      cy.fbFieldRequired();
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Approve and released", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+  });
+
   context("Create MR document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
@@ -617,7 +691,7 @@ context("Layout Verification of maintainance records", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.DRAFT,
         title: "Document List",
-        docId: "FM-00002",
+        docId: "FM-00006",
         revision: "Rev 1",
       });
     });
@@ -636,6 +710,15 @@ context("Layout Verification of maintainance records", () => {
 
     it("Verify overview tab predefiend fields up to attachment", () => {
       cy.verifyPredefiendFields();
+      cy.get("#AttachmentFieldPresenter-field").should("exist");
+    });
+
+    it("Verify approval", () => {
+      cy.get("[data-cy='form.builder.approvals']").should("exist");
+    });
+
+    it("Verify that Form Options should  appear for this tab ", () => {
+      cy.get(".formOptionsBox").should("exist");
     });
 
     it("Save the document", () => {
@@ -676,7 +759,7 @@ context("Layout Verification of maintainance records", () => {
       cy.drSelectDetailsTab();
     });
 
-    it("Verify Click Maintenance Record Tab, clicking on it should open that tab and close the other one", () => {
+    it("Verify Click on details Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
       cy.get("#sm-tabpanel-0").should("be.hidden");
       cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
@@ -698,6 +781,11 @@ context("Layout Verification of maintainance records", () => {
 
     it("Verify added FB Field  textfield", () => {
       cy.get("[name^='maintainance-record-textfield']").should("exist");
+    });
+
+    it("Verify that right side panel opens by default to the References tab", () => {
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
     it("Verify that Form Options should  appear for this tab ", () => {
@@ -778,6 +866,11 @@ context("Layout Verification of maintainance records", () => {
         cy.get(".formOptionsBox").should("exist");
       });
 
+      it("Verify that right side panel opens by default to the References tab", () => {
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
+      });
+
     });
 
     context("Fill the form", () => {
@@ -844,6 +937,11 @@ context("Layout Verification of maintainance records", () => {
 
       it("Verify Reference tab Info", () => {
         cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
+      });
+
+      it("Verify it is fixed when user scroll", () => {
+        cy.get("[data-cy='generalInfo'").scrollTo("top", { ensureScrollable: false });
+        cy.get("[data-cy='References'").should("be.visible");
       });
 
       it("Verify Right side pannel Expand and collapse", () => {
@@ -918,6 +1016,11 @@ context("Layout Verification of maintainance records", () => {
           cy.get("[data-cy='bookmark-icon']").arrowClick();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
+
+        it("Verify navigation on click of 'Approvals' book mark", () => {
+          cy.get("[data-cy='Bookmarks-detail']").contains("Approvals").arrowClick();
+          cy.get("[data-cy='form.builder.approvals']").should("be.visible");
+        });
       });
 
       context("Verify Scroll", () => {
@@ -928,6 +1031,88 @@ context("Layout Verification of maintainance records", () => {
         it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
           cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
         });
+      });
+    });
+
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+      });
+
+      it("Mapped Maintenance Details field", () => {
+        cy.get("[data-cy='field-fb-maintenance-details-section']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(1).autocompleteSelect("Maintenance Details");
+      });
+
+      it("Mapped MR textfield field", () => {
+        cy.get("[data-cy^='field-maintainance-record-textfield']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(2).autocompleteSelect("Maintainance Record Textfield");
+      });
+
+      it("Mapped Equipment field", () => {
+        cy.get("[data-cy='field-equipment_id']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(3).autocompleteSelect("Equipment");
+      });
+
+      it("Mapped Maintainer field", () => {
+        cy.get("[data-cy='field-equipment_maintainer']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(4).autocompleteSelect("Maintainer");
+      });
+
+      it("Mapped Completion Date field", () => {
+        cy.get("[data-cy='field-fb-equipment_due_date']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(5).autocompleteSelect("Completion Date");
+      });
+
+      it("Mapped Equipment Maintenance Section field", () => {
+        cy.get("[data-cy='field-fb-requipment-maintenance-section']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(6).autocompleteSelect("Equipment Maintenance Section");
+      });
+
+      it("Mapped Approvals field", () => {
+        cy.get("[data-cy^='field-fb-approvals']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(7).autocompleteSelect("form.builder.approvals");
+      });
+
+      it("Mapped checkbox field", () => {
+        cy.get("[data-cy^='field-checkbox']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(8).autocompleteSelect("Checkbox");
+      });
+
+      it("Click on confirm change", () => {
+        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+      });
+
+      it("Navigate to details Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Verify the checkbox field data after migration", () => {
+        cy.get("[value='1']").should("be.checked");
+      });
+
+      it("Verify form info should have migrated form 'FM-00002'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      });
+    });
+
+    context("Verify Scroll", () => {
+      it("Navigate to history tab", () => {
+        cy.get("[data-cy='timeline-icon']").arrowClick();
+      });
+
+      it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+        cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
       });
     });
 
