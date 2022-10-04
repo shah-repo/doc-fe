@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
@@ -32,7 +35,7 @@ let asyncTasksGroup;
 
 const trainingFormId = "FM-00001";
 
-context("Repeat Training with Training Curriculum", () => {
+context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
