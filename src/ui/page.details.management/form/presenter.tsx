@@ -65,7 +65,6 @@ export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
             selectProps={{ id: "helpModule" }}
           />
           {autoSizerRenderer({ label: "Columns", name: "columns" })}
-          {autoSizerRenderer({ label: "Config", name: "config" })}
         </Box>
         <Box display="flex" justifyContent="flex-end" mt={6}>
           <Button type="submit" variant="outlined">
