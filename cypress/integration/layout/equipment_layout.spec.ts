@@ -366,6 +366,130 @@ context("Layout Verification of EQ", () => {
     });
   });
 
+  // create migration form
+  context("Create EQ document", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+  });
+
+  context("Fill EQ document attributes", () => {
+    it("Verify predefiend fields title description doc id revision output type", () => {
+      cy.verifyPredefiendFields();
+    });
+
+    it("Enter document title 'EQ document'", () => {
+      cy.drEnterDocumentTitle({ name: "Migartion EQ" });
+    });
+
+    it("Fill MR document description", () => {
+      cy.drEnterDocumentDescription({ description: "EQ  description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Equipment' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Equipment" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Add FB Fields", () => {
+    it("Add autocomplete of “Approvers” and set validation", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "Autocomplete-Approvers" });
+      cy.get("[data-cy='optionId']").autocompleteSelect("Approvers");
+      cy.fbOpenValidation();
+      cy.fbFieldRequired();
+      cy.fbAddField();
+    });
+
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Navigate to Specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
+    it("Add textfield", () => {
+      fbclickOnAddCalPM();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "Eq Textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Select references", () => {
+      cy.drSelectReferences( "FM-00004" );
+      cy.drSelectReferences( "FM-00005" );
+      cy.unClick();
+    });
+
+    it("Add Checkbox group", () => {
+      fbclickOnAddCalPM();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
+      cy.fbOpenValidation();
+      cy.fbFieldRequired();
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add EQUIPMENT SECTIONS FOR PM", () => {
+      fbclickOnAddCalPM();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+      cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
+      cy.get("input[value='preventativeMaintenance']").arrowClick();
+      cy.fbAddField();
+    });
+
+    it("Add EQUIPMENT SECTIONS FOR CAL", () => {
+      fbclickOnAddCalPM();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+      cy.fbEnterNameValue({ name: "label", value: "Calibration" });
+      cy.get("input[value='calibration']").arrowClick();
+      cy.fbAddField();
+    });
+
+    it("Save the document", () => {
+      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
+      cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Approve and released", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+  // end of migration form
+
+
+  // Script start
+
   context("Create EQ document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
@@ -414,7 +538,7 @@ context("Layout Verification of EQ", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.DRAFT,
         title: "Document List",
-        docId: "FM-00002",
+        docId: "FM-00003",
         revision: "Rev 1",
       });
     });
@@ -545,7 +669,6 @@ context("Layout Verification of EQ", () => {
       cy.get("[name^='eq-textfield']").should("exist");
     });
 
-
     it("Verify that Form Options should  appear for this tab ", () => {
       cy.get(".formOptionsBox").should("exist");
     });
@@ -590,10 +713,23 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Verify overview tab predefiend fields up to attachment and FB fields Approver,Eq status", () => {
+
+        cy.get("[data-cy='field-name']").should("exist");
+        cy.get("[data-cy='description']").should("exist");
+        cy.get("[data-cy='select.document.documentType.id']").should("exist");
+        cy.get("[data-cy='field-document.docId']").should("exist");
+        cy.get("[data-cy='field-revisionStage']").should("exist");
+
+
         cy.get("[data-cy='field-name']").should("exist");
         cy.get("[name='fb-default-eq-status']").should("exist");
         cy.get("[data-cy^='autocomplete-approvers']").should("exist");
         cy.get("[data-cy='select.document.documentType.id']").should("exist");
+        cy.get("#AttachmentFieldPresenter-field").should("exist");
+      });
+
+      it("Verify that Form Options should  appear for this tab ", () => {
+        cy.get(".formOptionsBox").should("exist");
       });
     });
 
@@ -625,7 +761,7 @@ context("Layout Verification of EQ", () => {
         cy.get("[data-cy='fb-coordinator-eq']").should("exist");
       });
 
-      it("Verify Add field button Exist in detail tab", () => {
+      it("Verify Add field button Exist", () => {
         cy.get("[data-cy='form.builder.add.field']").should("exist");
 
       });
@@ -654,6 +790,7 @@ context("Layout Verification of EQ", () => {
         cy.get(".formOptionsBox").should("exist");
       });
     });
+
 
     context("Fill the form", () => {
       it("Navigate to overview tab", () => {
@@ -752,7 +889,82 @@ context("Layout Verification of EQ", () => {
           cy.drClickCreateDocumentWithoutApiCall();
         });
       });
+    });
 
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+      });
+
+      it("Mapped EQ Status field", () => {
+        cy.get("[data-cy='field-fb-default-eq-status']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(1).autocompleteSelect("EQ Status");
+      });
+
+      it("Mapped Primary Owner field", () => {
+        cy.get("[data-cy='field-fb-primary-owner-eq']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(2).autocompleteSelect("Primary Owner");
+      });
+
+      it("Mapped Coordinator field", () => {
+        cy.get("[data-cy='field-fb-coordinator-eq']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(3).autocompleteSelect("Coordinator");
+      });
+
+      it("Mapped Autocomplete-Approvers field", () => {
+        cy.get("[data-cy^='field-autocomplete-approvers']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(4).autocompleteSelect("Autocomplete-Approvers");
+      });
+
+      it("Mapped Eq Textfield field", () => {
+        cy.get("[data-cy^='field-eq-textfield']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(5).autocompleteSelect("Eq Textfield");
+      });
+
+      it("Mapped checkbox field", () => {
+        cy.get("[data-cy^='field-checkbox']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(6).autocompleteSelect("Checkbox");
+      });
+
+      it("Mapped Preventative Maintenance field", () => {
+        cy.get("[data-cy^='field-preventative-maintenance']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(7).autocompleteSelect("Preventative Maintenance");
+      });
+
+      it("Mapped Calibration field", () => {
+        cy.get("[data-cy^='field-calibration']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(8).autocompleteSelect("Calibration");
+      });
+
+      it("Click on confirm change", () => {
+        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+      });
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
+      it("Verify the checkbox field data after migration", () => {
+        cy.get("[value='1']").should("be.checked");
+      });
+
+      it("Verify form info should have migrated form 'FM-00002'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      });
+    });
+
+
+    context("Approve and released", () => {
       it("Approve and Release", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         cy.url().then((url: any) => {
@@ -760,7 +972,7 @@ context("Layout Verification of EQ", () => {
         });
       });
 
-      it("Verify tabs should visible Overview, Specification, calpmhistory", () => {
+      it("Verify tabs should visible Overview, Specification", () => {
         cy.verifyTabs("overview", "specification");
       });
 
@@ -1000,7 +1212,7 @@ context("Layout Verification of EQ", () => {
         const calibrationComplianceDate = moment().tz("America/Los_Angeles")
           .add(5, "days")
           .format("ddd, MMMM D, YYYY");
-        cy.get("[data-cy=\"maintenance.status\"]")
+        cy.get("[data-cy='maintenance.status']")
           .eq(0).then(($el) => {
             const text = $el.text().replace(/\u00a0/g, "");
             expect(text).to.contain(`PMDone - Due date: ${calibrationComplianceDate}`);
@@ -1019,7 +1231,6 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Navigate back to EQ", () => {
-
         cy.navigToEquipment();
         cy.dlClearFilters();
       });
@@ -1028,13 +1239,11 @@ context("Layout Verification of EQ", () => {
         cy.dlFilterByDocId({ docId: "EQ-00001" });
         cy.dlSelectFirstDocument();
       });
-
     });
 
 
     context("Validate Right Side Panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
-
         cy.get("[data-cy='References']").should("exist");
         cy.get("[data-cy='generalInfo']").should("be.visible");
       });
@@ -1154,7 +1363,6 @@ context("Layout Verification of EQ", () => {
 
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
-          cy.pause();
           cy.get("[data-cy='timeline-icon']").arrowClick();
         });
 
@@ -1166,7 +1374,6 @@ context("Layout Verification of EQ", () => {
   });
 
   // Doc approve using AR case
-
   context("Approve and release EQ using AR", () => {
 
     it("Navigate to Document list", () => {
@@ -1637,7 +1844,7 @@ context("Layout Verification of EQ", () => {
         const calibrationComplianceDate = moment().tz("America/Los_Angeles")
           .add(5, "days")
           .format("ddd, MMMM D, YYYY");
-        cy.get("[data-cy=\"maintenance.status\"]")
+        cy.get("[data-cy='maintenance.status']")
           .eq(0).then(($el) => {
             const text = $el.text().replace(/\u00a0/g, "");
             expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
