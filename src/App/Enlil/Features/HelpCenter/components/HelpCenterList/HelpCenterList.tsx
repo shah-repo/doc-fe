@@ -1,6 +1,6 @@
 import { Box, Typography } from "@material-ui/core";
 import React from "react";
-import { HelpCenterItemType, IHelpCenterModuleData } from "../../HelpCenter.types";
+import { HelpCenterItemData, HelpCenterItemType, HelpCenterModuleData } from "../../HelpCenter.types";
 import HelpCenterVideoItem from "./components/HelpCenterVideoItem/HelpCenterVideoItem";
 import HelpCenterWorkflowItem from "./components/HelpCenterWorkflowItem/HelpCenterWorkflowItem";
 import useStyles from "./HelpCenterList.styles";
@@ -11,13 +11,13 @@ const items = {
 };
 
 interface Props {
-  content: IHelpCenterModuleData;
+  content: HelpCenterModuleData;
 }
 
-function HelpCenterItem(props) {
-  const Item = items[props.type];
+const HelpCenterItem: React.FC<HelpCenterItemData> = (props) => {
+  const Item = items[props.type] as React.FC;
   return <Item {...props} />;
-}
+};
 
 const HelpCenterList: React.FC<Props> = ({ content }) => {
   const classes = useStyles();
