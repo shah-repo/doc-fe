@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { filter, find, get, groupBy, isArray, last, map, sortBy, union } from "lodash";
+import { filter, find, groupBy, isArray, last, map, sortBy, union } from "lodash";
 import { action, computed, set } from "mobx";
 import { FBAutocompleteAsyncConfig, FBAutocompleteAsyncConstructor, FBAutocompleteAsyncOption, FBData } from "..";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
@@ -93,10 +93,15 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
       case FBAutocompleteAsyncOption.officialGroups:
         return filter(union(data, this.additionalData), { isOfficial: true });
       case FBAutocompleteAsyncOption.availablePartDocuments:
-        return map([data].flat(), (doc) => ({
-          ...doc,
-          documentRevisions: get(doc, "documentRevisions[0]"),
-        }));
+        return map([data].flat(), (doc) => {
+          const releasedDocRevisions = doc.documentRevisions?.filter(
+            (item) => item.status === DocumentRevisionStatus.Released);
+          return {
+            ...doc,
+            documentRevisions: releasedDocRevisions.length > 0 ? releasedDocRevisions[0] : null,
+            // the 0th entry is always the released / most recent released version
+          };
+        }).filter((item) => item.documentRevisions);
       case FBAutocompleteAsyncOption.docRevByDoc:
         return data.documentRevisions.map((e) => ({
           ...e,
