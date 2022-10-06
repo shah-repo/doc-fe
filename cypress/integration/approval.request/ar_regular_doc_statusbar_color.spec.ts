@@ -192,7 +192,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
@@ -208,7 +208,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+      cy.get("[data-cy='form-options-text']").scrollIntoView();
     });
 
     it(`Verify statusbar conataining DRAFT is still visible`, () => {
@@ -331,7 +331,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
@@ -351,7 +351,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").eq(0).scrollIntoView();
+      cy.get("[data-cy='form-options-text']").eq(0).scrollIntoView();
     });
 
     it(`Verify statusbar conataining IN REVIEW is still visible`, () => {
@@ -449,7 +449,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     it("Check if 'Change Owner' button exists", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
@@ -465,7 +465,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+      cy.get("[data-cy='form-options-text']").scrollIntoView();
     });
 
     it(`Verify statusbar conataining  ${STATUS_TYPES_LABEL.PENDING_CHANGE} is still visible`, () => {
@@ -553,7 +553,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
@@ -577,7 +577,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").eq(0).scrollIntoView();
+      cy.get("[data-cy='form-options-text']").eq(0).scrollIntoView();
     });
 
     it(`Verify statusbar conataining IN REVIEW is still visible`, () => {
@@ -652,7 +652,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
@@ -676,7 +676,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").eq(0).scrollIntoView();
+      cy.get("[data-cy='form-options-text']").eq(0).scrollIntoView();
     });
 
     it(`Verify statusbar conataining RELEASED is still visible`, () => {

@@ -1,6 +1,6 @@
 import { Box, Grid, IconButton, Typography } from "@material-ui/core";
 import React from "react";
-import { FBWorkspaceBottomBarProps, FBTooltip } from "..";
+import { FBTooltip, FBWorkspaceBottomBarProps } from "..";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export.svg";
 import { ReactComponent as ImportIcon } from "../../../assets/images/import.svg";
 import { ReactComponent as PreviewIcon } from "../../../assets/images/preview.svg";
@@ -23,7 +23,7 @@ const FBWorkspaceBottomBar: React.FunctionComponent<FBWorkspaceBottomBarProps> =
     <Box display="flex" className="formOptionsBox" justifyContent="center" p={1} { ...boxProps }>
       <Grid container justify="space-between" alignItems="center" className={classes.formOptionsBox}>
         <Grid item>
-          <Typography className={classes.formOptionsText}>
+          <Typography className={classes.formOptionsText} data-cy='form-options-text'>
             <Text translation="form.options" />
           </Typography>
         </Grid>
