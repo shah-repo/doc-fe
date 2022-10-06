@@ -928,24 +928,33 @@ context("Receiving landing page test", () => {
       cy.get("[data-cy='po-supplier-built-in']").should("be.visible");
       cy.get("[data-cy^='purchaseorder'] table").should("be.visible");
       cy.get("[data-cy='form.builder.receive']").should("be.visible");
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Click on receive all", () => {
       cy.get("[data-cy='fb-control-btn']").contains("Receive All").arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(5000);
     });
 
     it("Verify that all Parts, non-Enlil parts and PO services should have received quantities", () => {
-      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='received']").eq(0).scrollIntoView();
       cy.get("[data-cy='received']").eq(0).should("have.text", "200");
       cy.get("[data-cy='received']").eq(1).should("have.text", "100");
     });
 
+    it("Save the  form", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(2000);
+    });
+
     it("Click on line item and Insert Receipt Quantity and click on save ", () => {
       cy.get("[data-cy='partNumberDocId']").eq(0).arrowClick();
       cy.get("[data-cy='received'] input").clear().arrowType("180");
+      cy.get("[data-cy='form.builder.save']").arrowClick();
+    });
+
+    it("Click on line item and Insert Receipt Quantity and click on save ", () => {
+      cy.get("[data-cy='partNumberDocId']").eq(1).arrowClick();
+      cy.get("[data-cy='received'] input").clear().arrowType("100");
       cy.get("[data-cy='form.builder.save']").arrowClick();
     });
 
@@ -970,7 +979,6 @@ context("Receiving landing page test", () => {
 
 
     context("Verify overview tab", () => {
-
       it("Navigate to overview tab", () => {
         cy.drSelectOverviewTab();
       });
@@ -1003,9 +1011,7 @@ context("Receiving landing page test", () => {
       it("Verify attachment field is visible", () => {
         cy.get("[data-cy='fb-po-approvals']").should("exist");
       });
-
     });
-
   });
 
 
@@ -1245,6 +1251,18 @@ context("Receiving landing page test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+  });
+
+  context("Verify received quantities.", () => {
+    it("Navigate to detail tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Verify that all Parts, non-Enlil parts and PO services have received quantities", () => {
+      cy.get("[data-cy='received']").eq(0).scrollIntoView();
+      cy.get("[data-cy='received']").eq(0).should("have.text", "180");
+      cy.get("[data-cy='received']").eq(1).should("have.text", "100");
+    });
   });
 
   // verify Draft state

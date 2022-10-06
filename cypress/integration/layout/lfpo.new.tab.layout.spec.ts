@@ -1416,6 +1416,16 @@ context("LFPO new layout verification", () => {
 
     it("Verify FB Fields", () => {
       cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+      cy.get("[data-cy='Textfield for inline']").should("exist");
+    });
+
+    it("Verify attachment", () => {
+      cy.get(`h6`).contains("Attachments").should("exist");
+    });
+
+    it("Verify initial qunatity, usable quantity", () => {
+      cy.get("[name='lot_quantity']").should("exist");
+      cy.get("[name='lot_usable_quantity']").should("exist");
     });
 
     it("Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {
@@ -1523,7 +1533,7 @@ context("LFPO new layout verification", () => {
 
     context("Verify User able to add Groups or other user permissions", () => {
       it("Open permissions tab", () => {
-        cy.drSelectPermissionTab();
+        cy.drSelectPermissionTab().wait(2000);
       });
 
       it("Add another user permission", () => {
