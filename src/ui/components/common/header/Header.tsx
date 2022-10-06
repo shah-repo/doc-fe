@@ -48,7 +48,7 @@ const Header: React.FunctionComponent<Props> = ({ children, status, displayStatu
               <Box width="100%">
                 <Grid
                   container={true}
-                  data-cy="headerSection"
+                  data-cy='header-section'
                   className={`${classes.headerSection} ${
                     headerBackgroundClasses[
                       FormHeaderStatusClassMapping[

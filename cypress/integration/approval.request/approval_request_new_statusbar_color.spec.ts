@@ -473,7 +473,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get("[data-cy='header.lastSaved']").should("not.be.exist");
+      cy.get("[data-cy='header-last-saved']").should("not.be.exist");
     });
 
     it(`Verify the statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
@@ -509,7 +509,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get("[data-cy='header.lastSaved']").should("not.be.exist");
+      cy.get("[data-cy='header-last-saved']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
@@ -570,7 +570,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get("[data-cy='header.lastSaved']").should("not.be.exist");
+      cy.get("[data-cy='header-last-saved']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {

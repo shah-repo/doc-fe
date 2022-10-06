@@ -38,7 +38,7 @@ const HeaderLastSaved: React.FC<Props> = ({
       ) : (
         <>
           <CloudIcon className={classes.icon} />
-          <Text dataCy="header.lastSaved" translation="form.builder.header.lastSaved" values={{ lastSavedTimestamp }} />
+          <Text dataCy="header-last-saved" translation="form.builder.header.lastSaved" values={{ lastSavedTimestamp }} />
         </>
       )}
     </Box>
