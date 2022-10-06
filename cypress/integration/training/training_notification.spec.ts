@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
@@ -39,7 +42,7 @@ const dueDate = momentInPST().add(30, "days").format("l");
 const adjAssignDate = momentInPST().subtract(23, "days").format("l");
 const adjDueDate = momentInPST().add(30, "days").subtract(23, "days").format("l");
 
-context("Training notification test", () => {
+context("Training notification test", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -674,6 +677,7 @@ context("Training notification test", () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
     });
 
@@ -821,6 +825,7 @@ context("Training notification test", () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
     });
 

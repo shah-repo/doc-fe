@@ -6027,6 +6027,13 @@ cypress-file-upload@^5.0.6:
   resolved "https://registry.yarnpkg.com/cypress-file-upload/-/cypress-file-upload-5.0.6.tgz#90a4a49ac4d147f955a642a25b6b3f0706a767b5"
   integrity sha512-Zop7M8xhP9WSoc5tVYJcUUn+iPn3RpsOEzHaTUKFQPiqxD5Bz19azO/BwiyuNJ5m82zPMd0i+KY/ubVog8cyGQ==
 
+cypress-grep@2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/cypress-grep/-/cypress-grep-2.5.3.tgz#ddf86a4a33d8af310dcae0dc7c23c2b215afca9c"
+  integrity sha512-uLBLbV6qyGAAaskUAIItwIw1rpw9IzUiON1Sf5RzIGUg9aUsKQdwDlK4XYsNAHRua0eUHm6zZ+V/yDkJmQlHsQ==
+  dependencies:
+    debug "4.3.1"
+
 cypress-localstorage-commands@^1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/cypress-localstorage-commands/-/cypress-localstorage-commands-1.2.2.tgz#5e8362aab9f0381da566163c6b3e285af156031b"
@@ -6190,7 +6197,7 @@ debug@3.2.6, debug@^3.1.0, debug@^3.1.1, debug@^3.2.5:
   dependencies:
     ms "^2.1.1"
 
-debug@4:
+debug@4, debug@4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
   integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==

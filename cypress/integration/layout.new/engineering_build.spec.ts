@@ -817,7 +817,12 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.drSelectReferences("FM-00001");
+        cy.wait(2000);
+        cy.get("div[data-cy=\"field-referenceTo\"]").contains("FM-00001")
+          .parent().parent().parent()
+          .find("svg").arrowClick({ force: true });
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -1130,7 +1135,12 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.drSelectReferences("FM-00001");
+        cy.wait(2000);
+        cy.get("div[data-cy=\"field-referenceTo\"]").contains("FM-00001")
+          .parent().parent().parent()
+          .find("svg").arrowClick({ force: true });
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {

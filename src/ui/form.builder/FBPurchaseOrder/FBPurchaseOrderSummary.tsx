@@ -25,7 +25,7 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
 
 
   useEffect(() => reaction(
-    () => _tabsState?.value,
+    () => _tabsState?.activeTabId,
     () => {
       const formValue = FBStore?.purchaseOrderValue || formState?.getFieldValue("po-items-built-in", defaultValue);
       const poSummaryObj = pick(formValue, requiredKeys);
