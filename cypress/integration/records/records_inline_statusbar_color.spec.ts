@@ -265,7 +265,7 @@ context("Record inline Flow", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Void' button exists", () => {
@@ -286,7 +286,7 @@ context("Record inline Flow", () => {
     });
 
     it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+      cy.get("[data-cy='form-options-text']").scrollIntoView();
     });
 
     it(`Verify statusbar conataining WIP is still visible`, () => {
@@ -361,7 +361,7 @@ context("Record inline Flow", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Void' button exists", () => {
@@ -430,7 +430,7 @@ context("Record inline Flow", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").should("not.be.disabled");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Void' button exists", () => {
@@ -467,6 +467,7 @@ context("Record inline Flow", () => {
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get(`[data-cy="exportToEmail"]`).should("be.visible").should("not.be.disabled");
     });
 

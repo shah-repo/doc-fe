@@ -27,6 +27,7 @@ declare global {
       lhrAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       pmDeleteApproverFromApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
+      pmSubmitForApprovalWithoutAPI(): Chainable<Subject>;
       pmClearFilters(): Chainable<Subject>;
       pmSelectFirstDocument(): Chainable<Subject>;
       lhrSubmitForApproval(): Chainable<Subject>;
@@ -71,7 +72,7 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   partLotDoc?: string;
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
 
 
   cy.get("[data-cy=\"title\"]").arrowClick();
@@ -203,6 +204,12 @@ Cypress.Commands.add("pmSubmitForApproval", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("pmSubmitForApprovalWithoutAPI", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

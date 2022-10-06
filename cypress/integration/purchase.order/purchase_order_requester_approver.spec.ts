@@ -1050,9 +1050,7 @@ context("po_requestor_as_an_approver", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
-      });
+      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
     });
 
     it("Enter description 'New Purchase Order'", () => {
@@ -1432,7 +1430,7 @@ context("po_requestor_as_an_approver", () => {
     it("Check if selected approver has approval signature right by his name", () => {
       cy.contains("PO Approval sig").should("exist");
     });
-    it("Check requestos should be fulfilling PO level signature", () => {
+    it("Check requestor should be fulfilling PO level signature", () => {
       cy.poAMCheckApprovalIconIfItsRed();
     });
   });
@@ -1574,7 +1572,7 @@ context("po_requestor_as_an_approver", () => {
         it("Check if selected approver has approval signature right by his name", () => {
           cy.contains("PO Approval sig").should("exist");
         });
-        it("Check requestos should not be fulfilling PO level signature", () => {
+        it("Check requestor should not be fulfilling PO level signature", () => {
           cy.poAMCheckApprovalIconIfItsGray();
         });
       });

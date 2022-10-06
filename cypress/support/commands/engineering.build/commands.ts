@@ -101,7 +101,7 @@ Cypress.Commands.add("ebCloneClickContinue", () => {
 });
 
 Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: string; name: string }) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick({ force: true });
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.value);

@@ -829,8 +829,9 @@ context("Procedure and parts flow test", () => {
           CyRoutes.GetAttachments,
           CyRoutes.GetAttachmentsAttached,
           CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick({ force: true });
+          cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick();
         });
+        cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick();
         cy.wait(10000);
         cy.progressBarShouldNotExist();
       });
