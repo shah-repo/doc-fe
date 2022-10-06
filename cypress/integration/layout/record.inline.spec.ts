@@ -595,7 +595,11 @@ context("Record inline Flow", () => {
       });
 
       it("Verify References selection Add Remove", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.get("[data-cy=\"references-icon\"]").arrowClick().wait(500);
+        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+        cy.drSelectReferences("FM-00001");
+        cy.get("[data-cy=\"field-referenceTo\"]").find("[role='button']").should("contain.text", "FM-00001")
+          .trigger("mouseover").find("svg").arrowClick({ force: true });
       });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {

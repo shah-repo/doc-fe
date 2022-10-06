@@ -6,7 +6,7 @@ import { SM } from "../../../App";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { COMMON_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
-import { EQMaintenanceRequired } from "./constants";
+import { Rules } from "./constants";
 
 export const withFBEditorActions = <T extends FBEditorActionsProps>(
   Component: React.FunctionComponent<T>
@@ -45,7 +45,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       });
 
       if ((!workspaceState?.getSchemaItemAt(index) || index === 0) && additionalSchema) {
-        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES, tabId: _tabsState?.tabID }));
+        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES, tabId: _tabsState?.activeTabId }));
         workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchemaWithInitialValues as FBSchemaProps[]));
         index = index + size(additionalSchema);
       }
@@ -91,8 +91,8 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       }
 
       // Inidvidual field flag setup
-      if (type === "eqmaintenance" && !formRules?.includes(EQMaintenanceRequired)) {
-        formRules = compact([formRules, EQMaintenanceRequired]).join(",");
+      if (type === "eqmaintenance" && !formRules?.includes(Rules.required)) {
+        formRules = compact([formRules, Rules.required]).join(",");
       }
       if (type === "blanktplform" && !defaultValue) {
         formValues.defaultValue = [];
@@ -128,7 +128,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder || validationAttribute,
-        tabId: _tabsState?.tabID,
+        tabId: _tabsState?.activeTabId,
       }, index);
       leftPanelState?.setIndex(index + 1 || 0);
 

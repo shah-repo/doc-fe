@@ -405,7 +405,7 @@ context("Paper Lot History Record", () => {
   });
 
   context("Verify predefined fields are displayed", () => {
-    it("Check 'Part to be Manufactured' is not displayed", () => {
+    it("Check 'Part to be Manufactured' is displayed", () => {
       cy.get("[data-cy=\"Part to be Manufactured\"]").should("exist")
         .parent().parent().parent().parent().next()
         .should("have.text", "The Part to be Manufactured is a required field.");

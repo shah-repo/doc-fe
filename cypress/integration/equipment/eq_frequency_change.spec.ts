@@ -32,7 +32,7 @@ let createdEquipmentDocument;
 let createdPMRecord;
 let createdCalibrationRecord;
 let group;
-const eqPMSchemaName = "pm-ki5wtk5l";
+let calDocId;
 let eqLowerFrequencyURL;
 let eqHigherFrequencyURL;
 
@@ -973,7 +973,7 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Click Create Approval Request", () => {
-          cy.arClickCreateApprovalRequestAfterCompletingForm();
+          cy.arSaveApiCall();
         });
 
         it("Add approvers to approval request on approver list", () => {
@@ -1004,21 +1004,30 @@ context("Equipment due date calculation while changing frequency", () => {
             eqLowerFrequencyURL = url;
           });
         });
+
+        it("Navigate to specification tab", () => {
+          cy.drSelectSpecificationTab();
+        });
       });
 
       context("Create new PM for EQ-00001", () => {
         it("Click 'NEW PM' on preventative maintenace section", () => {
-          cy.url().then((url: any) => {
-            const docIdFromUrl = url.split("/").pop();
-            // eslint-disable-next-line max-len
-            const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${eqPMSchemaName}`;
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              CyRoutes.GetAvailableApprovers], () => {
-              cy.visit(newPMUrl);
-            });
-            cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
+          cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+          cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+          cy.wait("@response").then((res) => {
+            if (res.response) {
+              const response = res.response.body;
+              calDocId = response.documentId;
+              const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+                CyRoutes.GetAvailableApprovers], () => {
+                cy.visit(newUrl);
+              });
+            }
           });
+          cy.checkToastMessage({ exists: false });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Turn off autosave", () => {
@@ -1027,18 +1036,6 @@ context("Equipment due date calculation while changing frequency", () => {
 
         it("Enter title 'Preventative maintenance after lowering frequency'", () => {
           cy.drEnterDocumentTitle({ name: "Preventative maintenance after lowering frequency" });
-        });
-
-        it("Select document type 'Maintenance Record'", () => {
-          cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-        });
-
-        it("Select revision stage 'Numeric'", () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-        });
-
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
         });
 
         it("navigate to Details tab", () => {
@@ -1232,7 +1229,7 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Click Create Approval Request", () => {
-            cy.arClickCreateApprovalRequestAfterCompletingForm();
+            cy.arSaveApiCall();
           });
 
           it("Add approvers to approval request on approver list", () => {
@@ -1263,21 +1260,30 @@ context("Equipment due date calculation while changing frequency", () => {
               eqHigherFrequencyURL = url;
             });
           });
+
+          it("Navigate to specification tab", () => {
+            cy.drSelectSpecificationTab();
+          });
         });
 
         context("Create new PM for EQ-00002", () => {
           it("Click 'NEW PM' on preventative maintenace section", () => {
-            cy.url().then((url: any) => {
-              const docIdFromUrl = url.split("/").pop();
-              // eslint-disable-next-line max-len
-              const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${eqPMSchemaName}`;
-              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                CyRoutes.GetAvailableApprovers], () => {
-                cy.visit(newPMUrl);
-              });
-              cy.progressBarShouldNotExist();
-              cy.listLoadingElementShouldNotExist();
+            cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+            cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+            cy.wait("@response").then((res) => {
+              if (res.response) {
+                const response = res.response.body;
+                calDocId = response.documentId;
+                const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+                cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+                  CyRoutes.GetAvailableApprovers], () => {
+                  cy.visit(newUrl);
+                });
+              }
             });
+            cy.checkToastMessage({ exists: false });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Turn off autosave", () => {
@@ -1286,18 +1292,6 @@ context("Equipment due date calculation while changing frequency", () => {
 
           it("Enter title 'Preventative maintenance after increasing frequency'", () => {
             cy.drEnterDocumentTitle({ name: "Preventative maintenance after increasing frequency" });
-          });
-
-          it("Select document type 'Maintenance Record'", () => {
-            cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-          });
-
-          it("Select revision stage 'Numeric'", () => {
-            cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-          });
-
-          it("Click create document", () => {
-            cy.drClickCreateDocumentWithApiCall();
           });
 
           it("navigate to Details tab", () => {

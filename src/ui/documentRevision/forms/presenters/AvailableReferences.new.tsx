@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Chip, CircularProgress, TextField, TooltipProps, Typography } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
 import { debounce, isArray, map, some, truncate } from "lodash";
@@ -8,8 +7,8 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { tooltipStyles } from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
+import { ReactComponent as RemoveReference } from "../../../../assets/images/trash.svg";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -44,11 +43,6 @@ const getReferenceValues = (
   const isReferencePart = checkIsDocumentPart(docType?.groupOptions);
   const canReferenceCreateInspection = checkCanTypeCreateInspection(docType?.groupOptions);
   return { highestRev, isReferencePart, canReferenceCreateInspection };
-};
-
-export const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="top" classes={classes} {...props} />;
 };
 
 const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithFormik> = ({
@@ -265,12 +259,12 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
             className={classes.chipRoot}
             label={
               <Typography className={classes.chip}>
-                <StyledTooltip title={option.label}>
+                <FBTooltip title={option.label}>
                   <>{truncateLable(option.label)}</>
-                </StyledTooltip>
+                </FBTooltip>
               </Typography>}
             disabled={option.deleteDisabled}
-            deleteIcon={<DeleteIcon  className={classes.deleteIcon} />}
+            deleteIcon={<RemoveReference className={classes.deleteIcon}/>}
             onDelete={(e) => {
               onChange(e, value.filter((obj) => obj.value !== option.value));
             }}

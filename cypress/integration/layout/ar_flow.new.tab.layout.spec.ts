@@ -160,8 +160,6 @@ context("Approval request form layout verification", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
       cy.fbGroupOptions("1", "2", "3");
-      cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
-      cy.get("[data-cy='fb-control-required']").arrowClick();
       cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -171,11 +169,15 @@ context("Approval request form layout verification", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
-      cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
-      cy.get("input[value^='visibility']").check();
-      cy.get(`input[name="validators.required_if_in"]`).check();
-      cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).first().check();
+      cy.get("button[data-cy='fb-editor-actions-add']").first().contains("Add").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Add section field Approval request details`, () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
+      cy.fbEnterNameValue({ name: "label", value: "Approval Request" });
       cy.get("button[data-cy='fb-editor-actions-add']").first().contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -200,7 +202,6 @@ context("Approval request form layout verification", () => {
       cy.verifyDescriptionIsHighlightedonHover();
     });
 
-
     context("Verify that Change details tab should be opened by default and that contains`", () => {
       it("Verify change detail tab open by default", () => {
         cy.isTabActive({ name: "changedetails", index: 0 });
@@ -208,6 +209,7 @@ context("Approval request form layout verification", () => {
 
       it("predefine schema fields except Approval request details", () => {
         cy.verifyPredefiendFields();
+        cy.get("#AttachmentFieldPresenter-field").should("exist");
       });
 
       it("Verify Approver block exist", () => {
@@ -231,12 +233,15 @@ context("Approval request form layout verification", () => {
       it("Verify FB fields added to AR form ", () => {
         cy.get("[data-cy^='text-field']").should("exist");
         cy.get("[data-cy='Checkbox']").should("exist");
-        cy.get("[data-cy='fb.add.document']").should("exist");
       });
 
       it("Verify FB fields added to AR form ", () => {
         cy.get("[name^=checkbox]").should("exist");
         cy.get("[data-cy^='text-field']").should("exist");
+      });
+
+      it("Verify section field Approval request", () => {
+        cy.get("[data-cy='Approval Request']").should("exist");
       });
 
       it("Verify that Form Options should appear on the document Tab", () => {
@@ -294,7 +299,6 @@ context("Approval request form layout verification", () => {
       });
 
       context("Verify that Change details tab should be opened by default and that contains`", () => {
-
         it("Verify change detail tab open by default", () => {
           cy.isTabActive({ name: "changedetails", index: 0 });
         });
@@ -314,7 +318,25 @@ context("Approval request form layout verification", () => {
         });
 
         it("Verify FB fields added to AR form ", () => {
+          cy.get("[data-cy^='text-field']").should("exist");
           cy.get("[name^=checkbox]").should("exist");
+        });
+
+        it("Verify add document description justification docrev field exists", () => {
+          cy.get("[data-cy='fb.add.document']").should("exist");
+          cy.get("[data-cy='fb.add.document']").arrowClick().wait(2000);
+          cy.get("[data-cy='proposedDocumentRevision']").should("exist");
+          cy.get("[name='descriptionOfChange']").should("exist");
+          cy.get("[name='justificationOfChange']").should("exist");
+          cy.get("[data-cy='dialog-close']").arrowClick();
+        });
+
+        it("Verify that predefined fields for Document tab is only Approval request details", () => {
+          cy.get("[data-cy='fb.add.document']").should("exist");
+        });
+
+        it("Verify section field Approval request", () => {
+          cy.get("[data-cy='Approval Request']").should("exist");
         });
 
         it("Verify that Form Options should appear on the document Tab", () => {
@@ -336,6 +358,16 @@ context("Approval request form layout verification", () => {
   });
 
   context("Verify description field", () => {
+    it("Verify description is highlighted on mouse over", () => {
+      cy.verifyDescriptionIsHighlightedonHover();
+    });
+
+    it("Verify title is highlighted on mouse over", () => {
+      cy.get("#field-title").trigger("mouseover");
+      cy.get("#field-title>div>div").should("have.css", "background-color", "rgb(235, 237, 242)");
+      cy.get("#field-title").trigger("mouseout");
+    });
+
     it("Verify DescriptionToolBar not have option to change font size, or option to change font type", () => {
       cy.verifyDescriptionToolbar();
     });
@@ -378,22 +410,42 @@ context("Approval request form layout verification", () => {
         .arrowType("{moveToEnd}{enter}Checking length of characters and lines ends here.");
       cy.unClick();
       cy.get(`[data-cy="description"] [contenteditable]`).first().scrollIntoView({ ensureScrollable: false });
+      cy.get("[data-cy='description'] button").contains("View more").should("exist");
       cy.unClick();
     });
 
-    it("Click on view more description should be expanded", () => {
+    it("Click on view more description should be expanded ", () => {
       cy.get("[data-cy='description'] button").arrowClick();
       cy.get("div[class^='rdw-editor-toolbar']").should("exist");
+      cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
+      cy.get(`[data-cy="description"] [contenteditable]`).first().scrollIntoView({ ensureScrollable: false });
+    });
+
+    it("on click of description description should be editable", () => {
+      cy.get(".DraftEditor-editorContainer").eq(0).arrowClick();
+      cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
+    });
+
+    it("click on out side description field should collpase and 2 lines are visible with view more button", () => {
+      cy.unClick();
+      cy.get("[data-cy='description'] button").contains("View more").should("be.visible");
+      cy.get("[data-text='true']").eq(0).should("be.visible");
+      cy.get("[data-text='true']").eq(1).should("be.visible");
+      cy.get("[data-text='true']").eq(2).should("not.be.visible");
     });
 
     it("Verify top header is visible on scroll", () => {
       cy.get("[data-cy='documentRevisions-1']").scrollTo("top", { ensureScrollable: false });
       cy.get("header").should("be.visible");
     });
+
+    it("on click of description description should be editable", () => {
+      cy.get(".DraftEditor-editorContainer").eq(0).arrowClick();
+      cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
+    });
   });
 
   context("fill the fields and save", () => {
-
     it("Navigate to document tab", () => {
       cy.unClick();
       cy.drSelectDocumentTab();
@@ -420,10 +472,10 @@ context("Approval request form layout verification", () => {
     });
 
     it("Click on Add Document", () => {
-      cy.get(`[data-cy="fb.add.document"]`).arrowClick();
+      cy.get(`[data-cy="fb.add.document"]`).arrowClick().wait(2000);
     });
 
-    it("selct document", () => {
+    it("Select document", () => {
       cy.get(`[data-cy="proposedDocumentRevision"]`).autocompleteSelect("FM-00002");
     });
 
@@ -442,10 +494,15 @@ context("Approval request form layout verification", () => {
     it("Save the doc", () => {
       cy.get("[data-cy='common.save']").arrowClick();
     });
-
   });
 
   context("Validate Right Side Panel", () => {
+
+    it("Verify that right side panel opens by default to the References tab", () => {
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
+    });
+
     it("Verify It is expanded and collpased", () => {
       cy.verifyExpandCollpase();
     });
@@ -455,7 +512,7 @@ context("Approval request form layout verification", () => {
     });
 
     it("Verify it is fixed when user scroll", () => {
-      cy.get("[data-cy='References-detail'").scrollIntoView();
+      cy.get("[data-cy='generalInfo'").scrollTo("top", { ensureScrollable: false });
       cy.get("[data-cy='References'").should("be.visible");
     });
 
@@ -504,8 +561,16 @@ context("Approval request form layout verification", () => {
         cy.get("[data-cy='bookmark-icon']").arrowClick();
         cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       });
-    });
 
+      it("Navigate to change detail tab", () => {
+        cy.drSelectChangeDetailsTab();
+      });
+
+      it("Clicking on book mark user is navigated to the bookmark field", () => {
+        cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
+        cy.get("[data-cy='Approval Request Details']").should("be.visible");
+      });
+    });
   });
 
   context("Verify Scroll", () => {
@@ -519,20 +584,62 @@ context("Approval request form layout verification", () => {
   });
 
   context("Training tab should not display", () => {
-    it("Verify traing tab not exist", () => {
+    it("Verify trainig tab not exist", () => {
       cy.get("#Checkbox-box").should("not.exist");
-      cy.get("[data-cy='tabid.training']").should("not.exist");
+      cy.get("[data-cy='tabId.training']").should("not.exist");
     });
   });
 
   context("Verify top header is fixed on scroll", () => {
     it("Verify top header is visible on scroll", () => {
-      cy.get("[data-cy='documentRevisions-1']").scrollTo("top", { ensureScrollable: false });
+      cy.get("[data-cy='tabId.changedetails']").scrollTo("top", { ensureScrollable: false });
+      cy.get("header").should("be.visible");
+    });
+  });
+
+
+  context("Approve and release document", () => {
+    it("Click on send to review button", () => {
+      cy.get("[data-cy='transitionButton']").arrowClick();
+    });
+
+    it("Approve submission", () => {
+      cy.get("[data-cy='transition-approve']").first().arrowClick();
+      cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy='passwordConfirm']").arrowClick().wait(5000);
+    });
+
+    it("Verify on mouse over title is not highlighted", () => {
+      cy.get("#field-name").parent().trigger("mouseover");
+      cy.get("#field-name").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+      cy.get("#field-name").trigger("mouseout");
+    });
+
+    it("Verify on mouse over description is not highlighted", () => {
+      cy.get("[data-cy='BaseWithhtml-editor']").eq(0).trigger("mouseover");
+      cy.get("[data-cy='BaseWithhtml-editor']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+      cy.get("[data-cy='BaseWithhtml-editor']>div").eq(0).trigger("mouseout");
+    });
+
+    it("Click on view more description should be expanded", () => {
+      cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
+      cy.get("div[class^='rdw-editor-toolbar']").should("not.exist");
+      cy.get("[data-cy='BaseWithhtml-editor'] button").contains("View less").should("be.visible");
+      cy.get("[class*='descriptionSummaryEditorClass']").should("exist");
+    });
+
+    it("Verify top header is visible on scroll", () => {
+      cy.get("[data-cy='tabId.changedetails']").scrollTo("top", { ensureScrollable: false });
       cy.get("header").should("be.visible");
     });
 
+    it("click on  description field again field should collpase ", () => {
+      cy.get("[data-cy='BaseWithhtml-editor'] button").contains("View less").arrowClick();
+      cy.get("[data-cy='BaseWithhtml-editor'] button").contains("View more").should("be.visible");
+      cy.get("[data-text='true']").eq(0).should("be.visible");
+      cy.get("[data-text='true']").eq(2).should("not.be.visible");
+    });
   });
-
 });
 
 export { };

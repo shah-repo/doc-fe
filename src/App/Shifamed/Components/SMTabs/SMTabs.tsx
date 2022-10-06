@@ -12,38 +12,45 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   tabs,
   children,
   boxProps,
-  tabProps,
   panelProps,
 }) => {
-  const  { _documentRevisionFormState } = SM.useStores();
   const classes = useStyles();
+  const  { _documentRevisionFormState } = SM.useStores();
+
   return (
     <Observer>
       {() => (
-        <SMBox {...boxProps} id="SMBodyTmpl" className={cx(classes.root,
-          { [classes.tabheader]: !_documentRevisionFormState?.expanded })}>
+        <SMBox
+          id="SMBodyTmpl"
+          {...boxProps}
+          className={cx(classes.root, { [classes.tabheader]: !_documentRevisionFormState?.expanded })}
+        >
           <Tabs
-            {...{ onChange }}
-            value={_tabsState?.value}
-            className={cx(classes.tabs,
-              { [classes.tabheader]: !_documentRevisionFormState?.expanded })}
-
+            className={cx(classes.tabs, { [classes.tabheader]: !_documentRevisionFormState?.expanded })}
+            value={_tabsState?.activeTabId}
+            onChange={onChange}
             TabIndicatorProps={{ className: classes.indicator }}
           >
-            {tabs?.map((tab, index) => (
+            {tabs?.map(({ tabId, labelId }, index) => (
               <Tab
-                { ...{ tabProps }}
+                key={`sm-tabpanel-${tabId}-${index}`}
                 className={classes.tab}
-
-                key={`sm-tabpanel-${tab}-${index}`}
-                data-cy={`tabCon-${tab}`}
-                label={<SMText label={tab} />}
+                value={tabId}
+                data-cy={`tabCon-${labelId}`}
+                label={
+                  <SMText label={labelId} />
+                }
               />
             ))}
           </Tabs>
           <SMMap<ReactNode> collection={children}>
             {(child: ReactNode, index) => (
-              <SMTabPanel {...{ index, panelProps }} key={`sm-tabpanel-${index}`}>
+              <SMTabPanel
+                key={`sm-tabpanel-${index}`}
+                tabId={tabs?.[index]?.tabId}
+                tabIndex={index}
+                panelProps={panelProps}
+              >
                 {child}
               </SMTabPanel>
             )}
@@ -53,4 +60,5 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
     </Observer>
   );
 };
+
 export default withSMTabsWrap(SMTabs);

@@ -6,7 +6,6 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    onTabChange,
     onScroll,
     _documentRevisionFormState,
     documentRevision,
@@ -31,16 +30,6 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // MARK: @reactions
-
-    // MARK: @helpers
-
-    // MARK: @methods
-    onTabChange = (_ev, newValue, tabConfig) => {
-      _tabsState?.setValue(newValue);
-      _tabsState?.setTabID(tabConfig[newValue].tabId);
-    };
-
     onScroll = (ev) => {
       if (!_documentRevisionFormState) { return; }
       const pageYOffset = get(ev.target, "scrollTop");
@@ -55,7 +44,6 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
         <Component
           {...props as T}
           {...{
-            onTabChange,
             onScroll,
             _documentRevisionFormState,
             _tabsState,

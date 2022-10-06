@@ -20,7 +20,6 @@ declare global {
       grpSetTypeFilter(params: { type: string }): Chainable;
       grpFilterByName(params: { name: string }): Chainable;
       grpClickEditGroupWithName(params: { name: string }): Chainable;
-      grpEditGroupName(params: { name: string });
       grpFilterByMembers(params: { member: string }): Chainable;
       grpFilterByType(params: { type: string }): Chainable;
       grpCheckIfNameFilterIsEmpty(): Chainable;
@@ -282,10 +281,6 @@ Cypress.Commands.add("grpEnterGroupName", (params: { name: string }) => {
   cy.get(`td[role="gridcell"] input`).eq(0).clear().arrowType(params.name);
 });
 
-Cypress.Commands.add("grpEditGroupName", (params: { name: string }) => {
-  cy.get("[data-cy=\"Group-groupName\"]").clear().arrowType(params.name);
-});
-
 Cypress.Commands.add("grpAssignUser", (params: { name: string }) => {
   cy.get(`td[role="gridcell"] input`).eq(1).arrowType(params.name);
   cy.get("li.k-item").contains(params.name).arrowClick();
@@ -472,6 +467,7 @@ Cypress.Commands.add("grpHistoryClickOpenButton", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetGroupsAudit, () => {
     cy.get("[data-cy=\"gm-open-history-panel\"]").arrowClick();
   });
+  cy.wait(500);
 });
 
 Cypress.Commands.add("grpHistoryVerifyAddedGroup", (params: { name: string }) => {
