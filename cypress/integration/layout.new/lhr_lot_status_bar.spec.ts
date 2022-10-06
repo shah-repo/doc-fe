@@ -879,10 +879,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           cy.closeAllAlertMessages();
         });
 
-        it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
+        it(`Submit for Approval → Verify it is functional and Verify popup message`, () => {
           cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          cy.poAMCheckForAlertMessage();
+          cy.checkToastMessageIsEqual({
+            message: "The Build Type is a required field",
+          });
+          cy.listLoadingElementShouldNotExist();
         });
 
         context(
@@ -1106,6 +1109,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
         it(`Complete step → Verify it is functional and Verify status changed ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
           cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
         });
       });
@@ -1120,15 +1124,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Approve the submission → LHRS is in the “Completed” state ", () => {
       it("Approve LHR", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApprove();
       });
 
       it(`LHRS is in the ${STATUS_TYPES_LABEL.COMPLETED} state`, () => {
@@ -1186,22 +1182,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Click on Complete step to Complete the step again", () => {
+          cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Approve LHR", () => {
-          cy.wait(3000);
-          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-          cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
-          cy.checkToastMessage({ exists: false });
-          cy.listLoadingElementShouldNotExist();
+          cy.ebApprove();
         });
 
         it(`LHRS is in the ${STATUS_TYPES_LABEL.COMPLETED} state`, () => {
@@ -1323,7 +1310,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Approve it → LHR is Released → Check the content of the status bar", () => {
       it("Approve LHR", () => {
-        cy.wait(3000);
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
         cy.unClick();
@@ -1385,10 +1372,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
           it("Click on Submit For Approval", () => {
             cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Approve LHR", () => {
-            cy.wait(3000);
             cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
             cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
             cy.unClick();
@@ -1430,10 +1417,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       it("Click on Submit For Approval", () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve LHR", () => {
-        cy.wait(3000);
         cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
         cy.unClick();
@@ -1509,7 +1496,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Click on the references", () => {
+          cy.wait(2000);
           cy.get("#ReferencePresenter-link").invoke("removeAttr", "target").click();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it(`Status is in ${STATUS_TYPES_LABEL.RELEASED}`, () => {
@@ -1565,6 +1555,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     context("Revise the LOT → Lot is in WIP → Check the status bar content:", () => {
       it("Click 'Update Record' button", () => {
         cy.get("[data-cy=\"updateRecord\"]").click();
+        cy.listLoadingElementShouldNotExist();
       });
 
       context("Check the content of the status bar", () => {
@@ -1703,15 +1694,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Approve the Lot", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApprove();
       });
 
       context("Check the content of the status bar", () => {
@@ -1793,15 +1776,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Approve LHR", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApprove();
       });
 
       it(`LHR is in the ${STATUS_TYPES_LABEL.OBSOLETE} state`, () => {
@@ -1924,11 +1899,12 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Click on “Complete step", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve LHR", () => {
-      cy.wait(3000);
       cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
       cy.unClick();
@@ -1968,7 +1944,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           });
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
-            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
           });
         }
@@ -1991,7 +1966,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Approve LHR", () => {
-        cy.wait(3000);
         cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
         cy.unClick();

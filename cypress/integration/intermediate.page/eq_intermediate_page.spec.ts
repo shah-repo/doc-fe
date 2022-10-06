@@ -300,7 +300,7 @@ context("Intermediate page validation", () => {
   context("Verify form options and add field button is displayed in Specification tab", () => {
     context("Verify add field button is displayed", () => {
       it("Verify 'Add Field' button displayed", () => {
-        cy.get(`[data-cy="form.builder.addEquiSpec"]`).should("exist");
+        cy.get(`[data-cy="form.builder.add.field"]`).should("exist");
       });
     });
 

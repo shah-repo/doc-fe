@@ -443,6 +443,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add created document revision", () => {
+      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
@@ -455,6 +456,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.get(`[data-cy="tabCon-tabId.changedetails"]`).arrowClick();
       cy.arAddApproverOnApproverList({ approver: USERS[1].email });
     });
 

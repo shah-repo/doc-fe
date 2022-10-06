@@ -378,9 +378,12 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     it("Add 'Material parameter' to step #1", () => {
       SystemRequirement("REQ-3620");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material two" });
-      });
+      const params = { numbOfStep: 1, material: "Parameter for material two" };
+
+      cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"title\"]").arrowType(params.material, { force: true });
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -420,21 +423,21 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
       SystemRequirement("REQ-2800");
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"void-button\"]").should("be.visible");
       cy.get("[data-cy=\"void-button\"]").arrowClick();
       cy.get("button[data-cy=\"AlertDialog-cancelButton\"]").arrowClick();
     });
 
     it("Check if 'Change Owner' button exists", () => {
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -560,7 +563,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -613,7 +616,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -663,11 +666,13 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
 
     it(`Verify 'Change Owner' exists in statusbar`, () => {
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 
@@ -717,7 +722,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
   context(`Click on 'Void' and verify document status as VOIDED`, () => {
     it(`Click 'Void' and 'Yes, Im sure'`, () => {
       SystemRequirement("REQ-2800");
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"void-button\"]").arrowClick();
       cy.get("[data-cy=\"AlertDialog-continueButton\"]").contains("Yes, I'm sure").arrowClick();
     });
@@ -742,12 +747,14 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
