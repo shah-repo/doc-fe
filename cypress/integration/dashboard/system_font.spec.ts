@@ -266,10 +266,10 @@ context("User Creation Flow", () => {
 
   context("Verify fonts for Landing page buttons", () => {
     it(`Verify 'Document List' button font-size ${FONT_SIZE_18} font-family ${soraSansserif} line-height ${LINE_HT_27} font-weight  ${FONT_WT_600}`, () => {
-      cy.get(`[data-cy="gridTitle"]`).contains("Document List").should("have.css", "font-size", FONT_SIZE_18);
-      cy.get(`[data-cy="gridTitle"]`).contains("Document List").should("have.css", "line-height", LINE_HT_27);
-      cy.get(`[data-cy="gridTitle"]`).contains("Document List").should("have.css", "font-family", soraSansserif);
-      cy.get(`[data-cy="gridTitle"]`).contains("Document List").should("have.css", "font-weight", FONT_WT_600);
+      cy.get(`[data-cy='grid-title']`).contains("Document List").should("have.css", "font-size", FONT_SIZE_18);
+      cy.get(`[data-cy='grid-title']`).contains("Document List").should("have.css", "line-height", LINE_HT_27);
+      cy.get(`[data-cy='grid-title']`).contains("Document List").should("have.css", "font-family", soraSansserif);
+      cy.get(`[data-cy='grid-title']`).contains("Document List").should("have.css", "font-weight", FONT_WT_600);
     });
 
     it(`Verify 'Export list' button font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight  ${FONT_WT_600}`, () => {

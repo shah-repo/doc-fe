@@ -233,9 +233,9 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
         disableRipple
       >
         {open ? (
-          <CollapseIcon className={classes.icon} data-cy="collapseIcon" onClick={handleClick}  />
+          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick}  />
         ) : (
-          <ExpandIcon className={classes.icon}  data-cy="expandIcon" onClick={handleClick}  />
+          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick}  />
         )}
         <ListItemAvatar>
           {docRevOwnerAvatar ? (

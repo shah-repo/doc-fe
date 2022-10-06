@@ -1875,26 +1875,26 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it(`Verify the popup window has PENDING text`, () => {
-      cy.get("[data-cy='pendingTitle']")
+      cy.get("[data-cy='pending-title']")
         .contains("PENDING");
     });
 
     it(`Verify the PENDING has font-size ${FONT_SIZE_12} form-family ${soraSansserif} line-height 18px font-weight ${FONT_WT_700}`, () => {
-      cy.get("[data-cy='pendingTitle']").checkStylePropExists({
+      cy.get("[data-cy='pending-title']").checkStylePropExists({
         content: "PENDING",
         props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_3, "font-weight": FONT_WT_700 },
       });
     });
 
     it(`Verify ${USERS[1].name} has font-size ${FONT_SIZE_28} form-family ${soraSansserif} font-weight ${FONT_WT_700}`, () => {
-      cy.get("[data-cy='listItemText']").checkStylePropExists({
+      cy.get("[data-cy='list-item-text']").checkStylePropExists({
         content: USERS[1].name,
         props: { "font-size": FONT_SIZE_28, "font-family": soraSansserif, "font-weight": FONT_WT_700 },
       });
     });
 
     it(`Close the popup window`, () => {
-      cy.get("[data-cy='closeModel']")
+      cy.get("[data-cy='close-model']")
         .arrowClick();
     });
   });
@@ -2047,7 +2047,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it(`Verify training status 'EMAIL ALL' font-size as ${FONT_SIZE_11} and form-family as ${soraSansserif} line-height ${FONT_SIZE_14} and font-weight ${FONT_WT_700}`, () => {
-      cy.get("[data-cy='emailButton']")
+      cy.get("[data-cy='email-button']")
         .checkStylePropExists({
           content: "EMAIL ALL",
           props: { "font-size": FONT_SIZE_11, "font-family": soraSansserif, "line-height": FONT_SIZE_14, "font-weight": FONT_WT_700 },
@@ -2055,7 +2055,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it(`Verify training status ${USERS[2].name} font-size as ${FONT_SIZE_12_8} and form-family as ${soraSansserif}`, () => {
-      cy.get("[data-cy='listItemText']")
+      cy.get("[data-cy='list-item-text']")
         .checkStylePropExists({
           content: USERS[2].name,
           props: { "font-size": FONT_SIZE_12_8, "font-family": soraSansserif },

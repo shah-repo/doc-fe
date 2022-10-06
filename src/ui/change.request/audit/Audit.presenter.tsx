@@ -83,7 +83,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           <Box
             mb={1}
             key={`${change.groupId}-${index}`}
-            data-cy="noPaddingMargin"
+            data-cy="no-padding-margin"
             className={
               index === audits.length - 1
                 ? classes.noPaddingMargin

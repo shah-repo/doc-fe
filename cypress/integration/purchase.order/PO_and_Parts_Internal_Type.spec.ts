@@ -1373,7 +1373,7 @@ context("PO and parts ", () => {
     });
 
     it("check attachement on dashboard", () => {
-      cy.get("svg[data-cy='expandIcon']").eq(0).arrowClick();
+      cy.get("svg[data-cy='expand-icon']").eq(0).arrowClick();
     });
 
     it("verify Attachments", () => {
@@ -1394,7 +1394,7 @@ context("PO and parts ", () => {
     });
 
     it("check attachement on dashboard", () => {
-      cy.get("svg[data-cy='expandIcon']").eq(0).arrowClick();
+      cy.get("svg[data-cy='expand-icon']").eq(0).arrowClick();
     });
 
     it("verify Attachments", () => {

@@ -231,7 +231,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     <Grid item>
                       <Button
                         onClick={() => handleSendEmail()}
-                        data-cy="emailButton"
+                        data-cy="email-button"
                         className={classes.emailbutton}
                       >
                         <Text translation="email.button.title" />
@@ -272,7 +272,7 @@ const TrainingEmailModal: React.FunctionComponent<TrainingEmailModalProps> = ({
                     <Typography
                       component="span"
                       variant="h2"
-                      data-cy="listItemText"
+                      data-cy="list-item-text"
                       className={classes.listitemtext}
                     >
                       {due.userName}

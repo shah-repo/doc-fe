@@ -397,7 +397,7 @@ context("Self training test", () => {
     });
 
     it("Check if 'Send To Email' button is working", () => {
-      cy.get(`[data-cy='closeIcon']`)
+      cy.get(`[data-cy='close-icon']`)
         .arrowClick();
     });
   });
