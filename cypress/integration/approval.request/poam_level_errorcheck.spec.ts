@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { LINE_ITEMS_STATUS_TYPES } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -9,6 +10,7 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let adminEmployee;
+let secondEmployee;
 let approvalRequestDocumentType;
 let initialArDocument;
 let formDocumentType;
@@ -52,6 +54,7 @@ context("Approval request landing page test", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           poamDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "PO Approval Matrix");
@@ -166,35 +169,35 @@ context("Approval request landing page test", () => {
             formInput: {
               "po-levels-built-in": {
                 approvalLevels: [
-                  // {
-                  //   // id: "29f145c3-f0bb-43e6-8df9-38e339357a1b",
-                  //   signatures: [
-                  //     {
-                  //       id: "b4b6c0d1-eab2-48e4-b0c1-99211805601d",
-                  //       signatureStage: 1,
-                  //       groups: [
-                  //         {
-                  //           id: group.body[0].id,
-                  //         },
-                  //       ],
-                  //       employees: [],
-                  //     },
-                  //     {
-                  //       id: "f4bbbf1c-e3c5-4a38-9508-5176792614a8",
-                  //       signatureStage: 2,
-                  //       groups: [],
-                  //       employees: [],
-                  //     },
-                  //     {
-                  //       id: "6a81c552-4ceb-44cc-9279-f8a4f1abe449",
-                  //       signatureStage: 3,
-                  //       groups: [],
-                  //       employees: [],
-                  //     },
-                  //   ],
-                  //   limit: 1000,
-                  //   name: "ning title",
-                  // },
+                  {
+                    id: "29f145c3-f0bb-43e6-8df9-38e339357a1b",
+                    signatures: [
+                      {
+                        id: "b4b6c0d1-eab2-48e4-b0c1-99211805601d",
+                        signatureStage: 1,
+                        groups: [
+                          {
+                            id: group.body[0].id,
+                          },
+                        ],
+                        employees: [],
+                      },
+                      {
+                        id: "f4bbbf1c-e3c5-4a38-9508-5176792614a8",
+                        signatureStage: 2,
+                        groups: [],
+                        employees: [],
+                      },
+                      {
+                        id: "6a81c552-4ceb-44cc-9279-f8a4f1abe449",
+                        signatureStage: 3,
+                        groups: [],
+                        employees: [],
+                      },
+                    ],
+                    limit: 1000,
+                    name: "Level-1",
+                  },
                 ],
               },
             },
@@ -274,7 +277,7 @@ context("Approval request landing page test", () => {
     it("Click add item", () => {
       cy.get(`[data-cy="form.builder.add.item"]`).arrowClick();
       cy.get(`[data-cy="name"]`).arrowType("Level-1");
-      cy.get(`[data-cy="limit"]`).arrowType("1000");
+      cy.get(`[data-cy="limit"]`).arrowType("2000");
       cy.get(`[data-cy="signatures.0.groups"]`).autocompleteSelect("Everyone");
       cy.get(`[data-cy="signatures.0.employees"]`).autocompleteSelect(USERS[1].name);
       cy.get(`[data-cy="common.add"]`).arrowClick();
@@ -284,45 +287,32 @@ context("Approval request landing page test", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Check Duplicate entry is not added", () => {
-      cy.get(`[data-cy="form.builder.add.item"]`).arrowClick();
-      cy.get(`[data-cy="name"]`).arrowType("Level-1");
-      cy.get(`[data-cy="limit"]`).arrowType("1000");
-      cy.get(`[data-cy="signatures.0.groups"]`).autocompleteSelect("Everyone");
-      cy.get(`[data-cy="signatures.0.employees"]`).autocompleteSelect(USERS[1].name);
-      cy.get(`[data-cy="common.add"]`).arrowClick();
-      cy.pause();
+    it("Verify system is showing error for duplicate entry", () => {
+      cy.checkToastMessageContains({ message: "PO matrix can't have duplicate limits or level names" });
+      cy.closeAllAlertMessages();
     });
-
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    // it("Verify system is showing error for duplicate entry", () => {
-
-    // });
 
     it("Click on the recently added level", () => {
-      cy.get("tbody>tr").eq(0).arrowClick();
+      cy.get("tbody>tr").eq(1).arrowClick();
     });
 
     it("Change level name", () => {
-      cy.get(`[data-cy="name"]`).arrowType("Level-1a");
+      cy.get(`[data-cy="name"]`).clear().arrowType("Level-2");
     });
 
     it("Click add button", () => {
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
 
-    it("Save document and verify no error shown", () => {
+    it("Save document and verify document saved without error", () => {
       cy.drClickCreateDocumentWithApiCall();
-      // toast error check
+      cy.checkToastMessage({ exists: false });
     });
 
     it("Add another level", () => {
       cy.get(`[data-cy="form.builder.add.item"]`).arrowClick();
-      cy.get(`[data-cy="name"]`).arrowType("Level-2");
-      cy.get(`[data-cy="limit"]`).arrowType("1000");
+      cy.get(`[data-cy="name"]`).arrowType("Level-3");
+      cy.get(`[data-cy="limit"]`).arrowType("2000");
       cy.get(`[data-cy="signatures.0.groups"]`).autocompleteSelect("Everyone");
       cy.get(`[data-cy="signatures.0.employees"]`).autocompleteSelect(USERS[1].name);
       cy.get(`[data-cy="common.add"]`).arrowClick();
@@ -332,17 +322,39 @@ context("Approval request landing page test", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    // it("Verify system is showing error for duplicate entry", () => {
-
-    // });
+    it("Verify system is showing error for duplicate entry", () => {
+      cy.checkToastMessageContains({ message: "PO matrix can't have duplicate limits or level names" });
+      cy.closeAllAlertMessages();
+    });
 
     it("Click on the recently added level", () => {
+      cy.get("tbody>tr").eq(2).arrowClick();
+    });
+
+    it("Change limit", () => {
+      cy.get(`[data-cy="limit"]`).clear().arrowType("3000");
+    });
+
+    it("Click add button", () => {
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
+
+    it("Save document and verify document saved without error", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.checkToastMessage({ exists: false });
+    });
+
+    it("Click on the First level", () => {
       cy.get("tbody>tr").eq(0).arrowClick();
     });
 
-    // it("Update level as original", () => {
+    it("Change level name as in second level", () => {
+      cy.get(`[data-cy="name"]`).clear().arrowType("Level-2");
+    });
 
-    // });
+    it("Change limit as in second level", () => {
+      cy.get(`[data-cy="limit"]`).clear().arrowType("2000");
+    });
 
     it("Click add button", () => {
       cy.get(`[data-cy="common.add"]`).arrowClick();
@@ -352,12 +364,14 @@ context("Approval request landing page test", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Click on the recently added level", () => {
-      cy.get("tbody>tr").eq(0).arrowClick();
+    it("Verify system is showing error for duplicate entry", () => {
+      cy.checkToastMessageContains({ message: "PO matrix can't have duplicate limits or level names" });
+      cy.closeAllAlertMessages();
     });
 
-    it("Change level name to original", () => {
-      cy.get(`[data-cy="name"]`).arrowType("Level-1");
+    it("Click on the First level and change level name to original", () => {
+      cy.get("tbody>tr").eq(0).arrowClick();
+      cy.get(`[data-cy="name"]`).clear().arrowType("Level-1");
     });
 
     it("Click add button", () => {
@@ -366,6 +380,92 @@ context("Approval request landing page test", () => {
 
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Verify system is showing error for duplicate entry", () => {
+      cy.checkToastMessageContains({ message: "PO matrix can't have duplicate limits or level names" });
+      cy.closeAllAlertMessages();
+    });
+
+    it("Click on the First level and change limit to original", () => {
+      cy.get("tbody>tr").eq(0).arrowClick();
+      cy.get(`[data-cy="limit"]`).clear().arrowType("1000");
+    });
+
+    it("Click add button", () => {
+      cy.get(`[data-cy="common.add"]`).arrowClick();
+    });
+
+    it("Save document and verify document saved without error", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.checkToastMessage({ exists: false });
+    });
+  });
+
+  context(`Add ${USERS[2].name} as approver`, () => {
+    it("Click 'Approve and Release' button", () => {
+      cy.poAMCheckForApproval();
+    });
+
+    it(`Select ${USERS[2].name}`, () => {
+      cy.poAMSelectApprover(USERS[2].name);
+    });
+
+    it("Enter password", () => {
+      cy.poAMEnterPassword();
+    });
+
+    it("Click 'Confirm' button", () => {
+      cy.poAMApproveButton();
+    });
+  });
+
+  context(`Approve as a ${USERS[2].name}`, () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+    });
+
+    it("Navigates to Approval Requests", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Choose AR", () => {
+      cy.arFilterARListByNameAndStatus({ title: "POAM doc", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
+    });
+
+    it("Click 'Approve Submission' button", () => {
+      cy.poAMApproveSubmissionButton();
+    });
+
+    it("Enter password", () => {
+      cy.poAMEnterPassword();
+    });
+
+    it("Click 'Confirm' button", () => {
+      cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+    });
+  });
+
+  context(`Close the AR and verify it is closed without throwing any error message`, () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+
+    it("Navigates to Approval Requests", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Choose AR", () => {
+      cy.arClearFilters();
+      cy.arFilterARListByNameAndStatus({ title: "POAM doc", status: LINE_ITEMS_STATUS_TYPES.APPROVED });
+    });
+
+    it("Close AR and verify AR closed without throwing any error message", () => {
+      cy.arCloseAR();
+    });
+
+    it("Verify status of AR", () => {
+      cy.arVerifyStatus({ status: LINE_ITEMS_STATUS_TYPES.CLOSED });
     });
   });
 });
