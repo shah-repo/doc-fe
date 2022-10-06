@@ -243,7 +243,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Click on Submit For Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
     });
 
@@ -288,7 +288,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Click on Submit For Approval", () => {
           cy.wait(3000);
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
       });
     });

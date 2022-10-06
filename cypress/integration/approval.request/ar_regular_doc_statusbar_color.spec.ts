@@ -328,12 +328,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -548,12 +550,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -645,6 +649,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
@@ -885,11 +890,13 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
 
     it(`Verify 'Change Owner' exists in statusbar`, () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 
