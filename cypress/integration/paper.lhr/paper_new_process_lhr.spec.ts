@@ -627,15 +627,11 @@ context("Paper new process LHR", () => {
   });
 
   context("Approve and released LHR error checking", () => {
-    it("Approve and release document", () => {
-      cy.lhrSubmitForApproval();
-    });
-
-    it("Verify error message for build type", () => {
+    it("Approve and release document & Verify error message for build type", () => {
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       cy.checkToastMessageIsEqual({
-        message: "The Build Type is a required field.",
+        message: "The Build Type is a required field",
       });
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 

@@ -1,19 +1,21 @@
 import React from "react";
-import { SM, SMProvider, SMTabsHOCProps, SMTabsState } from "../../..";
+import { DocumentRevisionFormState, SM, SMProvider, SMTabsHOCProps, SMTabsState } from "../../..";
 
 export const withSMTabs = <T extends SMTabsHOCProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     _tabsState,
+    _documentRevisionFormState,
     ...props
   }: T) => {
 
     _tabsState = SM.useRef(SMTabsState);
+    _documentRevisionFormState = SM.useRef(DocumentRevisionFormState);
 
     return (
-      <SMProvider {...{ _tabsState }}>
-        <Component {...props as T} {...{ _tabsState }} />
+      <SMProvider {...{ _tabsState, _documentRevisionFormState }}>
+        <Component {...props as T} {...{ _tabsState, _documentRevisionFormState }} />
       </SMProvider>
     );
   };

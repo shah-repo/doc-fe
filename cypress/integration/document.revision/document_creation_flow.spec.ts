@@ -392,7 +392,8 @@ context("Document Creation Flow", () => {
     context("Verify ownership mechanism", () => {
       it("Change owner of document", () => {
         SystemRequirement("REQ-0340");
-        cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
+        cy.get("#HeaderMenuButton").arrowClick();
+        cy.drChangeOwnerByAdmin({ employee: USERS[3].name });
       });
 
       it("Login user to dashboard", () => {
@@ -425,6 +426,7 @@ context("Document Creation Flow", () => {
 
       it("Change owner of document by admin", () => {
         SystemRequirement("REQ-0340");
+        cy.get("#HeaderMenuButton").arrowClick();
         cy.drChangeOwnerByAdmin({ employee: USERS[2].name });
       });
 
