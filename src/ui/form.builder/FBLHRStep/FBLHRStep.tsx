@@ -4,7 +4,7 @@ import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
 import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
-import { find, isEmpty, map } from "lodash";
+import { find, map } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -19,8 +19,6 @@ import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
 import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
-import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
-import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
 import { FBLHRStepStyles } from "./FBLHRStep.styles";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
@@ -256,22 +254,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               }
             />
           </Box>
-          {isDocumentLHRT && !isEmpty(materials) && (
-            <FBLHRStepProcedureItem
-              value={materials}
-              type={FBProcedureItemType.materials}
-              lhrStepIndex={index}
-              isPendingChange
-            />
-          )}
-          {isDocumentLHRT && !isEmpty(equipment) && (
-            <FBLHRStepProcedureItem
-              value={equipment}
-              type={FBProcedureItemType.equipment}
-              lhrStepIndex={index}
-              isPendingChange
-            />
-          )}
           <Box mb={3.75} mt={3.75}>
             <Grid container spacing={3}>
               <Grid item xs={4}>
