@@ -604,7 +604,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     context("Create CSL revision from revised EFM-10605", () => {
       it("Click on Create New button", () => {
-        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.drCreateNewDocumentFromFormRecord();
         cy.wait(3000);
       });
 
