@@ -1,10 +1,10 @@
-import { Avatar, Badge, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Avatar, Badge, Box, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import Accordion from "@material-ui/core/ExpansionPanel";
 import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
 import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
-import { find, map } from "lodash";
+import { find, isEmpty, map } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -16,8 +16,11 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { User } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
+import Text from "../../components/Text";
 import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
+import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
+import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
 import { FBLHRStepStyles } from "./FBLHRStep.styles";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 
@@ -49,7 +52,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 }) => {
   const { workspaceState } = FB.useStores();
   const classes = FBLHRStepStyles();
-
   const documentOperators = workspaceState?.document?.document?.operators
     ?.map(({ user }) => ({ stepId: user?.id, user }));
 
@@ -109,6 +111,19 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
     return statusColor;
   };
 
+  const getLHRStatus = () => {
+    const status = stepLHRs?.status;
+    let lhrstatus = "";
+    if (stepLHRs && isDocumentRevisionReleased(status)) {
+      lhrstatus = "form.builder.step.complete";
+    } else if (stepLHRs && !isDocumentRevisionReleased(status)) {
+      lhrstatus = "form.builder.step.inprogress";
+    } else if (!stepLHRs) {
+      lhrstatus = "form.builder.step.noStarted";
+    }
+    return lhrstatus || status;
+  };
+
   const renderRemoveCircle = () => (
     <RemoveCircle
       style={{
@@ -155,6 +170,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 component={"span"}
                 mr={0.75}
               >
+                {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}}></FBText>)}
               </Box>
               {stepLHRs &&
                 (isDocumentRevisionReleased(stepLHRs?.status) || isDocumentRevisionInDraft(stepLHRs?.status)) &&
@@ -239,7 +255,58 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               }
             />
           </Box>
+
+          {!isDocumentLHRT && !isEmpty(materials) && (
+            <FBLHRStepProcedureItem
+              value={materials}
+              type={FBProcedureItemType.materials}
+              lhrStepIndex={index}
+              isPendingChange
+            />
+          )}
+          {!isDocumentLHRT && !isEmpty(equipment) && (
+            <FBLHRStepProcedureItem
+              value={equipment}
+              type={FBProcedureItemType.equipment}
+              lhrStepIndex={index}
+              isPendingChange
+            />
+          )}
+          {!isDocumentLHRT && (
+            <Box mb={3.75} mt={3.75}>
+              <Grid container spacing={3}>
+                <Grid item xs={4}>
+                  <Typography className={classes.fontTitle} data-cy={`start-quantity-${stepIndex}`}>
+                    <Text translation="form.builder.start.quantity" />
+                  </Typography>
+                  <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
+                    {stepLHRs?.formInput?.["lhrs-start-quantity"]}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography className={classes.fontTitle}  data-cy={`accepted-quantity-${stepIndex}`}>
+                    <Text translation="form.builder.accepted.quantity" />
+                  </Typography>
+                  <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
+                    {stepLHRs?.formInput?.["lhrs-accepted-quantity"]}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography className={classes.fontTitle} data-cy={`rejected-quantity-${stepIndex}`}>
+                    <Text translation="form.builder.rejected.quantity" />
+                  </Typography>
+                  <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
+                    {stepLHRs?.formInput?.["lhrs-rejected-quantity"]}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>)}
           <Box>
+            {!isDocumentLHRT && (
+              <Box className={classes.fontTitle} data-cy={`operators-${stepIndex}`}>
+                <Text translation="common.operators" />
+              </Box>
+            )}
             <List>
               {map(operators, (operator, index) => (
                 <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
