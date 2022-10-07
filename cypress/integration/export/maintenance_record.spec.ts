@@ -570,7 +570,7 @@ context("Export maintenance record", () => {
     context("Add Maintenance Record with Released", () => {
       it("Add approver", () => {
         cy.get("[data-cy*='fb-approvals-fb-approvals']").eq(0)
-          .autocompleteSelect("enlil.testmail+cy1");
+          .autocompleteSelect(USERS[1].name);
         cy.wait(2000);
       });
       it("Click on revisions tab on side panel", () => {
@@ -795,7 +795,7 @@ context("Export maintenance record", () => {
 
       it("Add approver", () => {
         cy.get("[data-cy*='fb-approvals-fb-approvals']").eq(0)
-          .autocompleteSelect("enlil.testmail+cy1");
+          .autocompleteSelect(USERS[1].name);
         cy.wait(2000);
       });
 
