@@ -17,7 +17,7 @@ const LHRBanner: React.FunctionComponent<LHRBannerProps> = ({ documentRevision }
     return null;
   }
 
-  const lhrData = smartReferencesTo[0].toDocRev?.precalc.lshs_subtitle;
+  const lhrData = smartReferencesTo[0].toDocRev?.precalc?.lshs_subtitle;
   if (!lhrData?.part.docRevId || !lhrData?.part.documentId) {
     return null;
   }

@@ -528,7 +528,9 @@ add the requestor to the approvals field`,
 
     context("Fill in Fields including field Requestor", () => {
       it(`Select '${USERS[2].name}' for Requestor`, () => {
+        cy.get(`div[name^="po-requestor-autocomplete"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
         cy.get("[data-cy^=po-requestor-autocomplete]").arrowClick();
+        cy.wait(3000);
         cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
       });
     });
@@ -552,6 +554,7 @@ add the requestor to the approvals field`,
 
     context("Check “Backspace” and “Clear all” option will not be available in the PO approval field", () => {
       it(`Verify that “Backspace” and “Clear all” option will not be available in the PO approval field`, () => {
+        cy.wait(1000);
         cy.get("[data-cy^=fb-po-approvals]").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
       });
     });

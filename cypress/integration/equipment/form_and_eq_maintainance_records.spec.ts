@@ -1179,12 +1179,8 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Verify for pm", () => {
-        cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "2");
+        cy.get("[data-cy=\"document.revision.history\"]").should("have.length", "1");
         cy.get("[data-cy=\"document.revision.history\"]").eq(0).should("have.text", "History");
-      });
-
-      it("Verify for calibration", () => {
-        cy.get("[data-cy=\"document.revision.history\"]").eq(1).should("have.text", "History");
       });
 
       it("Check preventative maintenance document existance", () => {

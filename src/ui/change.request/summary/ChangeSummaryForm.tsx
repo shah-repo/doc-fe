@@ -52,6 +52,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   canChangeOwnership,
   displayLastSaved,
   errors,
+  _documentRevisionFormState,
 }) => {
   const { _tabsState } = SM.useStores();
   _formState?.setMode(mode);
@@ -101,7 +102,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
-              contentBoxProps={{ minHeight: "0px", height: "auto" }}
+              contentBoxProps={{ minHeight: _documentRevisionFormState?.expanded ? "100%" : "0px", height: "auto" }}
               boxProps={{ overflow: "auto" }}
               header={<ChangeSummaryFormHeader
                 title={changeRequest?.title}

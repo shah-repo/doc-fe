@@ -918,6 +918,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Select Purchase order", () => {
+      cy.wait(1000);
       cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
         .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
     });
@@ -961,6 +962,11 @@ context("Receiving landing page test", () => {
     it("Save the  form", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.wait(2000);
+    });
+
+    it("Navigate to details Tab", () => {
+      cy.wait(1000);
+      cy.drSelectDetailsTab();
     });
 
     it("Verify inserted quantity saved and display in the table ", () => {
@@ -1300,6 +1306,7 @@ context("Receiving landing page test", () => {
 
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
+      cy.wait(1000);
       cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
         .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
     });
@@ -1365,7 +1372,9 @@ context("Receiving landing page test", () => {
     });
 
     it("Navigate to details Tab", () => {
+      cy.wait(1000);
       cy.drSelectDetailsTab();
+      cy.wait(1000);
     });
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {

@@ -205,14 +205,14 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       poApprovalsState.setPrevPOItems(poItems);
 
-      checkLineItems();
+      // checkLineItems();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => reaction(
-      () => Object.values((poApprovalsState?.groups as {})).length,
-      (length) => {
-        if (length > 0) {
+      () => Object.values((poApprovalsState?.groups as {})).slice(),
+      (groups) => {
+        if (groups) {
           checkLineItems();
         }
       }
