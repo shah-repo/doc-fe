@@ -1137,7 +1137,6 @@ context("Paper Lot History Record", () => {
 
     it("Upload attachement picture 'dummy.pdf'", () => {
       cy.atchUploadAttachment({ fileName: "dummy.pdf" });
-      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1153,15 +1152,17 @@ context("Paper Lot History Record", () => {
           });
         });
       });
-      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Production' build type", () => {
       cy.get(`[name="lhr-build-type"]`).last().should("have.value", "Production").check();
-
       cy.get(`[data-cy="Build Type"]`)
         .parent().parent().parent().parent().next("p")
         .should("not.exist");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'R&D' build type", () => {
@@ -1174,12 +1175,14 @@ context("Paper Lot History Record", () => {
 
     it("Enter Intial Quantity field value", () => {
       cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter End Quantity field value", () => {
       cy.get("[name=\"lhr-end-quantity\"]").arrowType("20");
+      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1189,7 +1192,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Enter text in fb-textfield", () => {
-      cy.get(`[name^="fb-textfield"]`).first().arrowType("LHR textfield").wait(2000);
+      cy.get(`[name^="fb-textfield"]`).first().arrowType("LHR textfield").wait(3000);
     });
 
     it("Click save document", () => {
