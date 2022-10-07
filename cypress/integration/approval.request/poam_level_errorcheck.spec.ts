@@ -284,7 +284,7 @@ context("Approval request landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
     });
 
     it("Verify system is showing error for duplicate entry", () => {
@@ -319,7 +319,7 @@ context("Approval request landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
     });
 
     it("Verify system is showing error for duplicate entry", () => {
@@ -361,7 +361,7 @@ context("Approval request landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
     });
 
     it("Verify system is showing error for duplicate entry", () => {
@@ -379,7 +379,7 @@ context("Approval request landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
     });
 
     it("Verify system is showing error for duplicate entry", () => {
