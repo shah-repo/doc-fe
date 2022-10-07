@@ -1865,6 +1865,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
