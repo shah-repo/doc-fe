@@ -1003,10 +1003,6 @@ context("Paper Lot History Record", () => {
       cy.get("[data-cy=\"remove-schema-item\"]").eq(-4).arrowClick({ force: true });
     });
 
-    it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("Verify File Upload is not diplayed", () => {
       cy.get(`[data-cy="${fileUploadFieldTitle}"]`).should("not.exist");
     });
@@ -1036,10 +1032,6 @@ context("Paper Lot History Record", () => {
       cy.fbEnterNameValue({ name: "label", value: fileUploadFieldTitle });
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
-    });
-
-    it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Verify File Upload is diplayed", () => {
@@ -1110,7 +1102,7 @@ context("Paper Lot History Record", () => {
         .should("have.text", "The End Quantity is a required field.");
     });
 
-    it("Verify TextField with validation is diplayed", () => {
+    it("Verify TextField with validation is displayed", () => {
       cy.get(`[data-cy="${txtFieldTitle1}"]`).should("exist");
     });
 
@@ -1129,29 +1121,15 @@ context("Paper Lot History Record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       });
-
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"Part to be Manufactured\"]")
         .parent().parent().parent().parent().next("p")
         .should("not.exist");
     });
 
-    it("Upload attachement picture 'dummy.pdf'", () => {
-      cy.atchUploadAttachment({ fileName: "dummy.pdf" });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Upload attachment test.docx", () => {
-      cy.fixture("test.docx").then((fileContent) => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
-            fileContent: fileContent.toString(),
-            fileName: "test.docx",
-            mimeType: "*",
-            filePath: `fixtures/test.docx`,
-          });
-        });
-      });
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1163,6 +1141,7 @@ context("Paper Lot History Record", () => {
         .should("not.exist");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select 'R&D' build type", () => {
@@ -1171,6 +1150,7 @@ context("Paper Lot History Record", () => {
       cy.get(`[name="lhr-build-type"]`).eq(1).should("have.value", "Production").should("be.disabled");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter Intial Quantity field value", () => {
@@ -1192,7 +1172,23 @@ context("Paper Lot History Record", () => {
     });
 
     it("Enter text in fb-textfield", () => {
-      cy.get(`[name^="fb-textfield"]`).first().arrowType("LHR textfield").wait(3000);
+      cy.get(`[name^="fb-textfield"]`).first().arrowType("LHR textfield");
+      cy.unClick();
+    });
+
+    it("Upload attachment test.docx", () => {
+      cy.fixture("test.docx").then((fileContent) => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
+          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
+            fileContent: fileContent.toString(),
+            fileName: "test.docx",
+            mimeType: "*",
+            filePath: `fixtures/test.docx`,
+          });
+        });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
@@ -1337,7 +1333,7 @@ context("Paper Lot History Record", () => {
 
     it("Verify attached file length more than 50 bytes", () => {
       const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-        downloadFile.replace(".zip", ""), "dummy.pdf");
+        downloadFile.replace(".zip", ""), "image.jpg");
       cy.readFile(attachedFile).its("length").should("be.gt", 50);
     });
   });
@@ -1371,7 +1367,7 @@ context("Paper Lot History Record", () => {
         tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nPRT-00001, REV 1, PART DOCUMENT1`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/dummy.pdf\nAttachments/);
+        expect(el).match(/image.jpg\nAttachments/);
 
         expect(el).match(/Part to be Manufactured\nPRT-00001 - 1 Part document1/);
 
@@ -1567,7 +1563,7 @@ context("Paper Lot History Record", () => {
 
     it("Verify attached file length more than 50 bytes", () => {
       const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
-        downloadFile.replace(".zip", ""), "dummy.pdf");
+        downloadFile.replace(".zip", ""), "image.jpg");
       cy.readFile(attachedFile).its("length").should("be.gt", 50);
     });
   });
@@ -1602,7 +1598,7 @@ context("Paper Lot History Record", () => {
         tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nPRT-00001, REV 1, PART DOCUMENT1`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/dummy.pdf\nAttachments/);
+        expect(el).match(/image.jpg\nAttachments/);
 
         expect(el).match(/Part to be Manufactured\nPRT-00001 - 1 Part document1/);
 
@@ -1982,7 +1978,7 @@ context("Paper Lot History Record", () => {
         tmpRegex = new RegExp( `Build Type\\n R&D(.*)Production`, "gi" );
         expect(el).not.match(tmpRegex);
 
-        expect(el).not.match(/dummy.pdf/);
+        expect(el).not.match(/image.jpg/);
 
         expect(el).match(/Obsolete/);
 
