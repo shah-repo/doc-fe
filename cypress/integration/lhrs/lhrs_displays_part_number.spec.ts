@@ -300,6 +300,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Enter title", () => {
+      cy.wait(3000);
       cy.drEnterDocumentTitle( { name: "CSL with part number and CS reference" });
     });
 
@@ -481,7 +482,9 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          // cy.wait(2000);
+          // cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          cy.wait(2000);
           cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document", { force: true });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -523,6 +526,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click save document", () => {
+      cy.wait(4000);
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -534,7 +538,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click 'LHR Step'", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]").scrollIntoView().arrowClick();
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
     });
 
     it("Click 'START MPI'", () => {
@@ -603,6 +607,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     context("Create CSL revision from revised EFM-10605", () => {
       it("Click on Create New button", () => {
         cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.wait(3000);
       });
 
       it("Enter title", () => {
@@ -787,6 +792,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
+          cy.wait(2000);
           cy.get("input[data-cy=\"lhrstep-built-in\"]")
             .autocompleteSelect("MPI document (revised EFM-10605)", { force: true });
           cy.progressBarShouldNotExist();
@@ -829,6 +835,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click save document", () => {
+      cy.wait(3000);
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   });
@@ -839,7 +846,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click 'LHR Step'", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]").scrollIntoView().arrowClick();
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
     });
 
     it("Click 'START MPI'", () => {
