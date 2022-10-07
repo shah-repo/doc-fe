@@ -334,6 +334,66 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
   });
 
   context("Scenario 6a - Newly Created PART_LOT internal type, Component specification", () => {
+    context("Create a document type 'Form' for migration with output CSL and add FB fields", () => {
+      it("Navigate to Document List", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document'", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it(`Enter title ${formTitle}`, () => {
+        cy.drEnterDocumentTitle({ name: "migration form" });
+      });
+
+      it(`Enter description ${formDescription}`, () => {
+        cy.drEnterDocumentDescription({ description: "Migration form description" });
+      });
+
+      it("Click on 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Click on 'Component specification Lot' document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Component Specification Lot" });
+        cy.unClick();
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+    });
+
+    context("Add Fields in Details tab for migration form", () => {
+      it("Add Text Field", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add Radio Button group", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+        cy.fbGroupOptions("Option 1", "Option 2");
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save Form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Approve and released", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
     context("Create a document type 'Form' with output CSL and add FB fields", () => {
       it("Navigate to Document List", () => {
         cy.navigToDocumentList();
@@ -577,6 +637,10 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           });
 
           context("Verify Details tab added fields", () => {
+            it("Navigate to Details tab", () => {
+              cy.drSelectDetailsTab();
+            });
+
             it("Verify Text Field", () => {
               cy.contains("fb-textfield").should("exist");
             });
@@ -621,6 +685,74 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
         });
       });
 
+      context("Verify form migration", () => {
+        it("Verify migrate form button is visible", () => {
+          cy.get("[data-cy=references-icon]").arrowClick();
+          cy.get("[data-cy='common.form.migration']").should("be.visible");
+        });
+
+        it("Click on migrate form button", () => {
+          cy.get("[data-cy='common.form.migration']").arrowClick();
+        });
+
+        it("Select form to be migrated", () => {
+          cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+          cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+        });
+
+        it("Mapped Initial Quantity", () => {
+          cy.get("[id='formMigrationField']" ).eq(0).arrowClick();
+          cy.get("[id^='react-select']").eq(1).autocompleteSelect("Initial Quantity");
+        });
+
+        it("Mapped Usable Quantity", () => {
+          cy.get("[id='formMigrationField']" ).eq(1).arrowClick();
+          cy.get("[id^='react-select']").eq(2).autocompleteSelect("Usable Quantity");
+        });
+
+        it("Mapped Expiration Date field", () => {
+          cy.get("[id='formMigrationField']" ).eq(2).arrowClick();
+          cy.get("[id^='react-select']").eq(3).autocompleteSelect("Expiration Date");
+        });
+
+        it("Mapped Part Selection field", () => {
+          cy.get("[id='formMigrationField']" ).eq(3).arrowClick();
+          cy.get("[id^='react-select']").eq(4).autocompleteSelect("Part Selection");
+        });
+
+        it("Mapped 100% Inspection Override field", () => {
+          cy.get("[id='formMigrationField']" ).eq(4).arrowClick();
+          cy.get("[id^='react-select']").eq(5).autocompleteSelect("100% Inspection Override");
+        });
+
+        it("Mapped Approvals field", () => {
+          cy.get("[id='formMigrationField']" ).eq(5).arrowClick();
+          cy.get("[id^='react-select']").eq(6).autocompleteSelect("form.builder.approvals");
+        });
+
+        it("Mapped fb-radiobutton-group field", () => {
+          cy.get("[id='formMigrationField']" ).eq(6).arrowClick();
+          cy.get("[id^='react-select']").eq(7).autocompleteSelect("fb-textfield");
+        });
+
+        it("Mapped fb-radiobutton-group field", () => {
+          cy.get("[id='formMigrationField']" ).eq(7).arrowClick();
+          cy.get("[id^='react-select']").eq(8).autocompleteSelect("fb-radiobutton-group");
+        });
+
+        it("Click on confirm change", () => {
+          cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+        });
+
+        it("Navigate to details Tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Verify form info should have migrated form 'FM-00002'", () => {
+          cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+        });
+      });
+
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
           cy.openRevisionsTabAndVerifyCurrentRevision("A");
@@ -654,6 +786,10 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           {
             owner,
             actions: [{ key: "Access granted to user", value: userOne }],
+          },
+          {
+            owner,
+            actions: [{ key: "Form Set To", value: "FM-00002 - revision 1 - migration form" }],
           },
           {
             owner,
@@ -719,6 +855,10 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
       });
 
       context("Enter values for Details tab added fields", () => {
+        it("Navigate to overview Tab", () => {
+          cy.drSelectOverviewTab();
+        });
+
         it("Fill text field", () => {
           cy.get("[name^=fb-textfield-]").arrowType("Component specification Text Field");
           cy.unClick();
@@ -812,12 +952,20 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
             cy.get(`[data-cy="100% Inspection Override"]`).should("exist");
           });
 
+          it("Navigate to overview tab", () => {
+            cy.drSelectOverviewTab();
+          });
+
           it("Verify Text Field", () => {
             cy.contains("fb-textfield").should("exist");
           });
 
           it("Verify Radio Button Group", () => {
             cy.contains("fb-radiobutton-group").should("exist");
+          });
+
+          it("Navigate to Details tab", () => {
+            cy.drSelectDetailsTab();
           });
 
           it("Verify that Form Options should appear for Details tab", () => {
@@ -997,12 +1145,20 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           });
 
           context("Verify Details tab added fields", () => {
+            it("Navigate to Details tab", () => {
+              cy.drSelectOverviewTab();
+            });
+
             it("Verify Text Field", () => {
               cy.contains("fb-textfield").should("exist");
             });
 
             it("Verify Radio Button Group", () => {
               cy.contains("fb-radiobutton-group").should("exist");
+            });
+
+            it("Navigate to Details tab", () => {
+              cy.drSelectDetailsTab();
             });
 
             it("Verify that Form Options should appear for Details tab", () => {
