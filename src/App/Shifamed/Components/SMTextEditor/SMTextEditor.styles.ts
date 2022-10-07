@@ -36,6 +36,7 @@ export const SMEditorStyles = makeStyles(() =>
       borderTop: "1px solid #2684FF !important",
       borderRight: "1px solid #2684FF !important",
       borderRadius: "4px 4px 0px 0px !important",
+      position: "inherit !important" as any,
     },
     descriptionMainEditorClass: {
       borderLeft: "1px solid #2684FF !important",

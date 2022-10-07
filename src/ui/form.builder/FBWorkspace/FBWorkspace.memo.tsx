@@ -1,7 +1,7 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, Typography } from "@material-ui/core";
 import { get, isEqual, kebabCase, size } from "lodash";
-import React from "react";
 import { Observer } from "mobx-react";
+import React from "react";
 import {
   FB,
   FBSchema,
@@ -11,12 +11,18 @@ import {
   FBWorkspaceSocket,
 } from "..";
 import { ReactComponent as AddIcon } from "../../../assets/images/formBuilder/add_icon.svg";
+import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import {
   DocumentGroupType,
   DOC_TYPE_GROUP,
 } from "../../../state/ducks/documentRevisions/documentType/types";
+import SummaryInfo from "../../common/summary/SummaryInfo";
 import Text from "../../components/Text";
 import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
+import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
+import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
+import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import Colors from "../../layout/theme/utils/colors";
 
 const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
@@ -55,6 +61,28 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   );
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
+  const documentInfo = workspaceState?.document;
+  const isInlineApproval = isFormWithInlineApproval(documentInfo?.formDocument?.formTemplate?.schema);
+  const isRecord = checkIsDocumentRecord(documentInfo?.document?.documentType?.groupOptions);
+  const isFirstAlphaReleased = isDocumentAlphaReleased(documentInfo?.revisionStage) && documentInfo?.subRevision === 0;
+  const renderReleaseDetails = () => (
+    <Box>
+      <Typography variant="h6" style={{ paddingBottom: 8 }}>
+        <Text translation="document.revision.release.details" />
+      </Typography>
+      <SummaryInfo
+        label={"record.released.by"}
+        value={documentInfo?.owner?.user.name || ""}
+        dataCy={"releasedBy"}
+      />
+      <SummaryInfo
+        label={"document.revision.released.date"}
+        value={getFormattedDateString(documentInfo?.releasedAt, MomentFormats.MonthDateYear)}
+        dataCy={"releasedDate"}
+      />
+    </Box>
+  );
+
   return (
     <Observer>
       {() => (
@@ -67,6 +95,8 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
               workspaceMode={mode}
             />
           )}
+          {isRecord && isInlineApproval && isFirstAlphaReleased &&
+        isDocumentRevisionReleased(workspaceState?.document?.status) && renderReleaseDetails()}
           {_tabsState?.isTabActive("details") &&
             workspaceState?.mode === "design" &&
             [DOC_TYPE_GROUP.LHRT].includes(group as DOC_TYPE_GROUP) && (

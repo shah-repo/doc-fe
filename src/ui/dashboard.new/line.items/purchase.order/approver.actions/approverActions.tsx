@@ -195,9 +195,9 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
       >
         {type === ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED &&
         open ? (
-            <CollapseIcon className={classes.icon} onClick={handleClick} />
+            <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
           ) : (
-            <ExpandIcon className={classes.icon} onClick={handleClick} />
+            <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
           )}
         <ListItemAvatar>
           {approverAvatar ? (

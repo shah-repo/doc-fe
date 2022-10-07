@@ -58,6 +58,5 @@ export const LINE_HT_49_92 = "49.92px";
 export const LINE_HT_12 = "12px";
 export const LINE_HT_13 = "13px";
 export const LINE_HT_19_2 = "19.2px";
-export const LINE_HT_20_02 = "20.02px";
 
 export const TEXT_TRANS_UPPER = "uppercase";

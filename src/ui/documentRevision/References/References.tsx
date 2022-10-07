@@ -86,7 +86,7 @@ const References = ({
           {releasedAt
             ? getFormattedDateString(
               releasedAt,
-              MomentFormats.YearMonthDateDotNotation
+              MomentFormats.MonthDateYearTwoDigit
             )
             : <Text translation="common.none" />}
         </Typography>
