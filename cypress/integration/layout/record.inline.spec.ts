@@ -207,14 +207,14 @@ context("Record inline Flow", () => {
       it("Add textfield", () => {
         cy.fbAddNewFieldWhenHidden();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-        cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
+        cy.fbEnterNameValue({ name: "label", value: "Textfield for inline1" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add inline approval", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
-        cy.fbEnterNameValue({ name: "label", value: "Inline field" });
+        cy.fbEnterNameValue({ name: "label", value: "Inline field2" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
@@ -332,14 +332,14 @@ context("Record inline Flow", () => {
       it("Add textfield", () => {
         cy.fbAddNewFieldWhenHidden();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-        cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
+        cy.fbEnterNameValue({ name: "label", value: "Textfield for inline1" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add inline approval", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
-        cy.fbEnterNameValue({ name: "label", value: "Inline field" });
+        cy.fbEnterNameValue({ name: "label", value: "Inline field2" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
@@ -651,18 +651,19 @@ context("Record inline Flow", () => {
         });
         verifyHistoryContent(history, groupOne);
       });
-      // comment out after book mark apprear need to uncomment
-      // context("Verify book mark", () => {
-      //   it("Verify Book Mark Navigation", () => {
-      //     cy.get("[data-cy='bookmark-icon']").arrowClick();
-      //     cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
-      //   });
 
-      //   it("Click on approval block user should be navigated to the section", () => {
-      //     cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
-      //     cy.get("[data-cy^='fb-approvals']").should("be.visible");
-      //   });
-      // });
+      // comment out after book mark apprear need to uncomment
+      context("Verify book mark", () => {
+        it("Verify Book Mark Navigation", () => {
+          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+        });
+
+        it("Click on approval block user should be navigated to the section", () => {
+          cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
+          cy.get("[data-cy^='fb-approvals']").should("be.visible");
+        });
+      });
 
       context("Verify form migration", () => {
 
@@ -680,39 +681,39 @@ context("Record inline Flow", () => {
           cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
         });
 
+        it(" Approvals Select form to be migrated", () => {
+          cy.get("[data-cy^='field-fb-approvals']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(1).autocompleteSelect("form.builder.approvals");
+        });
+
         it("Mapped text field", () => {
-          cy.get("[data-cy^='field-textfield-for-inline']" ).arrowClick();
-          cy.get("[id^='react-select']").contains("Textfield for inline").arrowClick();
+          cy.get("[data-cy^='field-textfield-for-inline-1']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(2).autocompleteSelect("Textfield for inline1");
         });
 
         it("Mapped in line field", () => {
-          cy.get("[data-cy^='field-inline-field']" ).arrowClick();
-          cy.get("[id^='react-select']").contains("Inline field").arrowClick();
+          cy.get("[data-cy^='field-inline-field-2']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(3).autocompleteSelect("Inline field2");
         });
 
         it("Mapped checkbox", () => {
           cy.get("[data-cy^='field-checkbox']" ).arrowClick();
-          cy.get("[id^='react-select']").eq(3).autocompleteSelect("checkbox");
+          cy.get("[id^='react-select']").eq(4).autocompleteSelect("checkbox");
         });
 
         it("Mapped TEXT FIELD", () => {
           cy.get("[data-cy^='field-text-field']" ).arrowClick();
-          cy.get("[id^='react-select']").eq(4).autocompleteSelect("TEXT FIELD");
+          cy.get("[id^='react-select']").eq(5).autocompleteSelect("TEXT FIELD");
         });
 
         it("Second textfield for inline Select form to be migrated", () => {
           cy.get("[data-cy^='field-second-textfield-for-inline']" ).arrowClick();
-          cy.get("[id^='react-select']").contains("Second textfield for inline").arrowClick();
+          cy.get("[id^='react-select']").eq(6).autocompleteSelect("Second textfield for inline");
         });
 
         it(" Second inline field Select form to be migrated", () => {
           cy.get("[data-cy^='field-second-inline-field']" ).arrowClick();
-          cy.get("[id^='react-select']").contains("Second inline field").arrowClick();
-        });
-
-        it(" Approvals Select form to be migrated", () => {
-          cy.get("[data-cy^='field-fb-approvals']" ).arrowClick();
-          cy.get("[id^='react-select']").eq(7).autocompleteSelect("form.builder.approvals");
+          cy.get("[id^='react-select']").eq(7).autocompleteSelect("Second inline field");
         });
 
         it("Click on confirm change", () => {
@@ -735,12 +736,9 @@ context("Record inline Flow", () => {
 
     context("Approve Inline Approval", () => {
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name*='fb-ia-inline-field'] input")
-              .autocompleteSelect(`${USERS[2].name}`, { force: true });
-          });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[name*='fb-ia-inline-field-2'] input")
+          .autocompleteSelect(`${USERS[2].name}`, { force: true });
       });
 
       it("Approve first Inline Approval", () => {
@@ -770,7 +768,6 @@ context("Record inline Flow", () => {
       });
 
       it("Check system creates new major revision after inline approve", () => {
-        SystemRequirement("REQ-1040");
         cy.drClickRevisionsSidePanel();
         cy.recCheckRevisionStage({ stage: "Revision 2" });
       });
@@ -807,7 +804,7 @@ context("Record inline Flow", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
             () => {
               cy.listLoadingElementShouldNotExist();
-              cy.get("[name*='fb-ia-inline-field'] input")
+              cy.get("[name*='fb-ia-inline-field-2'] input")
                 .autocompleteSelect(`${USERS[2].name}`, { force: true });
             });
         });

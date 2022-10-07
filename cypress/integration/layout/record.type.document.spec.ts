@@ -461,9 +461,9 @@ context("Record type Document Layout verification", () => {
           cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
         });
 
-        it("Select form to be migrated", () => {
+        it("Mapped checkbox field", () => {
           cy.get("[data-cy^='field-checkbox']" ).arrowClick();
-          cy.get("[id^='react-select']").eq(1).autocompleteSelect("checkbox");
+          cy.get("[id^='react-select']").eq(2).autocompleteSelect("checkbox");
         });
 
         it("Select form to be migrated", () => {
@@ -472,6 +472,7 @@ context("Record type Document Layout verification", () => {
         });
 
         it("Click on confirm change", () => {
+          cy.pause();
           cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
         });
 
