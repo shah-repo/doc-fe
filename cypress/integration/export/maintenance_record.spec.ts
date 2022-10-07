@@ -26,10 +26,8 @@ let approvalRequestDocumentType;
 let initialArDocument;
 let createdEquipmentFormDocument;
 let createdMaintenanceInlineRecordFormDocument;
-let createdMaintenanceRecordFormDocument;
 let group;
 let eqMaintenanceURL;
-let docIdFromUrl;
 
 context("Export maintenance record", () => {
   before(() => {
@@ -503,7 +501,6 @@ context("Export maintenance record", () => {
       cy.wait("@response").then((res) => {
         if (res.response) {
           const response = res.response.body;
-          docIdFromUrl = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
           cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
             CyRoutes.GetAvailableApprovers], () => {
@@ -651,7 +648,6 @@ context("Export maintenance record", () => {
         cy.wait("@response").then((res) => {
           if (res.response) {
             const response = res.response.body;
-            docIdFromUrl = response.documentId;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
             cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
               CyRoutes.GetAvailableApprovers], () => {
@@ -734,7 +730,6 @@ context("Export maintenance record", () => {
         cy.wait("@response").then((res) => {
           if (res.response) {
             const response = res.response.body;
-            docIdFromUrl = response.documentId;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
             cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
               CyRoutes.GetAvailableApprovers], () => {
