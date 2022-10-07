@@ -514,8 +514,11 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Add an Approver'", () => {
-      cy.get("[data-cy^='fb-po-approvals-']").click()
-        .autocompleteSelect(USERS[2].name, { force: true });
+      cy.wait(1000);
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
@@ -621,12 +624,12 @@ context("Add Requestor as an approver of the PO", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
         cy.drSelectHistoryTab();
       });
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Added")
+      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor Added")
         .and("contain", USERS[2].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0)
+      cy.get(`[data-cy='no-padding-margin']`).eq(0)
         .should("contain", "Approver Added").should("contain", USERS[2].name);
     });
   });
@@ -665,7 +668,7 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify that history tab is capturing requestor Deleted and approver Removed", () => {
     it("Check history entry for 'Requestor Deleted'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0).should("contain", "Requestor  Deleted")
+      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Requestor  Deleted")
         .and("contain", USERS[2].name);
     });
   });
@@ -689,12 +692,12 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify that history tab is capturing requestor Updated and approver Added", () => {
     it("Check history entry for 'Requestor Updated'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Updated")
+      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor Updated")
         .and("contain", USERS[1].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0).should("contain", "Approver Added")
+      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Approver Added")
         .should("contain", USERS[1].name);
     });
   });
@@ -791,11 +794,11 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it(`Verify Shipping cost`, () => {
-      cy.poCheckShippingCost({ cost: "0.0" });
+      cy.poCheckShippingCost({ cost: "0.00" });
     });
 
     it("Check Tax value", () => {
-      cy.poCheckTax({ number: "0.0" });
+      cy.get(`[name="po-items-built-in.tax"]`).contains("0.00");
     });
 
     it("Check Total value", () => {
@@ -982,7 +985,8 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check approvers automatically added", () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).scrollIntoView().should("contain",
+        `${USERS[2].name} - ${USERS[2].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -993,12 +997,12 @@ context("Add Requestor as an approver of the PO", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
         cy.drSelectHistoryTab();
       });
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Updated")
+      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor Updated")
         .and("contain", USERS[2].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0)
+      cy.get(`[data-cy='no-padding-margin']`).eq(0)
         .should("contain", "Approver Added").should("contain", USERS[2].name);
     });
   });
@@ -1159,7 +1163,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check Tax value", () => {
-      cy.poCheckTax({ number: "0.0" });
+      cy.get(`[name="po-items-built-in.tax"]`).contains("0.00");
     });
 
     it("Check Total value", () => {

@@ -1,1 +1,3 @@
-export const EQMaintenanceRequired = "eq_maintenance_required";
+export enum Rules {
+  required = "required",
+}

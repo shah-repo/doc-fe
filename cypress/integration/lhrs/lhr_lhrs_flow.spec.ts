@@ -1419,16 +1419,17 @@ context("LHR & LHRS Flow", () => {
 
       context("Select created MPI in LHR template", () => {
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^='MuiExpansionPanelSummary']").eq(0).arrowClick();
+          cy.get("div[class^='MuiExpansionPanelSummary']").eq(0).arrowClick().wait(3000);
           cy.get("[data-cy='LHR Step 1']").arrowClick();
           cy.get("input[data-cy='lhrstep-built-in']").then(($el) => {
             $el.trigger("click");
           });
+          cy.get("div[class^='MuiExpansionPanelSummary']").eq(0).arrowClick().wait(3000);
           cy.wrapWithWaitOnApiCalls(
             [CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev],
             () => {
               cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect(
-                "MPI document"
+                "MPI document", { force: true }
               );
             }
           );
@@ -1443,7 +1444,7 @@ context("LHR & LHRS Flow", () => {
         });
 
         it("Select MPI document created with API for step #2 in LHRt", () => {
-          cy.get("div[class^='MuiExpansionPanelSummary']").eq(1).arrowClick();
+          cy.get("div[class^='MuiExpansionPanelSummary']").eq(1).arrowClick().wait(3000);
           cy.get("[data-cy='LHR Step 2']").arrowClick();
           cy.get("input[data-cy^='lhr-step']").then(($el) => {
             $el.trigger("click");
@@ -1456,8 +1457,9 @@ context("LHR & LHRS Flow", () => {
             ],
             () => {
               cy.listLoadingElementShouldNotExist();
+              cy.get("div[class^='MuiExpansionPanelSummary']").eq(1).arrowClick().wait(3000);
               cy.get("input[data-cy^='lhr-step']").autocompleteSelect(
-                "QPI document1"
+                "QPI document1", { force: true }
               );
             }
           );
@@ -1485,9 +1487,9 @@ context("LHR & LHRS Flow", () => {
 
       it("Select 'Lot History Record' form", () => {
         cy.get(`div[data-cy^="field-selectType"]`)
-          .click()
+          .arrowClick()
           .focused()
-          .arrowType("Lot History Record{downarrow}{enter}", { force: true });
+          .arrowType("Lot History Record{enter}", { force: true });
         cy.unClick();
       });
 
@@ -1521,7 +1523,7 @@ context("LHR & LHRS Flow", () => {
           cy.get("[data-cy='Due Date'").should("be.visible");
         });
         it("Verify Approval Block is exists", () => {
-          cy.get("[data-cy='form.builder.approvals'").should("be.visible");
+          cy.get("[data-cy='form.builder.approvals'").eq(1).scrollIntoView().should("be.visible");
         });
       });
       context("verify fields in Details Tab", () => {
@@ -1603,6 +1605,7 @@ context("LHR & LHRS Flow", () => {
                     cy.drAssignDocumentTo({ username: USERS[2].name });
                   });
                   it("Navigate to Detail Tab", () => {
+                    cy.wait(3000);
                     cy.drSelectDetailsTab();
                   });
                   it(`verify operators should have '${USERS[2].name}'`, () => {
@@ -1617,6 +1620,7 @@ context("LHR & LHRS Flow", () => {
                     cy.get("[data-cy^='operator-ac-']").find("svg").arrowClick({ force: true });
                   });
                   it("Navigate to Detail Tab", () => {
+                    cy.wait(3000);
                     cy.drSelectDetailsTab();
                   });
                   it(`verify operators should have '${USERS[2].name}'`, () => {
@@ -1683,6 +1687,7 @@ context("LHR & LHRS Flow", () => {
                     cy.get("[data-cy^='operator-ac-']").find("svg").arrowClick({ force: true });
                   });
                   it("Navigate to Detail Tab", () => {
+                    cy.wait(3000);
                     cy.drSelectDetailsTab();
                   });
                   it(`verify operators should have '${USERS[2].name}'`, () => {
@@ -1701,7 +1706,7 @@ context("LHR & LHRS Flow", () => {
           cy.drSelectMaterialsAndEquipmentTab();
         });
         it("should display aggregate materials/EQ from all the LHR steps", () => {
-          cy.get("[data-cy='1 Items']").should("have.length", "2");
+          cy.get(`[data-cy="form.builder.materials"]`).eq(0).parent().find("div").contains("1 items").should("exist");
         });
       });
     });
@@ -2093,13 +2098,6 @@ context("LHR & LHRS Flow", () => {
         lhrs1DocUrl = url;
       });
     });
-    it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-        });
-      cy.checkToastMessage({ exists: false });
-    });
     it("Click complete step", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
@@ -2208,7 +2206,7 @@ context("LHR & LHRS Flow", () => {
     context("Complete LHRs with operator", () => {
       it("Approve step", () => {
         cy.ebApprove();
-        cy.wait(15000);
+        cy.wait(3000);
       });
     });
   });
@@ -2288,7 +2286,7 @@ context("LHR & LHRS Flow", () => {
     it("Navigate to Materials and Equipment Tab", () => {
       cy.drSelectMaterialsAndEquipmentTab();
       cy.wait(500);
-      cy.get("[data-cy='form.builder.materials|s']").arrowClick({ multiple: true });
+      cy.get("[data-cy='tabCon-tabId.materialsandequipment']").arrowClick({ multiple: true });
     });
     it("Materials - Lot Number for the material should be displayed", () => {
       cy.get(".MuiChip-label").contains(lotNumber);
@@ -2309,6 +2307,12 @@ context("LHR & LHRS Flow", () => {
       cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
       cy.get("[value='R&D']").check();
       cy.wait(2000);
+    });
+
+    it("Select button to switch", () => {
+      cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").then(() => {
+        cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").last().arrowClick();
+      });
     });
   });
 
@@ -2575,27 +2579,20 @@ context("LHR & LHRS Flow", () => {
           cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
           cy.fbAddNewFieldButton();
         });
-        it("Save document", () => {
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PatchDocRev], () => {
-              cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-            });
-          cy.checkToastMessage({ exists: false });
-        });
         context("Added FB components, materials/EQ, step desc and attachment should be displayed in the LHRS", () => {
           it("Check description step #1", () => {
-            cy.xpath("//div[@data-cy='mpi-procedure-built-in.description']/../div[2]")
-              .should("have.text", "Description of step one");
+            cy.get("[data-cy='mpi-procedure-built-in.description']").parent().find("p")
+              .should("contain.text", "Description of step one");
           });
 
           it("Check materials step #1", () => {
-            cy.get("[data-cy='form.builder.lhrs.procedure.materials.title']")
+            cy.get("[data-cy='form.builder.mpi.procedure.materials.title']")
               .eq(0)
-              .should("have.text", "PRT-00005 - Part document - rev 1 | Qty: 3 each");
+              .should("have.text", "PRT-00005 - Part document | Qty: 3 each");
           });
 
           it("Check equipment step #1", () => {
-            cy.get("[data-cy$='equipment.title']")
+            cy.get("[data-cy='form.builder.mpi.procedure.equipment.title']")
               .eq(0)
               .should("contains.text", "ET-00003 - Equipment one");
           });
@@ -2615,25 +2612,25 @@ context("LHR & LHRS Flow", () => {
     it("Navigate to Procedure Tab", () => {
       cy.drSelectProcedureTab();
     });
-    it("Enter 'Start quntity' for LHRs #1", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name='lhrs-start-quantity']").arrowType("10");
-        cy.unClick();
-      });
+    it("Enter 'Start quantity' for LHRs #1", () => {
+      cy.get("[name='lhrs-start-quantity']").arrowType("10");
+      cy.unClick();
     });
 
     it("Enter 'Accepted quntity' for LHRs #1", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name='lhrs-accepted-quantity']").arrowType("8");
-        cy.unClick();
-      });
+      cy.get("[name='lhrs-accepted-quantity']").arrowType("8");
+      cy.unClick();
     });
 
     it("Enter 'Rejected quntity' for LHRs #1", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name='lhrs-rejected-quantity']").arrowType("2");
-        cy.unClick();
-      });
+      cy.get("[name='lhrs-rejected-quantity']").arrowType("2");
+      cy.unClick();
+    });
+
+    it("Click save document", () => {
+      cy.drSaveDocumentWithoutaudit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'SELECT' for 'Material One' ", () => {
@@ -2704,13 +2701,6 @@ context("LHR & LHRS Flow", () => {
       cy.url().then((url: any) => {
         lhrs1DocUrl = url;
       });
-    });
-    it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-        });
-      cy.checkToastMessage({ exists: false });
     });
     it("Click complete step", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
@@ -2904,7 +2894,7 @@ context("In the Materials& Equipment tab", () => {
   it("Navigate to Materials and Equipment Tab", () => {
     cy.drSelectMaterialsAndEquipmentTab();
     cy.wait(500);
-    cy.get("[data-cy='form.builder.materials|s']").arrowClick({ multiple: true });
+    cy.get("[data-cy='form.builder.materials']").eq(0).arrowClick({ multiple: true });
   });
   it("Materials - Lot Number for the material should be displayed", () => {
     cy.get(".MuiChip-label").contains(lotNumber);

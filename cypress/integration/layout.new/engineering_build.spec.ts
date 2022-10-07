@@ -541,6 +541,7 @@ context("Verify New Layout for EB Document", () => {
 
         it("Verify that Form Options should appear for Overview tab", () => {
           cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -576,6 +577,7 @@ context("Verify New Layout for EB Document", () => {
 
         it("Verify that Form Options should appear for Procedure tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -706,6 +708,7 @@ context("Verify New Layout for EB Document", () => {
 
           it("Verify that Form Options should appear for Overview tab", () => {
             cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+            cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
             cy.verifyFormOptionsVisibility();
           });
         });
@@ -743,9 +746,9 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add/Clone Step button", () => {
-            cy.get(`[data-cy="form.builder.add.step"]`).should("contain.text", "Add Step");
+            cy.get(`[data-cy="form.builder.add.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.add.step"]`).should("not.have.attr", "disabled");
-            cy.get(`[data-cy="form.builder.clone.step"]`).should("contain.text", "Clone Step");
+            cy.get(`[data-cy="form.builder.clone.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.clone.step"]`).should("not.have.attr", "disabled");
           });
 
@@ -756,8 +759,8 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add Material/Equipment button", () => {
-            cy.get(`[data-cy="form.builder.materials.btn"]`).should("contain.text", "Add Material");
-            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("contain.text", "Add Equipment");
+            cy.get(`[data-cy="form.builder.materials.btn"]`).should("exist");
+            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("exist");
           });
         });
 
@@ -814,7 +817,12 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.drSelectReferences("FM-00001");
+        cy.wait(2000);
+        cy.get("div[data-cy=\"field-referenceTo\"]").contains("FM-00001")
+          .parent().parent().parent()
+          .find("svg").arrowClick({ force: true });
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -1044,9 +1052,9 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add/Clone Step button", () => {
-            cy.get(`[data-cy="form.builder.add.step"]`).should("contain.text", "Add Step");
+            cy.get(`[data-cy="form.builder.add.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.add.step"]`).should("not.have.attr", "disabled");
-            cy.get(`[data-cy="form.builder.clone.step"]`).should("contain.text", "Clone Step");
+            cy.get(`[data-cy="form.builder.clone.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.clone.step"]`).should("not.have.attr", "disabled");
           });
 
@@ -1056,8 +1064,8 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add Material/Equipment button", () => {
-            cy.get(`[data-cy="form.builder.materials.btn"]`).should("contain.text", "Add Material");
-            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("contain.text", "Add Equipment");
+            cy.get(`[data-cy="form.builder.materials.btn"]`).should("exist");
+            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("exist");
           });
 
           it("Verify added Materials and Equipment", () => {
@@ -1098,7 +1106,7 @@ context("Verify New Layout for EB Document", () => {
           cy.get(`[data-cy="common.expand.all"]`).arrowClick();
           cy.get(".MuiExpansionPanel-root")
             .should("contain.text", "PRT-00002 - Part for EB document | each : 2")
-            .and("contain.text", "ET-00001 Equipment document");
+            .and("contain.text", "ET-00001 - Equipment document");
         });
 
         it("Verify that Form Options should not appear for Materials&Equipment tab", () => {
@@ -1127,7 +1135,12 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.drSelectReferences("FM-00001");
+        cy.wait(2000);
+        cy.get("div[data-cy=\"field-referenceTo\"]").contains("FM-00001")
+          .parent().parent().parent()
+          .find("svg").arrowClick({ force: true });
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -1340,7 +1353,7 @@ context("Verify New Layout for EB Document", () => {
           cy.get(`[data-cy="common.expand.all"]`).arrowClick();
           cy.get(".MuiExpansionPanel-root")
             .should("contain.text", "PRT-00002 - Part for EB document | each : 2")
-            .and("contain.text", "ET-00001 Equipment document");
+            .and("contain.text", "ET-00001 - Equipment document");
         });
 
         it("Verify that Form Options should not appear for Materials&Equipment tab", () => {

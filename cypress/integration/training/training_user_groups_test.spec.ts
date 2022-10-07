@@ -343,8 +343,8 @@ context("Training user groups test", () => {
     });
 
     it("Check if 'One-Time Training test' has all predefined fields", () => {
-      cy.get("[data-cy=\"Forced Retraining / One-Time Training\"]")
-        .should("contain.text", "Forced Retraining / One-Time Training");
+      cy.get("[data-cy=\"Forced Retraining One Time Training\"]")
+        .should("contain.text", "Forced Retraining One Time Training");
       cy.get("[data-cy=\"Documents to Train on\"]").should("contain.text", "Documents to Train on");
       cy.get("[data-cy=\"Force retraining (everyone will be retrained regardless of their current status)\"]")
         .should("contain.text", "Force retraining (everyone will be retrained regardless of their current status)");
@@ -592,9 +592,7 @@ context("Training user groups test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {

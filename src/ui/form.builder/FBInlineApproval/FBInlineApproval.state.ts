@@ -113,11 +113,19 @@ class FBInlineApprovalState {
     transition: FBInlineApprovalTransition,
     id: string,
     body: FBRequestApprovalTransitionBody,
+    callback?: () => void
   ) => this.requestApprovalApi.set({
     body,
     url: FBEndpoint.ApprovalsTransition,
     urlValues: { id, transition },
     method: "post",
+  }, (data, error) => {
+    if (error) {
+      return this.requestApprovalApi.onError(error);
+    }
+    this.requestApprovalApi.data = data;
+    this.requestApprovalApi.onSuccess();
+    callback?.();
   });
 
   public getDocument = (id?: string) => {

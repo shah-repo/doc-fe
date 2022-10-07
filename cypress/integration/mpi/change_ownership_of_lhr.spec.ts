@@ -722,11 +722,11 @@ context("Change Ownership of LHR", () => {
     });
 
     it("Check history - added and removed approvers should be displayed", () => {
-      cy.wait(5000);
+      cy.wait(3000);
       cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
-        .should("contain.text", "Approver Removed").and("contain.text", USERS[4].name);
+        .should("have.text", `Approver Removed${USERS[4].name}`);
       cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
-        .should("contain.text", "Approver Added").and("contain.text", USERS[4].name);
+        .should("have.text", `Approver Added${USERS[4].name}`);
     });
 
     it("Submit for approval", () => {

@@ -172,6 +172,10 @@ context("Approval request implementation tasks", () => {
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
+
+    it("Check status should be Draft", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
   });
 
   context("Check predefined fields", () => {
@@ -238,6 +242,13 @@ context("Approval request implementation tasks", () => {
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
       cy.unClick();
+    });
+
+    it("Verify Text Field Remove enabled", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "fb-textfield-1", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
     });
 
     it("Select Documents tab", () => {
@@ -432,6 +443,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add created document revision", () => {
+      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
@@ -444,6 +456,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.get(`[data-cy="tabCon-tabId.changedetails"]`).arrowClick();
       cy.arAddApproverOnApproverList({ approver: USERS[1].email });
     });
 
@@ -493,6 +506,10 @@ context("Approval request implementation tasks", () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Check status should be Draft", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 

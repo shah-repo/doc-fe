@@ -33,6 +33,7 @@ let createdPartDocument;
 const checkErrorMessage = () => {
   it("Verify Error Message 'The Build Type is a required field'", () => {
     cy.get("p.Mui-error span").should("contain.text", "The Build Type is a required field");
+    cy.get("p.Mui-error span").scrollIntoView();
     cy.get("p.Mui-error span").should("be.visible");
     cy.get("p.Mui-error").should("have.class", "Mui-error");
     cy.get("p.Mui-error").invoke("css", "color").should("equal", "rgb(244, 67, 54)");
@@ -881,7 +882,7 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Complete the step", () => {
-      cy.pmSubmitForApproval();
+      cy.get("[data-cy='ApproveAndRelease-button']").arrowClick({ force: true });
     });
 
     it("Approve  Inline Approval", () => {
@@ -906,14 +907,11 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-      ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
-      });
+      cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`).wait(2000);
     });
 
     it("Approve and released", () => {
-      cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
+      cy.get("#ApproveAndRelease-button").arrowClick({ force: true });
     });
 
     it("Approve  Inline Approval", () => {

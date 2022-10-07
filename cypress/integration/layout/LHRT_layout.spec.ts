@@ -899,19 +899,21 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Verify material", () => {
-      cy.get("[data-cy='materialInfo']").find("li").eq(0).should("have.text", "MT-00004 - Material one | sets : 2");
-      cy.get("[data-cy='materialInfo']").find("li").eq(1).should("have.text", "MT-00006 - Material two | boxes : 4");
+      cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
+        .should("have.text", "MT-00004 - Material one | sets : 2");
+      cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(1)
+        .should("have.text", "MT-00006 - Material two | boxes : 4");
     });
 
     it("Verify equipment", () => {
-      cy.get("[data-cy='equipmentInfo']").find("li").eq(0).should("have.text", "ET-00003 Equipment one");
-      cy.get("[data-cy='equipmentInfo']").find("li").eq(1).should("have.text", "ET-00007 Equipment two");
+      cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(0).should("have.text", "ET-00003 - Equipment one");
+      cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(1).should("have.text", "ET-00007 - Equipment two");
     });
   });
 
   context("Verify right side pannel", () => {
     it("Verify training tab should not visible", () => {
-      cy.get("[data-cy='tabid.training']").should("not.exist");
+      cy.get("[data-cy='tabId.training']").should("not.exist");
     });
 
     it("Verify that right side panel opens by default to the References tab", () => {

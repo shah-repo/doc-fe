@@ -1,3 +1,5 @@
+import moment from "moment";
+import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -30,6 +32,7 @@ let createdLot;
 
 const groupOne = "Developers";
 const paperlhrTitle = "Paper LHR form";
+const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
   before(() => {
@@ -706,7 +709,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22091401RD");
+      cy.get("#HeaderInfo-subtitle").should("contains.text", ` - LOT #${lotDateSuffix}01`);
     });
 
     context("Right side:", () => {
@@ -822,7 +825,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
           docId: "LHR-00001",
           revision: "Rev A",
         });
-        cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22091401RD");
+        cy.get("#HeaderInfo-subtitle").should("contains.text", ` - LOT #${lotDateSuffix}01`);
       });
 
       context("Right Side:", () => {
@@ -845,6 +848,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -856,7 +860,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Verify header is fixed when page scroll", () => {
-          cy.get(".hide-scroll>div>div>div").scrollTo("bottom");
+          cy.get(".hide-scroll>div>div>div").scrollTo("bottom", { ensureScrollable: false });
           cy.get("header").should("be.visible");
         });
       });
@@ -891,6 +895,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Check if 'Change Owner' button header menu and is functional", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
       cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
     });
@@ -902,7 +907,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Verify header is fixed when page scroll", () => {
-      cy.get(".hide-scroll>div>div>div").scrollTo("bottom");
+      cy.get(".hide-scroll>div>div>div").scrollTo("bottom", { ensureScrollable: false });
       cy.get("header").should("be.visible");
     });
   });
@@ -949,7 +954,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev A",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22091401RD");
+      cy.get("#HeaderInfo-subtitle").should("contains.text", ` - LOT #${lotDateSuffix}01`);
     });
 
     context("Right Side:", () => {
@@ -966,6 +971,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
         cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
       });
@@ -977,7 +983,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Verify header is fixed when page scroll", () => {
-        cy.get(".hide-scroll>div>div>div").scrollTo("bottom");
+        cy.get(".hide-scroll>div>div>div").scrollTo("bottom", { ensureScrollable: false });
         cy.get("header").should("be.visible");
       });
     });
@@ -1027,7 +1033,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         docId: "LHR-00001",
         revision: "Rev Void",
       });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #22091401RD");
+      cy.get("#HeaderInfo-subtitle").should("contains.text", ` - LOT #${lotDateSuffix}01`);
     });
 
     context("Right Side:", () => {
@@ -1044,6 +1050,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Check if 'Change Owner' button header menu and is functional", () => {
+        cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
         cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
       });

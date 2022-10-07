@@ -437,13 +437,13 @@ context("Training Flow test", () => {
       cy.navigToApprovalRequestList();
       cy.cmpClickCreateApprovalRequest();
       cy.arEnterApprovalRequestTitle({ title: "AR form" });
-      cy.arEnterApprovalRequestDescription({ description: "Description" });
+      cy.drEnterDocumentDescription({ description: "Description" });
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "approved form" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
       cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
       cy.arSaveApiCall();
       cy.arClickSendToReview();
@@ -544,9 +544,7 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {
@@ -681,9 +679,7 @@ context("Training Flow test", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {

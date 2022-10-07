@@ -1,10 +1,9 @@
-import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
 import { flatten, includes, omit, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
@@ -12,14 +11,11 @@ import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentTyp
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
-import SummaryInfo from "../../common/summary/SummaryInfo";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
 import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
-import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
-import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
+import { isDocumentRevisionInStatus } from "../../documentRevision/helpers/documentRevisionStatus";
 import { styles as AutoCompleteStyles } from "../../form.builder/styles/FBAutocomplete.styles";
 import { useTraining } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -86,8 +82,6 @@ const Presenter: React.FunctionComponent<Props> = ({
   const shouldRenderTrainingButton = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
     status);
-  const isInlineApproval = isFormWithInlineApproval(formDocument?.formTemplate?.schema);
-  const isFirstAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage) && dataProp?.subRevision === 0;
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
@@ -132,23 +126,6 @@ const Presenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderReleaseDetails = () => (
-    <Box p={5} >
-      <Typography variant="h6" style={{ paddingBottom: 8 }}>
-        <Text translation="document.revision.release.details" />
-      </Typography>
-      <SummaryInfo
-        label={"record.released.by"}
-        value={dataProp.owner.user.name}
-        dataCy={"releasedBy"}
-      />
-      <SummaryInfo
-        label={"document.revision.released.date"}
-        value={getFormattedDateString(dataProp.releasedAt, MomentFormats.MonthDateYear)}
-        dataCy={"releasedDate"}
-      />
-    </Box>
-  );
 
   const contentRenderer = () => (
     <Box minHeight={16} width="calc(100% - 8px)">
@@ -188,7 +165,7 @@ const Presenter: React.FunctionComponent<Props> = ({
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
         {isPO || includes(outputDocumentTypeName, "Purchase Order")
-          ? attachments && _tabsState?.tabID !== "details" && (
+          ? attachments && !_tabsState?.isTabActive("details") && (
             <Attachment
               isAttachmentEmpty={attachments.length < 1}
               docRevId={id}
@@ -207,8 +184,6 @@ const Presenter: React.FunctionComponent<Props> = ({
         {renderTrainingControl}
         {renderSelfTaughtTraining}
       </Grid>
-      {isRecord && isInlineApproval && isFirstAlphaReleased &&
-        isDocumentRevisionReleased(dataProp?.status) && renderReleaseDetails()}
     </Box>
   );
 

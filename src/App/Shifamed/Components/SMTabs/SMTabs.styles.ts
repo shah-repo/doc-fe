@@ -18,6 +18,10 @@ export default makeStyles({
     maxHeight: 44,
     position: "sticky",
   },
+  tabheader: {
+    top: 0,
+    overflowY: "unset",
+  },
   tab: {
     width: "auto",
     minWidth: 40,

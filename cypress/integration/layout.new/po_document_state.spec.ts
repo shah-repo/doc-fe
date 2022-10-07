@@ -183,7 +183,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Last save should be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
       });
 
@@ -243,7 +243,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Click on Submit For Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
     });
 
@@ -265,10 +265,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -287,7 +288,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Click on Submit For Approval", () => {
           cy.wait(3000);
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
       });
     });
@@ -330,10 +331,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -471,10 +473,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });

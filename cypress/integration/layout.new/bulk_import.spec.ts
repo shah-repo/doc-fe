@@ -153,6 +153,7 @@ context("Verify New Layout for Bulk Import Document", () => {
 
         it("Verify that Form Options should appear for Overview tab", () => {
           cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -166,7 +167,7 @@ context("Verify New Layout for Bulk Import Document", () => {
           cy.get("#sm-tabpanel-1").should("exist");
           cy.contains("Select Form Document For Import").should("exist");
           cy.contains("Select Output Document Type").should("exist");
-          cy.contains("EXCEL FOR IMPORT").should("exist");
+          cy.contains("Excel For Import").should("exist");
           cy.contains("Column Document/Record Id?").should("exist");
           cy.contains("Download Excel Template").should("exist");
           cy.contains("Upload excel with data for import").should("exist");
@@ -207,6 +208,7 @@ context("Verify New Layout for Bulk Import Document", () => {
 
         it("Verify that Form Options should appear for Details tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -315,7 +317,7 @@ context("Verify New Layout for Bulk Import Document", () => {
             cy.get("#sm-tabpanel-1").should("exist");
             cy.contains("Select Form Document For Import").should("exist");
             cy.contains("Select Output Document Type").should("exist");
-            cy.contains("EXCEL FOR IMPORT").should("exist");
+            cy.contains("Excel For Import").should("exist");
             cy.contains("Column Document/Record Id?").should("exist");
             cy.contains("Download Excel Template").should("exist");
             cy.contains("Upload excel with data for import").should("exist");
@@ -559,7 +561,7 @@ context("Verify New Layout for Bulk Import Document", () => {
           cy.get("#sm-tabpanel-1").should("exist");
           cy.contains("Select Form Document For Import").should("exist");
           cy.contains("Select Output Document Type").should("exist");
-          cy.contains("EXCEL FOR IMPORT").should("exist");
+          cy.contains("Excel For Import").should("exist");
           cy.contains("Column Document/Record Id?").should("exist");
           cy.contains("Download Excel Template").should("exist");
           cy.contains("Upload excel with data for import").should("exist");
@@ -759,7 +761,7 @@ context("Verify New Layout for Bulk Import Document", () => {
           cy.get("#sm-tabpanel-1").should("exist");
           cy.contains("Select Form Document For Import").should("exist");
           cy.contains("Select Output Document Type").should("exist");
-          cy.contains("EXCEL FOR IMPORT").should("exist");
+          cy.contains("Excel For Import").should("exist");
           cy.contains("Column Document/Record Id?").should("exist");
           cy.contains("Download Excel Template").should("exist");
           cy.contains("Upload excel with data for import").should("exist");

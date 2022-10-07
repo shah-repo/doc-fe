@@ -382,7 +382,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Approve First Inline Approval", () => {
-        cy.drSelectDetailsTab();
+        cy.drSelectDetailsTab().wait(2000);
         cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
@@ -491,6 +491,7 @@ context("Record inline existing Flow with detail ", () => {
 
       it("Fill in Approval block and  Approve and release Record", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[2].name}`);
+        cy.wait(2000);
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
         cy.listLoadingElementShouldNotExist();
       });

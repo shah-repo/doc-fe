@@ -284,10 +284,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -358,10 +359,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -509,16 +511,18 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
 
         it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
           cy.checkToastMessageContains({
             message: "File will be sent to your email shortly.",

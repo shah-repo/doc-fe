@@ -360,13 +360,14 @@ context("Purchase Supplier Update1", () => {
       });
 
       it("Enter Supplier Title 'Supplier'", () => {
-        cy.get("[data-cy=\"name\"]").arrowType("New Supplier");
+        cy.get("[data-cy='name']").arrowType("Supplier");
       });
 
       it("Enter Supplier Description 'Supplier Description'", () => {
-        cy.xpath("//div[@data-cy=\"description\"]/../div[2]").eq(-1).arrowClick();
-        cy.get("#fb-mpiprocedure-ref-description").find("div[contenteditable]").arrowType("Supplier Description");
-        cy.checkToastMessage({ exists: false });
+        cy.xpath("//div[@data-cy='description']/../div[2]").eq(1).arrowClick();
+        cy.get("[data-cy='description']>div>div>div>div>div[contenteditable]").eq(1).clear()
+          .arrowType("Supplier Description").wait(500);
+        cy.unClick();
       });
 
       it("Select Document Type 'Supplier'", () => {
@@ -383,7 +384,7 @@ context("Purchase Supplier Update1", () => {
       });
 
       it("Verify Supplier", () => {
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 1 - New Supplier");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 1 - Supplier");
       });
 
       it("Add Required Date", () => {
@@ -405,15 +406,20 @@ context("Purchase Supplier Update1", () => {
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
 
-      it("Release supplier", () => {
+      it("Add an approval", () => {
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Submit for approval", () => {
         cy.pmSubmitForApproval();
+      });
+
+      it("Approve the suppller", () => {
         cy.ebApprove();
       });
 
@@ -435,7 +441,7 @@ context("Purchase Supplier Update1", () => {
         cy.navigToPurchaseOrder();
         cy.dlSelectFirstDocument();
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 2 - New Supplier1");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 2 - Supplier1");
       });
 
       it(`Select '${USERS[2].name}' for Requestor`, () => {
@@ -491,7 +497,7 @@ context("Purchase Supplier Update1", () => {
       it("Open PO again - verify PO in Pending Approval updated to the newly released version of the Supplier", () => {
         cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 3 - New Supplier12");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 3 - Supplier12");
       });
 
       it("Log out user", () => {
@@ -561,7 +567,7 @@ context("Purchase Supplier Update1", () => {
       });
 
       it("Verify the system does not update Supplier to the latest revision when PO is released", () => {
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 3 - New Supplier12");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 3 - Supplier12");
       });
 
       it("[API]Get html document and verify supplier", () => {
@@ -576,7 +582,7 @@ context("Purchase Supplier Update1", () => {
           }).then((response) => {
             const responseBody = response.body.toString();
             expect(responseBody)
-              .contains("Name: New Supplier12");
+              .contains("Name: Supplier12");
           });
         });
       });
@@ -612,7 +618,7 @@ context("Purchase Supplier Update1", () => {
       });
 
       it("Verify the system is updating Supplier to the latest revision when PO is revised", () => {
-        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 4 - New Supplier123");
+        cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 4 - Supplier123");
       });
 
       it("Click on 'Purchase Order' on sidebar", () => {

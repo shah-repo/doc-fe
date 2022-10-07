@@ -543,6 +543,7 @@ context("DAM approvals in LHR", () => {
       it("Enter Supplier Description 'Supplier Description'", () => {
         cy.xpath("//div[@data-cy=\"description\"]/../div[2]").eq(-1).arrowClick();
         cy.get("#fb-mpiprocedure-ref-description").find("div[contenteditable]").arrowType("Supplier Description");
+        cy.wait(4000);
         cy.checkToastMessage({ exists: false });
       });
 
@@ -591,10 +592,6 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Click Save button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
       it("Release supplier", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
           cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
@@ -626,9 +623,7 @@ context("DAM approvals in LHR", () => {
 
       it("Add approver", () => {
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -19,7 +22,7 @@ let group;
 let asyncTasksGroup;
 const documentRevisionName = "New document for testing AR";
 
-context("Approval request form", () => {
+context("Approval request form", { tags: ["@timetool"] },  () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -308,7 +311,7 @@ context("Approval request form", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
@@ -359,10 +362,6 @@ context("Approval request form", () => {
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
-    });
-
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
     it("Save AR", () => {
@@ -774,7 +773,7 @@ context("Approval request form", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
