@@ -334,6 +334,7 @@ context("Record inline Flow", () => {
 
       it("Verify Predefiend fields up to attachment", () => {
         cy.verifyPredefiendFields();
+        cy.get("[data-cy='attachment']").should("exist");
       });
     });
 
@@ -818,8 +819,7 @@ context("Record inline Flow", () => {
       cy.isTabActive({ name: "overview", index: 0 });
       cy.get("[data-cy='field-name']").should("exist");
       cy.get("[data-cy='select.document.documentType.id']").should("exist");
-      // cy.get("[data-cy='field-revisionStage']").should("exist");
-      // cy.get("[data-cy='field-retrain']").should("exist");
+
       cy.get("[data-cy='attachment']").should("exist");
     });
 

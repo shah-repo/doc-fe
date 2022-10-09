@@ -198,12 +198,29 @@ context("Record inline existing Flow with detail ", () => {
         });
       });
 
+      it("Verify Predefiend Tabs Exist", () => {
+        cy.verifyTabs("overview", "details");
+      });
+
+      it("Verify Tabs are fixed and order not changable", () => {
+        cy.verifyFixedTab();
+      });
+
+      it("Verify Predefiend fields up to attachment", () => {
+        cy.verifyPredefiendFields();
+        cy.get("[data-cy='attachment']").should("exist");
+      });
+
+      it("Verify Overview Tab Selected by default", () => {
+        cy.isTabActive({ name: "overview", index: 0 });
+      });
+
       it("Navigate to Details tab", () => {
         cy.drSelectDetailsTab();
       });
 
       it("Add textfield", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
         cy.fbAddNewFieldButton();
@@ -229,21 +246,22 @@ context("Record inline existing Flow with detail ", () => {
         cy.fbAddNewFieldButton();
       });
 
-      it("Add radio button field", () => {
-        cy.fbAddNewFieldWhenHidden();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
-        cy.fbEnterNameValue({ name: "label", value: "Radio group for inline" });
-        cy.fbAddNewFieldButton();
-      });
-
       it("Add select field", () => {
-        cy.fbAddNewFieldWhenHidden();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
         cy.fbGroupOptions("option1", "option2");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.fbAddNewFieldButton();
         });
+      });
+
+      it("Add radio button field", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+        cy.fbEnterNameValue({ name: "label", value: "Radio group for inline" });
+        cy.fbGroupOptions("R1", "R2");
+        cy.fbAddNewFieldButton();
       });
 
       it("Add inline approval2", () => {
@@ -281,7 +299,7 @@ context("Record inline existing Flow with detail ", () => {
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Record one" });
     });
 
-    it("Verify Predefiend Tabs overview and details Exist", () => {
+    it("Verify Tabs overview and details Exist", () => {
       cy.verifyTabs("overview", "details");
     });
 
@@ -295,16 +313,26 @@ context("Record inline existing Flow with detail ", () => {
     });
 
     context("Verify added fields in the tabs", () => {
+
+      it("Verify text field'", () => {
+        cy.get("[data-cy^='textfield-for-inline']").should("exist");
+      });
+
       it("Verify check box exist'", () => {
         cy.get(`input[type="checkbox"][value="1"]`).should("exist");
       });
 
-      it("Verify Inline Inputs'", () => {
-        cy.get("[name^='textfield-for-inline']").should("exist");
+      it("Verify Inline approval'", () => {
+        cy.get("[name^='fb-ia-firstd-inline-field']").should("exist");
       });
 
       it("Verify Select field'", () => {
         cy.get("[name^='fb-select-field']").should("exist");
+      });
+
+      it("Verify radio inputs", () => {
+        cy.get("[name^='radio-group-for-inline'][value='R1']").should("exist");
+        cy.get("[name^='radio-group-for-inline'][value='R2']").should("exist");
       });
 
       it("Verify Inline Approval Inputs'", () => {
@@ -349,6 +377,10 @@ context("Record inline existing Flow with detail ", () => {
           cy.get("[data-value='option2']").arrowClick();
           cy.unClick();
         });
+      });
+
+      it("Check radio option R1 ", () => {
+        cy.get(`input[type="radio"][value="R1"]`).last().check();
       });
 
       it("Select approver for first inline", () => {
@@ -400,7 +432,16 @@ context("Record inline existing Flow with detail ", () => {
       it("Change text to  'Second entry' in textfield for inline", () => {
         cy.drSelectDetailsTab();
         cy.get("[name^='textfield-for-inline']").arrowType("Second entry");
+        cy.get(`input[type="checkbox"][value="1"]`).arrowClick();
         cy.unClick();
+      });
+
+      it("Check Checkbox option 2 ", () => {
+        cy.get(`input[type="checkbox"][value="2"]`).last().check();
+      });
+
+      it("Verify Inline Approval needs to be Approved", () => {
+        cy.get("[data-cy='form.builder.request.approve']").first().should("exist");
       });
 
       it("Click on Save", () => {
@@ -481,6 +522,14 @@ context("Record inline existing Flow with detail ", () => {
 
       it("Approval block should be displayed in the Overview tab", () => {
         cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
+      });
+
+      it("Navigate to history tab", () => {
+        cy.get("[data-cy='timeline-icon']").arrowClick();
+      });
+
+      it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+        cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom", { ensureScrollable: false });
       });
 
       it("Click on Save", () => {
