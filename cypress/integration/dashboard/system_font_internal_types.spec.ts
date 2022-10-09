@@ -833,7 +833,7 @@ context("User Creation Flow", () => {
 
     context("Verify font for 'Clear Filters' button", () => {
       it(`Verify 'Clear Filters' button font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight  ${FONT_WT_600}`, () => {
-        cy.get(`[class*="clearButton"]`)
+        cy.contains("button", "Clear Filters")
           .checkStylePropExists({
             content: "Clear Filters",
             props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
