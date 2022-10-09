@@ -27,8 +27,16 @@ let createdMPIDocument;
 let developersGroup;
 
 const paperlhrTitle = "Paper LHR form";
+const paperlhrDesc = "Paper LHR form description";
+const docType = "Paper Lot History Record";
 const partDocumentTitle = "Part document";
 
+const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameTwo = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameThree = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameFour = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameFive = (Math.round(Math.random() * 100000)) % 100000;
+const saveFileNameSix = (Math.round(Math.random() * 100000)) % 100000;
 
 context("Paper new process LHR", () => {
   before(() => {
@@ -497,20 +505,20 @@ context("Paper new process LHR", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Purchase Order Form'", () => {
+    it(`Enter title ${paperlhrTitle}`, () => {
       cy.drEnterDocumentTitle({ name: paperlhrTitle });
     });
 
-    it("Enter description 'New Purchase Order Form description'", () => {
-      cy.drEnterDocumentDescription({ description: "Paper LHR form description" });
+    it(`Enter description ${paperlhrDesc}`, () => {
+      cy.drEnterDocumentDescription({ description: paperlhrDesc });
     });
 
     it("Click on 'Form' document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Purchase Order' output document type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Paper Lot History Record" });
+    it(`Click on ${docType} output document type`, () => {
+      cy.drSelectOutputDocumentType({ documentType: docType });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -538,7 +546,7 @@ context("Paper new process LHR", () => {
     });
   });
 
-  context("Verify two options exist for document type and select 'Paper Lot History Record'", () => {
+  context(`Verify two options exist for document type and select ${docType}`, () => {
     it(`Verify 'Lot History Record' option is available`, () => {
       cy.get(`div[data-cy^="field-selectType"]`).click().focused()
         .arrowType("Lot History Record{downarrow}{enter}", { force: true });
@@ -546,21 +554,28 @@ context("Paper new process LHR", () => {
       cy.get(`div[data-cy^="field-selectType"]`).contains("Lot History Record");
     });
 
-    it("Verify 'Paper Lot History Record' option is available and Select it", () => {
+    it(`Verify ${docType} option is available and Select it`, () => {
       cy.get(`div[data-cy^="field-selectType"]`).click().focused()
-        .arrowType("Paper Lot History Record{downarrow}{enter}", { force: true });
+        .arrowType(`${docType}{downarrow}{enter}`, { force: true });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Navigate to LHR and Verify paper LHR status WIP and subtitle in LOT#YYMMDDXX format", () => {
     it(`Navigate to LHR`, () => {
-      cy.wait(2000);
+      cy.wait(3000);
       cy.navigToLHR();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter 'Paper LHR' document", () => {
       cy.lhrClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -697,8 +712,8 @@ context("Paper new process LHR", () => {
         .should("be.visible");
     });
 
-    it("Enter Intial Quantity field value to 10", () => {
-      cy.get(`[name="lhr_initial_quantity"]`).arrowType("10");
+    it("Enter Intial Quantity field value to 1.5e-8", () => {
+      cy.get(`[name="lhr_initial_quantity"]`).arrowType("1.5e-8");
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -709,8 +724,8 @@ context("Paper new process LHR", () => {
         .should("not.contain", "The Initial Quantity is a required field.");
     });
 
-    it("Verify Initial Quantity is displayed as entered", () => {
-      cy.get(`[name="lhr_initial_quantity"]`).should("have.value", "10");
+    it("Verify Initial Quantity is displayed as 1.5e-8", () => {
+      cy.get(`[name="lhr_initial_quantity"]`).should("have.value", "1.5e-8");
     });
 
     it("Verify 'The End Quantity is a required field.' is displayed", () => {
@@ -727,8 +742,8 @@ context("Paper new process LHR", () => {
         .should("be.visible");
     });
 
-    it("Enter End Quantity field value to 20", () => {
-      cy.get(`[name="lhr-end-quantity"]`).arrowType("20");
+    it("Enter End Quantity field value to 150000", () => {
+      cy.get(`[name="lhr-end-quantity"]`).arrowType("150000");
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -739,7 +754,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Verify End Quantity is displayed as entered", () => {
-      cy.get(`[name="lhr-end-quantity"]`).should("have.value", "20");
+      cy.get(`[name="lhr-end-quantity"]`).should("have.value", "150000");
     });
   });
 
@@ -749,6 +764,14 @@ context("Paper new process LHR", () => {
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Upload video.mp4 files", () => {
+      cy.atchUploadAttachment({ fileName: "video.mp4" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Upload dummy.pdf files", () => {
@@ -778,18 +801,61 @@ context("Paper new process LHR", () => {
       cy.progressBarShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
+  });
 
-    it("Upload video.mp4 files", () => {
-      cy.atchUploadAttachment({ fileName: "video.mp4" });
-      cy.listLoadingElementShouldNotExist();
-      cy.progressBarShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
+  context("Download files and verify they exists in downloaded folder", () => {
+    it("Download document image.jpg", () => {
+      cy.atchDownloadFile({ fileName: "image.jpg", saveFileName: saveFileNameOne + "image.jpg" });
+    });
+
+    it("Check size of downloaded file greater than 0", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameOne}image.jpg`).its("length").should("be.gt", 0);
+    });
+
+    it("Download document video.mp4", () => {
+      cy.atchDownloadFile({ fileName: "video.mp4", saveFileName: saveFileNameTwo + "video.mp4" });
+    });
+
+    it("Check size of downloaded file greater than 0", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameTwo}video.mp4`).its("length").should("be.gt", 0);
+    });
+
+    it("Download document dummy.pdf", () => {
+      cy.atchDownloadFile({ fileName: "dummy.pdf", saveFileName: saveFileNameThree + "dummy.pdf" });
+    });
+
+    it("Check size of downloaded file greater than 0", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameThree}dummy.pdf`).its("length").should("be.gt", 0);
+    });
+
+    it("Download document example.json", () => {
+      cy.atchDownloadFile({ fileName: "example.json", saveFileName: saveFileNameFour + "example.json" });
+    });
+
+    it("Check size of downloaded file greater than 0", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameFour}example.json`).its("length").should("be.gt", 0);
+    });
+
+    it("Download document users.csv", () => {
+      cy.atchDownloadFile({ fileName: "users.csv", saveFileName: saveFileNameFive + "users.csv" });
+    });
+
+    it("Check size of downloaded file greater than 0", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameFive}users.csv`).its("length").should("be.gt", 0);
+    });
+
+    it("Download document test.docx", () => {
+      cy.atchDownloadFile({ fileName: "test.docx", saveFileName: saveFileNameSix + "test.docx" });
+    });
+
+    it("Check size of downloaded file greater than 0", () => {
+      cy.readFile(`cypress/downloads/${saveFileNameSix}test.docx`).its("length").should("be.gt", 0);
     });
   });
 
   context("Click save document", () => {
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -839,12 +905,12 @@ context("Paper new process LHR", () => {
       cy.get("[name=\"lhr-build-type\"]").first().should("have.value", "R&D");
     });
 
-    it("Check 'Initial Quantity' as 10", () => {
-      cy.get(`[name="lhr_initial_quantity"]`).should("have.value", "10");
+    it("Check 'Initial Quantity' as 1.5e-8", () => {
+      cy.get(`[name="lhr_initial_quantity"]`).should("have.value", "1.5e-8");
     });
 
-    it("Check 'End Quantity' as 20", () => {
-      cy.get(`[name="lhr-end-quantity"]`).should("have.value", "20");
+    it("Check 'End Quantity' as 150000", () => {
+      cy.get(`[name="lhr-end-quantity"]`).should("have.value", "150000");
     });
 
     it("Verify dummy.pdf file exists", () => {
@@ -892,7 +958,7 @@ context("Paper new process LHR", () => {
 
     it("Add approver", () => {
       cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
-      cy.wait(2000);
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -949,9 +1015,9 @@ context("Paper new process LHR", () => {
       cy.drClickReviseDocument();
     });
 
-    it("Change End Quantity field value to 30", () => {
+    it("Change End Quantity field value to 3.0e6", () => {
       cy.get(`[name="lhr-end-quantity"]`).clear();
-      cy.get(`[name="lhr-end-quantity"]`).arrowType("30");
+      cy.get(`[name="lhr-end-quantity"]`).arrowType("3.0e6");
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1015,12 +1081,12 @@ context("Paper new process LHR", () => {
       cy.lhrVerifyFilterByPartNumberRev({ part: `PRT-00005.1 Part document` });
     });
 
-    it("Verify 'Start Quantily'", () => {
-      cy.lhrVerifyFilterByStartQuantity({ quantity: `10` });
+    it("Verify 'Start Quantily' as 1.5e-8", () => {
+      cy.lhrVerifyFilterByStartQuantity({ quantity: `1.5e-8` });
     });
 
-    it("Verify 'End Quantily'", () => {
-      cy.lhrVerifyFilterByEndQuantity({ quantity: `30` });
+    it("Verify 'End Quantily' as 3000000", () => {
+      cy.lhrVerifyFilterByEndQuantity({ quantity: `3000000` });
     });
 
     it("Verify 'Template'", () => {
