@@ -42,7 +42,7 @@ let createdPODocument;
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 const todaysDate = moment().tz("America/Los_Angeles");
-const currentFormattedDate = moment().tz("America/Los_Angeles").format("YYYY.MM.DD");
+const currentFormattedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
 const todaysDateFormated = moment().tz("America/Los_Angeles").format("L");
 const LFPO =  {
   documentTypeName: "Lot From Purchase Order Form",
@@ -804,7 +804,7 @@ context("Receiving landing page test", () => {
         cy.get("#AttachmentFieldPresenter-field").should("be.visible");
       });
 
-      it("Verify attachment field is visible", () => {
+      it("Verify approval field is visible", () => {
         cy.get("[data-cy='fb-po-approvals']").should("exist");
       });
 
