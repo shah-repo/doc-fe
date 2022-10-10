@@ -30,6 +30,9 @@ const paperlhrTitle = "Paper LHR form";
 const paperlhrDesc = "Paper LHR form description";
 const docType = "Paper Lot History Record";
 const partDocumentTitle = "Part document";
+const  lotTitle = "Lot from LHR";
+const lotDesc = "lot Description";
+const lotDocType = "Lots";
 
 const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
 const saveFileNameTwo = (Math.round(Math.random() * 100000)) % 100000;
@@ -496,6 +499,47 @@ context("Paper new process LHR", () => {
     });
   });
 
+  context("Create a lot form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'Create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it(`Enter title ${lotTitle}`, () => {
+      cy.drEnterDocumentTitle({ name: lotTitle });
+    });
+
+    it(`Enter description ${lotDesc}`, () => {
+      cy.drEnterDocumentDescription({ description: lotDesc });
+    });
+
+    it("Click on 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it(`Click on ${lotDocType} output document type`, () => {
+      cy.drSelectOutputDocumentType({ documentType: lotDocType });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Approve and release form", () => {
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+
   context("Create 'Paper LHR' form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
@@ -566,7 +610,7 @@ context("Paper new process LHR", () => {
 
   context("Navigate to LHR and Verify paper LHR status WIP and subtitle in LOT#YYMMDDXX format", () => {
     it(`Navigate to LHR`, () => {
-      cy.wait(3000);
+      cy.wait(5000);
       cy.navigToLHR();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -659,6 +703,10 @@ context("Paper new process LHR", () => {
       cy.get(`[name="lhr-build-type"]`).last().should("have.value", "Production").arrowClick();
     });
 
+    it(`Save the document`, () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
     it("Verify 'The Build Type is a required field.' is disappeared", () => {
       cy.get(".MuiFormHelperText-root.Mui-error").contains("The Build Type is a required field.")
         .should("not.exist");
@@ -672,14 +720,14 @@ context("Paper new process LHR", () => {
       cy.get(`div[data-cy="form.builder.build.title"]`).contains("Build type change");
     });
 
-    it(`Verify the popup windows contains 'You are about to switch the build type from form.builder.'`, () => {
-      cy.get(`[data-cy="[object Object]"]`).contains("You are about to switch the build type from form.builder.");
+    it(`Verify the popup windows contains 'You are about to switch the build type from form'`, () => {
+      cy.get(`[data-cy="[object Object]"]`).contains("You are about to switch the build type from");
     });
 
     // eslint-disable-next-line max-len
-    it(`Verify the popup windows contains 'Production to form.builder.R&D. Are you sure you want to make this change?'`, () => {
+    it(`Verify the popup windows contains 'Production to R&D. Are you sure you want to make this change?'`, () => {
       // eslint-disable-next-line max-len
-      cy.get(`[data-cy="[object Object]"]`).contains("Production to form.builder.R&D. Are you sure you want to make this change?");
+      cy.get(`[data-cy="[object Object]"]`).contains("Production to R&D. Are you sure you want to make this change?");
     });
 
     it(`Verify the popup windows displays 'Cancel'`, () => {
@@ -690,12 +738,16 @@ context("Paper new process LHR", () => {
       cy.get(`[data-cy="form.builder.lhr.build.switch"]`).contains("Yes switch build type").arrowClick();
     });
 
+    it(`Save the document`, () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
     it(`Verify switch build type to 'R&D' is checked`, () => {
       cy.get(`[name="lhr-build-type"]`).first().should("have.value", "R&D").should("be.checked");
     });
 
     it("Select build type 'Production' as disabled", () => {
-      cy.get(`[name="lhr-build-type"]`).last().should("have.value", "Production").should("be.disabled");
+      cy.get(`[name="lhr-build-type"]`).last().should("have.value", "Production").and("have.attr", "disabled");
     });
 
     it("Verify 'The Initial Quantity is a required field.' is displayed'", () => {
@@ -759,13 +811,6 @@ context("Paper new process LHR", () => {
   });
 
   context("Verify upload file of different formats", () => {
-    it("Upload image.jpg files", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
-      cy.listLoadingElementShouldNotExist();
-      cy.progressBarShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-
     it("Upload video.mp4 files", () => {
       cy.atchUploadAttachment({ fileName: "video.mp4" });
       cy.listLoadingElementShouldNotExist();
@@ -797,6 +842,13 @@ context("Paper new process LHR", () => {
 
     it("Upload test.docx files", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Upload image.jpg files", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1090,11 +1142,38 @@ context("Paper new process LHR", () => {
     });
 
     it("Verify 'Template'", () => {
-      cy.lhrVerifyFilterByTemplate({ template: `FM-00002` });
+      cy.lhrVerifyFilterByTemplate({ template: `FM-00003` });
     });
 
     it("Verify 'ID'", () => {
       cy.lhrVerifyFilterById({ id: `LHR-00001` });
+    });
+  });
+
+  context(`Navigate to LOT and verify lot number is same as in Paper LHR`, () => {
+    it(`Navigate to Lots`, () => {
+      cy.navigToLots();
+    });
+
+    it("Clear Filter", () => {
+      cy.lhrClearFilters();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it(`Verify Lot #${lotIdRef}01RD`, () => {
+      cy.lhrVerifyFilterByLot({ lot: `${lotIdRef}01RD` });
+    });
+
+    it("Veirfy the number of documents is one", () => {
+      cy.lhrVerifyDocumentCount({ numberOfDoc: 1 });
+    });
+
+    it("Filter document by status as 'Accepted'", () => {
+      cy.lhrVerifyFilterByStatus({ status: "Accepted" });
+    });
+
+    it("Verify 'Template' as 'FM-00002'", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "FM-00002");
     });
   });
 });
