@@ -52,7 +52,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 }) => {
   const { workspaceState } = FB.useStores();
   const classes = FBLHRStepStyles();
-
   const documentOperators = workspaceState?.document?.document?.operators
     ?.map(({ user }) => ({ stepId: user?.id, user }));
 
@@ -171,7 +170,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 component={"span"}
                 mr={0.75}
               >
-                <FBText locale={getLHRStatus()} values={{}}></FBText>
+                {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}}></FBText>)}
               </Box>
               {stepLHRs &&
                 (isDocumentRevisionReleased(stepLHRs?.status) || isDocumentRevisionInDraft(stepLHRs?.status)) &&
@@ -256,7 +255,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               }
             />
           </Box>
-          {isDocumentLHRT && !isEmpty(materials) && (
+
+          {!isDocumentLHRT && !isEmpty(materials) && (
             <FBLHRStepProcedureItem
               value={materials}
               type={FBProcedureItemType.materials}
@@ -264,7 +264,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               isPendingChange
             />
           )}
-          {isDocumentLHRT && !isEmpty(equipment) && (
+          {!isDocumentLHRT && !isEmpty(equipment) && (
             <FBLHRStepProcedureItem
               value={equipment}
               type={FBProcedureItemType.equipment}
@@ -272,38 +272,41 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               isPendingChange
             />
           )}
-          <Box mb={3.75} mt={3.75}>
-            <Grid container spacing={3}>
-              <Grid item xs={4}>
-                <Typography className={classes.fontTitle} data-cy={`start-quantity-${stepIndex}`}>
-                  <Text translation="form.builder.start.quantity" />
-                </Typography>
-                <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
-                  {stepLHRs?.formInput?.["lhrs-start-quantity"]}
-                </Typography>
+          {!isDocumentLHRT && (
+            <Box mb={3.75} mt={3.75}>
+              <Grid container spacing={3}>
+                <Grid item xs={4}>
+                  <Typography className={classes.fontTitle} data-cy={`start-quantity-${stepIndex}`}>
+                    <Text translation="form.builder.start.quantity" />
+                  </Typography>
+                  <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
+                    {stepLHRs?.formInput?.["lhrs-start-quantity"]}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography className={classes.fontTitle}  data-cy={`accepted-quantity-${stepIndex}`}>
+                    <Text translation="form.builder.accepted.quantity" />
+                  </Typography>
+                  <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
+                    {stepLHRs?.formInput?.["lhrs-accepted-quantity"]}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography className={classes.fontTitle} data-cy={`rejected-quantity-${stepIndex}`}>
+                    <Text translation="form.builder.rejected.quantity" />
+                  </Typography>
+                  <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
+                    {stepLHRs?.formInput?.["lhrs-rejected-quantity"]}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                <Typography className={classes.fontTitle}  data-cy={`accepted-quantity-${stepIndex}`}>
-                  <Text translation="form.builder.accepted.quantity" />
-                </Typography>
-                <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
-                  {stepLHRs?.formInput?.["lhrs-accepted-quantity"]}
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography className={classes.fontTitle} data-cy={`rejected-quantity-${stepIndex}`}>
-                  <Text translation="form.builder.rejected.quantity" />
-                </Typography>
-                <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
-                  {stepLHRs?.formInput?.["lhrs-rejected-quantity"]}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Box>
+            </Box>)}
           <Box>
-            <Box className={classes.fontTitle} data-cy={`operators-${stepIndex}`}>
-              <Text translation="common.operators" />
-            </Box>
+            {!isDocumentLHRT && (
+              <Box className={classes.fontTitle} data-cy={`operators-${stepIndex}`}>
+                <Text translation="common.operators" />
+              </Box>
+            )}
             <List>
               {map(operators, (operator, index) => (
                 <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
