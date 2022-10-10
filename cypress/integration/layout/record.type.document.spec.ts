@@ -95,7 +95,7 @@ context("Record type Document Layout verification", () => {
     });
   });
 
-  context("Create a required form for Record Document", () => {
+  context("Create a required form for Record Document for migration", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
@@ -234,8 +234,10 @@ context("Record type Document Layout verification", () => {
 
     context("Validate created form document", () => {
       context("Validate Predefined fields", () => {
-        it("Verify Predefiend fields up to attachment", () => {
+        it("Verify Predefiend fields up to attachment and appproval block", () => {
           cy.verifyPredefiendFields();
+          cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
+          cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
         });
       });
 
@@ -272,6 +274,10 @@ context("Record type Document Layout verification", () => {
           });
         });
 
+        it("Verify form option", () => {
+          cy.get(".formOptionsBox").should("exist");
+        });
+
         it("Navigate to details Tab", () => {
           cy.drSelectDetailsTab();
         });
@@ -285,6 +291,12 @@ context("Record type Document Layout verification", () => {
       });
 
       context("Validate Newly Added  form builder fields in Details tab", () => {
+
+        it("Verify fields in detail tab", () => {
+          cy.get("[data-cy='Checkbox']").should("be.visible");
+          cy.get(".formOptionsBox").should("exist");
+        });
+
         it("Validate Right Side Panel Open by default to Reference tab", () => {
           cy.get("[data-cy='References']").should("exist");
           cy.get("[data-cy='generalInfo']").should("be.visible");
@@ -303,6 +315,15 @@ context("Record type Document Layout verification", () => {
     context("Create New Document from Release form", () => {
       it("Click 'Create New'", () => {
         cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Verify new record should get created", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.DRAFT,
+          title: "Records",
+          docId: "RD-00004",
+          revision: "Rev A",
+        });
       });
     });
     context("Fill the form", () => {
@@ -328,6 +349,7 @@ context("Record type Document Layout verification", () => {
         cy.get("[data-cy='description']").should("exist");
         cy.get("[data-cy='select.document.documentType.id']").should("exist");
         cy.get("[data-cy='field-document.docId']").should("exist");
+        cy.get("#AttachmentFieldPresenter-field").should("exist");
       });
     });
 
@@ -472,7 +494,6 @@ context("Record type Document Layout verification", () => {
         });
 
         it("Click on confirm change", () => {
-          cy.pause();
           cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
         });
 
@@ -498,6 +519,16 @@ context("Record type Document Layout verification", () => {
         it("Click on approval block user should be navigated to the section", () => {
           cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
           cy.get("[data-cy^='fb-approvals']").should("be.visible");
+        });
+      });
+
+      context("Verify Scroll", () => {
+        it("Navigate to history tab", () => {
+          cy.get("[data-cy='timeline-icon']").arrowClick();
+        });
+
+        it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+          cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom", { ensureScrollable: false });
         });
       });
 
@@ -590,6 +621,11 @@ context("Record type Document Layout verification", () => {
       cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
       cy.get("[data-cy='bookmark-icon']").arrowClick();
       cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+    });
+
+    it("Click on approval block user should be navigated to the section", () => {
+      cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
+      cy.get("[data-cy^='fb-approvals']").should("be.visible");
     });
 
   });
