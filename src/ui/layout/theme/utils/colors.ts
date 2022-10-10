@@ -37,6 +37,7 @@ enum Colors {
   dark_gray2="#ABB0BA",
   // blue
   light_blue = "#edf4ff",
+  light_blue2 = "#EDF3FF",
   blue = "#0066FF",
   medium_blue = "#5C9DFC",
   background_blue = "#DBE9FF",

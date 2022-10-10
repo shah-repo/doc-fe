@@ -18,7 +18,7 @@ const FBDownloadSheetTpl: React.FunctionComponent<FBDownloadSheetTplProps> = ({
       key={`downloadsheet`}
       label={label}
       variant="contained"
-      style={{ margin: "0 0 2px 0", width: "50%", padding: "10px 0" }}
+      style={{ margin: "0 0 2px 0", padding: "10px 20px" }}
       onClick={() => handleAction?.()}
       {...{ disabled }}
     />
