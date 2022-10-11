@@ -527,10 +527,12 @@ context("LHRt using regular AR test", () => {
 
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+
+        cy.get("[data-cy=\"lhr-selected-part\"]").parent().parent().scrollIntoView();
         cy.get("[name=\"lhr-selected-part\"]").find("button").last().arrowClick({ force: true });
       });
       cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
-      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick({ force: true });
     });
 
     it("Click save document", () => {
