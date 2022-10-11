@@ -95,7 +95,7 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
                 label="form.builder.field.units"
                 name="units"
                 options={
-                  formState?.newValues.get("type") === "service" ? FBData.unitsOptions : FBData.productUnitsOptions
+                  formState?.newValues.get("type") === "product" ? FBData.productUnitsOptions : FBData.unitsOptions
                 }
                 optionValueKey="value"
                 optionLabelKey="text"
