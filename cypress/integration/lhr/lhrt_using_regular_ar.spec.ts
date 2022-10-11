@@ -527,7 +527,6 @@ context("LHRt using regular AR test", () => {
 
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-
         cy.get("[data-cy=\"lhr-selected-part\"]").parent().parent().scrollIntoView();
         cy.get("[name=\"lhr-selected-part\"]").find("button").last().arrowClick({ force: true });
       });
