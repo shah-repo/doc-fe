@@ -24,6 +24,21 @@ const docDescription = "Test Seed Description";
 const formTitle = "New Seed Form";
 const formDescription = "New Seed Form Description";
 
+const FIELD_HEADERS = [
+  "Document Title",
+  "Document Description",
+  "Type of document to be created",
+  "Document Type to be selected",
+  "JSON Form",
+  "Define the output of that form",
+  "Default Revision Stage",
+  "Training Required",
+  "Attachments to be included",
+  "fb-textfield",
+  "fb-checkbox-group",
+  "fb-radiobutton-group",
+];
+
 context("Verify New Layout for Seed Document", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -78,6 +93,71 @@ context("Verify New Layout for Seed Document", () => {
   });
 
   // Scenario 10c - Newly Created Seed Document
+  context("Create Seed Migration form", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'Create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it(`Enter title "Seed migrtion form"`, () => {
+      cy.drEnterDocumentTitle({ name: "Seed migrtion form" });
+    });
+
+    it(`Enter description ${formDescription}`, () => {
+      cy.drEnterDocumentDescription({ description: "Seed migration form Description" });
+    });
+
+    it("Click on 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click on 'SEED' document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "SEED" });
+      cy.unClick();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Add Text Field", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Checkbox group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
+      cy.fbGroupOptions("Option 1", "Option 2");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Radio Button group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+      cy.fbGroupOptions("Option 1", "Option 2");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save Form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
 
   context("Create Seed form", () => {
     it("Navigate to document list", () => {
@@ -386,6 +466,53 @@ context("Verify New Layout for Seed Document", () => {
       });
     });
 
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+      });
+
+      FIELD_HEADERS.forEach( (fieldHeader, i) => {
+        it(`Mapped '${fieldHeader}' field`, () => {
+          cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+          cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+        });
+      });
+
+      it("Click on confirm change", () => {
+        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+      });
+
+      it("Navigate to details Tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Verify form info should have migrated form 'FM-00002'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      });
+
+      it("Verify migrated form info 'fb-textfield'", () => {
+        cy.get("[data-cy='fb-textfield']").parent().should("contain.text", "fb-textfield");
+      });
+
+      it("Verify migrated form info 'fb-checkbox-group'", () => {
+        cy.get("[data-cy='fb-checkbox-group']").parent().should("contain.text", "fb-checkbox-group");
+      });
+
+      it("Verify migrated form info 'fb-radiobutton-group'", () => {
+        cy.get("[data-cy='fb-radiobutton-group']").parent().should("contain.text", "fb-radiobutton-group");
+      });
+    });
+
     context("Verify Revisions tab", () => {
       it("Open revisions tab, click and verify current revision", () => {
         cy.openRevisionsTabAndVerifyCurrentRevision("1");
@@ -422,6 +549,12 @@ context("Verify New Layout for Seed Document", () => {
           owner,
           actions: [
             { key: "Access granted to user", value: userOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Form Set To", value: "FM-00002 - revision 1 - Seed migrtion form" },
           ],
         },
         {
@@ -507,6 +640,10 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     context("Enter values for Details tab added fields", () => {
+      it("Navigate to overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Fill text field", () => {
         cy.get("[name^=fb-textfield-]").arrowType("Seed Text Field");
         cy.unClick();
@@ -604,6 +741,10 @@ context("Verify New Layout for Seed Document", () => {
           cy.contains("Attachments to be included").should("exist");
         });
 
+        it("Navigate to overview tab", () => {
+          cy.drSelectOverviewTab();
+        });
+
         it("Verify Text Field", () => {
           cy.contains("fb-textfield").should("exist");
         });
@@ -614,6 +755,10 @@ context("Verify New Layout for Seed Document", () => {
 
         it("Verify Radio Button Group", () => {
           cy.contains("fb-radiobutton-group").should("exist");
+        });
+
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
         });
 
         it("Verify that Form Options should appear for Details tab", () => {
@@ -767,8 +912,8 @@ context("Verify New Layout for Seed Document", () => {
           cy.verifyFixedTab();
         });
 
-        it("Verify that Form Options should not appear for Overview tab", () => {
-          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("not.exist");
+        it("Verify that Form Options should appear for Overview tab", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
         });
       });
 
@@ -793,6 +938,10 @@ context("Verify New Layout for Seed Document", () => {
         });
 
         context("Verify Details tab added fields", () => {
+          it("Navigate to overview tab", () => {
+            cy.drSelectOverviewTab();
+          });
+
           it("Verify Text Field", () => {
             cy.contains("fb-textfield").should("exist");
           });
@@ -803,6 +952,10 @@ context("Verify New Layout for Seed Document", () => {
 
           it("Verify Radio Button Group", () => {
             cy.contains("fb-radiobutton-group").should("exist");
+          });
+
+          it("Navigate to Details tab", () => {
+            cy.drSelectDetailsTab();
           });
 
           it("Verify that Form Options should appear for Details tab", () => {
