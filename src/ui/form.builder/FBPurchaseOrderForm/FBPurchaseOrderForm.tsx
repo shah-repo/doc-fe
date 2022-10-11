@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBForm, FBPurchaseOrderFormProps, FBQuantityField, FBRadioGroup, FBTextField } from "..";
+import { FBAutocomplete, FBAutocompleteAsync, FBCheckbox, FBData, FBDatePicker, FBForm, FBPurchaseOrderFormProps, FBPurchaseOrderItemType, FBQuantityField, FBRadioGroup, FBTextField } from "..";
 import { FBAutoCompleteStyle, styles } from "../styles/FBAutocomplete.styles";
 import { withFBPurchaseOrderForm } from "./FBPurchaseOrderForm.wrap";
 
@@ -95,7 +95,8 @@ const FBPurchaseOrderForm: React.FunctionComponent<FBPurchaseOrderFormProps> = (
                 label="form.builder.field.units"
                 name="units"
                 options={
-                  formState?.newValues.get("type") === "product" ? FBData.productUnitsOptions : FBData.unitsOptions
+                  formState?.newValues.get("type") === FBPurchaseOrderItemType.PRODUCT ? FBData.productUnitsOptions
+                    : FBData.unitsOptions
                 }
                 optionValueKey="value"
                 optionLabelKey="text"
