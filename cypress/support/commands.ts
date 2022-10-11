@@ -38,7 +38,7 @@ declare global {
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
-      unClick(): Chainable<Subject>;
+      unClick(options?: { force?: boolean }): Chainable<Subject>;
       checkIfInputHasValue(params: { inputSelector: string }): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
       triggerDueDateEmailScript(params: {sessionId: string; currentDate: string});
@@ -269,8 +269,8 @@ Cypress.Commands.add("selectCompany", (params: { name: string }) => {
   cy.get("#root", { timeout: 20 * 1000 }).contains(params.name).arrowClick();
 });
 
-Cypress.Commands.add("unClick", () => {
-  cy.get("body").arrowClick( 10, 10, { force: true });
+Cypress.Commands.add("unClick", (options = { force: true }) => {
+  cy.get("body").arrowClick( 10, 10, options);
 });
 
 Cypress.Commands.add(
