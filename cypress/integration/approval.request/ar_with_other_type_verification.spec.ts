@@ -377,6 +377,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Move component", () => {
+      cy.unClick();
       cy.get("[data-cy='fb-textfield-1']").scrollIntoView();
       cy.get("[data-cy='fb-textfield-1']").trigger("mouseover").wait(500);
       cy.get(".drag-handle").eq(3)
