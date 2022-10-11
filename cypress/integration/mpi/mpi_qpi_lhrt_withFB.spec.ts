@@ -1249,11 +1249,6 @@ context("Mpi Template", () => {
             .should("contain.text", "The Part to be Manufactured is a required field.");
         });
 
-        xit("Validate Build Type", () => {
-          cy.get(`[label="Build Type"]`).parent().parent()
-            .should("contain.text", "The Build Type is a required field.");
-        });
-
         it("Select Details tab", () => {
           cy.drSelectDetailsTab();
         });
