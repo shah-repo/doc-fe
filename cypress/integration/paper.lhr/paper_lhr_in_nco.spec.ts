@@ -597,15 +597,8 @@ context("Verify Paper LHR", () => {
     });
 
     context("Verify predefined fields are displayed", () => {
-      it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
-        cy.get(`[name="lhr-selected-part"]`).parent().parent()
-          .contains("The Part to be Manufactured is a required field.");
-      });
 
       it("Check 'Build Type' is displayed", () => {
-        cy.get(`[data-cy="Build Type"]`).should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Build Type is a required field.");
         cy.get(`[data-cy="Build Type"]`).parent().parent().parent().parent()
           .should("contain.html", `role="radiogroup"`);
         cy.get(`[name="lhr-build-type"]`).eq(0).should("have.value", "R&D");
@@ -613,15 +606,11 @@ context("Verify Paper LHR", () => {
       });
 
       it("Check 'Initial Quantity' is displayed", () => {
-        cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Initial Quantity is a required field.");
+        cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
       });
 
       it("Check 'End Quantity' is displayed", () => {
-        cy.get("[data-cy=\"End Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The End Quantity is a required field.");
+        cy.get("[data-cy=\"End Quantity\"]").should("exist");
       });
 
       it("Check 'Approvals' is displayed", () => {
@@ -652,27 +641,17 @@ context("Verify Paper LHR", () => {
     });
 
     context("Verify all data and predefined fields are present", () => {
-      it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
-        cy.get(`[name="lhr-selected-part"]`).parent().parent()
-          .contains("The Part to be Manufactured is a required field.");
-      });
 
       it("Verify 'Build Type' is displayed", () => {
-        cy.get("[data-cy=\"Build Type\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Build Type is a required field.");
+        cy.get("[data-cy=\"Build Type\"]").should("exist");
       });
 
       it("Verify 'Initial Quantity' is displayed", () => {
-        cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Initial Quantity is a required field.");
+        cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
       });
 
       it("Verify 'End Quantity' is displayed", () => {
-        cy.get("[data-cy=\"End Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The End Quantity is a required field.");
+        cy.get("[data-cy=\"End Quantity\"]").should("exist");
       });
 
       it("Verify 'Approvals' is displayed", () => {
@@ -738,27 +717,16 @@ context("Verify Paper LHR", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
-      it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
-        cy.get(`[name="lhr-selected-part"]`).parent().parent()
-          .contains("The Part to be Manufactured is a required field.");
-      });
-
       it("Verify 'Build Type' is displayed", () => {
-        cy.get("[data-cy=\"Build Type\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Build Type is a required field.");
+        cy.get("[data-cy=\"Build Type\"]").should("exist");
       });
 
       it("Verify 'Initial Quantity' is displayed", () => {
-        cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Initial Quantity is a required field.");
+        cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
       });
 
       it("Verify 'End Quantity' is displayed", () => {
-        cy.get("[data-cy=\"End Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The End Quantity is a required field.");
+        cy.get("[data-cy=\"End Quantity\"]").should("exist");
       });
 
       it("Verify 'Approvals' is displayed", () => {
@@ -768,7 +736,7 @@ context("Verify Paper LHR", () => {
 
     context(`Remove ${fileUploadFieldTitle} approve and verify Released form`, () => {
       it(`Remove ${fileUploadFieldTitle}`, () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").eq(-2).arrowClick({ force: true });
+        cy.get("[data-cy=\"remove-schema-item\"]").eq(-1).arrowClick({ force: true });
       });
 
       it("Save form", () => {
@@ -953,7 +921,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {
@@ -1036,7 +1004,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Save it", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {
@@ -1319,7 +1287,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {
@@ -1403,7 +1371,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Save it", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {
