@@ -120,7 +120,6 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     return true;
   };
 
-
   return (
     <>
       {includeQRScan && (
