@@ -256,7 +256,7 @@ Cypress.Commands.add("lhrClickSaveDocument", () => {
 });
 
 Cypress.Commands.add("lhrClearFilters", () => {
-  cy.get("button[data-cy=clearFilter]").arrowClick();
+  cy.get(`button[data-cy="clearFilter"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
 });
 
