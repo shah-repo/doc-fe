@@ -375,7 +375,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
       {isDocumentLHRT && (
         <>
           <Box display="flex" alignItems="center"  justifyContent={isDocumentLHRT ? "" : "center"}
-            style={{ borderBottom: "2px solid rgb(200, 202, 207)" }}>
+            style={{ borderBottom: `2px solid ${Colors.chinese_silver}` }}>
             <Box mr={2} ml={1} >
               <Typography variant="h6" style={{
                 color: Colors.almost_black,
@@ -407,20 +407,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               >
                 {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}}></FBText>)}
               </Box>
-              {stepLHRs &&
-                (isDocumentRevisionReleased(stepLHRs?.status) || isDocumentRevisionInDraft(stepLHRs?.status)) &&
-                (<Box component={"span"} data-cy={`lhr-step-timestamp-${stepIndex}`}>
-                  <Box component="span" marginRight={0.75}>&bull;</Box>
-                  {isDocumentRevisionReleased(stepLHRs.status)
-                    ? getFormattedDateString(
-                      stepLHRs?.releasedAt,
-                      MomentFormats.DateTime
-                    )
-                    : getFormattedDateString(
-                      stepLHRs?.createdAt,
-                      MomentFormats.DateTime
-                    )}
-                </Box>)}
             </Box>
           </Box>
           <Box flexGrow={1}></Box>
