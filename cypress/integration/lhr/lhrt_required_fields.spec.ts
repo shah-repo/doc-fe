@@ -534,6 +534,7 @@ context("LHRt required fields test", () => {
   context("Revise LHRT", () => {
     it("Click Revise button", () => {
       cy.drClickReviseDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select Details tab", () => {
@@ -549,8 +550,15 @@ context("LHRt required fields test", () => {
       cy.get("[data-cy=\"LHR Step 2\"]").arrowClick({ force: true });
     });
 
+    it("LHR step 2 should also display text in red", () => {
+      cy.get("[name^=\"lhr-step-\"]").parent().parent()
+        .find(".Mui-error").eq(0)
+        .should("have.text", "The LHR Step is a required field.")
+        .and("have.css", "color", "rgb(244, 67, 54)");
+    });
+
     it("Click save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -578,7 +586,6 @@ context("LHRt required fields test", () => {
     });
 
     it("Select MPI document for step #2 in LHRt", () => {
-      cy.get("[data-cy=\"LHR Step 2\"]").arrowClick({ force: true });
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
         cy.unClick();
