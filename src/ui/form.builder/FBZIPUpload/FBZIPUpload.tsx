@@ -55,7 +55,7 @@ const ZIPUploadChild: React.FunctionComponent<FBFZIPUploadProps> = ({
                 <Grid item xs={8}>
                   <FBFilesPresenter
                     boxProps={{ mt: 2 }}
-                    {...{ files, disabled }}
+                    {...{ files, disabled, name }}
                   />
                 </Grid>
                 <Grid item xs={4} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
