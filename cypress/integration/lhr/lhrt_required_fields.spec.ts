@@ -549,13 +549,6 @@ context("LHRt required fields test", () => {
       cy.get("[data-cy=\"LHR Step 2\"]").arrowClick({ force: true });
     });
 
-    it("LHR step 2 should also display text in red", () => {
-      cy.get("[name^=\"lhr-step-\"]").parent().parent()
-        .find(".Mui-error").eq(0)
-        .should("have.text", "The LHR Step is a required field.")
-        .and("have.css", "color", "rgb(244, 67, 54)");
-    });
-
     it("Click save document", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.progressBarShouldNotExist();
