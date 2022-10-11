@@ -465,6 +465,60 @@ context("Verify New Layout for EB Document", () => {
   });
 
   // Scenario 8a - Newly Created Engineering Build Document
+  context("Create EB migration form", () => {
+    context("Create EB  migration form", () => {
+      it("Navigate to Document List", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document'", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it(`Enter title "EB Migration Form"`, () => {
+        cy.drEnterDocumentTitle({ name: "EB Migration Form" });
+      });
+
+      it(`Enter description "EB migration form Description"`, () => {
+        cy.drEnterDocumentDescription({ description: "EB migration form Description" });
+      });
+
+      it("Click on 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Click on 'Engineering Build Test' document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Engineering Build Test" });
+        cy.unClick();
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Add EB Procedure", () => {
+        cy.fbAddNewField();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save Form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Approve and release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+  });
 
   context("Create EB form", () => {
     it("Navigate to Document List", () => {
@@ -646,6 +700,7 @@ context("Verify New Layout for EB Document", () => {
 
     it("Click on create Engineering Builds", () => {
       cy.get(`button[id="DocumentByTypeListPresenter-openDocRev"]`).arrowClick();
+      cy.get("[id='MultipleFormTemplate-selectDocType']").autocompleteSelect("New EB Form");
     });
 
     it(`Enter title ${docTitle}`, () => {
@@ -710,6 +765,10 @@ context("Verify New Layout for EB Document", () => {
             cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
             cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
             cy.verifyFormOptionsVisibility();
+          });
+
+          it("Save Form", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
           });
         });
       });
@@ -827,6 +886,57 @@ context("Verify New Layout for EB Document", () => {
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
         cy.verifyReferencesOtherInfo();
+      });
+    });
+
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^='react-select']").contains("FM-00003").arrowClick();
+      });
+
+      it("Mapped Approvals field", () => {
+        cy.get("[id='formMigrationField']" ).eq(0).arrowClick();
+        cy.get("[id^='react-select']").eq(0).autocompleteSelect("form.builder.approvals");
+      });
+
+      it("Mapped EB Procedure field", () => {
+        cy.get("[id='formMigrationField']" ).eq(1).arrowClick();
+        cy.get("[id^='react-select']").eq(1).autocompleteSelect("form.builder.procedure");
+      });
+
+      it("Mapped fb-textfield", () => {
+        cy.get("[id='formMigrationField']" ).eq(2).arrowClick();
+        cy.get("[id^='react-select']").eq(2).autocompleteSelect("fb-textfield");
+      });
+
+      it("Click on confirm change", () => {
+        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+      });
+
+      it("Navigate to procedure Tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Verify form info should have migrated form 'FM-00003'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
+      });
+
+      it("Verify migrated form info 'EB Procedure'", () => {
+        cy.get("[data-cy='form.builder.procedure']").parent().should("contain.text", "EB Procedure");
+      });
+
+      it("Verify migrated form info 'fb-textfield'", () => {
+        cy.get("[data-cy='fb-textfield']").parent().should("contain.text", "fb-textfield");
       });
     });
 
