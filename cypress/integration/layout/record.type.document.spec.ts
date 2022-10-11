@@ -522,6 +522,13 @@ context("Record type Document Layout verification", () => {
         });
       });
 
+      context("Verify revision history", () => {
+        it("Click on revision history tab", () => {
+          cy.get("[data-cy='cr-icon']").arrowClick();
+          cy.get("[data-cy='Revision History']").should("be.visible");
+        });
+      });
+
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
           cy.get("[data-cy='timeline-icon']").arrowClick();
