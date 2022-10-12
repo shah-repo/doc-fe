@@ -9,7 +9,7 @@ import useAsync from "../../hooks/useAsync";
 import { DialogHandler } from "../../hooks/useDialog";
 import { PageDetailsFormPresenter } from "../form/presenter";
 import { toPageDetailsBodyValues } from "../transform";
-import { PageDetailsCategory } from "../types";
+import { PageDetailsCategory, PageDetailsCategoryValues } from "../types";
 
 interface Props {
   dialog: DialogHandler;
@@ -23,6 +23,7 @@ export const PageDetailsForm: React.FunctionComponent<Props> = ({
     addNewBtnLabel: "",
     columns: null,
     config: null,
+    helpModule: null,
   };
 
   const addPageDetailsAction = useActionCreator(pageDetailsActions.addPageDetails);
@@ -36,7 +37,7 @@ export const PageDetailsForm: React.FunctionComponent<Props> = ({
     },
   });
 
-  const onSubmit = (values: PageDetailsCategory) => {
+  const onSubmit = (values: PageDetailsCategoryValues) => {
     async.start(
       addPageDetailsAction,
       toPageDetailsBodyValues(values),
