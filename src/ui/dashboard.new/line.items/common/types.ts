@@ -25,3 +25,7 @@ export enum DocTypeGroups {
   TRAINING_CURRICULUM = "TRAINING_CURRICULUM",
   BULK_CREATE = "BULK_CREATE",
 }
+
+export enum DocCategories {
+  LHR = "Lhr",
+}
