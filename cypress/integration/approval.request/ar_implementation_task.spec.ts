@@ -392,7 +392,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     });
   });
 
-  context("Check Implementation Task Status", () => {
+  xcontext("Check Implementation Task Status", () => {
     it(`Check Implementation task' status is ${STATUS_TYPES_LABEL.PENDING}`, () => {
       SystemRequirement("REQ-0710");
       cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.PENDING });
@@ -563,7 +563,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
         .eq(0).contains(/REQUESTED|COMPLETE/g);
     });
 
-    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+    xit("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
       cy.wait(5000);
       cy.reload();
       cy.progressBarShouldNotExist();
@@ -728,7 +728,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
       cy.dlFilterByStatus({ status: "Released" });
     });
 
-    it("Verify filter by status", () => {
+    xit("Verify filter by status", () => {
       cy.dlVerifyFilterByStatus({ status: "Released" });
     });
   });
