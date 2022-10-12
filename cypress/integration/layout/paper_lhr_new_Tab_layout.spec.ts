@@ -471,6 +471,11 @@ context("Paper LHR tab Layout", () => {
 
   context("Sample FORM for migration", () => {
     context("Start document creation flow", () => {
+
+      it("Turnoff auto save", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -502,16 +507,7 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
-      });
-
-      it("Add textfield", () => {
-        cy.fbAddNewFieldWhenHidden();
-        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-        cy.fbEnterNameValue({ name: "label", value: "Textfield from migration" });
-        cy.fbAddNewFieldButton();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and released", () => {
@@ -572,9 +568,7 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
   });
@@ -596,6 +590,11 @@ context("Paper LHR tab Layout", () => {
       cy.fbFieldRequired();
       cy.fbAddNewFieldButton();
     });
+
+    it("Click on Save", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
     it("Verify that it contains only Details tab", () => {
       cy.get("[data-cy='tabId.details']").should("exist");
       cy.get("#sm-tabpanel-1").should("not.exist");
@@ -742,17 +741,19 @@ context("Paper LHR tab Layout", () => {
         cy.get("[data-cy='lhr-end-quantity'] input").arrowType("10");
       });
 
-
       it("Checked chebox value", () => {
         cy.get(`input[type="checkbox"][value="1"]`).last().check();
       });
 
-      it("Save the document", () => {
-        cy.drSaveDocumentWithoutaudit();
-      });
-
       it("Fill in Approval block and  Approve and release Record", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+      });
+
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
+      it("Approve and release Record", () => {
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
       });
 
@@ -1013,7 +1014,7 @@ context("Paper LHR tab Layout", () => {
 
     context("Verify Scroll", () => {
       it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick({ force: true });
+        cy.get("[data-cy='timeline-icon']").arrowClick();
       });
 
       it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -1021,13 +1022,12 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Approve and Release", () => {
-        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.SessionDetails], () => {
+          cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
+          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
@@ -1057,9 +1057,9 @@ context("Paper LHR tab Layout", () => {
         cy.get("#sm-tabpanel-1").should("not.exist");
       });
 
-      it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage,(IN_REVIEW)", () => {
+      it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage,(WIP)", () => {
         cy.verifyHeaderInfoContent({
-          status: STATUS_TYPES_LABEL.IN_REVIEW,
+          status: STATUS_TYPES_LABEL.WIP,
           title: "LHR",
           docId: "LHR-00001",
           revision: "Rev A",
@@ -1082,10 +1082,9 @@ context("Paper LHR tab Layout", () => {
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
-          cy.get("[data-cy='lhr-selected-part']").scrollIntoView();
-          cy.get("[data-cy='lhr-selected-part']").should("be.visible");
-          cy.get("[name='lhr_initial_quantity']").should("be.visible");
-          cy.get("[name='lhr-end-quantity']").should("be.visible");
+          cy.get("[data-cy='lhr-selected-part']").should("exist");
+          cy.get("[name='lhr_initial_quantity']").should("exist");
+          cy.get("[name='lhr-end-quantity']").should("exist");
         });
 
         it("Verify Form option", () => {
@@ -1209,23 +1208,18 @@ context("Paper LHR tab Layout", () => {
       });
     });
 
-    context("Verify Scroll", () => {
-      it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
-      });
-
-      it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
-        cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+    context("Approve and released", () => {
+      it("Click on submit for approval", () => {
+        cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
       });
 
       it("Approve and Release", () => {
-        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.SessionDetails], () => {
+          cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
+          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
@@ -1279,9 +1273,9 @@ context("Paper LHR tab Layout", () => {
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
-          cy.get("[data-cy='lhr-selected-part']").should("be.visible");
-          cy.get("[name='lhr_initial_quantity']").should("be.visible");
-          cy.get("[name='lhr-end-quantity']").should("be.visible");
+          cy.get("[data-cy='lhr-selected-part']").should("exist");
+          cy.get("[name='lhr_initial_quantity']").should("exist");
+          cy.get("[name='lhr-end-quantity']").should("exist");
         });
 
         it("Verify Form option", () => {
@@ -1398,15 +1392,6 @@ context("Paper LHR tab Layout", () => {
       });
     });
 
-    context("Verify Scroll", () => {
-      it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
-      });
-
-      it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
-        cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
-      });
-    });
   });
 });
 
