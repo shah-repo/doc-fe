@@ -7,6 +7,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a document?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -17,6 +18,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "Document States and what they mean",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -32,6 +34,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create an Approval Request?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -42,6 +45,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create an Express Approval Request",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -57,6 +61,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a record?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -72,6 +77,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a purchase order?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -87,6 +93,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create an Equipment?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -102,6 +109,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a Supplier?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -117,6 +125,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a Receiving record?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -132,6 +141,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a Part?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -147,6 +157,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create an EB?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -162,6 +173,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create an LHR?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -177,6 +189,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a LOT?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -192,6 +205,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a Training Curriculum?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -202,6 +216,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a Training Record?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -217,6 +232,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to add Users?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -227,6 +243,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to Deactivate users?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -237,6 +254,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to help users Reset Password?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -252,6 +270,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create Groups?",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -267,6 +286,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "Haven’t found your answer yet? Try here",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -282,6 +302,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to navigate through the Dashboard as a regular user",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -292,6 +313,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to navigate through the Dashboard as Company admin",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -307,6 +329,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "Commonly asked user questions",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
       {
@@ -322,6 +345,7 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "What’s new with Enlil",
+        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
         videoId: "-ZtYP4oDwWY",
       },
     ],

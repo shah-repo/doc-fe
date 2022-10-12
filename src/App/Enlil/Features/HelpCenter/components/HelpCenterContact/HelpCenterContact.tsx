@@ -16,7 +16,7 @@ const HelpCenterContact: React.FC = () => {
       <HelpCenterExternalLink className={cx(classes.link, classes.contact)} href={StaticHelpLinks.Contact}>
         <ListItemIcon className={classes.icon}><SendIcon /></ListItemIcon>
         <ListItemText className={classes.text}>
-          <Text translation="help.dint.find.what.you.need" />
+          <Text translation="help.didnt.find.what.you.need" />
           <HelpCenterOutLink>
             <Text translation="help.contact" />
           </HelpCenterOutLink>

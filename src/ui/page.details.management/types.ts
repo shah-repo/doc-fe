@@ -6,3 +6,7 @@ export interface PageDetailsCategory {
   columns: Nullable<string>;
   config: Nullable<string>;
 }
+
+export interface PageDetailsCategoryValues extends PageDetailsCategory {
+  helpModule: Nullable<string>;
+}
