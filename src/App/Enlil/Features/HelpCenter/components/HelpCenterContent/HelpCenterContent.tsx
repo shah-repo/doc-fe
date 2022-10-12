@@ -2,13 +2,14 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typograp
 import React from "react";
 import { ReactComponent as CloseIcon } from "../../../../../../assets/images/cross.svg";
 import Text from "../../../../../../ui/components/Text";
+import { HelpCenterModuleData } from "../../HelpCenter.types";
 import HelpCenterContact from "../HelpCenterContact/HelpCenterContact";
 import HelpCenterList from "../HelpCenterList/HelpCenterList";
 import HelpCenterPopular from "../HelpCenterPopular/HelpCenterPopular";
 import useStyles from "./HelpCenterContent.styles";
 
 interface Props {
-  content: any;
+  content: HelpCenterModuleData;
   opened: boolean;
   handleCloseDialog: () => void;
 }
