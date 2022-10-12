@@ -12,7 +12,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
-import { FONT_SIZE_12, FONT_SIZE_14, FONT_SIZE_16, FONT_WT_400, FONT_WT_600, LINE_HT_21, LINE_HT_21_28, sora, soraSansserif } from "../../utils/constants/fonts_constants";
+import { FONT_SIZE_12, FONT_SIZE_14, FONT_SIZE_16, FONT_SIZE_24, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_21, LINE_HT_21_28, LINE_HT_24, LINE_HT_36, sora, soraSansserif } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -475,8 +475,6 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     it("Clear filters", () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Open the first document in the list", () => {
@@ -485,25 +483,18 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   });
 
   context("Training Record page font", () => {
-    it(`Verify 'Training Record' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "Training Record",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'Training Record' font-size ${FONT_SIZE_24} font-family ${soraSansserif} line-height ${LINE_HT_36} font-weight ${FONT_WT_500}`, () => {
+      cy.get(`[class*="MuiTypography-body1"]`).contains("Training Record").should("have.css", "font-size", FONT_SIZE_24);
+      cy.get(`[class*="MuiTypography-body1"]`).contains("Training Record").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class*="MuiTypography-body1"]`).contains("Training Record").should("have.css", "line-height", LINE_HT_36);
+      cy.get(`[class*="MuiTypography-body1"]`).contains("Training Record").should("have.css", "font-weight", FONT_WT_500);
     });
 
-    it(`Verify 'Training Record' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "Training Record",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
-    });
-
-    it(`Verify 'TRN ID' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "TRN ID",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'TRN ID' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_700}`, () => {
+      cy.get(`[class*="MuiTypography-body1"]`).contains("TRN ID").should("have.css", "font-size", FONT_SIZE_16);
+      cy.get(`[class*="MuiTypography-body1"]`).contains("TRN ID").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class*="MuiTypography-body1"]`).contains("TRN ID").should("have.css", "line-height", LINE_HT_24);
+      cy.get(`[class*="MuiTypography-body1"]`).contains("TRN ID").should("have.css", "font-weight", FONT_WT_700);
     });
 
     it(`Verify 'TRN-00001' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
