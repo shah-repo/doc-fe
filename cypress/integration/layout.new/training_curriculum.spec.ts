@@ -26,6 +26,19 @@ const docDescription = "Test Training Curriculum";
 const formTitle = "New Training Curriculum Form";
 const formDescription = "New Training Curriculum Form Description";
 
+const FIELD_HEADERS = [
+  "Periodic Training",
+  "Documents to Train on",
+  `Refresh/repeat training periodically?`,
+  "Training Frequency (in days)",
+  "Trainees Details",
+  "Groups to Train",
+  "Users to Train (if applicable)",
+  "form.builder.approvals",
+  "fb-textfield",
+  "fb-radiobutton-group",
+];
+
 context("Verify New Layout for Training Curriculum Document", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -281,6 +294,70 @@ context("Verify New Layout for Training Curriculum Document", () => {
   context("Login admin user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+  });
+
+  context("Create Training Curriculum form for migration", () => {
+    it("Navigate to Document List", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'Create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it(`Enter title`, () => {
+      cy.drEnterDocumentTitle({ name: "Migration form" });
+    });
+
+    it(`Enter description`, () => {
+      cy.drEnterDocumentDescription({
+        description: "Migration form description",
+      });
+    });
+
+    it("Click on 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click on 'Training Curriculum' document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
+      cy.unClick();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Add Text Field", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Radio Button group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+      cy.fbGroupOptions("Option 1", "Option 2");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save Form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -570,17 +647,152 @@ context("Verify New Layout for Training Curriculum Document", () => {
       cy.get(`[data-cy="References"]`).scrollIntoView({ ensureScrollable: false });
     });
 
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+      });
+    });
+
     context("Verify References tab", () => {
       it("Verify References tab General Info", () => {
         cy.verifyReferencesGeneralInfo({ user: owner });
       });
 
-      it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
-      });
+      // it("Verify Add/Remove References", () => {
+      //   cy.verifyAddRemoveReference({ formId: "FM-00001" });
+      // });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
         cy.verifyReferencesOtherInfo();
+      });
+    });
+
+    context("Field mapping for migration form", () => {
+      FIELD_HEADERS.forEach( (fieldHeader, i) => {
+        it(`Mapped '${fieldHeader}' field`, () => {
+          cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+          cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+        });
+      });
+    });
+
+    context("Click confirm and verify migrated fields are present", () => {
+      it("Click on confirm change", () => {
+        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+      });
+
+      it("Navigate to details Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Verify form info should have migrated form 'FM-00002'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      });
+
+      it("Verify migrated form info 'Periodic Training'", () => {
+        cy.get("[data-cy='Periodic Training']").parent().should("contain.text", "Periodic Training");
+      });
+
+      it("Verify migrated form info 'Documents to Train on'", () => {
+        cy.get("[data-cy='Documents to Train on']").parent().should("contain.text", "Documents to Train on");
+      });
+    });
+
+    xcontext("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+      });
+
+      it("Mapped 'Periodic Training'", () => {
+        cy.get("[id='formMigrationField']" ).eq(0).arrowClick()
+          .find("[id^='react-select']").autocompleteSelect("Periodic Training");
+        // cy.get("[id^='react-select']").eq(1).autocompleteSelect("Periodic Training");
+      });
+
+      it("Mapped 'Documents to Train on'", () => {
+        cy.get("[id='formMigrationField']" ).eq(1).arrowClick()
+          .find("[id^='react-select']").autocompleteSelect("Documents to Train on");
+        // cy.get("[id^='react-select']").eq(2).autocompleteSelect("Documents to Train on");
+      });
+
+      it("Mapped 'Refresh/repeat training periodically?'", () => {
+        cy.get("[id='formMigrationField']" ).eq(2).arrowClick();
+        cy.get("[id^='react-select']").eq(3).autocompleteSelect("Refresh/repeat training periodically?");
+      });
+
+      it("Mapped 'Training Frequency (in days)'", () => {
+        cy.get("[id='formMigrationField']" ).eq(3).arrowClick();
+        cy.get("[id^='react-select']").eq(4).autocompleteSelect("Training Frequency (in days)");
+      });
+
+      it("Mapped 'Trainees Details'", () => {
+        cy.get("[id='formMigrationField']" ).eq(4).arrowClick();
+        cy.get("[id^='react-select']").eq(5).autocompleteSelect("Trainees Details");
+      });
+
+      it("Mapped 'Groups to Train'", () => {
+        cy.get("[id='formMigrationField']" ).eq(5).arrowClick();
+        cy.get("[id^='react-select']").eq(6).autocompleteSelect("Groups to Train");
+      });
+
+      it("Mapped 'Users to Train (if applicable)'", () => {
+        cy.get("[id='formMigrationField']" ).eq(6).arrowClick();
+        cy.get("[id^='react-select']").eq(7).autocompleteSelect("Users to Train (if applicable)");
+      });
+
+      it("Mapped Approvals field", () => {
+        cy.get("[id='formMigrationField']" ).eq(7).arrowClick();
+        cy.get("[id^='react-select']").eq(8).autocompleteSelect("form.builder.approvals");
+      });
+
+      it("Mapped 'fb-textfield' field", () => {
+        cy.get("[id='formMigrationField']" ).eq(8).arrowClick();
+        cy.get("[id^='react-select']").eq(9).autocompleteSelect("fb-textfield");
+      });
+
+      it("Mapped 'fb-radiobutton-group' field", () => {
+        cy.get("[id='formMigrationField']" ).eq(9).arrowClick();
+        cy.get("[id^='react-select']").eq(10).autocompleteSelect("fb-radiobutton-group");
+      });
+
+      it("Click on confirm change", () => {
+        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+      });
+
+      it("Navigate to details Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Verify form info should have migrated form 'FM-00002'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      });
+
+      it("Verify migrated form info 'Periodic Training'", () => {
+        cy.get("[data-cy='Periodic Training']").parent().should("contain.text", "Periodic Training");
+      });
+
+      it("Verify migrated form info 'Documents to Train on'", () => {
+        cy.get("[data-cy='Documents to Train on']").parent().should("contain.text", "Documents to Train on");
       });
     });
 
@@ -620,6 +832,12 @@ context("Verify New Layout for Training Curriculum Document", () => {
           owner,
           actions: [
             { key: "Access granted to user", value: userOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Form Set To", value: "FM-00002 - revision 1 - Migration form" },
           ],
         },
         {
@@ -689,6 +907,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
     context("Enter values for Details tab added fields", () => {
       it("Fill text field", () => {
+        cy.pause();
         cy.get("[name^=fb-textfield-]").arrowType("Training Curriculum Text Field");
         cy.unClick();
       });
