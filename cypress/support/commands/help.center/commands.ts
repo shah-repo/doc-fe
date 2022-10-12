@@ -11,7 +11,7 @@ declare global {
       closeHelpCenterNavigation(): Chainable<Subject>;
       closeHelpCenterContent(): Chainable<Subject>;
       checkIfHelpCenterClosed(): Chainable<Subject>;
-      verifyHelpCenterTitle(title: string, compare: string): Chainable<Subject>;
+      verifyHelpCenterTitle(title: string, compare?: string): Chainable<Subject>;
     }
   }
 }

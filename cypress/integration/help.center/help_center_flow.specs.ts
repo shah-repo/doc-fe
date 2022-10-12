@@ -341,7 +341,7 @@ context("Help Center behaviour", () => {
 
         it("Navigate to AR document", () => {
           cy.dlClearFilters();
-          cy.dlSelectFirstDocument();
+          cy.dlSelectFirstDocumentItem();
         });
 
         it("Verify HelpCenter state", () => {
@@ -372,7 +372,7 @@ context("Help Center behaviour", () => {
 
         it("Navigate to Equipment document", () => {
           cy.dlClearFilters();
-          cy.dlSelectFirstDocument();
+          cy.dlSelectFirstDocumentItem();
         });
 
         it("Verify HelpCenter state", () => {
