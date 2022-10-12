@@ -692,9 +692,12 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Enter html code into 'Render HTML' field", () => {
-      cy.drEnterHtmlText({
-        htmlText: renderHTMLContent,
-      });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.drEnterHtmlText({
+            htmlText: renderHTMLContent,
+          });
+        });
     });
   });
 
@@ -736,8 +739,11 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+          cy.unClick();
+        });
     });
 
     it(`Verify 'The requestor field is required field' is disappeared`, () => {
@@ -790,14 +796,10 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.poAddPOButtonClick();
-    });
-  });
-
-  context("Save document", () => {
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.poAddPOButtonClick();
+        });
     });
   });
 
@@ -1048,8 +1050,11 @@ context("PO Removes lineitems removes approver", () => {
 
   context("Navigate to field Requestor and add User 1", () => {
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+          cy.unClick();
+        });
     });
 
     it(`Verify 'The requestor field is required field' is disappeared`, () => {
