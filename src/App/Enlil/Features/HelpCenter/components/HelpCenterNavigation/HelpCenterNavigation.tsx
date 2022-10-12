@@ -55,23 +55,24 @@ const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, hasGuide, handleClose
         vertical: "bottom",
         horizontal: "right",
       }}
+      data-cy="help-center.navigation"
     >
       <GuidesLink external={!hasGuide} href={staticLinks.Guides} onClick={handleOpenContent}>
         <ListItemIcon><HelpIcon /></ListItemIcon>
-        <ListItemText><Text translation="help.guides" /></ListItemText>
+        <ListItemText data-cy="help-center.content-opener"><Text translation="help.guides" /></ListItemText>
       </GuidesLink>
       <HelpCenterExternalLink href={staticLinks.ReleaseNotes}>
         <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
-        <ListItemText><Text translation="help.release.notes" /></ListItemText>
+        <ListItemText data-cy="help-center.external-link"><Text translation="help.release.notes" /></ListItemText>
       </HelpCenterExternalLink>
       <HelpCenterExternalLink href={staticLinks.FAQs}>
         <ListItemIcon><FAQsIcon /></ListItemIcon>
-        <ListItemText><Text translation="help.faqs" /></ListItemText>
+        <ListItemText data-cy="help-center.external-link"><Text translation="help.faqs" /></ListItemText>
       </HelpCenterExternalLink>
       <Divider variant="middle" component="li" />
       <HelpCenterExternalLink href={staticLinks.Contact}>
         <ListItemIcon><SendIcon /></ListItemIcon>
-        <ListItemText><Text translation="help.contact" /></ListItemText>
+        <ListItemText data-cy="help-center.external-link"><Text translation="help.contact" /></ListItemText>
       </HelpCenterExternalLink>
     </Menu>
   );

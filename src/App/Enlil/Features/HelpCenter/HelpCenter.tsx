@@ -44,7 +44,7 @@ const HelpCenter: React.FC = () => {
 
   return (
     <Theme>
-      <IconButton color="inherit" size="small" onClick={openMenu}>
+      <IconButton color="inherit" size="small" onClick={openMenu} data-cy="help-center.opener">
         <HelpIcon />
       </IconButton>
       <HelpCenterNavigation
