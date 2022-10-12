@@ -23,6 +23,42 @@ const randomNumberForCompany = Math.round(Math.random() * 100000) % 100000;
 const newCompanyName = "New company " + randomNumberForCompany;
 const newCompanyAbbr = "NC-" + randomNumberForCompany;
 
+const FIELD_HEADERS = [
+  "Company Details",
+  "Company Name",
+  "Company Abbreviation",
+  "Company Admin Email",
+  `Client's Logo & Avatar`,
+  "Use this source to resize the company logo and avatar if needed",
+  `Client's Logo (max 180px x 75px)`,
+  `Client's Avatar (58px x 58px)`,
+  "White-labeling",
+  "Paragraph",
+  "Instructions Media upload",
+  "defaultBackground",
+  "primary",
+  "secondary",
+  "Paragraph",
+  "APPROVED DAM JSON",
+  "Approved DAM json is used",
+  "DAM JSON",
+  "APPROVED PAGE DETAILS JSON",
+  "Approved Page Details json is used",
+  "Page Details JSON",
+  "APPROVED NAVIGATION JSON",
+  "Approved Navigation json is used",
+  "Navigation JSON",
+  "Launching Details",
+  "Scheduled Go Live Date",
+  "EMPLOYEES TEMPLATE LIST",
+  "Users List",
+  "GL Codes template list",
+  `Client's GL codes list`,
+  "Seed documents to be included",
+  "Post Creation Records",
+  "Logs Created",
+];
+
 context("Verify New Layout for NCO Document", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -72,6 +108,47 @@ context("Verify New Layout for NCO Document", () => {
     context("Login admin user", () => {
       it("Login user to dashboard", () => {
         cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      });
+    });
+
+    context("Create NCO form for migration", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document'", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it(`Enter title`, () => {
+        cy.drEnterDocumentTitle({ name: "Migration form" });
+      });
+
+      it(`Enter description`, () => {
+        cy.drEnterDocumentDescription({
+          description: "Migration form description",
+        });
+      });
+
+      it("Click on 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Click on 'New Company Record' document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "New Company Record" });
+        cy.unClick();
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -344,12 +421,65 @@ context("Verify New Layout for NCO Document", () => {
           cy.verifyReferencesGeneralInfo({ user: owner });
         });
 
-        it("Verify Add/Remove References", () => {
-          cy.verifyAddRemoveReference({ formId: "FM-00001" });
-        });
+        // it("Verify Add/Remove References", () => {
+        //   cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        // });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
           cy.verifyReferencesOtherInfo();
+        });
+      });
+
+      context("Verify form migration", () => {
+        it("Verify migrate form button is visible", () => {
+          cy.get("[data-cy=references-icon]").arrowClick();
+          cy.get("[data-cy='common.form.migration']").should("be.visible");
+        });
+
+        it("Click on migrate form button", () => {
+          cy.get("[data-cy='common.form.migration']").arrowClick();
+        });
+
+        it("Select form to be migrated", () => {
+          cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+          cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+        });
+      });
+
+      context("Field mapping for migration form", () => {
+        FIELD_HEADERS.forEach( (fieldHeader, i) => {
+          it(`Mapped '${fieldHeader}' field`, () => {
+            cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+            cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+          });
+        });
+      });
+
+      context("Click confirm and verify migrated fields are present", () => {
+        it("Click on confirm change", () => {
+          cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+        });
+
+        it("Navigate to details Tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Verify form info should have migrated form 'FM-00002'", () => {
+          cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+        });
+
+        // FIELD_HEADERS.forEach( (fieldHeader, i) => {
+        //   it(`Verify migrated '${fieldHeader}' field`, () => {
+        //     cy.get(`[data-cy="${fieldHeader}"]`).parent().should("contain.text", fieldHeader);
+        //   });
+        // });
+
+        it("Verify migrated form info 'Company Name'", () => {
+          cy.get("[data-cy='Company Name']").parent().should("contain.text", "Company Name");
+        });
+
+        it("Verify migrated form info 'Company Abbreviation'", () => {
+          cy.get("[data-cy='Company Abbreviation']").parent().should("contain.text", "Company Abbreviation");
         });
       });
 
@@ -394,6 +524,12 @@ context("Verify New Layout for NCO Document", () => {
           {
             owner,
             actions: [
+              { key: "Form Set To", value: "FM-00002 - revision 1 - Migration form" },
+            ],
+          },
+          {
+            owner,
+            actions: [
               { key: "Description changed", value: docDescription },
               { key: "Name changed", value: docTitle },
             ],
@@ -410,6 +546,7 @@ context("Verify New Layout for NCO Document", () => {
 
       context("Verify Bookmarks tab", () => {
         it("Open bookmarks tab", () => {
+          cy.pause();
           cy.drSelectBookmarksTab();
           cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
         });
@@ -437,10 +574,12 @@ context("Verify New Layout for NCO Document", () => {
       context("Enter values for Details tab predefined schema fields", () => {
         it(`Enters company name '${newCompanyName}'`, () => {
           cy.get("[name^=company-name-]").arrowType(newCompanyName);
+          cy.log(newCompanyName);
         });
 
         it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
           cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
+          cy.log(newCompanyAbbr);
         });
 
         it(`Enters company email '${USERS[1].email}'`, () => {
