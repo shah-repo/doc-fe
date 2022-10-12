@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
@@ -5,42 +6,20 @@
 /// <reference types="cypress-grep" />
 
 import "moment-timezone";
-import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
-import { LINE_ITEMS_STATUS_TYPES, TrainingStatus } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
-import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
-import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { emailDateOffset, fileTimeFormat, momentInPST, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
+import { FONT_SIZE_12, FONT_SIZE_14, FONT_SIZE_16, FONT_WT_400, FONT_WT_600, LINE_HT_21, LINE_HT_21_28, sora, soraSansserif } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let multipleCompanies;
 let adminEmployee;
-let secondEmployee;
-let developersGroup;
 let releasedFormId;
-let trnId;
-let emailsFromInbox;
-let downloadUrl;
-let tmpRegex;
-let downloadFile;
-let fileId;
-let dateAfterEmailShouldArrive;
-let asyncTasksGroup;
-
-const approvalRequestName = "Releasing FM-00003, released form";
-const aRID = "AR-00003";
-const assignDate = momentInPST().format("l");
-const dueDate = momentInPST().add(30, "days").format("l");
-
-const adjAssignDate = momentInPST().subtract(23, "days").format("l");
-const adjDueDate = momentInPST().add(30, "days").subtract(23, "days").format("l");
 
 context("Training notification test", { tags: ["@timetool"] }, () => {
   before(() => {
@@ -76,7 +55,6 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           done();
         });
       });
@@ -99,47 +77,9 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
       }).then((response) => {
-        developersGroup = response;
         done();
       });
     });
-
-    // it("[API]Patch group", () => {
-    //   cy.grpPatchGroup({
-    //     groupId: developersGroup.body[0].id,
-    //     sessionId: loginResponse.sessionId,
-    //     employeeId: adminEmployee.id,
-    //     payload: {
-    //       employees: [{ id: secondEmployee.id }],
-    //       tags: [...developersGroup.body[0].tags,
-    //         GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
-    //         GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
-    //       ],
-    //     },
-    //   });
-    // });
-
-    // it("[API]Get group", (done: any) => {
-    //   cy.grpGetGroupByName({
-    //     groupName: "Async Tasks",
-    //     sessionId: loginResponse.sessionId,
-    //     employeeId: adminEmployee.id,
-    //   }).then((response) => {
-    //     asyncTasksGroup = response;
-    //     done();
-    //   });
-    // });
-
-    // it("[API]Patch group", () => {
-    //   cy.grpPatchGroup({
-    //     groupId: asyncTasksGroup.body[0].id,
-    //     sessionId: loginResponse.sessionId,
-    //     employeeId: adminEmployee.id,
-    //     payload: {
-    //       employees: [{ id: adminEmployee.id }],
-    //     },
-    //   });
-    // });
 
     it("[API]API request for updating company navigation", (done: any) => {
       cy.cmpUpdateCompany({
@@ -333,9 +273,9 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -379,26 +319,25 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  // context("Create a document", () => {
-  //   it("Document with Released status", () => {
-  //     cy.navigToDocumentList();
-  //     cy.cmpClickCreateNewDocument();
-  //     cy.drEnterDocumentTitle({ name: "released form" });
-  //     cy.drEnterDocumentDescription({ description: "test description" });
-  //     cy.drSelectDocumentType({ documentType: "Form" });
-  //     cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-  //     cy.get("#Checkbox-box").arrowClick();
-  //     cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
-  //     cy.unClick();
-  //     cy.pause();
-  //     cy.drClickCreateDocumentWithApiCall();
-  //     cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-  //       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-  //     });
-  //     cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-  //     cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedFormId = x.text(); });
-  //   });
-  // });
+  context("Create a document", () => {
+    it("Document with Released status", () => {
+      cy.navigToDocumentList();
+      cy.cmpClickCreateNewDocument();
+      cy.drEnterDocumentTitle({ name: "released form" });
+      cy.drEnterDocumentDescription({ description: "test description" });
+      cy.drSelectDocumentType({ documentType: "Form" });
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.get("#Checkbox-box").arrowClick();
+      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+      cy.unClick();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedFormId = x.text(); });
+    });
+  });
 
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
@@ -464,16 +403,10 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
     });
 
-    it("Select Second User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
-    });
-
-    it("Select Third User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
-    });
-
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Navigate to Overview tab", () => {
@@ -511,20 +444,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
-      cy.pause();
     });
-
-    // it(`${USERS[2].name} with Pending on 'COMPLETED ON' column should be present`, () => {
-    //   cy.trLandingPageDocRevTitle({ title: "released form" });
-    //   cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
-    //   cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
-    // });
-
-    // it(`${USERS[3].name} with Pending on 'COMPLETED ON' column should be present`, () => {
-    //   cy.trLandingPageDocRevTitle({ title: "released form" });
-    //   cy.trLandingPageUsername({ username: USERS[3].name }).wait(500);
-    //   cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
-    // });
   });
 
   context("Check training notifications", () => {
@@ -547,401 +467,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context("Check for training text inside dialog box and complete training", () => {
-    it("Check if 'Send To Email' button is displayed", () => {
-      cy.pause();
-      cy.sendToEmail();
-    });
-
-    it("Check for training complete and check training ID, Title", () => {
-      cy.get("button[data-cy=\"training-complete\"]").contains("Complete training").arrowClick();
-      cy.get("form>div").should("contain.text", "TRN ID");
-      cy.get("form>div>div:nth-child(1)").should("contain.text", "TRN-00001");
-      cy.get("form>div>div:nth-child(1)").should("be.visible");
-      cy.get("form>div").should("contain.text", "Title");
-    });
-
-    it("Check if 'I completed training on' message is displayed", () => {
-      cy.get("form>div>div:nth-child(2)>div>").contains("I acknowledge I am trained on");
-    });
-
-    it("Check if 'FM-00003 Rev 1' revision is displayed", () => {
-      cy.get("form>div").should("contain.text", "Doc ID Rev");
-      cy.get("[role='dialog']").then(($el) => {
-        const text = $el.text();
-        expect(text.replace(/\u00a0/g, " ")).to.contain("FM-00003  Rev  1");
-      });
-    });
-
-    it("Check if trainee name is correct", () => {
-      cy.get("[role='dialog']").should("contain.text", USERS[1].name);
-      cy.get("[role='dialog']").contains(USERS[1].name).should("be.visible");
-    });
-
-    it("Click on acknowladge", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCompleteTraining], () => {
-          cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-          cy.progressBarShouldAppear();
-        });
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
-    });
-  });
-
-  context("Revise document and goes it to Approved status", () => {
-    it("Navigates to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Filters document by name and status, and select it", () => {
-      cy.drFilterDocListByNameAndStatus({ title: "released form", status: "Released" });
-    });
-
-    it("Clicks on revise document", () => {
-      cy.drClickReviseDocument();
-    });
-
-    it("Edit document description", () => {
-      cy.drEnterDocumentDescription({ description: "Edit description" });
-    });
-
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
-    it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-    });
-
-    it("Logs user in", () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-
-    it("Approve AR", () => {
-      cy.arApproveARFromDashboard();
-    });
-
-    it("Logs user in", () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
-    });
-  });
-
-  context("Check pending training notification", () => {
-    it(`Verify training notification`, () => {
-      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
-    });
-
-    it(`Click training notification and check doc with Approved status`, () => {
-      cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
-      cy.arVerifyStatus({ status: LINE_ITEMS_STATUS_TYPES.APPROVED });
-    });
-
-    it("Navigate to Training Records", () => {
-      cy.navigToTrainingRecords();
-    });
-
-    it(`${USERS[1].name} with Pending on 'COMPLETED ON' column should be present`, () => {
-      cy.trClearFilters();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.trLandingPageDocId({ docId: releasedFormId });
-      cy.trLandingPageCompletedOn({ completed: "Pending" });
-      cy.get("[data-grid-row-index]").should("have.length", 1);
-      cy.get(`[data-grid-row-index]`).should("contain", releasedFormId)
-        .and("contain", USERS[1].name).and("contain", "Pending");
-      cy.get(`[data-grid-col-index="0"]`).invoke("text").then(($el) => {
-        trnId = $el;
-      });
-    });
-
-    it(`Open the training link and verify 'SEND TO EMAIL' button`, () => {
-      cy.get(`[data-grid-col-index="0"]`).contains(`${trnId}`).arrowClick();
-      cy.get("div.MuiDialogTitle-root").contains("Training Record");
-      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
-    });
-
-    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-      cy.checkToastMessageContains({
-        message: "File will be sent to your email shortly.",
-      });
-    });
-
-    it("Close training dialog", () => {
-      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
-    });
-  });
-
-  context("Verify email for pending training notification", () => {
-    it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
-        after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${trnId}`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-
-    it("Download zip file containing pending training notification", () => {
-      expect(downloadUrl).contains("exported_file_download");
-      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-        if (res.body !== "") {
-          downloadUrl = res.body.url;
-          downloadFile  =  `${trnId}${fileTimeFormat}.zip`;
-          cy.downloadFile({
-            url: downloadUrl,
-            directory: CONFIG.DOWNLOADS_DIR,
-            fileName: downloadFile,
-          });
-        }
-      });
-    });
-
-    it("Verify file size of the downloaded zip file", () => {
-      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-      cy.readFile(zipfile).its("length").should("be.gt", 500);
-    });
-
-    it("extract pdf file from zip file", () => {
-      cy.unzipFile(
-        {
-          directory: CONFIG.DOWNLOADS_DIR,
-          fileName: downloadFile,
-        });
-    });
-
-    it("Verify PDF file for pending training notification", () => {
-      cy.pdfparseFile(
-        {
-          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${trnId}.pdf`,
-        }).then((cdata) => {
-        tmpRegex = new RegExp( "Training Record", "gi" );
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp( trnId, "gi" );
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`${USERS[1].name}`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 2`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Title\nreleased form`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 2\\n${USERS[1]
-          .name} \\| Trainee \\| Not Completed`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        expect(cdata.text).match(/Page 1 of 1/);
-
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(cdata.text).not.match(tmpRegex);
-      });
-    });
-  });
-
-  context("Check the completed training notification", () => {
-    it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
-    });
-
-    it("Verify training notification", () => {
-      cy.contains(`${releasedFormId}`).should("exist");
-      cy.contains(`released form`).should("exist");
-    });
-
-    it("Navigate to Training Records", () => {
-      cy.navigToTrainingRecords();
-    });
-
-    it(`${USERS[1].name} with timestamp on 'COMPLETED ON' column should be present`, () => {
-      cy.trClearFilters();
-      cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.trLandingPageDocId({ docId: releasedFormId });
-      cy.trLandingPageCompletedOn({ completed: "Last 7 days" });
-      cy.get("[data-grid-row-index]").should("have.length", 1);
-      cy.get(`[data-grid-row-index]`).should("contain", releasedFormId)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
-      cy.get(`[data-grid-col-index="0"]`).invoke("text").then(($el) => {
-        trnId = $el;
-      });
-    });
-
-    it(`Open the training link and verify 'SEND TO EMAIL' button`, () => {
-      cy.get(`[data-grid-col-index="0"]`).contains(`${trnId}`).arrowClick();
-      cy.get("div.MuiDialogTitle-root").contains("Training Record");
-      cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
-    });
-
-    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-      cy.checkToastMessageContains({
-        message: "File will be sent to your email shortly.",
-      });
-    });
-
-    it("Close training dialog", () => {
-      cy.get(`button>span>svg[role="presentation"]`).last().arrowClick();
-    });
-  });
-
-  context("Verify email for completed training notification", () => {
-    it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      const getEmailSetting =  {
-        to: CONFIG.TEST_EMAIL,
-        after: dateAfterEmailShouldArrive,
-        subject: `Export for document ${trnId}`,
-      };
-
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-        emailsFromInbox = emails;
-        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-      });
-    });
-
-    it("Verify the emails that should be received", () => {
-      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-        {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
-            "Your documents are ready for download.",
-            "<button type=\"button\">DOWNLOAD</button>",
-            createdCompany.id],
-        }];
-
-      cy.imapVerifyEmailsInList({
-        receivedEmails: emailsFromInbox,
-        emailsToTest: emailsThatShouldBeReceived,
-        getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 1,
-      });
-    });
-
-    it("Download zip file containing completed training notification", () => {
-      SystemRequirement("REQ-4860");
-      expect(downloadUrl).contains("exported_file_download");
-      fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
-
-      cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
-        if (res.body !== "") {
-          downloadUrl = res.body.url;
-          downloadFile  =  `${trnId}${fileTimeFormat}.zip`;
-          cy.downloadFile({
-            url: downloadUrl,
-            directory: CONFIG.DOWNLOADS_DIR,
-            fileName: downloadFile,
-          });
-        }
-      });
-    });
-
-    it("Verify file size of the downloaded zip file", () => {
-      const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
-      cy.readFile(zipfile).its("length").should("be.gt", 500);
-    });
-
-    it("extract pdf file from zip file", () => {
-      cy.unzipFile(
-        {
-          directory: CONFIG.DOWNLOADS_DIR,
-          fileName: downloadFile,
-        });
-    });
-
-    it("Verify PDF file for completed training notification", () => {
-      SystemRequirement("REQ-4880", "REQ-4850");
-      cy.pdfparseFile(
-        {
-          directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
-          fileName: `${trnId}.pdf`,
-        }).then((cdata) => {
-        tmpRegex = new RegExp( "Training Record", "gi" );
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp( trnId, "gi" );
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`${USERS[1].name}`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 1`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Title\nreleased form`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1]
-          .name} \\| Trainee \\| ${pdfDocRelDate}`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        expect(cdata.text).match(/Page 1 of 1/);
-
-        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
-        expect(cdata.text).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
-        expect(cdata.text).not.match(tmpRegex);
-      });
-    });
-  });
-
-  context("Verify email for completed training notification", () => {
+  context("Navigate to Training Records", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
     });
@@ -953,217 +479,96 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Verify ASSIGN DATE is Today", () => {
-      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("ASSIGN DATE").arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
-        .should("have.text", `${assignDate}`);
-      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
-      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
-        .should("have.text", `${assignDate}`);
-    });
-
-    it("Verify DUE DATE is 30 days from Now", () => {
-      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("DUE DATE").arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
-        .should("have.text", `${dueDate}`);
-      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
-      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
-        .should("have.text", `${dueDate}`);
+    it("Open the first document in the list", () => {
+      cy.dlSelectFirstDocument();
     });
   });
 
-  context("Navigate to approval request list and set effective date to 23 days from now", () => {
-    it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
-    });
-
-    it("Clear filters", () => {
-      cy.alClearFilters();
-    });
-
-    it("Filter list by status", () => {
-      cy.alFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.APPROVED });
-    });
-
-    it("Verify filter by TITLE", () => {
-      cy.alVerifyFilterByTitle({ title: approvalRequestName });
-    });
-
-    it(`Verify AR ID as ${aRID}`, () => {
-      cy.dlVerifyFilterByDocId({ docId: aRID });
-    });
-
-    it(`Open AR filtered request`, () => {
-      cy.get("#root").contains(approvalRequestName).arrowClick();
-    });
-
-    it("Click Close button", () => {
-      cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
-    });
-
-    it("Select option No", () => {
-      cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
-    });
-
-    it("Advance Effective Date to 23 days from now", () => {
-      const effectiveDate = momentInPST().add(23, "days");
-      const month = effectiveDate.format("MMM");
-      const day = effectiveDate.format("D");
-
-      cy.get("[aria-label=\"change date\"]").arrowClick();
-
-      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
-        const monthYearText = $el.text();
-        if (!monthYearText.includes(month)) {
-          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
-        }
-
-        cy.wait(500);
-
-        cy.get("button.MuiPickersDay-day")
-          .not(".MuiPickersDay-hidden")
-          .each(($el) => {
-            const dayNumber = $el.text();
-            if (day === dayNumber) {
-              cy.wrap($el).arrowClick();
-            }
-          });
+  context("Training Record page font", () => {
+    it(`Verify 'Training Record' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Training Record",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
       });
+    });
 
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-          cy.get("#confirmEffectiveDate").arrowClick();
+    it(`Verify 'Training Record' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Training Record",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'TRN ID' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "TRN ID",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'TRN-00001' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "TRN-00001",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'Doc ID Rev' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Doc ID Rev",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'FM-00003  Rev  1' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "FM-00003  Rev  1",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'Title' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Title",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'released form' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "released form",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'I completed training on' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "I completed training on",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify 'FM-00003 Rev 1' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Training Record",
+        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
+      });
+    });
+
+    it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[data-cy="timeline-icon"]`).arrowClick();
+      cy.get(`[data-cy="change-key-0"]`)
+        .checkStylePropExists({
+          content: USERS[1].name,
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
         });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
-    });
-  });
-
-  context("Use time tool to travel user back to future", () => {
-    it("Navigate to async tasks", () => {
-      cy.navigToAsyncTasks();
     });
 
-    it("Select task TIME_TRAVEL_COMPANY", () => {
-      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
-    });
-
-    it("Select 23 day to back in future", () => {
-      cy.asyncSelectBackToTheFutureTime({ day: 23 });
-    });
-
-    it("On Next Task, SELECT_ALL", () => {
-      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
-    });
-
-    it("Submit async task", () => {
-      cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Verify the time travel will appear in History list as 'Requested'", () => {
-      cy.get("tr.k-master-row").should("have.length", 1);
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", SQS_TYPES.TIME_TRAVEL_COMPANY);
-      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
-      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", SQS_TYPES.CLOSE_CR_BY_EFFECTIVE_DATE);
-      cy.get(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
-    });
-
-    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
-      cy.wait(5000);
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.reload();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("tr.k-master-row").should("have.length", 1);
-      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", SQS_TYPES.TIME_TRAVEL_COMPANY);
-      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
-      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", SQS_TYPES.CLOSE_CR_BY_EFFECTIVE_DATE);
-      cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
-    });
-  });
-
-  context("Verify ASSIGN DATE and Due Date are adjusted accordingly", () => {
-    it("Navigate to Training Records", () => {
-      cy.navigToTrainingRecords();
-    });
-
-    it("Clear filters", () => {
-      cy.trClearFilters();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-
-    it("Verify ASSIGN DATE is adjusted by 23 days", { retries: 3 }, () => {
-      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("ASSIGN DATE").arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
-        .should("have.text", `${adjAssignDate}`);
-      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
-      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
-        .should("have.text", `${adjAssignDate}`);
-    });
-
-    it("Verify DUE DATE is adjusted by 23 days", () => {
-      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("DUE DATE").arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
-      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
-        .should("have.text", `${adjDueDate}`);
-      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
-      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
-        .should("have.text", `${adjDueDate}`);
-    });
-  });
-
-  context(`Check training notifications as ${TrainingStatus.DUE_IN_7_DAYS}`, () => {
-    it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
-    });
-
-    it("Verify training notification", () => {
-      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
-    });
-  });
-
-  context("Verify the AR in CLOSED State", () => {
-    it("Navigate to ar list", () => {
-      cy.navigToApprovalRequestList();
-    });
-
-    it("Clear filters", () => {
-      cy.trClearFilters();
-    });
-
-    it(`Verify AR ID as ${aRID}`, () => {
-      cy.dlFilterByDocId({ docId: aRID });
-    });
-
-    it("Verify first AR is: " + approvalRequestName, () => {
-      cy.alVerifyFilterByTitle({ title: approvalRequestName });
-    });
-
-    it(`Verify filter by STATUS as ${LINE_ITEMS_STATUS_TYPES.CLOSED}`, () => {
-      cy.alVerifyFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.CLOSED });
+    it(`Verify 'Send To Email' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_21} font-weight ${FONT_WT_400}`, () => {
+      cy.checkStylePropExists({
+        content: "Send To Email",
+        props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_21, "font-weight": FONT_WT_400 },
+      });
     });
   });
 });
