@@ -878,14 +878,13 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("delete line item", () => {
-      cy.get(`[data-cy="poItems"]`).eq(0)
-        .find(`[class="MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall"]`).arrowClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get(`[data-cy="poItems"]`).eq(0)
+            .find(`[class="MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall"]`).arrowClick();
+        });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Save document'", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -1071,14 +1070,13 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("delete line item", () => {
-      cy.get(`[data-cy="poItems"]`).eq(0)
-        .find(`[class="MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall"]`).arrowClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get(`[data-cy="poItems"]`).eq(0)
+            .find(`[class="MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall"]`).arrowClick();
+        });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Save document'", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
