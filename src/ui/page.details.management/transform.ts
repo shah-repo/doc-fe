@@ -1,6 +1,6 @@
 import { PageDetails } from "../../state/ducks/documentRevisions/documentType/types";
 import { parseJSON, stringifyJSON } from "../document.type.management/transform";
-import { PageDetailsCategory, PageDetailsCategoryValues } from "./types";
+import { PageDetailsCategoryValues } from "./types";
 
 export const toPageDetailsInitialValues = (pageDetails: PageDetails): PageDetailsCategoryValues => ({
   ...pageDetails,
@@ -9,7 +9,7 @@ export const toPageDetailsInitialValues = (pageDetails: PageDetails): PageDetail
   helpModule: pageDetails.config.helpModule,
 });
 
-export const toPageDetailsBodyValues = (values: PageDetailsCategoryValues): PageDetailsCategory => ({
+export const toPageDetailsBodyValues = (values: PageDetailsCategoryValues): Omit<PageDetails, "id" | "exportList"> => ({
   category: values.category,
   addNewBtnLabel: values.addNewBtnLabel,
   columns: parseJSON(values.columns),
