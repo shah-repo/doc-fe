@@ -535,11 +535,13 @@ context("Paper LHR tab Layout", () => {
       it("Verify Predefined fields up to attachment", () => {
         cy.verifyPredefiendFields();
         cy.get("[data-cy='field-retrain']").should("exist");
+        cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
       });
 
       it("Verify Title, Description, Document Type, References, Document ID, output document", () => {
         cy.verifyPredefiendFields();
       });
+
     });
 
     context("Fill in document attributes", () => {
@@ -621,6 +623,7 @@ context("Paper LHR tab Layout", () => {
 
       it("Verify Default fields up to attachment", () => {
         cy.verifyPredefiendFields();
+        cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
       });
 
       it("Verify Added FB Fields checkbox, textfield", () => {
@@ -629,6 +632,9 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
+        cy.get("[id='formTemplate.outputDocumentTypes'").should("exist");
+        cy.get("#field-renderHTML").should("exist");
+        cy.get("[name^='lhr-build-type']").should("exist");
         cy.get("[data-cy='lhr-selected-part']").scrollIntoView();
         cy.get("[data-cy='lhr-selected-part']").should("exist");
         cy.get("[name='lhr_initial_quantity']").should("exist");
@@ -669,6 +675,48 @@ context("Paper LHR tab Layout", () => {
     it("Select a form Paper Lot History Record", () => {
       cy.get("#MultipleFormTemplate-selectDocType input[type='text']").arrowClick({ force: true })
         .autocompleteSelect("Paper LHR Document Title");
+    });
+
+    it("Verify new lhr should be created", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.WIP,
+        title: "LHR",
+        docId: "LHR-00001",
+        revision: "Rev A",
+      });
+    });
+
+    context("Verify the created lHR Tabs and field", () => {
+
+      it("Verify Default fields up to attachment", () => {
+        cy.get("[data-cy=\"field-document.docId\"]").should("exist");
+        cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
+      });
+
+      it("Verify Added FB Fields checkbox, textfield", () => {
+        cy.get("[name^='textfield-for-inline']").should("exist");
+        cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+      });
+
+      it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
+        cy.get("[name^='lhr-build-type']").should("exist");
+        cy.get("[data-cy='lhr-selected-part']").scrollIntoView();
+        cy.get("[data-cy='lhr-selected-part']").should("exist");
+        cy.get("[name='lhr_initial_quantity']").should("exist");
+        cy.get("[name='lhr-end-quantity']").should("exist");
+        cy.get("#sm-tabpanel-0").scrollTo("bottom");
+        cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
+      });
+
+      it("Verify Form option", () => {
+        cy.get(".formOptionsBox").should("exist");
+      });
+
+      it("Verify that right side panel opens by default to the References tab", () => {
+        cy.get("[data-cy='References']").should("exist");
+        cy.get("[data-cy='generalInfo']").should("be.visible");
+      });
+
     });
 
     context("Fill in the fields", () => {
@@ -753,9 +801,10 @@ context("Paper LHR tab Layout", () => {
         cy.isTabActive({ name: "details", index: 0 });
       });
 
-      context("Verify Schema Fields", () => {
+      context("Verify the created lHR Tabs and field", () => {
         it("Verify Default fields up to attachment", () => {
-          cy.get("[data-cy='field-document.docId']").should("exist");
+          cy.get("[data-cy=\"field-document.docId\"]").should("exist");
+          cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
         });
 
         it("Verify Added FB Fields checkbox, textfield", () => {
@@ -764,11 +813,13 @@ context("Paper LHR tab Layout", () => {
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
+          cy.get("[name^='lhr-build-type']").should("exist");
+          cy.get("[data-cy='lhr-selected-part']").scrollIntoView();
           cy.get("[data-cy='lhr-selected-part']").should("exist");
           cy.get("[name='lhr_initial_quantity']").should("exist");
           cy.get("[name='lhr-end-quantity']").should("exist");
           cy.get("#sm-tabpanel-0").scrollTo("bottom");
-          cy.get("[name^='fb-approvals-fb-approvals']").should("exist");
+          cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
         });
 
         it("Verify Form option", () => {
@@ -780,6 +831,7 @@ context("Paper LHR tab Layout", () => {
           cy.get("[data-cy='generalInfo']").should("be.visible");
         });
       });
+
     });
   });
 
@@ -815,7 +867,7 @@ context("Paper LHR tab Layout", () => {
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
       cy.get("[data-cy='common.revision']").parent().should("contain.text",
-        moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+        moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
     });
 
     context("Verify Revisions tab", () => {
@@ -846,16 +898,6 @@ context("Paper LHR tab Layout", () => {
       it("Verify the existing field after migration", () => {
         cy.get("[name='lhr_initial_quantity']").should("exist");
       });
-
-      // steps : Required after blocker fixed ENC-12588
-      // it("Click on confirm change", () => {
-      //   cy.get("[data-cy='common.confirm.change']").arrowClick();
-      // });
-
-      // it("Verify text field from migrated form added here", () => {
-      //   cy.get("[name^='textfield-from-migration']").should("exist").wait(2000);
-      // });
-
     });
 
     context("Verify User able to add Groups or other user permissions", () => {
@@ -908,6 +950,28 @@ context("Paper LHR tab Layout", () => {
         cy.get("[data-cy='Bookmarks-detail'] p").arrowClick();
         cy.get("[data-cy^='fb-approvals']").should("be.visible");
       });
+    });
+  });
+
+  context("Verify Revison history", () => {
+    it("Verify revision icon ", () => {
+      cy.get("[data-cy='cr-icon']").should("be.visible");
+    });
+
+    it("Click on revision icon history tab should open", () => {
+      cy.get("[data-cy='cr-icon']").arrowClick();
+      cy.get("[data-cy='Revision History-detail']").should("be.visible");
+    });
+  });
+
+
+  context("Verify Scroll", () => {
+    it("Navigate to history tab", () => {
+      cy.get("[data-cy='timeline-icon']").arrowClick({ force: true });
+    });
+
+    it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom", { ensureScrollable: false });
     });
   });
 
@@ -1060,13 +1124,12 @@ context("Paper LHR tab Layout", () => {
         cy.get("[data-cy='References']").should("be.visible");
       });
 
-
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
         cy.verifyReferenceInfo();
         cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
         cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
         cy.get("[data-cy='common.revision']").parent().should("contain.text",
-          moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
 
       context("Verify Revision", () => {
@@ -1262,7 +1325,7 @@ context("Paper LHR tab Layout", () => {
         cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
         cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
         cy.get("[data-cy='common.revision']").parent().should("contain.text",
-          moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
 
       context("Verify Revisions tab", () => {
