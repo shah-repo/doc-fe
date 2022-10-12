@@ -3,6 +3,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -27,7 +30,7 @@ const approvalRequestName = "Approval request form";
 const aRID = "AR-00001";
 const documentRevisionName = "New document for testing AR";
 
-context("Approval request form", () => {
+context("Approval request form", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -181,6 +184,7 @@ context("Approval request form", () => {
     });
 
     it("Add document revision", () => {
+      cy.arSelectDocumentTab();
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
@@ -189,10 +193,11 @@ context("Approval request form", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.drSelectChangeDetailsTab();
       cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
       cy.arAddApproverOnApproverList({ approver: USERS[2].email, noWait: true });
       cy.arAddApproverOnApproverList({ approver: USERS[3].email, noWait: true });

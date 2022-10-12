@@ -451,6 +451,115 @@ context("PO Removes lineitems removes approver", () => {
     });
   });
 
+  context("Create Form PO Approval matrix", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'POAM Form'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Form" });
+    });
+
+    it("Enters description 'POAM Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'PO Approval Matrix' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Create POAM document for PO", () => {
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enters title 'POAM Document'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Document" });
+    });
+
+    it("Enters description 'POAM Doc description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Doc description" });
+    });
+
+    it("Navigate to MatrixDetails tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Click on 'Add Item'", () => {
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+    });
+
+    it("Enter Level Name value to be '1'", () => {
+      cy.poAMEnterLevelName({ name: "1" });
+    });
+
+    it("Enter Limit value to be '5000'", () => {
+      cy.poAMEnterLimit({ limit: "5000" });
+    });
+
+    it(`Select Users '${USERS[1].name}'`, () => {
+      cy.poAMSelectUsers(USERS[1].name);
+    });
+
+    it("Add first POAM level", () => {
+      cy.poAddPOButtonClick();
+    });
+
+    it("Click on 'Add Item'", () => {
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+    });
+
+    it("Enter Level Name value to be '2'", () => {
+      cy.poAMEnterLevelName({ name: "2" });
+    });
+
+    it("Enter Limit value to be '25000'", () => {
+      cy.poAMEnterLimit({ limit: "25000" });
+    });
+
+    it(`Select Users '${USERS[2].name}'`, () => {
+      cy.poAMSelectUsers(USERS[2].name);
+    });
+
+    it("Add second POAM level", () => {
+      cy.poAddPOButtonClick();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
   context("Create Form for Part document", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
@@ -583,9 +692,12 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Enter html code into 'Render HTML' field", () => {
-      cy.drEnterHtmlText({
-        htmlText: renderHTMLContent,
-      });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.drEnterHtmlText({
+            htmlText: renderHTMLContent,
+          });
+        });
     });
   });
 
@@ -627,8 +739,11 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+          cy.unClick();
+        });
     });
 
     it(`Verify 'The requestor field is required field' is disappeared`, () => {
@@ -681,14 +796,10 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.poAddPOButtonClick();
-    });
-  });
-
-  context("Save document", () => {
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.poAddPOButtonClick();
+        });
     });
   });
 
@@ -706,6 +817,14 @@ context("PO Removes lineitems removes approver", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
+
+    it("Check if selected approver has approval signature right by his name", () => {
+      cy.contains("PO Approval sig").should("exist");
+    });
+
+    it("Check approval icon if it's colored", () => {
+      cy.poAMCheckApprovalIconIfItsRed();
+    });
   });
 
   context("Verify that history tab is capturing requestor Added and approver Added", () => {
@@ -713,12 +832,12 @@ context("PO Removes lineitems removes approver", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
         cy.drSelectHistoryTab();
       });
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Added")
+      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor Added")
         .and("contain", USERS[1].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0)
+      cy.get(`[data-cy='no-padding-margin']`).eq(0)
         .should("contain", "Approver Added").should("contain", USERS[1].name);
     });
   });
@@ -761,14 +880,13 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("delete line item", () => {
-      cy.get(`[data-cy="poItems"]`).eq(0)
-        .find(`[class="MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall"]`).arrowClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get(`[data-cy="poItems"]`).eq(0)
+            .find(`[class="MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall"]`).arrowClick();
+        });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Save document'", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -805,13 +923,16 @@ context("PO Removes lineitems removes approver", () => {
 
   context("Remove requestor", () => {
     it("Remove requestor", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
-      });
+      cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify history that 'Requestor Deleted' should be displayed", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0).should("contain", "Requestor  Deleted")
+      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Requestor  Deleted")
         .and("contain", USERS[1].name);
     });
   });
@@ -929,8 +1050,11 @@ context("PO Removes lineitems removes approver", () => {
 
   context("Navigate to field Requestor and add User 1", () => {
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+          cy.unClick();
+        });
     });
 
     it(`Verify 'The requestor field is required field' is disappeared`, () => {
@@ -951,14 +1075,13 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("delete line item", () => {
-      cy.get(`[data-cy="poItems"]`).eq(0)
-        .find(`[class="MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall"]`).arrowClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get(`[data-cy="poItems"]`).eq(0)
+            .find(`[class="MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall"]`).arrowClick();
+        });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Save document'", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 

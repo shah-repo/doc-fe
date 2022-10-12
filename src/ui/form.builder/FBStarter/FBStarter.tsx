@@ -7,6 +7,7 @@ import { styles } from "./FBStarter.styles";
 import { withFBStarter } from "./FBStarter.wrap";
 
 const FBStarter: React.FunctionComponent<FBStarterProps> = ({
+  index = 0,
   onClick,
   isNewLayout,
 }) => {
@@ -17,7 +18,8 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
       <Box
         display="flex"
         className={"fbStarterAddField"}
-        my={1}
+        mb={1}
+        mt={6}
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
       >
@@ -39,7 +41,7 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
           isHover={isHover}
           showNewButton={isNewLayout}
           startIcon={<AddIcon fontSize="small" />}
-          onClick={() => onClick && onClick(0)}
+          onClick={() => onClick && onClick(index)}
         />
         <Box
           border={0}

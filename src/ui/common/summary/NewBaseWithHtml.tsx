@@ -2,6 +2,7 @@ import { Box, Button, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useIntl } from "react-intl";
+import { SM } from "../../../App";
 import { SMEditorStyles } from "../../../App/Shifamed/Components/SMTextEditor/SMTextEditor.styles";
 import { convertHtmlToDraft } from "../../components/forms/fields/RichTextEditor/helpers";
 import { styles } from "./newStyles";
@@ -14,8 +15,8 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   value,
   labelProps,
   labelFont,
-  _documentRevisionFormState,
 }) => {
+  const { _documentRevisionFormState } = SM.useStores();
   const descriptionClasses = SMEditorStyles();
   const intl = useIntl();
   const [isTextClamped, setIsTextClamped] = useState(false);

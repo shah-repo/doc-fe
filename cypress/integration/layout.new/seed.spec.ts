@@ -140,6 +140,11 @@ context("Verify New Layout for Seed Document", () => {
       cy.verifyFixedTab();
     });
 
+    it("Verify form option box should be visible in overview tab", () => {
+      cy.get(".formOptionsBox").scrollIntoView();
+      cy.get(".formOptionsBox").should("be.visible");
+    });
+
     context("Verify tabs content", () => {
       context("Verify Overview tab content", () => {
         it("Verify Overview tab default fields", () => {
@@ -215,6 +220,7 @@ context("Verify New Layout for Seed Document", () => {
 
         it("Verify that Form Options should appear for Details tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -480,12 +486,13 @@ context("Verify New Layout for Seed Document", () => {
 
       it("Enters document description 'First document description'", () => {
         cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-          .click({ force: true }).arrowType("First document description", { force: true });
+          .click({ force: true }).arrowType("First document description");
       });
 
       it("Selects document type as 'Form'", () => {
         cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
-        cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul").contains("li", "Form").arrowClick();
+        cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul")
+          .contains("li", "Form").arrowClick();
       });
 
       it("Selects document type as 'Clinical Protocol'", () => {

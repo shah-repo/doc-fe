@@ -1489,7 +1489,7 @@ context("LHR & LHRS Flow", () => {
         cy.get(`div[data-cy^="field-selectType"]`)
           .arrowClick()
           .focused()
-          .arrowType("Lot History Record{downarrow}{enter}", { force: true });
+          .arrowType("Lot History Record{enter}", { force: true });
         cy.unClick();
       });
 

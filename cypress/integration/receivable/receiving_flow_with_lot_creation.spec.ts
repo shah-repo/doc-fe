@@ -743,9 +743,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       });
 
       it("Save PO", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Click 'Submit for Approval' button", () => {
@@ -1055,7 +1053,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Check the references on a Lot document", () => {
       SystemRequirement("REQ-2020");
-      cy.get("[data-cy='referenceTo']")
+      cy.get("[data-cy='referenceTo']").parent().parent().parent()
         .should("contain.text", "RC-00001 - A - ").and("contain.text", "POT-00001 - 1 - ");
     });
   });

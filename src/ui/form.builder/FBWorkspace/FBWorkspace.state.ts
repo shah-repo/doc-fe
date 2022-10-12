@@ -22,7 +22,7 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public loading = false;
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
-  public changeRequest?: ChangeRequest;
+  @observable public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
   public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
@@ -185,7 +185,6 @@ class FBWorkspaceState extends FBSchemaState {
     if (!id) { return; }
     this.loading = true;
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
-    this.setDirty(true);
     let body = {};
     switch (mode) {
       case "design":

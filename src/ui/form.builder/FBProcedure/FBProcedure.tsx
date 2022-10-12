@@ -1,10 +1,11 @@
 import { Box } from "@material-ui/core";
-import React from "react";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
+import React, { useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { FBInput, FBLabel, FBMapWrapper, FBProcedureItem, FBProcedureItemType, FBProcedureProps, FBProvider, FBTextEditor } from "..";
-import { StyledTooltip } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new";
-import { ReactComponent as AddNewIcon } from "../../../assets/images/formBuilder/icon_add.svg";
-import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/icon_clone.svg";
+import { FBInput, FBLabel, FBMapWrapper, FBProcedureItem, FBProcedureItemType, FBProcedureProps, FBProvider, FBTextEditor, FBTooltip } from "..";
+import { ReactComponent as OutlinedCloneIcon } from "../../../assets/images/clone.svg";
+import { ReactComponent as CloneIcon } from "../../../assets/images/formBuilder/clone_dark.svg";
 import Colors from "../../layout/theme/utils/colors";
 import { FBFontStyle } from "../styles/FBFont.styles";
 import { styles } from "./FBProcedure.style";
@@ -26,6 +27,8 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
   ...props
 }) => {
   const classes = styles();
+  const [isHover, setIsHover] = useState(false);
+  const [isAddIconHover, setIsHoverAddIcon] = useState(false);
   return (
     <FBInput {...props } {...{ name }} type="procedure">
       {!isOutput && (
@@ -46,22 +49,44 @@ const FBProcedure: React.FunctionComponent<FBProcedureProps> = ({
           <FBProvider {...{ procedureState }}>
             {!isPreview && (
               <Box className={classes.btnAlign}>
-                <StyledTooltip placement="top" title="form.builder.clone.step">
-                  <CloneIcon
-                    data-cy="form.builder.clone.step"
-                    onClick={() => handleAdd?.(true)}
-                    {...{ disabled }}
-                    style={{ marginLeft: "5px", cursor: "pointer" }}
-                  />
-                </StyledTooltip>
-                <StyledTooltip placement="top" title="form.builder.add.step">
-                  <AddNewIcon
-                    data-cy="form.builder.add.step"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleAdd?.()}
-                    {...{ disabled }}
-                  />
-                </StyledTooltip>
+                <Box onMouseEnter={() => setIsHover(true)}
+                  onMouseLeave={() => setIsHover(false)}>
+                  <FBTooltip title="form.builder.clone.step">
+                    { isHover ?
+                      <CloneIcon
+                        data-cy="form.builder.clone.step"
+                        onClick={() => handleAdd?.(true)}
+                        {...{ disabled }}
+                        style={{ marginLeft: "15px", cursor: "pointer" }}
+                      />
+                      :
+                      <OutlinedCloneIcon
+                        data-cy="form.builder.clone.step"
+                        onClick={() => handleAdd?.(true)}
+                        {...{ disabled }}
+                        style={{ marginLeft: "15px", cursor: "pointer" }}
+                      />
+                    }
+                  </FBTooltip>
+                </Box>
+                <Box onMouseEnter={() => setIsHoverAddIcon(true)}
+                  onMouseLeave={() => setIsHoverAddIcon(false)}>
+                  <FBTooltip title="form.builder.add">
+                    { isAddIconHover ?
+                      <AddCircleIcon style={{ color: Colors.almost_black, width: "17px", height: "17px" }}
+                        data-cy="form.builder.add.step"
+                        onClick={() => handleAdd?.()}
+                        {...{ disabled }}
+                      />
+                      :
+                      <AddCircleOutlineOutlinedIcon  style={{ color: Colors.font_gray, width: "17px", height: "17px" }}
+                        data-cy="form.builder.add.step"
+                        onClick={() => handleAdd?.()}
+                        {...{ disabled }}
+                      />
+                    }
+                  </FBTooltip>
+                </Box>
               </Box>
             )}
             <FBTextEditor

@@ -103,5 +103,7 @@ export default (on, config) => {
     launchOptions.args = launchOptions.args.filter((x) => x !== "--disable-dev-shm-usage");
     return launchOptions;
   });
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require("cypress-grep/src/plugin")(config);
 };
 
