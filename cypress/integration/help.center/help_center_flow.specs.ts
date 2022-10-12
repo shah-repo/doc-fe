@@ -253,28 +253,23 @@ context("Help Center behaviour", () => {
   context("Verify general behaviour", () => {
     context("Navigation behaviour", () => {
       it("Open HelpCenter navigation", () => {
-        cy.get("[data-cy='help-center.opener']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("be.visible");
+        cy.openHelpCenterNavigation();
       });
       it("Close HelpCenter navigation", () => {
-        cy.unClick({ force: false });
-        cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("not.exist");
+        cy.closeHelpCenterNavigation();
       });
     });
     context("Content behaviour", () => {
       it("Open HelpCenter navigation", () => {
-        cy.get("[data-cy='help-center.opener']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("be.visible");
+        cy.openHelpCenterNavigation();
       });
 
       it("Open HelpCenter content", () => {
-        cy.get("[data-cy='help-center.content-opener']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("be.visible");
+        cy.openHelpCenterContent();
       });
 
       it("Close HelpCenter content", () => {
-        cy.get("[data-cy='help-center.content-closer']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("not.exist");
+        cy.closeHelpCenterContent();
       });
 
       it("Verify HelpCenter navigation visibility", () => {
@@ -285,8 +280,7 @@ context("Help Center behaviour", () => {
 
   context("Verify static links behaviour", () => {
     it("Open HelpCenter navigation", () => {
-      cy.get("[data-cy='help-center.opener']").arrowClick({ force: true });
-      cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("be.visible");
+      cy.openHelpCenterNavigation();
     });
 
     it("Check HelpCenter navigation links", () => {
@@ -300,21 +294,18 @@ context("Help Center behaviour", () => {
     });
 
     it("Close HelpCenter navigation", () => {
-      cy.unClick({ force: false });
-      cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("not.exist");
+      cy.closeHelpCenterNavigation();
     });
   });
 
   context("Verify visibily behaviour", () => {
     context("Should close when navigating to other module", () => {
       it("Open HelpCenter navigation", () => {
-        cy.get("[data-cy='help-center.opener']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("be.visible");
+        cy.openHelpCenterNavigation();
       });
 
       it("Open HelpCenter content", () => {
-        cy.get("[data-cy='help-center.content-opener']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("be.visible");
+        cy.openHelpCenterContent();
       });
 
       it("Navigate to Documents", () => {
@@ -322,8 +313,7 @@ context("Help Center behaviour", () => {
       });
 
       it("Verify that HelpCenter is closed", () => {
-        cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("not.exist");
-        cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("not.exist");
+        cy.checkIfHelpCenterClosed();
       });
     });
 
@@ -336,13 +326,11 @@ context("Help Center behaviour", () => {
         });
 
         it("Open HelpCenter navigation", () => {
-          cy.get("[data-cy='help-center.opener']").arrowClick({ force: true });
-          cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("be.visible");
+          cy.openHelpCenterNavigation();
         });
 
         it("Open HelpCenter content", () => {
-          cy.get("[data-cy='help-center.content-opener']").arrowClick({ force: true });
-          cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("be.visible");
+          cy.openHelpCenterContent();
         });
 
         it("Remember HelpCenter content title", () => {
@@ -357,8 +345,7 @@ context("Help Center behaviour", () => {
         });
 
         it("Verify HelpCenter state", () => {
-          cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("be.visible");
-          cy.get("[data-cy='help-center.content-title']").should("have.text", helpCenterTitle);
+          cy.verifyHelpCenterTitle(helpCenterTitle);
         });
       });
 
@@ -370,13 +357,11 @@ context("Help Center behaviour", () => {
         });
 
         it("Open HelpCenter navigation", () => {
-          cy.get("[data-cy='help-center.opener']").arrowClick({ force: true });
-          cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("be.visible");
+          cy.openHelpCenterNavigation();
         });
 
         it("Open HelpCenter content", () => {
-          cy.get("[data-cy='help-center.content-opener']").arrowClick({ force: true });
-          cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("be.visible");
+          cy.openHelpCenterContent();
         });
 
         it("Remember HelpCenter content title", () => {
@@ -391,8 +376,7 @@ context("Help Center behaviour", () => {
         });
 
         it("Verify HelpCenter state", () => {
-          cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("be.visible");
-          cy.get("[data-cy='help-center.content-title']").should("have.text", helpCenterTitle);
+          cy.verifyHelpCenterTitle(helpCenterTitle);
         });
 
         it("Go back in browser", () => {
@@ -400,8 +384,7 @@ context("Help Center behaviour", () => {
         });
 
         it("Verify HelpCenter state", () => {
-          cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("be.visible");
-          cy.get("[data-cy='help-center.content-title']").should("have.text", helpCenterTitle);
+          cy.verifyHelpCenterTitle(helpCenterTitle);
         });
       });
     });

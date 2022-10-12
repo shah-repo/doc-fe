@@ -418,13 +418,11 @@ context("Help Center custom content", () => {
       });
 
       it("Open HelpCenter navigation", () => {
-        cy.get("[data-cy='help-center.opener']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("be.visible");
+        cy.openHelpCenterNavigation();
       });
 
       it("Open HelpCenter content", () => {
-        cy.get("[data-cy='help-center.content-opener']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("be.visible");
+        cy.openHelpCenterContent();
       });
 
       it("Remember HelpCenter content title", () => {
@@ -453,17 +451,15 @@ context("Help Center custom content", () => {
       });
 
       it("Open HelpCenter navigation", () => {
-        cy.get("[data-cy='help-center.opener']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.navigation'", { timeout: 500 }).should("be.visible");
+        cy.openHelpCenterNavigation();
       });
 
       it("Open HelpCenter content", () => {
-        cy.get("[data-cy='help-center.content-opener']").arrowClick({ force: true });
-        cy.get("[data-cy='help-center.content'", { timeout: 500 }).should("be.visible");
+        cy.openHelpCenterContent();
       });
 
       it("Verify changed HelpCenter content title", () => {
-        cy.get("[data-cy='help-center.content-title']").should("not.have.text", helpCenterTitle);
+        cy.verifyHelpCenterTitle(helpCenterTitle, "not.have.text");
       });
     });
   });
