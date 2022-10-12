@@ -10,7 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import cx from "classnames";
-import { sortBy } from "lodash";
+import { camelCase, sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -67,12 +67,12 @@ function Row(props: { row: PageDetails }) {
   return (
     <React.Fragment>
       <TableRow className={classes.row} onClick={() => setOpen(!open)}>
-        <TableCell >
+        <TableCell>
           <IconButton size="small">
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" data-cy={`page-detail.${camelCase(row.category)}`}>
           {row.category}
         </TableCell>
       </TableRow>
