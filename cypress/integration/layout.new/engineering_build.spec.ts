@@ -35,6 +35,13 @@ const docDescription = "Test EB Description";
 const formTitle = "New EB Form";
 const formDescription = "New EB Form Description";
 
+const FIELD_HEADERS = [
+  "form.builder.approvals",
+  "fb-textfield",
+  "form.builder.procedure",
+  "Step #1",
+];
+
 context("Verify New Layout for EB Document", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -500,6 +507,17 @@ context("Verify New Layout for EB Document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Add Text Field", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save Form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
       it("Navigate to Procedure tab", () => {
         cy.drSelectProcedureTab();
       });
@@ -554,6 +572,17 @@ context("Verify New Layout for EB Document", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Add Text Field", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save Form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
@@ -700,7 +729,10 @@ context("Verify New Layout for EB Document", () => {
 
     it("Click on create Engineering Builds", () => {
       cy.get(`button[id="DocumentByTypeListPresenter-openDocRev"]`).arrowClick();
-      cy.get("[id='MultipleFormTemplate-selectDocType']").autocompleteSelect("New EB Form");
+      cy.get("[id='MultipleFormTemplate-selectDocType']").type("New EB Form");
+      cy.wait(1500);
+      cy.get(`div[id^="react-select"]`).contains("New EB Form").arrowClick({ force: true });
+      cy.unClick();
     });
 
     it(`Enter title ${docTitle}`, () => {
@@ -765,10 +797,6 @@ context("Verify New Layout for EB Document", () => {
             cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
             cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
             cy.verifyFormOptionsVisibility();
-          });
-
-          it("Save Form", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
           });
         });
       });
@@ -904,39 +932,31 @@ context("Verify New Layout for EB Document", () => {
         cy.get("[id^='react-select']").contains("FM-00003").arrowClick();
       });
 
-      it("Mapped Approvals field", () => {
-        cy.get("[id='formMigrationField']" ).eq(0).arrowClick();
-        cy.get("[id^='react-select']").eq(0).autocompleteSelect("form.builder.approvals");
-      });
-
-      it("Mapped EB Procedure field", () => {
-        cy.get("[id='formMigrationField']" ).eq(1).arrowClick();
-        cy.get("[id^='react-select']").eq(1).autocompleteSelect("form.builder.procedure");
-      });
-
-      it("Mapped fb-textfield", () => {
-        cy.get("[id='formMigrationField']" ).eq(2).arrowClick();
-        cy.get("[id^='react-select']").eq(2).autocompleteSelect("fb-textfield");
+      FIELD_HEADERS.forEach( (fieldHeader, i) => {
+        it(`Mapped '${fieldHeader}' field`, () => {
+          cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+          cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+        });
       });
 
       it("Click on confirm change", () => {
         cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
       });
 
-      it("Navigate to procedure Tab", () => {
-        cy.drSelectProcedureTab();
+      it("Verify migrated form info 'fb-textfield'", () => {
+        cy.get("[data-cy='fb-textfield']").parent().should("contain.text", "fb-textfield");
       });
 
       it("Verify form info should have migrated form 'FM-00003'", () => {
         cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
       });
 
-      it("Verify migrated form info 'EB Procedure'", () => {
-        cy.get("[data-cy='form.builder.procedure']").parent().should("contain.text", "EB Procedure");
+      it("Navigate to procedure Tab", () => {
+        cy.drSelectProcedureTab();
       });
 
-      it("Verify migrated form info 'fb-textfield'", () => {
-        cy.get("[data-cy='fb-textfield']").parent().should("contain.text", "fb-textfield");
+      it("Verify migrated form info 'EB Procedure'", () => {
+        cy.get("[data-cy='form.builder.procedure']").parent().should("contain.text", "EB Procedure");
       });
     });
 
@@ -976,6 +996,12 @@ context("Verify New Layout for EB Document", () => {
           owner,
           actions: [
             { key: "Access granted to user", value: userOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Form Set To", value: "FM-00003 - revision 1 - EB Migration Form" },
           ],
         },
         {
