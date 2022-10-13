@@ -597,7 +597,10 @@ context("Verify Paper LHR", () => {
     });
 
     context("Verify predefined fields are displayed", () => {
-
+      it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
+        cy.get(`[name="lhr-selected-part"]`).parent().parent()
+          .should("not.contain", "The Part to be Manufactured is a required field.");
+      });
       it("Check 'Build Type' is displayed", () => {
         cy.get(`[data-cy="Build Type"]`).parent().parent().parent().parent()
           .should("contain.html", `role="radiogroup"`);
@@ -641,7 +644,10 @@ context("Verify Paper LHR", () => {
     });
 
     context("Verify all data and predefined fields are present", () => {
-
+      it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
+        cy.get(`[name="lhr-selected-part"]`).parent().parent()
+          .should("not.contain", "The Part to be Manufactured is a required field.");
+      });
       it("Verify 'Build Type' is displayed", () => {
         cy.get("[data-cy=\"Build Type\"]").should("exist");
       });
@@ -715,6 +721,11 @@ context("Verify Paper LHR", () => {
 
       it("Save form", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
+        cy.get(`[name="lhr-selected-part"]`).parent().parent()
+          .should("not.contain", "The Part to be Manufactured is a required field.");
       });
 
       it("Verify 'Build Type' is displayed", () => {
