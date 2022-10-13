@@ -790,7 +790,9 @@ context("Create new LHR and verify start step with and without selecting build t
       });
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
+        });
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -833,7 +835,9 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select build type Prod", () => {
-      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
+      });
     });
 
     it("Save the document", () => {
@@ -854,7 +858,7 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Click on start step", () => {
-      cy.get("[data-cy='form.builder.start.step']").arrowClick({ force: true }).wait(2000);
+      cy.get("[data-cy='form.builder.start.step']").arrowClick({ force: true }).wait(6000);
     });
 
     it("Select Overview Tab", () => {
@@ -862,7 +866,9 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select Approval", () => {
-      cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
+      });
     });
 
     it("Navigate to procedure tab", () => {
@@ -871,9 +877,18 @@ context("Create new LHR and verify start step with and without selecting build t
 
     it("Fill the start accepted and rejected quantity", () => {
       cy.get("[name='lhrs-start-quantity']").scrollIntoView();
-      cy.get("[name='lhrs-start-quantity']").arrowType("12");
-      cy.get("[name='lhrs-accepted-quantity']").arrowType("11");
-      cy.get("[name='lhrs-rejected-quantity']").arrowType("1").wait(2000);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name='lhrs-start-quantity']").arrowType("12");
+        cy.unClick();
+      });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name='lhrs-accepted-quantity']").arrowType("11");
+        cy.unClick();
+      });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name='lhrs-rejected-quantity']").arrowType("1").wait(2000);
+        cy.unClick();
+      });
     });
 
     it("Save the document", () => {
@@ -906,7 +921,9 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select Approval", () => {
-      cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`).wait(2000);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`).wait(2000);
+      });
     });
 
     it("Approve and released", () => {
