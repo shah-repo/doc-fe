@@ -888,7 +888,7 @@ context("Records flow", () => {
           .find("button").eq(1).click();
         cy.wait(1000);
         cy.get(`[data-cy="Inline Approval"]`).parent()
-          .find("button").eq(1).find("path").invoke("css", "fill").should("equal", "rgb(255, 216, 116)");
+          .find("button").eq(1).find("path").invoke("attr", "fill").should("equal", "#FFD874");
         cy.get(`input[placeholder^="Search"]`).clear();
         cy.fbVerifySectionsOnAddField("Favorites");
         cy.fbCheckFieldsExistFavoritesList("Inline Approval");
@@ -898,7 +898,7 @@ context("Records flow", () => {
         cy.get(`[data-cy="Approvals-btn"]`).arrowClick();
         cy.wait(1000);
         cy.get(`[data-cy="Inline Approval"]`).parent()
-          .find("button").eq(1).find("path").invoke("css", "fill").should("equal", "rgb(200, 202, 207)");
+          .find("button").eq(1).find("path").invoke("attr", "fill").should("equal", "#C8CACF");
       });
     });
 
