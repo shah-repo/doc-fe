@@ -187,7 +187,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
-
+    // Removed due to ENC-12907 : after requirement changes need to change
     // it("Add 'Implementation Task' to AR", () => {
     //   cy.fbClickAddNewHiddenBtn();
     //   cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
@@ -258,7 +258,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
       cy.arSelectChangeDetailsTab();
       // cy.get("[data-cy=\"fb-control-btn\"]").arrowClick({ force: true });
     });
-
+    // Removed due to ENC-12907 : after requirement changes need to change
     // it("Fill all fields and add 'Implementation Task'", () => {
     //   SystemRequirement("REQ-0710");
     //   cy.get("[data-cy=\"fb-control-btn\"]").arrowClick({ force: true });
@@ -291,7 +291,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
       cy.arApproveAR();
       cy.landingPageLoadingElementShouldNotExist();
     });
-
+    // Removed due to ENC-12907 : after requirement changes need to change
     // it(`Check approval request status is ${STATUS_TYPES_LABEL.IMPLEMENTATION}`, () => {
     //   SystemRequirement("REQ-0020", "REQ-0730");
     //   cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
@@ -300,6 +300,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
 
   context("Verify export", () => {
     it(`Check doc status as ${STATUS_TYPES_LABEL.IMPLEMENTATION} and click on Send To Email`, () => {
+      // Removed due to ENC-12907 : after requirement changes need to change
       // cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
       cy.get(`[data-cy="field-name"]`).should("have.text", approvalRequestTitle);
       cy.get(`[data-cy="HeaderInfo-docId"]`).then(($x) => {
@@ -390,7 +391,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
       });
     });
   });
-
+  // Removed due to ENC-12907 : after requirement changes need to change
   // context("Check Implementation Task Status", () => {
   //   it(`Check Implementation task' status is ${STATUS_TYPES_LABEL.PENDING}`, () => {
   //     SystemRequirement("REQ-0710");
