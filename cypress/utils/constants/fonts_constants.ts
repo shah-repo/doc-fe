@@ -44,6 +44,7 @@ export const LINE_HT_3 = "15px";
 export const LINE_HT_4 = "21.6px";
 export const LINE_HT_21 = "21px";
 export const LINE_HT_21_28 = "21.28px";
+export const LINE_HT_22_88 = "22.88px";
 export const LINE_HT_24 = "24px";
 export const LINE_HT_24_78 = "24.78px";
 export const LINE_HT_25_6 = "25.6px";

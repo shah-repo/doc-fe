@@ -12,7 +12,7 @@ import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
-import { FONT_SIZE_12, FONT_SIZE_14, FONT_SIZE_16, FONT_SIZE_24, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_21, LINE_HT_21_28, LINE_HT_24, LINE_HT_36, sora, soraSansserif } from "../../utils/constants/fonts_constants";
+import { FONT_SIZE_12, FONT_SIZE_14, FONT_SIZE_16, FONT_SIZE_24, FONT_WT_400, FONT_WT_500, FONT_WT_600, FONT_WT_700, LINE_HT_20_02, LINE_HT_21, LINE_HT_22_88, LINE_HT_24, LINE_HT_36, soraSansserif } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -478,88 +478,128 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Open the first document in the list", () => {
-      cy.dlSelectFirstDocument();
+      cy.get("tr.k-master-row").first().arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
   context("Training Record page font", () => {
     it(`Verify 'Training Record' font-size ${FONT_SIZE_24} font-family ${soraSansserif} line-height ${LINE_HT_36} font-weight ${FONT_WT_500}`, () => {
-      cy.get(`[class*="MuiTypography-body1"]`).contains("Training Record").should("have.css", "font-size", FONT_SIZE_24);
-      cy.get(`[class*="MuiTypography-body1"]`).contains("Training Record").should("have.css", "font-family", soraSansserif);
-      cy.get(`[class*="MuiTypography-body1"]`).contains("Training Record").should("have.css", "line-height", LINE_HT_36);
-      cy.get(`[class*="MuiTypography-body1"]`).contains("Training Record").should("have.css", "font-weight", FONT_WT_500);
+      cy.get(`[class="MuiDialogTitle-root"]`).find(".MuiTypography-body1").contains("Training Record").should("have.css", "font-size", FONT_SIZE_24);
+      cy.get(`[class="MuiDialogTitle-root"]`).find(".MuiTypography-body1").contains("Training Record").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiDialogTitle-root"]`).find(".MuiTypography-body1").contains("Training Record").should("have.css", "line-height", LINE_HT_36);
+      cy.get(`[class="MuiDialogTitle-root"]`).find(".MuiTypography-body1").contains("Training Record").should("have.css", "font-weight", FONT_WT_500);
     });
 
     it(`Verify 'TRN ID' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_700}`, () => {
-      cy.get(`[class*="MuiTypography-body1"]`).contains("TRN ID").should("have.css", "font-size", FONT_SIZE_16);
-      cy.get(`[class*="MuiTypography-body1"]`).contains("TRN ID").should("have.css", "font-family", soraSansserif);
-      cy.get(`[class*="MuiTypography-body1"]`).contains("TRN ID").should("have.css", "line-height", LINE_HT_24);
-      cy.get(`[class*="MuiTypography-body1"]`).contains("TRN ID").should("have.css", "font-weight", FONT_WT_700);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(0)
+        .contains("TRN ID").should("have.css", "font-size", FONT_SIZE_16);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(0)
+        .contains("TRN ID").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(0)
+        .contains("TRN ID").should("have.css", "line-height", LINE_HT_24);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(0)
+        .contains("TRN ID").should("have.css", "font-weight", FONT_WT_700);
     });
 
-    it(`Verify 'TRN-00001' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "TRN-00001",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'TRN-00001' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_700}`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiBox-root"]`).eq(0)
+        .contains("TRN-00001").should("have.css", "font-size", FONT_SIZE_16);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiBox-root"]`).eq(0)
+        .contains("TRN-00001").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiBox-root"]`).eq(0)
+        .contains("TRN-00001").should("have.css", "line-height", LINE_HT_24);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiBox-root"]`).eq(0)
+        .contains("TRN-00001").should("have.css", "font-weight", FONT_WT_700);
     });
 
-    it(`Verify 'Doc ID Rev' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "Doc ID Rev",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'Doc ID Rev' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_700}`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(1)
+        .contains("Doc ID Rev").should("have.css", "font-size", FONT_SIZE_16);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(1)
+        .contains("Doc ID Rev").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(1)
+        .contains("Doc ID Rev").should("have.css", "line-height", LINE_HT_24);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(1)
+        .contains("Doc ID Rev").should("have.css", "font-weight", FONT_WT_700);
     });
 
-    it(`Verify 'FM-00003  Rev  1' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "FM-00003  Rev  1",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'FM-00003 Rev 1' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_22_88} font-weight ${FONT_WT_700}`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2)
+        .contains("FM-00003 Rev 1").should("have.css", "font-size", FONT_SIZE_16);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2)
+        .contains("FM-00003 Rev 1").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2)
+        .contains("FM-00003 Rev 1").should("have.css", "line-height", LINE_HT_22_88);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2)
+        .contains("FM-00003 Rev 1").should("have.css", "font-weight", FONT_WT_700);
     });
 
-    it(`Verify 'Title' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "Title",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'Title' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_700}`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(2)
+        .contains("Title").should("have.css", "font-size", FONT_SIZE_16);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(2)
+        .contains("Title").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(2)
+        .contains("Title").should("have.css", "line-height", LINE_HT_24);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiTypography-body1"]`).eq(2)
+        .contains("Title").should("have.css", "font-weight", FONT_WT_700);
     });
 
-    it(`Verify 'released form' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "released form",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'released form' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiBox-root"]`).eq(2)
+        .contains("released form").should("have.css", "font-size", FONT_SIZE_14);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiBox-root"]`).eq(2)
+        .contains("released form").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiBox-root"]`).eq(2)
+        .contains("released form").should("have.css", "line-height", LINE_HT_20_02);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(2).find(`[class*="MuiBox-root"]`).eq(2)
+        .contains("released form").should("have.css", "font-weight", FONT_WT_400);
     });
 
-    it(`Verify 'I completed training on' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "I completed training on",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'I completed training on' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_22_88} font-weight ${FONT_WT_700}`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("I completed training on").should("have.css", "font-size", FONT_SIZE_16);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("I completed training on").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("I completed training on").should("have.css", "line-height", LINE_HT_22_88);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("I completed training on").should("have.css", "font-weight", FONT_WT_700);
     });
 
-    it(`Verify 'FM-00003 Rev 1' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_21_28} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "Training Record",
-        props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_21_28, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'FM-00003 Rev 1' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_22_88} font-weight ${FONT_WT_700}`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("FM-00003 Rev 1").should("have.css", "font-size", FONT_SIZE_16);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("FM-00003 Rev 1").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("FM-00003 Rev 1").should("have.css", "line-height", LINE_HT_22_88);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("FM-00003 Rev 1").should("have.css", "font-weight", FONT_WT_700);
     });
 
-    it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
-      cy.get(`[data-cy="timeline-icon"]`).arrowClick();
-      cy.get(`[data-cy="change-key-0"]`)
-        .checkStylePropExists({
-          content: USERS[1].name,
-          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
-        });
+    it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_22_88} font-weight ${FONT_WT_700}`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains(USERS[1].name).should("have.css", "font-size", FONT_SIZE_16);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains(USERS[1].name).should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains(USERS[1].name).should("have.css", "line-height", LINE_HT_22_88);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains(USERS[1].name).should("have.css", "font-weight", FONT_WT_700);
     });
 
-    it(`Verify 'Send To Email' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_21} font-weight ${FONT_WT_400}`, () => {
-      cy.checkStylePropExists({
-        content: "Send To Email",
-        props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_21, "font-weight": FONT_WT_400 },
-      });
+    it(`Verify 'Send To Email' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("Send To Email").should("have.css", "font-size", FONT_SIZE_12);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("Send To Email").should("have.css", "font-family", soraSansserif);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("Send To Email").should("have.css", "line-height", LINE_HT_21);
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
+        .contains("Send To Email").should("have.css", "font-weight", FONT_WT_600);
     });
   });
 });
