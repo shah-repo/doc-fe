@@ -275,6 +275,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Approve and release document for create company", () => {
+      cy.wait(3000);
       cy.drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom();
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -543,9 +544,9 @@ context("Add Requestor as an approver of the PO", () => {
       cy.drSelectMatrixDetailsTab();
     });
 
-    it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
+    // it("Click 'Save' document", () => {
+    //   cy.drClickCreateDocumentWithApiCallForForms();
+    // });
   });
 
   context("Click on 'Add Item'", () => {
@@ -562,24 +563,39 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Fill in the fields - Signature 1 group as 'QA'", () => {
-      cy.get(`[name="signatures.0.groups"]`).arrowClick();
+      cy.get(`[name="signatures.0.groups"]`).arrowClick().wait(500);
       cy.contains("QA").arrowClick();
+      cy.unClick();
     });
 
     it("Click on 'Add' button", () => {
-      cy.poAddPOButtonClick();
+      cy.get(`[data-cy="common.add"]`).contains("Add").arrowClick().wait(500);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.landingPageLoadingElementShouldNotExist();
+    it("Verify 'QA' group exists under signature 1", () => {
+      cy.get(`tr>td[class*="MuiTableCell-root"]`).eq(2).contains("QA");
     });
+
+    // it("Click 'Save' document", () => {
+    //   cy.drClickCreateDocumentWithoutApiCall();
+    //   cy.landingPageLoadingElementShouldNotExist();
+    // });
   });
 
   context("Release POAM", () => {
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Switch to matrix details tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("Verify 'QA' group exists under signature 1", () => {
+      cy.get(`tr>td[class*="MuiTableCell-root"]`).eq(2).contains("QA");
     });
   });
 
@@ -815,10 +831,10 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
       SystemRequirement("REQ-1400");
-      cy.get("[data-cy='common.add']").click();
-      cy.get("p[class*='MuiFormHelperText-root']>span")
+      cy.get("[data-cy='common.add']").arrowClick();
+      cy.get("p[class*='MuiFormHelperText-root']>span").eq(0)
         .contains("The Part Number field is required when Supplier Part Number is empty.");
-      cy.get("p[class*='MuiFormHelperText-root']>span")
+      cy.get("p[class*='MuiFormHelperText-root']>span").eq(1)
         .contains("The Supplier Part Number field is required when Part Number is empty.");
     });
 
@@ -866,13 +882,6 @@ context("Add Requestor as an approver of the PO", () => {
       });
     });
   });
-
-  // context("Save document", () => {
-  //   it("Save document", () => {
-  //     cy.drClickCreateDocumentWithoutApiCall();
-  //     cy.landingPageLoadingElementShouldNotExist();
-  //   });
-  // });
 
   context(`Check the Approval field automatically filled as the requestor as ${USERS[1].name}`, () => {
     it("Switch to details tab", () => {
@@ -1318,11 +1327,6 @@ context("Add Requestor as an approver of the PO", () => {
         cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
       });
     });
-
-    // it("Save document", () => {
-    //   cy.drClickCreateDocumentWithoutApiCall();
-    //   cy.landingPageLoadingElementShouldNotExist();
-    // });
 
     it(`Verify 'The requestor field is required field' is appeared`, () => {
       cy.get(".MuiFormHelperText-root.Mui-error").should("exist");
