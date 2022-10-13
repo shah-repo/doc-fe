@@ -99,7 +99,7 @@ Cypress.Commands.add("trCompleteTraining", () => {
 Cypress.Commands.add("trApproveTraining", () => {
   cy.get("[data-cy=\"form.builder.request.approve\"]").click();
   cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").click();
     cy.progressBarShouldNotExist();
   });
