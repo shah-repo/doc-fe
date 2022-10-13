@@ -96,10 +96,6 @@ export const withFBInput = <T extends FBInputProps>(
     }, []);
 
     useEffect(() => {
-      formState?.validate();
-    }, [formState]);
-
-    useEffect(() => {
       const disposeAutorun = autorun(() => {
         const errorName = formState?.errors.get(name) || helperText;
         feedbackDetails.error = formState?.errorValidation && showErrorMsg && !isUndefined(errorName);
@@ -314,6 +310,10 @@ export const withFBInput = <T extends FBInputProps>(
         );
       });
     }, []);
+
+    useEffect(() => {
+      formState?.validate();
+    }, [formState]);
 
     return Component({
       ...(props as T),
