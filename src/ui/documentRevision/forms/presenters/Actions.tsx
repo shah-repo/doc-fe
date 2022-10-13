@@ -148,6 +148,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
       case "formDesign":
         formik.setFieldValue("formDocument", {
           id: values?.formDocument?.id,
+          document: values?.formDocument?.document,
         });
         if (values.revisionChangeType === RevisionChangeType.Obsolete && isRecord) {
           const newInput = {};
