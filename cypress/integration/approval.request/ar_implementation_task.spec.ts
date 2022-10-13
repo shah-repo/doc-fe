@@ -563,7 +563,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
         .eq(0).contains(/REQUESTED|COMPLETE/g);
     });
 
-    xit("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
       cy.wait(5000);
       cy.reload();
       cy.progressBarShouldNotExist();
@@ -728,7 +728,7 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
       cy.dlFilterByStatus({ status: "Released" });
     });
 
-    xit("Verify filter by status", () => {
+    it("Verify filter by status", () => {
       cy.dlVerifyFilterByStatus({ status: "Released" });
     });
   });
