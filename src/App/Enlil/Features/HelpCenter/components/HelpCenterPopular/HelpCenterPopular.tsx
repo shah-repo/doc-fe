@@ -15,15 +15,15 @@ const HelpCenterPopular: React.FC = () => {
     <Box className={classes.root}>
       <Typography variant="h4"><Text translation="help.popular.resources" /></Typography>
       <MenuList className={classes.list} dense disablePadding>
-        <HelpCenterExternalLink className={classes.link} href={staticLinks.ReleaseNotes}>
+        <HelpCenterExternalLink className={classes.link} to={staticLinks.ReleaseNotes}>
           <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
           <ListItemText><Text translation="help.release.notes" /></ListItemText>
         </HelpCenterExternalLink>
-        <HelpCenterExternalLink className={classes.link} href={staticLinks.FAQs}>
+        <HelpCenterExternalLink className={classes.link} to={staticLinks.FAQs}>
           <ListItemIcon><FAQsIcon /></ListItemIcon>
           <ListItemText><Text translation="help.faqs" /></ListItemText>
         </HelpCenterExternalLink>
-        <HelpCenterExternalLink className={classes.link} href={staticLinks.Guides}>
+        <HelpCenterExternalLink className={classes.link} to={staticLinks.Guides}>
           <ListItemIcon><GuidesIcon /></ListItemIcon>
           <ListItemText><Text translation="help.view.all.guides" /></ListItemText>
         </HelpCenterExternalLink>

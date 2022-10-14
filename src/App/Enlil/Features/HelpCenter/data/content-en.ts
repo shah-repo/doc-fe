@@ -7,24 +7,24 @@ export default {
       {
         type: HelpCenterItemType.Video,
         title: "How to create a document?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
+        url: "//help.{env}enlil.io/document_help.html",
         videoId: "-ZtYP4oDwWY",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Document Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
       {
         type: HelpCenterItemType.Video,
         title: "Document States and what they mean",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
+        url: "//help.{env}enlil.io/document_help.html",
         videoId: "-ZtYP4oDwWY",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Document State Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -40,7 +40,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Approval Request Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
       {
         type: HelpCenterItemType.Video,
@@ -51,12 +51,13 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Express Approval Request Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
   [HelpModule.Record]: {
     title: "Records Help",
+    url: "//help.{env}enlil.io/article_page_pdf.html",
     items: [
       {
         type: HelpCenterItemType.Video,
@@ -67,7 +68,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Records Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -83,7 +84,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Purchase Order Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -99,7 +100,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Equipment Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -115,7 +116,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Supplier Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -131,7 +132,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Receiving Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -147,7 +148,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Parts Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -163,7 +164,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Engineering Builds Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -179,7 +180,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "LHR Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -195,7 +196,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "LOTs Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -211,7 +212,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Training Curriculum Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
       {
         type: HelpCenterItemType.Video,
@@ -222,7 +223,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Training Records Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -238,7 +239,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "User Addition workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
       {
         type: HelpCenterItemType.Video,
@@ -249,7 +250,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "User deactivation workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
       {
         type: HelpCenterItemType.Video,
@@ -260,7 +261,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Reset Password Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -276,7 +277,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Group Management Workflow",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -292,7 +293,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "All workflows",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -308,7 +309,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Dashboard Navigator",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
       {
         type: HelpCenterItemType.Video,
@@ -319,7 +320,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "Dashboard Navigator",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },
@@ -335,7 +336,7 @@ export default {
       {
         type: HelpCenterItemType.Workflow,
         title: "All workflows",
-        url: "//help.dev.enlil.io/article_page_pdf.html",
+        url: "//help.{env}enlil.io/article_page_pdf.html",
       },
     ],
   },

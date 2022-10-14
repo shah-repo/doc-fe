@@ -7,6 +7,12 @@ export default makeStyles((theme) => ({
   list: {
     margin: theme.spacing(1.5, -2.5, 0),
   },
+  link: {
+    "textDecoration": "none",
+    "&:hover": {
+      color: "red",
+    },
+  },
 }));
 
 export const itemStyles = (theme: Theme) => ({

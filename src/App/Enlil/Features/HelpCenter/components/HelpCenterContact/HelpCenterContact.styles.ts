@@ -9,5 +9,13 @@ export default makeStyles((theme) => ({
   contact: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
+    position: "relative",
+  },
+  out: {
+    "&:before": {
+      content: "''",
+      position: "absolute",
+      inset: 0,
+    },
   },
 }));

@@ -13,11 +13,11 @@ const HelpCenterContact: React.FC = () => {
 
   return (
     <MenuList className={classes.list} dense disablePadding>
-      <HelpCenterExternalLink className={cx(classes.link, classes.contact)} href={StaticHelpLinks.Contact}>
+      <HelpCenterExternalLink className={cx(classes.link, classes.contact)} to={StaticHelpLinks.Contact}>
         <ListItemIcon className={classes.icon}><SendIcon /></ListItemIcon>
         <ListItemText className={classes.text}>
           <Text translation="help.didnt.find.what.you.need" />
-          <HelpCenterOutLink>
+          <HelpCenterOutLink className={classes.out}>
             <Text translation="help.contact" />
           </HelpCenterOutLink>
         </ListItemText>
