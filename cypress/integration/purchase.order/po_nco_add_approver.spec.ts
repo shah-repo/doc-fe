@@ -126,6 +126,10 @@ context("Add Requestor as an approver of the PO", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create form for NCO document", () => {
@@ -222,12 +226,11 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
       cy.get(`[data-cy="Approved Page Details json is used"]`).scrollIntoView();
-      cy.get("[name*='approved-page-details-json-is-used-']").eq(0)
-        .should("have.value", "Yes").click();
+      cy.get(`[name*="approved-page-details-json-is-used-"]`).eq(0)
+        .should("have.value", "Yes").arrowClick().wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.wait(2000);
     });
 
     it("Upload Page Details JSON", () => {
@@ -274,10 +277,12 @@ context("Add Requestor as an approver of the PO", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Click on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Approve and release document for create company", () => {
-      cy.wait(3000);
-      cy.drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom();
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Log out user", () => {
@@ -468,11 +473,17 @@ context("Add Requestor as an approver of the PO", () => {
       cy.cmpSelectCompany({ name: newCompanyName, multiple: true });
       cy.wait("@response");
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Check PO exists & verify the official predefined schema", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check filters for document type management", () => {
@@ -540,13 +551,13 @@ context("Add Requestor as an approver of the PO", () => {
       cy.drEnterDocumentDescription({ description: "POAM Doc description" });
     });
 
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Navigate to MatrixDetails tab", () => {
       cy.drSelectMatrixDetailsTab();
     });
-
-    // it("Click 'Save' document", () => {
-    //   cy.drClickCreateDocumentWithApiCallForForms();
-    // });
   });
 
   context("Click on 'Add Item'", () => {
@@ -578,10 +589,9 @@ context("Add Requestor as an approver of the PO", () => {
       cy.get(`tr>td[class*="MuiTableCell-root"]`).eq(2).contains("QA");
     });
 
-    // it("Click 'Save' document", () => {
-    //   cy.drClickCreateDocumentWithoutApiCall();
-    //   cy.landingPageLoadingElementShouldNotExist();
-    // });
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
   });
 
   context("Release POAM", () => {
@@ -680,7 +690,7 @@ context("Add Requestor as an approver of the PO", () => {
       cy.ptSelectPartFormFromMultiSelect({ partForm: "Parts" });
     });
 
-    it("Enters title 'New Part'", () => {
+    it("Enters title 'New Part 2'", () => {
       cy.drEnterDocumentTitle({ name: "New Part 2" });
     });
 
@@ -697,7 +707,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
   });
 
-  context("Create a PO form with outputtype as 'Purchase Order', approve and release it", () => {
+  context("Create a form for PO with outputtype as 'Purchase Order', approve and release it", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -737,8 +747,13 @@ context("Add Requestor as an approver of the PO", () => {
       cy.unClick();
     });
 
-    it("Approve and release form for PO", () => {
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release the form for PO", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Check PO status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
@@ -785,6 +800,10 @@ context("Add Requestor as an approver of the PO", () => {
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
@@ -875,11 +894,13 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poAddPOButtonClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
+      cy.poAddPOButtonClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
@@ -1210,6 +1231,12 @@ context("Add Requestor as an approver of the PO", () => {
       });
     });
 
+    context("Turn off autosave", () => {
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+    });
+
     it("[API]Get html document and verify PO number and Requestor information", () => {
       cy.url().then((url: any) => {
         poHTMLDocRevId = url.split("/").pop();
@@ -1221,12 +1248,19 @@ context("Add Requestor as an approver of the PO", () => {
           },
         }).then((response) => {
           const responseBody = response.body.toString();
+          cy.log(responseBody);
           expect(responseBody)
             .contains(`PO Number:          PO-00001-1`)
             .and.contains("Requestor:")
             .and.contains(USERS[2].name);
         });
       });
+    });
+  });
+
+  context("Turn on autosave", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
   });
 
