@@ -598,7 +598,8 @@ context("Export Bulk", () => {
         cy.fbAddField();
       });
 
-      xit("move Component", () => {
+      it("move Component", () => {
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy='Textfield for New bulk import test']").trigger("mouseover");
         cy.wait(2000);
         cy.get(`[class="drag-handle"]`).eq(1)
