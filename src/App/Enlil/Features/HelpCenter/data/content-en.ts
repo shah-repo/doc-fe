@@ -3,351 +3,241 @@ import { HelpCenterItemType, HelpModule } from "../HelpCenter.types";
 export default {
   [HelpModule.DocumentList]: {
     title: "Document Help",
+    url: "https://help.dev.enlil.io/document_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create a document?",
-        url: "//help.{env}enlil.io/document_help.html",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/document_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Document Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
-      },
-      {
-        type: HelpCenterItemType.Video,
-        title: "Document States and what they mean",
-        url: "//help.{env}enlil.io/document_help.html",
-        videoId: "-ZtYP4oDwWY",
-      },
-      {
-        type: HelpCenterItemType.Workflow,
-        title: "Document State Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/document_workflow.html",
       },
     ],
   },
   [HelpModule.ApprovalRequests]: {
     title: "Approval Request Help",
+    url: "https://help.dev.enlil.io/approval_request_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create an Approval Request?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/approval_request_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Approval Request Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
-      },
-      {
-        type: HelpCenterItemType.Video,
-        title: "How to create an Express Approval Request",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
-      },
-      {
-        type: HelpCenterItemType.Workflow,
-        title: "Express Approval Request Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/approval_request_workflow.html",
       },
     ],
   },
   [HelpModule.Record]: {
     title: "Records Help",
-    url: "//help.{env}enlil.io/article_page_pdf.html",
+    url: "https://help.dev.enlil.io/record_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create a record?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/record_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Records Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/record_workflow.html",
       },
     ],
   },
   [HelpModule.PurchaseOrder]: {
     title: "Purchase Order Help",
+    url: "https://help.dev.enlil.io/purchase_order_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create a purchase order?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/purchase_order_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Purchase Order Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/purchase_order_workflow.html",
       },
     ],
   },
   [HelpModule.Equipment]: {
     title: "Equipment Help",
+    url: "https://help.dev.enlil.io/equipment_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create an Equipment?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/equipment_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Equipment Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/equipment_workflow.html",
       },
     ],
   },
   [HelpModule.Supplier]: {
     title: "Supplier Help",
+    url: "https://help.dev.enlil.io/supplier_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create a Supplier?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/equipment_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Supplier Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/supplier_workflow.html",
       },
     ],
   },
   [HelpModule.Receive]: {
     title: "Receiving Help",
+    url: "https://help.dev.enlil.io/receiving_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create a Receiving record?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/receiving_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Receiving Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/receiving_workflow.html",
       },
     ],
   },
   [HelpModule.Parts]: {
     title: "Parts Help",
+    url: "https://help.dev.enlil.io/parts_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create a Part?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/supplier_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Parts Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/supplier_workflow.html",
       },
     ],
   },
   [HelpModule.EB]: {
     title: "Engineering Build (EB) Help",
+    url: "https://help.dev.enlil.io/eb_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create an EB?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/eb_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Engineering Builds Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/eb_workflow.html",
       },
     ],
   },
   [HelpModule.Lhr]: {
     title: "LHR Help",
+    url: "https://help.dev.enlil.io/lhr_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create an LHR?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/lhr_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "LHR Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/lhr_workflow.html",
       },
     ],
   },
   [HelpModule.Lot]: {
     title: "LOTs Help",
+    url: "https://help.dev.enlil.io/lots_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create a LOT?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/lots_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "LOTs Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/lots_workflow.html",
       },
     ],
   },
   [HelpModule.Training]: {
     title: "Training Help",
+    url: "https://help.dev.enlil.io/training_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create a Training Curriculum?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/training_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Training Curriculum Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
-      },
-      {
-        type: HelpCenterItemType.Video,
-        title: "How to create a Training Record?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
-      },
-      {
-        type: HelpCenterItemType.Workflow,
-        title: "Training Records Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/training_workflow.html",
       },
     ],
   },
   [HelpModule.UserManagement]: {
     title: "User Management Help",
+    url: "https://help.dev.enlil.io/user_mgmt_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to add Users?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/user_mgmt_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "User Addition workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
-      },
-      {
-        type: HelpCenterItemType.Video,
-        title: "How to Deactivate users?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
-      },
-      {
-        type: HelpCenterItemType.Workflow,
-        title: "User deactivation workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
-      },
-      {
-        type: HelpCenterItemType.Video,
-        title: "How to help users Reset Password?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
-      },
-      {
-        type: HelpCenterItemType.Workflow,
-        title: "Reset Password Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/user_mgmt_workflow.html",
       },
     ],
   },
   [HelpModule.GroupManagement]: {
     title: "Group Management Help",
+    url: "https://help.dev.enlil.io/group_mgmt_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to create Groups?",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/group_mgmt_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Group Management Workflow",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
-      },
-    ],
-  },
-  [HelpModule.General]: {
-    title: "General Help",
-    items: [
-      {
-        type: HelpCenterItemType.Video,
-        title: "Haven’t found your answer yet? Try here",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
-      },
-      {
-        type: HelpCenterItemType.Workflow,
-        title: "All workflows",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
+        url: "https://help.dev.enlil.io/group_mgmt_workflow.html",
       },
     ],
   },
   [HelpModule.Dashboard]: {
     title: "Dashboard Help",
+    url: "https://help.dev.enlil.io/dashboard_help.html",
     items: [
       {
-        type: HelpCenterItemType.Video,
+        type: HelpCenterItemType.HowTo,
         title: "How to navigate through the Dashboard as a regular user",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/dashboard_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Dashboard Navigator",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
-      },
-      {
-        type: HelpCenterItemType.Video,
-        title: "How to navigate through the Dashboard as Company admin",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
-      },
-      {
-        type: HelpCenterItemType.Workflow,
-        title: "Dashboard Navigator",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
-      },
-    ],
-  },
-  [HelpModule.FAQ]: {
-    title: "Frequently Asked Questions",
-    items: [
-      {
-        type: HelpCenterItemType.Video,
-        title: "Commonly asked user questions",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
-      },
-      {
-        type: HelpCenterItemType.Workflow,
-        title: "All workflows",
-        url: "//help.{env}enlil.io/article_page_pdf.html",
-      },
-    ],
-  },
-  [HelpModule.ReleaseNotes]: {
-    title: "Release Notes",
-    items: [
-      {
-        type: HelpCenterItemType.Video,
-        title: "What’s new with Enlil",
-        url: "//www.youtube.com/watch?v=-ZtYP4oDwWY",
-        videoId: "-ZtYP4oDwWY",
+        url: "https://help.dev.enlil.io/dashboard_workflow.html",
       },
     ],
   },

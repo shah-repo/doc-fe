@@ -33,15 +33,16 @@ export interface HelpCenterItemData {
   url: string;
 }
 
+
 export interface HelpCenterHowToItemData extends HelpCenterItemData {
   type: HelpCenterItemType.HowTo;
-}
-export interface HelpCenterWorkflowItemData extends HelpCenterItemData {
-  type: HelpCenterItemType.Workflow;
 }
 export interface HelpCenterVideoItemData extends Partial<HelpCenterItemData> {
   type: HelpCenterItemType.Video;
   videoId: string;
+}
+export interface HelpCenterWorkflowItemData extends HelpCenterItemData {
+  type: HelpCenterItemType.Workflow;
 }
 
 export interface HelpCenterModuleData {
