@@ -15,7 +15,12 @@ const helpContent = {
   en,
 };
 
-const HelpCenter: React.FC = () => {
+interface Props {
+  persistent?: boolean;
+  draggable?: boolean;
+}
+
+const HelpCenter: React.FC<Props> = ({ persistent }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -37,10 +42,10 @@ const HelpCenter: React.FC = () => {
 
   const previousModule = usePreviousValue(currentModule);
   useEffect(() => {
-    if (previousModule && currentModule !== previousModule) {
+    if (!persistent && previousModule && currentModule !== previousModule) {
       contentDialog.close();
     }
-  }, [contentDialog, currentModule, previousModule]);
+  }, [persistent, contentDialog, currentModule, previousModule]);
 
   return (
     <Theme>
