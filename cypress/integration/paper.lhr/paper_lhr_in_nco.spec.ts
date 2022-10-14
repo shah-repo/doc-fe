@@ -602,6 +602,7 @@ context("Verify Paper LHR", () => {
           .should("not.contain", "The Part to be Manufactured is a required field.");
       });
       it("Check 'Build Type' is displayed", () => {
+        cy.get(`[data-cy="Build Type"]`).should("exist");
         cy.get(`[data-cy="Build Type"]`).parent().parent().parent().parent()
           .should("contain.html", `role="radiogroup"`);
         cy.get(`[name="lhr-build-type"]`).eq(0).should("have.value", "R&D");
