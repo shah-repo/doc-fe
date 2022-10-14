@@ -922,6 +922,7 @@ context("Create new LHR and verify start step with and without selecting build t
     it("Select Approval", () => {
       cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`).wait(2000);
     });
+
     it("Approve and released", () => {
       cy.get("#ApproveAndRelease-button").arrowClick({ force: true });
     });
