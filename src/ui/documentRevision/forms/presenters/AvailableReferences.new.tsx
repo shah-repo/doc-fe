@@ -202,7 +202,6 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       <Autocomplete
         {...{ onChange, disabled }}
         classes={{ option: classes.option }}
-        value={{ label: "" }}
         options={ModifiedOptions}
         getOptionLabel={(option) => option.label }
         // disable filtering on client
@@ -214,7 +213,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                label={!open && getDisplayText("common.select.placeholder")}
+                placeholder={getDisplayText("common.select.placeholder") as any}
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: "0px 30px 0px 9px", height: value.length ? "100%" : "40px" },
