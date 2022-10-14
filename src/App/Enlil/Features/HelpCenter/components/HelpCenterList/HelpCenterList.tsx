@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Text from "../../../../../../ui/components/Text";
 import { HelpCenterItemData, HelpCenterItemType, HelpCenterModuleData } from "../../HelpCenter.types";
-import { envUrl } from "../../utils/envUrl";
+import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
 import HelpCenterOutLink from "../HelpCenterOutLink/HelpCenterOutLink";
 import HelpCenterHowToItem from "./components/HelpCenterHowToItem/HelpCenterHowToItem";
 import HelpCenterVideoItem from "./components/HelpCenterVideoItem/HelpCenterVideoItem";
@@ -33,16 +33,15 @@ const HelpCenterList: React.FC<Props> = ({ content }) => {
       <Typography variant="h4">
         {content.title}
         {content.url && (
-          <Link
+          <HelpCenterExternalLink
             className={classes.link}
-            to={envUrl(content.url)}
-            target="_blank"
-            rel="noopener noreferrer"
+            to={content.url}
+            component={Link}
           >
             <HelpCenterOutLink>
               <Text translation="help.view.full.guide" />
             </HelpCenterOutLink>
-          </Link>
+          </HelpCenterExternalLink>
         )}
       </Typography>
       <Box className={classes.list}>

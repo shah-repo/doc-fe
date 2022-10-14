@@ -8,10 +8,7 @@ export default makeStyles((theme) => ({
     margin: theme.spacing(1.5, -2.5, 0),
   },
   link: {
-    "textDecoration": "none",
-    "&:hover": {
-      color: "red",
-    },
+    textDecoration: "none",
   },
 }));
 
