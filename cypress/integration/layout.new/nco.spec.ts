@@ -421,9 +421,9 @@ context("Verify New Layout for NCO Document", () => {
           cy.verifyReferencesGeneralInfo({ user: owner });
         });
 
-        // it("Verify Add/Remove References", () => {
-        //   cy.verifyAddRemoveReference({ formId: "FM-00001" });
-        // });
+        it("Verify Add/Remove References", () => {
+          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
           cy.verifyReferencesOtherInfo();
@@ -546,7 +546,6 @@ context("Verify New Layout for NCO Document", () => {
 
       context("Verify Bookmarks tab", () => {
         it("Open bookmarks tab", () => {
-          cy.pause();
           cy.drSelectBookmarksTab();
           cy.get(`[data-cy="bookmark-icon"]`).should("be.visible");
         });
