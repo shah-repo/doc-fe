@@ -386,9 +386,9 @@ context("Verify New Layout for Supplier Document", () => {
         cy.verifyReferencesGeneralInfo({ user: owner });
       });
 
-      // it("Verify Add/Remove References", () => {
-      //   cy.verifyAddRemoveReference({ formId: "FM-00001" });
-      // });
+      it("Verify Add/Remove References", () => {
+        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+      });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
         cy.verifyReferencesOtherInfo();
@@ -432,12 +432,6 @@ context("Verify New Layout for Supplier Document", () => {
       it("Verify form info should have migrated form 'FM-00002'", () => {
         cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
       });
-
-      // FIELD_HEADERS.forEach( (fieldHeader, i) => {
-      //   it(`Verify migrated '${fieldHeader}' field`, () => {
-      //     cy.get(`[data-cy="${fieldHeader}"]`).parent().should("contain.text", fieldHeader);
-      //   });
-      // });
 
       it("Verify migrated form info 'fb-textfield'", () => {
         cy.get("[data-cy='fb-textfield-migration']").parent().should("contain.text", "fb-textfield-migration");
