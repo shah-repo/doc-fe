@@ -1,8 +1,6 @@
 import { makeStyles } from "@material-ui/core";
-import { itemStyles } from "../../HelpCenterList.styles";
 
 export default makeStyles((theme) => ({
-  ...itemStyles(theme),
   video: {
     margin: theme.spacing(2.5),
     backgroundColor: theme.palette.grey[100],
