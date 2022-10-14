@@ -13,7 +13,7 @@ import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisi
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
-import { DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
+import { DocTypeGroups, DocCategories } from "../../../dashboard.new/line.items/common/types";
 import { checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
@@ -86,6 +86,9 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   if (SM.isNewCRLayout) {
     url = `${CHANGE_REQUEST_LIST_URL}`;
     iconLink = "/navigation_icons/cr.svg";
+  } else if (isTypeMpiOutput) {
+    url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${DocCategories.LHR}`;
+    iconLink = "/navigation_icons/lhr_icon.svg";
   }
   const classes = styles({ iconLink });
 

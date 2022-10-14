@@ -312,7 +312,7 @@ context("supplier_and_paperLHR", () => {
     });
 
     it("Verify fb-section ", () => {
-      cy.get(`[data-cy="Fb Section"]`).should("exist");
+      cy.get(`[data-cy="fb-section"]`).should("exist");
     });
 
     it("Verify fb-textfield tab", () => {
@@ -370,7 +370,7 @@ context("supplier_and_paperLHR", () => {
     });
 
     it("Verify fb-section ", () => {
-      cy.get(`[data-cy="Fb Section"]`).should("exist");
+      cy.get(`[data-cy="fb-section"]`).should("exist");
     });
 
     it("Verify fb-text-editor tab", () => {
