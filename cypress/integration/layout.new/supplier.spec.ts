@@ -24,6 +24,12 @@ const docDescription = "Test Supplier Description";
 const formTitle = "New Supplier Form";
 const formDescription = "New Supplier Form Description";
 
+const FIELD_HEADERS = [
+  "form.builder.approvals",
+  "fb-textfield",
+  "fb-radiobutton-group",
+];
+
 context("Verify New Layout for Supplier Document", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -74,6 +80,70 @@ context("Verify New Layout for Supplier Document", () => {
   context("Login admin user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+  });
+
+  context("Create supplier form for migration", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'Create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it(`Enter title`, () => {
+      cy.drEnterDocumentTitle({ name: "Migration form" });
+    });
+
+    it(`Enter description`, () => {
+      cy.drEnterDocumentDescription({
+        description: "Migration form description",
+      });
+    });
+
+    it("Click on 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click on 'Supplier' document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Supplier" });
+      cy.unClick();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Add Text Field", () => {
+      cy.fbAddNewField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-migration" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Radio Button group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group-migration" });
+      cy.fbGroupOptions("Option 1", "Option 2");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save Form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
@@ -316,12 +386,66 @@ context("Verify New Layout for Supplier Document", () => {
         cy.verifyReferencesGeneralInfo({ user: owner });
       });
 
-      it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
-      });
+      // it("Verify Add/Remove References", () => {
+      //   cy.verifyAddRemoveReference({ formId: "FM-00001" });
+      // });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
         cy.verifyReferencesOtherInfo();
+      });
+    });
+
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+      });
+    });
+
+    context("Field mapping for migration form", () => {
+      FIELD_HEADERS.forEach( (fieldHeader, i) => {
+        it(`Mapped '${fieldHeader}' field`, () => {
+          cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+          cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+        });
+      });
+    });
+
+    context("Click confirm and verify migrated fields are present", () => {
+      it("Click on confirm change", () => {
+        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+      });
+
+      it("Navigate to details Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Verify form info should have migrated form 'FM-00002'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      });
+
+      // FIELD_HEADERS.forEach( (fieldHeader, i) => {
+      //   it(`Verify migrated '${fieldHeader}' field`, () => {
+      //     cy.get(`[data-cy="${fieldHeader}"]`).parent().should("contain.text", fieldHeader);
+      //   });
+      // });
+
+      it("Verify migrated form info 'fb-textfield'", () => {
+        cy.get("[data-cy='fb-textfield-migration']").parent().should("contain.text", "fb-textfield-migration");
+      });
+
+      it("Verify migrated form info 'fb-radiobutton-group'", () => {
+        cy.get("[data-cy='fb-radiobutton-group-migration']").parent()
+          .should("contain.text", "fb-radiobutton-group-migration");
       });
     });
 
@@ -361,6 +485,12 @@ context("Verify New Layout for Supplier Document", () => {
           owner,
           actions: [
             { key: "Access granted to user", value: userOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Form Set To", value: "FM-00002 - revision 1 - Migration form" },
           ],
         },
         {
