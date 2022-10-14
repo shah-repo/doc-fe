@@ -22,6 +22,7 @@ export enum HelpModule {
 }
 
 export enum HelpCenterItemType {
+  HowTo = "HOWTO",
   Video = "VIDEO",
   Workflow = "WORKFLOW",
 }
@@ -32,16 +33,19 @@ export interface HelpCenterItemData {
   url: string;
 }
 
-export interface HelpCenterVideoItemData extends HelpCenterItemData {
+export interface HelpCenterHowToItemData extends HelpCenterItemData {
+  type: HelpCenterItemType.HowTo;
+}
+export interface HelpCenterWorkflowItemData extends HelpCenterItemData {
+  type: HelpCenterItemType.Workflow;
+}
+export interface HelpCenterVideoItemData extends Partial<HelpCenterItemData> {
   type: HelpCenterItemType.Video;
   videoId: string;
 }
 
-export interface HelpCenterWorkflowItemData extends HelpCenterItemData {
-  type: HelpCenterItemType.Workflow;
-}
-
 export interface HelpCenterModuleData {
   title: string;
+  url?: string;
   items: HelpCenterItemData[];
 }
