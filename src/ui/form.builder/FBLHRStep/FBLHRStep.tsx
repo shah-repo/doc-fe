@@ -258,7 +258,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             />
           </Box>
 
-          {!isDocumentLHRT && !isEmpty(materials) && (
+          {!isDocumentLHRT && !isEmpty(materials) && !lhrStepState && (
             <FBLHRStepProcedureItem
               value={materials}
               type={FBProcedureItemType.materials}
@@ -266,7 +266,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               isPendingChange
             />
           )}
-          {!isDocumentLHRT && !isEmpty(equipment) && (
+          {!isDocumentLHRT && !isEmpty(equipment) && !lhrStepState && (
             <FBLHRStepProcedureItem
               value={equipment}
               type={FBProcedureItemType.equipment}
