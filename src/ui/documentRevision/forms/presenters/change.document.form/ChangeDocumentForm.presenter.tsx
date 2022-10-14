@@ -12,7 +12,7 @@ import AutocompleteField from "../../../../components/forms/fields/Autocomplete/
 import Text from "../../../../components/Text";
 import { FBButton, FBSchemaProps } from "../../../../form.builder";
 import useStyles from "./ChangeDocumentForm.styles";
-import { toFieldsOptions, toFormOptions } from "./utils/transform";
+import { determineLabel, toFieldsOptions, toFormOptions } from "./utils/transform";
 
 interface Props {
   availableForms: DocumentTypeByIdForm[];
@@ -28,7 +28,7 @@ interface Props {
 function renderFields(availableFields: FBSchemaProps[], sourceSchema: FBSchemaProps[]) {
   return availableFields.map((field) => {
     // Hack: added default value for paragraph because it doesn't have a label
-    const label = field.type === "paragraph" ? "Paragraph" : field.label;
+    const label = determineLabel(field);
     return <Fragment key={field.name}>
       <AutocompleteField
         name={String(field.name)}
