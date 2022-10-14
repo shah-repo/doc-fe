@@ -858,7 +858,8 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Click on start step", () => {
-      cy.get("[data-cy='form.builder.start.step']").arrowClick({ force: true }).wait(6000);
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      cy.mpiStartStep({ stepNumber: 1 });
     });
 
     it("Select Overview Tab", () => {
@@ -866,9 +867,7 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
-      });
+      cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Navigate to procedure tab", () => {
@@ -921,11 +920,8 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`).wait(2000);
-      });
+      cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`).wait(2000);
     });
-
     it("Approve and released", () => {
       cy.get("#ApproveAndRelease-button").arrowClick({ force: true });
     });
