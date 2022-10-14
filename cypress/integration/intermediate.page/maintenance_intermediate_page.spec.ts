@@ -527,7 +527,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify test image is added in preview mode", () => {
-      cy.get(`[data-cy="remove-test_image.jpg"]`).eq(1).parent().prev().contains("test_image.jpg");
+      cy.get(`[data-cy="blanktplform-8"]`).contains("test_image.jpg").should("exist");
     });
   });
 });
