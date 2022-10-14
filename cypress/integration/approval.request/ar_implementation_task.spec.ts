@@ -724,6 +724,11 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
+    it("Clear filters", () => {
+      cy.dlClearFilters();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Filter list by status", () => {
       cy.dlFilterByStatus({ status: "Released" });
     });
@@ -750,6 +755,11 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
 
     it(`Filter list by OWNER as USERS[1].name`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Clear filters", () => {
+      cy.dlClearFilters();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Filter list by STATUS as ${STATUS_TYPES_LABEL.CLOSED}`, () => {
