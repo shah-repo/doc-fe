@@ -1,6 +1,6 @@
-import { HelpCenterItemType, HelpModule } from "../HelpCenter.types";
+import { HelpCenterItemType, HelpCenterModuleData, HelpModule } from "../HelpCenter.types";
 
-export default {
+const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
   [HelpModule.DocumentList]: {
     title: "Document Help",
     url: "https://help.dev.enlil.io/document_help.html",
@@ -242,3 +242,5 @@ export default {
     ],
   },
 };
+
+export default helpData;

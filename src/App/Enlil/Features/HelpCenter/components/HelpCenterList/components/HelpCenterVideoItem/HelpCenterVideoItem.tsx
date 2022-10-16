@@ -3,8 +3,16 @@ import React from "react";
 import { HelpCenterVideoItemData } from "../../../../HelpCenter.types";
 import useStyles from "./HelpCenterVideoItem.style";
 
-const HelpCenterVideoItem: React.FC<HelpCenterVideoItemData> = ({ videoId }) => {
+const getYoutubeId = (url: string) => {
+  const regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
+  const match = regExp.exec(url);
+  return (match && match[1].length === 11) ? match[1] : false;
+};
+
+const HelpCenterVideoItem: React.FC<HelpCenterVideoItemData> = ({ url }) => {
   const classes = useStyles();
+
+  const videoId = getYoutubeId(url);
 
   return (
     <Box className={classes.video}>

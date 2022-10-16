@@ -11,7 +11,7 @@ const getCurrentEnvName = (whitelist = ["dev", "demo", "prod", "prod2"], positio
   return whitelist.includes(env) ? env : "";
 };
 
-export const envUrl = (url: string) => {
+const envUrl = (url: string) => {
   const envName = getCurrentEnvName();
   const env = envName ? `${envName}.` : "";
   return template(url, { interpolate: /\{(.+?)\}/g })({ env });

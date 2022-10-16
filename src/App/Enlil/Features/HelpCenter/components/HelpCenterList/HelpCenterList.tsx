@@ -2,7 +2,7 @@ import { Box, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import Text from "../../../../../../ui/components/Text";
-import { HelpCenterItemData, HelpCenterItemType, HelpCenterModuleData } from "../../HelpCenter.types";
+import { HelpCenterItems, HelpCenterItemType, HelpCenterModuleData } from "../../HelpCenter.types";
 import HelpCenterExternalLink from "../HelpCenterExternalLink/HelpCenterExternalLink";
 import HelpCenterOutLink from "../HelpCenterOutLink/HelpCenterOutLink";
 import HelpCenterHowToItem from "./components/HelpCenterHowToItem/HelpCenterHowToItem";
@@ -20,7 +20,7 @@ interface Props {
   content: HelpCenterModuleData;
 }
 
-const HelpCenterItem: React.FC<HelpCenterItemData> = (props) => {
+const HelpCenterItem: React.FC<HelpCenterItems> = (props) => {
   const Item = items[props.type] as React.FC;
   return <Item {...props} />;
 };
@@ -45,7 +45,7 @@ const HelpCenterList: React.FC<Props> = ({ content }) => {
         )}
       </Typography>
       <Box className={classes.list}>
-        {content.items.map((item) => <HelpCenterItem {...item} key={item.title} />)}
+        {content.items.map((item) => <HelpCenterItem {...item} key={item.url} />)}
       </Box>
     </Box>
   );
