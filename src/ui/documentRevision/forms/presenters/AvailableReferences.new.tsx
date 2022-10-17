@@ -2,7 +2,7 @@
 import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { isArray, map, some, truncate } from "lodash";
+import { debounce, isArray, map, some, truncate } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -166,6 +166,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     }
   };
 
+  const debounceFunction = debounce(onInputChange, 1000, {
+    leading: true,
+    trailing: true,
+  });
+
   const onScroll = (event: React.SyntheticEvent) => {
     const listboxNode = event.currentTarget;
     if (
@@ -239,7 +244,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
           </Box>
         )}
         renderOption={(option) => option.label}
-        onInputChange={onInputChange}
+        onInputChange={debounceFunction}
         disableClearable
         ListboxProps={{ onScroll }}
         open={open}
