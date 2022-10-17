@@ -723,7 +723,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
         expect(el).match(/Logs/);
 
-        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
+        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/TEXT FIELD/);
@@ -1013,7 +1013,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT\\n1 2 3`);
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT\\nCheckbox\\n1 2 3`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`${USERS[2].name} \\- .*@.*`);
@@ -1245,7 +1245,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
           expect(el).match(/BulkProcessLogs.txt/);
 
-          tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\n(.*)\n1 2 3`, "gi" );
+          tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
           expect(el).match(tmpRegex);
 
           // eslint-disable-next-line max-len
