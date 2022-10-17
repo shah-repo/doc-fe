@@ -2,7 +2,7 @@
 import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { debounce, isArray, map, some, truncate } from "lodash";
+import { isArray, map, some, truncate } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -166,8 +166,6 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     }
   };
 
-  const debounceFunction = debounce(onInputChange, 1000);
-
   const onScroll = (event: React.SyntheticEvent) => {
     const listboxNode = event.currentTarget;
     if (
@@ -202,6 +200,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       <Autocomplete
         {...{ onChange, disabled }}
         classes={{ option: classes.option }}
+        value={{ label: inputValue }}
         options={ModifiedOptions}
         getOptionLabel={(option) => option.label }
         // disable filtering on client
@@ -213,7 +212,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
-                placeholder={getDisplayText("common.select.placeholder") as any}
+                label={!open && getDisplayText("common.select.placeholder")}
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: "0px 30px 0px 9px", height: value.length ? "100%" : "40px" },
@@ -240,7 +239,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
           </Box>
         )}
         renderOption={(option) => option.label}
-        onInputChange={debounceFunction}
+        onInputChange={onInputChange}
         disableClearable
         ListboxProps={{ onScroll }}
         open={open}
