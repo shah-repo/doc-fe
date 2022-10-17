@@ -247,7 +247,7 @@ Cypress.Commands.add("poCheckTotalAmount", (params: {number: string}) => {
 });
 
 Cypress.Commands.add("poCheckTaxRate", (params: {taxRate: string}) => {
-  cy.get(`[name="po-items-built-in.taxRate"]`).should("have.text", params.taxRate);
+  cy.get(`[name="po-items-built-in.taxRate"]`).contains(params.taxRate);
 });
 
 Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
