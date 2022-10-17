@@ -473,7 +473,9 @@ context("Add Requestor as an approver of the PO", () => {
       cy.cmpSelectCompany({ name: newCompanyName, multiple: true });
       cy.wait("@response");
     });
+  });
 
+  context("Turn off autosave", () => {
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
     });
@@ -484,6 +486,7 @@ context("Add Requestor as an approver of the PO", () => {
       cy.navigToDocumentTypeManagement();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Check filters for document type management", () => {
@@ -574,8 +577,8 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Fill in the fields - Signature 1 group as 'QA'", () => {
-      cy.get(`[name="signatures.0.groups"]`).arrowClick().wait(500);
-      cy.contains("QA").arrowClick();
+      cy.get(`[name="signatures.0.groups"]`).arrowClick().wait(1000);
+      cy.contains("QA").arrowClick().wait(1000);
       cy.unClick();
     });
 
@@ -591,6 +594,12 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Click 'Save' document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Turn on autosave", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
   });
 
@@ -897,10 +906,6 @@ context("Add Requestor as an approver of the PO", () => {
       cy.poAddPOButtonClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
