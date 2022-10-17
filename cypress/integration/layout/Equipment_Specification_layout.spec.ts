@@ -3,7 +3,6 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
-import moment from "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -282,7 +281,7 @@ context("Verification of Equipment Specification", () => {
     });
 
     it("Verify section", () => {
-      cy.get(`[data-cy='Section 1']`).should("exist");
+      cy.get(`[data-cy='Section1']`).should("exist");
     });
 
     it("Verify that Form Options should  appear for this tab ", () => {
@@ -304,6 +303,7 @@ context("Verification of Equipment Specification", () => {
     context("Create New Document from Release form", () => {
       it("Click 'Create New'", () => {
         cy.drCreateNewDocumentFromForm();
+        cy.cmpTurnOffAutosave();
       });
     });
 
@@ -411,9 +411,7 @@ context("Verification of Equipment Specification", () => {
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
         cy.verifyReferenceInfo();
-        cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
-        cy.get("[data-cy='common.revision']").parent().should("contain.text",
-          moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
       });
 
       context("Verify Revision", () => {
@@ -482,7 +480,7 @@ context("Verification of Equipment Specification", () => {
 
         it("Click on bookmarked section, section should be navigated", () => {
           cy.contains("Section1").arrowClick();
-          cy.get("[data-cy='Section 1']").should("be.visible");
+          cy.get("[data-cy='Section1']").should("be.visible");
         });
 
       });
@@ -538,7 +536,7 @@ context("Verification of Equipment Specification", () => {
 
         it("Verify the fields data after migration", () => {
           cy.get("[name^='es-speciffication-textfield']").should("have.value", "Test");
-          cy.get("[data-cy='Section 1']").should("exist");
+          cy.get("[data-cy='Section1']").should("exist");
           cy.get("[value='1']").should("be.checked");
         });
 
@@ -550,7 +548,6 @@ context("Verification of Equipment Specification", () => {
 
 
     context("Fill the fields and Released", () => {
-
       it("Enter document title 'ES document'", () => {
         cy.drEnterDocumentTitle({ name: "Equipment specification form" });
       });
