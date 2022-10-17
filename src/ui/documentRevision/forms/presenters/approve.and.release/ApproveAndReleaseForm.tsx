@@ -152,6 +152,14 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
     validateSelectedForm(templateOptions[0]);
   }
 
+  if (asyncState.status === AsyncStatus.Error) {
+    const displayErrorMsg = asyncState?.message.split(",")?.[0];
+    asyncState = {
+      ...asyncState,
+      message: displayErrorMsg,
+    };
+  }
+
   // MARK: @render
   return (
     <Form className={classes.form}>
