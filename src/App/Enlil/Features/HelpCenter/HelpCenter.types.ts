@@ -25,12 +25,11 @@ export enum HelpCenterItemType {
   Workflow = "WORKFLOW",
 }
 
-export interface HelpCenterItemData {
+interface HelpCenterItemData {
   type: HelpCenterItemType;
   title: string;
   url: string;
 }
-
 
 export interface HelpCenterHowToItemData extends HelpCenterItemData {
   type: HelpCenterItemType.HowTo;
