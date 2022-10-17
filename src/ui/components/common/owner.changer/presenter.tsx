@@ -80,7 +80,7 @@ const OwnerChangerPresenter: React.FC<OwnProps> = ({
     >
       <DialogTitle disableTypography className={classes.dialogTitle}>
         <Typography variant="h6"><Text translation="change.owner" /></Typography>
-        <IconButton onClick={closeDialog} className={classes.closeIcon}>
+        <IconButton onClick={closeDialog} className={classes.closeIcon} data-cy="change-owner-close-icon">
           <CloseIcon />
         </IconButton>
       </DialogTitle>

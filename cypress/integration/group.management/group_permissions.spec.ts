@@ -364,7 +364,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Check if 'Request Access' and 'Change Owner' button exists on document", () => {
-      cy.get("#PreviewControlsContainer-access").should("be.visible");
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 

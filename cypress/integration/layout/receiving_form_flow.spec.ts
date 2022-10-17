@@ -830,7 +830,7 @@ context("Receiving landing page test", () => {
 
     it("Edit Component", () => {
       cy.get("[data-cy=\"edit-schema-item\"]").eq(6).arrowClick({ force: true });
-      cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
+      cy.get("[data-cy=\"fb-editor-field-textfield\"]>div>input").clear();
       cy.fbAddLabelName({ name: "Textfield for LFPO Edited" });
       cy.fbAddField();
     });

@@ -11,7 +11,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
-import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocDraftDay, pdfDocDraftDayMonth, pdfDocDraftMonth, pdfDocDraftyear, pdfDocRelDate, pdfDocRelDateMonthFirst, pdfFooterDate } from "../../../utils/constants/dateHandler";
+import { emailDateOffset, equimentDueDays, equimentDueDaysFmt, fileTimeFormat, pdfDocDraftDay, pdfDocDraftMonth, pdfDocDraftyear, pdfDocRelDate, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -630,7 +630,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Autocomplete-Approvers\nSelect field\nPrimary Owner\nCoordinator/);
+        expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
 
         expect(el).match(/Draft/);
 
@@ -922,7 +922,7 @@ context("Autocomplete 'Equipment' test", () => {
         tmpRegex = new RegExp(`EQ Status\n.*Active.*Inactive`, "gi");
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Autocomplete-Approvers\nSelect field\nPrimary Owner\nCoordinator/);
+        expect(el).match(/Primary Owner\nCoordinator\nAutocomplete-Approvers\nSelect field/);
 
         expect(el).match(/Released/);
 
@@ -2131,11 +2131,11 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/History/);
         // eslint-disable-next-line @typescript-eslint/camelcase
-        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocDraftMonth}[\n]?${pdfDocDraftDay},[\n]? ${pdfDocDraftyear}`, "gi" );
+        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocDraftMonth} [\n]?${pdfDocDraftDay},[\n]?${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
         // eslint-disable-next-line @typescript-eslint/camelcase
-        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftDayMonth},[\n]?${pdfDocDraftyear}`, "gi" );
+        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftMonth} [\n]?${pdfDocDraftDay},[\n]?${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${equimentDueDaysFmt}`, "gi" );
@@ -2154,7 +2154,7 @@ context("Autocomplete 'Equipment' test", () => {
         expect(el).match(/Instructions\nInstructions for calibration/);
 
         expect(el).match(/History/);
-        tmpRegex = new RegExp( `MR-00001 Calibration document \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocRelDateMonthFirst}`, "gi" );
+        tmpRegex = new RegExp( `MR-00001 Calibration document \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftMonth} [\n]?${pdfDocDraftDay}, [\n]?${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `Calibration Done - Due Date: ${equimentDueDaysFmt}`, "gi" );

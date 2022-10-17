@@ -605,7 +605,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.url().then((url: any) => {
         supplierDocument = url;
       });
@@ -875,7 +875,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Click 'Save' button", () => {
-        cy.recClickCreateDocumentWithApiCall();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

@@ -442,9 +442,7 @@ context("po withdraw submission", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
-      });
+      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
     });
 
     it("Verify Requestor", () => {
@@ -486,6 +484,10 @@ context("po withdraw submission", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
+    });
+
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
     });
@@ -497,9 +499,7 @@ context("po withdraw submission", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
-      });
+      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
     });
 
     it("Verify Requestor", () => {
@@ -553,7 +553,7 @@ context("po withdraw submission", () => {
       cy.navigToPurchaseOrder();
     });
 
-    it("Veryfy the part document on lot", () => {
+    it("Verify the part document on lot", () => {
       cy.get(`[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.dlSelectFirstDocument();
     });
@@ -576,8 +576,10 @@ context("po withdraw submission", () => {
       cy.drSelectLineItems();
     });
 
-    it("Click on 'Add' inside PO dialog box and check for required fields", () => {
-      cy.get("[data-cy=\"form.builder.add.line.item\"]").click();
+    it("Click on 'Add Line Item", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.poAddNewFieldItem();
+      });
     });
 
     it("Select Part Number", () => {

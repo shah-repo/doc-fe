@@ -359,10 +359,7 @@ context(
           });
 
           it("Verify Text field with range", () => {
-            cy.get(".MuiDialogContent-root>div>div")
-              .eq(3)
-              .then((element) => cy.wrap(element)
-                .xpath("(//div[contains(@data-cy, 'textfieldwithrange-1')])"));
+            cy.get(`[role="dialog"] [data-cy="textfieldwithrange-4"]`).should("exist");
           });
 
           it("Verify Text field with range", () => {
