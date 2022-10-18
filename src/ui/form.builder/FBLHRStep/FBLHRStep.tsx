@@ -310,64 +310,62 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               </Box>
             )}
             <List>
-              {map(operators, (operator, index) => (
-                <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
-                  <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
-                    {operator.user.avatar ? (
-                      <Badge
-                        overlap="circle"
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        badgeContent={
-                          getStatusInfo(lhrStepState?.approvals, operator.stepId)
-                            ?.status === FBInlineApprovalStatusIdent.APPROVED
-                         && <OperatorApprovedIcon />}
-                      >
-                        <Avatar alt={operator.user?.name} src={operator.user?.avatar} />
-                      </Badge>
-                    ) : (
-                      <Avatar style={getAvtarStyle(operator.user.initialColor)}>
-                        {getInitalsFromName(operator.user?.name)}
-                      </Avatar>
-                    )}
-                  </ListItemAvatar>
-                  <ListItemText
-                    style={{ marginLeft: 4 }}
-                    primary={
-                      <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
-                        {operator.user?.name}
-                      </div>
-                    }
-                    secondary={
-                      <Observer>
-                        {() => (
-                          <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.operatorStatus}
-                              data-cy={`operator-status-${stepIndex}-${index}`}
-                            >
-                              {
-                                getStatusInfo(lhrStepState?.approvals, operator.stepId)
-                                  ?.status
+              {map(operators, (operator, index) => {
+                const statusInfo = getStatusInfo(lhrStepState?.approvals, operator.stepId);
+
+                return (
+                  <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
+                    <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
+                      {operator.user.avatar ? (
+                        <Badge
+                          overlap="circle"
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right",
+                          }}
+                          badgeContent={
+                            statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED && <OperatorApprovedIcon />
+                          }
+                        >
+                          <Avatar alt={operator.user?.name} src={operator.user?.avatar} />
+                        </Badge>
+                      ) : (
+                        <Avatar style={getAvtarStyle(operator.user.initialColor)}>
+                          {getInitalsFromName(operator.user?.name)}
+                        </Avatar>
+                      )}
+                    </ListItemAvatar>
+                    <ListItemText
+                      style={{ marginLeft: 4 }}
+                      primary={
+                        <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
+                          {operator.user?.name}
+                        </div>
+                      }
+                      secondary={
+                        <Observer>
+                          {() => (
+                            <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
+                              <Typography
+                                component="span"
+                                variant="body2"
+                                className={classes.operatorStatus}
+                                data-cy={`operator-status-${stepIndex}-${index}`}
+                              >
+                                {statusInfo?.status}
+                              </Typography>
+                              {statusInfo?.reviewedAt && <Box component="span" marginRight={4}>&bull;</Box>}
+                              {statusInfo?.reviewedAt &&
+                                getFormattedDateString(statusInfo?.reviewedAt, MomentFormats.DateTime)
                               }
-                            </Typography>
-                            {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
-                              (<Box component="span" marginRight={4}>&bull;</Box>)}
-                            {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
-                              getFormattedDateString(
-                                getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt,
-                                MomentFormats.DateTime)}
-                          </div>
-                        )}
-                      </Observer>
-                    }
-                  />
-                </ListItem>
-              ))}
+                            </div>
+                          )}
+                        </Observer>
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
             </List>
           </Box>
         </AccordionDetails>
