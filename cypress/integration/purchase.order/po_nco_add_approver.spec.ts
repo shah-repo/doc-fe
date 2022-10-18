@@ -566,6 +566,9 @@ context("Add Requestor as an approver of the PO", () => {
   context("Click on 'Add Item'", () => {
     it("Click on 'Add Item'", () => {
       cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Enter Level Name value to be 'level 1'", () => {
@@ -574,6 +577,7 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Enter Limit value to be '400'", () => {
       cy.poAMEnterLimit({ limit: "400" });
+      cy.unClick();
     });
 
     it("Fill in the fields - Signature 1 group as 'QA'", () => {
@@ -1448,10 +1452,10 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      SystemRequirement("REQ-1360");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.poAddNewFieldItem();
-      });
+      cy.poAddNewFieldItem();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
