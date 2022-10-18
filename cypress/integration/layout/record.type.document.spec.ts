@@ -634,7 +634,6 @@ context("Record type Document Layout verification", () => {
       cy.get("[data-cy='Bookmarks-detail'] p").eq(0).arrowClick();
       cy.get("[data-cy^='fb-approvals']").should("be.visible");
     });
-
   });
 });
 

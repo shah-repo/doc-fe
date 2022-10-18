@@ -628,71 +628,70 @@ context("Record inline Flow", () => {
         verifyHistoryContent(history, groupOne);
       });
 
-      // comment out after book mark apprear need to uncomment
       context("Verify book mark", () => {
         it("Verify Book Mark Navigation", () => {
           cy.get("[data-cy='bookmark-icon']").arrowClick();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
       });
+      // verify/ uncomment below block  after ENC-13023 fix
+      // xcontext("Verify form migration", () => {
+      //   it("Verify migrate form button is visible", () => {
+      //     cy.get("[data-cy=references-icon]").arrowClick();
+      //     cy.get("[data-cy='common.form.migration']").should("be.visible");
+      //   });
 
-      xcontext("Verify form migration", () => {
-        it("Verify migrate form button is visible", () => {
-          cy.get("[data-cy=references-icon]").arrowClick();
-          cy.get("[data-cy='common.form.migration']").should("be.visible");
-        });
+      //   it("Click on migrate form button", () => {
+      //     cy.get("[data-cy='common.form.migration']").arrowClick();
+      //   });
 
-        it("Click on migrate form button", () => {
-          cy.get("[data-cy='common.form.migration']").arrowClick();
-        });
+      //   it("Select form to be migrated", () => {
+      //     cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+      //     cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+      //   });
 
-        it("Select form to be migrated", () => {
-          cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
-          cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
-        });
+      //   xit(" Approvals Select form to be migrated", () => {
+      //     cy.get("[data-cy^='field-fb-approvals']" ).arrowClick();
+      //     cy.get("[id^='react-select']").eq(1).autocompleteSelect("form.builder.approvals");
+      //   });
 
-        xit(" Approvals Select form to be migrated", () => {
-          cy.get("[data-cy^='field-fb-approvals']" ).arrowClick();
-          cy.get("[id^='react-select']").eq(1).autocompleteSelect("form.builder.approvals");
-        });
+      //   it("Mapped text field", () => {
+      //     cy.get("[data-cy^='field-textfield-for-inline-1']" ).arrowClick();
+      //     cy.get("[id^='react-select']").eq(2).autocompleteSelect("Textfield for inline1");
+      //   });
 
-        it("Mapped text field", () => {
-          cy.get("[data-cy^='field-textfield-for-inline-1']" ).arrowClick();
-          cy.get("[id^='react-select']").eq(2).autocompleteSelect("Textfield for inline1");
-        });
+      //   it("Mapped checkbox", () => {
+      //     cy.get("[data-cy^='field-checkbox']" ).arrowClick();
+      //     cy.get("[id^='react-select']").eq(3).autocompleteSelect("checkbox");
+      //   });
 
-        it("Mapped checkbox", () => {
-          cy.get("[data-cy^='field-checkbox']" ).arrowClick();
-          cy.get("[id^='react-select']").eq(3).autocompleteSelect("checkbox");
-        });
+      //   it("Mapped TEXT FIELD", () => {
+      //     cy.get("[data-cy^='field-radio-group']" ).arrowClick();
+      //     cy.get("[id^='react-select']").eq(4).autocompleteSelect("Radio group");
+      //   });
 
-        it("Mapped TEXT FIELD", () => {
-          cy.get("[data-cy^='field-radio-group']" ).arrowClick();
-          cy.get("[id^='react-select']").eq(4).autocompleteSelect("Radio group");
-        });
+      //   it("Mapped in line approval field", () => {
+      //     cy.get("[data-cy^='field-inline-field-2']" ).arrowClick();
+      //     cy.get("[id^='react-select']").eq(5).autocompleteSelect("Inline field2");
+      //   });
 
-        it("Mapped in line approval field", () => {
-          cy.get("[data-cy^='field-inline-field-2']" ).arrowClick();
-          cy.get("[id^='react-select']").eq(5).autocompleteSelect("Inline field2");
-        });
+      //   it("Click on confirm change", () => {
+      //     cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+      //   });
 
-        it("Click on confirm change", () => {
-          cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
-        });
+      //   it("Navigate to details tab", () => {
+      //     cy.drSelectDetailsTab();
+      //   });
 
-        it("Navigate to details tab", () => {
-          cy.drSelectDetailsTab();
-        });
+      //   it("Verify the existing field after migration", () => {
+      //     cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
+      //     cy.get(`input[type="radio"][value="R1"]`).should("be.checked");
+      //   });
 
-        it("Verify the existing field after migration", () => {
-          cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
-          cy.get(`input[type="radio"][value="R1"]`).should("be.checked");
-        });
-
-        it("Verify Reference tab form info should have id 'FM-00002'", () => {
-          cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
-        });
-      });
+      //   it("Verify Reference tab form info should have id 'FM-00002'", () => {
+      //     cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      //   });
+      // });
     });
 
     context("Verify revision history", () => {
@@ -745,12 +744,6 @@ context("Record inline Flow", () => {
     });
 
     context("Approve Inline Approval", () => {
-      xit("Select approver for first inline", () => {
-        cy.get("[name*='fb-ia-inline-field-2'] input")
-          .autocompleteSelect(`${USERS[2].name}`, { force: true });
-        cy.listLoadingElementShouldNotExist();
-      });
-
       it("Approve first Inline Approval", () => {
         cy.drSelectDetailsTab();
         cy.listLoadingElementShouldNotExist();

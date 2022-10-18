@@ -313,7 +313,6 @@ context("Record inline existing Flow with detail ", () => {
     });
 
     context("Verify added fields in the tabs", () => {
-
       it("Verify text field'", () => {
         cy.get("[data-cy^='textfield-for-inline']").should("exist");
       });
