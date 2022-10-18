@@ -501,7 +501,7 @@ context("Record type Document Layout verification", () => {
           cy.drSelectDetailsTab();
         });
 
-        it("Verify the existing field after migration", () => {
+        it("Verify checkbox value should be checked after form migration", () => {
           cy.get(`input[type="checkbox"][value="1"]`).should("be.checked");
         });
 

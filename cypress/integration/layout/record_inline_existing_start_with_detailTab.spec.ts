@@ -533,14 +533,16 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      it("Fill in Approval block and  Approve and release Record", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[2].name}`);
-        cy.wait(2000);
+      it("Fill in Approval block", () => {
+        cy.get("[data-cy^='fb-approvals-fb-approvals-']").eq(0).autocompleteSelect(`${USERS[2].name}`);
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Approve and release Record", () => {
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
         cy.listLoadingElementShouldNotExist();
       });
