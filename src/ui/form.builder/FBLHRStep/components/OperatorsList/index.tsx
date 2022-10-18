@@ -35,14 +35,6 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
               const { stepId, user } = operator;
               const statusInfo = getStatusInfo(lhrStepState?.approvals, stepId);
 
-              const avatar = user?.avatar
-                ? <Avatar alt={user.name} src={user.avatar} />
-                : (
-                  <Avatar className={classes.avatar} style={{ background: user?.initialColor }}>
-                    {getInitalsFromName(user.name)}
-                  </Avatar>
-                );
-
               return (
                 <ListItem key={user?.id} alignItems="flex-start" disableGutters className={classes.listItem}>
                   <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
@@ -56,7 +48,14 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
                         statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED && <OperatorApprovedIcon />
                       }
                     >
-                      {avatar}
+                      <Avatar
+                        className={classes.avatar}
+                        style={{ background: user?.initialColor }}
+                        alt={user.name}
+                        src={user.avatar ?? undefined}
+                      >
+                        {getInitalsFromName(user.name)}
+                      </Avatar>
                     </Badge>
                   </ListItemAvatar>
                   <ListItemText
