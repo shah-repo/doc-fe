@@ -1035,11 +1035,8 @@ context("LFPO new layout verification", () => {
     });
 
     it("Select form", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
-        cy.get("[data-cy='lotForm']").wait(2000).autocompleteSelect("LFPO Document Title");
-      });
+      cy.get("[data-cy='lotForm']").wait(2000).autocompleteSelect("LFPO Document Title");
     });
-
 
     it("Create lot", () => {
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
@@ -1187,6 +1184,13 @@ context("LFPO new layout verification", () => {
         cy.get("[data-cy='Bookmarks-detail']").contains("Approvals").arrowClick();
         cy.get("[data-cy^='approvals']").should("be.visible");
       });
+    });
+  });
+
+  context("Verify Revision History tab", () => {
+    it("Open revision history tab", () => {
+      cy.drSelectRevisionHistoryTab();
+      cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
     });
   });
 
