@@ -52,7 +52,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 }) => {
   const { workspaceState } = FB.useStores();
   const classes = FBLHRStepStyles();
-
   const documentOperators = workspaceState?.document?.document?.operators
     ?.map(({ user }) => ({ stepId: user?.id, user }));
 
@@ -138,7 +137,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 
   return (
     <FBProvider {...{ lhrStepState }}>
-      <Accordion className={classes.panelBorder} expanded={expand}>
+      {!isDocumentLHRT && ( <Accordion className={classes.panelBorder} expanded={expand}>
+
         <AccordionSummary
           onClick={() => setExpand(!expand)}
           className={classes.panelSummary}
@@ -171,7 +171,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 component={"span"}
                 mr={0.75}
               >
-                <FBText locale={getLHRStatus()} values={{}}></FBText>
+                {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}}></FBText>)}
               </Box>
               {stepLHRs &&
                 (isDocumentRevisionReleased(stepLHRs?.status) || isDocumentRevisionInDraft(stepLHRs?.status)) &&
@@ -196,6 +196,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </Box>
           )}
         </AccordionSummary>
+
         <AccordionDetails className={classes.panelDetails}>
           <Box display="flex" alignItems="flex-start">
             <Box
@@ -256,7 +257,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               }
             />
           </Box>
-          {isDocumentLHRT && !isEmpty(materials) && (
+
+          {!isDocumentLHRT && !isEmpty(materials) && !lhrStepState && (
             <FBLHRStepProcedureItem
               value={materials}
               type={FBProcedureItemType.materials}
@@ -264,7 +266,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               isPendingChange
             />
           )}
-          {isDocumentLHRT && !isEmpty(equipment) && (
+          {!isDocumentLHRT && !isEmpty(equipment) && !lhrStepState && (
             <FBLHRStepProcedureItem
               value={equipment}
               type={FBProcedureItemType.equipment}
@@ -272,38 +274,41 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               isPendingChange
             />
           )}
-          <Box mb={3.75} mt={3.75}>
-            <Grid container spacing={3}>
-              <Grid item xs={4}>
-                <Typography className={classes.fontTitle} data-cy={`start-quantity-${stepIndex}`}>
-                  <Text translation="form.builder.start.quantity" />
-                </Typography>
-                <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
-                  {stepLHRs?.formInput?.["lhrs-start-quantity"]}
-                </Typography>
+          {!isDocumentLHRT && (
+            <Box mb={3.75} mt={3.75}>
+              <Grid container spacing={3}>
+                <Grid item xs={4}>
+                  <Typography className={classes.fontTitle} data-cy={`start-quantity-${stepIndex}`}>
+                    <Text translation="form.builder.start.quantity" />
+                  </Typography>
+                  <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
+                    {stepLHRs?.formInput?.["lhrs-start-quantity"]}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography className={classes.fontTitle}  data-cy={`accepted-quantity-${stepIndex}`}>
+                    <Text translation="form.builder.accepted.quantity" />
+                  </Typography>
+                  <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
+                    {stepLHRs?.formInput?.["lhrs-accepted-quantity"]}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography className={classes.fontTitle} data-cy={`rejected-quantity-${stepIndex}`}>
+                    <Text translation="form.builder.rejected.quantity" />
+                  </Typography>
+                  <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
+                    {stepLHRs?.formInput?.["lhrs-rejected-quantity"]}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                <Typography className={classes.fontTitle}  data-cy={`accepted-quantity-${stepIndex}`}>
-                  <Text translation="form.builder.accepted.quantity" />
-                </Typography>
-                <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
-                  {stepLHRs?.formInput?.["lhrs-accepted-quantity"]}
-                </Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography className={classes.fontTitle} data-cy={`rejected-quantity-${stepIndex}`}>
-                  <Text translation="form.builder.rejected.quantity" />
-                </Typography>
-                <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
-                  {stepLHRs?.formInput?.["lhrs-rejected-quantity"]}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Box>
+            </Box>)}
           <Box>
-            <Box className={classes.fontTitle} data-cy={`operators-${stepIndex}`}>
-              <Text translation="common.operators" />
-            </Box>
+            {!isDocumentLHRT && (
+              <Box className={classes.fontTitle} data-cy={`operators-${stepIndex}`}>
+                <Text translation="common.operators" />
+              </Box>
+            )}
             <List>
               {map(operators, (operator, index) => (
                 <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
@@ -366,7 +371,179 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </List>
           </Box>
         </AccordionDetails>
-      </Accordion>
+      </Accordion>)}
+      {isDocumentLHRT && (
+        <>
+          <Box display="flex" alignItems="center"  justifyContent={isDocumentLHRT ? "" : "center"}
+            style={{ borderBottom: `2px solid ${Colors.chinese_silver}` }}>
+            <Box mr={2} ml={1} >
+              <Typography variant="h6" style={{
+                color: Colors.almost_black,
+              }}>
+                <FBText locale={stepLabel}  />
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="flex-start" fontSize={12}>
+
+              {!isDocumentLHRT && (  <Box mr={1} display="flex" alignItems="center">
+                {stepLHRs && isDocumentRevisionReleased(stepLHRs?.status) && (
+                  <CheckCircle
+                    style={{
+                      color: getStatusColor(),
+                      fontSize: 17,
+                    }}
+                    className="fontSizeSmall"
+                  />
+                )}
+                {stepLHRs && !isDocumentRevisionReleased(stepLHRs?.status) && renderRemoveCircle()}
+                {!stepLHRs && renderRemoveCircle()}
+              </Box>)}
+              <Box
+                fontWeight={700}
+                fontSize={12}
+                color={Colors.almost_black}
+                component={"span"}
+                mr={0.75}
+              >
+                {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}}></FBText>)}
+              </Box>
+            </Box>
+          </Box>
+          <Box flexGrow={1}></Box>
+          {stepLHRs?.redline && (
+            <Box pr={2}>
+              <BorderColorIcon className={classes.borderColorIcon}></BorderColorIcon>
+            </Box>
+          )}
+          <AccordionDetails className={classes.panelhrtDetails}>
+            <Box display="flex" alignItems="flex-start">
+              <Box
+                flexGrow={1}
+                onClick={() => isOutput && stepLHRs && openLHRs()}
+                bgcolor={Colors.alabaster}
+                borderRadius={4}
+              >
+                <FBAutocompleteAsync
+                  boxProps={{ flexGrow: 1 }}
+                  label={"Select Document"}
+                  type="lhrstep"
+                  optionId={FBAutocompleteAsyncOption.mpiDocuments}
+                  gutter={false}
+                  autosave
+                  rules="required"
+                  withState
+                  shouldReloadOnInit
+                  disabled={isOutput || !(isDraft || isPendingChange)}
+                  withoutPrefixRoot={Boolean(stepLHRs)}
+                  inputPropStyle={{
+                    background: Colors.background_white,
+                    padding: "0px 0px 0px 6px",
+                    minHeight: 36,
+                  }}
+                  {...{ name, loading, filterOptions }}
+                  inputStyle={
+                  stepLHRs?.redline
+                    ? {
+                      background: Colors.seashell,
+                      border: `1px solid ${Colors.error_red}`,
+                      paddingLeft: "5px",
+                    }
+                    : { background: Colors.background_white, borderRadius: 4 }
+                  }
+                />
+              </Box>
+              {!isDocumentLHRT && ( <FBButton
+                disabled={isDisabled}
+                label={
+                  stepLHRs ? "form.builder.view.step" : "form.builder.start.step"
+                }
+                onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi}
+                {...{ loading }}
+                className={classes.button}
+                style={
+                  isDisabled ? {
+                    background: Colors.whitest_grey,
+                  }
+                    : stepLHRs
+                      ? {
+                        background: Colors.light_blue,
+                        color: Colors.navy,
+                      }
+                      : {
+                        background: Colors.navy,
+                        color: Colors.white,
+                      }
+                }
+              /> )}
+            </Box>
+
+
+            <Box>
+
+              <List>
+                {map(operators, (operator, index) => (
+                  <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
+                    <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
+                      {operator.user.avatar ? (
+                        <Badge
+                          overlap="circle"
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right",
+                          }}
+                          badgeContent={
+                          getStatusInfo(lhrStepState?.approvals, operator.stepId)
+                            ?.status === FBInlineApprovalStatusIdent.APPROVED
+                         && <OperatorApprovedIcon />}
+                        >
+                          <Avatar alt={operator.user?.name} src={operator.user?.avatar} />
+                        </Badge>
+                      ) : (
+                        <Avatar style={getAvtarStyle(operator.user.initialColor)}>
+                          {getInitalsFromName(operator.user?.name)}
+                        </Avatar>
+                      )}
+                    </ListItemAvatar>
+                    <ListItemText
+                      style={{ marginLeft: 4 }}
+                      primary={
+                        <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
+                          {operator.user?.name}
+                        </div>
+                      }
+                      secondary={
+                        <Observer>
+                          {() => (
+                            <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
+                              <Typography
+                                component="span"
+                                variant="body2"
+                                className={classes.operatorStatus}
+                                data-cy={`operator-status-${stepIndex}-${index}`}
+                              >
+                                {
+                                getStatusInfo(lhrStepState?.approvals, operator.stepId)
+                                  ?.status
+                                }
+                              </Typography>
+                              {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
+                              (<Box component="span" marginRight={4}>&bull;</Box>)}
+                              {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
+                              getFormattedDateString(
+                                getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt,
+                                MomentFormats.DateTime)}
+                            </div>
+                          )}
+                        </Observer>
+                      }
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </AccordionDetails>
+        </>
+      )}
     </FBProvider>
   );
 };

@@ -192,7 +192,7 @@ context("Intermediate page validation", () => {
         });
 
         it("Check 'Approvals' is displayed", () => {
-          cy.intPageVerifyApprovalsExist();
+          cy.intPageVerifyNewApprovalsExist();
         });
 
         it("Select 'Procedure' tab", () => {
@@ -597,7 +597,7 @@ context("Intermediate page validation", () => {
         });
 
         it("Check 'Approvals' is displayed", () => {
-          cy.intPageVerifyApprovalsExist();
+          cy.intPageVerifyNewApprovalsExist();
         });
 
         it("Select 'Procedure' tab", () => {

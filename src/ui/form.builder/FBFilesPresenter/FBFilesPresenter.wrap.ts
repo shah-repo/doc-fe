@@ -14,6 +14,7 @@ export const withFBFilesPresenter = <T extends FBFilesPresenterProps>(
   }: T) => {
 
     filesPresenterState = FB.useRef(FBFilesPresenterState);
+    attachments = [];
 
     useEffect(() => {
       const ids = map(files, "id");

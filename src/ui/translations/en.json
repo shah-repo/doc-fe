@@ -1331,7 +1331,17 @@
   "tabId.general": "General",
   "tabId.training": "Training",
   "tabId.calpmhistory": "Cal/PM History",
-  "meq.chip.nextCalDate": "Next Callibration Due :",
-  "meq.chip.prevMaintance": "Preventive Maintenance Due : ",
-  "form.builder.addEquiSpec": "Add Cal or PM"
+  "meq.chip.nextCalDate": "Next Callibration Due:",
+  "meq.chip.prevMaintance": "Preventive Maintenance Due:",
+  "form.builder.addEquiSpec": "Add Cal or PM",
+  "help.title": "Help",
+  "help.description": "Help",
+  "help.guides": "Help Guides",
+  "help.release.notes": "Release Notes",
+  "help.faqs": "FAQs",
+  "help.contact": "Contact Us",
+  "help.popular.resources": "Other Popular Resources",
+  "help.didnt.find.what.you.need": "Didn’t find exactly what you needed?",
+  "help.view.full.guide": "View full guide",
+  "help.view.all.guides": "View All Guides"
 }

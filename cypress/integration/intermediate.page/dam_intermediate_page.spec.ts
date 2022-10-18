@@ -347,7 +347,7 @@ context("Intermediate page validation", () => {
 
     it("Verify Field 2 exists", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy='select-1']").should("exist");
+        .find("[data-cy='fb-select-field']").should("exist");
     });
 
     it("Verify Field 2 Required error message exists", () => {
@@ -357,7 +357,7 @@ context("Intermediate page validation", () => {
 
     it("Verify Field 3 exists", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy='textfield-2']").should("exist");
+        .find("[data-cy='TEXT FIELD']").should("exist");
     });
 
     it("Verify Field 3 error message should not exists", () => {
@@ -392,7 +392,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Remove validation for TEXT FIELD", () => {
-      cy.get("[data-cy='textfield-2']").trigger("mouseover");
+      cy.get("[data-cy='TEXT FIELD']").trigger("mouseover");
       cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true });
       cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
       cy.get(`input[name="validators.required_if"]`).arrowClick();
@@ -401,12 +401,12 @@ context("Intermediate page validation", () => {
     });
 
     it("Remove Field2", () => {
-      cy.get("[data-cy='select-1']").trigger("mouseover");
+      cy.get("[data-cy='fb-select-field']").trigger("mouseover");
       cy.get("[data-cy='remove-schema-item']").eq(0).arrowClick();
     });
 
     it("Remove Field3", () => {
-      cy.get("[data-cy='textfield-2']").trigger("mouseover");
+      cy.get("[data-cy='TEXT FIELD']").trigger("mouseover");
       cy.get("[data-cy='remove-schema-item']").eq(0).arrowClick();
     });
   });
@@ -423,12 +423,12 @@ context("Intermediate page validation", () => {
 
     it("Verify Field 2 exists", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy='select-1']").should("not.exist");
+        .find("[data-cy='fb-select-field']").should("not.exist");
     });
 
     it("Verify Field 2 exists", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
-        .find("[data-cy='textfield-2']").should("not.exist");
+        .find("[data-cy='TEXT FIELD']").should("not.exist");
     });
 
     it("Close Preview dialog", () => {
