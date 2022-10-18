@@ -178,11 +178,15 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Enters title 'New Company'", () => {
-      cy.drEnterDocumentTitle({ name: "New Company" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drEnterDocumentTitle({ name: "New Company" });
+      });
     });
 
     it("Enters description 'New Company description'", () => {
-      cy.drEnterDocumentDescription({ description: "New Company description" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drEnterDocumentDescription({ description: "New Company description" });
+      });
     });
 
     it("Click on 'Details' tab", () => {
@@ -190,65 +194,90 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it(`Enters company name '${newCompanyName}'`, () => {
-      cy.get("input[name^=company-name-]").arrowType(newCompanyName, { force: true });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("input[name^=company-name-]").arrowType(newCompanyName, { force: true });
+        cy.unClick();
+      });
     });
 
     it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
-      cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
+        cy.unClick();
+      });
     });
 
     it(`Enters company email '${USERS[1].email}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email, { force: true });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email, { force: true });
+        cy.unClick();
+      });
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
-      cy.get("[name*='approved-dam-json-is-used']").eq(0)
-        .should("have.value", "Yes").click({ force: true });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name*='approved-dam-json-is-used']").eq(0)
+          .should("have.value", "Yes").click({ force: true });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload DOM JSON", () => {
-      cy.atchUploadDOMJSONForNCO({ fileName: "po_dam.json", queue: 0 });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.atchUploadDOMJSONForNCO({ fileName: "po_dam.json", queue: 0 });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-      cy.get("[name*='approved-page-details-json-is-used-']").eq(0)
-        .should("have.value", "Yes").click({ force: true });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name*='approved-page-details-json-is-used-']").eq(0)
+          .should("have.value", "Yes").click({ force: true });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Page Details JSON", () => {
-      cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-      cy.get("[name*='approved-navigation-json-is-used-']").eq(0)
-        .should("have.value", "Yes").click({ force: true });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name*='approved-navigation-json-is-used-']").eq(0)
+          .should("have.value", "Yes").click({ force: true });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Navigation JSON", () => {
-      cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Users List JSON", () => {
-      cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.get("[data-cy='albumMediaButton']").eq(0).arrowClick({ force: true });
-      cy.pmUploadAttachment({ fileName: "image.jpg" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy='albumMediaButton']").eq(0).arrowClick({ force: true });
+        cy.pmUploadAttachment({ fileName: "image.jpg" });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -728,12 +757,18 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Select Order Date", () => {
-      cy.get(`[class*="MuiOutlinedInput"] > div > button[tabindex="0"]`).arrowClick();
-      cy.get("button.MuiPickersDay-daySelected").arrowClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get(`[class*="MuiOutlinedInput"] > div > button[tabindex="0"]`).arrowClick();
+          cy.get("button.MuiPickersDay-daySelected").arrowClick();
+        });
     });
 
     it("Select 'Open' for PO status", () => {
-      cy.poSelectPOStatus({ status: "Open" });
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.poSelectPOStatus({ status: "Open" });
+        });
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
