@@ -83,7 +83,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
                 {...{ disabled }}
               />
             </Grid>
-            <Grid item xs={1} style={{ paddingLeft: "8px" }}>
+            <Grid item xs={1} style={{ paddingLeft: "8px", margin: "auto" }}>
               %
             </Grid>
           </Grid>

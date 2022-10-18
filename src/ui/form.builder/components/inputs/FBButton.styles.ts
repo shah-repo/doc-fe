@@ -10,7 +10,7 @@ export default makeStyles(() =>
       "fontFamily": "Sora",
       "fontStyle": "normal",
       "lineHeight": "15px",
-      "background": Colors.light_blue,
+      "background": Colors.light_blue2,
       "color": Colors.navy,
       "&:hover": {
         background: Colors.bright_gray2,
