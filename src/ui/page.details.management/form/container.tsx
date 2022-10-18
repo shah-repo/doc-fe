@@ -7,7 +7,7 @@ import { toastError } from "../../components/notifications";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { toPageDetailsBodyValues, toPageDetailsInitialValues } from "../transform";
-import { PageDetailsCategory } from "../types";
+import { PageDetailsCategory, PageDetailsCategoryValues } from "../types";
 import { PageDetailsFormPresenter } from "./presenter";
 
 interface Props {
@@ -29,7 +29,7 @@ export const PageDetailsFormContainer: React.FunctionComponent<Props> = ({
 
   const updatePageDetailsAction = useActionCreator(pageDetailsActions.updatePageDetails);
 
-  const onSubmit = (values) => {
+  const onSubmit = (values: PageDetailsCategoryValues) => {
     async.start(
       updatePageDetailsAction,
       id,

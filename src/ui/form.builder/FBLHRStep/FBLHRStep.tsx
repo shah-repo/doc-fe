@@ -258,7 +258,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             />
           </Box>
 
-          {!isDocumentLHRT && !isEmpty(materials) && (
+          {!isDocumentLHRT && !isEmpty(materials) && !lhrStepState && (
             <FBLHRStepProcedureItem
               value={materials}
               type={FBProcedureItemType.materials}
@@ -266,7 +266,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               isPendingChange
             />
           )}
-          {!isDocumentLHRT && !isEmpty(equipment) && (
+          {!isDocumentLHRT && !isEmpty(equipment) && !lhrStepState && (
             <FBLHRStepProcedureItem
               value={equipment}
               type={FBProcedureItemType.equipment}
@@ -425,7 +425,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               >
                 <FBAutocompleteAsync
                   boxProps={{ flexGrow: 1 }}
-                  label={"Select Document"}
+                  label="form.builder.select.document"
+                  validationAttribute ="form.builder.lhrstep"
                   type="lhrstep"
                   optionId={FBAutocompleteAsyncOption.mpiDocuments}
                   gutter={false}

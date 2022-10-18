@@ -24,7 +24,7 @@ interface Props {
 const UserAvatarCard: React.FunctionComponent<Props> = ({ timestamp, userDetails }) => {
   const intl = useIntl();
   const { avatar, initialColor, name } = { ...userDetails.user };
-  const updatedName = ["Admin", "unknown"].includes(name)
+  const updatedName = ["Admin", "unknown", "EnlilMail SysAdmin"].includes(name)
     ? intl.formatMessage({ id: "common.server.automation" })
     : name;
   const classes = styles();
