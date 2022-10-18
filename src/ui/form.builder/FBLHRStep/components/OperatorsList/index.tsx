@@ -36,7 +36,7 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
               const statusInfo = getStatusInfo(lhrStepState?.approvals, stepId);
 
               return (
-                <ListItem key={user?.id} alignItems="flex-start" disableGutters className={classes.listItem}>
+                <ListItem key={user?.id} className={classes.listItem} disableGutters>
                   <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
                     <Badge
                       overlap="circle"
@@ -59,7 +59,7 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
                     </Badge>
                   </ListItemAvatar>
                   <ListItemText
-                    style={{ marginLeft: 4 }}
+                    className={classes.listItemText}
                     primary={
                       <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
                         {user?.name}
@@ -75,12 +75,14 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
                               className={classes.operatorStatus}
                               data-cy={`operator-status-${stepIndex}-${index}`}
                             >
-                              {statusInfo?.status}
+                              {statusInfo?.status?.toLowerCase()}
                             </Typography>
-                            {statusInfo?.reviewedAt && <Box component="span" marginRight={4}>&bull;</Box>}
-                            {statusInfo?.reviewedAt &&
-                              getFormattedDateString(statusInfo?.reviewedAt, MomentFormats.DateTime)
-                            }
+                            {statusInfo?.reviewedAt && (
+                              <>
+                                <Box component="span" marginLeft={1} marginRight={1}>&bull;</Box>
+                                {getFormattedDateString(statusInfo?.reviewedAt, MomentFormats.DateTime)}
+                              </>
+                            )}
                           </div>
                         )}
                       </Observer>

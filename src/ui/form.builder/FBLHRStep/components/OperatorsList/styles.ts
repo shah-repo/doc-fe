@@ -6,6 +6,9 @@ export default makeStyles(() => ({
     paddingTop: 0,
     paddingBottom: 0,
   },
+  listItemText: {
+    marginLeft: 4,
+  },
   operatorTitle: {
     fontWeight: 700,
     fontSize: 14,
@@ -17,10 +20,11 @@ export default makeStyles(() => ({
     fontWeight: 400,
     color: Colors.almost_black,
     marginTop: 10,
+    textTransform: "capitalize",
   },
   avatar: {
-    width: "35px",
-    height: "35px",
+    width: 45,
+    height: 45,
     fontWeight: 600,
     color: Colors.white,
     borderRadius: "50%",
