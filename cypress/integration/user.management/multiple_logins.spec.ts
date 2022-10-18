@@ -70,7 +70,7 @@ context("Multiple consecutive logins", () => {
       });
 
       it("Clicks the save button", () => {
-        cy.usrClickSaveButton();
+        cy.usrClickPlusSaveButton();
         cy.checkToastMessage({ exists: false });
       });
 
@@ -125,7 +125,7 @@ context("Multiple consecutive logins", () => {
       });
 
       it("Clicks the save button", () => {
-        cy.usrClickSaveButton();
+        cy.usrClickPlusSaveButton();
         cy.checkToastMessage({ exists: false });
       });
 
@@ -172,6 +172,7 @@ context("Multiple consecutive logins", () => {
       it("Should see locked notification", () => {
         SystemRequirement("REQ-3970");
         cy.get("[data-cy=UserLocked-lockedInfo]").should("have.text", "Your account has been locked.");
+        cy.get("[data-cy=UserLocked-infoLink]").should("have.text", "Please contact your Company Admin for Enlil to reset your password.");
       });
     });
 
