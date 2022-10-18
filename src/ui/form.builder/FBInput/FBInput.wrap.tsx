@@ -245,6 +245,9 @@ export const withFBInput = <T extends FBInputProps>(
 
       // Validation settings
       let attr = (label as string) || placeholder || validationAttribute || name;
+      if (label === "form.builder.select.document") {
+        attr = "form.builder.lhrstep";
+      }
       isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
       formState?.setValidationAttributeName(name, attr);
       if (!rules) { return; }
