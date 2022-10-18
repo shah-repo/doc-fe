@@ -440,7 +440,7 @@ context("Help Center custom content", () => {
       it("Set custom help content for Purchase Order", () => {
         cy.get("[data-cy='page-detail.purchaseOrder']").arrowClick();
         cy.get("[data-cy='select.helpModule']").arrowClick();
-        cy.get("[data-cy='selectItem.helpModule.General']").arrowClick();
+        cy.get("[data-cy='selectItem.helpModule.Dashboard']").arrowClick();
         cy.get("[data-cy='submit.purchaseOrder']").arrowClick();
       });
     });
