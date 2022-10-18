@@ -23,7 +23,7 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
 
   const getStatusInfo = (opert, operatorId: string) => {
     const approvers = stepLHRs?.id && opert ? opert[stepLHRs?.id] : [];
-    return find(approvers, (o) => o.approverId === operatorId && o.status !== "ABANDONED");
+    return find(approvers, (o) => o.approverId === operatorId && o.status !== FBInlineApprovalStatusIdent.ABANDONED);
   };
 
   return (
