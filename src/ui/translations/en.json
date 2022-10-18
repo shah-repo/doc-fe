@@ -1333,5 +1333,6 @@
   "tabId.calpmhistory": "Cal/PM History",
   "meq.chip.nextCalDate": "Next Callibration Due :",
   "meq.chip.prevMaintance": "Preventive Maintenance Due : ",
-  "form.builder.addEquiSpec": "Add Cal or PM"
+  "form.builder.addEquiSpec": "Add Cal or PM",
+  "documentRevision.form.PO.matrix.duplicate": "PO matrix can't have duplicate limits or level names"
 }
