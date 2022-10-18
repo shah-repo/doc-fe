@@ -617,14 +617,6 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Save the document", () => {
-      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
-      cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
   });
@@ -786,15 +778,18 @@ context("Layout Verification of EQ", () => {
 
       it("Fill the Description details'", () => {
         cy.drEnterDocumentDescription({ description: "EQ Test Description" });
+        cy.listLoadingElementShouldNotExist();
       });
 
-      it("Fill the Eq status and Approver'", () => {
+      it("Fill the Eq status'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[name='fb-default-eq-status']").eq(0).arrowClick();
         });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy^='autocomplete-approvers']").autocompleteSelect(USERS[1].name);
-        });
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Fill Approver'", () => {
+        cy.get("[data-cy^='autocomplete-approvers']").autocompleteSelect(USERS[1].name);
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
@@ -804,9 +799,8 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigate to specification tab", () => {
@@ -1395,9 +1389,14 @@ context("Layout Verification of EQ", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Alpha" });
       });
 
-      it("Fill the Eq status and Approver'", () => {
+      it("Fill the Eq status", () => {
         cy.get("[name='fb-default-eq-status']").eq(0).arrowClick().wait(2000);
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Fill Approver", () => {
         cy.get("[data-cy^='autocomplete-approvers']").autocompleteSelect(USERS[1].name);
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
@@ -1510,15 +1509,18 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Add approvers to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
+        cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].email);
+        // cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
       });
 
       it("Save AR", () => {
         cy.arSaveApiCall();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Send AR to review", () => {
         cy.contains("Send to review").arrowClick();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve the AR", () => {
