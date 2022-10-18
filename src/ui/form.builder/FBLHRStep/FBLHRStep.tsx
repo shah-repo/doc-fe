@@ -4,7 +4,7 @@ import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
 import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
-import { find, isEmpty, map } from "lodash";
+import { find, isEmpty } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -310,62 +310,67 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               </Box>
             )}
             <List>
-              {map(operators, (operator, index) => {
-                const statusInfo = getStatusInfo(lhrStepState?.approvals, operator.stepId);
+              <Observer>
+                {() => (
+                  <>
+                    {operators?.map((operator, index) => {
+                      const { stepId, user } = operator;
+                      const statusInfo = getStatusInfo(lhrStepState?.approvals, stepId);
 
-                return (
-                  <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
-                    <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
-                      {operator.user.avatar ? (
-                        <Badge
-                          overlap="circle"
-                          anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "right",
-                          }}
-                          badgeContent={
-                            statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED && <OperatorApprovedIcon />
-                          }
-                        >
-                          <Avatar alt={operator.user?.name} src={operator.user?.avatar} />
-                        </Badge>
-                      ) : (
-                        <Avatar style={getAvtarStyle(operator.user.initialColor)}>
-                          {getInitalsFromName(operator.user?.name)}
-                        </Avatar>
-                      )}
-                    </ListItemAvatar>
-                    <ListItemText
-                      style={{ marginLeft: 4 }}
-                      primary={
-                        <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
-                          {operator.user?.name}
-                        </div>
-                      }
-                      secondary={
-                        <Observer>
-                          {() => (
-                            <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
-                              <Typography
-                                component="span"
-                                variant="body2"
-                                className={classes.operatorStatus}
-                                data-cy={`operator-status-${stepIndex}-${index}`}
-                              >
-                                {statusInfo?.status}
-                              </Typography>
-                              {statusInfo?.reviewedAt && <Box component="span" marginRight={4}>&bull;</Box>}
-                              {statusInfo?.reviewedAt &&
-                                getFormattedDateString(statusInfo?.reviewedAt, MomentFormats.DateTime)
+                      const avatar = user?.avatar
+                        ? <Avatar alt={user.name} src={user.avatar} />
+                        : <Avatar style={getAvtarStyle(user.initialColor)}>{getInitalsFromName(user.name)}</Avatar>;
+
+                      return (
+                        <ListItem key={user?.id} alignItems="flex-start" disableGutters className={classes.listItem}>
+                          <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
+                            <Badge
+                              overlap="circle"
+                              anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "right",
+                              }}
+                              badgeContent={
+                                statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED && <OperatorApprovedIcon />
                               }
-                            </div>
-                          )}
-                        </Observer>
-                      }
-                    />
-                  </ListItem>
-                );
-              })}
+                            >
+                              {avatar}
+                            </Badge>
+                          </ListItemAvatar>
+                          <ListItemText
+                            style={{ marginLeft: 4 }}
+                            primary={
+                              <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
+                                {user?.name}
+                              </div>
+                            }
+                            secondary={
+                              <Observer>
+                                {() => (
+                                  <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
+                                    <Typography
+                                      component="span"
+                                      variant="body2"
+                                      className={classes.operatorStatus}
+                                      data-cy={`operator-status-${stepIndex}-${index}`}
+                                    >
+                                      {statusInfo?.status}
+                                    </Typography>
+                                    {statusInfo?.reviewedAt && <Box component="span" marginRight={4}>&bull;</Box>}
+                                    {statusInfo?.reviewedAt &&
+                                      getFormattedDateString(statusInfo?.reviewedAt, MomentFormats.DateTime)
+                                    }
+                                  </div>
+                                )}
+                              </Observer>
+                            }
+                          />
+                        </ListItem>
+                      );
+                    })}
+                  </>
+                )}
+              </Observer>
             </List>
           </Box>
         </AccordionDetails>
@@ -474,69 +479,70 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 }
               /> )}
             </Box>
-
-
             <Box>
-
               <List>
-                {map(operators, (operator, index) => (
-                  <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
-                    <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
-                      {operator.user.avatar ? (
-                        <Badge
-                          overlap="circle"
-                          anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "right",
-                          }}
-                          badgeContent={
-                          getStatusInfo(lhrStepState?.approvals, operator.stepId)
-                            ?.status === FBInlineApprovalStatusIdent.APPROVED
-                         && <OperatorApprovedIcon />}
-                        >
-                          <Avatar alt={operator.user?.name} src={operator.user?.avatar} />
-                        </Badge>
-                      ) : (
-                        <Avatar style={getAvtarStyle(operator.user.initialColor)}>
-                          {getInitalsFromName(operator.user?.name)}
-                        </Avatar>
-                      )}
-                    </ListItemAvatar>
-                    <ListItemText
-                      style={{ marginLeft: 4 }}
-                      primary={
-                        <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
-                          {operator.user?.name}
-                        </div>
-                      }
-                      secondary={
-                        <Observer>
-                          {() => (
-                            <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
-                              <Typography
-                                component="span"
-                                variant="body2"
-                                className={classes.operatorStatus}
-                                data-cy={`operator-status-${stepIndex}-${index}`}
-                              >
-                                {
-                                getStatusInfo(lhrStepState?.approvals, operator.stepId)
-                                  ?.status
+                <Observer>
+                  {() => (
+                    <>
+                      {operators?.map((operator, index) => {
+                        const { stepId, user } = operator;
+                        const statusInfo = getStatusInfo(lhrStepState?.approvals, stepId);
+
+                        const avatar = user?.avatar
+                          ? <Avatar alt={user.name} src={user.avatar} />
+                          : <Avatar style={getAvtarStyle(user.initialColor)}>{getInitalsFromName(user.name)}</Avatar>;
+
+                        return (
+                          <ListItem key={user?.id} alignItems="flex-start" disableGutters className={classes.listItem}>
+                            <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
+                              <Badge
+                                overlap="circle"
+                                anchorOrigin={{
+                                  vertical: "bottom",
+                                  horizontal: "right",
+                                }}
+                                badgeContent={
+                                  statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED
+                                    && <OperatorApprovedIcon />
                                 }
-                              </Typography>
-                              {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
-                              (<Box component="span" marginRight={4}>&bull;</Box>)}
-                              {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
-                              getFormattedDateString(
-                                getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt,
-                                MomentFormats.DateTime)}
-                            </div>
-                          )}
-                        </Observer>
-                      }
-                    />
-                  </ListItem>
-                ))}
+                              >
+                                {avatar}
+                              </Badge>
+                            </ListItemAvatar>
+                            <ListItemText
+                              style={{ marginLeft: 4 }}
+                              primary={
+                                <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
+                                  {operator.user?.name}
+                                </div>
+                              }
+                              secondary={
+                                <Observer>
+                                  {() => (
+                                    <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
+                                      <Typography
+                                        component="span"
+                                        variant="body2"
+                                        className={classes.operatorStatus}
+                                        data-cy={`operator-status-${stepIndex}-${index}`}
+                                      >
+                                        {statusInfo?.status}
+                                      </Typography>
+                                      {statusInfo?.reviewedAt &&
+                                        (<Box component="span" marginRight={4}>&bull;</Box>)}
+                                      {statusInfo?.reviewedAt &&
+                                        getFormattedDateString(statusInfo?.reviewedAt, MomentFormats.DateTime)}
+                                    </div>
+                                  )}
+                                </Observer>
+                              }
+                            />
+                          </ListItem>
+                        );
+                      })}
+                    </>
+                  )}
+                </Observer>
               </List>
             </Box>
           </AccordionDetails>
