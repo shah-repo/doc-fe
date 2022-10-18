@@ -95,7 +95,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
               workspaceMode={mode}
             />
           )}
-          {isRecord && isInlineApproval && isFirstAlphaReleased &&
+          {isRecord && isInlineApproval && isFirstAlphaReleased && _tabsState?.isTabActive("overview") &&
         isDocumentRevisionReleased(workspaceState?.document?.status) && renderReleaseDetails()}
           {_tabsState?.isTabActive("details") &&
             workspaceState?.mode === "design" &&

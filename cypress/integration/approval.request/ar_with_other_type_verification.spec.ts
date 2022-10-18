@@ -138,6 +138,10 @@ context("Approval request implementation tasks", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create new AR form", () => {
@@ -271,7 +275,6 @@ context("Approval request implementation tasks", () => {
     });
   });
 
-
   context("Create a Other type form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
@@ -369,14 +372,19 @@ context("Approval request implementation tasks", () => {
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
     });
 
+    it("Click on Save", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Move component", () => {
-      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
-      cy.wait(2000);
+      cy.unClick();
+      cy.get("[data-cy='fb-textfield-1']").scrollIntoView();
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover").wait(500);
       cy.get(".drag-handle").eq(3)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(2)
-        .realMouseMove(0, 0, { position: "center" })
+        .realMouseMove(0, -100, { position: "center" })
         .realMouseUp();
       cy.unClick();
     });
@@ -395,14 +403,17 @@ context("Approval request implementation tasks", () => {
 
     it("Approve and Release the document", () => {
       cy.get(`[data-cy="ApproveAndRelease-submit"]`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Export", () => {
     it("Export template", () => {
-      cy.wait(2000);
-      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).click({ force: true });
+      cy.get(`button[data-cy="FBWorkspace-exportTemplate"]`).scrollIntoView();
+      cy.get(`button[data-cy="FBWorkspace-exportTemplate"]`).click();
       cy.get(`[data-cy="fb-template-name"]`).arrowType("Other_Form_Template");
+      cy.unClick();
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
   });
@@ -431,7 +442,9 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Choose newly AR Form template", () => {
-      cy.arSelectARForm({ formTitle: approvalRequestFormName });
+      cy.get("div[data-cy='field-select-form']>#FormList-selectForm").arrowClick();
+      cy.get("div[id^=react-select]").contains(approvalRequestFormName).arrowClick();
+      cy.get("[data-cy='create.approval.request.continue']").arrowClick();
     });
 
     it("Enter title AR title: " + approvalRequestTitle, () => {
@@ -451,13 +464,18 @@ context("Approval request implementation tasks", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    it("Click on Save", () => {
+      cy.arSaveApiCall();
+    });
+
+    it("Switch to ChangeDetails tab", () => {
+      cy.arSelectChangeDetailsTab();
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.get(`[data-cy="tabCon-tabId.changedetails"]`).arrowClick();
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {

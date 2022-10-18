@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 import { reaction } from "mobx";
+import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBFileUploadState, FBFZIPUploadProps, FBUnzipStatus } from "..";
 
@@ -27,7 +28,9 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
 
     fileUploadState = FB.useRef<FBFileUploadState>(FBFileUploadState, formValue);
     isInputOwner = workspaceState?.getIsInputOwner(name);
-    files = fileUploadState?.files;
+    useObserver(() => {
+      files = fileUploadState?.files;
+    });
 
     disableFileUpload = fileUploadState?.files.length === 1;
     disableUnzipButton = fileUploadState?.unzipStatus === FBUnzipStatus.FAILED ||
@@ -49,7 +52,7 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
           if (!data) {
             return;
           }
-          fileUploadState?.setUnzipStatus(data[0].status);
+          fileUploadState?.setUnzipStatus(data[0]?.status);
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,6 +65,12 @@ export const withFBZIPUpload = <T extends FBFZIPUploadProps>(
           formState?.setFieldValue(name, files, withState);
           formState?.setFieldAutosave(name);
           formState?.unlockField(name);
+          if (isEmpty(files)) {
+            formState?.validate();
+            const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+            if (!isUnderWorkspace) { return; }
+            workspaceState?.saveDocRev(formState?.getValues());
+          }
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps

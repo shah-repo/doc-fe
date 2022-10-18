@@ -100,7 +100,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       if (!isObject(option)) {
         option = defaultValue;
       }
-      let optionText = get(option, optionLabelKey);
+      let optionText = get(option, optionLabelKey) || option;
       if (isTranslation(optionText)) {
         optionText = intl.formatMessage({ id: optionText });
       }

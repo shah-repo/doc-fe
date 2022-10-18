@@ -27,7 +27,8 @@ export const withFBSortable = <T extends FBSortableProps>(
       });
     };
 
-    const isHiddenByRules = (item: FBSchemaProps) => workspaceState?.hiddenFieldsByRules?.has(item.name as string);
+    const isHiddenByRules = (item: FBSchemaProps) =>
+      !workspaceState?.isMode("design") && workspaceState?.hiddenFieldsByRules?.has(item.name as string);
 
     const SortableItem = SortableElement(({ value, position }: { value: FBSchemaProps; position: number }) => (
       <Observer>
