@@ -8,7 +8,6 @@ import faker from "faker";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { momentInPST } from "../../utils/constants/dateHandler";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -114,9 +113,7 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
 
       context("Create new user", () => {
         it("Clicks the save button", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
-            cy.get("td>span>button>span>svg>path").eq(0).arrowClick({ force: true });
-          });
+          cy.usrClickPlusSaveButton();
           cy.checkToastMessage({ exists: false });
           cy.landingPageLoadingElementShouldNotExist();
         });
@@ -215,7 +212,6 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
             };
 
             cy.imapGetMails({ userEmail: emailOfUserToSignUp, options: getEmailSetting }).then((emails) => {
-              console.log("emails", emails);
               emailsFromInbox = emails;
             });
           });
@@ -228,7 +224,9 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
               },
               {
                 sentToUser: emailOfUserToSignUp,
-                contains: [`Your password for the Enlil Account associated with <b>${emailOfUserToSignUp}</b> is about to expire.`],
+                contains: ["Your password for the Enlil Account associated with",
+                  `<b>${emailOfUserToSignUp}</b> is about to expire.`,
+                ],
               },
               {
                 sentToUser: emailOfUserToSignUp,
@@ -244,7 +242,9 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
               },
               {
                 sentToUser: emailOfUserToSignUp,
-                contains: ["If you are still having problems with changing your password, please contact your Company\r\n                          Admin for Enlil."],
+                contains: ["If you are still having problems with changing your password,",
+                  "please contact your Company\r\n                          Admin for Enlil.",
+                ],
               },
               {
                 sentToUser: emailOfUserToSignUp,
@@ -265,7 +265,11 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
           });
 
           it("Confirm message is not in email", () => {
-            cy.imapVerifyLastEmailDoesNotContain({ userEmail: emailOfUserToSignUp, content: "In order to change your password you must reply to this link enlil-feedback@shifamed.com to change your password. We’re here to help you at any step along the way" });
+            cy.imapVerifyLastEmailDoesNotContain({
+              userEmail: emailOfUserToSignUp,
+              content: "In order to change your password you must reply to this link enlil-feedback@shifamed.com" +
+              "to change your password. We're here to help you at any step along the way",
+            });
           });
         });
       });
@@ -307,7 +311,6 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
           };
 
           cy.imapGetMails({ userEmail: emailOfUserToSignUp, options: getEmailSetting }).then((emails) => {
-            console.log("emails", emails);
             emailsFromInbox = emails;
           });
         });
@@ -320,7 +323,9 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
             },
             {
               sentToUser: emailOfUserToSignUp,
-              contains: ["Your password for the Enlil Account associated with", `<b>${emailOfUserToSignUp}</b> expired on`],
+              contains: ["Your password for the Enlil Account associated with",
+                `<b>${emailOfUserToSignUp}</b> expired on`,
+              ],
             },
             {
               sentToUser: emailOfUserToSignUp,
@@ -349,7 +354,11 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
         });
 
         it("Confirm message is not in email", () => {
-          cy.imapVerifyLastEmailDoesNotContain({ userEmail: emailOfUserToSignUp, content: "In order to change your password you must reply to this link enlil-feedback@shifamed.com to change your password. We’re here to help you at any step along the way" });
+          cy.imapVerifyLastEmailDoesNotContain({
+            userEmail: emailOfUserToSignUp,
+            content: "In order to change your password you must reply to this link enlil-feedback@shifamed.com" +
+            "to change your password. We're here to help you at any step along the way",
+          });
         });
       });
     });

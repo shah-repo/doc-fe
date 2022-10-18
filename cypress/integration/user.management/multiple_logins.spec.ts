@@ -172,7 +172,8 @@ context("Multiple consecutive logins", () => {
       it("Should see locked notification", () => {
         SystemRequirement("REQ-3970");
         cy.get("[data-cy=UserLocked-lockedInfo]").should("have.text", "Your account has been locked.");
-        cy.get("[data-cy=UserLocked-infoLink]").should("have.text", "Please contact your Company Admin for Enlil to reset your password.");
+        cy.get("[data-cy=UserLocked-infoLink]").should("have.text",
+          "Please contact your Company Admin for Enlil to reset your password.");
       });
     });
 
