@@ -435,7 +435,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Verify Field1 is displayed and flagged as “Required”", () => {
-        cy.get("[data-cy='textfield-6']").contains("The fb-textfield is a required field.")
+        cy.get(`[role="dialog"] [data-cy='textfield-7']`).contains("The fb-textfield is a required field.")
           .should("exist");
       });
 

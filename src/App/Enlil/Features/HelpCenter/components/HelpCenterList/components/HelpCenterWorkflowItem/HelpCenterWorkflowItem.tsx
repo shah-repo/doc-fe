@@ -1,10 +1,8 @@
 import { ListItemIcon, ListItemText, MenuList } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as PDFIcon } from "../../../../../../../../assets/images/file-types/pdf-20.svg";
-import Text from "../../../../../../../../ui/components/Text";
+import { ReactComponent as PageIcon } from "../../../../../../../../assets/images/page.svg";
 import { HelpCenterWorkflowItemData } from "../../../../HelpCenter.types";
 import HelpCenterExternalLink from "../../../HelpCenterExternalLink/HelpCenterExternalLink";
-import HelpCenterOutLink from "../../../HelpCenterOutLink/HelpCenterOutLink";
 import useStyles from "./HelpCenterWorkflowItem.style";
 
 const HelpCenterWorkflowItem: React.FC<HelpCenterWorkflowItemData> = ({ title, url }) => {
@@ -12,13 +10,10 @@ const HelpCenterWorkflowItem: React.FC<HelpCenterWorkflowItemData> = ({ title, u
 
   return (
     <MenuList disablePadding>
-      <HelpCenterExternalLink className={classes.link} href={url}>
-        <ListItemIcon className={classes.icon}><PDFIcon /></ListItemIcon>
+      <HelpCenterExternalLink className={classes.link} to={url}>
+        <ListItemIcon className={classes.icon}><PageIcon /></ListItemIcon>
         <ListItemText className={classes.text} disableTypography>
           {title}
-          <HelpCenterOutLink>
-            <Text translation="help.view.full.guide" />
-          </HelpCenterOutLink>
         </ListItemText>
       </HelpCenterExternalLink>
     </MenuList>

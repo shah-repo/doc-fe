@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -8,7 +11,6 @@ import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, momentInPST } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -31,7 +33,7 @@ const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
 const approvalRequestFormName = "New Approval request form template";
 
-context("Approval request implementation tasks", () => {
+context("Approval request implementation tasks", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -185,13 +187,13 @@ context("Approval request implementation tasks", () => {
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
-
-    it("Add 'Implementation Task' to AR", () => {
-      cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
-      cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
-      cy.fbAddField();
-    });
+    // Removed due to ENC-12907 : after requirement changes need to change
+    // it("Add 'Implementation Task' to AR", () => {
+    //   cy.fbClickAddNewHiddenBtn();
+    //   cy.fbSelectItemFromNewFieldList({ section: "Buttons", field: "Implementation Task" });
+    //   cy.get("[data-cy=\"label\"]").arrowType("Implementation Task");
+    //   cy.fbAddField();
+    // });
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -254,31 +256,31 @@ context("Approval request implementation tasks", () => {
   context("Add implementation task and continue AR creation flow", () => {
     it("Select Change Details Tab", () => {
       cy.arSelectChangeDetailsTab();
-      cy.get("[data-cy=\"fb-control-btn\"]").arrowClick({ force: true });
+      // cy.get("[data-cy=\"fb-control-btn\"]").arrowClick({ force: true });
     });
+    // Removed due to ENC-12907 : after requirement changes need to change
+    // it("Fill all fields and add 'Implementation Task'", () => {
+    //   SystemRequirement("REQ-0710");
+    //   cy.get("[data-cy=\"fb-control-btn\"]").arrowClick({ force: true });
+    //   cy.get("[data-cy=\"title\"]").arrowType("Task One");
+    //   cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
+    //   cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[1].email}`);
+    //   cy.poAddDateRequired();
+    //   cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
+    //     cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+    //   });
+    // });
 
-    it("Fill all fields and add 'Implementation Task'", () => {
-      SystemRequirement("REQ-0710");
-      cy.get("[data-cy=\"fb-control-btn\"]").arrowClick({ force: true });
-      cy.get("[data-cy=\"title\"]").arrowType("Task One");
-      cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
-      cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[1].email}`);
-      cy.poAddDateRequired();
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
-      });
-    });
+    // it("Add description 'Test' to trigger autosave", () => {
+    //   cy.get("[class^=\"public-DraftStyleDefault-block\"]").clear()
+    //     .arrowType("CR from New form template for approval request", { force: true });
+    //   cy.unClick();
+    // });
 
-    it("Add description 'Test' to trigger autosave", () => {
-      cy.get("[class^=\"public-DraftStyleDefault-block\"]").clear()
-        .arrowType("CR from New form template for approval request", { force: true });
-      cy.unClick();
-    });
-
-    it(`Check 'Implementation task' status is '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
-      SystemRequirement("REQ-0710");
-      cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-    });
+    // it(`Check 'Implementation task' status is '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
+    //   SystemRequirement("REQ-0710");
+    //   cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    // });
 
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
@@ -289,16 +291,17 @@ context("Approval request implementation tasks", () => {
       cy.arApproveAR();
       cy.landingPageLoadingElementShouldNotExist();
     });
-
-    it(`Check approval request status is ${STATUS_TYPES_LABEL.IMPLEMENTATION}`, () => {
-      SystemRequirement("REQ-0020", "REQ-0730");
-      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
-    });
+    // Removed due to ENC-12907 : after requirement changes need to change
+    // it(`Check approval request status is ${STATUS_TYPES_LABEL.IMPLEMENTATION}`, () => {
+    //   SystemRequirement("REQ-0020", "REQ-0730");
+    //   cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
+    // });
   });
 
   context("Verify export", () => {
     it(`Check doc status as ${STATUS_TYPES_LABEL.IMPLEMENTATION} and click on Send To Email`, () => {
-      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
+      // Removed due to ENC-12907 : after requirement changes need to change
+      // cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IMPLEMENTATION });
       cy.get(`[data-cy="field-name"]`).should("have.text", approvalRequestTitle);
       cy.get(`[data-cy="HeaderInfo-docId"]`).then(($x) => {
         releasedFormId = $x.text();
@@ -384,45 +387,45 @@ context("Approval request implementation tasks", () => {
           fileName: `${releasedFormId}-Approval-request-from-newly-created-form.pdf`,
         }).then((cdata) => {
         expect(cdata.numpages).gt(0);
-        expect(cdata.text).to.have.string(STATUS_TYPES_LABEL.IMPLEMENTATION);
+        // expect(cdata.text).to.have.string(STATUS_TYPES_LABEL.IMPLEMENTATION);
       });
     });
   });
+  // Removed due to ENC-12907 : after requirement changes need to change
+  // context("Check Implementation Task Status", () => {
+  //   it(`Check Implementation task' status is ${STATUS_TYPES_LABEL.PENDING}`, () => {
+  //     SystemRequirement("REQ-0710");
+  //     cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.PENDING });
+  //   });
 
-  context("Check Implementation Task Status", () => {
-    it(`Check Implementation task' status is ${STATUS_TYPES_LABEL.PENDING}`, () => {
-      SystemRequirement("REQ-0710");
-      cy.arCheckImplementationTaskStatus({ status: STATUS_TYPES_LABEL.PENDING });
-    });
+  //   it("Complete Implementation Task'", () => {
+  //     SystemRequirement("REQ-0710");
+  //     cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).arrowClick();
+  //     cy.get("[data-cy=\"description\"]").next().arrowType("Task is done");
+  //     cy.wrapWithWaitOnApiCall(CyRoutes.PostTaskDone, () => {
+  //       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+  //     });
+  //   });
 
-    it("Complete Implementation Task'", () => {
-      SystemRequirement("REQ-0710");
-      cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).arrowClick();
-      cy.get("[data-cy=\"description\"]").next().arrowType("Task is done");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostTaskDone, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
-      });
-    });
+  //   it(`Check 'Implementation task' status is DONE`, () => {
+  //     SystemRequirement("REQ-0710");
+  //     cy.arCheckImplementationTaskStatus({ status: "DONE" });
+  //   });
 
-    it(`Check 'Implementation task' status is DONE`, () => {
-      SystemRequirement("REQ-0710");
-      cy.arCheckImplementationTaskStatus({ status: "DONE" });
-    });
+  //   it("Navigate to AR list", () => {
+  //     cy.navigToApprovalRequestList();
+  //     cy.arClearFilters();
+  //   });
 
-    it("Navigate to AR list", () => {
-      cy.navigToApprovalRequestList();
-      cy.arClearFilters();
-    });
+  //   it(`Filter ${STATUS_TYPES_LABEL.APPROVED} by name and status, and select it`, () => {
+  //     cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: STATUS_TYPES_LABEL.APPROVED });
+  //   });
 
-    it(`Filter ${STATUS_TYPES_LABEL.APPROVED} by name and status, and select it`, () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: STATUS_TYPES_LABEL.APPROVED });
-    });
-
-    it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
-      SystemRequirement("REQ-0020", "REQ-0730");
-      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
-    });
-  });
+  //   it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+  //     SystemRequirement("REQ-0020", "REQ-0730");
+  //     cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
+  //   });
+  // });
 
   context("Create a document with revision as Numeric", () => {
     it("Navigate to document list", () => {
@@ -721,6 +724,11 @@ context("Approval request implementation tasks", () => {
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
     });
 
+    it("Clear filters", () => {
+      cy.dlClearFilters();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Filter list by status", () => {
       cy.dlFilterByStatus({ status: "Released" });
     });
@@ -747,6 +755,11 @@ context("Approval request implementation tasks", () => {
 
     it(`Filter list by OWNER as USERS[1].name`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
+    });
+
+    it("Clear filters", () => {
+      cy.dlClearFilters();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Filter list by STATUS as ${STATUS_TYPES_LABEL.CLOSED}`, () => {

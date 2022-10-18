@@ -15,6 +15,7 @@ declare global {
       navigToNestedItem(params: {navigItems: NavigationItems[]}): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
       navigToDocumentTypeManagement(): Chainable<Subject>;
+      navigToPageDetailsManagement(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
@@ -182,6 +183,16 @@ Cypress.Commands.add("navigToDocumentTypeManagement", () => {
     navigItems: [
       NavigationItems.DASHBOARD,
       NavigationItems.DOCUMENT_TYPE_MANAGEMENT,
+    ],
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToPageDetailsManagement", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.PAGE_DETAILS_MANAGEMENT,
     ],
   });
   cy.landingPageLoadingElementShouldNotExist();

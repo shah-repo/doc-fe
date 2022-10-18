@@ -56,6 +56,9 @@ import { CONFIG, RUN_ENVIRONMENT_OPTIONS } from "./config";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require("cypress-grep")();
+
 Cypress.on("uncaught:exception", (err, runnable) => {
   const socketIsClosingError =
     err.message.includes("The following error originated from your application code, not from Cypress") &&

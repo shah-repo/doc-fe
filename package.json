@@ -165,6 +165,7 @@
     "cypress": "8.3.1",
     "cypress-downloadfile": "^1.2.0",
     "cypress-file-upload": "^5.0.6",
+    "cypress-grep": "2.5.3",
     "cypress-localstorage-commands": "^1.2.1",
     "cypress-movie": "^3.0.5",
     "cypress-multi-reporters": "^1.4.0",

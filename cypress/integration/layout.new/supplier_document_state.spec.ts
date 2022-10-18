@@ -186,7 +186,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Last save should be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
 
         it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
@@ -268,7 +268,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -343,7 +343,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -494,7 +494,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {

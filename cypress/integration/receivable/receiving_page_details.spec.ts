@@ -712,6 +712,7 @@ context("Receivable test with Page Details", () => {
 
     context("Create Purchase Order document with three Products", () => {
       it("Click on 'Purchase Order' on sidebar", () => {
+        cy.wait(1000);
         cy.navigToPurchaseOrder();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -858,9 +859,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Save document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.drClickCreateDocumentWithoutApiCall();
-          });
+          cy.drClickCreateDocumentWithApiCall();
         });
       });
 
@@ -1070,6 +1069,10 @@ context("Receivable test with Page Details", () => {
   });
 
   context("Create receiving document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to receiving", () => {
       cy.navigToReceivableList();
     });
@@ -1083,11 +1086,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Upload logo picture image.jpg", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostOrPatchDocRev], () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
     it("Setting Text area value Y", () => {

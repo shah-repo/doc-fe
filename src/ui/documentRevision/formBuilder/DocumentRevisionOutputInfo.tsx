@@ -36,7 +36,7 @@ const DocumentRevisionOutputInfo: React.FunctionComponent<Props> = ({
         <SMText label="common.revision" />
         <>{version}</>,&nbsp;
         <>
-          {getFormattedDateString( effectiveDate, MomentFormats.YearMonthDateDotNotation )}
+          {getFormattedDateString( effectiveDate, MomentFormats.MonthDateYearTwoDigit )}
         </>
       </Typography>
     </Box>

@@ -3,6 +3,9 @@
 // eslint-disable-next-line spaced-comment
 // / <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
@@ -60,7 +63,7 @@ const lhrid = "LHR-00007";
 const rejArId = "AR-00009";
 const tcId = "TC-00001";
 
-context("Dashboard notification font test", () => {
+context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -1374,13 +1377,6 @@ context("Dashboard notification font test", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
-    it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-    });
-
-
     it("Click on 'Overview' tab", () => {
       cy.drSelectOverviewTab();
     });
@@ -1391,12 +1387,6 @@ context("Dashboard notification font test", () => {
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-    });
-
-    it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
     });
 
     it("Click Submit for Approval", () => {
@@ -1434,7 +1424,9 @@ context("Dashboard notification font test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.poAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.get("[data-cy^=\"fb-po-approvals\"]").scrollIntoView().arrowClick().wait(500);
+      cy.get("[data-cy^=\"fb-po-approvals\"]").autocompleteSelect(USERS[1].name).wait(500);
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approvals and check enfocment", () => {
@@ -1479,12 +1471,6 @@ context("Dashboard notification font test", () => {
       cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Click save document", () => {
-      cy.drSaveDocumentWithoutaudit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Select 'Details' tab", () => {
       cy.contains("Details").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
@@ -1504,12 +1490,6 @@ context("Dashboard notification font test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
         cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Click save document", () => {
-      cy.drSaveDocumentWithoutaudit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1895,26 +1875,26 @@ context("Dashboard notification font test", () => {
     });
 
     it(`Verify the popup window has PENDING text`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-pendingtitle\"]")
+      cy.get("[data-cy='pending-title']")
         .contains("PENDING");
     });
 
     it(`Verify the PENDING has font-size ${FONT_SIZE_12} form-family ${soraSansserif} line-height 18px font-weight ${FONT_WT_700}`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-pendingtitle\"]").checkStylePropExists({
+      cy.get("[data-cy='pending-title']").checkStylePropExists({
         content: "PENDING",
         props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_3, "font-weight": FONT_WT_700 },
       });
     });
 
     it(`Verify ${USERS[1].name} has font-size ${FONT_SIZE_28} form-family ${soraSansserif} font-weight ${FONT_WT_700}`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]").checkStylePropExists({
+      cy.get("[data-cy='list-item-text']").checkStylePropExists({
         content: USERS[1].name,
         props: { "font-size": FONT_SIZE_28, "font-family": soraSansserif, "font-weight": FONT_WT_700 },
       });
     });
 
     it(`Close the popup window`, () => {
-      cy.get("[class^=\"MuiButtonBase-root MuiIconButton-root makeStyles-closemodel\"]")
+      cy.get("[data-cy='close-model']")
         .arrowClick();
     });
   });
@@ -2067,7 +2047,7 @@ context("Dashboard notification font test", () => {
     });
 
     it(`Verify training status 'EMAIL ALL' font-size as ${FONT_SIZE_11} and form-family as ${soraSansserif} line-height ${FONT_SIZE_14} and font-weight ${FONT_WT_700}`, () => {
-      cy.get("[class^=\"MuiButtonBase-root MuiButton-root MuiButton-text makeStyles-emailbutton\"]")
+      cy.get("[data-cy='email-button']")
         .checkStylePropExists({
           content: "EMAIL ALL",
           props: { "font-size": FONT_SIZE_11, "font-family": soraSansserif, "line-height": FONT_SIZE_14, "font-weight": FONT_WT_700 },
@@ -2075,7 +2055,7 @@ context("Dashboard notification font test", () => {
     });
 
     it(`Verify training status ${USERS[2].name} font-size as ${FONT_SIZE_12_8} and form-family as ${soraSansserif}`, () => {
-      cy.get("[class^=\"MuiTypography-root makeStyles-listitemtext\"]")
+      cy.get("[data-cy='list-item-text']")
         .checkStylePropExists({
           content: USERS[2].name,
           props: { "font-size": FONT_SIZE_12_8, "font-family": soraSansserif },
@@ -2083,7 +2063,7 @@ context("Dashboard notification font test", () => {
     });
 
     it(`Close training status popup window`, () => {
-      cy.get("[class^=\"MuiButtonBase-root MuiIconButton-root makeStyles-closemodel\"]")
+      cy.get("[data-cy='closeModel")
         .arrowClick();
     });
   });

@@ -1,8 +1,6 @@
 export enum HelpModule {
-  FAQ = "FAQ",
   General = "General",
   Dashboard = "Dashboard",
-  ReleaseNotes = "Release Notes",
   DocumentList = "Document List",
   UserManagement = "User Management",
   GroupManagement = "Group Management",
@@ -22,26 +20,32 @@ export enum HelpModule {
 }
 
 export enum HelpCenterItemType {
+  HowTo = "HOWTO",
   Video = "VIDEO",
   Workflow = "WORKFLOW",
 }
 
-export interface HelpCenterItemData {
+interface HelpCenterItemData {
   type: HelpCenterItemType;
   title: string;
   url: string;
 }
 
-export interface HelpCenterVideoItemData extends HelpCenterItemData {
-  type: HelpCenterItemType.Video;
-  videoId: string;
+export interface HelpCenterHowToItemData extends HelpCenterItemData {
+  type: HelpCenterItemType.HowTo;
 }
-
+export interface HelpCenterVideoItemData extends Partial<HelpCenterItemData> {
+  type: HelpCenterItemType.Video;
+  url: string;
+}
 export interface HelpCenterWorkflowItemData extends HelpCenterItemData {
   type: HelpCenterItemType.Workflow;
 }
 
+export type HelpCenterItems = HelpCenterHowToItemData | HelpCenterVideoItemData | HelpCenterWorkflowItemData;
+
 export interface HelpCenterModuleData {
   title: string;
-  items: HelpCenterItemData[];
+  url?: string;
+  items: HelpCenterItems[];
 }

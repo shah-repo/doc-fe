@@ -64,7 +64,7 @@ Cypress.Commands.add("verifyDocumentHeaderDetails", () => {
 
 Cypress.Commands.add("verifyListItemExistsOnHeader", (params: { listItem: string; breadcrump?: boolean}) => {
   cy.get("div[data-cy=\"Header-listIcon\"]").should("exist");
-  cy.get("[class*=makeStyles-headerSection]>div").eq(0).contains(params.listItem).should("exist");
+  cy.get("[data-cy='header-section']>div").eq(0).contains(params.listItem).should("exist");
   if (params.breadcrump) {
     cy.get(`li[class*="MuiBreadcrumbs-separator"]>svg`).should("exist");
   }
@@ -257,11 +257,11 @@ Cypress.Commands.add("verifyTitleNotHighlightedonHover", () => {
 });
 
 Cypress.Commands.add("verifyDescriptionNotHighlightedonHover", () => {
-  cy.get("[data-cy='description']").eq(0).trigger("mouseover");
-  cy.get("[data-cy='description']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
-  cy.get("[data-cy='description']>div").eq(0).trigger("mouseout");
+  cy.get("[data-cy='BaseWithhtml-editor']").eq(0).trigger("mouseover");
+  cy.get("[data-cy='BaseWithhtml-editor']>div").should("not.have.css", "background-color", "rgb(235, 237, 242)");
+  cy.get("[data-cy='BaseWithhtml-editor']>div").eq(0).trigger("mouseout");
 });
 
 Cypress.Commands.add("verifyStatusbarBgcolor", (params: { bcolor: string}) => {
-  cy.get("[class*=\"makeStyles-headerSection\"]").should("have.css", "background-color", params.bcolor);
+  cy.get("[data-cy='header-section']").should("have.css", "background-color", params.bcolor);
 });

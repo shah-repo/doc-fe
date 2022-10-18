@@ -20,6 +20,7 @@ declare global {
       fbAddNewFieldWhenHidden(): Chainable<Subject>;
       fbAddNewFieldWhenHiddenLastPlace(): Chainable<Subject>;
       fbAddNewFieldWhenHidden2ndLastPlace(): Chainable<Subject>;
+      fbAddNewFieldWhenHidden3rdLastPlace(): Chainable<Subject>;
       fbCheckboxGroupField(): Chainable<Subject>;
       fbRadioBtnGroupField(): Chainable<Subject>;
       fbGroupName(params: { name: string }): Chainable<Subject>;
@@ -153,6 +154,10 @@ Cypress.Commands.add("fbAddNewFieldWhenHiddenLastPlace", () => {
 
 Cypress.Commands.add("fbAddNewFieldWhenHidden2ndLastPlace", () => {
   cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
+});
+
+Cypress.Commands.add("fbAddNewFieldWhenHidden3rdLastPlace", () => {
+  cy.get("button[data-cy=\"form.builder.add.field\"]").eq(-3).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {

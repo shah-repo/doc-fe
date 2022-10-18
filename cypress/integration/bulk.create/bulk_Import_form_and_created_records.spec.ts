@@ -501,7 +501,7 @@ context("Export Bulk", () => {
     });
 
     it("Verify that Approvals field is automatically added", () => {
-      cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+      cy.get("[data-cy='form.builder.approvals']").should("exist");
     });
   });
 
@@ -599,6 +599,7 @@ context("Export Bulk", () => {
       });
 
       it("move Component", () => {
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy='Textfield for New bulk import test']").trigger("mouseover");
         cy.wait(2000);
         cy.get(`[class="drag-handle"]`).eq(1)

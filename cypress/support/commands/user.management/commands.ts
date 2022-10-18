@@ -331,7 +331,7 @@ Cypress.Commands.add("usrHistoryVerifyReactivatedUser", (params: { name: string 
 
 Cypress.Commands.add("usrHistoryVerifyRecordsCount", (params: { records: number }) => {
   cy.listLoadingElementShouldNotExist();
-  cy.get("div[class^=\"makeStyles-externalContainer-\"]").last().next()
+  cy.get("[data-cy='external-container']").last().next()
     .find("[data-cy=\"header-userInitials\"]").should("have.length", params.records);
 });
 

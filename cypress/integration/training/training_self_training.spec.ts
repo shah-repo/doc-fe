@@ -361,7 +361,8 @@ context("Self training test", () => {
 
     it("Click 'Send To Email'", () => {
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      cy.sendToEmailFromHeader();
+      cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+      cy.get("div.Toastify__toast-container").should("exist");
       cy.wait(5000);
     });
 
@@ -396,7 +397,7 @@ context("Self training test", () => {
     });
 
     it("Check if 'Send To Email' button is working", () => {
-      cy.get(`button[class^="MuiButtonBase-root MuiIconButton-root makeStyles-closeButton"]`)
+      cy.get(`[data-cy='close-icon']`)
         .arrowClick();
     });
   });

@@ -1,5 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -456,13 +457,19 @@ context("Bulk create approvals block/inline test", () => {
       it("Select document type to be used for bulk creation", () => {
         cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-output-document-type\"]")
           .autocompleteSelect("Approvals Inline Type");
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'no' to have Document id column", () => {
         cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(1).check();
       });
 
+      it("Save the from", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
       it("Click on 'Overview' tab", () => {
+        cy.listLoadingElementShouldNotExist();
         cy.drSelectOverviewTab();
       });
 
@@ -560,7 +567,7 @@ context("Bulk create approvals block/inline test", () => {
 
           it("Verify record release date", () => {
             cy.get("div[data-cy=releaseDate]").parent().parent().find("p")
-              .should("have.text", "2021.11.18");
+              .should("have.text", "11/18/2021");
           });
 
           it("Verify record approve date", () => {
@@ -594,7 +601,7 @@ context("Bulk create approvals block/inline test", () => {
 
           it("Verify record release date", () => {
             cy.get("div[data-cy=releaseDate]").parent().parent().find("p")
-              .should("have.text", "2021.11.18");
+              .should("have.text", "11/18/2021");
           });
 
           it("Verify record approve date", () => {

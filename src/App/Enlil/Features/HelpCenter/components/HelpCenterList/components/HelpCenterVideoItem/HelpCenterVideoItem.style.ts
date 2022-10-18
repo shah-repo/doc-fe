@@ -1,12 +1,12 @@
 import { makeStyles } from "@material-ui/core";
-import { itemStyles } from "../../HelpCenterList.styles";
 
 export default makeStyles((theme) => ({
-  ...itemStyles(theme),
   video: {
     margin: theme.spacing(2.5),
+    borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.grey[100],
     position: "relative",
+    overflow: "hidden",
   },
   progress: {
     position: "absolute",

@@ -17,23 +17,22 @@ interface Props {
 }
 
 interface GuidesItemProps {
-  external: boolean;
-  href: string;
-  onClick: () => void;
+  to: string;
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
 const GuidesLink: React.FC<GuidesItemProps> = React.forwardRef(
-  ({ external, href, onClick, children, className }, ref) => (
-    external ? (
-      <HelpCenterExternalLink href={href} className={className}>
-        {children}
-      </HelpCenterExternalLink>
-    ) : (
+  ({ to, children, className, onClick }, ref) => (
+    onClick ? (
       <MenuItem onClick={onClick} innerRef={ref} className={className}>
         {children}
       </MenuItem>
+    ) : (
+      <HelpCenterExternalLink to={to} className={className}>
+        {children}
+      </HelpCenterExternalLink>
     )
   )
 );
@@ -55,22 +54,26 @@ const HelpCenterNavigation: React.FC<Props> = ({ anchorEl, hasGuide, handleClose
         vertical: "bottom",
         horizontal: "right",
       }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
       data-cy="help-center.navigation"
     >
-      <GuidesLink external={!hasGuide} href={staticLinks.Guides} onClick={handleOpenContent}>
+      <GuidesLink to={staticLinks.Guides} onClick={hasGuide ? handleOpenContent : undefined}>
         <ListItemIcon><HelpIcon /></ListItemIcon>
         <ListItemText data-cy="help-center.content-opener"><Text translation="help.guides" /></ListItemText>
       </GuidesLink>
-      <HelpCenterExternalLink href={staticLinks.ReleaseNotes}>
+      <HelpCenterExternalLink to={staticLinks.ReleaseNotes}>
         <ListItemIcon><ReleaseNotesIcon /></ListItemIcon>
         <ListItemText data-cy="help-center.external-link"><Text translation="help.release.notes" /></ListItemText>
       </HelpCenterExternalLink>
-      <HelpCenterExternalLink href={staticLinks.FAQs}>
+      <HelpCenterExternalLink to={staticLinks.FAQs}>
         <ListItemIcon><FAQsIcon /></ListItemIcon>
         <ListItemText data-cy="help-center.external-link"><Text translation="help.faqs" /></ListItemText>
       </HelpCenterExternalLink>
       <Divider variant="middle" component="li" />
-      <HelpCenterExternalLink href={staticLinks.Contact}>
+      <HelpCenterExternalLink to={staticLinks.Contact}>
         <ListItemIcon><SendIcon /></ListItemIcon>
         <ListItemText data-cy="help-center.external-link"><Text translation="help.contact" /></ListItemText>
       </HelpCenterExternalLink>
