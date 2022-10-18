@@ -483,17 +483,19 @@ context("User Creation Flow", () => {
     });
 
     it(`Verify 'Approvals' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24}  font-weight ${FONT_WT_600}`, () => {
-      cy.get(`[class*="MuiBox-root MuiBox-root-"]`).contains("Approvals").should("have.css", "font-size", FONT_SIZE_16);
-      cy.get(`[class*="MuiBox-root MuiBox-root-"]`).contains("Approvals").should("have.css", "font-family", soraSansserif);
-      cy.get(`[class*="MuiBox-root MuiBox-root-"]`).contains("Approvals").should("have.css", "line-height", LINE_HT_24);
-      cy.get(`[class*="MuiBox-root MuiBox-root-"]`).contains("Approvals").should("have.css", "font-weight", FONT_WT_600);
+      cy.get(`[data-cy="form.builder.approvals"]`)
+        .checkStylePropExists({
+          content: "Approvals",
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
+        });
     });
 
     it(`Verify 'Title' as 'released doc1' font-size ${FONT_SIZE_19} font-family ${soraSansserif} line-height ${LINE_HT_27_17} font-weight ${FONT_WT_600}`, () => {
-      cy.get(`[class*="MuiBox-root MuiBox-root-"]`).contains("released doc1").should("have.css", "font-size", FONT_SIZE_19);
-      cy.get(`[class*="MuiBox-root MuiBox-root-"]`).contains("released doc1").should("have.css", "font-family", soraSansserif);
-      cy.get(`[class*="MuiBox-root MuiBox-root-"]`).contains("released doc1").should("have.css", "line-height", LINE_HT_27_17);
-      cy.get(`[class*="MuiBox-root MuiBox-root-"]`).contains("released doc1").should("have.css", "font-weight", FONT_WT_600);
+      cy.get(`[data-cy="field-name"]`)
+        .checkStylePropExists({
+          content: "released doc1",
+          props: { "font-size": FONT_SIZE_19, "font-family": soraSansserif, "line-height": LINE_HT_27_17, "font-weight": FONT_WT_600 },
+        });
     });
   });
 
@@ -622,10 +624,10 @@ context("User Creation Flow", () => {
       });
     });
 
-    it(`Verify added 'Blank Template' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
-      cy.get("[data-cy^=\"Fb Blank Template\"]")
+    it(`Verify added 'fb-blank-template' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_24} font-weight ${FONT_WT_600}`, () => {
+      cy.get("[data-cy^=\"fb-blank-template\"]")
         .checkStylePropExists({
-          content: "Fb Blank Template",
+          content: "fb-blank-template",
           props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
         });
     });
@@ -782,11 +784,10 @@ context("User Creation Flow", () => {
     });
 
     it(`Verify 'fb-blank-template' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_18} font-weight ${FONT_WT_400}`, () => {
-      cy.get(`[data-cy="Bookmarks-detail"]`)
-        .checkStylePropExists({
-          content: "fb-blank-template",
-          props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_18, "font-weight": FONT_WT_400 },
-        });
+      cy.get(`[data-cy="Bookmarks-detail"]`).find(".MuiTypography-body1").should("have.css", "font-size", FONT_SIZE_14);
+      cy.get(`[data-cy="Bookmarks-detail"]`).find(".MuiTypography-body1").should("have.css", "font-family", sora);
+      cy.get(`[data-cy="Bookmarks-detail"]`).find(".MuiTypography-body1").should("have.css", "line-height", LINE_HT_18);
+      cy.get(`[data-cy="Bookmarks-detail"]`).find(".MuiTypography-body1").should("have.css", "font-weight", FONT_WT_400);
     });
   });
 
@@ -881,11 +882,11 @@ context("User Creation Flow", () => {
         });
     });
 
-    it(`Verify 'Approvers' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15_96} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Approvers' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_600}`, () => {
       cy.get(`[data-cy="field-approvals"]`)
         .checkStylePropExists({
           content: "Approvers",
-          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15_96, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_15, "font-weight": FONT_WT_600 },
         });
     });
 
