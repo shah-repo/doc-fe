@@ -566,6 +566,9 @@ context("Add Requestor as an approver of the PO", () => {
   context("Click on 'Add Item'", () => {
     it("Click on 'Add Item'", () => {
       cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Enter Level Name value to be 'level 1'", () => {
@@ -915,10 +918,10 @@ context("Add Requestor as an approver of the PO", () => {
       });
     });
 
-    // it("Save document", () => {
-    //   cy.drClickCreateDocumentWithoutApiCall();
-    //   cy.landingPageLoadingElementShouldNotExist();
-    // });
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
 
     it(`Verify 'The requestor field is required field' is in RED(#F44336)`, () => {
       cy.get(".MuiFormHelperText-root.Mui-error").contains("The Requestor is a required field.")
