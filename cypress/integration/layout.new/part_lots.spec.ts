@@ -677,7 +677,11 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
         });
 
         it("Verify Add/Remove References", () => {
-          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+          cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
+          cy.wait(2000);
+          cy.contains("FM-00001").arrowClick();
+          cy.drRemoveReferences({ reference: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -869,7 +873,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
         });
 
         it("Save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Turn on autosave", () => {
@@ -994,7 +998,11 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           });
 
           it("Verify Add/Remove References", () => {
-            cy.verifyAddRemoveReference({ formId: "FM-00001" });
+            cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+            cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
+            cy.wait(2000);
+            cy.contains("FM-00001").arrowClick();
+            cy.drRemoveReferences({ reference: "FM-00001" });
           });
 
           it("Verify Referenced By, Training, Release Date and Form Info", () => {
