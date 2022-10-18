@@ -34,6 +34,17 @@ const docTitle = "Component specification title";
 const formTitle = "Component specification Form";
 const formDescription = "Component specification Form Description";
 
+const FIELD_HEADERS = [
+  "Initial Quantity",
+  "Usable Quantity",
+  "Expiration Date",
+  "Part Selection",
+  "100% Inspection Override",
+  "form.builder.approvals",
+  "fb-textfield",
+  "fb-radiobutton-group",
+];
+
 context("Verify New Layout for PART_LOT internal type, Component specification", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -704,44 +715,11 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
         });
 
-        it("Mapped Initial Quantity", () => {
-          cy.get("[id='formMigrationField']" ).eq(0).arrowClick();
-          cy.get("[id^='react-select']").eq(1).autocompleteSelect("Initial Quantity");
-        });
-
-        it("Mapped Usable Quantity", () => {
-          cy.get("[id='formMigrationField']" ).eq(1).arrowClick();
-          cy.get("[id^='react-select']").eq(2).autocompleteSelect("Usable Quantity");
-        });
-
-        it("Mapped Expiration Date field", () => {
-          cy.get("[id='formMigrationField']" ).eq(2).arrowClick();
-          cy.get("[id^='react-select']").eq(3).autocompleteSelect("Expiration Date");
-        });
-
-        it("Mapped Part Selection field", () => {
-          cy.get("[id='formMigrationField']" ).eq(3).arrowClick();
-          cy.get("[id^='react-select']").eq(4).autocompleteSelect("Part Selection");
-        });
-
-        it("Mapped 100% Inspection Override field", () => {
-          cy.get("[id='formMigrationField']" ).eq(4).arrowClick();
-          cy.get("[id^='react-select']").eq(5).autocompleteSelect("100% Inspection Override");
-        });
-
-        it("Mapped Approvals field", () => {
-          cy.get("[id='formMigrationField']" ).eq(5).arrowClick();
-          cy.get("[id^='react-select']").eq(6).autocompleteSelect("form.builder.approvals");
-        });
-
-        it("Mapped fb-radiobutton-group field", () => {
-          cy.get("[id='formMigrationField']" ).eq(6).arrowClick();
-          cy.get("[id^='react-select']").eq(7).autocompleteSelect("fb-textfield");
-        });
-
-        it("Mapped fb-radiobutton-group field", () => {
-          cy.get("[id='formMigrationField']" ).eq(7).arrowClick();
-          cy.get("[id^='react-select']").eq(8).autocompleteSelect("fb-radiobutton-group");
+        FIELD_HEADERS.forEach( (fieldHeader, i) => {
+          it(`Mapped '${fieldHeader}' field`, () => {
+            cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+            cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+          });
         });
 
         it("Click on confirm change", () => {
