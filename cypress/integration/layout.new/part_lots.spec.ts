@@ -647,6 +647,41 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
             });
           });
 
+          context("Fill Details tab fields", () => {
+            it("Enter quantity received", () => {
+              cy.get("[name=\"lot_quantity\"]").arrowType("12");
+            });
+
+            it("Enter Usable Quantity", () => {
+              cy.get("[name=\"lot_usable_quantity\"]").arrowType("12");
+            });
+
+            it("Enter Expiration date", () => {
+              cy.get("input[name^=\"lot_expiry_date\"]").parent().find("button").arrowClick({ force: true });
+              cy.get(".MuiPickersDay-daySelected").arrowClick();
+            });
+
+            it("Select Part", () => {
+              cy.get("[data-cy=\"lot_part\"]").autocompleteSelect("Part document");
+            });
+
+            it("Check 100% override", () => {
+              cy.get("[value=\"100% Inspection Override\"]").check();
+            });
+
+            it("Enter fb-textfield", () => {
+              cy.get("[name^=\"fb-textfield-\"]").arrowType("fb-textfield");
+            });
+
+            it("Check b-radiobutton-group", () => {
+              cy.get("[value=\"Option 1\"]").check();
+            });
+
+            it("Save document", () => {
+              cy.drClickCreateDocumentWithApiCallForForms();
+            });
+          });
+
           context("Verify Details tab added fields", () => {
             it("Navigate to Details tab", () => {
               cy.drSelectDetailsTab();
@@ -726,12 +761,44 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
         });
 
+        it("Verify fb-textfield", () => {
+          cy.get("[value='fb-textfield']").should("exist");
+        });
+
+        it("Verify fb-radiobutton-group", () => {
+          cy.get("[value=\"Option 1\"]").should("be.checked");
+        });
+
         it("Navigate to details Tab", () => {
           cy.drSelectDetailsTab();
         });
 
         it("Verify form info should have migrated form 'FM-00002'", () => {
           cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+        });
+
+        it("Verify  initial quantity ", () => {
+          cy.get("[value='12']").eq(0).should("exist");
+        });
+
+        it("Verify Usable Quantity", () => {
+          cy.get("[value='12']").eq(1).should("exist");
+        });
+
+        it("Verify Expiration date", () => {
+          const ExpirationDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
+          // eslint-disable-next-line max-len
+          cy.get("[class='MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd MuiOutlinedInput-inputAdornedEnd']")
+            .should("have.value", ExpirationDate);
+        });
+
+        it("Verify Part", () => {
+          cy.get("[data-cy=\"lot_part\"]").should("have.value", "PRT-00005 - rev 1 - Part document");
+
+        });
+
+        it("Verify 100% override", () => {
+          cy.get("[value=\"100% Inspection Override\"]").should("be.checked");
         });
       });
 
@@ -767,21 +834,27 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           },
           {
             owner,
-            actions: [{ key: "Access granted to user", value: userOne }],
+            actions: [
+              { key: "Access granted to user", value: userOne }],
           },
           {
             owner,
-            actions: [{ key: "Form Set To", value: "FM-00002 - revision 1 - migration form" }],
-          },
-          {
-            owner,
-            actions: [{ key: "Name changed", value: docTitle }],
+            actions: [
+              { key: "Form Set To", value: "FM-00002 - revision 1 - migration form" },
+            ],
           },
         ];
 
         it("Open history tab and verify changes are being captured", () => {
           cy.drSelectHistoryTab();
           cy.get(`[data-cy="History-detail"]`).should("be.visible");
+        });
+
+        it("Verify Name changed value as 'Component specification title'  ", () => {
+          cy.get("[data-cy=\"change-key-4-0\"]").contains("Name changed")
+            .should("exist");
+          cy.get("[data-cy=\"change-value-4-0\"]").contains("Component specification title")
+            .should("exist");
         });
 
         verifyHistoryContent(history, groupOne);
