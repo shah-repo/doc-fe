@@ -151,9 +151,8 @@ context("Verify New Layout for Supplier Document", () => {
     });
   });
 
-  // Scenario 11a - Newly Created Supplier Document
-
   context("Create supplier form", () => {
+    // Scenario 11a - Newly Created Supplier Document
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -436,12 +435,11 @@ context("Verify New Layout for Supplier Document", () => {
       });
 
       it("Click on migrate form button", () => {
-        cy.get("[data-cy='common.form.migration']").arrowClick();
+        cy.drClickMigrateForm();
       });
 
       it("Select form to be migrated", () => {
-        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
-        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+        cy.drSelectFormToBeMigrated({ formContains: "FM-00002" });
       });
     });
 
@@ -576,9 +574,8 @@ context("Verify New Layout for Supplier Document", () => {
     });
   });
 
-  // Scenario 11b - Existing Supplier
-
   context("Select existing supplier draft document", () => {
+    // Scenario 11b - Existing Supplier
     it("Navigate to Supplier List", () => {
       cy.navigToSuppliers();
     });
