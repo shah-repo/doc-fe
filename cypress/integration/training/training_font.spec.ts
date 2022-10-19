@@ -44,9 +44,9 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[4]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -54,7 +54,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           done();
         });
       });
@@ -62,7 +62,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -264,7 +264,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -400,7 +400,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Select First User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
     });
 
     it("Save training", () => {
@@ -414,7 +414,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Save training", () => {
@@ -439,11 +439,11 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+    it(`${USERS[11].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
+      cy.trLandingPageUsername({ username: USERS[11].name }).wait(500);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name).and("contain", "Pending");
     });
   });
 
@@ -580,15 +580,15 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
         .contains("FM-00003 Rev 1").should("have.css", "font-weight", FONT_WT_700);
     });
 
-    it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_22_88} font-weight ${FONT_WT_700}`, () => {
+    it(`Verify ${USERS[11].name} font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_22_88} font-weight ${FONT_WT_700}`, () => {
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
-        .contains(USERS[1].name).should("have.css", "font-size", FONT_SIZE_16);
+        .contains(USERS[11].name).should("have.css", "font-size", FONT_SIZE_16);
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
-        .contains(USERS[1].name).should("have.css", "font-family", soraSansserif);
+        .contains(USERS[11].name).should("have.css", "font-family", soraSansserif);
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
-        .contains(USERS[1].name).should("have.css", "line-height", LINE_HT_22_88);
+        .contains(USERS[11].name).should("have.css", "line-height", LINE_HT_22_88);
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-6"]`).eq(3)
-        .contains(USERS[1].name).should("have.css", "font-weight", FONT_WT_700);
+        .contains(USERS[11].name).should("have.css", "font-weight", FONT_WT_700);
     });
 
     it(`Verify 'Send To Email' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
