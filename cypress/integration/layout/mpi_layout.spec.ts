@@ -433,24 +433,14 @@ context("Mpi Layout", () => {
           });
           cy.progressBarShouldNotExist();
         });
-        it("Save document", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
 
         it("Click 'Clone Step'", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev,
-            CyRoutes.GetAttachments,
-            CyRoutes.GetAttachmentsAttached,
-          ], () => {
-            cy.get("[data-cy='form.builder.clone.step']").arrowClick();
-          });
-          cy.wait(10000);
+          cy.get("[data-cy='form.builder.clone.step']").arrowClick();
           cy.progressBarShouldNotExist();
         });
       });
 
       context("Verify 'Clone Step' feature", () => {
-
         it("Verify description is copied", () => {
           cy.get("[data-cy='form.builder.step.number']").eq(1).scrollIntoView();
 
@@ -598,7 +588,6 @@ context("Mpi Layout", () => {
       });
 
       context("Validate Right Side Panel", () => {
-
         it("Verify that right side panel opens by default to the References tab", () => {
           cy.get("[data-cy='References']").should("exist");
           cy.get("[data-cy='generalInfo']").should("be.visible");
@@ -630,7 +619,7 @@ context("Mpi Layout", () => {
           cy.verifyReferenceInfo();
           cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
           cy.get("[data-cy='common.revision']").parent().should("contain.text",
-            moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+            moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
         });
 
         context("Verify Revisions tab", () => {
@@ -694,9 +683,18 @@ context("Mpi Layout", () => {
             cy.get("[data-cy='Bookmarks-detail'] p").eq(1).arrowClick();
             cy.get("#fb-mpi-procedure-section-built-in").should("be.visible");
           });
+        });
+      });
 
+      context("Verify Revison history", () => {
+        it("Verify revision icon ", () => {
+          cy.get("[data-cy='cr-icon']").should("be.visible");
         });
 
+        it("Click on revision icon history tab should open", () => {
+          cy.get("[data-cy='cr-icon']").arrowClick();
+          cy.get("[data-cy='Revision History-detail']").should("be.visible");
+        });
       });
 
       context("Verify Scroll", () => {
@@ -779,7 +777,7 @@ context("Mpi Layout", () => {
     it("Verify on scroll The top bar with “Revise document” and “Change owner” are fixed", () => {
       cy.get("[data-cy='form.builder.step.number']").eq(2).scrollIntoView();
       cy.get("[data-cy='updateRecord']").should("be.visible");
-      cy.get("[data-cy='changeOwner']").should("be.visible");
+      cy.get("[data-cy='changeOwner']").should("exist");
     });
 
     it("Click on view less description and scroll", () => {
@@ -789,12 +787,11 @@ context("Mpi Layout", () => {
 
     it("Verify on scroll The top bar with “Revise document” and “Change owner” are fixed", () => {
       cy.get("[data-cy='updateRecord']").should("be.visible");
-      cy.get("[data-cy='changeOwner']").should("be.visible");
+      cy.get("[data-cy='changeOwner']").should("exist");
     });
   });
 
   context("Complete the training and verify training tab", () => {
-
     it("Navigate to overview tab", () => {
       cy.drSelectOverviewTab();
     });
@@ -825,10 +822,7 @@ context("Mpi Layout", () => {
       cy.get("#Presenter-FBWorkspace ul").should("contain.text", "Training Completed");
       cy.get("#Presenter-FBWorkspace ul").should("contain.text", USERS[1].name);
     });
-
   });
-
-
 });
 
 export { };
