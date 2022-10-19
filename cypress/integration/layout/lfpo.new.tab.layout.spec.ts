@@ -919,7 +919,6 @@ context("LFPO new layout verification", () => {
     });
 
     context("Verify Schema Fields", () => {
-
       it("Verify Default fields up to attachment", () => {
         cy.verifyPredefiendFields();
         cy.get("#AttachmentFieldPresenter-field").should("be.visible");
@@ -989,6 +988,15 @@ context("LFPO new layout verification", () => {
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .autocompleteSelect("Receivable test");
+      });
+    });
+
+    it("Verify receiving should get created", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.WIP,
+        title: "Receiving",
+        docId: "RCT-00002",
+        revision: "Rev A",
       });
     });
 
