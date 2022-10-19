@@ -457,7 +457,7 @@ context("LHRt using regular AR test", () => {
 
     it("LHR step should also display text in red", () => {
       cy.get("[name=\"lhrstep-built-in\"]").parent().parent()
-        .find(".Mui-error").eq(0)
+        .find(".Mui-error").eq(1)
         .should("have.text", "The LHR Step is a required field.")
         .and("have.css", "color", "rgb(244, 67, 54)");
     });
@@ -526,11 +526,12 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Select 'Part document' for Part to be Manufactured", () => {
+      cy.get("[data-cy='field-renderHTML']").scrollIntoView();
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=\"lhr-selected-part\"]").find("button").last().arrowClick({ force: true });
       });
       cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
-      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick({ force: true });
     });
 
     it("Click save document", () => {
@@ -642,6 +643,7 @@ context("LHRt using regular AR test", () => {
 
     it("Click Revise button", () => {
       cy.drClickReviseDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select Details tab", () => {
@@ -659,14 +661,14 @@ context("LHRt using regular AR test", () => {
 
     it("LHR step 2 should also display text in red", () => {
       cy.get("[name^=\"lhr-step-\"]").parent().parent()
-        .find(".Mui-error").eq(0)
+        .find(".Mui-error").eq(1)
         .should("have.text", "The LHR Step is a required field.")
         .and("have.css", "color", "rgb(244, 67, 54)");
       cy.wait(2000);
     });
 
     it("Click save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

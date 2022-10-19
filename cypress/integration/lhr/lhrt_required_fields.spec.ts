@@ -451,7 +451,7 @@ context("LHRt required fields test", () => {
 
     it("LHR step should also display text in red", () => {
       cy.get("[name=\"lhrstep-built-in\"]").parent().parent()
-        .find(".Mui-error").eq(0)
+        .find(".Mui-error").eq(1)
         .should("have.text", "The LHR Step is a required field.")
         .and("have.css", "color", "rgb(244, 67, 54)");
     });
@@ -552,7 +552,7 @@ context("LHRt required fields test", () => {
 
     it("LHR step 2 should also display text in red", () => {
       cy.get("[name^=\"lhr-step-\"]").parent().parent()
-        .find(".Mui-error").eq(0)
+        .find(".Mui-error").eq(1)
         .should("have.text", "The LHR Step is a required field.")
         .and("have.css", "color", "rgb(244, 67, 54)");
     });
