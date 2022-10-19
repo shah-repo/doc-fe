@@ -267,7 +267,8 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
           it("Confirm message is not in email", () => {
             cy.imapVerifyLastEmailDoesNotContain({
               userEmail: emailOfUserToSignUp,
-              content: "For your security, this link will expire in 24 hours or immediately after you change your password.",
+              content: "For your security, " +
+              "this link will expire in 24 hours or immediately after you change your password.",
             });
           });
         });
