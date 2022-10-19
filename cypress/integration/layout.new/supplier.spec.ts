@@ -81,6 +81,10 @@ context("Verify New Layout for Supplier Document", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create supplier form for migration", () => {
@@ -126,14 +130,14 @@ context("Verify New Layout for Supplier Document", () => {
     it("Add Text Field", () => {
       cy.fbAddNewField();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield-migration" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Radio Button group", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group-migration" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("Option 1", "Option 2");
       cy.fbAddNewFieldButton();
     });
@@ -281,10 +285,6 @@ context("Verify New Layout for Supplier Document", () => {
   });
 
   context("Create supplier document", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromForm();
     });
@@ -387,11 +387,45 @@ context("Verify New Layout for Supplier Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        it("Verify Add/Remove References", () => {
+          cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
+          cy.wait(2000);
+          cy.contains("FM-00001").arrowClick();
+          cy.drRemoveReferences({ reference: "FM-00001" });
+        });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
         cy.verifyReferencesOtherInfo();
+      });
+    });
+
+    context("Fill in the fields", () => {
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add Approver", () => {
+        cy.pmAddApproverOnApproverList({ approver: owner });
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Fill Text Field", () => {
+        cy.get("[name^=fb-textfield-]").arrowType("Supplier Text Field");
+        cy.unClick();
+      });
+
+      it("Select radio button option", () => {
+        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
     });
 
@@ -422,7 +456,18 @@ context("Verify New Layout for Supplier Document", () => {
 
     context("Click confirm and verify migrated fields are present", () => {
       it("Click on confirm change", () => {
-        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+          cy.get("[data-cy='common.confirm.change']").arrowClick();
+        });
+      });
+
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it(`Verify migrated form info ${FIELD_HEADERS[0]}`, () => {
+        cy.get(`[name^="fb-approvals-fb-approvals"]`).find("span")
+          .should("contain.text", `${USERS[1].name} - ${USERS[1].email}`);
       });
 
       it("Navigate to details Tab", () => {
@@ -433,13 +478,12 @@ context("Verify New Layout for Supplier Document", () => {
         cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
       });
 
-      it("Verify migrated form info 'fb-textfield'", () => {
-        cy.get("[data-cy='fb-textfield-migration']").parent().should("contain.text", "fb-textfield-migration");
+      it(`Verify migrated form info ${FIELD_HEADERS[1]}`, () => {
+        cy.get(`input[name^="fb-textfield"]`).should("have.value", "Supplier Text Field");
       });
 
-      it("Verify migrated form info 'fb-radiobutton-group'", () => {
-        cy.get("[data-cy='fb-radiobutton-group-migration']").parent()
-          .should("contain.text", "fb-radiobutton-group-migration");
+      it(`Verify migrated form info ${FIELD_HEADERS[2]}`, () => {
+        cy.get(`input[name^="fb-radiobutton-group"]`).last().should("be.checked");
       });
     });
 
@@ -489,6 +533,10 @@ context("Verify New Layout for Supplier Document", () => {
         },
         {
           owner,
+          actions: [],
+        },
+        {
+          owner,
           actions: [
             { key: "Description changed", value: docDescription },
             { key: "Name changed", value: docTitle },
@@ -525,29 +573,6 @@ context("Verify New Layout for Supplier Document", () => {
       it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
         cy.verifyHistoryScroll();
       });
-    });
-  });
-
-  context("Fill in the fields", () => {
-    it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it("Fill Text Field and check for autosave", () => {
-      cy.get("[name^=fb-textfield-]").arrowType("Supplier Text Field");
-      cy.unClick();
-    });
-
-    it("Select radio button option", () => {
-      cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
-    });
-
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
-    it("Turn on autosave", () => {
-      cy.cmpTurnOnAutosave();
     });
   });
 
@@ -653,7 +678,14 @@ context("Verify New Layout for Supplier Document", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          it("Verify Add/Remove References", () => {
+            cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+            cy.listLoadingElementShouldNotExist();
+            cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
+            cy.wait(2000);
+            cy.contains("FM-00001").arrowClick();
+            cy.drRemoveReferences({ reference: "FM-00001" });
+          });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -735,9 +767,9 @@ context("Verify New Layout for Supplier Document", () => {
   });
 
   context("Approve and Release supplier document", () => {
-    it("Add Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: owner });
-    });
+    // it("Add Approver", () => {
+    //   cy.pmAddApproverOnApproverList({ approver: owner });
+    // });
 
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
