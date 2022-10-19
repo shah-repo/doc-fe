@@ -930,7 +930,7 @@ context("Create new LHRT Layout Verification", () => {
 
   context("Verify Book Mark", () => {
     it("Verify Book Mark Navigation for Approval block", () => {
-      cy.get("[data-cy='bookmark-icon']").arrowClick();
+      cy.drSelectBookmarksTab();
       cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       cy.get("[data-cy='Bookmarks-detail'] P").arrowClick();
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "true");
@@ -951,7 +951,7 @@ context("Create new LHRT Layout Verification", () => {
 
   context("Verify Scroll", () => {
     it("Navigate to history tab", () => {
-      cy.get("[data-cy='timeline-icon']").arrowClick();
+      cy.drSelectHistoryTab();
     });
 
     it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -1019,10 +1019,7 @@ context("Create new LHRT Layout Verification", () => {
     it("Verify Step 2 visible in detail tab", () => {
       cy.get("[data-cy='LHR Step 2']").should("be.visible");
     });
-
   });
-
-
 });
 
 export { };

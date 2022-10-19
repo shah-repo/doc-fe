@@ -942,7 +942,7 @@ context("Paper LHR tab Layout", () => {
 
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
-        cy.get("[data-cy='bookmark-icon']").arrowClick();
+        cy.drSelectBookmarksTab();
         cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       });
 
@@ -1074,9 +1074,10 @@ context("Paper LHR tab Layout", () => {
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
-          cy.get("[data-cy='lhr-selected-part']").should("exist");
-          cy.get("[name='lhr_initial_quantity']").should("exist");
-          cy.get("[name='lhr-end-quantity']").should("exist");
+          cy.contains("Part to be Manufactured").scrollIntoView();
+          cy.get("[data-cy='lhr-selected-part']").should("be.visible");
+          cy.get("[name='lhr_initial_quantity']").should("be.visible");
+          cy.get("[name='lhr-end-quantity']").should("be.visible");
         });
 
         it("Verify Form option", () => {
@@ -1179,7 +1180,7 @@ context("Paper LHR tab Layout", () => {
 
       context("Verify Book Mark", () => {
         it("Verify Book Mark Navigation", () => {
-          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.drSelectBookmarksTab();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
 
@@ -1192,7 +1193,7 @@ context("Paper LHR tab Layout", () => {
 
     context("Verify Scroll", () => {
       it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
+        cy.drSelectHistoryTab();
       });
 
       it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -1265,9 +1266,10 @@ context("Paper LHR tab Layout", () => {
         });
 
         it("Verify schema fields Part,Initial Quantity end quantity,approvals", () => {
-          cy.get("[data-cy='lhr-selected-part']").should("exist");
-          cy.get("[name='lhr_initial_quantity']").should("exist");
-          cy.get("[name='lhr-end-quantity']").should("exist");
+          cy.contains("Part to be Manufactured").scrollIntoView();
+          cy.get("[data-cy='lhr-selected-part']").should("be.visible");
+          cy.get("[name='lhr_initial_quantity']").should("be.visible");
+          cy.get("[name='lhr-end-quantity']").should("be.visible");
         });
 
         it("Verify Form option", () => {
@@ -1279,7 +1281,6 @@ context("Paper LHR tab Layout", () => {
           cy.get("[data-cy='generalInfo']").should("be.visible");
         });
       });
-
     });
 
     context("Validate Right Side Panel", () => {
@@ -1363,7 +1364,7 @@ context("Paper LHR tab Layout", () => {
 
       context("Verify Book Mark", () => {
         it("Verify Book Mark Navigation", () => {
-          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.drSelectBookmarksTab();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
 
@@ -1376,7 +1377,7 @@ context("Paper LHR tab Layout", () => {
 
     context("Verify Scroll", () => {
       it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
+        cy.drSelectHistoryTab();
       });
 
       it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
