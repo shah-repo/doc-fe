@@ -767,10 +767,6 @@ context("Verify New Layout for Supplier Document", () => {
   });
 
   context("Approve and Release supplier document", () => {
-    // it("Add Approver", () => {
-    //   cy.pmAddApproverOnApproverList({ approver: owner });
-    // });
-
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
     });
