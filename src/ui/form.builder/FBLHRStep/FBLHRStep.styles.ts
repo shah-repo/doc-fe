@@ -47,6 +47,10 @@ export const FBLHRStepStyles = makeStyles(() =>
       marginRight: "22px",
       display: "block",
     },
+    panelhrtDetails: {
+      padding: "10px 0px 0px 0px",
+      display: "block",
+    },
     panelBorder: {
       marginBottom: 5,
       border: `1px solid ${Colors.gray_goose}`,
