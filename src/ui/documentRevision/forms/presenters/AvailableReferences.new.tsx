@@ -166,7 +166,10 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     }
   };
 
-  const debounceFunction = debounce(onInputChange, 1000);
+  const debounceFunction = debounce(onInputChange, 1000, {
+    leading: true,
+    trailing: true,
+  });
 
   const onScroll = (event: React.SyntheticEvent) => {
     const listboxNode = event.currentTarget;
@@ -202,7 +205,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       <Autocomplete
         {...{ onChange, disabled }}
         classes={{ option: classes.option }}
-        value={{ label: "" }}
+        value={{ label: inputValue }}
         options={ModifiedOptions}
         getOptionLabel={(option) => option.label }
         // disable filtering on client
