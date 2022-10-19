@@ -20,7 +20,6 @@ export default makeStyles(() => ({
     fontWeight: 400,
     color: Colors.almost_black,
     marginTop: 10,
-    textTransform: "capitalize",
   },
   avatar: {
     width: 45,

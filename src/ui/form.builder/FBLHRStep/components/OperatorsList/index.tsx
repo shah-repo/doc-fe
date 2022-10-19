@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar, Badge, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
-import { find } from "lodash";
+import { find, capitalize } from "lodash";
 import { Observer } from "mobx-react";
 import { FBInlineApprovalStatusIdent, FBLHRStepState } from "../../../";
 import { ReactComponent as OperatorApprovedIcon } from "../../../../../assets/images/OperatorApproved.svg";
@@ -75,7 +75,7 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
                               className={classes.operatorStatus}
                               data-cy={`operator-status-${stepIndex}-${index}`}
                             >
-                              {statusInfo?.status?.toLowerCase()}
+                              {capitalize(statusInfo?.status)}
                             </Typography>
                             {statusInfo?.reviewedAt && (
                               <>
