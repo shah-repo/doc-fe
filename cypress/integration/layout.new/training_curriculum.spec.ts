@@ -361,9 +361,8 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
   });
 
-  // Scenario 7a - Newly Created Training Curriculum Document
-
   context("Create Training Curriculum form", () => {
+    // Scenario 7a - Newly Created Training Curriculum Document
     it("Navigate to Document List", () => {
       cy.navigToDocumentList();
     });
@@ -653,7 +652,12 @@ context("Verify New Layout for Training Curriculum Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.get(`[data-cy="referenceTo"]`).arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+        cy.wait(2000);
+        cy.contains("FM-00001").arrowClick();
+        cy.drRemoveReferences({ reference: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -715,12 +719,11 @@ context("Verify New Layout for Training Curriculum Document", () => {
       });
 
       it("Click on migrate form button", () => {
-        cy.get("[data-cy='common.form.migration']").arrowClick();
+        cy.drClickMigrateForm();
       });
 
       it("Select form to be migrated", () => {
-        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
-        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+        cy.drSelectFormToBeMigrated({ formContains: "FM-00002" });
       });
     });
 
@@ -866,9 +869,8 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
   });
 
-  // Scenario 7b - Existing Training Curriculum Record
-
   context("Select exisiting Draft training curriculum document", () => {
+    // Scenario 7b - Existing Training Curriculum Record
     it("Navigate to Training Curriculum", () => {
       cy.navigToTrainingCurriculums();
     });
@@ -979,7 +981,12 @@ context("Verify New Layout for Training Curriculum Document", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          cy.get(`[data-cy="referenceTo"]`).arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+          cy.wait(2000);
+          cy.contains("FM-00001").arrowClick();
+          cy.drRemoveReferences({ reference: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
