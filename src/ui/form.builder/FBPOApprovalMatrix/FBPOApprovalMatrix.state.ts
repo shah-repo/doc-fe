@@ -1,6 +1,8 @@
 import { findIndex, isEmpty, union } from "lodash";
 import { action, observable, set } from "mobx";
 import { FBAutocompleteAsyncOption, FBAutocompleteAsyncState, FBFormState } from "..";
+import { intl } from "../../../common/intl";
+import { toastError } from "../../components/notifications";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { FBPOApprovalMatrixConstructor, POApprovalMatrix, POApprovalMatrixLevel } from "./FBPOApprovalMatrix.types";
@@ -39,6 +41,12 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
 
   @action public addItem = (approvalLevel: POApprovalMatrixLevel) => {
     const appLevelIndex = findIndex(this.approvalLevels, { id: approvalLevel.id });
+    const checkDuplicate = this.approvalLevels.filter(
+      (item) => item.name === approvalLevel.name || item.limit === approvalLevel.limit );
+    if (checkDuplicate?.length > 0) {
+      toastError(intl.formatMessage({ id: "documentRevision.form.PO.matrix.duplicate" }));
+      return;
+    }
     if (appLevelIndex === -1) {
       set(this, "approvalLevels", union(this.approvalLevels, [approvalLevel]));
       return;

@@ -35,6 +35,13 @@ const AuditProcedure: React.FunctionComponent<Props> = ({
         <div style={{ width: "100%", height: "100%" }} dangerouslySetInnerHTML={{ __html: auditValue as string }}/>
       );
     },
+    partLot() {
+      auditValue = procedureState.getLot(auditValue ?? "");
+      if (FB.isUUID(auditValue ?? "")) {
+        return <CircularProgress size={12} />;
+      }
+      return (<div data-cy={dataCy}>{auditValue}</div>);
+    },
     materials() {
       auditValue = procedureState.getItem(auditValue ?? "", FBProcedureItemType.materials);
       if (FB.isUUID(auditValue ?? "")) {

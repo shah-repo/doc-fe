@@ -1,21 +1,18 @@
-import { Avatar, Badge, Box, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import Accordion from "@material-ui/core/ExpansionPanel";
 import AccordionDetails from "@material-ui/core/ExpansionPanelDetails";
 import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
 import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
-import { find, isEmpty, map } from "lodash";
-import { Observer } from "mobx-react";
+import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
-import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBInlineApprovalStatusIdent, FBLHRStepProps, FBProvider, FBText } from "..";
+import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
 import { ReactComponent as CollapseMoreIcon } from "../../../assets/images/CollapseMoreIcon.svg";
 import { ReactComponent as ExpandMoreIcon } from "../../../assets/images/ExpandMoreIcon.svg";
-import { ReactComponent as OperatorApprovedIcon } from "../../../assets/images/OperatorApproved.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { User } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
-import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
 import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
@@ -23,6 +20,7 @@ import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedure
 import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
 import { FBLHRStepStyles } from "./FBLHRStep.styles";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
+import OperatorsList from "./components/OperatorsList";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
@@ -81,22 +79,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 
   operators = operators?.map((user) => ({ stepId: user?.stepId, user: user?.user }));
 
-  const getStatusInfo = (opert, operatorId: string) => {
-    const approvers = stepLHRs?.id && opert ? opert[stepLHRs?.id] : [];
-    return find(approvers, (o) => o.approverId === operatorId && o.status !== "ABANDONED");
-  };
   const stepLabel = stepLHRs ? `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`
     : `LHR Step ${stepIndex}`;
   const [expand, setExpand] = React.useState(false);
-  const getAvtarStyle = (initialColor) => ({
-    width: "35px",
-    height: "35px",
-    fontWeight: 600,
-    color: Colors.white,
-    borderRadius: "50%",
-    fontSize: "12px",
-    background: `${initialColor}`,
-  });
 
   const getStatusColor = () => {
     const status = stepLHRs?.status;
@@ -137,7 +122,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 
   return (
     <FBProvider {...{ lhrStepState }}>
-      <Accordion className={classes.panelBorder} expanded={expand}>
+      {!isDocumentLHRT && ( <Accordion className={classes.panelBorder} expanded={expand}>
+
         <AccordionSummary
           onClick={() => setExpand(!expand)}
           className={classes.panelSummary}
@@ -195,6 +181,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             </Box>
           )}
         </AccordionSummary>
+
         <AccordionDetails className={classes.panelDetails}>
           <Box display="flex" alignItems="flex-start">
             <Box
@@ -256,7 +243,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
             />
           </Box>
 
-          {!isDocumentLHRT && !isEmpty(materials) && (
+          {!isDocumentLHRT && !isEmpty(materials) && !lhrStepState && (
             <FBLHRStepProcedureItem
               value={materials}
               type={FBProcedureItemType.materials}
@@ -264,7 +251,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               isPendingChange
             />
           )}
-          {!isDocumentLHRT && !isEmpty(equipment) && (
+          {!isDocumentLHRT && !isEmpty(equipment) && !lhrStepState && (
             <FBLHRStepProcedureItem
               value={equipment}
               type={FBProcedureItemType.equipment}
@@ -307,69 +294,121 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 <Text translation="common.operators" />
               </Box>
             )}
-            <List>
-              {map(operators, (operator, index) => (
-                <ListItem alignItems="flex-start" disableGutters className={classes.listItem} key={index}>
-                  <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
-                    {operator.user.avatar ? (
-                      <Badge
-                        overlap="circle"
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        badgeContent={
-                          getStatusInfo(lhrStepState?.approvals, operator.stepId)
-                            ?.status === FBInlineApprovalStatusIdent.APPROVED
-                         && <OperatorApprovedIcon />}
-                      >
-                        <Avatar alt={operator.user?.name} src={operator.user?.avatar} />
-                      </Badge>
-                    ) : (
-                      <Avatar style={getAvtarStyle(operator.user.initialColor)}>
-                        {getInitalsFromName(operator.user?.name)}
-                      </Avatar>
-                    )}
-                  </ListItemAvatar>
-                  <ListItemText
-                    style={{ marginLeft: 4 }}
-                    primary={
-                      <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
-                        {operator.user?.name}
-                      </div>
-                    }
-                    secondary={
-                      <Observer>
-                        {() => (
-                          <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.operatorStatus}
-                              data-cy={`operator-status-${stepIndex}-${index}`}
-                            >
-                              {
-                                getStatusInfo(lhrStepState?.approvals, operator.stepId)
-                                  ?.status
-                              }
-                            </Typography>
-                            {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
-                              (<Box component="span" marginRight={4}>&bull;</Box>)}
-                            {getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt &&
-                              getFormattedDateString(
-                                getStatusInfo(lhrStepState?.approvals, operator.stepId)?.reviewedAt,
-                                MomentFormats.DateTime)}
-                          </div>
-                        )}
-                      </Observer>
-                    }
-                  />
-                </ListItem>
-              ))}
-            </List>
+            <OperatorsList {...{ operators, stepLHRs, lhrStepState, stepIndex }} />
           </Box>
         </AccordionDetails>
-      </Accordion>
+      </Accordion>)}
+      {isDocumentLHRT && (
+        <>
+          <Box display="flex" alignItems="center"  justifyContent={isDocumentLHRT ? "" : "center"}
+            style={{ borderBottom: `2px solid ${Colors.chinese_silver}` }}>
+            <Box mr={2} ml={1} >
+              <Typography variant="h6" style={{
+                color: Colors.almost_black,
+              }}>
+                <FBText locale={stepLabel}  />
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="flex-start" fontSize={12}>
+
+              {!isDocumentLHRT && (  <Box mr={1} display="flex" alignItems="center">
+                {stepLHRs && isDocumentRevisionReleased(stepLHRs?.status) && (
+                  <CheckCircle
+                    style={{
+                      color: getStatusColor(),
+                      fontSize: 17,
+                    }}
+                    className="fontSizeSmall"
+                  />
+                )}
+                {stepLHRs && !isDocumentRevisionReleased(stepLHRs?.status) && renderRemoveCircle()}
+                {!stepLHRs && renderRemoveCircle()}
+              </Box>)}
+              <Box
+                fontWeight={700}
+                fontSize={12}
+                color={Colors.almost_black}
+                component={"span"}
+                mr={0.75}
+              >
+                {!isDocumentLHRT && (<FBText locale={getLHRStatus()} values={{}}></FBText>)}
+              </Box>
+            </Box>
+          </Box>
+          <Box flexGrow={1}></Box>
+          {stepLHRs?.redline && (
+            <Box pr={2}>
+              <BorderColorIcon className={classes.borderColorIcon}></BorderColorIcon>
+            </Box>
+          )}
+          <AccordionDetails className={classes.panelhrtDetails}>
+            <Box display="flex" alignItems="flex-start">
+              <Box
+                flexGrow={1}
+                onClick={() => isOutput && stepLHRs && openLHRs()}
+                bgcolor={Colors.alabaster}
+                borderRadius={4}
+              >
+                <FBAutocompleteAsync
+                  boxProps={{ flexGrow: 1 }}
+                  label="form.builder.select.document"
+                  validationAttribute ="form.builder.lhrstep"
+                  type="lhrstep"
+                  optionId={FBAutocompleteAsyncOption.mpiDocuments}
+                  gutter={false}
+                  autosave
+                  rules="required"
+                  withState
+                  shouldReloadOnInit
+                  disabled={isOutput || !(isDraft || isPendingChange)}
+                  withoutPrefixRoot={Boolean(stepLHRs)}
+                  inputPropStyle={{
+                    background: Colors.background_white,
+                    padding: "0px 0px 0px 6px",
+                    minHeight: 36,
+                  }}
+                  {...{ name, loading, filterOptions }}
+                  inputStyle={
+                  stepLHRs?.redline
+                    ? {
+                      background: Colors.seashell,
+                      border: `1px solid ${Colors.error_red}`,
+                      paddingLeft: "5px",
+                    }
+                    : { background: Colors.background_white, borderRadius: 4 }
+                  }
+                />
+              </Box>
+              {!isDocumentLHRT && ( <FBButton
+                disabled={isDisabled}
+                label={
+                  stepLHRs ? "form.builder.view.step" : "form.builder.start.step"
+                }
+                onClick={stepLHRs ? () => openLHRs(stepLHRs) : startMpi}
+                {...{ loading }}
+                className={classes.button}
+                style={
+                  isDisabled ? {
+                    background: Colors.whitest_grey,
+                  }
+                    : stepLHRs
+                      ? {
+                        background: Colors.light_blue,
+                        color: Colors.navy,
+                      }
+                      : {
+                        background: Colors.navy,
+                        color: Colors.white,
+                      }
+                }
+              /> )}
+            </Box>
+            <Box>
+              <OperatorsList {...{ operators, stepLHRs, lhrStepState, stepIndex }} />
+            </Box>
+          </AccordionDetails>
+        </>
+      )}
     </FBProvider>
   );
 };
