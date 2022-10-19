@@ -425,7 +425,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
               >
                 <FBAutocompleteAsync
                   boxProps={{ flexGrow: 1 }}
-                  label={"Select Document"}
+                  label="form.builder.select.document"
+                  validationAttribute ="form.builder.lhrstep"
                   type="lhrstep"
                   optionId={FBAutocompleteAsyncOption.mpiDocuments}
                   gutter={false}
