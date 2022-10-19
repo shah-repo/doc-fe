@@ -471,7 +471,6 @@ context("Verify New Layout for EB Document", () => {
     });
   });
 
-  // Scenario 8a - Newly Created Engineering Build Document
   context("Create EB migration form", () => {
     context("Create EB  migration form", () => {
       it("Navigate to Document List", () => {
@@ -1112,8 +1111,6 @@ context("Verify New Layout for EB Document", () => {
       });
     });
   });
-
-  // Scenario 8b - Existing Engineering Build Record
 
   context("Select existing draft engineering build document", () => {
     it("Navigate to Engineering Build", () => {
