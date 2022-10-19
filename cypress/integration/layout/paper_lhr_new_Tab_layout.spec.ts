@@ -1010,17 +1010,10 @@ context("Paper LHR tab Layout", () => {
     it("Fill in Approval block and  Approve and release Record", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
       cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    context("Verify Scroll", () => {
-      it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
-      });
-
-      it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
-        cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
-      });
-
+    context("Approve and released", () => {
       it("Approve and Release", () => {
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,

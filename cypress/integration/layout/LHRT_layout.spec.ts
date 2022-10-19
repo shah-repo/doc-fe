@@ -806,8 +806,8 @@ context("Create new LHRT Layout Verification", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("CS-00005 - Part document");
       });
+
       it("Save the document", () => {
-        cy.pause();
         cy.drSaveDocumentWithoutaudit();
       });
     });
