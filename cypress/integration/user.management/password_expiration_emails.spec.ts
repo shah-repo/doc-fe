@@ -267,8 +267,7 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
           it("Confirm message is not in email", () => {
             cy.imapVerifyLastEmailDoesNotContain({
               userEmail: emailOfUserToSignUp,
-              content: "In order to change your password you must reply to this link enlil-feedback@shifamed.com" +
-              "to change your password. We're here to help you at any step along the way",
+              content: "For your security, this link will expire in 24 hours or immediately after you change your password.",
             });
           });
         });
@@ -359,6 +358,20 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
             content: "In order to change your password you must reply to this link enlil-feedback@shifamed.com" +
             "to change your password. We're here to help you at any step along the way",
           });
+        });
+      });
+
+      context("Check locked user message", () => {
+        it("Log user in", () => {
+          cy.authLogin({
+            email: emailOfUserToSignUp,
+          });
+        });
+
+        it("Should see locked notification", () => {
+          cy.get("[data-cy=UserLocked-lockedInfo]").should("have.text", "Your account has been locked.");
+          cy.get("[data-cy=UserLocked-infoLink]").should("have.text",
+            "Please contact your Company Admin for Enlil to reset your password.");
         });
       });
     });
