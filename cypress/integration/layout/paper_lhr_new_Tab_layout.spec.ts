@@ -959,7 +959,7 @@ context("Paper LHR tab Layout", () => {
     });
 
     it("Click on revision icon history tab should open", () => {
-      cy.get("[data-cy='cr-icon']").arrowClick();
+      cy.drSelectRevisionHistoryTab();
       cy.get("[data-cy='Revision History-detail']").should("be.visible");
     });
   });
@@ -967,7 +967,7 @@ context("Paper LHR tab Layout", () => {
 
   context("Verify Scroll", () => {
     it("Navigate to history tab", () => {
-      cy.get("[data-cy='timeline-icon']").arrowClick({ force: true });
+      cy.drSelectHistoryTab();
     });
 
     it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
