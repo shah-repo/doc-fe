@@ -25,6 +25,7 @@ declare global {
       usrEnterName(params: {name: string}): Chainable;
       usrClickEditUser(params: {name: string}): Chainable;
       usrClickSaveButton(): Chainable;
+      usrClickPlusSaveButton(): Chainable;
       usrClickCancelButton(): Chainable;
       usrClickStatusButton(): Chainable;
       usrClickCloseDialogButton(): Chainable;
@@ -135,11 +136,11 @@ Cypress.Commands.add("usrClickAddEmployee", () => {
 });
 
 Cypress.Commands.add("usrEnterEmail", (params: {email: string }) => {
-  cy.get("[id=\"input-with-icon-textfield\"]").eq(1).arrowType(params.email);
+  cy.get("[id=\"input-with-icon-textfield\"]").eq(1).arrowType(params.email, { force: true });
 });
 
 Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
-  cy.get("[id=\"input-with-icon-textfield\"]").eq(0).arrowType(params.name);
+  cy.get("[id=\"input-with-icon-textfield\"]").eq(0).arrowType(params.name, { force: true });
 });
 
 Cypress.Commands.add("usrClickEditUser", (params: {name: string }) => {
@@ -162,6 +163,14 @@ Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
 Cypress.Commands.add("usrClickSaveButton", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
     cy.get("button>span>svg>path").eq(1).arrowClick({ force: true });
+  });
+  cy.checkToastMessage({ exists: false });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("usrClickPlusSaveButton", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
+    cy.get("td>span>button>span>svg>path").eq(0).arrowClick({ force: true });
   });
   cy.checkToastMessage({ exists: false });
   cy.landingPageLoadingElementShouldNotExist();
