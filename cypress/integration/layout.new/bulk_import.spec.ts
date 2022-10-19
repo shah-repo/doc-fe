@@ -23,6 +23,21 @@ const docTitle = "Test Bulk Import";
 const formTitle = "New Bulk Import Form";
 const formDescription = "New Bulk Import Form Description";
 
+const FIELD_HEADERS = [
+  "Select Form Document For Import",
+  "Column Document/Record Id?",
+  "Select Output Document Type",
+  "Download Excel Template",
+  "EXCEL FOR IMPORT",
+  "Upload excel with data for import",
+  "Mass Create Logs",
+  "Logs",
+  "form.builder.approvals",
+  "fb-textfield",
+  "fb-radiobutton-group",
+];
+
+
 context("Verify New Layout for Bulk Import Document", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -364,6 +379,41 @@ context("Verify New Layout for Bulk Import Document", () => {
         });
       });
 
+      context("Enter values for Details tab predefined schema fields", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        it("Select form to be used for bulk creation", () => {
+          cy.get(`[data-cy="fb-form-document-to-be-used"]`).autocompleteSelect("FM-00003");
+        });
+
+        it("Select document type to be used for bulk creation", () => {
+          cy.get(`[data-cy="fb-output-document-type"]`).autocompleteSelect("Bulk Import");
+        });
+
+        it("Select 'Yes' to have Document/Record Id column", () => {
+          cy.get(`[name="fb-add-column-document-record-id"]`).eq(0).check();
+        });
+
+        it("Upload excel file", () => {
+          cy.atchUploadTemplateForBLC({ fileName: "test_template_new.xlsx" });
+        });
+
+        it("Fill text field", () => {
+          cy.get("[name^=fb-textfield-]").arrowType("Bulk Import Text Field");
+          cy.unClick();
+        });
+
+        it("Select radio button option", () => {
+          cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
+        });
+
+        it("Save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+      });
+
       context("Verify Details tab content", () => {
         it("Navigate to Details tab", () => {
           cy.drSelectDetailsTab();
@@ -420,7 +470,11 @@ context("Verify New Layout for Bulk Import Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.get(`[data-cy="referenceTo"]`).arrowClick();
+        cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+        cy.wait(2000);
+        cy.contains("FM-00001").arrowClick();
+        cy.drRemoveReferences({ reference: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -443,59 +497,11 @@ context("Verify New Layout for Bulk Import Document", () => {
         cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
       });
 
-      it("Mapped 'Select Form Document For Import'", () => {
-        cy.get("[id='formMigrationField']" ).eq(0).arrowClick();
-        cy.get("[id^='react-select']").eq(1).autocompleteSelect("Select Form Document For Import");
-      });
-
-      it("Mapped 'Column Document/Record Id?'", () => {
-        cy.get("[id='formMigrationField']" ).eq(1).arrowClick();
-        cy.get("[id^='react-select']").eq(2).autocompleteSelect("Column Document/Record Id?");
-      });
-
-      it("Mapped 'Select Output Document Type'", () => {
-        cy.get("[id='formMigrationField']" ).eq(2).arrowClick();
-        cy.get("[id^='react-select']").eq(3).autocompleteSelect("Select Output Document Type");
-      });
-
-      it("Mapped 'Download Excel Template'", () => {
-        cy.get("[id='formMigrationField']" ).eq(3).arrowClick();
-        cy.get("[id^='react-select']").eq(4).autocompleteSelect("Download Excel Template");
-      });
-
-      it("Mapped 'EXCEL FOR IMPORT'", () => {
-        cy.get("[id='formMigrationField']" ).eq(4).arrowClick();
-        cy.get("[id^='react-select']").eq(5).autocompleteSelect("EXCEL FOR IMPORT");
-      });
-
-      it("Mapped 'Upload excel with data for import'", () => {
-        cy.get("[id='formMigrationField']" ).eq(5).arrowClick();
-        cy.get("[id^='react-select']").eq(6).autocompleteSelect("Upload excel with data for import");
-      });
-
-      it("Mapped 'Mass Create Logs'", () => {
-        cy.get("[id='formMigrationField']" ).eq(6).arrowClick();
-        cy.get("[id^='react-select']").eq(7).autocompleteSelect("Mass Create Logs");
-      });
-
-      it("Mapped 'Logs'", () => {
-        cy.get("[id='formMigrationField']" ).eq(7).arrowClick();
-        cy.get("[id^='react-select']").eq(8).autocompleteSelect("Logs");
-      });
-
-      it("Mapped Approvals field", () => {
-        cy.get("[id='formMigrationField']" ).eq(8).arrowClick();
-        cy.get("[id^='react-select']").eq(9).autocompleteSelect("form.builder.approvals");
-      });
-
-      it("Mapped fb-textfield", () => {
-        cy.get("[id='formMigrationField']" ).eq(9).arrowClick();
-        cy.get("[id^='react-select']").eq(10).autocompleteSelect("fb-textfield");
-      });
-
-      it("Mapped fb-radiobutton-group field", () => {
-        cy.get("[id='formMigrationField']" ).eq(10).arrowClick();
-        cy.get("[id^='react-select']").eq(11).autocompleteSelect("fb-radiobutton-group");
+      FIELD_HEADERS.forEach( (fieldHeader, i) => {
+        it(`Mapped '${fieldHeader}' field`, () => {
+          cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+          cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+        });
       });
 
       it("Click on confirm change", () => {
@@ -508,12 +514,32 @@ context("Verify New Layout for Bulk Import Document", () => {
         cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
       });
 
-      it("Verify migrated form info 'fb-textfield'", () => {
-        cy.get("[data-cy='fb-textfield']").parent().should("contain.text", "fb-textfield");
+      it("Verify fb-textfield", () => {
+        cy.get("[value='Bulk Import Text Field']").should("exist");
       });
 
-      it("Verify migrated form info 'fb-radiobutton-group'", () => {
-        cy.get("[data-cy='fb-radiobutton-group']").parent().should("contain.text", "fb-radiobutton-group");
+      it("Verify fb-radiobutton-group", () => {
+        cy.get("[value=\"Option 2\"]").should("be.checked");
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Verify  Select Form Document For Import ", () => {
+        cy.get("[value='FM-00003 - rev 1 - New Bulk Import Form']").should("exist");
+      });
+
+      it("Verify Column Document/Record Id?", () => {
+        cy.get("[value=\"Yes\"]").should("be.checked");
+      });
+
+      it("Verify Select Output Document Type", () => {
+        cy.get("[value='Bulk Import']").should("exist");
+      });
+
+      it("Verify uploaded file", () => {
+        cy.get(`[data-cy="fileupload-5"]`).contains("test_template_new.xlsx").should("exist");
       });
     });
 
@@ -562,17 +588,18 @@ context("Verify New Layout for Bulk Import Document", () => {
             { key: "Form Set To", value: "FM-00002 - revision 1 - Bulk import Migration " },
           ],
         },
-        {
-          owner,
-          actions: [
-            { key: "Name changed", value: docTitle },
-          ],
-        },
       ];
 
       it("Open history tab and verify changes are being captured", () => {
         cy.drSelectHistoryTab();
         cy.get(`[data-cy="History-detail"]`).should("be.visible");
+      });
+
+      it("Verify Name changed value as 'Component specification title'  ", () => {
+        cy.get("[data-cy=\"change-key-4-0\"]").contains("Name changed")
+          .should("exist");
+        cy.get("[data-cy=\"change-value-4-0\"]").contains("Test Bulk Import")
+          .should("exist");
       });
 
       verifyHistoryContent(history, groupOne);
@@ -599,62 +626,13 @@ context("Verify New Layout for Bulk Import Document", () => {
     });
   });
 
-  context("Fill in the fields", () => {
-    it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    context("Enter values for Details tab predefined schema fields", () => {
-      it("Select form to be used for bulk creation", () => {
-        cy.get(`[data-cy="fb-form-document-to-be-used"]`).autocompleteSelect("FM-00003");
-      });
-
-      it("Select document type to be used for bulk creation", () => {
-        cy.get(`[data-cy="fb-output-document-type"]`).autocompleteSelect("Bulk Import");
-      });
-
-      it("Select 'Yes' to have Document/Record Id column", () => {
-        cy.get(`[name="fb-add-column-document-record-id"]`).eq(0).check();
-      });
-
-      it("Upload excel file", () => {
-        cy.atchUploadTemplateForBLC({ fileName: "test_template_new.xlsx" });
-      });
-
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-    });
-
-    context("Enter values for Details tab added fields", () => {
-      it("Navigate to Overview tab", () => {
-        cy.drSelectOverviewTab();
-      });
-
-      it("Fill text field", () => {
-        cy.get("[name^=fb-textfield-]").arrowType("Bulk Import Text Field");
-        cy.unClick();
-      });
-
-      it("Select radio button option", () => {
-        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
-      });
-
-      it("Save document", () => {
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-      it("Turn on autosave", () => {
-        cy.cmpTurnOnAutosave();
-      });
-    });
-  });
-
   // Scenario 9b - Existing Bulk Import Record
 
   context("Select exisiting WIP bulk import record", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
+    });
+
     it("Navigate to Records", () => {
       cy.navigToRecords();
     });
@@ -774,7 +752,11 @@ context("Verify New Layout for Bulk Import Document", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          cy.get(`[data-cy="referenceTo"]`).arrowClick();
+          cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+          cy.wait(2000);
+          cy.contains("FM-00001").arrowClick();
+          cy.drRemoveReferences({ reference: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -862,7 +844,7 @@ context("Verify New Layout for Bulk Import Document", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve bulk import record", () => {
