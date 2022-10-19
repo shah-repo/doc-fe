@@ -756,7 +756,6 @@ context("Paper LHR tab Layout", () => {
       it("Approve and release Record", () => {
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
       });
-
     });
   });
 
