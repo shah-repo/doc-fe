@@ -743,6 +743,10 @@ context("Verify New Layout for EB Document", () => {
       cy.drEnterDocumentDescription({ description: docDescription });
     });
 
+    it("Enter fb-textfield", () => {
+      cy.get("[name^=\"fb-textfield-\"]").arrowType("fb-textfield");
+    });
+
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
@@ -810,15 +814,19 @@ context("Verify New Layout for EB Document", () => {
           cy.get("#sm-tabpanel-1").find("button[data-cy=\"form.builder.add.field\"]").should("exist");
         });
 
+        it("Enter description to Step #1", () => {
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Step #1 description" });
+        });
+
         it("Add Text Field", () => {
           cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+          cy.fbEnterNameValue({ name: "label", value: "textfield" });
           cy.fbAddNewFieldButton();
         });
 
         it("Save Form", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
       });
 
@@ -852,8 +860,12 @@ context("Verify New Layout for EB Document", () => {
         });
 
         context("Verify Procedure tab added fields", () => {
+          it("Navigate to Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Verify Text Field", () => {
-            cy.contains("fb-textfield").should("exist");
+            cy.contains("textfield").should("exist");
           });
 
           it("Verify that Form Options should appear for Procedure tab", () => {
@@ -943,8 +955,8 @@ context("Verify New Layout for EB Document", () => {
         cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
       });
 
-      it("Verify migrated form info 'fb-textfield'", () => {
-        cy.get("[data-cy='fb-textfield']").parent().should("contain.text", "fb-textfield");
+      it("Verify 'fb-textfield' value after migration", () => {
+        cy.get("[value='fb-textfield']").should("exist");
       });
 
       it("Verify form info should have migrated form 'FM-00003'", () => {
@@ -955,8 +967,10 @@ context("Verify New Layout for EB Document", () => {
         cy.drSelectProcedureTab();
       });
 
-      it("Verify migrated form info 'EB Procedure'", () => {
-        cy.get("[data-cy='form.builder.procedure']").parent().should("contain.text", "EB Procedure");
+      it("Verify 'Step #1' value after migration", () => {
+        cy.get("div[id^=\"fb-mpiprocedure\"] p")
+          .should("have.text", "Step #1 description");
+        cy.wait(2000);
       });
     });
 
@@ -1062,13 +1076,11 @@ context("Verify New Layout for EB Document", () => {
         cy.drSelectProcedureTab();
       });
 
-      it("Enter description to Step #1", () => {
-        cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Step #1 description" });
-      });
-
       it("Upload attachment 'image.jpg'", () => {
         cy.get("[data-cy=\"albumMediaButton\"]").scrollIntoView().arrowClick();
         cy.pmUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add material document", () => {
@@ -1091,7 +1103,7 @@ context("Verify New Layout for EB Document", () => {
 
     context("Enter values for Procedure tab added fields", () => {
       it("Fill text field", () => {
-        cy.get("[name^=fb-textfield-]").arrowType("EB Text Field");
+        cy.get("[name^=textfield-]").arrowType("EB Text Field");
         cy.unClick();
       });
 
@@ -1214,7 +1226,7 @@ context("Verify New Layout for EB Document", () => {
 
         context("Verify Procedure tab added fields", () => {
           it("Verify Text Field", () => {
-            cy.contains("fb-textfield").should("exist");
+            cy.contains("textfield").should("exist");
           });
 
           it("Verify that Form Options should appear for Procedure tab", () => {
@@ -1461,7 +1473,7 @@ context("Verify New Layout for EB Document", () => {
 
         context("Verify Procedure tab added fields", () => {
           it("Verify Text Field", () => {
-            cy.contains("fb-textfield").should("exist");
+            cy.contains("textfield").should("exist");
           });
 
           it("Verify that Form Options should appear for Procedure tab", () => {
