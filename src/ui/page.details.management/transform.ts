@@ -6,7 +6,7 @@ export const toPageDetailsInitialValues = (pageDetails: PageDetails): PageDetail
   ...pageDetails,
   columns: stringifyJSON(pageDetails.columns),
   config: stringifyJSON(pageDetails.config),
-  helpModule: pageDetails.config.helpModule,
+  helpModule: pageDetails.config?.helpModule,
 });
 
 export const toPageDetailsBodyValues = (values: PageDetailsCategoryValues): Omit<PageDetails, "id" | "exportList"> => ({

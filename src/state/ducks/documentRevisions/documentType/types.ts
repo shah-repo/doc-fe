@@ -385,7 +385,7 @@ export const GroupWithGroupOptions =  {
 };
 
 interface PageDetailsConfig {
-  helpModule: HelpModule;
+  helpModule?: HelpModule;
 }
 
 export interface PageDetailsColumn {

@@ -8,5 +8,5 @@ export interface PageDetailsCategory {
 }
 
 export interface PageDetailsCategoryValues extends PageDetailsCategory {
-  helpModule: Nullable<string>;
+  helpModule?: Nullable<string>;
 }
