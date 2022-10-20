@@ -144,7 +144,7 @@ const Presenter: React.FunctionComponent<Props> = ({
             label="document.output.type"
             value={outputDocumentTypeName}
             labelProps={{ ...AutoCompleteStyles.labelProps }}
-            labelFont={{ ...AutoCompleteStyles.labelFont, marginBottom: 14 }}
+            labelFont={{ ...AutoCompleteStyles.labelFont, marginBottom: 22 }}
           />
         )}
         {isEB && parent && (
