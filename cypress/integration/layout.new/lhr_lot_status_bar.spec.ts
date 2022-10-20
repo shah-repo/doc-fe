@@ -38,7 +38,7 @@ const reference = {
   valueCode: "LOT #22041301",
 };
 
-const owner = USERS[1].name;
+const owner = USERS[11].name;
 
 context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   before(() => {
@@ -63,16 +63,16 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [LotHistoryRecordTest, MPITest, LHRTTest, Part],
           },
           sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
@@ -89,7 +89,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -821,7 +821,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
   context("Login admin user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
   });
 
@@ -936,8 +936,9 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Add some references", () => {
+        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.drSelectReferences(reference.value);
+          cy.get("ul>li[role=option]").contains(reference.value).arrowClick({ force: true });
         });
       });
 
@@ -948,7 +949,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Add Approver to approvals list", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
       });
     });
 
@@ -1193,7 +1194,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       () => {
         it("Add Approver to approvals list", () => {
           cy.wait(1000);
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+          cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
         });
 
         it("Click on Complete step to Complete the step again", () => {
@@ -1652,7 +1653,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Add Approver to approvals list", () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+          cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
         });
 
         it("Click on Submit For Approval", () => {
@@ -1892,11 +1893,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Add 'Due Date'", () => {
-      cy.poAddDateRequired();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poAddDateRequired();
+      });
     });
 
     it("Add Approver to approvals list", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Select Details tab", () => {
@@ -1909,7 +1912,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Add Approver to approvals list", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Select Procedure tab", () => {
@@ -1917,18 +1920,24 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Enter 'Start quantity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("8");
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("8");
+        cy.unClick();
+      });
     });
 
     it("Enter 'Accepted quantity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("5");
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("5");
+        cy.unClick();
+      });
     });
 
     it("Enter 'Rejected quantity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("3");
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("3");
+        cy.unClick();
+      });
     });
 
     it("Click on “Complete step", () => {
@@ -1994,6 +2003,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner, { force: true });
         });
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
         cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
         cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
