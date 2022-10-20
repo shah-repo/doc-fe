@@ -884,6 +884,7 @@ context("Receiving landing page test", () => {
   });
 
   context("Create Released Receiving record", () => {
+
     it("Navigate to Receiving landing page", () => {
       cy.navigToReceivableList();
     });
@@ -921,9 +922,10 @@ context("Receiving landing page test", () => {
     });
 
     it("Select Purchase order", () => {
-      cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
-        .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
-      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetReceivableQuantity], () => {
+        cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
+          .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
+      });
     });
 
     it("Save the  form", () => {
@@ -941,47 +943,54 @@ context("Receiving landing page test", () => {
     });
 
     it("Click on receive all", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetReceivableQuantity], () => {
-          cy.get("[data-cy='fb-control-btn']").contains("Receive All").arrowClick();
-        });
-      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev,
+        CyRoutes.GetReceivableQuantity], () => {
+        cy.get("[data-cy='fb-control-btn']").contains("Receive All").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
     });
 
     it("Verify that all Parts, non-Enlil parts and PO services should have received quantities", () => {
-      cy.get("[data-cy='received']").eq(0).scrollIntoView();
+      cy.get("[data-cy='received']").eq(0).scrollIntoView().wait(2000);
       cy.get("[data-cy='received']").eq(0).should("have.text", "200");
       cy.get("[data-cy='received']").eq(1).should("have.text", "100");
-    });
-
-    it("Click on line item and Insert Receipt Quantity and click on save ", () => {
-      cy.get("[data-cy='partNumberDocId']").eq(0).arrowClick();
-      cy.get("[data-cy='received'] input").clear().arrowType("180");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy='form.builder.save']").arrowClick();
-      });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click on line item and Insert Receipt Quantity and click on save ", () => {
+    it("Click on line Item to edit", () => {
+      cy.wrapWithWaitOnApiCalls([], () => {
+        cy.get("[data-cy='partNumberDocId']").eq(0).arrowClick();
+      });
+    });
+
+    it("Insert Receipt Quantity and click on save ", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev,
+        CyRoutes.GetReceivableQuantity], () => {
+        cy.get("[data-cy='received'] input").clear().arrowType("180");
+        cy.get("[data-cy='form.builder.save']").arrowClick();
+      });
+    });
+
+    it("Save the  form", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on line item 2", () => {
       cy.get("[data-cy='partNumberDocId']").eq(1).arrowClick();
-      cy.get("[data-cy='received'] input").clear().arrowType("100");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+    });
+
+    it("Insert Receipt Quantity and click on save ", () => {
+      cy.wrapWithWaitOnApiCalls([], () => {
+        cy.get("[data-cy='received'] input").clear().arrowType("100");
         cy.get("[data-cy='form.builder.save']").arrowClick();
       });
-      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Save the document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Navigate to details Tab", () => {
-      cy.drSelectDetailsTab();
+    it("Save the  form", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1030,9 +1039,7 @@ context("Receiving landing page test", () => {
     });
   });
 
-
   context("Validate Right Side Panel", () => {
-
     it("Verify that right side panel opens by default to the References tab", () => {
       cy.get("[data-cy='References']").should("exist");
       cy.get("[data-cy='generalInfo']").should("be.visible");
@@ -1193,6 +1200,7 @@ context("Receiving landing page test", () => {
         cy.get("[name='Test']").clear().arrowType("Test");
         cy.drClickCreateDocumentWithoutApiCall();
       });
+
       it("Verify migrate form button is visible", () => {
         cy.get("[data-cy=references-icon]").arrowClick();
         cy.get("[data-cy='common.form.migration']").should("be.visible");
@@ -1327,7 +1335,6 @@ context("Receiving landing page test", () => {
       cy.dlFilterByDocId({ docId: "RCT-00001" });
       cy.dlSelectFirstDocument();
     });
-
   });
 
   context("Verify Layout for created receiving record in draft state", () => {
@@ -1446,7 +1453,6 @@ context("Receiving landing page test", () => {
     it("Verify that right side panel Expand and collapse", () => {
       cy.verifyExpandCollpase();
     });
-
   });
 
   context("Validate Right Side Panel", () => {
