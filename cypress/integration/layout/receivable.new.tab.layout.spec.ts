@@ -923,6 +923,7 @@ context("Receiving landing page test", () => {
     it("Select Purchase order", () => {
       cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
         .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save the  form", () => {
@@ -940,7 +941,11 @@ context("Receiving landing page test", () => {
     });
 
     it("Click on receive all", () => {
-      cy.get("[data-cy='fb-control-btn']").contains("Receive All").arrowClick();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetReceivableQuantity], () => {
+          cy.get("[data-cy='fb-control-btn']").contains("Receive All").arrowClick();
+        });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify that all Parts, non-Enlil parts and PO services should have received quantities", () => {
@@ -972,6 +977,7 @@ context("Receiving landing page test", () => {
         [CyRoutes.PatchDocRev], () => {
           cy.drClickCreateDocumentWithoutApiCall();
         });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to details Tab", () => {
@@ -1229,6 +1235,7 @@ context("Receiving landing page test", () => {
 
       it("Navigate to details Tab", () => {
         cy.drSelectDetailsTab();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {
