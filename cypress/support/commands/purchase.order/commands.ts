@@ -113,7 +113,7 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -247,7 +247,7 @@ Cypress.Commands.add("poCheckTotalAmount", (params: {number: string}) => {
 });
 
 Cypress.Commands.add("poCheckTaxRate", (params: {taxRate: string}) => {
-  cy.get(`[name="po-items-built-in.taxRate"]`).contains(params.taxRate);
+  cy.get(`[name="po-items-built-in.taxRate"]`).should("have.text", params.taxRate);
 });
 
 Cypress.Commands.add("poCheckTax", (params: {number: string}) => {

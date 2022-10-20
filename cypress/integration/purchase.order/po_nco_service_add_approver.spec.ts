@@ -26,7 +26,7 @@ const apiCreatedCompany: any = {
   employees: [],
   documentTypes: [],
 };
-const ADMIN_USER = USERS[1];
+const ADMIN_USER = USERS[11];
 const ncoFormName = "NCO Form";
 const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
 const newCompanyName = "New company " + randomNumberForCompany;
@@ -69,9 +69,9 @@ context("Add Requestor as an approver of the PO", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               NCORecord,
               SupplierExport,
@@ -89,7 +89,7 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -124,7 +124,7 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -204,8 +204,8 @@ context("Add Requestor as an approver of the PO", () => {
       cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
     });
 
-    it(`Enters company email '${USERS[1].email}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email, { force: true });
+    it(`Enters company email '${USERS[11].email}'`, () => {
+      cy.get("[name^=company-admin-email-]").arrowType(USERS[11].email, { force: true });
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
@@ -293,7 +293,7 @@ context("Add Requestor as an approver of the PO", () => {
   context("Login User", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       });
     });
 
@@ -304,7 +304,7 @@ context("Add Requestor as an approver of the PO", () => {
             const response = res.body;
             apiCreatedCompany.employees = response.employees;
             createdCompany = response;
-            adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+            adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           }
         });
       }).as("response");
@@ -460,7 +460,7 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       });
 
       cy.intercept({ method: "GET", pathname: "/api/v1/auth/sessionDetails" }, (req) => {
@@ -710,7 +710,7 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Add an approver", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick().wait(2000);
-      cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(`${USERS[2].name}{enter}`, { force: true });
+      cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(`${USERS[12].name}{enter}`, { force: true });
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -736,12 +736,12 @@ context("Add Requestor as an approver of the PO", () => {
   // eslint-disable-next-line max-len
   context("Remove the lastly added approver, add requester and verify 'The requestor field is required field.' is disappeared", () => {
     it("Remove last Approver added'", () => {
-      cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().parent()
+      cy.contains(`${USERS[12].name} - ${USERS[12].email}`).parent().parent()
         .find(".MuiSvgIcon-root.MuiChip-deleteIcon").arrowClick();
     });
 
-    it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+    it(`Select '${USERS[11].name}' for Requestor`, () => {
+      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[11].name} - ${USERS[11].email}`);
       cy.unClick();
     });
 
@@ -755,11 +755,16 @@ context("Add Requestor as an approver of the PO", () => {
       cy.drSelectLineItems();
     });
 
+    it("Click on 'Add item' button", () => {
+      SystemRequirement("REQ-1360");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.poAddNewFieldItem();
+      });
+    });
+
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
-      cy.poAddNewFieldItem();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldAppear();
-      cy.landingPageLoadingElementShouldNotExist();
+      SystemRequirement("REQ-1400");
+      cy.get("[data-cy='common.add']").arrowClick();
       cy.get("p[class*='MuiFormHelperText-root']>span").eq(0)
         .contains("The Part Number field is required when Supplier Part Number is empty.");
       cy.get("p[class*='MuiFormHelperText-root']>span").eq(1)
@@ -809,7 +814,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
   });
 
-  context(`Check the Approval field automatically filled as the requestor as ${USERS[1].name}`, () => {
+  context(`Check the Approval field automatically filled as the requestor as ${USERS[11].name}`, () => {
     it("Switch to details tab", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
@@ -817,7 +822,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check requestor is added", () => {
-      cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[11].name} - ${USERS[11].email}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -825,7 +830,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check approvers automatically added", () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[11].name} - ${USERS[11].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -834,7 +839,7 @@ context("Add Requestor as an approver of the PO", () => {
   context("Verify that if the Requestor fulfills the PO approval level in Gray color", () => {
     it("Check if selected approver has approval signature right by his name", () => {
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[1].name + " | DRAFT" + USERS[1].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[11].name + " | DRAFT" + USERS[11].email);
     });
 
     it("Check approval icon if it's colored", () => {
@@ -848,45 +853,45 @@ context("Add Requestor as an approver of the PO", () => {
         cy.drSelectHistoryTab();
       });
       cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Added")
-        .and("contain", USERS[1].name);
+        .and("contain", USERS[11].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
       cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0)
-        .should("contain", "Approver Added").should("contain", USERS[1].name);
+        .should("contain", "Approver Added").should("contain", USERS[11].name);
     });
   });
 
   context("Verify that approver delete is disabled", () => {
     it("Verify that approver delete is disabled", () => {
-      cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${USERS[11].name} - ${USERS[11].email}`);
       cy.get(`input[data-cy^="fb-po-approvals-"]`).parent()
         .find(`[class="MuiChip-root MuiAutocomplete-tag Mui-disabled MuiChip-deletable"]`).should("exist");
     });
   });
 
   // eslint-disable-next-line max-len
-  context(`Remove requestor ${USERS[1].name} and add ${USERS[2].name} which automatically filled as the approver as ${USERS[2].name}`, () => {
+  context(`Remove requestor ${USERS[11].name} and add ${USERS[12].name} which automatically filled as the approver as ${USERS[12].name}`, () => {
     it("Switch to details tab", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Remove requestor as ${USERS[1].name}`, () => {
+    it(`Remove requestor as ${USERS[11].name}`, () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
         cy.unClick();
       });
     });
 
-    it(`Select '${USERS[2].name}' for Requestor`, () => {
-      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[2].name} - ${USERS[2].email}`);
+    it(`Select '${USERS[12].name}' for Requestor`, () => {
+      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[12].name} - ${USERS[12].email}`);
       cy.unClick();
     });
 
     it("Check requestor is added", () => {
-      cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[12].name} - ${USERS[12].email}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -894,7 +899,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check approvers automatically added", () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[12].name} - ${USERS[12].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -903,7 +908,7 @@ context("Add Requestor as an approver of the PO", () => {
   context("Verify that if the Requestor fulfills the PO approval level in Red color", () => {
     it("Check if selected approver has approval signature right by his name", () => {
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[2].name + " | DRAFT" + USERS[2].email);
+      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[12].name + " | DRAFT" + USERS[12].email);
     });
 
     it("Check approval icon if it's colored", () => {
@@ -931,43 +936,43 @@ context("Add Requestor as an approver of the PO", () => {
     it("Check approvers automatically Removed", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get(`[name^="fb-po-approvals-"]`).should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).should("not.contain", `${USERS[12].name} - ${USERS[12].email}`);
     });
   });
 
   context("Verify that history tab is capturing requestor Deleted and approver Removed", () => {
     it("Check history entry for 'Requestor Deleted'", () => {
       cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0).should("contain", "Requestor  Deleted")
-        .and("contain", USERS[2].name);
+        .and("contain", USERS[12].name);
     });
   });
 
   context("Add a new requestor and check approver is automatically added", () => {
-    it(`Select '${USERS[2].name}' for Requestor`, () => {
-      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[2].name} - ${USERS[2].email}`);
+    it(`Select '${USERS[12].name}' for Requestor`, () => {
+      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[12].name} - ${USERS[12].email}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Check new requestor is added", () => {
-      cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[12].name} - ${USERS[12].email}`);
     });
 
     it("Check approvers automatically added", () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[12].name} - ${USERS[12].email}`);
     });
   });
 
   context("Verify that history tab is capturing requestor Updated and approver Added", () => {
     it("Check history entry for 'Requestor Updated'", () => {
       cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Updated")
-        .and("contain", USERS[2].name);
+        .and("contain", USERS[12].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
       cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0).should("contain", "Approver Added")
-        .should("contain", USERS[2].name);
+        .should("contain", USERS[12].name);
     });
   });
 
@@ -984,7 +989,7 @@ context("Add Requestor as an approver of the PO", () => {
       cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
       cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Draft");
       cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "N/A");
-      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[2].name);
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[12].name);
       cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
     });
   });
@@ -1003,7 +1008,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Auth login second user user", () => {
-      cy.authLogin({ email: USERS[2].email });
+      cy.authLogin({ email: USERS[12].email });
     });
 
     it("Select company", () => {
@@ -1028,7 +1033,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Auth login first user", () => {
-      cy.authLogin({ email: USERS[1].email });
+      cy.authLogin({ email: USERS[11].email });
     });
 
     it("Select company", () => {
@@ -1055,7 +1060,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Verify Requestor", () => {
-      cy.get("[data-cy^='po-requestor-']").should("have.value", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get("[data-cy^='po-requestor-']").should("have.value", `${USERS[12].name} - ${USERS[12].email}`);
     });
 
     it("Verify Order Date", () => {
@@ -1063,7 +1068,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Verify approvers", () => {
-      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[2].name} - ${USERS[2].email} `);
+      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[12].name} - ${USERS[12].email} `);
     });
 
     it("navigate to Line Items", () => {
@@ -1135,7 +1140,7 @@ context("Add Requestor as an approver of the PO", () => {
       cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "N/A");
       cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "");
       cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$54.63");
-      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[2].name);
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[12].name);
       cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
     });
   });
@@ -1147,7 +1152,7 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -1175,7 +1180,7 @@ context("Add Requestor as an approver of the PO", () => {
           expect(responseBody)
             .contains(`PO Number:          PO-00001-1`)
             .and.contains("Requestor:")
-            .and.contains(USERS[2].name);
+            .and.contains(USERS[12].name);
         });
       });
     });
@@ -1213,7 +1218,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Verify Requestor", () => {
-      cy.get("[data-cy^='po-requestor-']").should("have.value", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get("[data-cy^='po-requestor-']").should("have.value", `${USERS[12].name} - ${USERS[12].email}`);
     });
 
     it("Verify Order Date", () => {
@@ -1221,7 +1226,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Verify approvers", () => {
-      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[2].name} - ${USERS[2].email} `);
+      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[12].name} - ${USERS[12].email} `);
     });
 
     it("navigate to Line Items", () => {
@@ -1305,8 +1310,8 @@ context("Add Requestor as an approver of the PO", () => {
       cy.get(".MuiFormHelperText-root.Mui-error").should("exist");
     });
 
-    it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+    it(`Select '${USERS[11].name}' for Requestor`, () => {
+      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[11].name} - ${USERS[11].email}`);
       cy.unClick();
     });
 
@@ -1315,7 +1320,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check requestor is added", () => {
-      cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`input[data-cy^="po-requestor-"]`).should("have.value", `${USERS[11].name} - ${USERS[11].email}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1323,7 +1328,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check approvers automatically added", () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[11].name} - ${USERS[11].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1335,18 +1340,18 @@ context("Add Requestor as an approver of the PO", () => {
         cy.drSelectHistoryTab();
       });
       cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Updated")
-        .and("contain", USERS[1].name);
+        .and("contain", USERS[11].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
       cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0)
-        .should("contain", "Approver Added").should("contain", USERS[1].name);
+        .should("contain", "Approver Added").should("contain", USERS[11].name);
     });
   });
 
   context("Verify that approver delete is disabled", () => {
     it("Verify that approver delete is disabled", () => {
-      cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${USERS[11].name} - ${USERS[11].email}`);
       cy.get(`input[data-cy^="fb-po-approvals-"]`).parent()
         .find(`[class="MuiChip-root MuiAutocomplete-tag Mui-disabled MuiChip-deletable"]`).should("exist");
     });
@@ -1364,15 +1369,15 @@ context("Add Requestor as an approver of the PO", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`Select '${USERS[2].name}' for Requestor`, () => {
-      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[2].name} - ${USERS[2].email}`);
+    it(`Select '${USERS[12].name}' for Requestor`, () => {
+      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[12].name} - ${USERS[12].email}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Check approvers automatically added", () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[12].name} - ${USERS[12].email}`);
     });
   });
 
@@ -1438,7 +1443,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Auth login first user", () => {
-      cy.authLogin({ email: USERS[2].email });
+      cy.authLogin({ email: USERS[12].email });
     });
 
     it("Select company", () => {
@@ -1463,7 +1468,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Auth login first user", () => {
-      cy.authLogin({ email: USERS[1].email });
+      cy.authLogin({ email: USERS[11].email });
     });
 
     it("Select company", () => {
@@ -1490,7 +1495,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Verify Requestor", () => {
-      cy.get("[data-cy^='po-requestor-']").should("have.value", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get("[data-cy^='po-requestor-']").should("have.value", `${USERS[12].name} - ${USERS[12].email}`);
     });
 
     it("Verify Order Date", () => {
@@ -1498,7 +1503,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Verify approvers", () => {
-      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[2].name} - ${USERS[2].email} `);
+      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[12].name} - ${USERS[12].email} `);
     });
 
     it("navigate to Line Items", () => {
@@ -1567,7 +1572,7 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -1588,7 +1593,7 @@ context("Add Requestor as an approver of the PO", () => {
           expect(responseBody)
             .contains(`PO Number:          PO-00001-2`)
             .and.contains("Requestor:")
-            .and.contains(USERS[2].name);
+            .and.contains(USERS[12].name);
         });
       });
     });
