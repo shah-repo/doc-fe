@@ -136,7 +136,7 @@ const Presenter: React.FunctionComponent<Props> = ({
             label="document.revision.trainingRequired"
             value={<Text translation={`common.${retrain}` as Translation} />}
             labelProps={AutoCompleteStyles.labelProps}
-            labelFont={AutoCompleteStyles.labelFont}
+            labelFont={{ ...AutoCompleteStyles.labelFont, marginBottom: 14 }}
           />
         }
         {formTemplate && (
