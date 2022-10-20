@@ -433,24 +433,14 @@ context("Mpi Layout", () => {
           });
           cy.progressBarShouldNotExist();
         });
-        it("Save document", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
 
         it("Click 'Clone Step'", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev,
-            CyRoutes.GetAttachments,
-            CyRoutes.GetAttachmentsAttached,
-          ], () => {
-            cy.get("[data-cy='form.builder.clone.step']").arrowClick();
-          });
-          cy.wait(10000);
+          cy.get("[data-cy='form.builder.clone.step']").arrowClick();
           cy.progressBarShouldNotExist();
         });
       });
 
       context("Verify 'Clone Step' feature", () => {
-
         it("Verify description is copied", () => {
           cy.get("[data-cy='form.builder.step.number']").eq(1).scrollIntoView();
 
@@ -598,7 +588,6 @@ context("Mpi Layout", () => {
       });
 
       context("Validate Right Side Panel", () => {
-
         it("Verify that right side panel opens by default to the References tab", () => {
           cy.get("[data-cy='References']").should("exist");
           cy.get("[data-cy='generalInfo']").should("be.visible");
@@ -630,7 +619,7 @@ context("Mpi Layout", () => {
           cy.verifyReferenceInfo();
           cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
           cy.get("[data-cy='common.revision']").parent().should("contain.text",
-            moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+            moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
         });
 
         context("Verify Revisions tab", () => {
@@ -681,7 +670,7 @@ context("Mpi Layout", () => {
 
         context("Verify Book Mark", () => {
           it("Verify Book Mark Navigation", () => {
-            cy.get("[data-cy='bookmark-icon']").arrowClick();
+            cy.drSelectBookmarksTab();
             cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
           });
 
@@ -694,14 +683,23 @@ context("Mpi Layout", () => {
             cy.get("[data-cy='Bookmarks-detail'] p").eq(1).arrowClick();
             cy.get("#fb-mpi-procedure-section-built-in").should("be.visible");
           });
+        });
+      });
 
+      context("Verify Revison history", () => {
+        it("Verify revision icon ", () => {
+          cy.get("[data-cy='cr-icon']").should("be.visible");
         });
 
+        it("Click on revision icon history tab should open", () => {
+          cy.get("[data-cy='cr-icon']").arrowClick();
+          cy.get("[data-cy='Revision History-detail']").should("be.visible");
+        });
       });
 
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
-          cy.get("[data-cy='timeline-icon']").arrowClick();
+          cy.drSelectHistoryTab();
         });
 
         it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -722,7 +720,6 @@ context("Mpi Layout", () => {
       });
 
       context("Training related verification after released", () => {
-
         it("Navigate to overview tab", () => {
           cy.drSelectOverviewTab();
         });
@@ -731,11 +728,24 @@ context("Mpi Layout", () => {
           cy.get("#Presenter-FBWorkspace p").should("contain.text", "Click here to acknowledge training completion");
           cy.get("[data-cy='training-complete']").should("exist");
         });
+
+        it("Navigate to training tab", () => {
+          cy.drSelectTrainingTab();
+        });
+
+        it("Verify training tab is empty", () => {
+          cy.contains("Training can be assigned to this document once it is released").should("be.visible");
+          cy.get("#Presenter-FBWorkspace ul").should("not.be.visible");
+        });
       });
     });
   });
 
   context("Verify all fields are displayed in the tabs as it should", () => {
+    it("Navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Verify title and description field no longger heighlighted", () => {
       cy.get(`h5[data-cy='field-name']`).trigger("mouseover");
       cy.get(`h5[data-cy='field-name']`).should("not.have.attr", "style");
@@ -758,43 +768,51 @@ context("Mpi Layout", () => {
       cy.verifyFixedTab();
     });
 
-    it("Verify Form opens to the overview tab by default and it contains", () => {
-      cy.isTabActive({ name: "overview", index: 0 });
-    });
-
     it("Verify overview tab fields and approval block", () => {
       cy.get("[data-cy='field-name']").should("exist");
       cy.get("[data-cy='BaseWithhtml-editor']").should("exist");
       cy.get("[name^='fb-approvals-approvals-built-in']").should("exist");
     });
 
-    it("Navigate to Procedure tab", () => {
-      cy.drSelectProcedureTab();
-    });
+    context("Verify title and description not highlighted", () => {
+      it("Verify Title is not highlighted", () => {
+        cy.get("h6").eq(2).trigger("mouseover");
+        cy.get("h6").eq(2).should("not.have.css", "background-color", "rgb(235, 237, 242)");
+        cy.get("h6").eq(2).trigger("mouseout");
+      });
 
-    it("Click on view more description should be expanded", () => {
-      cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
-    });
+      it("Verify Description is not highlighted", () => {
+        cy.verifyDescriptionNotHighlightedonHover();
+      });
 
-    it("Verify on scroll The top bar with “Revise document” and “Change owner” are fixed", () => {
-      cy.get("[data-cy='form.builder.step.number']").eq(2).scrollIntoView();
-      cy.get("[data-cy='updateRecord']").should("be.visible");
-      cy.get("[data-cy='changeOwner']").should("be.visible");
-    });
+      it("Click on view more description should be expanded", () => {
+        cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
+        cy.get("div[class^='rdw-editor-toolbar']").should("not.exist");
+        cy.contains("View less").should("be.visible");
+        cy.get("[data-text='true']").eq(3).should("be.visible");
+      });
 
-    it("Click on view less description and scroll", () => {
-      cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
-      cy.get("[data-cy='lhrs-start-quantity']").scrollIntoView();
-    });
+      it("Verify top header is visible on scroll", () => {
+        cy.get("main").scrollTo("top", { ensureScrollable: false });
+        cy.get("header").should("be.visible");
+      });
 
-    it("Verify on scroll The top bar with “Revise document” and “Change owner” are fixed", () => {
-      cy.get("[data-cy='updateRecord']").should("be.visible");
-      cy.get("[data-cy='changeOwner']").should("be.visible");
+      it("click on description field again description field should collpase", () => {
+        cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
+        cy.contains("View more").should("be.visible");
+        cy.get("[data-text='true']").eq(0).should("be.visible");
+        cy.get("[data-text='true']").eq(1).should("be.visible");
+        cy.get("[data-text='true']").eq(2).should("not.be.visible");
+      });
+
+      it("Verify top header is visible on scroll", () => {
+        cy.get("main").scrollTo("top", { ensureScrollable: false });
+        cy.get("header").should("be.visible");
+      });
     });
   });
 
   context("Complete the training and verify training tab", () => {
-
     it("Navigate to overview tab", () => {
       cy.drSelectOverviewTab();
     });
@@ -817,6 +835,10 @@ context("Mpi Layout", () => {
       cy.checkToastMessage({ exists: false });
     });
 
+    it("Verify Form opens to the overview tab by default", () => {
+      cy.isTabActive({ name: "overview", index: 0 });
+    });
+
     it("Navigate to training tab", () => {
       cy.drSelectTrainingTab();
     });
@@ -825,10 +847,7 @@ context("Mpi Layout", () => {
       cy.get("#Presenter-FBWorkspace ul").should("contain.text", "Training Completed");
       cy.get("#Presenter-FBWorkspace ul").should("contain.text", USERS[1].name);
     });
-
   });
-
-
 });
 
 export { };
