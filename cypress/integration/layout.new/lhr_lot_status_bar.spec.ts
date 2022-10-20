@@ -949,7 +949,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Add Approver to approvals list", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        cy.pmAddApproverOnApproverList({ approver: owner });
       });
     });
 
@@ -1194,7 +1194,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       () => {
         it("Add Approver to approvals list", () => {
           cy.wait(1000);
-          cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+          cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
         it("Click on Complete step to Complete the step again", () => {
@@ -1653,7 +1653,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Add Approver to approvals list", () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+          cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
         it("Click on Submit For Approval", () => {
@@ -1899,7 +1899,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Add Approver to approvals list", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverList({ approver: owner });
     });
 
     it("Select Details tab", () => {
@@ -1912,7 +1912,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Add Approver to approvals list", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.pmAddApproverOnApproverList({ approver: owner });
     });
 
     it("Select Procedure tab", () => {
