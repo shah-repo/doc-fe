@@ -935,7 +935,7 @@ context("Records flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
         cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-        cy.get("[data-cy=\"optionId\"]").arrowType("Document revisions");
+        cy.get(`[data-cy="optionId"]`).arrowType("Document revisions");
         cy.contains("Document revisions").eq(0).arrowClick();
         cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
