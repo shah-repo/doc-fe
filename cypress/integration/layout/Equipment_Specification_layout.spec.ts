@@ -3,6 +3,7 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import moment from "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -78,6 +79,7 @@ context("Verification of Equipment Specification", () => {
       });
     });
   });
+
   context("Fill ES document attributes", () => {
     it("Verify predefiend fields title description doc id revision output type", () => {
       cy.verifyPredefiendFields();
@@ -190,7 +192,6 @@ context("Verification of Equipment Specification", () => {
     });
   });
 
-
   context("Verify Layout of document and Tabs", () => {
     it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Draft)", () => {
       cy.verifyHeaderInfoContent({
@@ -287,7 +288,6 @@ context("Verification of Equipment Specification", () => {
     it("Verify that Form Options should  appear for this tab ", () => {
       cy.get(".formOptionsBox").should("exist");
     });
-
   });
 
   context("Release ES", () => {
@@ -299,10 +299,12 @@ context("Verification of Equipment Specification", () => {
   });
 
   context("Create a required document from release form Verify the layout and Release It", () => {
-
     context("Create New Document from Release form", () => {
       it("Click 'Create New'", () => {
         cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
       });
     });
@@ -361,7 +363,6 @@ context("Verification of Equipment Specification", () => {
       it("Verify that Form Options should  appear for this tab ", () => {
         cy.get(".formOptionsBox").should("exist");
       });
-
     });
 
     context("Fill the form", () => {
@@ -406,12 +407,20 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Verify References selection Add Remove", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        it("Verify Add/Remove References", () => {
+          cy.get(`[data-cy="referenceTo"]`).arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+          cy.wait(2000).type(`{downarrow}{enter}`);
+          cy.drRemoveReferences({ reference: "FM-00001" });
+        });
       });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
         cy.verifyReferenceInfo();
-        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
+        cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text",
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
 
       context("Verify Revision", () => {
@@ -527,7 +536,13 @@ context("Verification of Equipment Specification", () => {
         });
 
         it("Click on confirm change", () => {
-          cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+          cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+            cy.get("[data-cy='common.confirm.change']").arrowClick();
+          });
+        });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
         });
 
         it("Navigate to specification Tab", () => {
@@ -545,7 +560,6 @@ context("Verification of Equipment Specification", () => {
         });
       });
     });
-
 
     context("Fill the fields and Released", () => {
       it("Enter document title 'ES document'", () => {
