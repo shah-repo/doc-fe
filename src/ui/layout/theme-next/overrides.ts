@@ -47,17 +47,17 @@ const overrides = (theme: Theme): Overrides => ({
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: theme.spacing(1.75, 2.5),
+      padding: theme.spacing(1.75, 2),
     },
   },
   MuiDialogContent: {
     root: {
-      padding: theme.spacing(2.5),
+      padding: theme.spacing(2),
     },
   },
   MuiDialogActions: {
     root: {
-      padding: theme.spacing(2.5),
+      padding: theme.spacing(2),
       backgroundColor: theme.palette.grey[50],
     },
   },
