@@ -513,6 +513,8 @@ context("Intermediate page validation", () => {
     });
 
     it("Edit Radio Button group", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
       cy.get(`[data-cy="options"]`).arrowType("{enter}option3");
       cy.fbAddNewFieldButton();
@@ -527,7 +529,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify test image is added in preview mode", () => {
-      cy.get(`[data-cy="blanktplform-8"]`).contains("test_image.jpg").should("exist");
+      cy.contains("test_image.jpg").should("exist");
     });
   });
 });
