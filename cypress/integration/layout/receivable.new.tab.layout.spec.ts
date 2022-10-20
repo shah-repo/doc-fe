@@ -929,8 +929,11 @@ context("Receiving landing page test", () => {
     });
 
     it("Save the  form", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+          cy.listLoadingElementShouldNotExist();
+        });
     });
 
     it("Verify Po ,Requestor, suplier, Receiving table,Receive all button should be exist", () => {
@@ -960,22 +963,22 @@ context("Receiving landing page test", () => {
     });
 
     it("Click on line Item to edit", () => {
-      cy.wrapWithWaitOnApiCalls([], () => {
-        cy.get("[data-cy='partNumberDocId']").eq(0).arrowClick();
-      });
+      cy.get("[data-cy='partNumberDocId']").eq(0).arrowClick();
     });
 
     it("Insert Receipt Quantity and click on save ", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev,
-        CyRoutes.GetReceivableQuantity], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetReceivableQuantity], () => {
         cy.get("[data-cy='received'] input").clear().arrowType("180");
         cy.get("[data-cy='form.builder.save']").arrowClick();
       });
     });
 
     it("Save the  form", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+          cy.listLoadingElementShouldNotExist();
+        });
     });
 
     it("Click on line item 2", () => {
@@ -983,15 +986,18 @@ context("Receiving landing page test", () => {
     });
 
     it("Insert Receipt Quantity and click on save ", () => {
-      cy.wrapWithWaitOnApiCalls([], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetReceivableQuantity], () => {
         cy.get("[data-cy='received'] input").clear().arrowType("100");
         cy.get("[data-cy='form.builder.save']").arrowClick();
       });
     });
 
     it("Save the  form", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls(
+        [], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+          cy.listLoadingElementShouldNotExist();
+        });
     });
 
     it("Verify inserted quantity saved and display in the table ", () => {
