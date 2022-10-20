@@ -723,11 +723,12 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
         });
 
         it("Verify Add/Remove References", () => {
-          cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-          cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
-          cy.wait(2000);
-          cy.contains("FM-00001").arrowClick();
-          cy.drRemoveReferences({ reference: "FM-00001" });
+          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          // cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+          // cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
+          // cy.wait(2000);
+          // cy.contains("FM-00001").arrowClick();
+          // cy.drRemoveReferences({ reference: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -758,7 +759,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
         });
 
         it("Click on confirm change", () => {
-          cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+          cy.drClickConfirmChange();
         });
 
         it("Verify fb-textfield", () => {
@@ -1000,11 +1001,11 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
 
           it("Verify predefined schema fields", () => {
             cy.get("#sm-tabpanel-1").should("exist");
-            cy.get(`[data-cy="Initial Quantity"]`).should("exist");
-            cy.get(`[data-cy="Usable Quantity"]`).should("exist");
-            cy.get(`[data-cy="Expiration Date"]`).should("exist");
-            cy.get(`[data-cy="Part Selection"]`).should("exist");
-            cy.get(`[data-cy="100% Inspection Override"]`).should("exist");
+            cy.get(`[data-cy="Initial Quantity"]`).contains("Initial Quantity").should("exist");
+            cy.get(`[data-cy="Usable Quantity"]`).contains("Usable Quantity").should("exist");
+            cy.get(`[data-cy="Expiration Date"]`).contains("Expiration Date").should("exist");
+            cy.get(`[data-cy="Part Selection"]`).contains("Part Selection").should("exist");
+            cy.get(`[data-cy="100% Inspection Override"]`).contains("100% Inspection Override").should("exist");
           });
 
           it("Navigate to overview tab", () => {
@@ -1049,11 +1050,12 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           });
 
           it("Verify Add/Remove References", () => {
-            cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-            cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
-            cy.wait(2000);
-            cy.contains("FM-00001").arrowClick();
-            cy.drRemoveReferences({ reference: "FM-00001" });
+            cy.verifyAddRemoveReference({ formId: "FM-00001" });
+            // cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+            // cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
+            // cy.wait(2000);
+            // cy.contains("FM-00001").arrowClick();
+            // cy.drRemoveReferences({ reference: "FM-00001" });
           });
 
           it("Verify Referenced By, Training, Release Date and Form Info", () => {
