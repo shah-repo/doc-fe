@@ -157,6 +157,7 @@ Cypress.Commands.add("verifyReferenceTab", ({ user, formId, shortName }) => {
 Cypress.Commands.add("verifyAddRemoveReference", ({ formId }) => {
   cy.get("[data-cy=\"references-icon\"]").arrowClick().wait(500);
   cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
   cy.drSelectReferences(formId);
   cy.wait(1000);
   cy.drRemoveReferences({ reference: formId });

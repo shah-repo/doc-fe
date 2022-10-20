@@ -525,7 +525,7 @@ context("Approval request form layout verification", () => {
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
       cy.get("[data-cy='common.revision']").parent().should("contain.text",
-        moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+        moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       cy.get("[data-cy='References-detail']").should("contain.text",
         moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
     });

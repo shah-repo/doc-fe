@@ -1011,10 +1011,14 @@ context("LFPO new layout verification", () => {
         CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[data-cy='porec-receivable-test']").autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save the form", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1210,7 +1214,7 @@ context("LFPO new layout verification", () => {
     });
 
     it("Click on migrate form button", () => {
-      cy.get("[data-cy='common.form.migration']").arrowClick();
+      cy.drClickMigrateForm();
     });
 
     it("Select form to be migrated", () => {

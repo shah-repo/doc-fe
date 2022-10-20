@@ -745,9 +745,7 @@ context("Receiving landing page test", () => {
       }).then(() => {
         done();
       });
-
     });
-
   });
 
 
@@ -954,28 +952,31 @@ context("Receiving landing page test", () => {
     it("Click on line item and Insert Receipt Quantity and click on save ", () => {
       cy.get("[data-cy='partNumberDocId']").eq(0).arrowClick();
       cy.get("[data-cy='received'] input").clear().arrowType("180");
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Save the  form", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[data-cy='form.builder.save']").arrowClick();
+      });
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on line item and Insert Receipt Quantity and click on save ", () => {
       cy.get("[data-cy='partNumberDocId']").eq(1).arrowClick();
       cy.get("[data-cy='received'] input").clear().arrowType("100");
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("[data-cy='form.builder.save']").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
-    xit("Save the  form", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.listLoadingElementShouldNotExist();
+    it("Save the document", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
     });
 
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify inserted quantity saved and display in the table ", () => {
@@ -1035,6 +1036,11 @@ context("Receiving landing page test", () => {
       cy.verifyExpandCollpase();
     });
 
+    it("Verify it is fixed when user scroll up or down", () => {
+      cy.get("main").scrollTo("top", { ensureScrollable: false });
+      cy.get("[data-cy='references-icon']").should("be.visible");
+    });
+
     it("Verify eye icon", () => {
       cy.get("[data-cy='references-icon']").should("be.visible");
     });
@@ -1048,6 +1054,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Verify References selection Add Remove", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.verifyAddRemoveReference({ formId: "FM-00001" });
     });
 
@@ -1073,6 +1080,7 @@ context("Receiving landing page test", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
           cy.drAddUserFromPermissionTab(USERS[3].name);
         });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add another group permission", () => {
@@ -1145,7 +1153,7 @@ context("Receiving landing page test", () => {
 
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
-        cy.get("[data-cy='bookmark-icon']").arrowClick();
+        cy.drSelectBookmarksTab();
         cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       });
 
@@ -1185,7 +1193,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Click on migrate form button", () => {
-        cy.get("[data-cy='common.form.migration']").arrowClick();
+        cy.drClickMigrateForm();
       });
 
       it("Select form to be migrated", () => {
@@ -1229,8 +1237,6 @@ context("Receiving landing page test", () => {
         cy.get("[data-cy='po-requestor-autocomplete']").should("exist");
         cy.get("[data-cy^='purchaseorder'] table").should("exist");
       });
-
-
     });
 
     context("Verify Scroll and tabs", () => {
@@ -1244,7 +1250,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
+        cy.drSelectHistoryTab();
       });
 
       it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -1497,8 +1503,16 @@ context("Receiving landing page test", () => {
 
     context("Verify Book Mark", () => {
       it("Verify Book Mark Navigation", () => {
-        cy.get("[data-cy='bookmark-icon']").arrowClick();
+        cy.drSelectBookmarksTab();
         cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+      });
+
+      it("Click on approval bookmark", () => {
+        cy.get("[data-cy='Bookmarks-detail'] p").arrowClick();
+      });
+
+      it("Verify approval block is navigated", () => {
+        cy.get("[data-cy='fb-po-approvals']").should("be.visible");
       });
     });
   });
