@@ -833,10 +833,10 @@ context("Verify New Layout for EB Document", () => {
         context("Verify Procedure tab predefined fields", () => {
           it("Verify EB Procedure", () => {
             cy.get("#sm-tabpanel-1").should("exist");
-            cy.contains("Step #1").should("exist");
-            cy.contains("Materials").should("exist");
-            cy.contains("Equipment").should("exist");
-            cy.contains("EB Procedure").should("exist");
+            cy.get(`[data-cy="form.builder.step.number"]`).contains("Step #1").should("exist");
+            cy.get(`[data-cy="form.builder.materials"]`).eq(0).contains("Materials").should("exist");
+            cy.get(`[data-cy="form.builder.equipment"]`).eq(0).contains("Equipment").should("exist");
+            cy.get(`[data-cy="form.builder.procedure"]`).contains("EB Procedure").should("exist");
           });
 
           it("Verify Add/Clone Step button", () => {
@@ -915,12 +915,11 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.drSelectReferences("FM-00001");
+        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+        cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
         cy.wait(2000);
-        cy.get("div[data-cy=\"field-referenceTo\"]").contains("FM-00001")
-          .parent().parent().parent()
-          .find("svg").arrowClick({ force: true });
-        cy.progressBarShouldNotExist();
+        cy.contains("FM-00001").arrowClick();
+        cy.drRemoveReferences({ reference: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -1280,12 +1279,11 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.drSelectReferences("FM-00001");
+        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+        cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
         cy.wait(2000);
-        cy.get("div[data-cy=\"field-referenceTo\"]").contains("FM-00001")
-          .parent().parent().parent()
-          .find("svg").arrowClick({ force: true });
-        cy.progressBarShouldNotExist();
+        cy.contains("FM-00001").arrowClick();
+        cy.drRemoveReferences({ reference: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
