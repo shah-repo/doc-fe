@@ -220,19 +220,25 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
     context("Add some references", () => {
       it("Add some references", () => {
-        cy.drSelectReferences(reference.value);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drSelectReferences(reference.value);
+        });
       });
     });
 
     context("Add Required Fields", () => {
       it(`Select '${USERS[1].name}' for Requestor`, () => {
         cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true });
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        });
       });
 
       it("Add Required Date", () => {
-        cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-        cy.get(".MuiPickersDay-daySelected").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+          cy.get(".MuiPickersDay-daySelected").arrowClick();
+        });
       });
     });
 
@@ -240,6 +246,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       it("Add Approver to approvals list", () => {
         cy.wait(3000);
         cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on Submit For Approval", () => {
@@ -284,6 +291,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         it("Add Approver to approvals list", () => {
           cy.wait(3000);
           cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click on Submit For Approval", () => {
@@ -347,8 +355,12 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
           it("Add Approver to approvals list", () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
             cy.wait(3000);
-            cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
+            cy.get("[data-cy^='fb-po-approvals-']").scrollIntoView();
+            cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[1].name);
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Click on Submit For Approval", () => {
@@ -398,8 +410,12 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       it("Add Approver to approvals list", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
         cy.wait(3000);
+        cy.get("[data-cy^=fb-po-approvals-]").scrollIntoView();
         cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on Submit For Approval", () => {
