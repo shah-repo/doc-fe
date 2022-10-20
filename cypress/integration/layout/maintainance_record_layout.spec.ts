@@ -924,6 +924,7 @@ context("Layout Verification of maintainance records", () => {
           cy.get(`input[type="checkbox"][value="1"]`).should("exist");
           cy.get(`input[type="checkbox"][value="1"]`).check();
         });
+        cy.wait(1000);
       });
 
       it("Verify add FB Field textfield", () => {
