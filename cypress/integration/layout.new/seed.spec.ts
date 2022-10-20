@@ -92,70 +92,71 @@ context("Verify New Layout for Seed Document", () => {
     });
   });
 
-  // Scenario 10c - Newly Created Seed Document
-  context("Create Seed Migration form", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-    });
+  context("Scenario 10c - Newly Created Seed Document", () => {
+    context("Create Seed Migration form", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
 
-    it("Click on 'Create a document'", () => {
-      cy.cmpClickCreateNewDocument();
-    });
+      it("Click on 'Create a document'", () => {
+        cy.cmpClickCreateNewDocument();
+      });
 
-    it(`Enter title "Seed migrtion form"`, () => {
-      cy.drEnterDocumentTitle({ name: "Seed migrtion form" });
-    });
+      it(`Enter title "Seed migrtion form"`, () => {
+        cy.drEnterDocumentTitle({ name: "Seed migrtion form" });
+      });
 
-    it(`Enter description ${formDescription}`, () => {
-      cy.drEnterDocumentDescription({ description: "Seed migration form Description" });
-    });
+      it(`Enter description ${formDescription}`, () => {
+        cy.drEnterDocumentDescription({ description: "Seed migration form Description" });
+      });
 
-    it("Click on 'Form' document type", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
+      it("Click on 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
 
-    it("Click on 'SEED' document type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "SEED" });
-      cy.unClick();
-    });
+      it("Click on 'SEED' document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "SEED" });
+        cy.unClick();
+      });
 
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
 
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
 
-    it("Add Text Field", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-      cy.fbAddNewFieldButton();
-    });
+      it("Add Text Field", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+        cy.fbAddNewFieldButton();
+      });
 
-    it("Add Checkbox group", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
-      cy.fbGroupOptions("Option 1", "Option 2");
-      cy.fbAddNewFieldButton();
-    });
+      it("Add Checkbox group", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
+        cy.fbGroupOptions("Option 1", "Option 2");
+        cy.fbAddNewFieldButton();
+      });
 
-    it("Add Radio Button group", () => {
-      cy.fbAddNewFieldWhenHiddenLastPlace();
-      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
-      cy.fbGroupOptions("Option 1", "Option 2");
-      cy.fbAddNewFieldButton();
-    });
+      it("Add Radio Button group", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+        cy.fbGroupOptions("Option 1", "Option 2");
+        cy.fbAddNewFieldButton();
+      });
 
-    it("Save Form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
+      it("Save Form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
 
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      it("Approve and release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
     });
   });
 
@@ -417,6 +418,64 @@ context("Verify New Layout for Seed Document", () => {
           });
         });
 
+        context("Fill in the fields", () => {
+          context("Enter values for Details tab predefined schema fields", () => {
+            it("Enters document title 'First document'", () => {
+              cy.get("[data-cy^=document-title-]").arrowType("First document");
+            });
+
+            it("Select 'Form with output' value on 'Type of document to be created'", () => {
+              cy.get("[name^=type-of-document-to-be-created-]").eq(0).check();
+            });
+
+            it("Select 'Numeric' value on 'Default Revision Stage'", () => {
+              cy.get("[name^=default-revision-stage-]").eq(0).check();
+            });
+
+            it("Upload JSON Form", () => {
+              cy.atchUploadJSONFormForSeed({ fileName: "TestTemplate.json", queue: 0 });
+            });
+
+            it("Enters document description 'First document description'", () => {
+              cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
+                .click({ force: true }).arrowType("First document description");
+            });
+
+            it("Selects document type as 'Form'", () => {
+              cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
+              cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul")
+                .contains("li", "Form").arrowClick();
+            });
+
+            it("Selects document type as 'Clinical Protocol'", () => {
+              cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick();
+              cy.get("[id^=menu-define-the-output-of-that-form-]>div:nth-child(3)>ul")
+                .contains("li", "Clinical Protocol").arrowClick();
+            });
+
+            it("Selects 'No' training required option", () => {
+              cy.get("[name^=training-required-]").eq(1).arrowClick();
+            });
+
+            it("Fill text field", () => {
+              cy.get("[name^=fb-textfield-]").arrowType("Seed Text Field");
+              cy.unClick();
+            });
+
+            it("Check checkbox option", () => {
+              cy.get(`input[type="checkbox"][value="Option 1"]`).last().check();
+            });
+
+            it("Select radio button option", () => {
+              cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
+            });
+
+            it("Save document", () => {
+              cy.drClickCreateSupplierWithApiCall();
+            });
+          });
+        });
+
         context("Verify Details tab added fields", () => {
           it("Verify Text Field", () => {
             cy.contains("fb-textfield").should("exist");
@@ -458,7 +517,11 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.get(`[data-cy="referenceTo"]`).arrowClick();
+        cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+        cy.wait(2000);
+        cy.contains("FM-00001").arrowClick();
+        cy.drRemoveReferences({ reference: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -500,16 +563,53 @@ context("Verify New Layout for Seed Document", () => {
         cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
       });
 
-      it("Verify migrated form info 'fb-textfield'", () => {
-        cy.get("[data-cy='fb-textfield']").parent().should("contain.text", "fb-textfield");
+      it("Verify fb-textfield", () => {
+        cy.get("[value='Seed Text Field']").should("exist");
       });
 
-      it("Verify migrated form info 'fb-checkbox-group'", () => {
-        cy.get("[data-cy='fb-checkbox-group']").parent().should("contain.text", "fb-checkbox-group");
+      it("Verify fb-checkbox-group", () => {
+        cy.get("[value=\"Option 1\"]").should("be.checked");
       });
 
-      it("Verify migrated form info 'fb-radiobutton-group'", () => {
-        cy.get("[data-cy='fb-radiobutton-group']").parent().should("contain.text", "fb-radiobutton-group");
+      it("Verify fb-radiobutton-group", () => {
+        cy.get("[value=\"Option 2\"]").should("be.checked");
+      });
+
+      it("Navigate to details Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Verify  Document Title ", () => {
+        cy.get("[value='First document']").eq(0).should("exist");
+      });
+
+      it("Verify  Document Description ", () => {
+        cy.get(`[data-cy^="document-description-"]`).contains("First document description").should("exist");
+      });
+
+      it("Verify Type of document to be created", () => {
+        cy.get("[value=\"Form with output\"]").should("be.checked");
+      });
+
+      it("Verify  Document Type to be selected ", () => {
+        cy.get(`[id^="mui-component-select-document-type-to-be-selected-"]`).contains("Form").should("exist");
+      });
+
+      it("Verify JSON Form ", () => {
+        cy.get(`[data-cy="fileupload-4"]`).contains("TestTemplate.json").should("exist");
+      });
+
+      it("Verify  Define the output of that form ", () => {
+        // eslint-disable-next-line max-len
+        cy.get(`[id^="mui-component-select-define-the-output-of-that-form-"]`).contains("Clinical Protocol").should("exist");
+      });
+
+      it("Verify Default Revision Stage", () => {
+        cy.get("[value=\"Numeric\"]").should("be.checked");
+      });
+
+      it("Verify Training Required", () => {
+        cy.get("[value=\"No\"]").should("be.checked");
       });
     });
 
@@ -557,18 +657,25 @@ context("Verify New Layout for Seed Document", () => {
             { key: "Form Set To", value: "FM-00002 - revision 1 - Seed migrtion form" },
           ],
         },
-        {
-          owner,
-          actions: [
-            { key: "Description changed", value: docDescription },
-            { key: "Name changed", value: docTitle },
-          ],
-        },
       ];
 
       it("Open history tab and verify changes are being captured", () => {
         cy.drSelectHistoryTab();
         cy.get(`[data-cy="History-detail"]`).should("be.visible");
+      });
+
+      it("Verify Description changed value as 'Test Seed Description'  ", () => {
+        cy.get("[data-cy=\"change-key-4-0\"]").contains("Description changed")
+          .should("exist");
+        cy.get("[data-cy=\"change-value-4-0\"]").contains("Test Seed Description")
+          .should("exist");
+      });
+
+      it("Verify Name changed value as 'Test Seed'  ", () => {
+        cy.get("[data-cy=\"change-key-4-1\"]").contains("Name changed")
+          .should("exist");
+        cy.get("[data-cy=\"change-value-4-1\"]").contains("Test Seed")
+          .should("exist");
       });
 
       verifyHistoryContent(history, groupOne);
@@ -595,81 +702,11 @@ context("Verify New Layout for Seed Document", () => {
     });
   });
 
-  context("Fill in the fields", () => {
-    it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    context("Enter values for Details tab predefined schema fields", () => {
-      it("Enters document title 'First document'", () => {
-        cy.get("[data-cy^=document-title-]").arrowType("First document");
-      });
-
-      it("Select 'Form with output' value on 'Type of document to be created'", () => {
-        cy.get("[name^=type-of-document-to-be-created-]").eq(0).check();
-      });
-
-      it("Select 'Numeric' value on 'Default Revision Stage'", () => {
-        cy.get("[name^=default-revision-stage-]").eq(0).check();
-      });
-
-      it("Upload JSON Form", () => {
-        cy.atchUploadJSONFormForSeed({ fileName: "TestTemplate.json", queue: 0 });
-      });
-
-      it("Enters document description 'First document description'", () => {
-        cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
-          .click({ force: true }).arrowType("First document description");
-      });
-
-      it("Selects document type as 'Form'", () => {
-        cy.get("[id^=mui-component-select-document-type-to-be-selected-]").arrowClick();
-        cy.get("[id^=menu-document-type-to-be-selected-]>div:nth-child(3)>ul")
-          .contains("li", "Form").arrowClick();
-      });
-
-      it("Selects document type as 'Clinical Protocol'", () => {
-        cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick();
-        cy.get("[id^=menu-define-the-output-of-that-form-]>div:nth-child(3)>ul")
-          .contains("li", "Clinical Protocol").arrowClick();
-      });
-
-      it("Selects 'No' training required option", () => {
-        cy.get("[name^=training-required-]").eq(1).arrowClick();
-      });
-    });
-
-    context("Enter values for Details tab added fields", () => {
-      it("Navigate to overview tab", () => {
-        cy.drSelectOverviewTab();
-      });
-
-      it("Fill text field", () => {
-        cy.get("[name^=fb-textfield-]").arrowType("Seed Text Field");
-        cy.unClick();
-      });
-
-      it("Check checkbox option", () => {
-        cy.get(`input[type="checkbox"][value="Option 1"]`).last().check();
-      });
-
-      it("Select radio button option", () => {
-        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
-      });
-
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-      it("Turn on autosave", () => {
-        cy.cmpTurnOnAutosave();
-      });
-    });
-  });
-
-  // Scenario 10d - Existing Seed Document
-
   context("Select exisiting draft seed document", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
+    });
+
     it("Navigate to Document List", () => {
       cy.navigToDocumentList();
     });
@@ -787,7 +824,11 @@ context("Verify New Layout for Seed Document", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          cy.get(`[data-cy="referenceTo"]`).arrowClick();
+          cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+          cy.wait(2000);
+          cy.contains("FM-00001").arrowClick();
+          cy.drRemoveReferences({ reference: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
