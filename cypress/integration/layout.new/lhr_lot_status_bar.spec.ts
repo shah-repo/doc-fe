@@ -1121,8 +1121,8 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it(`Complete step → Verify it is functional and Verify status changed ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
           cy.wait(1000);
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
           cy.listLoadingElementShouldNotExist();
           cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
         });
@@ -1199,6 +1199,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
         it("Click on Complete step to Complete the step again", () => {
           cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
             cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
           });
@@ -1393,6 +1394,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           });
 
           it("Click on Submit For Approval", () => {
+            cy.wait(1000);
             cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
               cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
             });
@@ -1438,7 +1440,9 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     context("Select Admin Change and release Rev A.2  → Rev A.1 is in Superseded state", () => {
       it("Add Approver to approvals list", () => {
         cy.wait(2000);
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
+        });
       });
 
       it("Click on Submit For Approval", () => {
@@ -1654,10 +1658,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
         it("Add Approver to approvals list", () => {
           cy.pmAddApproverOnApproverList({ approver: owner });
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Click on Submit For Approval", () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it(`Status is in ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -1800,7 +1808,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.wait(500);
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
-        cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+        cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
         cy.listLoadingElementShouldNotExist();
       });
 
@@ -1964,7 +1972,9 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
   context(`Revise the LHR step and choose “Void” in the revision stage → Check the content of the status bar`, () => {
     it("Revise document with 'Void' option", () => {
+      cy.wait(1000);
       cy.drClickReviseDocument();
+      cy.wait(2000);
     });
 
     context("Check the content of the status bar", () => {
@@ -1998,6 +2008,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   Check the content of the status bar`,
     () => {
       it("Revise document with 'Void' option", () => {
+        cy.wait(3000);
         cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
         cy.wait(3000);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
