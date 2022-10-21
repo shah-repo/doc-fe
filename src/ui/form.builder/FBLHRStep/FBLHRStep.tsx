@@ -80,8 +80,8 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 
   operators = operators?.map((user) => ({ stepId: user?.stepId, user: user?.user }));
 
-  const defineMPIParametersForMaterialParts = Boolean(materials?.filter((part) => part?.quantity === undefined).length);
-  const defineMPIParametersForEquipments = Boolean(equipment?.filter((eq) => eq?.id === "B").length);
+  const defineMPIParametersForMaterialParts = Boolean(materials?.filter((part) => part?.LHRTparameter === true).length);
+  const defineMPIParametersForEquipments = Boolean(equipment?.filter((eq) => eq?.LHRTparameter === true).length);
 
   const stepLabel = stepLHRs ? `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`
     : `LHR Step ${stepIndex}`;
