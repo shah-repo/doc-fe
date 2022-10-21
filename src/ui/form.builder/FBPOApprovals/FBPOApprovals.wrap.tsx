@@ -102,12 +102,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       || (item.type === FBPurchaseOrderItemType.PRODUCT && item.partNumberDocId)
     );
 
-    /**
-     * For automatic addition of requestor to approver, the poItem must be an enlil item, use the above logic
-     * whereas for automatic removal of approver, that was also the requestor it is essential that no poItem exists.
-     */
-    const checkPOItemExistsForAutoRemoval = (poItems: FBPurchaseOrderValue) => Boolean(poItems?.items?.length);
-
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
       (poItems) => {
@@ -133,7 +127,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       const approvers = map(poApprovalsState?.getApprovals, "approver.id");
 
       const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
-      const hasPoLineItems = checkPOItemExistsForAutoRemoval(poItems);
       const hasRequesterInApprovers = approvers?.includes(requester);
       const hasPrevRequesterInApprovers = approvers?.includes(prevRequesterValue);
 
@@ -141,7 +134,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         return addApprover([requester]);
       }
 
-      if (requester && hasRequesterInApprovers && !hasPoLineItems) {
+      if (requester && hasRequesterInApprovers && !hasServiceOrProductPart) {
         return removeApprover([requester]);
       }
 
