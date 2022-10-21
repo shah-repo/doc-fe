@@ -20,5 +20,6 @@ export default makeStyles((theme) => ({
   },
   actions: {
     padding: 0,
+    backgroundColor: theme.palette.common.white,
   },
 }));

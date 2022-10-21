@@ -90,7 +90,7 @@ Cypress.Commands.add("trCompleteTraining", () => {
       cy.get("button[data-cy=training-complete]").click();
       cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-      cy.progressBarShouldAppear();
+      cy.progressBarShouldNotExist();
     });
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
@@ -101,7 +101,7 @@ Cypress.Commands.add("trApproveTraining", () => {
   cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").click();
-    cy.progressBarShouldAppear();
+    cy.progressBarShouldNotExist();
   });
   cy.listLoadingElementShouldNotExist();
 });

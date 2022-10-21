@@ -2,10 +2,10 @@ import { makeStyles, Theme } from "@material-ui/core";
 
 export default makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(2.5),
+    padding: theme.spacing(2),
   },
   list: {
-    margin: theme.spacing(1.5, -2.5, 0),
+    margin: theme.spacing(1.5, -2, 0),
   },
   link: {
     textDecoration: "none",
@@ -14,8 +14,8 @@ export default makeStyles((theme) => ({
 
 export const itemStyles = (theme: Theme) => ({
   link: {
-    paddingLeft: theme.spacing(2.5),
-    paddingRight: theme.spacing(2.5),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
   text: {
     ...theme.typography.body1,

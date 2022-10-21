@@ -21,6 +21,7 @@ import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
 import { FBLHRStepStyles } from "./FBLHRStep.styles";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
 import OperatorsList from "./components/OperatorsList";
+import { Observer } from "mobx-react";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
@@ -120,7 +121,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   );
   const isDisabled = !isOutput || loading || !lhrBuildTypeExist;
 
-  return (
+  return ( <Observer>{() =>
     <FBProvider {...{ lhrStepState }}>
       {!isDocumentLHRT && ( <Accordion className={classes.panelBorder} expanded={expand}>
 
@@ -410,6 +411,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         </>
       )}
     </FBProvider>
+  }</Observer>
   );
 };
 
