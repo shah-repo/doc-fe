@@ -440,6 +440,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
           cy.drClickCreateDocumentWithoutApiCall();
           cy.wait(3000);
+          cy.get("[data-cy^=fb-po-approvals-]").scrollIntoView();
           cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(`${USERS[1].name}`);
           cy.listLoadingElementShouldNotExist();
           cy.wait(2000);
