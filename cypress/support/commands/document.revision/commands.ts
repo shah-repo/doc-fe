@@ -136,6 +136,7 @@ declare global {
       verifyDesSort(params: { index: number; colLength: number }): Chainable<Subject>;
       verifyAscSort(params: { index: number; colLength: number }): Chainable<Subject>;
       drClickMigrateForm(): Chainable<Subject>;
+      drClickConfirmChange(): Chainable<Subject>;
       drSelectFormToBeMigrated(params: {formContains: string}): Chainable<Subject>;
     }
   }
@@ -1029,6 +1030,10 @@ Cypress.Commands.add("drPatchDocType", (params: {
 
 Cypress.Commands.add("drClickMigrateForm", () => {
   cy.get(`[data-cy="common.form.migration"]`).arrowClick();
+});
+
+Cypress.Commands.add("drClickConfirmChange", () => {
+  cy.get("[data-cy='common.confirm.change']").arrowClick();
 });
 
 Cypress.Commands.add("drSelectFormToBeMigrated", (params: {formContains: string}) => {
