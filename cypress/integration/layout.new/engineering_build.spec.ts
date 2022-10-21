@@ -469,6 +469,10 @@ context("Verify New Layout for EB Document", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create EB migration form", () => {
@@ -947,6 +951,12 @@ context("Verify New Layout for EB Document", () => {
 
       it("Click on confirm change", () => {
         cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Verify 'fb-textfield' value after migration", () => {
@@ -1108,6 +1118,10 @@ context("Verify New Layout for EB Document", () => {
   });
 
   context("Select existing draft engineering build document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to Engineering Build", () => {
       cy.navigToEB();
     });
@@ -1369,6 +1383,10 @@ context("Verify New Layout for EB Document", () => {
   context("Select existing released engineering build document", () => {
     it("Navigate to Engineering Build", () => {
       cy.navigToEB();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Filter by EB Id", () => {
