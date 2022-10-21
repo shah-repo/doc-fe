@@ -886,19 +886,27 @@ context("Records flow", () => {
       it("Verify Favorites", () => {
         cy.get(`[data-cy="Inline Approval"]`).parent()
           .find("button").eq(1).click();
-        cy.wait(1000);
+        cy.wait(2000);
         cy.get(`[data-cy="Inline Approval"]`).parent()
-          .find("button").eq(1).find("path").invoke("css", "fill").should("equal", "rgb(255, 216, 116)");
+          .find("button").eq(1).find("path").invoke("attr", "fill").should("equal", "#FFD874");
         cy.get(`input[placeholder^="Search"]`).clear();
+      });
+
+      it("Verify Favorites", () => {
         cy.fbVerifySectionsOnAddField("Favorites");
         cy.fbCheckFieldsExistFavoritesList("Inline Approval");
         cy.get(`[data-cy="Inline Approval"]`).parent()
           .find(`[class="MuiButtonBase-root MuiIconButton-root"]`).eq(0).click();
+      });
+
+      it("Verify Favorites", () => {
         cy.fbVerifySectionsNotOnAddField("Favorites");
         cy.get(`[data-cy="Approvals-btn"]`).arrowClick();
-        cy.wait(1000);
         cy.get(`[data-cy="Inline Approval"]`).parent()
-          .find("button").eq(1).find("path").invoke("css", "fill").should("equal", "rgb(200, 202, 207)");
+          .find("button").eq(1).click();
+        cy.wait(2000);
+        cy.get(`[data-cy="Inline Approval"]`).parent()
+          .find("button").eq(1).find("path").invoke("attr", "fill").should("equal", "#C8CACF");
       });
     });
 
@@ -927,7 +935,8 @@ context("Records flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
         cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
         cy.fbEnterPlaceholder({ placeholder: "fb-autocomplete placeholder" });
-        cy.get(`[data-cy="optionId"]`).autocompleteSelect("Document Revision");
+        cy.get(`[data-cy="optionId"]`).arrowType("Document revisions");
+        cy.contains("Document revisions").eq(0).arrowClick();
         cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
         cy.fbAddNewFieldButton();
       });
@@ -1966,8 +1975,9 @@ context("Records flow", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-inline-approval" });
       cy.fbVerifyNameValue({ name: "label", value: "fb-inline-approval" });
       cy.fbEnterNameValue({ name: "label", value: "fb-inline-approval-changed" });
-      cy.get(`[data-cy="editorConfig.approvers"]`).parent().should("contain", USERS[1].email);
-      cy.get(`[data-cy="editorConfig.groups"]`).parent().should("contain", "Everyone");
+      cy.wait(2000);
+      cy.get(`[data-cy="editorConfig.approvers"]`).autocompleteSelect(`${USERS[1].email }`);
+      cy.get(`[data-cy="editorConfig.groups"]`).autocompleteSelect("Everyone");
       cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
       cy.get(`[data-cy="fb-inline-approval-changed"]`).should("exist");
