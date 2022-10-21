@@ -43,7 +43,7 @@ class FBPOApprovalMatrixState extends FBRequest<POApprovalMatrix, null> {
     const appLevelIndex = findIndex(this.approvalLevels, { id: approvalLevel.id });
     const checkDuplicate = this.approvalLevels.filter(
       (item) => item.name === approvalLevel.name || item.limit === approvalLevel.limit );
-    if ((appLevelIndex === -1 && checkDuplicate?.length > 0) || (appLevelIndex > 0 && checkDuplicate?.length === 2)) {
+    if ((appLevelIndex === -1 && checkDuplicate?.length > 0) || (appLevelIndex >= 0 && checkDuplicate?.length === 2)) {
       toastError(intl.formatMessage({ id: "documentRevision.form.PO.matrix.duplicate" }));
       return;
     }
