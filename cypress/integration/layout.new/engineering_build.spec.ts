@@ -915,11 +915,7 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-        cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
-        cy.wait(2000);
-        cy.contains("FM-00001").arrowClick();
-        cy.drRemoveReferences({ reference: "FM-00001" });
+        cy.verifyAddRemoveReference({ formId: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -1106,7 +1102,7 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
   });
@@ -1279,11 +1275,7 @@ context("Verify New Layout for EB Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-        cy.get("[data-cy=\"referenceTo\"]").arrowType("FM-00001");
-        cy.wait(2000);
-        cy.contains("FM-00001").arrowClick();
-        cy.drRemoveReferences({ reference: "FM-00001" });
+        cy.verifyAddRemoveReference({ formId: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
