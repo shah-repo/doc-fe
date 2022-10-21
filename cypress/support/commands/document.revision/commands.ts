@@ -135,6 +135,9 @@ declare global {
 
       verifyDesSort(params: { index: number; colLength: number }): Chainable<Subject>;
       verifyAscSort(params: { index: number; colLength: number }): Chainable<Subject>;
+      drClickMigrateForm(): Chainable<Subject>;
+      drClickConfirmChange(): Chainable<Subject>;
+      drSelectFormToBeMigrated(params: {formContains: string}): Chainable<Subject>;
     }
   }
 }
@@ -579,7 +582,7 @@ Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string
   cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick({ force: true });
-  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.get("li").contains(params.status).arrowClick({ force: true }).wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
@@ -1016,4 +1019,17 @@ Cypress.Commands.add("drPatchDocType", (params: {
     body: params.payload,
   }).then((response) => response ? response.body : {})
     .then((response) => JSON.stringify(response));
+});
+
+Cypress.Commands.add("drClickMigrateForm", () => {
+  cy.get(`[data-cy="common.form.migration"]`).arrowClick();
+});
+
+Cypress.Commands.add("drClickConfirmChange", () => {
+  cy.get("[data-cy='common.confirm.change']").arrowClick();
+});
+
+Cypress.Commands.add("drSelectFormToBeMigrated", (params: {formContains: string}) => {
+  cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+  cy.get("[id^='react-select']").contains(params.formContains).arrowClick();
 });

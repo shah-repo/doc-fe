@@ -28,7 +28,7 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
     if (auditValue === "undefined") { return; }
     try {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      auditValue = JSON.parse(auditValue);
+      auditValue = JSON.parse(auditValue)?.id;
     } catch {
       if (isString(auditValue)) {
         auditValue = [auditValue];

@@ -557,7 +557,7 @@ context("Bulk create flow", () => {
     });
 
     it("The section component where the excel spreadsheet will be added is labeled 'Excel for Import'", () => {
-      cy.get(`[id="sm-tabpanel-1" ] [id="fb-spreadsheet-for-import"]`).should("have.text", "EXCEL FOR IMPORT");
+      cy.get(`[id="sm-tabpanel-1" ] [id="fb-spreadsheet-for-import"]`).should("have.text", "Excel For Import");
     });
 
     it("The Paragraph component with the instructions is labeled 'Upload excel with data for import'", () => {
