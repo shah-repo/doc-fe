@@ -364,6 +364,10 @@ context("Layout Verification of EQ", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   // create migration form
@@ -405,8 +409,10 @@ context("Layout Verification of EQ", () => {
       cy.drSelectOutputDocumentType({ documentType: "Equipment" });
     });
 
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click on 'Create Document'", () => {
+      cy.wrapWithWaitOnApiCalls( [CyRoutes.PostDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
   });
 
@@ -438,8 +444,15 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Select references", () => {
-      cy.drSelectReferences( "FM-00004" );
-      cy.drSelectReferences( "FM-00005" );
+      cy.get(`[data-cy="referenceTo"]`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00004")
+        .wait(2000).type(`{downarrow}{enter}`);
+
+      cy.get(`[data-cy="referenceTo"]`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00005")
+        .wait(2000).type(`{downarrow}{enter}`);
       cy.unClick();
     });
 
@@ -470,15 +483,7 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Save the document", () => {
-      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
-      cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and released", () => {
@@ -487,9 +492,7 @@ context("Layout Verification of EQ", () => {
   });
   // end of migration form
 
-
   // Script start
-
   context("Create EQ document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
@@ -528,8 +531,10 @@ context("Layout Verification of EQ", () => {
       cy.drSelectOutputDocumentType({ documentType: "Equipment" });
     });
 
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click on 'create document'", () => {
+      cy.wrapWithWaitOnApiCalls( [CyRoutes.PostDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
   });
 
@@ -563,10 +568,6 @@ context("Layout Verification of EQ", () => {
       cy.verifyPredefiendFields();
       cy.get("#AttachmentFieldPresenter-field").should("exist");
     });
-
-    it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-    });
   });
 
   context("Add FB Fields", () => {
@@ -585,6 +586,10 @@ context("Layout Verification of EQ", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Navigate to Specification tab", () => {
       cy.drSelectSpecificationTab();
     });
@@ -597,8 +602,15 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Select references", () => {
-      cy.drSelectReferences( "FM-00004" );
-      cy.drSelectReferences( "FM-00005" );
+      cy.get(`[data-cy="referenceTo"]`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00004")
+        .wait(2000).type(`{downarrow}{enter}`);
+
+      cy.get(`[data-cy="referenceTo"]`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00005")
+        .wait(2000).type(`{downarrow}{enter}`);
       cy.unClick();
     });
 
@@ -629,15 +641,7 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Save the document", () => {
-      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
-      cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -673,7 +677,6 @@ context("Layout Verification of EQ", () => {
       cy.get(".formOptionsBox").should("exist");
     });
   });
-
 
   context("Release EQ", () => {
     it("Approve and release  document", () => {
@@ -713,14 +716,11 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Verify overview tab predefiend fields up to attachment and FB fields Approver,Eq status", () => {
-
         cy.get("[data-cy='field-name']").should("exist");
         cy.get("[data-cy='description']").should("exist");
         cy.get("[data-cy='select.document.documentType.id']").should("exist");
         cy.get("[data-cy='field-document.docId']").should("exist");
         cy.get("[data-cy='field-revisionStage']").should("exist");
-
-
         cy.get("[data-cy='field-name']").should("exist");
         cy.get("[name='fb-default-eq-status']").should("exist");
         cy.get("[data-cy^='autocomplete-approvers']").should("exist");
@@ -752,10 +752,6 @@ context("Layout Verification of EQ", () => {
         cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOnAutosave();
-      });
-
       it("Verify Primary owner and co-ordinator fields", () => {
         cy.get("[data-cy='fb-primary-owner-eq']").should("exist");
         cy.get("[data-cy='fb-coordinator-eq']").should("exist");
@@ -763,7 +759,6 @@ context("Layout Verification of EQ", () => {
 
       it("Verify Add field button Exist", () => {
         cy.get("[data-cy='form.builder.add.field']").should("exist");
-
       });
 
       it("Verify add FB Field Checked chebox", () => {
@@ -791,7 +786,6 @@ context("Layout Verification of EQ", () => {
       });
     });
 
-
     context("Fill the form", () => {
       it("Navigate to overview tab", () => {
         cy.drSelectOverviewTab();
@@ -807,7 +801,9 @@ context("Layout Verification of EQ", () => {
 
       it("Fill the Eq status and Approver'", () => {
         cy.get("[name='fb-default-eq-status']").eq(0).arrowClick().wait(2000);
-        cy.get("[data-cy^='autocomplete-approvers']").autocompleteSelect(USERS[1].name);
+        cy.get("[data-cy^='autocomplete-approvers']").arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick({ force: true });
+        cy.unClick();
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
@@ -817,9 +813,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Navigate to specification tab", () => {
@@ -885,9 +879,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -947,7 +939,13 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Click on confirm change", () => {
-        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+          cy.get("[data-cy='common.confirm.change']").arrowClick();
+        });
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Navigate to specification tab", () => {
@@ -963,7 +961,6 @@ context("Layout Verification of EQ", () => {
       });
     });
 
-
     context("Approve and released", () => {
       it("Approve and Release", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -976,22 +973,20 @@ context("Layout Verification of EQ", () => {
         cy.verifyTabs("overview", "specification");
       });
 
-      it("Button ‘New PM should be displayed", () => {
-        cy.drSelectSpecificationTab();
-        cy.get("[data-cy='fb-control-btn']").contains("New PM").should("be.visible");
-      });
-
-      it("Button ‘New Cal’ should be exist", () => {
-        cy.get("[data-cy='form.builder.new.calibration']").should("exist");
-      });
-    });
-
-
-    context("Fill new calbration form", () => {
       it("Switch to specification tab", () => {
         cy.drSelectSpecificationTab();
       });
 
+      it("Button 'New PM' should be displayed", () => {
+        cy.get("[data-cy='fb-control-btn']").contains("New PM").should("be.visible");
+      });
+
+      it("Button 'New Cal' should be exist", () => {
+        cy.get("[data-cy='form.builder.new.calibration']").should("exist");
+      });
+    });
+
+    context("Fill new calbration form", () => {
       it("Click on New CAL", () => {
         cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
         cy.get("[data-cy='form.builder.new.calibration']").arrowClick();
@@ -1183,6 +1178,10 @@ context("Layout Verification of EQ", () => {
         cy.navigToEquipment();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Select 'EQ-00001'", () => {
         cy.dlFilterByDocId({ docId: "EQ-00001" });
         cy.dlSelectFirstDocument();
@@ -1241,7 +1240,6 @@ context("Layout Verification of EQ", () => {
       });
     });
 
-
     context("Validate Right Side Panel", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
         cy.get("[data-cy='References']").should("exist");
@@ -1264,7 +1262,7 @@ context("Layout Verification of EQ", () => {
         cy.verifyReferenceInfo();
         cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
         cy.get("[data-cy='common.revision']").parent().should("contain.text",
-          moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
 
       context("Verify Revision", () => {
@@ -1274,13 +1272,18 @@ context("Layout Verification of EQ", () => {
           cy.listLoadingElementShouldNotExist();
         });
 
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
         it("Enter document description 'test training description'", () => {
           cy.drEnterDocumentDescription({ description: "EQ description 2" });
         });
 
-        it("Save Record'", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
+        it("Save Record", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
+
         it("open revision tab", () => {
           cy.get("[data-cy='note-icon']").arrowClick();
         });
@@ -1375,7 +1378,6 @@ context("Layout Verification of EQ", () => {
 
   // Doc approve using AR case
   context("Approve and release EQ using AR", () => {
-
     it("Navigate to Document list", () => {
       cy.unClick();
       cy.navigToDocumentList();
@@ -1392,6 +1394,10 @@ context("Layout Verification of EQ", () => {
 
     it("Click 'Create New'", () => {
       cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     context("Fill the form", () => {
@@ -1413,7 +1419,9 @@ context("Layout Verification of EQ", () => {
 
       it("Fill the Eq status and Approver'", () => {
         cy.get("[name='fb-default-eq-status']").eq(0).arrowClick().wait(2000);
-        cy.get("[data-cy^='autocomplete-approvers']").autocompleteSelect(USERS[1].name);
+        cy.get("[data-cy^='autocomplete-approvers']").arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick({ force: true });
+        cy.unClick();
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
@@ -1423,9 +1431,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Navigate to specification tab", () => {
@@ -1491,9 +1497,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -1553,7 +1557,6 @@ context("Layout Verification of EQ", () => {
         cy.get("[data-cy='transition-closed']").arrowClick();
         cy.get("#AlertDialog-continueButton").arrowClick();
       });
-
     });
 
     context("Navigate to EQ and verify its in release state", () => {
@@ -1562,11 +1565,14 @@ context("Layout Verification of EQ", () => {
         cy.dlClearFilters();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Select 'EQ-00002'", () => {
         cy.dlFilterByDocId({ docId: "EQ-00002" });
         cy.dlSelectFirstDocument();
       });
-
 
       context("Verify EQ is released and all data Preserved", () => {
         it("Verify EQ is in release state", () => {
@@ -1615,13 +1621,8 @@ context("Layout Verification of EQ", () => {
         });
       });
 
-
       context("Fill new calbration form", () => {
         it("Switch to specification tab", () => {
-          cy.drSelectSpecificationTab();
-        });
-
-        it("Verify data is preserved ", () => {
           cy.drSelectSpecificationTab();
         });
 
@@ -1813,9 +1814,12 @@ context("Layout Verification of EQ", () => {
     });
 
     context("Verify specification tab", () => {
-
       it("Navigate back to EQ", () => {
         cy.navigToEquipment();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Select 'EQ-00002'", () => {
