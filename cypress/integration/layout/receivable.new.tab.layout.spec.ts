@@ -884,7 +884,6 @@ context("Receiving landing page test", () => {
   });
 
   context("Create Released Receiving record", () => {
-
     it("Navigate to Receiving landing page", () => {
       cy.navigToReceivableList();
     });
@@ -946,8 +945,8 @@ context("Receiving landing page test", () => {
     });
 
     it("Click on receive all", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev,
-        CyRoutes.GetReceivableQuantity], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
+        CyRoutes.GetReceivableQuantity, CyRoutes.PatchDocRev], () => {
         cy.get("[data-cy='fb-control-btn']").contains("Receive All").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -969,7 +968,7 @@ context("Receiving landing page test", () => {
     it("Insert Receipt Quantity and click on save ", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetReceivableQuantity], () => {
         cy.get("[data-cy='received'] input").clear().arrowType("180");
-        cy.get("[data-cy='form.builder.save']").arrowClick();
+        cy.get("[data-cy='form.builder.save']").arrowClick().wait(2000);
       });
     });
 
@@ -981,6 +980,11 @@ context("Receiving landing page test", () => {
         });
     });
 
+    it("Verify inserted quantity saved and display in the table ", () => {
+      cy.get("[data-cy='received']").eq(0).scrollIntoView();
+      cy.get("[data-cy='received'] span").eq(0).should("have.text", "180");
+    });
+
     it("Click on line item 2", () => {
       cy.get("[data-cy='partNumberDocId']").eq(1).arrowClick();
     });
@@ -989,6 +993,7 @@ context("Receiving landing page test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetReceivableQuantity], () => {
         cy.get("[data-cy='received'] input").clear().arrowType("100");
         cy.get("[data-cy='form.builder.save']").arrowClick();
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
     });
 
@@ -998,11 +1003,6 @@ context("Receiving landing page test", () => {
           cy.drClickCreateDocumentWithoutApiCall();
           cy.listLoadingElementShouldNotExist();
         });
-    });
-
-    it("Verify inserted quantity saved and display in the table ", () => {
-      cy.get("[data-cy='received']").eq(0).scrollIntoView();
-      cy.get("[data-cy='received'] span").eq(0).should("have.text", "180");
     });
 
     it("Verify form option should appear in this tab", () => {
@@ -1278,12 +1278,12 @@ context("Receiving landing page test", () => {
         cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
       });
     });
-
   });
 
   context("Release document", () => {
     it("Navigate to overview tab", () => {
-      cy.drSelectOverviewTab().wait(2000);
+      cy.drSelectOverviewTab();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
@@ -1364,7 +1364,7 @@ context("Receiving landing page test", () => {
 
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
-      cy.wait(1000);
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
         .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
     });
@@ -1430,9 +1430,8 @@ context("Receiving landing page test", () => {
     });
 
     it("Navigate to details Tab", () => {
-      cy.wait(1000);
       cy.drSelectDetailsTab();
-      cy.wait(1000);
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {

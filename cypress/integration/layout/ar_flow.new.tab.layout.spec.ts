@@ -625,7 +625,7 @@ context("Approval request form layout verification", () => {
       cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
       cy.get("div[class^='rdw-editor-toolbar']").should("not.exist");
       cy.get("[data-cy='BaseWithhtml-editor'] button").contains("View less").should("be.visible");
-      cy.get("[class*='descriptionSummaryEditorClass']").should("exist");
+      cy.get("[data-text='true']").eq(3).should("be.visible");
     });
 
     it("Verify top header is visible on scroll", () => {
