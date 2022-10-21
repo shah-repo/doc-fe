@@ -116,6 +116,10 @@ context("Verify New Layout for NCO Document", () => {
         cy.navigToDocumentList();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Click on 'Create a document'", () => {
         cy.cmpClickCreateNewDocument();
       });
@@ -153,7 +157,6 @@ context("Verify New Layout for NCO Document", () => {
     });
 
     // Scenario 10a - Newly Created NCO Document
-
     context("Create NCO form", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
@@ -430,6 +433,60 @@ context("Verify New Layout for NCO Document", () => {
         });
       });
 
+      context("Fill in the fields", () => {
+        it("Navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
+        context("Enter values for Details tab predefined schema fields", () => {
+          it(`Enters company name '${newCompanyName}'`, () => {
+            cy.get("[name^=company-name-]").arrowType(newCompanyName);
+            cy.log(newCompanyName);
+          });
+
+          it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
+            cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
+            cy.log(newCompanyAbbr);
+          });
+
+          it(`Enters company email '${USERS[1].email}'`, () => {
+            cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
+          });
+
+          it("Select 'Yes' for 'Approved DAM json is used'", () => {
+            cy.get(`[name*="approved-dam-json-is-used-"]`).check("Yes");
+          });
+
+          it("Upload correct DAM JSON", () => {
+            cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
+          });
+
+          it("Select 'Yes' for 'Approved Page Details json is used'", () => {
+            cy.get(`[name*="approved-page-details-json-is-used-"]`).check("Yes");
+          });
+
+          it("Upload Page Details JSON", () => {
+            cy.atchUploadPageDetailsJSONForNCO({ fileName: "doc_type_page_details.json", queue: 0 });
+          });
+
+          it("Select 'Yes' for 'Approved Navigation json is used'", () => {
+            cy.get(`[name*="approved-navigation-json-is-used-"]`).check("Yes");
+          });
+
+          it("Upload Navigation JSON", () => {
+            cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
+          });
+
+          it("Upload Users List JSON", () => {
+            cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+          });
+
+          it("Save document", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
+        });
+      });
+
       context("Verify form migration", () => {
         it("Verify migrate form button is visible", () => {
           cy.get("[data-cy=references-icon]").arrowClick();
@@ -457,7 +514,9 @@ context("Verify New Layout for NCO Document", () => {
 
       context("Click confirm and verify migrated fields are present", () => {
         it("Click on confirm change", () => {
-          cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+          cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+            cy.get("[data-cy='common.confirm.change']").arrowClick();
+          });
         });
 
         it("Navigate to details Tab", () => {
@@ -468,18 +527,48 @@ context("Verify New Layout for NCO Document", () => {
           cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
         });
 
-        // FIELD_HEADERS.forEach( (fieldHeader, i) => {
-        //   it(`Verify migrated '${fieldHeader}' field`, () => {
-        //     cy.get(`[data-cy="${fieldHeader}"]`).parent().should("contain.text", fieldHeader);
-        //   });
-        // });
-
-        it("Verify migrated form info 'Company Name'", () => {
-          cy.get("[data-cy='Company Name']").parent().should("contain.text", "Company Name");
+        it(`Verify migrated form info ${FIELD_HEADERS[1]}`, () => {
+          cy.get(`input[name^="company-name"]`).should("have.value", newCompanyName);
         });
 
-        it("Verify migrated form info 'Company Abbreviation'", () => {
-          cy.get("[data-cy='Company Abbreviation']").parent().should("contain.text", "Company Abbreviation");
+        it(`Verify migrated form info ${FIELD_HEADERS[2]}`, () => {
+          cy.get(`input[name^="company-abbreviation"]`).should("have.value", newCompanyAbbr);
+        });
+
+        it(`Verify migrated form info ${FIELD_HEADERS[3]}`, () => {
+          cy.get(`input[name^="company-admin-email"]`).should("have.value", USERS[1].email);
+        });
+
+        it(`Verify migrated form info ${FIELD_HEADERS[16]}`, () => {
+          cy.get(`input[name^="approved-dam-json-is-used"]`).first().should("be.checked");
+        });
+
+        it(`Verify migrated form info ${FIELD_HEADERS[17]}`, () => {
+          cy.get(`button[data-cy="remove-doc_type_DAM.json"]`).parent().prev()
+            .should("contain.text", "doc_type_DAM.json");
+        });
+
+        it(`Verify migrated form info ${FIELD_HEADERS[19]}`, () => {
+          cy.get(`input[name^="approved-page-details-json-is-used"]`).first().should("be.checked");
+        });
+
+        it(`Verify migrated form info ${FIELD_HEADERS[20]}`, () => {
+          cy.get(`button[data-cy="remove-doc_type_page_details.json"]`).parent().prev()
+            .should("contain.text", "doc_type_page_details.json");
+        });
+
+        it(`Verify migrated form info ${FIELD_HEADERS[22]}`, () => {
+          cy.get(`input[name^="approved-navigation-json-is-used"]`).first().should("be.checked");
+        });
+
+        it(`Verify migrated form info ${FIELD_HEADERS[23]}`, () => {
+          cy.get(`button[data-cy="remove-doc_type_navigation.json"]`).parent().prev()
+            .should("contain.text", "doc_type_navigation.json");
+        });
+
+        it(`Verify migrated form info ${FIELD_HEADERS[27]}`, () => {
+          cy.get(`button[data-cy="remove-users.csv"]`).parent().prev()
+            .should("contain.text", "users.csv");
         });
       });
 
@@ -529,6 +618,10 @@ context("Verify New Layout for NCO Document", () => {
           },
           {
             owner,
+            actions: [],
+          },
+          {
+            owner,
             actions: [
               { key: "Description changed", value: docDescription },
               { key: "Name changed", value: docTitle },
@@ -565,66 +658,7 @@ context("Verify New Layout for NCO Document", () => {
       });
     });
 
-    context("Fill in the fields", () => {
-      it("Navigate to Details tab", () => {
-        cy.drSelectDetailsTab();
-      });
-
-      context("Enter values for Details tab predefined schema fields", () => {
-        it(`Enters company name '${newCompanyName}'`, () => {
-          cy.get("[name^=company-name-]").arrowType(newCompanyName);
-          cy.log(newCompanyName);
-        });
-
-        it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
-          cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
-          cy.log(newCompanyAbbr);
-        });
-
-        it(`Enters company email '${USERS[1].email}'`, () => {
-          cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
-        });
-
-        it("Select 'Yes' for 'Approved DAM json is used'", () => {
-          cy.get("[name*=\"approved-dam-json-is-used-\"]").check("Yes");
-        });
-
-        it("Upload correct DAM JSON", () => {
-          cy.atchUploadDOMJSONForNCO({ fileName: "doc_type_DAM.json", queue: 0 });
-        });
-
-        it("Select 'Yes' for 'Approved Page Details json is used'", () => {
-          cy.get("[name*=\"approved-page-details-json-is-used-\"]").check("Yes");
-        });
-
-        it("Upload Page Details JSON", () => {
-          cy.atchUploadPageDetailsJSONForNCO({ fileName: "doc_type_page_details.json", queue: 0 });
-        });
-
-        it("Select 'Yes' for 'Approved Navigation json is used'", () => {
-          cy.get("[name*=\"approved-navigation-json-is-used-\"]").check("Yes");
-        });
-
-        it("Upload Navigation JSON", () => {
-          cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
-        });
-
-        it("Upload Users List JSON", () => {
-          cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
-        });
-
-        it("Save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
-
-        it("Turn on autosave", () => {
-          cy.cmpTurnOnAutosave();
-        });
-      });
-    });
-
     // Scenario 10d - Existing NCO Document
-
     context("Select exisiting draft NCO document", () => {
       it("Navigate to Document List", () => {
         cy.navigToDocumentList();
