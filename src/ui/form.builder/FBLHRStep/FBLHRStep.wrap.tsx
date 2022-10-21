@@ -90,7 +90,8 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
 
     React.useEffect(() => reaction(
       () => formState?.approvalMap,
-      (value) => value && (lhrStepState?.setApproval(value))
+      (value) => value && (lhrStepState?.setApproval(value)),
+      { fireImmediately: true },
       /* eslint-disable-next-line react-hooks/exhaustive-deps */
     ), []);
 

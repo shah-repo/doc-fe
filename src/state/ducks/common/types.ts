@@ -42,6 +42,7 @@ export interface Approval {
   assignedAt?: string;
   assigned: Partial<Employee>;
   partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>;
+  manually?: boolean;
 }
 
 export interface Id {
