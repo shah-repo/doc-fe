@@ -517,10 +517,6 @@ context("Record inline Flow", () => {
         cy.get("[name^='fb-ia-first-inline-field'] input").should("exist");
         cy.get("[name^='fb-ia-second-inline-field'] input").should("exist");
       });
-
-      xit("Verify select field", () => {
-        cy.get("[data-cy='select-2']").should("exist");
-      });
     });
 
     context("Fill in document attributes", () => {
