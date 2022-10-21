@@ -183,6 +183,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Last save should be present", () => {
+          cy.listLoadingElementShouldNotExist();
           cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
       });
@@ -223,6 +224,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.drSelectReferences(reference.value);
         });
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -232,6 +234,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Required Date", () => {
@@ -239,6 +242,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
           cy.get(".MuiPickersDay-daySelected").arrowClick();
         });
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -286,12 +290,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
             cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
           });
-        });
-
-        it("Add Approver to approvals list", () => {
-          cy.wait(3000);
-          cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
-          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click on Submit For Approval", () => {
@@ -356,7 +354,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           it("Add Approver to approvals list", () => {
             cy.drClickCreateDocumentWithoutApiCall();
             cy.wait(3000);
-            cy.get("[data-cy^='fb-po-approvals-']").scrollIntoView();
             cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[1].name);
             cy.listLoadingElementShouldNotExist();
           });
@@ -436,6 +433,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       the item goes to ${STATUS_TYPES_LABEL.VOIDED} state`,
       () => {
         it("Revise document with 'Void' option", () => {
+          cy.wait(3000);
           cy.drClickReviseDocument();
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
           cy.listLoadingElementShouldNotExist();
@@ -443,6 +441,8 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.drClickCreateDocumentWithoutApiCall();
           cy.wait(3000);
           cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(`${USERS[1].name}`);
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
           cy.drApproveAndReleaseDialog();
           cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
           cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
@@ -451,7 +451,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Approve the record", () => {
-          cy.wait(3000);
+          cy.wait(2000);
           cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
           cy.unClick();
