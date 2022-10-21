@@ -365,7 +365,7 @@ context("User Creation Flow", () => {
       });
 
       it("Click the add button", () => {
-        cy.get("button>span>svg>path").eq(1).arrowClick({ force: true });
+        cy.get("td>span>button>span>svg>path").eq(0).arrowClick({ force: true });
         cy.landingPageLoadingElementShouldNotExist();
       });
 
