@@ -234,6 +234,7 @@ context("Record inline existing Flow with detail ", () => {
         cy.fbOpenValidation();
         cy.fbFieldRequired();
         cy.fbAddNewFieldButton();
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
 
       it("Add inline approval1", () => {
@@ -444,9 +445,9 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Navigate to detail tab", () => {
@@ -466,12 +467,6 @@ context("Record inline existing Flow with detail ", () => {
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
       });
 
       it("Navigate to detail tab", () => {
@@ -543,6 +538,7 @@ context("Record inline existing Flow with detail ", () => {
 
       it("Approve and release Record", () => {
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
+        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
