@@ -411,7 +411,7 @@ context("Layout Verification of EQ", () => {
 
     it("Click on 'Create Document'", () => {
       cy.wrapWithWaitOnApiCalls( [CyRoutes.PostDocRev], () => {
-        cy.get(`[data-cy="DocumentRevisionForm-submit"]`).arrowClick();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
   });
@@ -533,7 +533,7 @@ context("Layout Verification of EQ", () => {
 
     it("Click on 'create document'", () => {
       cy.wrapWithWaitOnApiCalls( [CyRoutes.PostDocRev], () => {
-        cy.get(`[data-cy="DocumentRevisionForm-submit"]`).arrowClick();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
   });
