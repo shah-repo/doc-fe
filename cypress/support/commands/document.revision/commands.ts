@@ -320,7 +320,7 @@ Cypress.Commands.add("drRemoveReferences", (params: {reference: string}) => {
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
   cy.get("[data-cy=\"field-name\"]").arrowClick().wait(500);
-  cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
+  cy.get("[data-cy=\"field-name\"]").arrowType(params.name).scrollIntoView();
   cy.unClick();
 });
 
@@ -372,7 +372,7 @@ Cypress.Commands.add("drEnterHtmlText", (params: { htmlText: string }) => {
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?: { approverName?: string; toastifyExists?: boolean }) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
-    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(1000);
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -383,10 +383,12 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?
   }
   cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.unClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick().wait(1000);
     });
   if (params === undefined)
   {
@@ -431,10 +433,15 @@ Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
 });
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+    cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(500);
+  });
   cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
-  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+  cy.unClick();
+  cy.get(`[data-cy="ApproveAndRelease-submit"]`).arrowClick().wait(500);
   cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
