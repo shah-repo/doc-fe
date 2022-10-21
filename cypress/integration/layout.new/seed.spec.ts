@@ -424,21 +424,13 @@ context("Verify New Layout for Seed Document", () => {
               cy.get("[data-cy^=document-title-]").arrowType("First document");
             });
 
-            it("Select 'Form with output' value on 'Type of document to be created'", () => {
-              cy.get("[name^=type-of-document-to-be-created-]").eq(0).check();
-            });
-
-            it("Select 'Numeric' value on 'Default Revision Stage'", () => {
-              cy.get("[name^=default-revision-stage-]").eq(0).check();
-            });
-
-            it("Upload JSON Form", () => {
-              cy.atchUploadJSONFormForSeed({ fileName: "TestTemplate.json", queue: 0 });
-            });
-
             it("Enters document description 'First document description'", () => {
               cy.get("[data-cy^=document-description-]>div>div>div>div>div[contenteditable]>div")
                 .click({ force: true }).arrowType("First document description");
+            });
+
+            it("Select 'Form with output' value on 'Type of document to be created'", () => {
+              cy.get("[name^=type-of-document-to-be-created-]").eq(0).check();
             });
 
             it("Selects document type as 'Form'", () => {
@@ -447,10 +439,18 @@ context("Verify New Layout for Seed Document", () => {
                 .contains("li", "Form").arrowClick();
             });
 
+            it("Upload JSON Form", () => {
+              cy.atchUploadJSONFormForSeed({ fileName: "TestTemplate.json", queue: 0 });
+            });
+
             it("Selects document type as 'Clinical Protocol'", () => {
               cy.get("[id^=mui-component-select-define-the-output-of-that-form-]").arrowClick();
               cy.get("[id^=menu-define-the-output-of-that-form-]>div:nth-child(3)>ul")
                 .contains("li", "Clinical Protocol").arrowClick();
+            });
+
+            it("Select 'Numeric' value on 'Default Revision Stage'", () => {
+              cy.get("[name^=default-revision-stage-]").eq(0).check();
             });
 
             it("Selects 'No' training required option", () => {
@@ -517,11 +517,7 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.get(`[data-cy="referenceTo"]`).arrowClick();
-        cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
-        cy.wait(2000);
-        cy.contains("FM-00001").arrowClick();
-        cy.drRemoveReferences({ reference: "FM-00001" });
+        cy.verifyAddRemoveReference({ formId: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -553,10 +549,8 @@ context("Verify New Layout for Seed Document", () => {
 
       it("Click on confirm change", () => {
         cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
-      });
-
-      it("Navigate to details Tab", () => {
-        cy.drSelectOverviewTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify form info should have migrated form 'FM-00002'", () => {
@@ -824,11 +818,7 @@ context("Verify New Layout for Seed Document", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          cy.get(`[data-cy="referenceTo"]`).arrowClick();
-          cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
-          cy.wait(2000);
-          cy.contains("FM-00001").arrowClick();
-          cy.drRemoveReferences({ reference: "FM-00001" });
+          cy.verifyAddRemoveReference({ formId: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
