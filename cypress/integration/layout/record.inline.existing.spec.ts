@@ -168,7 +168,6 @@ context("Record inline Flow", () => {
       });
     });
 
-
     context("Fill in document attributes", () => {
       it("Enter title 'Inline Form Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Inline Form Document Revision" });
@@ -284,6 +283,7 @@ context("Record inline Flow", () => {
       it("Navigate to Details tab", () => {
         cy.drSelectDetailsTab();
       });
+
       it("Verify form option exist in detail Tab", () => {
         cy.drSelectDetailsTab();
         cy.get(".formOptionsBox").should("exist");
@@ -737,7 +737,7 @@ context("Record inline Flow", () => {
       });
 
       it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
+        cy.drSelectHistoryTab();
       });
 
       it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -905,14 +905,13 @@ context("Record inline Flow", () => {
         cy.get("[data-cy='AlertDialog-continueButton']").arrowClick();
       });
     });
-
   });
 
   context("Verify Scroll", () => {
     it("Navigate to history tab", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy='timeline-icon']").arrowClick();
+      cy.drSelectHistoryTab();
     });
 
     it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -938,7 +937,6 @@ context("Record inline Flow", () => {
     it("Verify Overview Tab and Predefined fields", () => {
       cy.isTabActive({ name: "overview", index: 0 });
       cy.contains("Attachments").should("exist");
-      // cy.get("[data-cy='attachment']").should("exist");
     });
 
     it("Verify that the existing fields were migrated properly and that content for both the tabs", () => {

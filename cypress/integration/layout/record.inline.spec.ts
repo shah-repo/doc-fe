@@ -630,7 +630,7 @@ context("Record inline Flow", () => {
 
       context("Verify book mark", () => {
         it("Verify Book Mark Navigation", () => {
-          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.drSelectBookmarksTab();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
       });
@@ -696,7 +696,7 @@ context("Record inline Flow", () => {
 
     context("Verify revision history", () => {
       it("Click on revision history tab", () => {
-        cy.get("[data-cy='cr-icon']").arrowClick();
+        cy.drSelectRevisionHistoryTab();
         cy.get("[data-cy='Revision History']").should("be.visible");
       });
     });
@@ -731,7 +731,7 @@ context("Record inline Flow", () => {
 
     context("Verify Scroll and training", () => {
       it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
+        cy.drSelectHistoryTab();
       });
 
       it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -869,7 +869,7 @@ context("Record inline Flow", () => {
     });
 
     it("Verify Book Mark Navigation", () => {
-      cy.get("[data-cy='bookmark-icon']").arrowClick();
+      cy.drSelectBookmarksTab();
       cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
     });
 

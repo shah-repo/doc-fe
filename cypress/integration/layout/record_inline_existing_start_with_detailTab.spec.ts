@@ -444,7 +444,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.drClickCreateDocumentWithApiCall();
         });
       });
@@ -524,7 +524,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Navigate to history tab", () => {
-        cy.get("[data-cy='timeline-icon']").arrowClick();
+        cy.drSelectHistoryTab();
       });
 
       it("Click and drag the scroll bar and verify that user can scroll history tab", () => {

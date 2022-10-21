@@ -291,7 +291,6 @@ context("Record type Document Layout verification", () => {
       });
 
       context("Validate Newly Added  form builder fields in Details tab", () => {
-
         it("Verify fields in detail tab", () => {
           cy.get("[data-cy='Checkbox']").should("be.visible");
           cy.get(".formOptionsBox").should("exist");
@@ -406,10 +405,7 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Verify References selection", () => {
-        cy.get("[data-cy='references-icon']").arrowClick();
-        cy.get("[data-cy='referenceTo']").arrowClick();
-        cy.drSelectReferences( "FM-00001" );
-        cy.drRemoveReferences({ reference: "FM-00001" });
+        cy.verifyAddRemoveReference({ formId: "FM-00001" });
       });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
@@ -456,9 +452,11 @@ context("Record type Document Layout verification", () => {
             ],
           },
         ];
+
         it("Verify Doc history", () => {
           cy.drSelectHistoryTab();
         });
+
         verifyHistoryContent(history, groupOne);
       });
 
@@ -475,12 +473,11 @@ context("Record type Document Layout verification", () => {
         });
 
         it("Click on migrate form button", () => {
-          cy.get("[data-cy='common.form.migration']").arrowClick();
+          cy.drClickMigrateForm();
         });
 
         it("Select form to be migrated", () => {
-          cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
-          cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+          cy.drSelectFormToBeMigrated({ formContains: "FM-00002" });
         });
 
         it("Mapped checkbox field", () => {
@@ -512,7 +509,7 @@ context("Record type Document Layout verification", () => {
 
       context("Verify book mark", () => {
         it("Verify Book Mark Navigation", () => {
-          cy.get("[data-cy='bookmark-icon']").arrowClick();
+          cy.drSelectBookmarksTab();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
 
@@ -524,14 +521,14 @@ context("Record type Document Layout verification", () => {
 
       context("Verify revision history", () => {
         it("Click on revision history tab", () => {
-          cy.get("[data-cy='cr-icon']").arrowClick();
+          cy.drSelectRevisionHistoryTab();
           cy.get("[data-cy='Revision History']").should("be.visible");
         });
       });
 
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
-          cy.get("[data-cy='timeline-icon']").arrowClick();
+          cy.drSelectHistoryTab();
         });
 
         it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -540,7 +537,6 @@ context("Record type Document Layout verification", () => {
       });
 
       context("Fill and Approve Released", () => {
-
         it(`Add first Approver as ${USERS[1].name}`, () => {
           cy.drSelectOverviewTab();
           cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
@@ -626,7 +622,7 @@ context("Record type Document Layout verification", () => {
 
     it("Verify Book Mark Navigation", () => {
       cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
-      cy.get("[data-cy='bookmark-icon']").arrowClick();
+      cy.drSelectBookmarksTab();
       cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
     });
 
