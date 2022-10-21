@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Badge, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import { find, capitalize } from "lodash";
-import { Observer } from "mobx-react";
+import { observer } from "mobx-react";
 import { FBInlineApprovalStatusIdent, FBLHRStepState } from "../../../";
 import { ReactComponent as OperatorApprovedIcon } from "../../../../../assets/images/OperatorApproved.svg";
 import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
@@ -28,74 +28,64 @@ const OperatorsList: React.FC<OperatorsListProps> = (props) => {
 
   return (
     <List>
-      <Observer>
-        {() => (
-          <>
-            {operators?.map((operator, index) => {
-              const { stepId, user } = operator;
-              const statusInfo = getStatusInfo(lhrStepState?.approvals, stepId);
+      {operators?.map((operator, index) => {
+        const { stepId, user } = operator;
+        const statusInfo = getStatusInfo(lhrStepState?.approvals, stepId);
 
-              return (
-                <ListItem key={user?.id} className={classes.listItem} disableGutters>
-                  <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
-                    <Badge
-                      overlap="circle"
-                      anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right",
-                      }}
-                      badgeContent={
-                        statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED && <OperatorApprovedIcon />
-                      }
-                    >
-                      <Avatar
-                        className={classes.avatar}
-                        style={{ background: user?.initialColor }}
-                        alt={user.name}
-                        src={user.avatar ?? undefined}
-                      >
-                        {getInitalsFromName(user.name)}
-                      </Avatar>
-                    </Badge>
-                  </ListItemAvatar>
-                  <ListItemText
-                    className={classes.listItemText}
-                    primary={
-                      <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
-                        {user?.name}
-                      </div>
-                    }
-                    secondary={
-                      <Observer>
-                        {() => (
-                          <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              className={classes.operatorStatus}
-                              data-cy={`operator-status-${stepIndex}-${index}`}
-                            >
-                              {capitalize(statusInfo?.status)}
-                            </Typography>
-                            {statusInfo?.reviewedAt && (
-                              <>
-                                <Box component="span" marginLeft={1} marginRight={1}>&bull;</Box>
-                                {getFormattedDateString(statusInfo?.reviewedAt, MomentFormats.DateTime)}
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </Observer>
-                    }
-                  />
-                </ListItem>
-              );
-            })}
-          </>
-        )}
-      </Observer>
+        return (
+          <ListItem key={user?.id} className={classes.listItem} disableGutters>
+            <ListItemAvatar data-cy={`operator-avatar-${stepIndex}-${index}`}>
+              <Badge
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                badgeContent={
+                  statusInfo?.status === FBInlineApprovalStatusIdent.APPROVED && <OperatorApprovedIcon />
+                }
+              >
+                <Avatar
+                  className={classes.avatar}
+                  style={{ background: user?.initialColor }}
+                  alt={user.name}
+                  src={user.avatar ?? undefined}
+                >
+                  {getInitalsFromName(user.name)}
+                </Avatar>
+              </Badge>
+            </ListItemAvatar>
+            <ListItemText
+              className={classes.listItemText}
+              primary={
+                <div className={classes.operatorTitle} data-cy={`operator-name-${stepIndex}-${index}`}>
+                  {user?.name}
+                </div>
+              }
+              secondary={
+                <div data-cy={`operator-sub-title-${stepIndex}-${index}`}>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.operatorStatus}
+                    data-cy={`operator-status-${stepIndex}-${index}`}
+                  >
+                    {capitalize(statusInfo?.status)}
+                  </Typography>
+                  {statusInfo?.reviewedAt && (
+                    <>
+                      <Box component="span" marginLeft={1} marginRight={1}>&bull;</Box>
+                      {getFormattedDateString(statusInfo?.reviewedAt, MomentFormats.DateTime)}
+                    </>
+                  )}
+                </div>
+              }
+            />
+          </ListItem>
+        );
+      })}
     </List>
   );
 };
 
-export default OperatorsList;
+export default observer(OperatorsList);

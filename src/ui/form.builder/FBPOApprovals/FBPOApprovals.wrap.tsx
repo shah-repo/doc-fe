@@ -102,12 +102,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       || (item.type === FBPurchaseOrderItemType.PRODUCT && item.partNumberDocId)
     );
 
-    /**
-     * For automatic addition of requestor to approver, the poItem must be an enlil item, use the above logic
-     * whereas for automatic removal of approver, that was also the requestor it is essential that no poItem exists.
-     */
-    const checkPOItemExistsForAutoRemoval = (poItems: FBPurchaseOrderValue) => Boolean(poItems?.items?.length);
-
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
       (poItems) => {
@@ -126,26 +120,30 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
 
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
-
       const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-
       const prevRequesterValue = prevRequester.current;
-      const approvers = map(poApprovalsState?.getApprovals, "approver.id");
-
       const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
-      const hasPoLineItems = checkPOItemExistsForAutoRemoval(poItems);
-      const hasRequesterInApprovers = approvers?.includes(requester);
-      const hasPrevRequesterInApprovers = approvers?.includes(prevRequesterValue);
 
-      if (requester && !hasRequesterInApprovers && hasServiceOrProductPart) {
-        return addApprover([requester]);
+      const allApprovers = poApprovalsState?.getApprovals
+        ?.map((item) => item?.approver?.id);
+      const hasRequesterInAllApprovers = allApprovers?.includes(requester);
+
+      if (requester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
+        return addApprover([requester], { manually: false });
       }
 
-      if (requester && hasRequesterInApprovers && !hasPoLineItems) {
+      // We can remove only automatically added approvers.
+      const autoApprovers = poApprovalsState?.getApprovals
+        ?.filter((item) => !item.manually)
+        ?.map((item) => item?.approver?.id);
+      const hasRequesterInAutoApprovers = autoApprovers?.includes(requester);
+      const hasPrevRequesterInAutoApprovers = autoApprovers?.includes(prevRequesterValue as string);
+
+      if (requester && hasRequesterInAutoApprovers && !hasServiceOrProductPart) {
         return removeApprover([requester]);
       }
 
-      if (!requester && prevRequesterValue && hasPrevRequesterInApprovers) {
+      if (!requester && prevRequesterValue && hasPrevRequesterInAutoApprovers) {
         return removeApprover([prevRequesterValue]);
       }
     }
@@ -181,7 +179,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         const employeesToBeAdded = difference(fieldValue, formValue);
-        employeesToBeAdded.length > 0 && addApprover(employeesToBeAdded);
+        employeesToBeAdded.length > 0 && addApprover(employeesToBeAdded, { manually: true });
         const employeesToBeRemoved = difference(formValue, fieldValue);
         employeesToBeRemoved.length > 0 && removeApprover(employeesToBeRemoved);
         formState?.getInputState(name)?.setRender();
@@ -253,7 +251,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
     };
 
-    const addApprover = (ids?: string[]) => {
+    const addApprover = (ids: string[], { manually = true } = {}) => {
       if (!id) { return; }
       if (!ids) { return; }
       const groupName = checkGroups(ids[0]);
@@ -270,6 +268,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         fieldId: name,
         partOf: { id },
         signatureGroupName: groupName,
+        manually,
       }, () => {
         const id  = workspaceState?.id;
         if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }

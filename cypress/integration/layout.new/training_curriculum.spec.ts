@@ -26,6 +26,19 @@ const docDescription = "Test Training Curriculum";
 const formTitle = "New Training Curriculum Form";
 const formDescription = "New Training Curriculum Form Description";
 
+const FIELD_HEADERS = [
+  "Periodic Training",
+  "Documents to Train on",
+  `Refresh/repeat training periodically?`,
+  "Training Frequency (in days)",
+  "Trainees Details",
+  "Groups to Train",
+  "Users to Train (if applicable)",
+  "form.builder.approvals",
+  "fb-textfield",
+  "fb-radiobutton-group",
+];
+
 context("Verify New Layout for Training Curriculum Document", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -284,9 +297,72 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
   });
 
-  // Scenario 7a - Newly Created Training Curriculum Document
+  context("Create Training Curriculum form for migration", () => {
+    it("Navigate to Document List", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Click on 'Create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it(`Enter title`, () => {
+      cy.drEnterDocumentTitle({ name: "Migration form" });
+    });
+
+    it(`Enter description`, () => {
+      cy.drEnterDocumentDescription({
+        description: "Migration form description",
+      });
+    });
+
+    it("Click on 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click on 'Training Curriculum' document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
+      cy.unClick();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Add Text Field", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Radio Button group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+      cy.fbGroupOptions("Option 1", "Option 2");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save Form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
 
   context("Create Training Curriculum form", () => {
+    // Scenario 7a - Newly Created Training Curriculum Document
     it("Navigate to Document List", () => {
       cy.navigToDocumentList();
     });
@@ -576,11 +652,134 @@ context("Verify New Layout for Training Curriculum Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.get(`[data-cy="referenceTo"]`).arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+        cy.wait(2000);
+        cy.contains("FM-00001").arrowClick();
+        cy.drRemoveReferences({ reference: "FM-00001" });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
         cy.verifyReferencesOtherInfo();
+      });
+    });
+
+    context("Fill in the fields", () => {
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      context("Enter values for Details tab predefined schema fields", () => {
+        it(`Select Documents to Train on ${formTitle}`, () => {
+          cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect(formTitle);
+        });
+
+        it("Select Refresh/repeat training periodically? 'Yes'", () => {
+          cy.get("[name=training-refresh-training-periodically]").first().arrowClick();
+        });
+
+        it("Enter Training Frequency (in days)", () => {
+          cy.get("[name=training-validity]").arrowType("5");
+        });
+
+        it(`Select Groups to train ${groupOne}`, () => {
+          cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect(groupOne);
+        });
+
+        it("Select Users to train", () => {
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(owner);
+        });
+      });
+
+      context("Enter values for Details tab added fields", () => {
+        it("Fill text field", () => {
+          cy.get("[name^=fb-textfield-]").arrowType("Training Curriculum Text Field");
+          cy.unClick();
+        });
+
+        it("Select radio button option", () => {
+          cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
+        });
+
+        it("Save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Turn on autosave", () => {
+          cy.cmpTurnOnAutosave();
+        });
+      });
+    });
+
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.drClickMigrateForm();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.drSelectFormToBeMigrated({ formContains: "FM-00002" });
+      });
+    });
+
+    context("Field mapping for migration form", () => {
+      FIELD_HEADERS.forEach( (fieldHeader, i) => {
+        it(`Mapped '${fieldHeader}' field`, () => {
+          cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+          cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+        });
+      });
+    });
+
+    context("Click confirm and verify migrated fields are present", () => {
+      it("Click on confirm change", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+          cy.get("[data-cy='common.confirm.change']").arrowClick();
+        });
+      });
+
+      it("Navigate to details Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Verify form info should have migrated form 'FM-00002'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      });
+
+      it(`Verify migrated form info ${FIELD_HEADERS[1]}`, () => {
+        cy.get(`[name="training-document-to-be-trained-on"]`).find("span")
+          .should("contain.text", "FM-00003 - rev 1 - New Training Curriculum Form");
+      });
+
+      it(`Verify migrated form info ${FIELD_HEADERS[2]}`, () => {
+        cy.get(`input[name="training-refresh-training-periodically"]`).should("be.checked");
+      });
+
+      it(`Verify migrated form info ${FIELD_HEADERS[3]}`, () => {
+        cy.get(`[name="training-validity"]`).should("have.value", "5");
+      });
+
+      it(`Verify migrated form info ${FIELD_HEADERS[5]}`, () => {
+        cy.get(`[name="training-select-groups-to-train"]`).find("span")
+          .should("contain.text", "Developers");
+      });
+
+      it(`Verify migrated form info ${FIELD_HEADERS[6]}`, () => {
+        cy.get(`[name="training-select-users-to-train"]`).find("span")
+          .should("contain.text", USERS[1].name);
+      });
+
+      it(`Verify migrated form info ${FIELD_HEADERS[7]}`, () => {
+        cy.get(`input[name^="fb-textfield"]`).should("have.value", "Training Curriculum Text Field");
+      });
+
+      it(`Verify migrated form info ${FIELD_HEADERS[8]}`, () => {
+        cy.get(`input[name^="fb-radiobutton-group"]`).should("be.checked");
       });
     });
 
@@ -625,6 +824,16 @@ context("Verify New Layout for Training Curriculum Document", () => {
         {
           owner,
           actions: [
+            { key: "Form Set To", value: "FM-00002 - revision 1 - Migration form" },
+          ],
+        },
+        {
+          owner,
+          actions: [],
+        },
+        {
+          owner,
+          actions: [
             { key: "Description changed", value: docDescription },
             { key: "Name changed", value: docTitle },
           ],
@@ -660,56 +869,8 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
   });
 
-  context("Fill in the fields", () => {
-    it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    context("Enter values for Details tab predefined schema fields", () => {
-      it(`Select Documents to Train on ${formTitle}`, () => {
-        cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect(formTitle);
-      });
-
-      it("Select Refresh/repeat training periodically? 'Yes'", () => {
-        cy.get("[name=training-refresh-training-periodically]").first().arrowClick();
-      });
-
-      it("Enter Training Frequency (in days)", () => {
-        cy.get("[name=training-validity]").arrowType("5");
-      });
-
-      it(`Select Groups to train ${groupOne}`, () => {
-        cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect(groupOne);
-      });
-
-      it("Select Users to train", () => {
-        cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(owner);
-      });
-    });
-
-    context("Enter values for Details tab added fields", () => {
-      it("Fill text field", () => {
-        cy.get("[name^=fb-textfield-]").arrowType("Training Curriculum Text Field");
-        cy.unClick();
-      });
-
-      it("Select radio button option", () => {
-        cy.get("[name^=fb-radiobutton-group-]").last().arrowClick();
-      });
-
-      it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-      it("Turn on autosave", () => {
-        cy.cmpTurnOnAutosave();
-      });
-    });
-  });
-
-  // Scenario 7b - Existing Training Curriculum Record
-
   context("Select exisiting Draft training curriculum document", () => {
+    // Scenario 7b - Existing Training Curriculum Record
     it("Navigate to Training Curriculum", () => {
       cy.navigToTrainingCurriculums();
     });
@@ -820,7 +981,12 @@ context("Verify New Layout for Training Curriculum Document", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          cy.get(`[data-cy="referenceTo"]`).arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+          cy.wait(2000);
+          cy.contains("FM-00001").arrowClick();
+          cy.drRemoveReferences({ reference: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -837,6 +1003,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
       context("Verify Access Permissions tab", () => {
         it("Open access permissions tab", () => {
           cy.drSelectPermissionTab();
+          cy.wait(1000);
         });
 
         it("Add another user permission", () => {
