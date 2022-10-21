@@ -405,7 +405,13 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Verify References selection", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        const docId = "FM-00001";
+        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+        cy.get("[data-cy=\"referenceTo\"] input").arrowType(docId);
+        cy.wait(2000);
+        cy.contains(docId).arrowClick();
+        cy.wait(2000);
+        cy.drRemoveReferences({ reference: docId });
       });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {

@@ -570,7 +570,13 @@ context("Record inline Flow", () => {
       });
 
       it("Verify References selection Add Remove", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        const docId = "FM-00001";
+        cy.get("[data-cy='referenceTo']").arrowClick();
+        cy.get("[data-cy='referenceTo'] input").arrowType(docId);
+        cy.wait(2000);
+        cy.contains(docId).arrowClick();
+        cy.wait(2000);
+        cy.drRemoveReferences({ reference: docId });
       });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
@@ -769,6 +775,8 @@ context("Record inline Flow", () => {
             () => {
               cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick({ force: true });
             });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Revise record / update record ", () => {
