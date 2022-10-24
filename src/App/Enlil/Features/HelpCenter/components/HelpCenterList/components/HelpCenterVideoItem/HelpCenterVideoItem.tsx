@@ -15,7 +15,7 @@ const HelpCenterVideoItem: React.FC<HelpCenterVideoItemData> = ({ url }) => {
   const videoId = getYoutubeId(url);
 
   return (
-    <Box className={classes.video}>
+    <Box className={classes.video} data-cy="help-center.video-item">
       <Box className={classes.progress}>
         <CircularProgress size={20} />
       </Box>
@@ -27,6 +27,7 @@ const HelpCenterVideoItem: React.FC<HelpCenterVideoItemData> = ({ url }) => {
         allow="encrypted-media"
         allowFullScreen
         title="video"
+        data-cy="help-center.video-item-embed"
       />
     </Box>
   );

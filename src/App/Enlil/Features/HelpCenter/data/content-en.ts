@@ -177,7 +177,7 @@ const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
       },
     ],
   },
-  [HelpModule.Training]: {
+  [HelpModule.TrainingCurriculums]: {
     title: "Training Help",
     url: "//help.{env}enlil.io/training_help.html",
     items: [
