@@ -499,7 +499,7 @@ context("Help Center behaviour", () => {
     });
 
     it("Check HelpCenter navigation links", () => {
-      cy.get("[data-cy='help-center.external-link']")
+      cy.get("[data-cy='help-center.navigation'] a[role='menuitem']")
         .each((link) => {
           cy.wrap(link.closest("a"))
             .should("have.attr", "target", "_blank")
