@@ -64,6 +64,7 @@ declare global {
       listLoadingElementShouldAppear(): Chainable<Subject>;
       dragAndDrop(params: {fromSelector: string; toSelector: string});
       dragAndDropTopDown(params: {fromSelector: string; toSelector: string});
+      checkExternalLink(): Chainable<Subject>;
     }
   }
 }
@@ -360,3 +361,18 @@ Cypress.Commands.add("dragAndDropTopDown", (params: {fromSelector: string; toSel
     .realMouseUp();
 });
 
+Cypress.Commands.add("checkExternalLink", { prevSubject: "element" }, (
+  subject: JQuery<HTMLElement>
+) => {
+  cy.wrap(subject)
+    .should("have.attr", "target", "_blank")
+    .should("have.attr", "rel", "noopener noreferrer")
+    .should("have.attr", "href")
+    .then((href) => {
+      cy
+        .request(href)
+        .its("status")
+        .should("eq", 200);
+    });
+  return cy.wrap(subject);
+});
