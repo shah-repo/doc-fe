@@ -5,7 +5,6 @@ import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
 import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import { isEmpty } from "lodash";
-import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
@@ -121,7 +120,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   );
   const isDisabled = !isOutput || loading || !lhrBuildTypeExist;
 
-  return ( <Observer>{() =>
+  return (
     <FBProvider {...{ lhrStepState }}>
       {!isDocumentLHRT && ( <Accordion className={classes.panelBorder} expanded={expand}>
 
@@ -427,7 +426,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         </>
       )}
     </FBProvider>
-  }</Observer>
   );
 };
 
