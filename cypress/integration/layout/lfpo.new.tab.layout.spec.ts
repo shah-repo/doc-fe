@@ -919,9 +919,9 @@ context("LFPO new layout verification", () => {
     });
 
     context("Verify Schema Fields", () => {
-
       it("Verify Default fields up to attachment", () => {
         cy.verifyPredefiendFields();
+        cy.get("#AttachmentFieldPresenter-field").should("be.visible");
       });
 
       it("Verify Added FB Fields", () => {
@@ -965,93 +965,15 @@ context("LFPO new layout verification", () => {
           revision: "Rev 1",
         });
       });
-
-      it("Click on create new", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.get("[data-cy='PreviewControlsContainer-createNew']").arrowClick();
-        });
-      });
-
-      it("Select Part", () => {
-        cy.drEnterDocumentTitle({ name: "LFPO form document" });
-        cy.get("[data-cy='lot_part']").autocompleteSelect(`PRT-00006 - rev 1 - Part second document`);
-        cy.get(`input[type="checkbox"][value="1"]`).last().check();
-      });
-
-      it("Save the document", () => {
-        cy.drSaveDocumentWithoutaudit();
-      });
-
-      it("Fill in Approval block and  Approve and release Record", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
-        cy.get("[data-cy='ApproveAndRelease-button']").arrowClick().wait(2000);
-      });
-
-      it("Approve and Release", () => {
-        cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.SessionDetails], () => {
-          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
     });
   });
 
-  context("Create Draft state Document", () => {
-    it("Navigate to Receiving landing page", () => {
-      cy.navigToReceivableList();
-    });
-
-    it("Click 'Create Receipt Record'", () => {
-      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
-    });
-
-    it("Create Receiving Record", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Receivable test");
-      });
-    });
-
-    it("Navigate to detail tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it("Select PO", () => {
-      cy.drSelectDetailsTab();
-      cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
-        .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
-    });
-
-    it("Save the form", () => {
-      cy.drSaveDocumentWithoutaudit();
-      cy.wait(2000);
-    });
-
-    it("Click on create lot", () => {
-      cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
-      cy.get("[name^='received']").arrowType("200");
-      cy.get("[data-cy='lotType']").arrowClick({ force: true })
-        .autocompleteSelect("Lots");
-      cy.wrapWithWaitOnApiCalls([], () => {
-        cy.get("[data-cy='lotForm']").arrowClick({ force: true })
-          .autocompleteSelect("LFPO Document Title");
-      });
-      cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
-    });
-
-  });
 
   context("Receving flow", () => {
+    it("toggle off auto save", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to Receiving landing page", () => {
       cy.navigToReceivableList();
     });
@@ -1069,19 +991,35 @@ context("LFPO new layout verification", () => {
       });
     });
 
+    it("Verify receiving should get created", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.WIP,
+        title: "Receiving",
+        docId: "RCT-00002",
+        revision: "Rev A",
+      });
+    });
+
     it("Navigate to detail tab", () => {
-      cy.drSelectDetailsTab();
+      cy.drSelectDetailsTab().wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Purchase order", () => {
-      cy.drSelectDetailsTab();
-      cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
-        .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.get("[data-cy='porec-receivable-test']").autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save the form", () => {
-      cy.drSaveDocumentWithoutaudit();
-      cy.wait(2000);
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on create lot", () => {
@@ -1090,17 +1028,11 @@ context("LFPO new layout verification", () => {
 
     it("Verify pop up window will open", () => {
       cy.get("[data-cy='form.builder.po.create.a.lot']").contains("Create Lot").should("be.visible");
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("fill the fields", () => {
       cy.get("[name^='received']").arrowType("100");
-      cy.get("[data-cy='lotType']").arrowClick({ force: true })
-        .autocompleteSelect("Lots");
-
-      cy.wrapWithWaitOnApiCalls([], () => {
-        cy.get("[data-cy='lotForm']").arrowClick({ force: true })
-          .autocompleteSelect("LFPO Document Title");
-      });
     });
 
     it("Enter Expiration date", () => {
@@ -1109,15 +1041,23 @@ context("LFPO new layout verification", () => {
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
+    it("Select document type", () => {
+      cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select form", () => {
+      cy.get("[data-cy='lotForm']").wait(2000).autocompleteSelect("LFPO Document Title");
+    });
+
     it("Create lot", () => {
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
     });
 
     it("Verify Lot should be created and displayed in the table for that part", () => {
-      const lotId = lotIdRef + "03";
+      const lotId = lotIdRef + "01";
       cy.get("[data-cy='lots'] span").contains(lotId).should("exist");
     });
-
   });
 
   context("Verify created lot", () => {
@@ -1127,8 +1067,6 @@ context("LFPO new layout verification", () => {
 
     it("Click to open that LOT", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="5"] input`).arrowType("LFPO00007");
-
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick();
       cy.get("li").contains(STATUS_TYPES_LABEL.WIP).arrowClick();
@@ -1180,7 +1118,6 @@ context("LFPO new layout verification", () => {
     it("Verify Form option", () => {
       cy.get(".formOptionsBox").should("exist");
     });
-
   });
 
   context("Validate Right Side Panel", () => {
@@ -1214,7 +1151,7 @@ context("LFPO new layout verification", () => {
       cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00007");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", todaysDate.format("YYYY.MM.DD"));
+      cy.get("[data-cy='common.revision']").parent().should("contain.text", todaysDate.format("MM/DD/YYYY"));
     });
 
     context("Verify Revision", () => {
@@ -1262,6 +1199,13 @@ context("LFPO new layout verification", () => {
     });
   });
 
+  context("Verify Revision History tab", () => {
+    it("Open revision history tab", () => {
+      cy.drSelectRevisionHistoryTab();
+      cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
+    });
+  });
+
   context("Verify form migration", () => {
 
     it("Verify migrate form button is visible", () => {
@@ -1270,7 +1214,7 @@ context("LFPO new layout verification", () => {
     });
 
     it("Click on migrate form button", () => {
-      cy.get("[data-cy='common.form.migration']").arrowClick();
+      cy.drClickMigrateForm();
     });
 
     it("Select form to be migrated", () => {
@@ -1359,8 +1303,15 @@ context("LFPO new layout verification", () => {
     });
 
     it("Fill in Approval block and  Approve and release Record", () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy^='fb-approvals-fb-approvals-']").eq(0).autocompleteSelect(`${USERS[1].name}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Approve and release Record", () => {
       cy.get("[data-cy='ApproveAndRelease-button']").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and Release", () => {
@@ -1386,7 +1337,6 @@ context("LFPO new layout verification", () => {
 
     it("Click to open that LOT", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="5"] input`).arrowType("LFPO00007").wait(500);
       cy.get(".k-grid").contains("Accepted").arrowClick();
     });
 
@@ -1416,6 +1366,16 @@ context("LFPO new layout verification", () => {
 
     it("Verify FB Fields", () => {
       cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+      cy.get("[data-cy='Textfield for inline']").should("exist");
+    });
+
+    it("Verify attachment", () => {
+      cy.get(`h6`).contains("Attachments").should("exist");
+    });
+
+    it("Verify initial qunatity, usable quantity", () => {
+      cy.get("[name='lot_quantity']").should("exist");
+      cy.get("[name='lot_usable_quantity']").should("exist");
     });
 
     it("Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {
@@ -1428,186 +1388,6 @@ context("LFPO new layout verification", () => {
     it("Verify that right side panel opens by default to the References tab", () => {
       cy.get("[data-cy='References']").should("exist");
       cy.get("[data-cy='generalInfo']").should("be.visible");
-    });
-  });
-
-  // verify draft state Lots
-  context("Verify created lot", () => {
-    it("Navigate to Lot landing page", () => {
-      cy.navigToLots();
-    });
-    it("Click to open that LOT", () => {
-      cy.dlClearFilters();
-      cy.get(`[aria-colindex="2"] .k-input`).arrowClick();
-      cy.get("li").contains(STATUS_TYPES_LABEL.WIP).arrowClick().wait(500);
-      cy.landingPageLoadingElementShouldNotExist();
-      cy.dlSelectFirstDocument();
-    });
-
-    it("Verify that it contains only Details tab", () => {
-      cy.get("[data-cy='tabId.details']").should("exist");
-      cy.get("#sm-tabpanel-1").should("not.exist");
-    });
-
-    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
-      cy.verifyFixedTab();
-    });
-
-    it("Verify Form opens to the Details tab by default", () => {
-      cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.visible");
-    });
-
-    it("Verify FB Fields textfield, checkbox", () => {
-      cy.get("[name^='textfield-for-inline']").should("exist");
-      cy.get(`input[type="checkbox"][value="1"]`).should("exist");
-    });
-
-    it("Verify Quantity, Part Number, Usable Quantity", () => {
-      cy.get("[name='lot_quantity']").should("be.visible");
-      cy.get("[name='lot_usable_quantity']").should("be.visible");
-      cy.get("[data-cy='lot_part']").should("be.visible");
-    });
-
-    it("Verify Expiration Date, Part Selection, 100% inspection ride, Approval block", () => {
-      cy.get("[name='lot_expiry_date']").should("exist");
-      cy.get("[name='100-inspection-override']").should("exist");
-      cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
-      cy.get("[name='lot_part']").should("exist");
-    });
-
-    it("Verify Form option", () => {
-      cy.get(".formOptionsBox").should("exist");
-    });
-  });
-
-  context("Validate Right Side Panel", () => {
-    it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy='References']").should("exist");
-      cy.get("[data-cy='generalInfo']").should("be.visible");
-    });
-
-    it("Verify Reference tab Info", () => {
-      cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
-    });
-
-    it("Verify Eye Icon", () => {
-      cy.get("[data-cy='references-icon']").should("exist");
-    });
-
-    it("Verify Expand and collapse", () => {
-      cy.verifyExpandCollpase();
-    });
-
-    it("It is fixed as the user scrolls up or down", () => {
-      cy.get("#sm-tabpanel-0").scrollIntoView().should("be.visible");
-      cy.get("[data-cy='References']").should("be.visible");
-    });
-
-    it("Verify References selection Add Remove", () => {
-      cy.verifyAddRemoveReference({ formId: "FM-00001" });
-    });
-
-    it("Verify Referenced By ,and Release date Item exist or not", () => {
-      cy.verifyReferenceInfo();
-      cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00007");
-      cy.get("[data-cy='common.revision']").parent().should("contain.text", todaysDate.format("YYYY.MM.DD"));
-    });
-
-    context("Verify Revision", () => {
-      it("open revision tab", () => {
-        cy.openRevisionsTabAndVerifyCurrentRevision("A");
-      });
-    });
-
-    context("Verify User able to add Groups or other user permissions", () => {
-      it("Open permissions tab", () => {
-        cy.drSelectPermissionTab();
-      });
-
-      it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[3].name);
-        });
-      });
-
-      it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Developers");
-        });
-      });
-    });
-
-    context("Check document history", () => {
-      it("Verify Doc history", () => {
-        cy.drSelectHistoryTab();
-      });
-      verifyHistoryContent(history, groupOne);
-    });
-
-    context("Verify Book Mark", () => {
-      it("Verify Book Mark should be visible", () => {
-        cy.get("[data-cy='bookmark-icon']").arrowClick();
-        cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
-      });
-    });
-  });
-
-  context("Verify Scroll", () => {
-    it("Navigate to history tab", () => {
-      cy.get("[data-cy='timeline-icon']").arrowClick();
-    });
-
-    it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
-      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
-    });
-  });
-
-  context("Fill in the fields and Release", () => {
-    it("Enter value in textfield", () => {
-      cy.get("[data-cy^='textfield-for-inline']").arrowType("Test");
-      cy.get("[data-cy='lot_usable_quantity']").arrowType("200");
-    });
-
-    it("Enter Expiration date", () => {
-      cy.get("input[name^='lot_expiry_date']").parent().find("button").arrowClick({ force: true });
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
-    });
-
-    it("Check 100% override", () => {
-      cy.get("[value='100% Inspection Override']").check();
-    });
-
-    it("Checked chebox value", () => {
-      cy.get(`input[type="checkbox"][value="1"]`).last().check();
-    });
-
-    it("Fill in Approval block and  Approve and release Record", () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
-    });
-
-    it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-    });
-
-    it("click for approval", () => {
-      cy.get("[data-cy='ApproveAndRelease-button']").arrowClick({ force: true }).wait(2000);
-    });
-
-    it("Approve and Release", () => {
-      cy.get("[data-cy='form.builder.request.approve']").arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostApprovalsApprove,
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.SessionDetails], () => {
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
   });
 });
