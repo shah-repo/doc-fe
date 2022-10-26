@@ -3,6 +3,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { isEmpty } from "lodash";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBEQMaintenanceProps, FBInput, FBQuantityField, FBRadioGroup, FBSection, FBText, FBTextEditor } from "..";
+import Colors from "../../layout/theme-next/colors";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
 
 const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
@@ -31,9 +32,9 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       <Box display="flex" flexDirection="row-reverse">
         <FBButton
           variant="text"
-          endIcon={isNewPMLoading ? <CircularProgress size={14} color="inherit" /> : <AddCircleIcon />}
+          startIcon={isNewPMLoading ? <CircularProgress size={14} color="inherit" /> : <AddCircleIcon />}
           label={isTypePM ? "form.builder.new.pm" : "form.builder.new.calibration"}
-          style={{ margin: 0 }}
+          style={{ margin: 0, color: Colors.textGray, backgroundColor: "transparent" }}
           onClick={handleAdd}
           disabled={isNewPMDisabled}
         />

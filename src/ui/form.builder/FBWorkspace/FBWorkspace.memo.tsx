@@ -19,7 +19,7 @@ import {
 import SummaryInfo from "../../common/summary/SummaryInfo";
 import Text from "../../components/Text";
 import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
-import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEquipment, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
@@ -62,6 +62,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
   const documentInfo = workspaceState?.document;
+  const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
   const isInlineApproval = isFormWithInlineApproval(documentInfo?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(documentInfo?.document?.documentType?.groupOptions);
   const isFirstAlphaReleased = isDocumentAlphaReleased(documentInfo?.revisionStage) && documentInfo?.subRevision === 0;
@@ -117,7 +118,8 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
                 <Text translation="form.builder.add.step" />
               </Button>
             )}
-          {isStarter && !_tabsState?.isTabActive("calpmhistory") && <FBStarter index={size(schema)} />}
+          {isStarter && !_tabsState?.isTabActive("calpmhistory") &&
+          !isEquipmentDoc && <FBStarter index={size(schema)} />}
           {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
         </Box>
       )}
