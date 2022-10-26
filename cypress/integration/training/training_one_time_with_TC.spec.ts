@@ -575,7 +575,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
         expect(el).match(/APPROVALS\nApprovers/);
 
-        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
+        tmpRegex = new RegExp( `Checkbox\\nTEXT FIELD\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
@@ -821,8 +821,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
         tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
-        expect(el).match(tmpRegex);
+        expect(el).match(/APPROVALS\nNone/);
 
         expect(el).match(/Draft/);
 
@@ -845,9 +844,10 @@ context("Repeat One Time Training with Training Curriculum", () => {
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).not.match(/TEXT FIELD/);
+        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
+        expect(el).match(tmpRegex);
 
-        expect(el).match(/APPROVALS\nNone/);
+        expect(el).not.match(/TEXT FIELD/);
 
         expect(el).match(/Draft/);
 
