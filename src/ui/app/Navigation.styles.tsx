@@ -21,6 +21,7 @@ export default (theme: Theme) =>
       marginTop: 0,
       paddingLeft: 0,
       paddingRight: 0,
+      flexShrink: 0,
     },
     toolbarTitle: {
       flex: 1,
@@ -31,8 +32,8 @@ export default (theme: Theme) =>
       color: theme.palette.common.white,
     },
     list: {
-      height: "72vh",
-      overflow: "hidden",
+      flexGrow: 1,
+      overflowX: "hidden",
       overflowY: "auto",
     },
   });

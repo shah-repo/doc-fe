@@ -80,7 +80,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       classes={{ paper: classes.drawerPaper }}
       anchor="left"
     >
-      <Box flexGrow="1">
+      <Box flexGrow="1" display="flex" flexDirection="column" height="100%">
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6" className={classes.toolbarTitle}>
             <Link to={HOME_URL} className={classes.headerLink}>
@@ -89,7 +89,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
           </Typography>
         </Toolbar>
         {
-          isLoading
+          isLoading && true
             ? (
               <Box display="flex" justifyContent="center" mt={2}>
                 <CircularProgress size={20} />
@@ -97,22 +97,20 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
             )
             : (
               <List className={cx(classes.list, "containing-box-scrollbar")}>
-                {
-                  navigationItems.map((link: NavigationItem) => (
-                    <NavigationLinkContainer
-                      key={link.label}
-                      currentPath={location.pathname}
-                      {...link}
-                    />
-                  ))
-                }
+                {navigationItems.map((link: NavigationItem) => (
+                  <NavigationLinkContainer
+                    key={link.label}
+                    currentPath={location.pathname}
+                    {...link}
+                  />
+                ))}
               </List>
             )
         }
-      </Box>
-      <NavigationProfileContainer />
-      <Box paddingBottom="20px">
-        <BottomLogo />
+        <NavigationProfileContainer />
+        <Box paddingBottom="20px">
+          <BottomLogo />
+        </Box>
       </Box>
     </Drawer>
   );
