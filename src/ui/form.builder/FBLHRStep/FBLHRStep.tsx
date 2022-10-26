@@ -80,9 +80,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 
   operators = operators?.map((user) => ({ stepId: user?.stepId, user: user?.user }));
 
-  const defineMPIParametersForMaterialParts = Boolean(materials?.filter((part) => part?.LHRTparameter === true).length);
-  const defineMPIParametersForEquipments = Boolean(equipment?.filter((eq) => eq?.LHRTparameter === true).length);
-
   const stepLabel = stepLHRs ? `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`
     : `LHR Step ${stepIndex}`;
   const [expand, setExpand] = React.useState(false);
@@ -407,7 +404,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 }
               /> )}
             </Box>
-            {isDocumentLHRT && !isEmpty(materials) && defineMPIParametersForMaterialParts && (
+            {isDocumentLHRT && !isEmpty(materials) && (
               <FBLHRStepProcedureItem
                 value={materials}
                 type={FBProcedureItemType.materials}
@@ -415,7 +412,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 isPendingChange
               />
             )}
-            {isDocumentLHRT && !isEmpty(equipment) &&  defineMPIParametersForEquipments && (
+            {isDocumentLHRT && !isEmpty(equipment) && (
               <FBLHRStepProcedureItem
                 value={equipment}
                 type={FBProcedureItemType.equipment}
