@@ -5,6 +5,7 @@ import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
 import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import { isEmpty } from "lodash";
+import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
@@ -18,10 +19,9 @@ import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisi
 import Colors from "../../layout/theme/utils/colors";
 import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
 import { FBProcedureItemType } from "../FBProcedureItem/FBProcedureItem.types";
+import OperatorsList from "./components/OperatorsList";
 import { FBLHRStepStyles } from "./FBLHRStep.styles";
 import { withFBLHRStep } from "./FBLHRStep.wrap";
-import OperatorsList from "./components/OperatorsList";
-import { Observer } from "mobx-react";
 
 const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   filterOptions,
@@ -79,6 +79,9 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   }
 
   operators = operators?.map((user) => ({ stepId: user?.stepId, user: user?.user }));
+
+  const defineMPIParametersForMaterialParts = Boolean(materials?.filter((part) => part?.LHRTparameter === true).length);
+  const defineMPIParametersForEquipments = Boolean(equipment?.filter((eq) => eq?.LHRTparameter === true).length);
 
   const stepLabel = stepLHRs ? `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`
     : `LHR Step ${stepIndex}`;
@@ -404,6 +407,22 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 }
               /> )}
             </Box>
+            {isDocumentLHRT && !isEmpty(materials) && defineMPIParametersForMaterialParts && (
+              <FBLHRStepProcedureItem
+                value={materials}
+                type={FBProcedureItemType.materials}
+                lhrStepIndex={index}
+                isPendingChange
+              />
+            )}
+            {isDocumentLHRT && !isEmpty(equipment) &&  defineMPIParametersForEquipments && (
+              <FBLHRStepProcedureItem
+                value={equipment}
+                type={FBProcedureItemType.equipment}
+                lhrStepIndex={index}
+                isPendingChange
+              />
+            )}
             <Box>
               <OperatorsList {...{ operators, stepLHRs, lhrStepState, stepIndex }} />
             </Box>
