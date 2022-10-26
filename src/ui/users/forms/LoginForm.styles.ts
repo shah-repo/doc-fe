@@ -57,7 +57,7 @@ export default (theme: Theme) =>
       position: "relative",
       marginTop: "10px",
     },
-    passwordInput: {
+    input: {
       marginTop: "5px !important",
     },
   });
