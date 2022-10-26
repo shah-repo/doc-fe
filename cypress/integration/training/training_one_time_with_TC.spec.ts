@@ -1035,9 +1035,6 @@ context("Repeat One Time Training with Training Curriculum", () => {
         tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
-        expect(el).match(tmpRegex);
-
         expect(el).match(/Released/);
 
         tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1063,6 +1060,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
         tmpRegex = new
         RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
