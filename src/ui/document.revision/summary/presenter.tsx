@@ -126,6 +126,10 @@ const Presenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const summaryStyles = {
+    labelStyle: { ...AutoCompleteStyles.labelProps, marginBottom: 2 },
+    valueStyle: { ...AutoCompleteStyles.labelFont, marginBottom: 22 },
+  };
 
   const contentRenderer = () => (
     <Box minHeight={16} width="calc(100% - 8px)">
@@ -135,16 +139,14 @@ const Presenter: React.FunctionComponent<Props> = ({
           <SummaryField
             label="document.revision.trainingRequired"
             value={<Text translation={`common.${retrain}` as Translation} />}
-            labelProps={AutoCompleteStyles.labelProps}
-            labelFont={{ ...AutoCompleteStyles.labelFont, marginBottom: 14 }}
+            {...summaryStyles}
           />
         }
         {formTemplate && (
           <SummaryField
             label="document.output.type"
             value={outputDocumentTypeName}
-            labelProps={{ ...AutoCompleteStyles.labelProps }}
-            labelFont={{ ...AutoCompleteStyles.labelFont, marginBottom: 22 }}
+            {...summaryStyles}
           />
         )}
         {isEB && parent && (
