@@ -875,7 +875,9 @@ context("Layout Verification of maintainance records", () => {
 
     context("Fill the form", () => {
       it("Fill the record details'", () => {
-        cy.drEnterDocumentTitle({ name: "MR Test title" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drEnterDocumentTitle({ name: "MR Test title" });
+        });
       });
 
       it("Navigate to overview tab", () => {
@@ -893,37 +895,51 @@ context("Layout Verification of maintainance records", () => {
       });
 
       it("fill EQ,Maintainer,completion date fields", () => {
-        cy.get("[data-cy='equipment_id']").autocompleteSelect("EQ-00001");
-        cy.get("[data-cy='equipment_maintainer']").autocompleteSelect(USERS[1].name);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy='equipment_id']").autocompleteSelect("EQ-00001");
+        });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy='equipment_maintainer']").autocompleteSelect(USERS[1].name);
+        });
       });
 
       it("Fill 'Completion Date'", () => {
         const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
-        cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
 
-        cy.get("button.MuiPickersDay-day")
-          .not(".MuiPickersDay-hidden")
-          .each(($el) => {
-            const dayNumber = $el.text();
-            if (dayOfTheMonth.toString() === dayNumber) {
-              cy.wrap($el).arrowClick();
-            }
-          });
+          cy.get("button.MuiPickersDay-day")
+            .not(".MuiPickersDay-hidden")
+            .each(($el) => {
+              const dayNumber = $el.text();
+              if (dayOfTheMonth.toString() === dayNumber) {
+                cy.wrap($el).arrowClick();
+              }
+            });
+        });
       });
 
       it("Verify add FB Field Checked chebox", () => {
-        cy.get(`input[type="checkbox"][value="1"]`).should("exist");
-        cy.get(`input[type="checkbox"][value="1"]`).check();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+          cy.get(`input[type="checkbox"][value="1"]`).check();
+        });
+        cy.wait(1000);
       });
 
       it("Verify add FB Field textfield", () => {
-        cy.get("[name^='maintainance-record-textfield']").should("exist");
-        cy.get("[name^='maintainance-record-textfield']").arrowType("Test");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name^='maintainance-record-textfield']").should("exist");
+          cy.get("[name^='maintainance-record-textfield']").arrowType("Test");
+          cy.unClick();
+        });
       });
 
       it("Select Approval", () => {
         cy.drSelectOverviewTab();
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+        });
       });
     });
 
@@ -954,7 +970,7 @@ context("Layout Verification of maintainance records", () => {
 
       it("Verify References selection Add Remove", () => {
         cy.cmpTurnOffAutosave();
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        cy.verifyAddRemoveReference({ formId: "FM-0000" });
         cy.cmpTurnOnAutosave();
       });
 
@@ -962,7 +978,7 @@ context("Layout Verification of maintainance records", () => {
         cy.verifyReferenceInfo();
         cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
         cy.get("[data-cy='common.revision']").parent().should("contain.text",
-          moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
 
       context("Verify Revision", () => {
