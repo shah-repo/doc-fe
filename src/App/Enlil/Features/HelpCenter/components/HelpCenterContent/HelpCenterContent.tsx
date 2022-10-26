@@ -33,11 +33,16 @@ const HelpCenterContent: React.FC<Props> = ({ content, opened, handleCloseDialog
         <Typography variant="h6">
           <Text translation="help.title" />
         </Typography>
-        <IconButton className={classes.close} size="small" onClick={handleCloseDialog}>
+        <IconButton
+          className={classes.close}
+          size="small"
+          onClick={handleCloseDialog}
+          data-cy="help-center.content-closer"
+        >
           <CloseIcon />
         </IconButton>
       </DialogTitle>
-      <DialogContent className={classes.content} dividers>
+      <DialogContent className={classes.content} dividers data-cy="help-center.content">
         <HelpCenterList content={content} />
         <HelpCenterPopular />
       </DialogContent>

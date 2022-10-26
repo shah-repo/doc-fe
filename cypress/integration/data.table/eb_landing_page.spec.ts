@@ -514,6 +514,7 @@ context("Test Engineering Build landing page", () => {
         body: {
           category: "EB",
           addNewBtnLabel: "Create Engineering Build",
+          config: {},
           columns: [
             {
               label: "EB ID",
