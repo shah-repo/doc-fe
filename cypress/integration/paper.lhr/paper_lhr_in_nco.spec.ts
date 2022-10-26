@@ -63,7 +63,7 @@ context("Verify Paper LHR", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
@@ -72,7 +72,7 @@ context("Verify Paper LHR", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           done();
         });
       });
@@ -80,7 +80,7 @@ context("Verify Paper LHR", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -116,7 +116,7 @@ context("Verify Paper LHR", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       });
     });
 
@@ -201,8 +201,8 @@ context("Verify Paper LHR", () => {
         cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
       });
 
-      it(`Enters company email '${USERS[1].email}'`, () => {
-        cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
+      it(`Enters company email '${USERS[11].email}'`, () => {
+        cy.get("[name^=company-admin-email-]").arrowType(USERS[11].email);
       });
 
       it("Select 'Yes' for 'Approved DAM json is used'", () => {
@@ -251,7 +251,7 @@ context("Verify Paper LHR", () => {
     context("Login user", () => {
       it("Logs user in", () => {
         cy.authLogin({
-          email: USERS[1].email,
+          email: USERS[11].email,
         });
       });
 
@@ -262,7 +262,7 @@ context("Verify Paper LHR", () => {
               const response = res.body;
               apiCreatedCompany.employees = response.employees;
               createdCompany = response;
-              adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+              adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
             }
           });
         }).as("response");
@@ -635,7 +635,7 @@ context("Verify Paper LHR", () => {
       it("Verify data on landing page", () => {
         cy.dlVerifyFilterByRev({ revision: "1" });
         cy.dlVerifyFilterByType({ type: "FM" });
-        cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.dlVerifyFilterByOwner({ owner: USERS[11].name });
         cy.dlVerifyFilterByStatus({ status: "Draft" });
       });
 
@@ -704,7 +704,7 @@ context("Verify Paper LHR", () => {
       it("Verify data on landing page", () => {
         cy.dlVerifyFilterByRev({ revision: "1" });
         cy.dlVerifyFilterByType({ type: "FM" });
-        cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.dlVerifyFilterByOwner({ owner: USERS[11].name });
         cy.dlVerifyFilterByStatus({ status: "Released" });
         cy.dlVerifyFilterByArId({ arId: arID });
         cy.dlVerifyFilterByEffectiveDate({ effectiveDate: currentDate });
@@ -894,7 +894,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -929,10 +929,13 @@ context("Verify Paper LHR", () => {
 
     context("Release LHR", () => {
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.wait(7000);
+        cy.listLoadingElementShouldNotExist();
+        cy.pmAddApproverOnApproverList({ approver: USERS[11].email });
       });
 
       it("Click save document", () => {
+        cy.wait(2000);
         cy.drClickCreateDocumentWithoutApiCall();
       });
 
@@ -963,7 +966,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -1006,13 +1009,17 @@ context("Verify Paper LHR", () => {
       });
 
       it("Enter End Quantity field value", () => {
-        cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+          cy.unClick();
+        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save it", () => {
@@ -1021,6 +1028,7 @@ context("Verify Paper LHR", () => {
 
       it("Submit for approval", () => {
         cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick();
+        cy.wait(1000);
       });
 
       it("Approve record", () => {
@@ -1057,7 +1065,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -1232,6 +1240,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Upload new attachment", () => {
+        cy.wait(7000);
         cy.atchUploadAttachment({ fileName: "image.jpg" });
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
@@ -1257,7 +1266,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -1295,7 +1304,8 @@ context("Verify Paper LHR", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click save document", () => {
@@ -1325,7 +1335,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -1379,7 +1389,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
       });
 
       it("Save it", () => {
@@ -1424,7 +1434,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
