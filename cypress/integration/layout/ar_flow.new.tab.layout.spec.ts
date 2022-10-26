@@ -525,7 +525,7 @@ context("Approval request form layout verification", () => {
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
       cy.get("[data-cy='common.revision']").parent().should("contain.text",
-        moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+        moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       cy.get("[data-cy='References-detail']").should("contain.text",
         moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
     });
@@ -625,7 +625,7 @@ context("Approval request form layout verification", () => {
       cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
       cy.get("div[class^='rdw-editor-toolbar']").should("not.exist");
       cy.get("[data-cy='BaseWithhtml-editor'] button").contains("View less").should("be.visible");
-      cy.get("[class*='descriptionSummaryEditorClass']").should("exist");
+      cy.get("[data-text='true']").eq(3).should("be.visible");
     });
 
     it("Verify top header is visible on scroll", () => {
