@@ -13,8 +13,8 @@ type Props = SummaryBaseProps;
 const BaseWithhtml: React.FunctionComponent<Props> = ({
   label,
   value,
-  labelProps,
-  labelFont,
+  labelStyle,
+  valueStyle,
 }) => {
   const { _documentRevisionFormState } = SM.useStores();
   const descriptionClasses = SMEditorStyles();

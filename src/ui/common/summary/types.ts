@@ -6,7 +6,7 @@ export interface SummaryBaseProps {
   label?: Translation | string;
   value?: any;
   noValueOption?: any;
-  labelProps?: BoxProps;
-  labelFont?: BoxProps;
+  labelStyle?: BoxProps;
+  valueStyle?: BoxProps;
   _documentRevisionFormState?: DocumentRevisionFormState;
 }
