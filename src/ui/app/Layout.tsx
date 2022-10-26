@@ -24,25 +24,24 @@ import TrainingDetailContainer from "../training/TrainingDetail.container";
 import UserManagementListContainer from "../user.management/kendo/container";
 import DataFetcherContainer from "./DataFetcher.container";
 import HeaderContainer from "./Header.container";
-import { styles } from "./Layout.styles";
+import useStyles from "./Layout.styles";
 import Navigation from "./Navigation";
 import PingServer from "./PingServer";
 import SocketsContainer from "./sockets/container";
 
 const Layout: React.FunctionComponent = () => {
-  const formDocument = SM.isNewCRLayout || SM.isNewLayout;
-  const pageLevelScroll =   { overflow: SM.isScrollEnabled ? "auto" : "" };
-  const classes = styles(formDocument);
-  return (<div>
-    <RemoteValidatorsLoader />
-    <PingServer />
-    <CssBaseline />
-    <HeaderContainer />
-    <Navigation />
-    <SocketsContainer />
-    <WatermarkFooterContainer />
-    {(
-      <main className={SM.isHomeURL ? classes.newContent : classes.content} style={pageLevelScroll}>
+  const classes = useStyles(SM.isHomeURL);
+
+  return (
+    <>
+      <RemoteValidatorsLoader />
+      <PingServer />
+      <CssBaseline />
+      <HeaderContainer />
+      <Navigation />
+      <SocketsContainer />
+      <WatermarkFooterContainer />
+      <main className={classes.root}>
         <DataFetcherContainer />
         <Switch>
           <Route
@@ -54,11 +53,19 @@ const Layout: React.FunctionComponent = () => {
             path={DOCUMENT_REVISION_ROOT_URL}
             component={DocumentRevisionContainer}
           />
-          <Route path={DASHBOARD_URL} exact={true} component={DashboardContainer} />
-          <Route path={HOME_URL} exact={true} component={DashboardLayout} />
+          <Route
+            path={DASHBOARD_URL}
+            exact
+            component={DashboardContainer}
+          />
+          <Route
+            path={HOME_URL}
+            exact
+            component={DashboardLayout}
+          />
           <Route
             path={CHANGE_REQUEST_CREATE_URL}
-            exact={true}
+            exact
             component={ChangeRequestCreateContainer}
           />
           <Route
@@ -67,12 +74,12 @@ const Layout: React.FunctionComponent = () => {
           />
           <Route
             path={CHANGE_REQUEST_LIST_URL}
-            exact={true}
+            exact
             component={ChangeRequestListContainer}
           />
           <Route
             path={DOCUMENT_REVISION_LIST_URL}
-            exact={true}
+            exact
             component={DocumentRevisionListContainer}
           />
           <Route
@@ -91,7 +98,10 @@ const Layout: React.FunctionComponent = () => {
             path={GROUP_MANAGEMENT_ROOT_URL}
             component={GroupManagementListContainer}
           />
-          <Route path={SLACK_ROOT_URL} component={SlackContainer} />
+          <Route
+            path={SLACK_ROOT_URL}
+            component={SlackContainer}
+          />
           <Route
             path={DOCUMENT_BY_TYPE_LIST_URL}
             component={DocumentTypeListContainer}
@@ -112,10 +122,11 @@ const Layout: React.FunctionComponent = () => {
             path={ASYNC_TASKS_URL}
             component={AsyncTasksContainer}
           />
-          <Redirect to={{ pathname: HOME_URL }} />
+          <Redirect to={HOME_URL} />
         </Switch>
       </main>
-    )}
-  </div>); };
+    </>
+  );
+};
 
 export default Layout;
