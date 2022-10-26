@@ -78,6 +78,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
             inputProps={{ autoComplete: "current-password", id: "LoginFormPresenter-password", type: "password" }}
             validate={validator(required)}
             lpignore={false}
+            inputStyleProps={classes.passwordInput}
           />
         </Box>
         <SubmitButton

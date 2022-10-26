@@ -55,5 +55,9 @@ export default (theme: Theme) =>
     },
     passwordContainer: {
       position: "relative",
+      marginTop: "10px",
+    },
+    passwordInput: {
+      marginTop: "5px !important",
     },
   });
