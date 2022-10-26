@@ -66,6 +66,7 @@ const LoginFormPresenter: React.FunctionComponent<Props> = ({
           inputProps={{ autoComplete: "email", autoFocus: true, id: "LoginFormPresenter-email" }}
           validate={validator(required, email)}
           lpignore={false}
+          inputStyleProps={classes.passwordInput}
         />
         <Box className={classes.passwordContainer}>
           {!isSignLabel && forgotPasswordButtonRenderer()}
