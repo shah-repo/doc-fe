@@ -88,7 +88,7 @@ const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
       {
         type: HelpCenterItemType.HowTo,
         title: "How to create a Supplier?",
-        url: "//help.{env}enlil.io/equipment_how_to.html",
+        url: "//help.{env}enlil.io/supplier_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
@@ -120,12 +120,12 @@ const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
       {
         type: HelpCenterItemType.HowTo,
         title: "How to create a Part?",
-        url: "//help.{env}enlil.io/supplier_how_to.html",
+        url: "//help.{env}enlil.io/parts_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
         title: "Parts Workflow",
-        url: "//help.{env}enlil.io/supplier_workflow.html",
+        url: "//help.{env}enlil.io/parts_workflow.html",
       },
     ],
   },
@@ -177,7 +177,7 @@ const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
       },
     ],
   },
-  [HelpModule.Training]: {
+  [HelpModule.TrainingCurriculums]: {
     title: "Training Help",
     url: "//help.{env}enlil.io/training_help.html",
     items: [

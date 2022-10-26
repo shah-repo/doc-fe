@@ -9,7 +9,7 @@ const HelpCenterWorkflowItem: React.FC<HelpCenterWorkflowItemData> = ({ title, u
   const classes = useStyles();
 
   return (
-    <MenuList disablePadding>
+    <MenuList disablePadding data-cy="help-center.workflow-item">
       <HelpCenterExternalLink className={classes.link} to={url}>
         <ListItemIcon className={classes.icon}><PageIcon /></ListItemIcon>
         <ListItemText className={classes.text} disableTypography>
