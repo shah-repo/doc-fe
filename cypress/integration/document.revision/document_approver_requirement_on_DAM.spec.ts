@@ -915,10 +915,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/Checkbox/);
-
-          expect(el).match(/1 2 3/);
-
           expect(el).match(/Draft/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -956,6 +952,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           expect(el).match(tmpRegex);
 
           expect(el).not.match(/TEXT FIELD/);
+
+          expect(el).match(/Checkbox/);
+
+          expect(el).match(/1 2 3/);
 
           expect(el).match(/Draft/);
 
@@ -1171,10 +1171,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/Checkbox/);
-
-          expect(el).match(/1 2 3/);
-
           expect(el).match(/Released/);
 
           tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
@@ -1212,6 +1208,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           expect(el).match(tmpRegex);
 
           expect(el).not.match(/TEXT FIELD/);
+
+          expect(el).match(/Checkbox/);
+
+          expect(el).match(/1 2 3/);
 
           expect(el).match(/Released/);
 
