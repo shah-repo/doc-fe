@@ -594,6 +594,7 @@ context("Record inline Flow", () => {
 
       it("Click on Save", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve Second Inline Approval", () => {
@@ -749,7 +750,7 @@ context("Record inline Flow", () => {
       });
 
       it("Revise record / update record ", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy='updateRecord']").click();
         });
         cy.progressBarShouldNotExist();
@@ -836,20 +837,6 @@ context("Record inline Flow", () => {
 
     it("Navigate to overview tab", () => {
       cy.drSelectOverviewTab();
-    });
-
-    xit("Approve First Inline Approval", () => {
-      cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick({ force: true });
-      cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.SessionDetails], () => {
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Edit the field text field and check box", () => {
