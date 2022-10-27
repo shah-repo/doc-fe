@@ -745,9 +745,6 @@ context("Record inline Flow", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
 
       it("Revise record / update record ", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
@@ -884,6 +881,9 @@ context("Record inline Flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.ReleaseDocRevWithoutAr], () => {
         cy.get("[data-cy='AlertDialog-continueButton']").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -891,7 +891,9 @@ context("Record inline Flow", () => {
     it("Navigate to history tab", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.drSelectHistoryTab();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
+        cy.drSelectHistoryTab();
+      });
     });
 
     it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
