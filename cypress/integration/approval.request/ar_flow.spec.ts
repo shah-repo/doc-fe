@@ -416,7 +416,7 @@ context("Approval request form", () => {
 
         expect(el).match(/Description of change\nJustification of change/);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVERS\nNone/);
+        expect(el).match(/APPROVERS\nNone\nCheckbox\nTEXT FIELD/);
 
         tmpRegex = new RegExp( `1 2 3`, "gi" );
         expect(el).match(tmpRegex);
@@ -493,6 +493,10 @@ context("Approval request form", () => {
 
     it("Checkbox option 2 checked", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
+    });
+
+    it("Click on Save", () => {
+      cy.arSaveApiCall();
     });
 
     it("Click Create Approval Request", () => {
