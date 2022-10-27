@@ -63,7 +63,7 @@ context("Verify Paper LHR", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
@@ -72,7 +72,7 @@ context("Verify Paper LHR", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           done();
         });
       });
@@ -80,7 +80,7 @@ context("Verify Paper LHR", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -116,7 +116,7 @@ context("Verify Paper LHR", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       });
     });
 
@@ -201,8 +201,8 @@ context("Verify Paper LHR", () => {
         cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
       });
 
-      it(`Enters company email '${USERS[1].email}'`, () => {
-        cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
+      it(`Enters company email '${USERS[11].email}'`, () => {
+        cy.get("[name^=company-admin-email-]").arrowType(USERS[11].email);
       });
 
       it("Select 'Yes' for 'Approved DAM json is used'", () => {
@@ -251,7 +251,7 @@ context("Verify Paper LHR", () => {
     context("Login user", () => {
       it("Logs user in", () => {
         cy.authLogin({
-          email: USERS[1].email,
+          email: USERS[11].email,
         });
       });
 
@@ -262,7 +262,7 @@ context("Verify Paper LHR", () => {
               const response = res.body;
               apiCreatedCompany.employees = response.employees;
               createdCompany = response;
-              adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+              adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
             }
           });
         }).as("response");
@@ -599,13 +599,12 @@ context("Verify Paper LHR", () => {
     context("Verify predefined fields are displayed", () => {
       it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
         cy.get(`[name="lhr-selected-part"]`).parent().parent()
-          .contains("The Part to be Manufactured is a required field.");
+          .should("not.contain", "The Part to be Manufactured is a required field.");
       });
-
       it("Check 'Build Type' is displayed", () => {
         cy.get(`[data-cy="Build Type"]`).should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Build Type is a required field.");
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Build Type is a required field.");
         cy.get(`[data-cy="Build Type"]`).parent().parent().parent().parent()
           .should("contain.html", `role="radiogroup"`);
         cy.get(`[name="lhr-build-type"]`).eq(0).should("have.value", "R&D");
@@ -614,14 +613,14 @@ context("Verify Paper LHR", () => {
 
       it("Check 'Initial Quantity' is displayed", () => {
         cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Initial Quantity is a required field.");
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Initial Quantity is a required field.");
       });
 
       it("Check 'End Quantity' is displayed", () => {
         cy.get("[data-cy=\"End Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The End Quantity is a required field.");
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The End Quantity is a required field.");
       });
 
       it("Check 'Approvals' is displayed", () => {
@@ -642,7 +641,7 @@ context("Verify Paper LHR", () => {
       it("Verify data on landing page", () => {
         cy.dlVerifyFilterByRev({ revision: "1" });
         cy.dlVerifyFilterByType({ type: "FM" });
-        cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.dlVerifyFilterByOwner({ owner: USERS[11].name });
         cy.dlVerifyFilterByStatus({ status: "Draft" });
       });
 
@@ -654,25 +653,25 @@ context("Verify Paper LHR", () => {
     context("Verify all data and predefined fields are present", () => {
       it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
         cy.get(`[name="lhr-selected-part"]`).parent().parent()
-          .contains("The Part to be Manufactured is a required field.");
+          .should("not.contain", "The Part to be Manufactured is a required field.");
       });
-
       it("Verify 'Build Type' is displayed", () => {
         cy.get("[data-cy=\"Build Type\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Build Type is a required field.");
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Build Type is a required field.");
+
       });
 
       it("Verify 'Initial Quantity' is displayed", () => {
         cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Initial Quantity is a required field.");
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Initial Quantity is a required field.");
       });
 
       it("Verify 'End Quantity' is displayed", () => {
         cy.get("[data-cy=\"End Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The End Quantity is a required field.");
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The End Quantity is a required field.");
       });
 
       it("Verify 'Approvals' is displayed", () => {
@@ -718,7 +717,7 @@ context("Verify Paper LHR", () => {
       it("Verify data on landing page", () => {
         cy.dlVerifyFilterByRev({ revision: "1" });
         cy.dlVerifyFilterByType({ type: "FM" });
-        cy.dlVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.dlVerifyFilterByOwner({ owner: USERS[11].name });
         cy.dlVerifyFilterByStatus({ status: "Released" });
         cy.dlVerifyFilterByArId({ arId: arID });
         cy.dlVerifyFilterByEffectiveDate({ effectiveDate: currentDate });
@@ -740,25 +739,25 @@ context("Verify Paper LHR", () => {
 
       it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
         cy.get(`[name="lhr-selected-part"]`).parent().parent()
-          .contains("The Part to be Manufactured is a required field.");
+          .should("not.contain", "The Part to be Manufactured is a required field.");
       });
 
       it("Verify 'Build Type' is displayed", () => {
         cy.get("[data-cy=\"Build Type\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Build Type is a required field.");
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Build Type is a required field.");
       });
 
       it("Verify 'Initial Quantity' is displayed", () => {
         cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The Initial Quantity is a required field.");
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Initial Quantity is a required field.");
       });
 
       it("Verify 'End Quantity' is displayed", () => {
         cy.get("[data-cy=\"End Quantity\"]").should("exist")
-          .parent().parent().parent().parent().next()
-          .should("have.text", "The End Quantity is a required field.");
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The End Quantity is a required field.");
       });
 
       it("Verify 'Approvals' is displayed", () => {
@@ -768,7 +767,7 @@ context("Verify Paper LHR", () => {
 
     context(`Remove ${fileUploadFieldTitle} approve and verify Released form`, () => {
       it(`Remove ${fileUploadFieldTitle}`, () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").eq(-2).arrowClick({ force: true });
+        cy.get("[data-cy=\"remove-schema-item\"]").eq(-1).arrowClick({ force: true });
       });
 
       it("Save form", () => {
@@ -914,7 +913,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -949,11 +948,14 @@ context("Verify Paper LHR", () => {
 
     context("Release LHR", () => {
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.wait(7000);
+        cy.listLoadingElementShouldNotExist();
+        cy.pmAddApproverOnApproverList({ approver: USERS[11].email });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.wait(2000);
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {
@@ -983,7 +985,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -1026,21 +1028,26 @@ context("Verify Paper LHR", () => {
       });
 
       it("Enter End Quantity field value", () => {
-        cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+          cy.unClick();
+        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save it", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {
-        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick();
+        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick({ force: true });
+        cy.wait(1000);
       });
 
       it("Approve record", () => {
@@ -1077,7 +1084,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -1252,6 +1259,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Upload new attachment", () => {
+        cy.wait(7000);
         cy.atchUploadAttachment({ fileName: "image.jpg" });
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
@@ -1277,7 +1285,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -1315,11 +1323,12 @@ context("Verify Paper LHR", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {
@@ -1345,7 +1354,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {
@@ -1393,21 +1402,26 @@ context("Verify Paper LHR", () => {
       });
 
       it("Enter End Quantity field value", () => {
-        cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+          cy.unClick();
+        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        });
       });
 
       it("Save it", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {
-        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick();
+        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick({ force: true });
       });
 
       it("Approve record", () => {
@@ -1444,7 +1458,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Owner'", () => {
-        cy.lhrVerifyFilterByOwner({ owner: USERS[1].name });
+        cy.lhrVerifyFilterByOwner({ owner: USERS[11].name });
       });
 
       it("Verify 'Part number/rev'", () => {

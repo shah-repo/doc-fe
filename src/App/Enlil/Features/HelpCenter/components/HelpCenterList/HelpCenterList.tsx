@@ -30,20 +30,21 @@ const HelpCenterList: React.FC<Props> = ({ content }) => {
 
   return (
     <Box className={classes.root}>
-      <Typography variant="h4">
+      <Typography variant="h4" data-cy="help-center.content-title">
         {content.title}
-        {content.url && (
-          <HelpCenterExternalLink
-            className={classes.link}
-            to={content.url}
-            component={Link}
-          >
-            <HelpCenterOutLink>
-              <Text translation="help.view.full.guide" />
-            </HelpCenterOutLink>
-          </HelpCenterExternalLink>
-        )}
       </Typography>
+      {content.url && (
+        <HelpCenterExternalLink
+          className={classes.link}
+          to={content.url}
+          component={Link}
+          dataCy="help-center.full-guide"
+        >
+          <HelpCenterOutLink>
+            <Text translation="help.view.full.guide" />
+          </HelpCenterOutLink>
+        </HelpCenterExternalLink>
+      )}
       <Box className={classes.list}>
         {content.items.map((item) => <HelpCenterItem {...item} key={item.url} />)}
       </Box>

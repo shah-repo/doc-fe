@@ -5,7 +5,6 @@ import AccordionSummary from "@material-ui/core/ExpansionPanelSummary";
 import { CheckCircle, RemoveCircle } from "@material-ui/icons";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import { isEmpty } from "lodash";
-import { Observer } from "mobx-react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { FB, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBLHRStepProps, FBProvider, FBText } from "..";
@@ -80,9 +79,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
 
   operators = operators?.map((user) => ({ stepId: user?.stepId, user: user?.user }));
 
-  const defineMPIParametersForMaterialParts = Boolean(materials?.filter((part) => part?.quantity === undefined).length);
-  const defineMPIParametersForEquipments = Boolean(equipment?.filter((eq) => eq?.id === "B").length);
-
   const stepLabel = stepLHRs ? `LHR Step ${stepIndex} - Rev ${stepLHRs?.displayRevision || ""}`
     : `LHR Step ${stepIndex}`;
   const [expand, setExpand] = React.useState(false);
@@ -124,7 +120,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
   );
   const isDisabled = !isOutput || loading || !lhrBuildTypeExist;
 
-  return ( <Observer>{() =>
+  return (
     <FBProvider {...{ lhrStepState }}>
       {!isDocumentLHRT && ( <Accordion className={classes.panelBorder} expanded={expand}>
 
@@ -407,7 +403,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 }
               /> )}
             </Box>
-            {isDocumentLHRT && !isEmpty(materials) && defineMPIParametersForMaterialParts && (
+            {isDocumentLHRT && !isEmpty(materials) && (
               <FBLHRStepProcedureItem
                 value={materials}
                 type={FBProcedureItemType.materials}
@@ -415,7 +411,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                 isPendingChange
               />
             )}
-            {isDocumentLHRT && !isEmpty(equipment) &&  defineMPIParametersForEquipments && (
+            {isDocumentLHRT && !isEmpty(equipment) && (
               <FBLHRStepProcedureItem
                 value={equipment}
                 type={FBProcedureItemType.equipment}
@@ -430,7 +426,6 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
         </>
       )}
     </FBProvider>
-  }</Observer>
   );
 };
 

@@ -13,8 +13,8 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
   label,
   value,
   classes,
-  labelProps,
-  labelFont,
+  labelStyle,
+  valueStyle,
 }) => {
   const intl = useIntl();
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
@@ -54,7 +54,7 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
     <Grid item={true} xs={12} style={{ marginBottom: "-24px" }} >
       {label && (
         <Grid item={true} xs={12} id="BaseWithhtml-label">
-          <Typography style={labelProps}>
+          <Typography style={labelStyle}>
             <Text message={label} />
           </Typography>
         </Grid>
