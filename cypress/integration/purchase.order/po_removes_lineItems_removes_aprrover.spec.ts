@@ -1135,7 +1135,7 @@ context("PO Removes lineitems removes approver", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check approver does not exist in approver block", () => {
+    it("Check approver exist in approver block", () => {
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain.text", `${USERS[1].name} - ${USERS[1].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
