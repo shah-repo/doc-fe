@@ -43,18 +43,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
   const navigationSelectorItems = useSelector(companySelectors.getNavigationItems) || [];
-  // TODO:: REMOVE THIS once Navigation item coming from backend
-  const index = navigationSelectorItems.findIndex((x) => x.path === "/async_tasks");
-  if (index === -1) {
-    navigationSelectorItems.push({
-      icon: "/navigation_icons/document-menu.svg",
-      label: "Async Tasks",
-      path: "/async_tasks",
-      restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
-      type: "LINK",
-    });
-  }
-  // const navigationItems = (useSelector(companySelectors.getNavigationItems) || [])
+
   const navigationItems = (navigationSelectorItems)
     .reduce<NavigationItem[]>((acc, item) => {
       if (itemAllowedForUser(item, userTags)) {
