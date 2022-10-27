@@ -11,9 +11,9 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[33];
-const FIRST_USER = USERS[34];
-const SECOND_USER = USERS[35];
-const THIRD_USER = USERS[36];
+const FIRST_USER = USERS[11];
+const SECOND_USER = USERS[12];
+const THIRD_USER = USERS[13];
 const recordTitle = "Record document from newly created form";
 const dateOffset = (5 * 1000);
 
@@ -70,15 +70,6 @@ context("Records email popup modal", () => {
           fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === THIRD_USER.email);
           done();
         });
-      });
-    });
-
-    it("[API]Login second tester", (done: any) => {
-      cy.authApiLogin({
-        email: FIRST_USER.email,
-      }).then((response) => {
-        loginResponse = response;
-        done();
       });
     });
 
@@ -164,7 +155,7 @@ context("Records email popup modal", () => {
       });
 
       it("Verify approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and Release document", () => {
@@ -204,6 +195,8 @@ context("Records email popup modal", () => {
       cy.pmAddApproverOnApproverList({ approver: SECOND_USER.name });
 
       cy.pmAddApproverOnApproverList({ approver: THIRD_USER.name });
+
+      cy.unClick();
     });
 
     it("Save Record'", () => {
