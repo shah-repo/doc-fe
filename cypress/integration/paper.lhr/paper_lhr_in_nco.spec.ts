@@ -612,11 +612,15 @@ context("Verify Paper LHR", () => {
       });
 
       it("Check 'Initial Quantity' is displayed", () => {
-        cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+        cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Initial Quantity is a required field.");
       });
 
       it("Check 'End Quantity' is displayed", () => {
-        cy.get("[data-cy=\"End Quantity\"]").should("exist");
+        cy.get("[data-cy=\"End Quantity\"]").should("exist")
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The End Quantity is a required field.");
       });
 
       it("Check 'Approvals' is displayed", () => {
