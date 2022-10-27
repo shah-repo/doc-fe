@@ -370,10 +370,12 @@ context("Approval request implementation tasks", () => {
       cy.fbAddNewFieldButton();
       cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
       cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Move component", () => {
@@ -533,7 +535,7 @@ context("Approval request implementation tasks", () => {
 
   context("import", () => {
     it("Import template", () => {
-      cy.get("#fb-import-schema").attachFile("../downloads/Other_Form_Template.json");
+      cy.get("#fb-import-schema").attachFile("../fixtures/Other_Form_Template.json");
     });
   });
 
