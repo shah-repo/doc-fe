@@ -65,6 +65,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       }
       return acc;
     }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (currentEmployeeId) {
@@ -72,15 +73,18 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentEmployeeId]);
+
   return (
     <Drawer
       PaperProps={{ id: "navigation" }}
-      className={classes.drawer}
       variant="permanent"
-      classes={{ paper: classes.drawerPaper }}
+      classes={{
+        root: classes.drawer,
+        paper: classes.drawerPaper,
+      }}
       anchor="left"
     >
-      <Box flexGrow="1" display="flex" flexDirection="column" height="100%">
+      <Box className={classes.root}>
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6" className={classes.toolbarTitle}>
             <Link to={HOME_URL} className={classes.headerLink}>
@@ -89,12 +93,8 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
           </Typography>
         </Toolbar>
         {
-          isLoading && true
-            ? (
-              <Box display="flex" justifyContent="center" mt={2}>
-                <CircularProgress size={20} />
-              </Box>
-            )
+          isLoading
+            ? <CircularProgress size={20} className={classes.progress} />
             : (
               <List className={cx(classes.list, "containing-box-scrollbar")}>
                 {navigationItems.map((link: NavigationItem) => (
@@ -108,7 +108,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
             )
         }
         <NavigationProfileContainer />
-        <Box paddingBottom="20px">
+        <Box className={classes.bottom}>
           <BottomLogo />
         </Box>
       </Box>

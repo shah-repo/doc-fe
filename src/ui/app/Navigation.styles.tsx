@@ -16,6 +16,12 @@ export default (theme: Theme) =>
       overflow: "hidden",
       borderRight: "none",
     },
+    root: {
+      flex: 1,
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+    },
     toolbar: {
       backgroundColor: Colors.mirage,
       marginTop: 0,
@@ -35,5 +41,12 @@ export default (theme: Theme) =>
       flexGrow: 1,
       overflowX: "hidden",
       overflowY: "auto",
+    },
+    progress: {
+      margin: "auto",
+      marginTop: 16,
+    },
+    bottom: {
+      paddingBottom: 20,
     },
   });
