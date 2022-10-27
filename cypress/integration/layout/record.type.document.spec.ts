@@ -548,7 +548,9 @@ context("Record type Document Layout verification", () => {
 
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
-          cy.drSelectHistoryTab();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+            cy.drSelectHistoryTab();
+          });
         });
 
         it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -557,6 +559,10 @@ context("Record type Document Layout verification", () => {
       });
 
       context("Fill and Approve Released", () => {
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
         it(`Add first Approver as ${USERS[1].name}`, () => {
           cy.drSelectOverviewTab();
           cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
