@@ -49,6 +49,7 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
         && !_tabsState?.isTabActive("calpmhistory")
         && !(isEquipmentDoc && _tabsState?.isTabActive("overview"));
     };
+    autosave = _formState?.autosave || false;
 
     if (isEmpty(workspaceState)) {
       workspaceState =  FB.useRef<FBWorkspaceState>(FBWorkspaceState, {

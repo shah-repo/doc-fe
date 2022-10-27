@@ -155,6 +155,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
               },
             },
           };
+          workspaceState?.setAutosave(true);
         }
         return handleCancel?.();
       }
