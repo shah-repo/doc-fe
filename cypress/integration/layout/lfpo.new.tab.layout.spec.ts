@@ -1029,14 +1029,6 @@ context("LFPO new layout verification", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    // it("Save the form", () => {
-    //   cy.wrapWithWaitOnApiCalls([
-    //     CyRoutes.PatchDocRev], () => {
-    //     cy.drClickCreateDocumentWithoutApiCall();
-    //   });
-    //   cy.listLoadingElementShouldNotExist();
-    // });
-
     it("Click on create lot", () => {
       cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
     });
