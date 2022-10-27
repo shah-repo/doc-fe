@@ -602,7 +602,9 @@ context("Verify Paper LHR", () => {
           .should("not.contain", "The Part to be Manufactured is a required field.");
       });
       it("Check 'Build Type' is displayed", () => {
-        cy.get(`[data-cy="Build Type"]`).should("exist");
+        cy.get(`[data-cy="Build Type"]`).should("exist")
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Build Type is a required field.");
         cy.get(`[data-cy="Build Type"]`).parent().parent().parent().parent()
           .should("contain.html", `role="radiogroup"`);
         cy.get(`[name="lhr-build-type"]`).eq(0).should("have.value", "R&D");
@@ -650,15 +652,22 @@ context("Verify Paper LHR", () => {
           .should("not.contain", "The Part to be Manufactured is a required field.");
       });
       it("Verify 'Build Type' is displayed", () => {
-        cy.get("[data-cy=\"Build Type\"]").should("exist");
+        cy.get("[data-cy=\"Build Type\"]").should("exist")
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Build Type is a required field.");
+
       });
 
       it("Verify 'Initial Quantity' is displayed", () => {
-        cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+        cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Initial Quantity is a required field.");
       });
 
       it("Verify 'End Quantity' is displayed", () => {
-        cy.get("[data-cy=\"End Quantity\"]").should("exist");
+        cy.get("[data-cy=\"End Quantity\"]").should("exist")
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The End Quantity is a required field.");
       });
 
       it("Verify 'Approvals' is displayed", () => {
@@ -730,15 +739,21 @@ context("Verify Paper LHR", () => {
       });
 
       it("Verify 'Build Type' is displayed", () => {
-        cy.get("[data-cy=\"Build Type\"]").should("exist");
+        cy.get("[data-cy=\"Build Type\"]").should("exist")
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Build Type is a required field.");
       });
 
       it("Verify 'Initial Quantity' is displayed", () => {
-        cy.get("[data-cy=\"Initial Quantity\"]").should("exist");
+        cy.get("[data-cy=\"Initial Quantity\"]").should("exist")
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The Initial Quantity is a required field.");
       });
 
       it("Verify 'End Quantity' is displayed", () => {
-        cy.get("[data-cy=\"End Quantity\"]").should("exist");
+        cy.get("[data-cy=\"End Quantity\"]").should("exist")
+          .parent().parent().parent().parent().parent()
+          .should("not.contain", "The End Quantity is a required field.");
       });
 
       it("Verify 'Approvals' is displayed", () => {
@@ -1027,7 +1042,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Submit for approval", () => {
-        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick();
+        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick({ force: true });
         cy.wait(1000);
       });
 
@@ -1383,13 +1398,18 @@ context("Verify Paper LHR", () => {
       });
 
       it("Enter End Quantity field value", () => {
-        cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+          cy.unClick();
+        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        });
       });
 
       it("Save it", () => {
@@ -1397,7 +1417,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Submit for approval", () => {
-        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick();
+        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick({ force: true });
       });
 
       it("Approve record", () => {
