@@ -1,5 +1,6 @@
 import { Box, Button, Grid, InputLabel, TextareaAutosize } from "@material-ui/core";
 import { Field, FormikProps } from "formik";
+import { camelCase } from "lodash";
 import React from "react";
 import { HelpModule } from "../../../App/Enlil/Features/HelpCenter/HelpCenter.types";
 import InputField from "../../components/forms/fields/Input";
@@ -67,7 +68,11 @@ export const PageDetailsFormPresenter: React.FunctionComponent<Props> = ({
           {autoSizerRenderer({ label: "Columns", name: "columns" })}
         </Box>
         <Box display="flex" justifyContent="flex-end" mt={6}>
-          <Button type="submit" variant="outlined">
+          <Button
+            type="submit"
+            variant="outlined"
+            data-cy={`submit.${props.values.category ? camelCase(props.values.category) : "new"}`}
+          >
             <Text translation={"common.save"} />
           </Button>
           <Button onClick={handleTransition} variant="outlined">

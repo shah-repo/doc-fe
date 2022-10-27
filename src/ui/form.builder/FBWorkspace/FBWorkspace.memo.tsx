@@ -2,14 +2,7 @@ import { Box, Button, Typography } from "@material-ui/core";
 import { get, isEqual, kebabCase, size } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
-import {
-  FB,
-  FBSchema,
-  FBStarter,
-  FBWorkspaceBottomBar,
-  FBWorkspaceProps,
-  FBWorkspaceSocket,
-} from "..";
+import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps, FBWorkspaceSocket } from "..";
 import { ReactComponent as AddIcon } from "../../../assets/images/formBuilder/add_icon.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import {
@@ -19,7 +12,7 @@ import {
 import SummaryInfo from "../../common/summary/SummaryInfo";
 import Text from "../../components/Text";
 import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
-import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEquipment, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
@@ -62,6 +55,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
   const documentInfo = workspaceState?.document;
+  const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
   const isInlineApproval = isFormWithInlineApproval(documentInfo?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(documentInfo?.document?.documentType?.groupOptions);
   const isFirstAlphaReleased = isDocumentAlphaReleased(documentInfo?.revisionStage) && documentInfo?.subRevision === 0;
@@ -117,8 +111,10 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
                 <Text translation="form.builder.add.step" />
               </Button>
             )}
-          {isStarter && !_tabsState?.isTabActive("calpmhistory") && <FBStarter index={size(schema)} />}
-          {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
+          {isEquipmentDoc ? isStarter && !_tabsState?.isTabActive("calpmhistory") &&
+          ( !_tabsState?.isTabActive("overview")) && <FBStarter index={size(schema)} /> :
+            isStarter && !_tabsState?.isTabActive("calpmhistory") && <FBStarter index={size(schema)} />}
+          {!withoutBottomBar && !isEquipmentDoc && <FBWorkspaceBottomBar {...{ includeTransport }} />}
         </Box>
       )}
     </Observer>
