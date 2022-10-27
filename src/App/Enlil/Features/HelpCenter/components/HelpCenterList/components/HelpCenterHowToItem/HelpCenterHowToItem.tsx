@@ -9,7 +9,7 @@ const HelpCenterHowToItem: React.FC<HelpCenterHowToItemData> = ({ title, url }) 
   const classes = useStyles();
 
   return (
-    <MenuList disablePadding>
+    <MenuList disablePadding data-cy="help-center.howto-item">
       <HelpCenterExternalLink className={classes.link} to={url}>
         <ListItemIcon className={classes.icon}><PlayIcon /></ListItemIcon>
         <ListItemText className={classes.text} disableTypography>

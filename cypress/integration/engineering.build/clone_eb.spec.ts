@@ -566,6 +566,7 @@ context("Clone EB Flow test", () => {
         body: {
           category: "EB",
           addNewBtnLabel: "Create Engineering Build",
+          config: {},
           columns: [
             {
               label: "EB ID",

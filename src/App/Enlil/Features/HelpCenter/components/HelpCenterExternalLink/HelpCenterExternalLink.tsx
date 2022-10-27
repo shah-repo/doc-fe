@@ -22,9 +22,10 @@ interface Props {
   children: React.ReactNode;
   component?: React.ElementType;
   className?: string;
+  dataCy?: string;
 }
 
-const HelpCenterExternalLink: React.FC<Props> = ({ to, component, children, className }) => {
+const HelpCenterExternalLink: React.FC<Props> = ({ to, component, children, className, dataCy }) => {
   const classes = useStyles();
 
   const LinkItem = component ?? MenuItem;
@@ -36,6 +37,7 @@ const HelpCenterExternalLink: React.FC<Props> = ({ to, component, children, clas
       target="_blank"
       rel="noopener noreferrer"
       className={cx(classes.root, className)}
+      data-cy={dataCy}
     >
       {children}
     </LinkItem>
