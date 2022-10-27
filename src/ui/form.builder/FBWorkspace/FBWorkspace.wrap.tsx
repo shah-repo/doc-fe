@@ -8,6 +8,7 @@ import { FB, FBDialogState, FBInlineApprovalBody, FBSchemaProps, FBSectionTypes,
 import { SM } from "../../../App";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
+import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
 
 // Disable missing translation message for the non translation cases.
 
@@ -42,8 +43,12 @@ export const withFBWorkspace = <T extends FBWorkspaceProps>(
     const dispatch = useDispatch();
     const { _formState, _documentRevisionFormState, _tabsState } = SM.useStores();
     const { bookmarkState } = FB.useStores();
-    const isStarterRequired = () => (["design", "formDesign"].includes(workspaceState?.mode as string));
-    autosave = _formState?.autosave || false;
+    const isStarterRequired = () => {
+      const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
+      return ["design", "formDesign"].includes(workspaceState?.mode as string)
+        && !_tabsState?.isTabActive("calpmhistory")
+        && !(isEquipmentDoc && _tabsState?.isTabActive("overview"));
+    };
 
     if (isEmpty(workspaceState)) {
       workspaceState =  FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
