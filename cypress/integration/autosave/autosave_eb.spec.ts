@@ -179,7 +179,7 @@ context("Autosave EB test", () => {
 
       it("Verify that Approvals field is automatically added", () => {
         cy.drSelectOverviewTab();
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and release the form", () => {

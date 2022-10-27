@@ -2,14 +2,7 @@ import { Box, Button, Typography } from "@material-ui/core";
 import { get, isEqual, kebabCase, size } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
-import {
-  FB,
-  FBSchema,
-  FBStarter,
-  FBWorkspaceBottomBar,
-  FBWorkspaceProps,
-  FBWorkspaceSocket,
-} from "..";
+import { FB, FBSchema, FBStarter, FBWorkspaceBottomBar, FBWorkspaceProps, FBWorkspaceSocket } from "..";
 import { ReactComponent as AddIcon } from "../../../assets/images/formBuilder/add_icon.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import {
@@ -118,9 +111,10 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
                 <Text translation="form.builder.add.step" />
               </Button>
             )}
-          {isStarter && !_tabsState?.isTabActive("calpmhistory") &&
-          !isEquipmentDoc && <FBStarter index={size(schema)} />}
-          {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
+          {isEquipmentDoc ? isStarter && !_tabsState?.isTabActive("calpmhistory") &&
+          ( !_tabsState?.isTabActive("overview")) && <FBStarter index={size(schema)} /> :
+            isStarter && !_tabsState?.isTabActive("calpmhistory") && <FBStarter index={size(schema)} />}
+          {!withoutBottomBar && !isEquipmentDoc && <FBWorkspaceBottomBar {...{ includeTransport }} />}
         </Box>
       )}
     </Observer>
