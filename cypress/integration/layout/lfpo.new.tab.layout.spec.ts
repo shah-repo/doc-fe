@@ -1058,7 +1058,9 @@ context("LFPO new layout verification", () => {
     });
 
     it("Select document type", () => {
-      cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+        cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
+      });
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1074,10 +1076,6 @@ context("LFPO new layout verification", () => {
     it("Verify Lot should be created and displayed in the table for that part", () => {
       const lotId = lotIdRef + "01";
       cy.get("[data-cy='lots'] span").contains(lotId).should("exist");
-    });
-
-    it("Save the form data", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -1165,7 +1163,9 @@ context("LFPO new layout verification", () => {
     });
 
     it("Verify References selection Add Remove", () => {
-      cy.verifyAddRemoveReference({ formId: "FM-00001" });
+      cy.get("[data-cy='referenceTo']").arrowClick({ force: true });
+      cy.drSelectReferences( "FM-00001" );
+      cy.drRemoveReferences({ reference: "FM-00001" });
     });
 
     it("Verify Referenced By,and Release date Item exist or not", () => {
