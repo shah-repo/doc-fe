@@ -10,7 +10,6 @@ import { verifyHistoryContent } from "./../../utils/context/historyContent";
 
 let createdCompany;
 let loginResponse;
-let secondEmployee;
 let adminEmployee;
 let RDdocumentType;
 
@@ -47,7 +46,6 @@ context("Record inline Flow", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           RDdocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record one");
           done();
         });
@@ -151,7 +149,11 @@ context("Record inline Flow", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -194,9 +196,7 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Navigate to Details tab", () => {
@@ -233,10 +233,14 @@ context("Record inline Flow", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Inline field2" });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[1].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
-        cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
+      });
+
+      it("Click on Save", () => {
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -301,9 +305,7 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Verify Overview Tab Selected by default", () => {
@@ -350,21 +352,18 @@ context("Record inline Flow", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Inline field2" });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[1].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
-        cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
 
+      it("Click on Save", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Navigate to overview", () => {
         cy.drSelectOverviewTab();
-      });
-    });
-
-    context("Create document", () => {
-      it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 
@@ -520,7 +519,8 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickCreateDocumentWithApiCall();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigate to Details tab", () => {
@@ -528,12 +528,8 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name*='fb-ia-inline-field'] input")
-              .autocompleteSelect(`${USERS[2].name}`, { force: true });
-          });
+        cy.get("[name*='fb-ia-inline-field'] input")
+          .autocompleteSelect(`${USERS[1].name}`, { force: true });
       });
 
       it("Checkbox option 1 checked", () => {
@@ -550,7 +546,7 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickCreateDocumentWithApiCall();
         cy.listLoadingElementShouldNotExist();
       });
     });
@@ -566,7 +562,7 @@ context("Record inline Flow", () => {
       });
 
       it("Verify Reference tab Info", () => {
-        cy.verifyReferenceTab({ user: USERS[2], formId: "FM-00003", shortName: "HB" });
+        cy.verifyReferenceTab({ user: USERS[1], formId: "FM-00003", shortName: "GR" });
       });
 
       it("Verify References selection Add Remove", () => {
@@ -616,13 +612,13 @@ context("Record inline Flow", () => {
         const groupOne = "Developers";
         const history = [
           {
-            owner: USERS[2].name,
+            owner: USERS[1].name,
             actions: [
               { key: "Access granted to group", value: `Developers` },
             ],
           },
           {
-            owner: USERS[2].name,
+            owner: USERS[1].name,
             actions: [
               { key: "Access granted to user", value: `${USERS[3].name}` },
             ],
@@ -718,7 +714,7 @@ context("Record inline Flow", () => {
         cy.get(".formOptionsBox").should("exist");
       });
 
-      it("Verify it  should not contains approval block", () => {
+      it("Verify it should not contains approval block", () => {
         cy.get("[data-cy^='fb-approvals-fb-approvals']").should("not.exist");
       });
 
@@ -768,6 +764,7 @@ context("Record inline Flow", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+
       context("Approve and Release document", () => {
         it("Approve and release it", () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
@@ -779,9 +776,13 @@ context("Record inline Flow", () => {
           cy.listLoadingElementShouldNotExist();
         });
 
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
         it("Revise record / update record ", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.get("[data-cy='updateRecord']").click();
+            cy.get("[data-cy='updateRecord']").arrowClick();
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -792,7 +793,7 @@ context("Record inline Flow", () => {
         });
 
         it("Approval block should be displayed in the Overview tab", () => {
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[2].name}`);
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
           cy.get("[data-cy^='fb-approvals-fb-approvals']").should("exist");
           cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
         });
@@ -873,7 +874,7 @@ context("Record inline Flow", () => {
     });
 
     it("Verify Reference Tab", () => {
-      cy.verifyReferenceTab({ user: USERS[2], formId: "", shortName: "HB" });
+      cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
     });
 
     it("Verify Book Mark Navigation", () => {

@@ -9,7 +9,6 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
-let secondEmployee;
 let adminEmployee;
 let RDdocumentType;
 
@@ -46,7 +45,6 @@ context("Record inline existing Flow with detail ", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           RDdocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record one");
           done();
         });
@@ -150,7 +148,7 @@ context("Record inline existing Flow with detail ", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -158,6 +156,10 @@ context("Record inline existing Flow with detail ", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click on 'create a document' button", () => {
@@ -192,7 +194,7 @@ context("Record inline existing Flow with detail ", () => {
         cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it("Click on Save", () => {
+      it("Create document", () => {
         cy.wrapWithWaitOnApiCalls([], () => {
           cy.drClickCreateDocumentWithApiCall();
         });
@@ -241,8 +243,8 @@ context("Record inline existing Flow with detail ", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "firstd Inline field" });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[1].name });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
-        cy.fbAddApproverToInlineDialog({ approverName: USERS[3].name });
         cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
@@ -252,9 +254,7 @@ context("Record inline existing Flow with detail ", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
         cy.fbGroupOptions("option1", "option2");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.fbAddNewFieldButton();
-        });
+        cy.fbAddNewFieldButton();
       });
 
       it("Add radio button field", () => {
@@ -269,7 +269,7 @@ context("Record inline existing Flow with detail ", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Second inline field" });
-        cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
+        cy.fbAddApproverToInlineDialog({ approverName: USERS[1].name });
         cy.get("[data-cy='editorConfig.groups']").autocompleteSelect("Everyone");
         cy.fbAddNewFieldButton();
       });
@@ -287,12 +287,15 @@ context("Record inline existing Flow with detail ", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
-
   });
 
   context("Create record and Relesed it", () => {
     it("Navigate to records", () => {
       cy.navigToRecords();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Click on create new and chose 'Record one'", () => {
@@ -342,7 +345,7 @@ context("Record inline existing Flow with detail ", () => {
     });
 
     context("Fill in document attributes", () => {
-      it("Navigate to details tab", () => {
+      it("Navigate to overview tab", () => {
         cy.drSelectOverviewTab();
       });
 
@@ -368,15 +371,11 @@ context("Record inline existing Flow with detail ", () => {
 
       it("Enter text 'First entry' in textfield for inline", () => {
         cy.get("[name^='textfield-for-inline']").arrowType("First entry");
-        cy.unClick();
       });
 
-      it("Select another value for select field and check for autosave", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[id^='mui-component-select-fb-select-field']").arrowClick();
-          cy.get("[data-value='option2']").arrowClick();
-          cy.unClick();
-        });
+      it("Select option2 for select field ", () => {
+        cy.get("[id^='mui-component-select-fb-select-field']").arrowClick();
+        cy.get("[data-value='option2']").arrowClick();
       });
 
       it("Check radio option R1 ", () => {
@@ -384,77 +383,72 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name^='fb-ia-firstd-inline-field'] input").arrowClick();
-            cy.get("[name*='fb-ia-firstd-inline-field'] input")
-              .autocompleteSelect(`${USERS[2].name}`, { force: true });
-          });
-      });
-
-      it("Select approver for Second inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name^='fb-ia-second-inline-field'] input").arrowClick();
-            cy.get("[name*='fb-ia-second-inline-field'] input")
-              .autocompleteSelect(`${USERS[2].name}`, { force: true });
-          });
+        cy.get("[name*='fb-ia-firstd-inline-field'] input")
+          .autocompleteSelect(`${USERS[1].name}`, { force: true });
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Navigate to Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve First Inline Approval", () => {
-        cy.drSelectDetailsTab().wait(2000);
         cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.GetRequiredApproversDocRev,
           CyRoutes.SessionDetails], () => {
+          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.get("[data-cy='common.confirm']").arrowClick();
         });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist().wait(2000);
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Change text to  'Second entry' in textfield for inline", () => {
-        cy.drSelectDetailsTab();
-        cy.get("[name^='textfield-for-inline']").arrowType("Second entry");
-        cy.get(`input[type="checkbox"][value="1"]`).arrowClick();
-        cy.unClick();
+        cy.get("[name^='textfield-for-inline']").clear().arrowType("Second entry");
       });
 
       it("Check Checkbox option 2 ", () => {
-        cy.get(`input[type="checkbox"][value="2"]`).last().check();
+        cy.get(`input[type="checkbox"][value="1"]`).arrowClick();
+        cy.get(`input[type="checkbox"][value="2"]`).arrowClick();
+      });
+
+      it("Click on Save", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify Inline Approval needs to be Approved", () => {
         cy.get("[data-cy='form.builder.request.approve']").first().should("exist");
       });
 
-      it("Click on Save", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-        cy.listLoadingElementShouldNotExist();
-        cy.progressBarShouldNotExist();
-      });
-
-      it("Navigate to detail tab", () => {
-        cy.drSelectDetailsTab();
+      it("Select approver for Second inline", () => {
+        cy.get("[name*='fb-ia-second-inline-field'] input")
+          .autocompleteSelect(`${USERS[1].name}`, { force: true });
       });
 
       it("Approve first Inline Approval", () => {
+        cy.drSelectDetailsTab().wait(2000);
         cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
@@ -474,7 +468,6 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Approve all the Inlines", () => {
-        cy.drSelectDetailsTab();
         cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
@@ -490,9 +483,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Send request for approval", () => {
@@ -532,7 +523,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Fill in Approval block", () => {
-        cy.get("[data-cy^='fb-approvals-fb-approvals-']").eq(0).autocompleteSelect(`${USERS[2].name}`);
+        cy.get("[data-cy^='fb-approvals-fb-approvals-']").eq(0).autocompleteSelect(`${USERS[1].name}`);
         cy.listLoadingElementShouldNotExist();
       });
 

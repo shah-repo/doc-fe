@@ -93,6 +93,10 @@ context("Record type Document Layout verification", () => {
     it("Logs user in", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create a required form for Record Document for migration", () => {
@@ -179,6 +183,11 @@ context("Record type Document Layout verification", () => {
     });
 
     context("Fill in document attributes", () => {
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Enter title 'Inline Form Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Inline Form Document Revision" });
       });
@@ -471,6 +480,11 @@ context("Record type Document Layout verification", () => {
           cy.drSelectDetailsTab();
           cy.get("[data-cy='Checkbox']").should("be.visible");
           cy.get(`input[type="checkbox"][value="1"]`).last().check();
+        });
+
+        it("Click on Save", () => {
+          cy.drClickCreateDocumentWithApiCall();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify migrate form button is visible", () => {
