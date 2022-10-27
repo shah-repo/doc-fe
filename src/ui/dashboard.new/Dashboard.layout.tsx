@@ -13,7 +13,7 @@ const DashboardLayout: React.FC = () => {
   return (
     <Box className={classes.box}>
       <Grid container className={classes.root}>
-        <Grid item xs={12} md={isDashboardAdmin ? 8 : 12}>
+        <Grid item className={classes.tabs} xs={12} md={isDashboardAdmin ? 8 : 12}>
           <DashboardTabs />
         </Grid>
         {isDashboardAdmin && (

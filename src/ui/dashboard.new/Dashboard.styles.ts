@@ -21,9 +21,11 @@ export default makeStyles((theme) => ({
     margin: "auto",
     overflow: "hidden",
   },
+  tabs: {
+    height: "100%",
+  },
   stats: {
-    paddingTop: 65,
-    display: "flex",
-    flexDirection: "column",
+    height: "100%",
+    paddingTop: 56,
   },
 }));
