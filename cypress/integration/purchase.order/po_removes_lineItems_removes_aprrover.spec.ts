@@ -278,15 +278,18 @@ context("PO Removes lineitems removes approver", () => {
         cy.get("[data-cy='albumMediaButton']").eq(0).arrowClick({ force: true });
         cy.pmUploadAttachment({ fileName: "image.jpg" });
       });
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
+      cy.wait(2000);
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release document for create company", () => {
+      cy.wait(2000);
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
@@ -911,6 +914,7 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Navigate to line items", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.drSelectLineItems();
     });
 
@@ -927,7 +931,9 @@ context("PO Removes lineitems removes approver", () => {
 
   context("Verify that the system removed User from the approvals field", () => {
     it("Select detail tab", () => {
+      cy.wait(5000);
       cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check approver does not exist in approver block", () => {
@@ -1090,6 +1096,8 @@ context("PO Removes lineitems removes approver", () => {
           cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
           cy.unClick();
         });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify 'The requestor field is required field' is disappeared`, () => {
@@ -1106,6 +1114,7 @@ context("PO Removes lineitems removes approver", () => {
 
   context("Switch to lineitems tab and remove Line items and save it", () => {
     it("Navigate to line items", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.drSelectLineItems();
     });
 
@@ -1123,10 +1132,11 @@ context("PO Removes lineitems removes approver", () => {
   context("Verify that the system removed User from the approvals field", () => {
     it("Select detail tab", () => {
       cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check approver does not exist in approver block", () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("not.contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain.text", `${USERS[1].name} - ${USERS[1].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
