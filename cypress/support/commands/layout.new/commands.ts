@@ -159,7 +159,6 @@ Cypress.Commands.add("verifyAddRemoveReference", ({ formId }) => {
   cy.listLoadingElementShouldNotExist();
   cy.drSelectReferences(formId);
   cy.listLoadingElementShouldNotExist();
-  cy.progressBarShouldNotExist();
   cy.drRemoveReferences({ reference: formId });
 });
 

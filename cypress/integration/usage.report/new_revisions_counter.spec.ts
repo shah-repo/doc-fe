@@ -436,6 +436,7 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
         body: {
           category: "EB",
           addNewBtnLabel: "Create Engineering Build",
+          config: {},
           columns: [
             {
               label: "EB ID",

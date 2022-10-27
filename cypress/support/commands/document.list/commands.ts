@@ -40,6 +40,7 @@ declare global {
       dlVerifyDocCounter(params: {docCounterNumber: integerType }): Chainable<Subject>;
       dlVerifyDescriptionOnHover(params: {description: string }): Chainable<Subject>;
       dlSelectFirstDocument(): Chainable<Subject>;
+      dlSelectFirstDocumentItem(): Chainable<Subject>;
     }
   }
 }
@@ -194,6 +195,14 @@ Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string
 Cypress.Commands.add("dlSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
     cy.get("tr.k-master-row").first().arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("dlSelectFirstDocumentItem", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+    cy.get("tr.k-master-row").first().children("td").first().arrowClick();
   });
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
