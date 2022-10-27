@@ -111,8 +111,8 @@ Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: s
 
 Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick();
-  cy.get("[data-cy=\"title\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
   cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
