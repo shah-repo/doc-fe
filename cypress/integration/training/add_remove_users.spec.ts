@@ -347,11 +347,11 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.unClick();
     });
 
-    it("Click save document", () => {
+    it("Click on Create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Create a document", () => {
+    it("Release the document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
