@@ -1157,6 +1157,7 @@ context("LFPO new layout verification", () => {
     it("Verify References selection Add Remove", () => {
       cy.get("[data-cy='referenceTo']").arrowClick({ force: true });
       cy.drSelectReferences( "FM-00001" );
+      cy.listLoadingElementShouldNotExist();
       cy.drRemoveReferences({ reference: "FM-00001" });
     });
 
