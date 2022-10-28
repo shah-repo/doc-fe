@@ -192,7 +192,7 @@ context("Parts from EB flow test", () => {
 
       it("Verify that Approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and release the form", () => {
