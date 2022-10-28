@@ -22,7 +22,7 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const TABLE_NAME = "documentRevisions";
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
-  const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD, DOC_TYPE_GROUP_OPTION.OTHER];
+  const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD];
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const history = useHistory();
 
