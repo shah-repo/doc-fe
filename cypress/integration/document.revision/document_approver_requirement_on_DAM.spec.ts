@@ -7,7 +7,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
-import { emailDateOffset } from "../../utils/constants/dateHandler";
+import { emailDateOffset, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -32,8 +32,8 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+// const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+// const apdfDocRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 
 
 const ADMIN_USER = USERS[10];
@@ -338,7 +338,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Effective Date: N\/A/);
@@ -357,7 +357,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Effective Date: N\/A/);
@@ -529,10 +529,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Effective Date: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 2/);
@@ -547,16 +547,16 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
-          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfFooterDate}`, "gi" );
           expect(el).match(tmpRegex);
 
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Effective Date: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 2 of 2/);
@@ -917,10 +917,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 3/);
@@ -959,10 +959,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 2 of 3/);
@@ -985,10 +985,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 3 of 3/);
@@ -1173,10 +1173,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 3/);
@@ -1215,10 +1215,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 2 of 3/);
@@ -1238,18 +1238,18 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           expect(el).not.match(/TEXT FIELD/);
 
           expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-          tmpRegex = new RegExp( `${arId}2N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+          tmpRegex = new RegExp( `${arId}2N\\/A \\(Numeric Release\\)${pdfFooterDate}`, "gi" );
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp( `${arIdRev1}1N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );
+          tmpRegex = new RegExp( `${arIdRev1}1N\\/A \\(Numeric Release\\)${pdfFooterDate}`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 3 of 3/);
@@ -1374,18 +1374,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.arApproverRoleStatus({ roleName: roleThree, enabled: false });
     });
 
-    it(`Verify approver is marked for ${roleOne}`, () => {
-      cy.arApproverRoleStatus({ roleName: roleOne, enabled: true });
-    });
-
-    it(`Verify approver is marked for ${roleTwo}`, () => {
-      cy.arApproverRoleStatus({ roleName: roleTwo, enabled: true });
-    });
-
-    it(`Verify approver is marked for ${roleThree}`, () => {
-      cy.arApproverRoleStatus({ roleName: roleThree, enabled: true });
-    });
-
     it("Click Create Approval Request", () => {
       cy.arSaveApiCall();
     });
@@ -1403,6 +1391,18 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Add third approver to approval request on approver list", () => {
       SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: THIRD_USER.email });
+    });
+
+    it(`Verify approver is marked for ${roleOne}`, () => {
+      cy.arApproverRoleStatus({ roleName: roleOne, enabled: true });
+    });
+
+    it(`Verify approver is marked for ${roleTwo}`, () => {
+      cy.arApproverRoleStatus({ roleName: roleTwo, enabled: true });
+    });
+
+    it(`Verify approver is marked for ${roleThree}`, () => {
+      cy.arApproverRoleStatus({ roleName: roleThree, enabled: true });
     });
 
     it("Clicks on 'Save' button", () => {
@@ -1542,10 +1542,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
           expect(el).match(/DRAFT/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
@@ -1686,23 +1686,23 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           expect(el).match(/Role Three/);
 
           tmpRegex = new
-          RegExp( `${FIRST_USER.name} | PENDING ${docRelDate}\n(.*)@(.*)`, "gi" );
+          RegExp( `${FIRST_USER.name} | PENDING ${pdfDocRelDate}\n(.*)@(.*)`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new
-          RegExp( `${SECOND_USER.name} | PENDING ${docRelDate}\n(.*)@(.*)`, "gi" );
+          RegExp( `${SECOND_USER.name} | PENDING ${pdfDocRelDate}\n(.*)@(.*)`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new
-          RegExp( `${THIRD_USER.name} | PENDING ${docRelDate}\n\n(.*)@(.*)`, "gi" );
+          RegExp( `${THIRD_USER.name} | PENDING ${pdfDocRelDate}\n\n(.*)@(.*)`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/In Review/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
@@ -1944,23 +1944,23 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
           expect(el).match(/Role Three/);
 
           tmpRegex = new
-          RegExp( `${FIRST_USER.name} | APPROVED | ${docRelDate}\n(.*)@(.*)`, "gi" );
+          RegExp( `${FIRST_USER.name} | APPROVED | ${pdfDocRelDate}\n(.*)@(.*)`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new
-          RegExp( `${SECOND_USER.name} | APPROVED | ${docRelDate}\n(.*)@(.*)`, "gi" );
+          RegExp( `${SECOND_USER.name} | APPROVED | ${pdfDocRelDate}\n(.*)@(.*)`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new
-          RegExp( `${THIRD_USER.name} | APPROVED | ${docRelDate}\n(.*)@(.*)`, "gi" );
+          RegExp( `${THIRD_USER.name} | APPROVED | ${pdfDocRelDate}\n(.*)@(.*)`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/CLOSED/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
