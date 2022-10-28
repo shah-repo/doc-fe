@@ -32,9 +32,6 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 
-// const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-// const apdfDocRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-
 
 const ADMIN_USER = USERS[10];
 const FIRST_USER = USERS[11];
