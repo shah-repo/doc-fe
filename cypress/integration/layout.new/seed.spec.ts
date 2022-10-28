@@ -990,19 +990,17 @@ context("Verify New Layout for Seed Document", () => {
         cy.drSelectDetailsTab();
       });
 
-      context("Verify Details tab predefined schema fields", () => {
-        it("Verify predefined schema fields", () => {
-          cy.get("#sm-tabpanel-1").should("exist");
-          cy.contains("Document Title").should("exist");
-          cy.contains("Document Description").should("exist");
-          cy.contains("Type of document to be created").should("exist");
-          cy.contains("Document Type to be selected").should("exist");
-          cy.contains("JSON Form").should("exist");
-          cy.contains("Define the output of that form").should("exist");
-          cy.contains("Default Revision Stage").should("exist");
-          cy.contains("Training Required").should("exist");
-          cy.contains("Attachments to be included").should("exist");
-        });
+      it("Verify predefined schema fields", () => {
+        cy.get("#sm-tabpanel-1").should("exist");
+        cy.contains("Document Title").should("exist");
+        cy.contains("Document Description").should("exist");
+        cy.contains("Type of document to be created").should("exist");
+        cy.contains("Document Type to be selected").should("exist");
+        cy.contains("JSON Form").should("exist");
+        cy.contains("Define the output of that form").should("exist");
+        cy.contains("Default Revision Stage").should("exist");
+        cy.contains("Training Required").should("exist");
+        cy.contains("Attachments to be included").should("exist");
       });
 
       context("Verify Details tab added fields", () => {
