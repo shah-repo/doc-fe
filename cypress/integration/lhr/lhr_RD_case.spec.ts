@@ -792,13 +792,11 @@ context("LHR: RD case specs", () => {
         });
 
         it("Click 'LHR Step'", () => {
-          cy.get(".MuiExpansionPanelSummary-content").eq(0).arrowClick();
           cy.get("[data-cy='LHR Step 1']").arrowClick({ force: true });
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
           cy.wait(2000);
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
           cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -948,10 +946,14 @@ context("LHR: RD case specs", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
+      cy.wait(2000);
     });
 
     it("Select 'R&D' build type", () => {
-      cy.get("[value=\"R&D\"]").check();
+      cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
+      cy.contains("Build Type").should("be.visible");
+      cy.get("[value='R&D']").check();
+      cy.wait(2000);
     });
 
     it("Select button to switch", () => {
