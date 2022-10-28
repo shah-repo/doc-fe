@@ -42,9 +42,9 @@ context("Add/Remove users from Training Curriculum", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4], USERS[7]],
+            users: [USERS[12], USERS[3], USERS[4], USERS[7]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -53,8 +53,8 @@ context("Add/Remove users from Training Curriculum", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -62,7 +62,7 @@ context("Add/Remove users from Training Curriculum", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -280,7 +280,7 @@ context("Add/Remove users from Training Curriculum", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -407,8 +407,8 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[4].name}`);
       cy.wait(2000);
@@ -419,7 +419,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Save training", () => {
@@ -444,29 +444,29 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.navigToDashboard();
     });
 
-    it(`Open and complete training for ${USERS[1].name}`, () => {
+    it(`Open and complete training for ${USERS[11].name}`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTraining();
     });
 
-    it(`Login as ${USERS[2].name}`, () => {
+    it(`Login as ${USERS[12].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[12].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it(`Open and complete training for ${USERS[2].name}`, () => {
+    it(`Open and complete training for ${USERS[12].name}`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTraining();
     });
 
-    it(`Login as ${USERS[1].name}`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
@@ -500,10 +500,10 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.wait(2000);
     });
 
-    it(`Remove users ${USERS[1].name} and ${USERS[3].name}`, () => {
+    it(`Remove users ${USERS[11].name} and ${USERS[3].name}`, () => {
       cy.get("[data-cy=training-select-users-to-train]").parent().parent()
         .find(".MuiChip-root.MuiAutocomplete-tag.MuiChip-deletable")
-        .contains(USERS[1].name).parent().parent().find("svg").arrowClick();
+        .contains(USERS[11].name).parent().parent().find("svg").arrowClick();
 
       cy.get("[data-cy=training-select-users-to-train]").parent().parent()
         .find(".MuiChip-root.MuiAutocomplete-tag.MuiChip-deletable")
@@ -519,7 +519,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Click Submit for Approval", () => {
@@ -544,12 +544,12 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.trClearFilters();
     });
 
-    it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[1].name });
+    it(`Training record for ${USERS[11].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
 
@@ -569,7 +569,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Check if trainee name is correct", () => {
-      cy.get("[role='dialog']").should("contain.text", USERS[1].name);
+      cy.get("[role='dialog']").should("contain.text", USERS[11].name);
     });
 
     it("Check if 'Send To Email' button is displayed", () => {
@@ -584,12 +584,12 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get(`[class="k-grid-norecords"]`).should("have.text", "No results found");
     });
 
-    it(`Training record for ${USERS[2].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[2].name });
+    it(`Training record for ${USERS[12].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[2].name).and("not.contain", "Pending");
+        .and("contain", USERS[12].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
 
@@ -609,7 +609,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Check if trainee name is correct", () => {
-      cy.get("[role='dialog']").should("contain.text", USERS[2].name);
+      cy.get("[role='dialog']").should("contain.text", USERS[12].name);
     });
 
     it("Check if 'Send To Email' button is displayed", () => {
