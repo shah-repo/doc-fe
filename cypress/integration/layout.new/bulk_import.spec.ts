@@ -469,8 +469,24 @@ context("Verify New Layout for Bulk Import Document", () => {
         cy.verifyReferencesGeneralInfo({ user: owner });
       });
 
+      it("Click on reference tab", () => {
+        cy.get("[data-cy=\"references-icon\"]").arrowClick().wait(1000);
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Verify Add/Remove References", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        const docId = "FM-00001";
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+          cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
+        });
+
+        it("Save the document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+          cy.drRemoveReferences({ reference: docId });
+        });
       });
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -561,6 +577,10 @@ context("Verify New Layout for Bulk Import Document", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
           cy.drAddGroupFromPermissionTab(groupOne);
         });
+      });
+
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -831,8 +851,18 @@ context("Verify New Layout for Bulk Import Document", () => {
       cy.drSelectOverviewTab();
     });
 
+    it("Turn of autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Add Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: owner });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save the form", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
