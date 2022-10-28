@@ -1,7 +1,14 @@
-import { Box } from "@material-ui/core";
+import { Box, makeStyles } from "@material-ui/core";
 import React from "react";
-import Text from "../../components/Text";
-import useStyles from "./NoPendingActions.styles";
+import Text from "../components/Text";
+import Colors from "../layout/theme/utils/colors";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    color: Colors.red,
+    padding: theme.spacing(2, 1.5),
+  },
+}));
 
 const NoPendingActions: React.FC = () => {
   const classes = useStyles();
