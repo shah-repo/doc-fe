@@ -288,6 +288,10 @@ context("Add/Remove users from Training Curriculum", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -341,7 +345,13 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
+    });
+
+    it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Create a document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
@@ -411,7 +421,10 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[13].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[14].name}`);
-      cy.wait(2000);
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Navigate to Overview tab", () => {
@@ -423,7 +436,9 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
     });
 
     it("Click Submit for Approval", () => {
@@ -478,6 +493,10 @@ context("Add/Remove users from Training Curriculum", () => {
       cy.navigToTrainingCurriculums();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Select training", () => {
       cy.trSelectFirstDocument();
     });
@@ -512,7 +531,10 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
     });
 
     it("Navigate to Overview tab", () => {
@@ -521,6 +543,11 @@ context("Add/Remove users from Training Curriculum", () => {
 
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+    });
+
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click Submit for Approval", () => {
