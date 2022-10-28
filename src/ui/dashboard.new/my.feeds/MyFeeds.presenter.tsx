@@ -48,7 +48,7 @@ interface Props {
   dialogPDF: DialogHandler;
 }
 
-const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
+const MyFeedsLineItemPresenter: React.FC<Props> = ({
   loadMyFeeds,
   loadMyFeedsListAsyncState,
   feedItems,

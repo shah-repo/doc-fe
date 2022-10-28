@@ -19,7 +19,7 @@ interface Props {
   overallLimit: number;
 }
 
-const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
+const TrainingsLineItemPresenter: React.FC<Props> = ({
   pinLineItem,
   unPinLineItem,
   onLoadMoreData,

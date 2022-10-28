@@ -17,7 +17,7 @@ interface Props {
   recents: RecentItems[];
 }
 
-const RecentsPresenter: React.FunctionComponent<Props> = ({
+const RecentsPresenter: React.FC<Props> = ({
   loadRecents,
   loadRecentsListAsyncState,
   recents,
