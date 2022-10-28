@@ -964,7 +964,11 @@ context("PO Removes lineitems removes approver", () => {
 
   context("Remove requestor", () => {
     it("Remove requestor", () => {
-      cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
+      cy.wait(2000);
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PatchDocRev], () => {
+          cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
+        });
     });
 
     it("Save document", () => {
