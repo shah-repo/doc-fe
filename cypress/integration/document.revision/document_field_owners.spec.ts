@@ -3,6 +3,7 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { FormOperatorsType } from "../../utils/constants/documentTypes/form";
 import { LotHistoryRecordOperators } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -161,7 +162,9 @@ context("Document Field Owners Test", () => {
     });
 
     it(`Select '${USERS[3].name}' to Assign document to`, () => {
-      cy.drAssignDocumentTo({ username: USERS[3].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.drAssignDocumentTo({ username: USERS[3].name });
+      });
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -169,7 +172,9 @@ context("Document Field Owners Test", () => {
     });
 
     it(`Select '${USERS[4].name}' to Assign document to`, () => {
-      cy.drAssignDocumentTo({ username: USERS[4].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.drAssignDocumentTo({ username: USERS[4].name });
+      });
     });
 
     it(`Logout as current user`, () => {
@@ -188,7 +193,7 @@ context("Document Field Owners Test", () => {
       cy.navigToRecords();
     });
 
-    it("Filter document by name and status, and select it", () => {
+    it("Filter document by id and status, and select it", () => {
       cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
     });
 
@@ -224,7 +229,7 @@ context("Document Field Owners Test", () => {
       cy.navigToRecords();
     });
 
-    it("Filter document by name and status, and select it", () => {
+    it("Filter document by id and status, and select it", () => {
       cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
     });
 
@@ -256,7 +261,7 @@ context("Document Field Owners Test", () => {
       cy.navigToRecords();
     });
 
-    it("Filter document by name and status, and select it", () => {
+    it("Filter document by id and status, and select it", () => {
       cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
     });
 
@@ -286,7 +291,7 @@ context("Document Field Owners Test", () => {
       cy.navigToRecords();
     });
 
-    it("Filter document by name and status, and select it", () => {
+    it("Filter document by id and status, and select it", () => {
       cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
     });
 
