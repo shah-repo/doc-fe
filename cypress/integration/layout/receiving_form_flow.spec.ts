@@ -365,6 +365,7 @@ context("Receiving landing page test", () => {
   context("Create receiving  form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter document by ID", () => {
@@ -685,6 +686,8 @@ context("Receiving landing page test", () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.listLoadingElementShouldNotExist();
+      cy.pause();
     });
 
     it("Verify that Approvals field is automatically added", () => {
@@ -891,6 +894,8 @@ context("Receiving landing page test", () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.listLoadingElementShouldNotExist();
+      cy.pause();
     });
 
     it("Verify that Approvals field is automatically added", () => {
