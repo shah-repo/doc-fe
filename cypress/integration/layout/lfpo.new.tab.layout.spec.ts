@@ -1155,10 +1155,18 @@ context("LFPO new layout verification", () => {
     });
 
     it("Verify References selection Add Remove", () => {
-      cy.get("[data-cy='referenceTo']").arrowClick({ force: true });
-      cy.drSelectReferences( "FM-00001" );
-      cy.listLoadingElementShouldNotExist();
-      cy.drRemoveReferences({ reference: "FM-00001" });
+      const docId = "FM-00001";
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
+      });
+
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.drRemoveReferences({ reference: docId });
+      });
     });
 
     it("Verify Referenced By,and Release date Item exist or not", () => {
