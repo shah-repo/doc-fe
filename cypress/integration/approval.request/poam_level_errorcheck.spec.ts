@@ -283,30 +283,22 @@ context("Approval request landing page test", () => {
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
-    });
-
     it("Verify system is showing error for duplicate entry", () => {
       cy.checkToastMessageContains({ message: "PO matrix can't have duplicate limits or level names" });
       cy.closeAllAlertMessages();
     });
 
-    it("Click on the recently added level", () => {
-      cy.get("tbody>tr").eq(1).arrowClick();
-    });
-
-    it("Change level name", () => {
-      cy.get(`[data-cy="name"]`).clear().arrowType("Level-2");
-    });
-
-    it("Click add button", () => {
+    it("Click on the recently added level and change level name", () => {
+      cy.get(`[data-cy="form.builder.add.item"]`).arrowClick();
+      cy.get(`[data-cy="name"]`).arrowType("Level-2");
+      cy.get(`[data-cy="limit"]`).arrowType("2000");
+      cy.get(`[data-cy="signatures.0.groups"]`).autocompleteSelect("Everyone");
+      cy.get(`[data-cy="signatures.0.employees"]`).autocompleteSelect(USERS[1].name);
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
 
     it("Save document and verify document saved without error", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.checkToastMessage({ exists: false });
+      cy.drSaveDocumentWithoutaudit();
     });
 
     it("Add another level", () => {
@@ -318,30 +310,22 @@ context("Approval request landing page test", () => {
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
-    });
-
     it("Verify system is showing error for duplicate entry", () => {
       cy.checkToastMessageContains({ message: "PO matrix can't have duplicate limits or level names" });
       cy.closeAllAlertMessages();
     });
 
-    it("Click on the recently added level", () => {
-      cy.get("tbody>tr").eq(2).arrowClick();
-    });
-
-    it("Change limit", () => {
-      cy.get(`[data-cy="limit"]`).clear().arrowType("3000");
-    });
-
-    it("Click add button", () => {
+    it("Click on the recently added level and change limit", () => {
+      cy.get(`[data-cy="form.builder.add.item"]`).arrowClick();
+      cy.get(`[data-cy="name"]`).arrowType("Level-3");
+      cy.get(`[data-cy="limit"]`).arrowType("3000");
+      cy.get(`[data-cy="signatures.0.groups"]`).autocompleteSelect("Everyone");
+      cy.get(`[data-cy="signatures.0.employees"]`).autocompleteSelect(USERS[1].name);
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
 
     it("Save document and verify document saved without error", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.checkToastMessage({ exists: false });
+      cy.drSaveDocumentWithoutaudit();
     });
 
     it("Click on the First level", () => {
@@ -361,12 +345,13 @@ context("Approval request landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
+      cy.get(`[data-cy="DocumentRevisionForm-submit"]`).arrowClick();
     });
 
     it("Verify system is showing error for duplicate entry", () => {
       cy.checkToastMessageContains({ message: "PO matrix can't have duplicate limits or level names" });
       cy.closeAllAlertMessages();
+      cy.wait(2000);
     });
 
     it("Click on the First level and change level name to original", () => {
@@ -378,17 +363,15 @@ context("Approval request landing page test", () => {
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
-    });
-
     it("Verify system is showing error for duplicate entry", () => {
       cy.checkToastMessageContains({ message: "PO matrix can't have duplicate limits or level names" });
       cy.closeAllAlertMessages();
+      cy.wait(2000);
     });
 
     it("Click on the First level and change limit to original", () => {
       cy.get("tbody>tr").eq(0).arrowClick();
+      cy.get(`[data-cy="name"]`).clear().arrowType("Level-1");
       cy.get(`[data-cy="limit"]`).clear().arrowType("1000");
     });
 
@@ -397,8 +380,7 @@ context("Approval request landing page test", () => {
     });
 
     it("Save document and verify document saved without error", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.checkToastMessage({ exists: false });
+      cy.drSaveDocumentWithoutaudit();
     });
   });
 
