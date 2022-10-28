@@ -32,9 +32,7 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <span id="UserMenuButton" data-cy="UserMenuButton">
-        <MoreHorizIcon fontSize="small"  style={{ color: Colors.white }}  />
-      </span>
+      <MoreHorizIcon fontSize="small" style={{ color: Colors.white }} id="UserMenuButton" data-cy="UserMenuButton" />
       <Menu
         id="UserMenu"
         anchorEl={anchorEl}
