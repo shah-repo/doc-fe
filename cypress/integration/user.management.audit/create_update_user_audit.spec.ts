@@ -109,6 +109,7 @@ context("User Creation Flow", () => {
     });
 
     it("Verify user added datetime", () => {
+      cy.wait(3000);
       cy.usrHistoryVerifyCurrentDate({ dateTime: currentDate });
     });
 
@@ -354,6 +355,7 @@ context("User Creation Flow", () => {
 
     context(`Reactivate ${nameOfThirdUserToSignUp}`, () => {
       it(`Click edit button for ${nameOfThirdUserToSignUp}`, () => {
+        cy.grpClearFilter();
         cy.usrClickEditUser({ name: nameOfThirdUserToSignUp });
       });
 

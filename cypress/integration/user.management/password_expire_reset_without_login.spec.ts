@@ -131,7 +131,7 @@ context("Password expire reset flow", { tags: ["@timetool"] }, () => {
       context("Create new user", () => {
         it("Clicks the save button", () => {
           cy.intercept({ method: "POST", pathname: "/api/v1/employees" }).as("postEmployee");
-          cy.get("button>span>svg>path").eq(1).arrowClick();
+          cy.get("td>span>button>span>svg>path").eq(0).arrowClick();
           cy.wait("@postEmployee").then((res) => {
             if (res.response) {
               const response = res.response.body;
