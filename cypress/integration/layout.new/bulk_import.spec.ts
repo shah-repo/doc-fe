@@ -768,7 +768,15 @@ context("Verify New Layout for Bulk Import Document", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          const docId = "FM-00001";
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+            cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
+          });
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+            cy.drRemoveReferences({ reference: docId });
+          });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
