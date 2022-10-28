@@ -1,8 +1,5 @@
-/* eslint-disable max-len */
-/* eslint-disable react/react-in-jsx-scope */
 import { Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -16,7 +13,6 @@ import {
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
-import Text from "../../components/Text";
 import { DialogHandler } from "../../hooks/useDialog";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
@@ -35,7 +31,7 @@ import POTaskApproval from "../line.items/purchase.order/task.approval/POTaskApp
 import NONPOTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
 import TrainingItem from "../line.items/training/default/DefaultTraining";
 import { LoadMoreButton } from "../LoadMoreButton";
-import { styles } from "./MyFeeds.styles";
+import NoPendingActions from "../no.pending.actions/NoPendingActions";
 
 interface Props {
   loadMyFeeds: any;
@@ -65,12 +61,10 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
   onLoadMoreData,
   dialogPDF,
 }) => {
-  const classes = styles();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
 
-  const renderPendingActions = () => (
-
-    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
+  const PendingActions = () => (
+    <List dense onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
       {feedItems.results
         .map((pendingAction, index) => {
           switch (pendingAction.type) {
@@ -606,6 +600,7 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
                   </>
                 );
               }
+              // falls through
             default:
               return (
                 <>
@@ -625,22 +620,14 @@ const MyFeedsLineItemPresenter: React.FunctionComponent<Props> = ({
     </List>
 
   );
-  const renderNoPendingActions = feedItems.total === 0 && (
-    <Typography className={classes.noPendingActions}>
-      <Text
-        translation="dashboard.noPendingActions"
-        dataCy="dashboard.noPendingActions"
-      />
-    </Typography>
-  );
+
   return (
     <AsyncGate
       asyncAction={loadMyFeeds}
       asyncState={loadMyFeedsListAsyncState}
       startActionOnMount={!!currentEmployeeId}
     >
-      {feedItems.total > 0 && renderPendingActions()}
-      {renderNoPendingActions}
+      {feedItems.total === 0 ? <NoPendingActions /> : <PendingActions />}
     </AsyncGate>
   );
 };

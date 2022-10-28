@@ -10,7 +10,6 @@ import { ApiAction, AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
 import RecentsItem from "./Recents.item";
-import { styles } from "./Recents.styles";
 
 interface Props {
   loadRecents: ActionCreator<ApiAction<RecentItems[], any>>;
@@ -23,9 +22,8 @@ const RecentsPresenter: React.FunctionComponent<Props> = ({
   loadRecentsListAsyncState,
   recents,
 }) => {
-  const classes = styles();
   const renderItems = () => (
-    <List className={classes.root}>
+    <List>
       {recents.map((data, index) => {
         switch (data.itemType) {
           case RecentTypes.DOCUMENT:

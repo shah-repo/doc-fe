@@ -1,4 +1,4 @@
-import { Divider, List, ListItemText, Typography } from "@material-ui/core";
+import { Divider, List } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -10,7 +10,7 @@ import { ActionTypes } from "../../../state/ducks/dashboard/types";
 import Text from "../../components/Text";
 import NewTraining from "../line.items/training/new.training/newTraining";
 import { LoadMoreButton } from "../LoadMoreButton";
-import { styles } from "./Trainings.styles";
+import NoPendingActions from "../no.pending.actions/NoPendingActions";
 
 interface Props {
   pinLineItem: (id: string) => void;
@@ -25,7 +25,6 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   onLoadMoreData,
   overallLimit,
 }) => {
-  const classes = styles();
   const [hoverItemId, setHoverItemId] = React.useState("");
   const onMouseHoverItem = (id) => {
     setHoverItemId(id);
@@ -35,8 +34,8 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   };
   const trainingItems: any = useSelector(trainingSelectors.trainingList);
 
-  const renderPendingActions = () => (
-    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
+  const PendingActions = () => (
+    <List dense onMouseLeave={onMouseLeaveItem}>
       {trainingItems.results.map((pendingAction, index) => {
         switch (pendingAction.type) {
           case ActionTypes.TRAINING_STATUS_OWNER:
@@ -77,27 +76,8 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
       />
     </List>
   );
-  const renderNoPendingActions = trainingItems.total === 0 && (
-    <List dense>
-      <ListItemText
-        primary={
-          <Typography className={classes.noPendingActions}>
-            <Text
-              translation="dashboard.noPendingActions"
-              dataCy="dashboard.noPendingActions"
-            />
-          </Typography>
-        }
-      />
-    </List>
-  );
 
-  return (
-    <>
-      {trainingItems.total > 0 && renderPendingActions()}
-      {renderNoPendingActions}
-    </>
-  );
+  return trainingItems.total === 0 ? <NoPendingActions /> : <PendingActions />;
 };
 
 export default TrainingsLineItemPresenter;
