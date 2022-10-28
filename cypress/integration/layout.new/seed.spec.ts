@@ -212,7 +212,9 @@ context("Verify New Layout for Seed Document", () => {
     it("Verify tabs", () => {
       cy.verifyTabs("overview", "details");
     });
+  });
 
+  context("Verify Form opens to the Overview tab by default", () => {
     it("Verify Overview as default selected tab", () => {
       cy.isTabActive({ name: "overview", index: 0 });
     });
@@ -226,110 +228,122 @@ context("Verify New Layout for Seed Document", () => {
       cy.get(".formOptionsBox").should("be.visible");
     });
 
-    context("Verify tabs content", () => {
-      context("Verify Overview tab content", () => {
-        it("Verify Overview tab default fields", () => {
-          cy.get("#sm-tabpanel-0").should("exist");
-          cy.verifyDefaultFields();
-          cy.get(`[data-cy="field-outputDocumentTypes"]`).should("exist");
-        });
+    it("Verify Overview tab default fields", () => {
+      cy.get("#sm-tabpanel-0").should("exist");
+      cy.verifyDefaultFields();
+      cy.get(`[data-cy="field-outputDocumentTypes"]`).should("exist");
+    });
 
-        it("Verify that Form Options should appear for Overview tab", () => {
-          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
-          cy.verifyFormOptionsVisibility();
-        });
+    it("Verify Document Type exist", () => {
+      cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
+    });
+
+    it("Verify Document ID exist", () => {
+      cy.get("[data-cy=\"field-document.docId\"]").should("exist");
+    });
+
+    it("Verify Training required exist", () => {
+      cy.get("[data-cy=\"field-retrain\"]").should("exist");
+    });
+
+    it("Verify Attachments exist", () => {
+      cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+    });
+
+    it("Verify that Form Options should appear for Overview tab", () => {
+      cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+      cy.verifyFormOptionsVisibility();
+    });
+  });
+
+  context("Verify Details tab predefined schema fields", () => {
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Verify predefined schema fields", () => {
+      cy.get("#sm-tabpanel-1").should("exist");
+      cy.contains("Document Title").should("exist");
+      cy.contains("Document Description").should("exist");
+      cy.contains("Type of document to be created").should("exist");
+      cy.contains("Document Type to be selected").should("exist");
+      cy.contains("Default Revision Stage").should("exist");
+      cy.contains("Training Required").should("exist");
+      cy.contains("Attachments to be included").should("exist");
+    });
+  });
+
+  context("Add Fields in Details tab", () => {
+    it("Add Text Field", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Checkbox group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
+      cy.fbGroupOptions("Option 1", "Option 2");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Add Radio Button group", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
+      cy.fbGroupOptions("Option 1", "Option 2");
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save Form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+  });
+
+  context("Verify Details tab added fields", () => {
+    it("Verify Text Field", () => {
+      cy.contains("fb-textfield").should("exist");
+    });
+
+    it("Verify Checkbox Group", () => {
+      cy.contains("fb-checkbox-group").should("exist");
+    });
+
+    it("Verify Radio Button Group", () => {
+      cy.contains("fb-radiobutton-group").should("exist");
+    });
+
+    it("Verify that Form Options should appear for Details tab", () => {
+      cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+      cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
+      cy.verifyFormOptionsVisibility();
+    });
+  });
+
+  context("Verify Right side panel", () => {
+    it("Verify that right side panel opens by default to the References tab", () => {
+      cy.verifyReferencesTabAsActive();
+    });
+
+    context("Verify References tab", () => {
+      it("Verify References tab General Info", () => {
+        cy.verifyReferencesGeneralInfo({ user: owner });
       });
 
-      context("Verify Details tab predefined schema fields", () => {
-        it("Navigate to Details tab", () => {
-          cy.drSelectDetailsTab();
-        });
-
-        it("Verify predefined schema fields", () => {
-          cy.get("#sm-tabpanel-1").should("exist");
-          cy.contains("Document Title").should("exist");
-          cy.contains("Document Description").should("exist");
-          cy.contains("Type of document to be created").should("exist");
-          cy.contains("Document Type to be selected").should("exist");
-          cy.contains("Default Revision Stage").should("exist");
-          cy.contains("Training Required").should("exist");
-          cy.contains("Attachments to be included").should("exist");
-        });
+      it("Verify References", () => {
+        cy.get(`[data-cy="field-referenceTo"]`).should("exist");
       });
 
-      context("Add Fields in Details tab", () => {
-        it("Add Text Field", () => {
-          cy.fbAddNewFieldWhenHiddenLastPlace();
-          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
-          cy.fbAddNewFieldButton();
-        });
-
-        it("Add Checkbox group", () => {
-          cy.fbAddNewFieldWhenHiddenLastPlace();
-          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
-          cy.fbGroupOptions("Option 1", "Option 2");
-          cy.fbAddNewFieldButton();
-        });
-
-        it("Add Radio Button group", () => {
-          cy.fbAddNewFieldWhenHiddenLastPlace();
-          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
-          cy.fbGroupOptions("Option 1", "Option 2");
-          cy.fbAddNewFieldButton();
-        });
-
-        it("Save Form", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-        });
+      it("Verify Referenced By, Training, Release Date and Form Info", () => {
+        cy.verifyReferencesOtherInfo();
       });
+    });
 
-      context("Verify Details tab added fields", () => {
-        it("Verify Text Field", () => {
-          cy.contains("fb-textfield").should("exist");
-        });
-
-        it("Verify Checkbox Group", () => {
-          cy.contains("fb-checkbox-group").should("exist");
-        });
-
-        it("Verify Radio Button Group", () => {
-          cy.contains("fb-radiobutton-group").should("exist");
-        });
-
-        it("Verify that Form Options should appear for Details tab", () => {
-          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
-          cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
-          cy.verifyFormOptionsVisibility();
-        });
-      });
-
-      context("Verify Right side panel", () => {
-        it("Verify that right side panel opens by default to the References tab", () => {
-          cy.verifyReferencesTabAsActive();
-        });
-
-        context("Verify References tab", () => {
-          it("Verify References tab General Info", () => {
-            cy.verifyReferencesGeneralInfo({ user: owner });
-          });
-
-          it("Verify References", () => {
-            cy.get(`[data-cy="field-referenceTo"]`).should("exist");
-          });
-
-          it("Verify Referenced By, Training, Release Date and Form Info", () => {
-            cy.verifyReferencesOtherInfo();
-          });
-        });
-
-        context("Verify Right side panel tabs", () => {
-          it("Verify other tabs", () => {
-            cy.verifyRightSidePanelOtherTabs();
-          });
-        });
+    context("Verify Right side panel tabs", () => {
+      it("Verify other tabs", () => {
+        cy.verifyRightSidePanelOtherTabs();
       });
     });
   });
@@ -731,26 +745,41 @@ context("Verify New Layout for Seed Document", () => {
       cy.verifyTabs("overview", "details");
     });
 
-    context("Verify draft seed document tabs content", () => {
-      context("Verify Overview tab content", () => {
-        it("Verify Overview as default selected tab", () => {
-          cy.isTabActive({ name: "overview", index: 0 });
+
+    context("Verify Form opens to the Overview tab by default", () => {
+      it("Verify Overview as default selected tab", () => {
+        cy.isTabActive({ name: "overview", index: 0 });
+      });
+
+      it("Verify tab as fixed", () => {
+        cy.verifyFixedTab();
+      });
+
+      context("Verify this tab contains Default fields up to attachments", () => {
+        it("Verify Overview tab default fields", () => {
+          cy.get("#sm-tabpanel-0").should("exist");
+          cy.verifyDefaultFields();
         });
 
-        it("Verify tab as fixed", () => {
-          cy.verifyFixedTab();
+        it("Verify Document Type exist", () => {
+          cy.get("[data-cy=\"field-document.documentType.id\"]").should("exist");
         });
 
-        context("Verify Overview tab content", () => {
-          it("Verify Overview tab default fields", () => {
-            cy.get("#sm-tabpanel-0").should("exist");
-            cy.verifyDefaultFields();
-          });
+        it("Verify Document ID exist", () => {
+          cy.get("[data-cy=\"field-document.docId\"]").should("exist");
+        });
 
-          it("Verify that Form Options should appear for Overview tab", () => {
-            cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
-            cy.verifyFormOptionsVisibility();
-          });
+        it("Verify Training required exist", () => {
+          cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        });
+
+        it("Verify Attachments exist", () => {
+          cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+        });
+
+        it("Verify that Form Options should appear for Overview tab", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
         });
       });
 
@@ -933,66 +962,73 @@ context("Verify New Layout for Seed Document", () => {
       cy.verifyTabs("overview", "details");
     });
 
-    context("Verify released seed document tabs content", () => {
-      context("Verify Overview tab content", () => {
-        it("Verify Overview as default selected tab", () => {
-          cy.isTabActive({ name: "overview", index: 0 });
-        });
 
-        it("Verify tab as fixed", () => {
-          cy.verifyFixedTab();
-        });
+    context("Verify Form opens to the Overview tab by default & contains Default fields up to attachments", () => {
+      it("Verify Overview as default selected tab", () => {
+        cy.isTabActive({ name: "overview", index: 0 });
+      });
 
-        it("Verify that Form Options should appear for Overview tab", () => {
-          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+      it("Verify tab as fixed", () => {
+        cy.verifyFixedTab();
+      });
+
+      it("Verify Training required exist", () => {
+        cy.get("[id='sm-tabpanel-0']").contains("Training Required").should("exist");
+      });
+
+      it("Verify Attachments exist", () => {
+        cy.get("[id='sm-tabpanel-0']").contains("Attachments").should("exist");
+      });
+
+      it("Verify that Form Options should appear for Overview tab", () => {
+        cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+      });
+    });
+
+    context("Verify Details tab content", () => {
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      context("Verify Details tab predefined schema fields", () => {
+        it("Verify predefined schema fields", () => {
+          cy.get("#sm-tabpanel-1").should("exist");
+          cy.contains("Document Title").should("exist");
+          cy.contains("Document Description").should("exist");
+          cy.contains("Type of document to be created").should("exist");
+          cy.contains("Document Type to be selected").should("exist");
+          cy.contains("JSON Form").should("exist");
+          cy.contains("Define the output of that form").should("exist");
+          cy.contains("Default Revision Stage").should("exist");
+          cy.contains("Training Required").should("exist");
+          cy.contains("Attachments to be included").should("exist");
         });
       });
 
-      context("Verify Details tab content", () => {
+      context("Verify Details tab added fields", () => {
+        it("Navigate to overview tab", () => {
+          cy.drSelectOverviewTab();
+        });
+
+        it("Verify Text Field", () => {
+          cy.contains("fb-textfield").should("exist");
+        });
+
+        it("Verify Checkbox Group", () => {
+          cy.contains("fb-checkbox-group").should("exist");
+        });
+
+        it("Verify Radio Button Group", () => {
+          cy.contains("fb-radiobutton-group").should("exist");
+        });
+
         it("Navigate to Details tab", () => {
           cy.drSelectDetailsTab();
         });
 
-        context("Verify Details tab predefined schema fields", () => {
-          it("Verify predefined schema fields", () => {
-            cy.get("#sm-tabpanel-1").should("exist");
-            cy.contains("Document Title").should("exist");
-            cy.contains("Document Description").should("exist");
-            cy.contains("Type of document to be created").should("exist");
-            cy.contains("Document Type to be selected").should("exist");
-            cy.contains("JSON Form").should("exist");
-            cy.contains("Define the output of that form").should("exist");
-            cy.contains("Default Revision Stage").should("exist");
-            cy.contains("Training Required").should("exist");
-            cy.contains("Attachments to be included").should("exist");
-          });
-        });
-
-        context("Verify Details tab added fields", () => {
-          it("Navigate to overview tab", () => {
-            cy.drSelectOverviewTab();
-          });
-
-          it("Verify Text Field", () => {
-            cy.contains("fb-textfield").should("exist");
-          });
-
-          it("Verify Checkbox Group", () => {
-            cy.contains("fb-checkbox-group").should("exist");
-          });
-
-          it("Verify Radio Button Group", () => {
-            cy.contains("fb-radiobutton-group").should("exist");
-          });
-
-          it("Navigate to Details tab", () => {
-            cy.drSelectDetailsTab();
-          });
-
-          it("Verify that Form Options should appear for Details tab", () => {
-            cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
-            cy.verifyFormOptionsVisibility();
-          });
+        it("Verify that Form Options should appear for Details tab", () => {
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.verifyFormOptionsVisibility();
         });
       });
     });
