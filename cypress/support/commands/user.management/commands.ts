@@ -144,7 +144,7 @@ Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
 });
 
 Cypress.Commands.add("usrClickEditUser", (params: {name: string }) => {
-  cy.get("tr.k-master-row").contains(params.name).parents("tr").find(`td[data-grid-col-index="5"]>span>button`).eq(0)
+  cy.get("tr.k-master-row").contains(params.name).parents("tr").find(`td[data-grid-col-index="5"]>span>button>span>svg`).eq(0)
     .arrowClick();
 });
 
