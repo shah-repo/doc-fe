@@ -735,15 +735,21 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("select option for radio group", () => {
-        cy.fbSelectRadioButtonValue({ value: "X" });
+        cy.get(`[type="radio"]`).eq(0).check("X");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Fill text editor field", () => {
         cy.fbEnterTextEditor({ value: "Some text for Text editor" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigate to Overview tab", () => {
         cy.drSelectOverviewTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add two approvers", () => {
@@ -759,7 +765,6 @@ context("Autocomplete 'Lots' test", () => {
         cy.pmDeleteApproverFromApproverList({ approver: `${USERS[1].name} - ${USERS[1].email}` });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.pause();
       });
 
       it("Submit for approval", () => {
