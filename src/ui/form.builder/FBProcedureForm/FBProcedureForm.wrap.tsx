@@ -156,6 +156,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
             },
           };
         }
+        workspaceState?.saveDocRev();
         return handleCancel?.();
       }
       const allSteps = workspaceState?.schema?.filter((item) => item.type === "mpiprocedure");
