@@ -9,8 +9,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { Part } from "../../utils/constants/documentTypes/part";
-import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
-import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
@@ -75,8 +73,6 @@ context("Receiving landing page test", () => {
             documentTypes: [
               LFPO,
               Part,
-              PurchaseOrderTest,
-              ReceivableTest,
             ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -473,7 +469,11 @@ context("Receiving landing page test", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for Receiving" });
-      cy.fbAddField();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.fbAddField();
+      });
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("move component", () => {
@@ -523,10 +523,12 @@ context("Receiving landing page test", () => {
   context("Create Another receiving  form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter document by ID", () => {
       cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00005", status: "Draft" });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify that Approvals field is automatically added", () => {
@@ -534,7 +536,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Import the template", () => {
-      cy.get("#fb-import-schema").attachFile("../downloads/Receiving_Import.json");
+      cy.get("#fb-import-schema").attachFile("../fixtures/Receiving_Import.json");
     });
 
     it("Verify imported field", () => {
@@ -626,11 +628,17 @@ context("Receiving landing page test", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for new receiving" });
-      cy.fbAddField();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.fbAddField();
+      });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
+
     it("move component", () => {
-      cy.get("[data-cy='Textfield for new receiving']").trigger("mouseover");
+      cy.get("[data-cy='Textfield for new receiving']").trigger("mouseover", { force: true });
       cy.wait(2000);
       cy.get(`[class="drag-handle"]`).eq(2)
         .realMouseDown({ position: "center", button: "left" });
@@ -687,11 +695,10 @@ context("Receiving landing page test", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
       cy.listLoadingElementShouldNotExist();
-      cy.pause();
     });
 
     it("Verify that Approvals field is automatically added", () => {
-      cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+      cy.get("[data-cy='form.builder.approvals']").should("exist");
     });
   });
 
@@ -817,6 +824,7 @@ context("Receiving landing page test", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for LFPO" });
       cy.fbAddField();
+      cy.wait(3000);
     });
 
     it("move component", () => {
@@ -895,15 +903,17 @@ context("Receiving landing page test", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
       cy.listLoadingElementShouldNotExist();
-      cy.pause();
+      cy.wait(3000);
     });
 
     it("Verify that Approvals field is automatically added", () => {
-      cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+      cy.get("[data-cy='form.builder.approvals']").should("exist");
     });
 
     it("Import the template", () => {
-      cy.get("#fb-import-schema").attachFile("../downloads/LFPO_Import.json");
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.get("#fb-import-schema").attachFile("../downloads/LFPO_Import.json");
+      });
     });
 
     it("Verify imported field", () => {
@@ -1644,7 +1654,8 @@ context("Receiving landing page test", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Requestor", () => {
@@ -1818,12 +1829,12 @@ context("Receiving landing page test", () => {
       cy.cmpTurnOffAutosave();
     });
 
-    it("Click 'Create Receipt Record'", () => {
-      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
-    });
-
     it("Create Receiving Record", () => {
-      cy.recSelectRecordFormFromMultiSelect({ recordType: "Receivable" });
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.DocPreview,
+        CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
+      });
     });
 
     it("Add approver", () => {
@@ -1835,9 +1846,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Save the form", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Navigate to detail tab", () => {
@@ -1880,27 +1889,19 @@ context("Receiving landing page test", () => {
     });
 
     it("Save the form", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Click on create lot", () => {
       cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
       cy.get("[name^='received']").arrowType("100");
-      cy.get("[data-cy='lotType']").arrowClick({ force: true })
-        .autocompleteSelect("Lots");
-      cy.wrapWithWaitOnApiCalls([], () => {
-        cy.get("[data-cy='lotForm']").arrowClick({ force: true })
-          .autocompleteSelect("New Lot from Purchase Order Form");
-      });
-      cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
-    });
-
-    it("Save the form", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+        cy.get("[data-cy='lotType']").arrowClick({ force: true }).autocompleteSelect("Lots");
+      });
+      cy.get("[data-cy='lotForm']").arrowClick({ force: true })
+        .autocompleteSelect("New Lot from Purchase Order Form");
+      cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
     });
 
     it("Submit for approval", () => {
@@ -1921,6 +1922,5 @@ context("Receiving landing page test", () => {
     it("Veryfy the part document on lot", () => {
       cy.get(`[aria-colindex="3"] input`).arrowType("PRT-00005.1");
     });
-
   });
 });
