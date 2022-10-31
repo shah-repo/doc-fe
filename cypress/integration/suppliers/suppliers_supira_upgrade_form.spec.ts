@@ -158,6 +158,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.navigToDocumentList();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click on 'Create a document'", () => {
       cy.cmpClickCreateNewDocument();
     });
@@ -190,9 +194,11 @@ context("Create company via API and create Suppliers document", () => {
 
   context("import form template and release the form", () => {
     it("Import template of 'Rev D' form", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("#fb-import-schema").attachFile("Supira_Supplier_Form_Template_Rev_D.json");
-      });
+      cy.get("#fb-import-schema").attachFile("Supira_Supplier_Form_Template_Rev_D.json");
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -226,6 +232,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.get(`[data-value="R&D/Prototype Only"]`).arrowClick();
       cy.unClick();
       cy.wait(2000);
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify the status", () => {
@@ -263,9 +273,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select one supplier use status", () => {
       cy.get(`[id^="mui-component-select-supplier-use-status"]`).arrowClick({ force: true });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-value="Pending Evaluation"]`).arrowClick({ force: true });
-      });
+      cy.get(`[data-value="Pending Evaluation"]`).arrowClick({ force: true });
     });
 
     it("Select Risk Classifications", () => {
@@ -273,6 +281,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
       cy.unClick();
       cy.wait(2000);
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify the status", () => {
@@ -587,6 +599,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.wait(2000);
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to Supplier list", () => {
       cy.navigToSuppliers();
       cy.reload();
@@ -631,9 +647,11 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Import template of 'Rev E' form", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("#fb-import-schema").attachFile("Supira_Supplier_Form_Template_Rev_E.json");
-      });
+      cy.get("#fb-import-schema").attachFile("Supira_Supplier_Form_Template_Rev_E.json");
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
