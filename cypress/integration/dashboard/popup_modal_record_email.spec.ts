@@ -304,7 +304,7 @@ context("Records email popup modal", () => {
 
     it("Approve Record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(2000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
@@ -396,7 +396,7 @@ context("Records email popup modal", () => {
       cy.authLogout();
     });
 
-    it(`Login as user ${THIRD_USER} to dashboard`, () => {
+    it(`Login as user ${THIRD_USER.name} to dashboard`, () => {
       cy.authLoginToDashboard({ USER: THIRD_USER, employeeId: fourthEmployee.id });
     });
   });
@@ -415,7 +415,7 @@ context("Records email popup modal", () => {
 
     it("Approve Record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(2000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
@@ -428,7 +428,7 @@ context("Records email popup modal", () => {
       cy.authLogout();
     });
 
-    it(`Login user as ${FIRST_USER} to dashboard`, () => {
+    it(`Login user as ${FIRST_USER.name} to dashboard`, () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
     });
 
@@ -445,7 +445,7 @@ context("Records email popup modal", () => {
 
     it("Approve Record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(2000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
