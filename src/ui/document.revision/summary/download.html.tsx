@@ -1,7 +1,6 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
-import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
@@ -32,7 +31,6 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   const [URL, setURL] = React.useState<string>("");
   const classes = styles({ isPDF: true });
-
   const action = useActionCreator(attachmentsActions.getAssetUrl);
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -52,22 +50,12 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
     async.start(action, pdf.s3Url, async);
   };
 
-  let button: React.ReactElement;
+  let button: React.ReactElement | null = null;
 
   if (isNewLayout) {
     const isActive = async.asyncState.status === AsyncStatus.Active;
-
     button = renderAsButton
-      ? (
-        <StyledButton
-          color="primary"
-          disabled={isActive}
-          data-cy="downloadHtml"
-          onClick={handleClick}
-        >
-          <Text translation="common.download.html" />
-        </StyledButton>
-      )
+      ? null
       : (
         <StyledMenuListItem disabled={isActive} button alignItems="flex-start">
           <StyledMenuListIcon>
