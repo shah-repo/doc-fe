@@ -503,7 +503,7 @@ context("Export Record doc", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.wait(2000);
         cy.unClick();
         cy.progressBarShouldNotExist();
