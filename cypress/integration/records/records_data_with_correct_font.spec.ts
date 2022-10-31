@@ -652,10 +652,10 @@ context("records_data_with_correct_font", () => {
       });
 
       it(`Verify the side bar 'Released Date' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_400}`, () => {
-        const releaseDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
+        const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
         cy.get(`[data-cy="releasedDate"]`)
           .checkStylePropExists({
-            content: releaseDate,
+            content: receivingReleasedDate,
             props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
           });
       });
