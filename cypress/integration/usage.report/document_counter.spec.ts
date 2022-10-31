@@ -4105,17 +4105,21 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       });
 
       it("Add approval", () => {
-        cy.wait(3000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Submit for approval", () => {
-        cy.wait(3000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.pmSubmitForApproval();
       });
 
       it("Approve approval", () => {
-        cy.wait(3000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.ebApprove();
       });
     });
