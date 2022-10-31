@@ -1419,12 +1419,10 @@ context("LHR & LHRS Flow", () => {
 
       context("Select created MPI in LHR template", () => {
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^='MuiExpansionPanelSummary']").eq(0).arrowClick().wait(3000);
           cy.get("[data-cy='LHR Step 1']").arrowClick();
           cy.get("input[data-cy='lhrstep-built-in']").then(($el) => {
             $el.trigger("click");
           });
-          cy.get("div[class^='MuiExpansionPanelSummary']").eq(0).arrowClick().wait(3000);
           cy.wrapWithWaitOnApiCalls(
             [CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev],
             () => {
@@ -1444,7 +1442,6 @@ context("LHR & LHRS Flow", () => {
         });
 
         it("Select MPI document created with API for step #2 in LHRt", () => {
-          cy.get("div[class^='MuiExpansionPanelSummary']").eq(1).arrowClick().wait(3000);
           cy.get("[data-cy='LHR Step 2']").arrowClick();
           cy.get("input[data-cy^='lhr-step']").then(($el) => {
             $el.trigger("click");
@@ -1457,7 +1454,6 @@ context("LHR & LHRS Flow", () => {
             ],
             () => {
               cy.listLoadingElementShouldNotExist();
-              cy.get("div[class^='MuiExpansionPanelSummary']").eq(1).arrowClick().wait(3000);
               cy.get("input[data-cy^='lhr-step']").autocompleteSelect(
                 "QPI document1", { force: true }
               );
@@ -1486,11 +1482,8 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Select 'Lot History Record' form", () => {
-        cy.get(`div[data-cy^="field-selectType"]`)
-          .arrowClick()
-          .focused()
-          .arrowType("Lot History Record{enter}", { force: true });
-        cy.unClick();
+        cy.get("[data-cy=\"field-selectType\"]").arrowClick().wait(1000);
+        cy.contains(new RegExp("^Lot History Record$", "g")).arrowClick();
       });
 
       it("Verify LHR is in DRAFT status", () => {
@@ -1523,7 +1516,7 @@ context("LHR & LHRS Flow", () => {
           cy.get("[data-cy='Due Date'").should("be.visible");
         });
         it("Verify Approval Block is exists", () => {
-          cy.get("[data-cy='form.builder.approvals'").eq(1).scrollIntoView().should("be.visible");
+          cy.get("[data-cy='form.builder.approvals']").eq(0).scrollIntoView().should("be.visible");
         });
       });
       context("verify fields in Details Tab", () => {
