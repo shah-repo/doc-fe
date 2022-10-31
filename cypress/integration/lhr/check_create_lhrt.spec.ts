@@ -1082,6 +1082,7 @@ context("Verify the user is able to create LHRT", () => {
     });
 
     it("Submit for approval", () => {
+      cy.wait(2000);
       cy.lhrSubmitForApproval();
     });
 
