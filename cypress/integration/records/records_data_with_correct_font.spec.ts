@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment-timezone";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
@@ -651,9 +652,10 @@ context("records_data_with_correct_font", () => {
       });
 
       it(`Verify the side bar 'Released Date' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_400}`, () => {
+        const releaseDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
         cy.get(`[data-cy="releasedDate"]`)
           .checkStylePropExists({
-            content: "Released Date: 10/2/2022",
+            content: releaseDate,
             props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
           });
       });
