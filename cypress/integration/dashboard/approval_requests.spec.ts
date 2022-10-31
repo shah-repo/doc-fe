@@ -1065,10 +1065,12 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Filter list by STATUS as APPROVED", () => {
+      cy.wait(2000);
       cy.alFilterByStatus({ status: "APPROVED" });
     });
 
     it("Verify filter by STATUS as APPROVED", () => {
+      cy.wait(2000);
       cy.alVerifyFilterByStatus({ status: "APPROVED" });
     });
   });
