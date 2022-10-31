@@ -1168,7 +1168,6 @@ context("LFPO new layout verification", () => {
     });
 
     it("Verify Referenced By,and Release date Item exist or not", () => {
-      cy.pause();
       cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00007");
