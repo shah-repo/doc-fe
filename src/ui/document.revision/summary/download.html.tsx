@@ -1,7 +1,7 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
-import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+// import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
 import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
@@ -56,19 +56,12 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
 
   if (isNewLayout) {
     const isActive = async.asyncState.status === AsyncStatus.Active;
-
     button = renderAsButton
       ? (
-        <StyledButton
-          color="primary"
-          disabled={isActive}
-          data-cy="downloadHtml"
-          onClick={handleClick}
-        >
-          <Text translation="common.download.html" />
-        </StyledButton>
+        <></>
       )
       : (
+
         <StyledMenuListItem disabled={isActive} button alignItems="flex-start">
           <StyledMenuListIcon>
             <DownloadHTMLIcon/>
@@ -92,7 +85,6 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
       />
     );
   }
-
   return (
     <>
       {button}
