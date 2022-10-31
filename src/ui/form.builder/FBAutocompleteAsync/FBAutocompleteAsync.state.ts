@@ -97,7 +97,7 @@ class FBAutocompleteAsyncState extends FBRequest<any, any> {
           ...doc,
           documentRevisions:
             some(doc.documentRevisions, ["status", DocumentRevisionStatus.Released])
-              ? doc.documentRevisions[0] : null,
+              ? doc.documentRevisions : null,
           // the 0th entry is always the released / most recent released version
         })).filter((item) => item.documentRevisions);
       case FBAutocompleteAsyncOption.docRevByDoc:
