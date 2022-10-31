@@ -1156,20 +1156,19 @@ context("LFPO new layout verification", () => {
 
     it("Verify References selection Add Remove", () => {
       const docId = "FM-00001";
+      cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
         cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
       });
-
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-      });
-
+      cy.drClickCreateDocumentWithApiCall();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
         cy.drRemoveReferences({ reference: docId });
       });
     });
 
     it("Verify Referenced By,and Release date Item exist or not", () => {
+      cy.pause();
       cy.verifyReferenceInfo();
       cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
       cy.get("[data-cy='common.revision']").parent().should("contain.text", "LFPO00007");
@@ -1320,7 +1319,9 @@ context("LFPO new layout verification", () => {
   });
 
   context("Fill in the fields and Release", () => {
+
     it("Checked chebox value", () => {
+      cy.cmpTurnOffAutosave();
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
