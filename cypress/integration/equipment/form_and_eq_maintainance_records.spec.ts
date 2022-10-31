@@ -414,7 +414,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify that Approvals field is automatically added", () => {
-      cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+      cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
     });
 
     context("Predefined fields are displayed", () => {
@@ -545,7 +545,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Verify that Approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Import the template", () => {
