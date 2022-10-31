@@ -1666,6 +1666,9 @@ context("LHR & LHRS Flow", () => {
                     cy.drAssignDocumentTo({ username: USERS[2].name });
                   });
                   it("Navigate to Detail Tab", () => {
+                    cy.listLoadingElementShouldNotExist();
+                    cy.progressBarShouldNotExist();
+                    cy.wait(2000);
                     cy.drSelectDetailsTab();
                   });
                   it(`verify operators should have '${USERS[2].name}'`, () => {
@@ -1736,7 +1739,7 @@ context("LHR & LHRS Flow", () => {
             .parent()
             .should(
               "contain.text",
-              moment().tz("America/Los_Angeles").format("YYYY.MM.DD")
+              moment().tz("America/Los_Angeles").format("MM/DD/YYYY")
             );
         });
         it("verify migrate form button should exists or not", () => {
@@ -1869,7 +1872,7 @@ context("LHR & LHRS Flow", () => {
           );
         });
         it("Verify Approval Block is exists or not", () => {
-          cy.get("[data-cy='form.builder.approvals'").should("be.visible");
+          cy.get("[data-cy^='fb-approvals'").should("be.visible");
         });
       });
     });
@@ -1933,7 +1936,7 @@ context("LHR & LHRS Flow", () => {
           .parent()
           .should(
             "contain.text",
-            moment().tz("America/Los_Angeles").format("YYYY.MM.DD")
+            moment().tz("America/Los_Angeles").format("MM/DD/YYYY")
           );
       });
       it("verify migrate form button should exists or not", () => {
@@ -2144,11 +2147,11 @@ context("LHR & LHRS Flow", () => {
     approval status`, () => {
       it(`verify operator '${USERS[2].name}' and Pending status`, () => {
         cy.get("[data-cy='operator-name-1-0']").should("have.text", USERS[2].name);
-        cy.get("[data-cy='operator-status-1-0']").should("have.text", "PENDING");
+        cy.get("[data-cy='operator-status-1-0']").should("have.text", "Pending");
       });
       it(`verify operator '${USERS[3].name}' and Pending status`, () => {
         cy.get("[data-cy='operator-name-1-1']").should("have.text", USERS[3].name);
-        cy.get("[data-cy='operator-status-1-1']").should("have.text", "PENDING");
+        cy.get("[data-cy='operator-status-1-1']").should("have.text", "Pending");
       });
     });
     it("verify MPI/QPI Doc ID, Rev and Title", () => {
@@ -2252,11 +2255,11 @@ context("LHR & LHRS Flow", () => {
      be displayed beside the operator/approver (User 1 and User 2)`, () => {
       it(`verify operator '${USERS[2].name}' and APPROVED status`, () => {
         cy.get("[data-cy='operator-name-1-0']").should("have.text", USERS[2].name);
-        cy.get("[data-cy='operator-status-1-0']").should("have.text", "APPROVED");
+        cy.get("[data-cy='operator-status-1-0']").should("have.text", "Approved");
       });
       it(`verify operator '${USERS[3].name}' and APPROVED status`, () => {
         cy.get("[data-cy='operator-name-1-1']").should("have.text", USERS[3].name);
-        cy.get("[data-cy='operator-status-1-1']").should("have.text", "APPROVED");
+        cy.get("[data-cy='operator-status-1-1']").should("have.text", "Approved");
       });
     });
     context("Start/Accepted/Rejected quantities should be displayed", () => {
@@ -2371,7 +2374,7 @@ context("LHR & LHRS Flow", () => {
           );
         });
         it("Verify Approval Block is exists or not", () => {
-          cy.get("[data-cy='form.builder.approvals'").should("be.visible");
+          cy.get("[data-cy^='fb-approvals'").should("be.visible");
         });
       });
     });
@@ -2436,7 +2439,7 @@ context("LHR & LHRS Flow", () => {
           .parent()
           .should(
             "contain.text",
-            moment().tz("America/Los_Angeles").format("YYYY.MM.DD")
+            moment().tz("America/Los_Angeles").format("MM/DD/YYYY")
           );
       });
       it("verify migrate form button should exists or not", () => {
@@ -2755,7 +2758,7 @@ context("LHR & LHRS Flow", () => {
         context("Operators list: LHR/LHRS owner and User 3 should be displayed", () => {
           it(`verify operators should have '${USERS[1].name}'and status as APPROVED with timestamp`, () => {
             cy.get("[data-cy='operator-name-2-0']").should("have.text", USERS[1].name);
-            cy.get("[data-cy='operator-status-2-0']").should("have.text", "APPROVED");
+            cy.get("[data-cy='operator-status-2-0']").should("have.text", "Approved");
             cy.get("[data-cy='operator-sub-title-2-0']")
               .should(
                 "contain.text",
@@ -2763,7 +2766,7 @@ context("LHR & LHRS Flow", () => {
           });
           it(`verify operators should have '${USERS[3].name}' and status as PENDING`, () => {
             cy.get("[data-cy='operator-name-2-1']").should("have.text", USERS[3].name);
-            cy.get("[data-cy='operator-status-2-1']").should("contain.text", "PENDING");
+            cy.get("[data-cy='operator-status-2-1']").should("contain.text", "Pending");
           });
         });
       });
@@ -2859,7 +2862,7 @@ context("In the Details tab, LHR Step #2 should now have status of Completed wit
     });
     it(`verify operators should have '${USERS[1].name}'and status as APPROVED with timestamp`, () => {
       cy.get("[data-cy='operator-name-2-0']").should("have.text", USERS[1].name);
-      cy.get("[data-cy='operator-status-2-0']").should("have.text", "APPROVED");
+      cy.get("[data-cy='operator-status-2-0']").should("have.text", "Approved");
       cy.get("[data-cy='operator-sub-title-2-0']")
         .should(
           "contain.text",
@@ -2867,7 +2870,7 @@ context("In the Details tab, LHR Step #2 should now have status of Completed wit
     });
     it(`verify operators should have '${USERS[3].name}' and status as PENDING`, () => {
       cy.get("[data-cy='operator-name-2-1']").should("have.text", USERS[3].name);
-      cy.get("[data-cy='operator-status-2-1']").should("contain.text", "APPROVED");
+      cy.get("[data-cy='operator-status-2-1']").should("contain.text", "Approved");
       cy.get("[data-cy='operator-sub-title-2-0']")
         .should(
           "contain.text",
