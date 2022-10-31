@@ -108,7 +108,7 @@ context("Record inline history Flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get(`span[data-cy="form.builder.approvals"]`).should("exist");
       });
 
       it("Add textfield", () => {
@@ -148,6 +148,8 @@ context("Record inline history Flow", () => {
         cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddField();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release document", () => {
@@ -170,6 +172,7 @@ context("Record inline history Flow", () => {
       cy.recSelectRecordFormFromMultiSelect({
         recordType: "History Test Record",
       });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     context("Fill in document attributes", () => {
@@ -183,47 +186,36 @@ context("Record inline history Flow", () => {
 
       it("Enter text 'First entry' in textfield for inline", () => {
         SystemRequirement("REQ-1080");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType("First entry");
-          cy.unClick();
-        });
+        cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType("First entry");
+        cy.unClick();
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check 'Red' and 'Green' value on checkbox", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.fbSelectCheckboxValue( "Red", "Green" );
-          cy.unClick();
-        });
+        cy.fbSelectCheckboxValue( "Red", "Green" );
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'One' value on radiobutton", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.fbSelectRadioButtonValue({ value: "One" });
-          cy.unClick();
-        });
+        cy.fbSelectRadioButtonValue({ value: "One" });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'SelectOne' value on select field", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-          cy.fbSelectFieldValue({ value: "SelectOne" });
-          cy.unClick();
-        });
+        cy.fbSelectFieldValue({ value: "SelectOne" });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select approver for first inline", () => {
         SystemRequirement("REQ-4340");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-          cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
-          cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
-        });
-      });
-
-      it("Save record", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
+        cy.get("[name*=\"fb-ia-inline-field\"] input").autocompleteSelect(USERS[2].email);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -251,6 +243,7 @@ context("Record inline history Flow", () => {
             cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
             cy.unClick();
             cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
         });
 
@@ -280,33 +273,31 @@ context("Record inline history Flow", () => {
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
+          cy.pause();
           cy.fbUnSelectCheckboxValue( "Red" );
           cy.progressBarShouldNotExist();
           cy.fbUnSelectCheckboxValue( "Green" );
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Check 'Blue' value on checkbox", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.fbSelectCheckboxValue( "Blue" );
-            cy.unClick();
-          });
+          cy.fbSelectCheckboxValue( "Blue" );
           cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Select 'Two' value on radiobutton", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.fbSelectRadioButtonValue({ value: "Two" });
-            cy.unClick();
-          });
+          cy.fbSelectRadioButtonValue({ value: "Two" });
           cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Select 'SelectTwo' value on select field", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.fbSelectFieldValue({ value: "SelectTwo" });
-            cy.unClick();
-          });
+          cy.fbSelectFieldValue({ value: "SelectTwo" });
+          cy.unClick();
           cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Save record", () => {
@@ -331,6 +322,7 @@ context("Record inline history Flow", () => {
 
         it(`Check record status is in ${STATUS_TYPES_LABEL.DRAFT}`, () => {
           cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+          cy.pause();
         });
       });
 
