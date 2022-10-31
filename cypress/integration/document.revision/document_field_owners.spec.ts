@@ -110,7 +110,7 @@ context("Document Field Owners Test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Click on 'Save' button", () => {
+    it("Click on 'Create Document' button", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
@@ -154,7 +154,11 @@ context("Document Field Owners Test", () => {
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
       cy.drCreateNewDocumentFromForm();
-      cy.wait(5000);
+    });
+
+    it("Change build type to 'R&D'", () => {
+      cy.unClick();
+      cy.get(`[value="R&D"]`).check();
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
@@ -206,11 +210,10 @@ context("Document Field Owners Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='text-field-for']").arrowType("Test First Field");
-    });
-
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^='text-field-for']").arrowType("Test First Field");
+        cy.unClick();
+      });
     });
 
     it(`Logout as current user`, () => {
@@ -234,11 +237,10 @@ context("Document Field Owners Test", () => {
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
-    });
-
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
+        cy.unClick();
+      });
     });
 
     it("Check field from other colaborator is disabled", () => {
@@ -258,7 +260,10 @@ context("Document Field Owners Test", () => {
 
   context("Check fields are disabled for user that is not field owner, and change owner of document", () => {
     it("Navigate to records list", () => {
-      cy.navigToRecords();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostOrPatchDocRev, CyRoutes.GetDocRevStatusesCategory], () => {
+        cy.navigToRecords();
+      });
+      cy.wait(2000);
     });
 
     it("Filter document by id and status, and select it", () => {
@@ -288,7 +293,10 @@ context("Document Field Owners Test", () => {
     });
 
     it("Navigate to records list", () => {
-      cy.navigToRecords();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostOrPatchDocRev, CyRoutes.GetDocRevStatusesCategory], () => {
+        cy.navigToRecords();
+      });
+      cy.wait(2000);
     });
 
     it("Filter document by id and status, and select it", () => {
@@ -304,7 +312,9 @@ context("Document Field Owners Test", () => {
     });
 
     it("Add Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
+      });
     });
 
     it("Submit for Approval", () => {
