@@ -31,7 +31,6 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   const [URL, setURL] = React.useState<string>("");
   const classes = styles({ isPDF: true });
-
   const action = useActionCreator(attachmentsActions.getAssetUrl);
   const async = useAsync<AttachmentDownloadResponse>({
     onSuccess: (downloadInfo) => {
@@ -60,7 +59,6 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
         <></>
       )
       : (
-
         <StyledMenuListItem disabled={isActive} button alignItems="flex-start">
           <StyledMenuListIcon>
             <DownloadHTMLIcon/>
@@ -84,6 +82,7 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
       />
     );
   }
+
   return (
     <>
       {button}
