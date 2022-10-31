@@ -411,13 +411,23 @@ context("Record inline Flow", () => {
           expect(el).match(/Attachments/);
           expect(el).match(/image.jpg/);
 
+          expect(el).match(/APPROVALS\nApprovers/);
+
           expect(el).match(/Textfield for inline/);
 
           expect(el).match(/Inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
+          expect(el).match(/Checkbox/);
+
+          expect(el).match(/1/);
+
+          expect(el).match(/2/);
+
+          expect(el).match(/3/);
+
+          expect(el).match(/TEXT FIELD/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -441,11 +451,9 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
+          expect(el).match(/Second textfield for inline/);
+
           expect(el).match(/Second inline field\nInline approval pending/);
-
-          expect(el).match(/At least one approval required/);
-
-          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -629,13 +637,23 @@ context("Record inline Flow", () => {
           expect(el).match(/Attachments/);
           expect(el).match(/image.jpg/);
 
+          expect(el).match(/APPROVALS\nApprovers/);
+
           expect(el).match(/Textfield for inline/);
 
           expect(el).match(/Inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
+          expect(el).match(/Checkbox/);
+
+          expect(el).match(/1/);
+
+          expect(el).match(/2/);
+
+          expect(el).match(/3/);
+
+          expect(el).match(/TEXT FIELD/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -659,11 +677,11 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
+          expect(el).match(/Second textfield for inline/);
+
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
-
-          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -941,17 +959,21 @@ context("Record inline Flow", () => {
 
           expect(el).match(/Textfield for inline\nFirst entry/);
 
-          expect(el).match(/Second textfield for inline\nFirst entry/);
-
           tmpRegex = new RegExp(`Checkbox`);
           expect(el).match(tmpRegex);
 
+          expect(el).match(/1/);
+
+          expect(el).match(/2/);
+
+          expect(el).match(/3/);
+
+          expect(el).match(/Second textfield for inline\nFirst entry/);
+
+          expect(el).match(/WIP/);
+
           tmpRegex = RegExp( `${USERS[3].name}`, "gi" );
           expect(el).not.match(tmpRegex);
-
-          expect(el).not.match(/TEXT FIELD/);
-
-          expect(el).match(/1 2 3\nWIP/);
 
           tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
@@ -964,7 +986,7 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
 
-          tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| PENDING`);
+          tmpRegex = new RegExp(`INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| DRAFT`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`SECOND INLINE FIELD\\n${USERS[2].name} \\- .*@.* \\| DRAFT`);
