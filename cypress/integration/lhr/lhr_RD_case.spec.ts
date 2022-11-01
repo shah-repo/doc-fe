@@ -762,6 +762,9 @@ context("LHR: RD case specs", () => {
 
       it("Select 'LHRt' document type", () => {
         cy.drSelectDocumentType({ documentType: "LHR Template" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -923,6 +926,9 @@ context("LHR: RD case specs", () => {
       ], () => {
         cy.visit(lhrDocUrl1);
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Add approval", () => {
