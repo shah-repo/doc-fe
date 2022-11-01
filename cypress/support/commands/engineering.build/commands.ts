@@ -157,11 +157,11 @@ Cypress.Commands.add("ebApprove", () => {
 });
 
 Cypress.Commands.add("lhrApprove", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
-    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick({ force: true });
   });
   cy.checkToastMessage({ exists: false });
   cy.saveBarShouldNotExist();
