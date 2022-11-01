@@ -381,6 +381,9 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: MPI });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select 'Numeric' revision stage", () => {
