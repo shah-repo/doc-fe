@@ -150,7 +150,7 @@ context("Autocomplete 'Parts' test", () => {
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
       cy.get(`input[type="checkbox"][value="3"]`).first().check();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -297,12 +297,15 @@ context("Autocomplete 'Parts' test", () => {
 
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/Checkbox\nTEXT FIELD/);
-
         expect(el).match(/Make vs Buy\nPrimary Supplier\nOther Suppliers/);
 
-        tmpRegex = new RegExp( `Traceability required\nSerialized\n Yes No\n1 2 3\nTraceability required`, "gi" );
-        expect(el).not.match(tmpRegex);
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp( `Traceability required\nSerialized\n.*Yes.*No\nSelect serialization`, "gi" );
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp( `IQC Required\nTraceability required\nIQC Required`, "gi" );
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Draft/);
 
@@ -325,10 +328,9 @@ context("Autocomplete 'Parts' test", () => {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Select serialization/);
+        expect(el).match(/Limited Shelf Life\nFAI Required/);
 
-        // eslint-disable-next-line max-len
-        expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required\nIQC Required\nLimited Shelf Life\nFAI Required/);
+        expect(el).match(/Checkbox\nTEXT FIELD\nLimited Shelf Life\nFAI Required\n1 2 3/);
 
         expect(el).match(/Draft/);
 
@@ -517,12 +519,15 @@ context("Autocomplete 'Parts' test", () => {
 
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/Checkbox\nTEXT FIELD/);
-
         expect(el).match(/Make vs Buy\nPrimary Supplier\nOther Suppliers/);
 
-        tmpRegex = new RegExp( `Traceability required\nSerialized\n Yes No\n1 2 3\nTraceability required`, "gi" );
-        expect(el).not.match(tmpRegex);
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp( `Traceability required\nSerialized\n.*Yes.*No\nSelect serialization`, "gi" );
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp( `IQC Required\nTraceability required\nIQC Required`, "gi" );
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
 
@@ -545,10 +550,9 @@ context("Autocomplete 'Parts' test", () => {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Select serialization/);
+        expect(el).match(/Limited Shelf Life\nFAI Required/);
 
-        // eslint-disable-next-line max-len
-        expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required\nIQC Required\nLimited Shelf Life\nFAI Required/);
+        expect(el).match(/Checkbox\nTEXT FIELD\nLimited Shelf Life\nFAI Required\n1 2 3/);
 
         expect(el).match(/Released/);
 
@@ -653,7 +657,7 @@ context("Autocomplete 'Parts' test", () => {
         cy.get("ul[role=listbox]>li").contains("Select Provided Serialization").arrowClick();
       });
 
-      it("Save document", () => {
+      it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
@@ -790,8 +794,6 @@ context("Autocomplete 'Parts' test", () => {
 
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/Checkbox/);
-
           expect(el).match(/Make vs Buy\nMake\n/);
 
           // eslint-disable-next-line max-len
@@ -799,7 +801,8 @@ context("Autocomplete 'Parts' test", () => {
 
           expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required/);
 
-          tmpRegex = new RegExp( `IQC Required\nLimited Shelf Life\nFAI Required\n1 2 3\nTraceability required`, "gi" );
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `Checkbox\nTraceability required\nIQC Required\nLimited Shelf Life\nFAI Required\n1 2 3`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/Draft/);
@@ -847,6 +850,7 @@ context("Autocomplete 'Parts' test", () => {
       it("Approve and release FORM document", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.fbClickButton({ el: "updateRecord" });
         });
       });
 
@@ -863,7 +867,7 @@ context("Autocomplete 'Parts' test", () => {
         cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
           arId = $lnEl.text();
         });
-        cy.sendToEmail();
+        cy.sendToEmailFromHeader();
       });
 
       it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -990,8 +994,6 @@ context("Autocomplete 'Parts' test", () => {
 
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/Checkbox/);
-
           expect(el).match(/Make vs Buy\nMake\n/);
 
           // eslint-disable-next-line max-len
@@ -999,7 +1001,8 @@ context("Autocomplete 'Parts' test", () => {
 
           expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required/);
 
-          tmpRegex = new RegExp( `IQC Required\nLimited Shelf Life\nFAI Required\n1 2 3\nTraceability required`, "gi" );
+          // eslint-disable-next-line max-len
+          tmpRegex = new RegExp( `Checkbox\nTraceability required\nIQC Required\nLimited Shelf Life\nFAI Required\n1 2 3`, "gi" );
           expect(el).match(tmpRegex);
 
           expect(el).match(/Released/);

@@ -44,9 +44,9 @@ context("Add/Remove Training docs from Training Curriculum", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -55,8 +55,8 @@ context("Add/Remove Training docs from Training Curriculum", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -64,7 +64,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -282,13 +282,17 @@ context("Add/Remove Training docs from Training Curriculum", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -343,7 +347,13 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
+    });
+
+    it("Click on Create document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Release the document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
@@ -447,9 +457,12 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
-      cy.wait(2000);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Navigate to Overview tab", () => {
@@ -457,11 +470,13 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Save training", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
     });
 
     it("Click Submit for Approval", () => {
@@ -518,12 +533,12 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
     });
 
-    it(`${USERS[1].name} with timestamp on 'Completed on' column for 'released doc1' should be present`, () => {
+    it(`${USERS[11].name} with timestamp on 'Completed on' column for 'released doc1' should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
     });
@@ -536,6 +551,10 @@ context("Add/Remove Training docs from Training Curriculum", () => {
   context("Revise training", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Find training 'test training title'", () => {
@@ -565,7 +584,10 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
     });
 
     it("Navigate to Overview tab", () => {
@@ -573,11 +595,18 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+    });
+
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Click Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Click Approve", () => {
@@ -594,38 +623,38 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Training record for doc1 should be as it is", () => {
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
-      cy.trLandingPageUsername({ username: USERS[2].name });
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[2].name).and("contain", "Pending");
+        .and("contain", USERS[12].name).and("contain", "Pending");
     });
 
     it("Training record for doc3", () => {
       cy.trLandingPageDocId({ docId: releasedDoc3Id });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc3Id)
-        .and("contain", USERS[1].name).and("contain", "Pending");
-      cy.trLandingPageUsername({ username: USERS[2].name });
+        .and("contain", USERS[11].name).and("contain", "Pending");
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc3Id)
-        .and("contain", USERS[2].name).and("contain", "Pending");
+        .and("contain", USERS[12].name).and("contain", "Pending");
     });
 
     it("Training record for doc2", () => {
       cy.trLandingPageDocId({ docId: releasedDoc2Id });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc2Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
   });
 
-  context(`Verify training notification for ${USERS[2].name}`, () => {
+  context(`Verify training notification for ${USERS[12].name}`, () => {
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[12].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
