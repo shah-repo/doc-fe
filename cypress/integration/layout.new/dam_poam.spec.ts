@@ -1,6 +1,7 @@
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
 
@@ -12,6 +13,11 @@ const userOne = USERS[2].name;
 const userTwo = USERS[3].name;
 const groupOne = "Developers";
 const groupTwo = "Company Admin";
+
+const ncoFormName = "NCO Form";
+const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
+const newCompanyName = "New company " + randomNumberForCompany;
+const newCompanyAbbr = "NC-" + randomNumberForCompany;
 
 const tablePOAM = [
   ["Level 1", 5000, "Everyone"],
@@ -54,7 +60,7 @@ context("DAM and POAM", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [NCORecord],
           },
           sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -71,6 +77,160 @@ context("DAM and POAM", () => {
           USER: USERS[1],
           employeeId: adminEmployee.id,
         });
+      });
+    });
+
+    context("Create form for NCO document", () => {
+      it("Navigates to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Clicks on 'create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it(`Enters title '${ncoFormName}'`, () => {
+        cy.drEnterDocumentTitle({ name: ncoFormName });
+      });
+
+      it("Enters description 'New NCO Form description'", () => {
+        cy.drEnterDocumentDescription({ description: "New NCO Form description" });
+      });
+
+      it("Select 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'New Company Record' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "New Company Record" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Click on 'Save' button", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("'Approve and Release' the document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+    context("Create NCO document and add required jsons and company details", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Select released NCO Form", () => {
+        cy.drFilterDocListByNameAndStatus({ title: ncoFormName, status: "Released" });
+      });
+
+      it("Create new document from form", () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Enters title 'New Company'", () => {
+        cy.drEnterDocumentTitle({ name: "New Company" });
+      });
+
+      it("Enters description 'New Company description'", () => {
+        cy.drEnterDocumentDescription({ description: "New Company description" });
+      });
+
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+      });
+
+      it(`Enters company name '${newCompanyName}'`, () => {
+        cy.get("[name^=company-name-]").arrowType(newCompanyName, { force: true });
+      });
+
+      it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
+        cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
+      });
+
+      it(`Enters company email '${USERS[11].email}'`, () => {
+        cy.get("[name^=company-admin-email-]").arrowType(USERS[11].email, { force: true });
+      });
+
+      it("Select 'Yes' for 'Approved DAM json is used'", () => {
+        cy.get(`[data-cy="Approved DAM json is used"]`).scrollIntoView();
+        cy.get("[name*='approved-dam-json-is-used']").eq(0).should("have.value", "Yes").click();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Upload DAM JSON", () => {
+        cy.get(`[data-cy="DAM JSON "]`).scrollIntoView();
+        cy.atchUploadDOMJSONForNCO({ fileName: "po_dam.json", queue: 0 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Yes' for 'Approved Page Details json is used'", () => {
+        cy.get(`[data-cy="Approved Page Details json is used"]`).scrollIntoView();
+        cy.get(`[name*="approved-page-details-json-is-used-"]`).eq(0)
+          .should("have.value", "Yes").arrowClick().wait(500);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Upload Page Details JSON", () => {
+        cy.get(`[data-cy="Page Details JSON"]`).scrollIntoView();
+        cy.fixture("PageDetails.json").then((fileContent) => {
+          cy.get(`[id^="fb-attachment-field-page-details-json-"]`).eq(0).attachFile({
+            fileContent,
+            fileName: "PageDetails.json",
+            mimeType: "*",
+            filePath: `fixtures/PageDetails.json`,
+          });
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Yes' for 'Approved Navigation json is used'", () => {
+        cy.get(`[data-cy="Approved Navigation json is used"]`).scrollIntoView();
+        cy.get("[name*='approved-navigation-json-is-used-']").eq(0)
+          .should("have.value", "Yes").click();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Upload Navigation JSON", () => {
+        cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Upload Users List JSON", () => {
+        cy.get(`[data-cy="Users List"]`).scrollIntoView();
+        cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Upload logo picture 'image.jpg'", () => {
+        cy.get(`[data-cy^="Client\\'s Logo (max 180px x 75px)"]`).scrollIntoView();
+        cy.get("[data-cy='albumMediaButton']").eq(0).arrowClick();
+        cy.pmUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click on 'Save' button", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release document for create company", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -377,7 +537,7 @@ context("DAM and POAM", () => {
 
         it("Select form to be migrated", () => {
           cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
-          cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+          cy.get("[id^='react-select']").contains("FM-00003").arrowClick();
         });
 
         FIELD_HEADERS.forEach( (fieldHeader, i) => {
@@ -396,7 +556,7 @@ context("DAM and POAM", () => {
         });
 
         it("Verify form info should have migrated form 'FM-00003'", () => {
-          cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+          cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
         });
 
         it("Verify prefix value 'DT' after migration", () => {
@@ -548,12 +708,12 @@ context("DAM and POAM", () => {
           cy.isTabActive({ name: "overview", index: 0 });
         });
 
-        xit("Verify Training required exist", () => {
-          cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        it("Verify Training required exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Training Required").should("exist");
         });
 
-        xit("Verify Attachments exist", () => {
-          cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+        it("Verify Attachments exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Attachments").should("exist");
         });
 
         it("Verify that Form Options should not appear for this tab", () => {
@@ -615,14 +775,6 @@ context("DAM and POAM", () => {
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
           cy.verifyReferencesOtherInfo();
-        });
-
-        xit("Open migrate form tab", () => {
-          cy.drSelectMigrateFormTab();
-        });
-
-        xit("Select migration form", () => {
-          cy.get("[data-cy=\"field-changeDocumentForm\"]").eq(0).arrowClick();
         });
       });
 
@@ -1030,7 +1182,7 @@ context("DAM and POAM", () => {
 
           it("Select form to be migrated", () => {
             cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
-            cy.get("[id^='react-select']").contains("FM-00005").arrowClick();
+            cy.get("[id^='react-select']").contains("FM-00006").arrowClick();
           });
 
           FIELD_HEADERS1.forEach( (fieldHeader1, i) => {
@@ -1048,8 +1200,8 @@ context("DAM and POAM", () => {
             cy.drSelectMatrixDetailsTab();
           });
 
-          it("Verify form info should have migrated form 'FM-00005'", () => {
-            cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00005");
+          it("Verify form info should have migrated form 'FM-00006'", () => {
+            cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00006");
           });
 
           it("Verify Level 1 Name  value  after migration", () => {
@@ -1220,12 +1372,12 @@ context("DAM and POAM", () => {
           cy.isTabActive({ name: "overview", index: 0 });
         });
 
-        xit("Verify Training required exist", () => {
-          cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        it("Verify Training required exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Training Required").should("exist");
         });
 
-        xit("Verify Attachments exist", () => {
-          cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+        it("Verify Attachments exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Attachments").should("exist");
         });
 
         it("Verify that Form Options should not appear for Overview tab", () => {
