@@ -2,13 +2,12 @@ import { Grid } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import * as React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { SM } from "../../../../App";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
-import ExportARToEmail from "../../export.email/ExportAREmail";
 import { RouteParamsCreate } from "../../utils/types";
-import { formIdContext } from "./AssessmentForm.presenter";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
 
 interface OwnProps {
@@ -16,6 +15,8 @@ interface OwnProps {
   asyncState: AsyncState;
 }
 type Props = OwnProps & RouteComponentProps<RouteParamsCreate>;
+
+const formIdContext = React.createContext<string | undefined>(undefined);
 
 const DocRevActions: React.FunctionComponent<Props> = ({
   changeRequest,
@@ -26,7 +27,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   const documentTypeId = match.params.documentTypeId;
   const { workspaceState, formState } = FB.useStores();
   const formik = useFormikContext();
-
+  const isNewLayout = SM.isNewCRLayout;
 
   function setFBValue() {
     switch (workspaceState?.getMode()) {
@@ -51,18 +52,18 @@ const DocRevActions: React.FunctionComponent<Props> = ({
 
   return (
     <Grid
-      container={true}
+      container
       alignItems="center"
       justify="flex-end"
       direction="row"
     >
       <SubmitButton
         id="submit"
+        showNewButton={isNewLayout}
         asyncState={asyncState}
         onClick={onFormClick}
         dataCy={label}
         label={label} />
-      {changeRequest?.id && <ExportARToEmail id={changeRequest?.id}/>}
       <AssessmentFormControlsContainer changeRequest={changeRequest} />
     </Grid>
   );

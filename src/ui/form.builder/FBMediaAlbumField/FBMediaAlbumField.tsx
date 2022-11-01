@@ -1,5 +1,6 @@
 import React from "react";
 import { FBInput, FBMediaAlbum, FBMediaAlbumFieldProps, FBMediaQR, FBProvider } from "..";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBMediaAlbumField } from "./FBMediaAlbumField.wrap";
 
 const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
@@ -21,7 +22,8 @@ const FBMediaAlbumField: React.FunctionComponent<FBMediaAlbumFieldProps> = ({
   gutter,
 }) => (
   <FBProvider {...{ [`mediaAlbumFieldState_${name}`]: mediaAlbumFieldState }} >
-    <FBInput {...{ name, label, gutter, index, editorConfig, autosave }} type="mediaalbum">
+    <FBInput {...{ name, label, gutter, index, editorConfig, autosave }}
+      type="mediaalbum" labelProps={FBFontStyle.labelProps}>
       {mode !== "qr" && (
         <FBMediaAlbum {...{
           collection,

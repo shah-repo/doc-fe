@@ -20,11 +20,12 @@ const FBDialog: React.FunctionComponent<FBDialogProps> = ({
   content,
   actions,
   maxWidth,
+  classes,
 }) => (
   <Dialog
     fullWidth={true}
     fullScreen={useMediaQuery(useTheme().breakpoints.down(maxWidth || "sm"))}
-    {...{ open, maxWidth }}
+    {...{ open, maxWidth, classes }}
   >
     <DialogTitle>
       <Box display="flex" flexDirection="row-reverse">

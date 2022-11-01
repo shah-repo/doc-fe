@@ -4,10 +4,13 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -31,11 +34,6 @@ let downloadFile;
 let dateAfterEmailShouldArrive;
 let fileId;
 let arId;
-
-const dateOffset = (5 * 1000);
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-
 
 context("Records flow", () => {
   before(() => {
@@ -65,13 +63,7 @@ context("Records flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-              },
+              RecordDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -256,33 +248,35 @@ context("Records flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Add Checkbox group", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-        cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
-        cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-        cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-        cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+        cy.fbGroupOptions("1", "2", "3");
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+        cy.fbAddNewFieldButton();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-        cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("input[value^=\"visibility\"]").check();
         cy.get(`input[name="validators.required_if_in"]`).check();
         cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-        cy.get(`input[type="checkbox"][value="3"]`).last().check();
+        cy.get(`input[type="checkbox"][value="3"]`).first().check();
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -299,13 +293,14 @@ context("Records flow", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
-      it("Verify form Draft status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+      it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.arCheckTitleInEditableAndMatches({ name: "Lot History Record" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           recFormId = $docIdElement.text();
         });
         cy.sendToEmail();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
 
       it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -317,28 +312,18 @@ context("Records flow", () => {
 
     context("Verify email for recordform notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recFormId}`,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         });
       });
 
@@ -369,8 +354,7 @@ context("Records flow", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${recFormId}${filetime}_draft.zip`;
+            downloadFile  =  `${recFormId}${fileTimeFormat}_draft.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -452,7 +436,7 @@ context("Records flow", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -475,7 +459,7 @@ context("Records flow", () => {
 
           expect(el).match(/Draft/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Effective Date: N/A`, "gi");
@@ -491,8 +475,8 @@ context("Records flow", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
 
-      it("Verify form Released status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: "Lot History Record" });
         cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
           recFormId = $docIdElement.text();
@@ -501,6 +485,7 @@ context("Records flow", () => {
           arId = $lnEl.text();
         });
         cy.sendToEmail();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
 
       it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -512,28 +497,18 @@ context("Records flow", () => {
 
     context("Verify email for record form notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recFormId}`,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
-            emailsFromInbox = emails;
-            expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-            downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+          emailsFromInbox = emails;
+          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
         });
       });
 
@@ -564,8 +539,7 @@ context("Records flow", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${recFormId}${filetime}_rel.zip`;
+            downloadFile  =  `${recFormId}${fileTimeFormat}_rel.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -648,10 +622,10 @@ context("Records flow", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 2/);
@@ -665,7 +639,7 @@ context("Records flow", () => {
           expect(el).match(tmpRegex);
 
           expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
-          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${docRelDate}\nReleased`, "gi" );
+          tmpRegex = new RegExp( `${arId}1N\\/A \\(Numeric Release\\)${pdfDocRelDate}\nReleased`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -673,10 +647,10 @@ context("Records flow", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Effective Date: ${docRelDate}`, "gi");
+          tmpRegex = new RegExp(`Effective Date: ${pdfDocRelDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 2 of 2/);
@@ -717,14 +691,14 @@ context("Records flow", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Verify approvals field is automatically added", () => {
-        SystemRequirement("REQ-0980");
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
-
       context("Creates document and releases it", () => {
         it("Click create document after filling document", () => {
           cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Verify approvals field is automatically added", () => {
+          SystemRequirement("REQ-0980");
+          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
         });
 
         it("Approve and Release document", () => {
@@ -758,12 +732,17 @@ context("Records flow", () => {
       cy.recCreateRecordFromLandingPage();
     });
 
-    it("Select 'Approval Record' form", () => {
-      cy.recSelectRecordFormFromMultiSelect({ recordType: "Record Document", recordForm: "Approval Record" });
+    it("Select 'Lot History Record' form", () => {
+      cy.get(`div[data-cy^="field-selectType"]`).click().focused()
+        .arrowType("Record Document{downarrow}{enter}", { force: true });
+      cy.unClick();
+      cy.get("[data-cy=\"field-selectForm\"]").click().focused()
+        .arrowType("Lot History Record{downarrow}{enter}", { force: true });
     });
 
     it("Check if revision is in alpha revision stage", () => {
       SystemRequirement("REQ-1030");
+      cy.drClickRevisionsSidePanel();
       cy.recCheckRevisionStage({ stage: "Revision A" });
     });
   });
@@ -776,7 +755,6 @@ context("Records flow", () => {
 
     it("Upload attachement picture 'image.jpg'", () => {
       cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
-      cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -785,15 +763,15 @@ context("Records flow", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
-    it("Add first Approver'", () => {
+    it(`Add first Approver as ${USERS[1].name}`, () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Add 2nd Approver'", () => {
+    it(`Add 2nd Approver as ${USERS[3].name}`, () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
     });
 
-    it("Remove first Approver'", () => {
+    it(`Remove first Approver as ${USERS[1].name}`, () => {
       cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick();
     });
 
@@ -815,7 +793,7 @@ context("Records flow", () => {
     });
 
     it("Get the document Id", () => {
-      cy.arVerifyStatus({ status: "In Review" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });
@@ -825,7 +803,7 @@ context("Records flow", () => {
       cy.authLogout();
     });
 
-    it("Login user to dashboard", () => {
+    it(`Login user ${USERS[3].name} as to dashboard`, () => {
       cy.authLoginToDashboard({ USER: USERS[3], employeeId: thirdEmployee.id });
     });
 
@@ -863,7 +841,7 @@ context("Records flow", () => {
     });
 
     it("Save Record'", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check doc WIP status and click on Send To Email", () => {
@@ -872,6 +850,7 @@ context("Records flow", () => {
       cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
     });
 
@@ -884,28 +863,19 @@ context("Records flow", () => {
 
   context("Verify email for WIP Approval Record notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${recDocId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
@@ -937,8 +907,7 @@ context("Records flow", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${recDocId}${filetime}_WIP.zip`;
+          downloadFile  =  `${recDocId}${fileTimeFormat}_WIP.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -1012,10 +981,10 @@ context("Records flow", () => {
 
         expect(el).match(/WIP/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 1/);
@@ -1035,13 +1004,14 @@ context("Records flow", () => {
       cy.ebApprove();
     });
 
-    it("Check doc Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "Approval Record title" });
       cy.drGetDocIdElementFromUI().should("contain.text", "RD-").then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
       });
-      cy.sendToEmail();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.sendToEmailFromHeader();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -1052,29 +1022,20 @@ context("Records flow", () => {
 
     context("Verify email for Released Approval Record notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${recDocId}`,
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          include_body: true,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+          .then((emails) => {
             emailsFromInbox = emails;
             expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
             downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
+          });
       });
 
       it("Verify the emails that should be received", () => {
@@ -1105,8 +1066,7 @@ context("Records flow", () => {
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
           if (res.body !== "") {
             downloadUrl = res.body.url;
-            const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-            downloadFile  =  `${recDocId}${filetime}_rel.zip`;
+            downloadFile  =  `${recDocId}${fileTimeFormat}_rel.zip`;
             cy.downloadFile({
               url: downloadUrl,
               directory: CONFIG.DOWNLOADS_DIR,
@@ -1168,7 +1128,7 @@ context("Records flow", () => {
           tmpRegex = new RegExp(`${USERS[1].name} \\- .*@.*`);
           expect(el).not.match(tmpRegex);
 
-          tmpRegex = new RegExp(`APPROVALS\\n${USERS[2].name} \\- .*@.* \\| APPROVED \\| ${docRelDate}`);
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[2].name} \\- .*@.* \\| APPROVED \\| ${pdfDocRelDate}`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`Checkbox\\n1 2 3`);
@@ -1180,10 +1140,10 @@ context("Records flow", () => {
 
           expect(el).match(/Released/);
 
-          tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${footerDate}`, "gi");
+          tmpRegex = new RegExp(`Form Info: FM-00002, Revision 1, ${pdfFooterDate}`, "gi");
           expect(el).match(tmpRegex);
 
           expect(el).match(/Page 1 of 1/);
@@ -1196,7 +1156,7 @@ context("Records flow", () => {
 
     it("Check if approved date exists", () => {
       SystemRequirement("REQ-1010");
-      cy.get("[id=\"Presenter-FBWorkspace\"]").contains(currentDate);
+      cy.get("[data-cy^=\"approve\"]").contains(currentDate);
     });
 
     context("Check for Landing page columns and values", () => {
@@ -1211,11 +1171,11 @@ context("Records flow", () => {
       it("Check for Landing page default columns", () => {
         SystemRequirement("REQ-2740");
         cy.filterCheckHeaderValues("ID",
-          "Revision", "State",
-          "Title",
-          "Owner",
-          "Released Date",
-          "Form ID");
+          "REVISION", "STATE",
+          "TITLE",
+          "OWNER",
+          "RELEASED DATE",
+          "FORM ID");
       });
     });
 

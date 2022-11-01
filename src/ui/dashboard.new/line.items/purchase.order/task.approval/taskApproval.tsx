@@ -149,7 +149,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <StyledListItem button onMouseEnter={onMouseHoverListItem}>
+      <StyledListItem button onMouseEnter={onMouseHoverListItem} className={classes.buttoncursor} disableRipple>
         <ListItemAvatar>
           {docRevOwnerAvatar ? (
             <Avatar
@@ -245,6 +245,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <RejectIcon
                   data-cy="transition-reject"
                   onMouseEnter={onMouseHoverRejectIcon}
+                  className={classes.cursorPointer}
                 />
               )}
               {rejectHover && (
@@ -257,6 +258,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     data-cy="transition-reject"
                     onClick={handleRejectClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -266,6 +268,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                 <ApproveIcon
                   data-cy="transition-approve"
                   onMouseEnter={onMouseHoverApproveIcon}
+                  className={classes.cursorPointer}
                 />
               )}
               {approveHover && (
@@ -278,13 +281,14 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     data-cy="transition-approve"
                     onClick={handleApproveClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
             </span>
             {!pinned && (
               <span className={classes.actionIcon}>
-                {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+                {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
                 {pinHover && (
                   <StyleTooltip
                     title={<Text translation="common.pin" />}
@@ -294,6 +298,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                     <PinSolidIcon
                       onClick={handlePinClick}
                       onMouseLeave={onMouseLeaveActionIcons}
+                      className={classes.cursorPointer}
                     />
                   </StyleTooltip>
                 )}
@@ -309,6 +314,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               </span>
@@ -325,6 +331,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
               <PinSolidIcon
                 onClick={handleUnPinClick}
                 onMouseLeave={onMouseLeaveActionIcons}
+                className={classes.cursorPointer}
               />
             </StyleTooltip>
           </span>

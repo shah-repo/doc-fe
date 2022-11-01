@@ -40,6 +40,7 @@ declare global {
       grpAssignUserDialog(params: { name: string }): Chainable;
       grpRemoveUserDialog(params: { name: string }): Chainable;
       grpSaveGroup(): Chainable;
+      grpCancelGroup(): Chainable;
       grpSaveGroupPatch(): Chainable;
       grpSelectGroupWithoutClosingDialog(params: { name: string }): Chainable;
       grpSelectGroup(params: { name: string }): Chainable;
@@ -62,6 +63,30 @@ declare global {
         payload: any;
         employeeId: string;
         sessionId: string;}): Chainable<Subject>;
+      grpEditAddMembers(...list: string[]): Chainable<Subject>;
+      grpEditGroupName(params: { name: string }): Chainable;
+      grpEditRemoveMembers(...list: string[]): Chainable<Subject>;
+      grpEditAddPermissions(...list: string[]): Chainable<Subject>;
+      grpEditRemovePermissions(...list: string[]): Chainable<Subject>;
+      grpEditAddTags(...list: string[]): Chainable<Subject>;
+      grpEditRemoveTags(...list: string[]): Chainable<Subject>;
+      grpEditAddParentGroups(...list: string[]): Chainable<Subject>;
+      grpEditRemoveParentGroups(...list: string[]): Chainable<Subject>;
+      grpVerifyHistoryButton(): Chainable;
+      grpHistoryClickOpenButton(): Chainable;
+      grpHistoryVerifyAddedGroup(params: {name: string}): Chainable;
+      grpHistoryVerifyAddedMember(...list: string[]): Chainable<Subject>;
+      grpHistoryVerifyAddedPermissions(...list: string[]): Chainable<Subject>;
+      grpHistoryVerifyAddedTags(...list: string[]): Chainable<Subject>;
+      grpHistoryVerifyAddedParentGroups(...list: string[]): Chainable<Subject>;
+      grpHistoryVerifyUpdatedGroup(params: {groupName: string}): Chainable;
+      grpHistoryVerifyGroupNameUpdated(params: {oldGroupName: string; newGroupName: string}): Chainable;
+      grpHistoryVerifyRemovedMember(...list: string[]): Chainable<Subject>;
+      grpHistoryVerifyRemovedPermissions(...list: string[]): Chainable<Subject>;
+      grpHistoryVerifyRemovedTags(...list: string[]): Chainable<Subject>;
+      grpHistoryVerifyRemovedParentGroups(...list: string[]): Chainable<Subject>;
+      grpHistoryVerifyRecordsCount(params: {records: number}): Chainable;
+      grpHistoryClickCloseButton(): Chainable;
     }
   }
 }
@@ -282,6 +307,11 @@ Cypress.Commands.add("grpSaveGroup", () => {
   cy.landingPageLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("grpCancelGroup", () => {
+  cy.get(`td[role="gridcell"] button`).eq(1).arrowClick();
+  cy.checkToastMessage({ exists: false });
+});
+
 Cypress.Commands.add("grpSaveGroupPatch", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GroupsPatch, () => {
     cy.get("#Group-createGroup").arrowClick();
@@ -297,6 +327,7 @@ Cypress.Commands.add("grpSelectGroup", (params: {name: string}) => {
 });
 
 Cypress.Commands.add("grpClickEditGroupWithName", (params: {name: string}) => {
+  cy.grpClearFilter();
   cy.get("tr.k-master-row").contains(params.name).parents("tr").find("button").arrowClick();
 });
 
@@ -370,4 +401,150 @@ Cypress.Commands.add("grpPatchGroup", (params: {
     body: params.payload,
   }).then((response) => response ? response.body : {})
     .then((response) => JSON.stringify(response));
+});
+
+Cypress.Commands.add("grpEditAddMembers", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("#Group-members").arrowType(item);
+    cy.get("#Group-members>div>div>div[id^=react-select]").contains(item).arrowClick();
+  });
+});
+
+Cypress.Commands.add("grpEditGroupName", (params: { name: string }) => {
+  cy.get("[data-cy=\"Group-groupName\"]").clear().arrowType(params.name);
+});
+
+Cypress.Commands.add("grpEditRemoveMembers", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("#Group-members").contains(item).next().arrowClick();
+  });
+});
+
+Cypress.Commands.add("grpEditAddPermissions", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("#Group-permissions").arrowType(item);
+    cy.get("#Group-permissions>div>div>div[id^=react-select]").contains(item).arrowClick();
+  });
+});
+
+Cypress.Commands.add("grpEditRemovePermissions", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("#Group-permissions").contains(item).next().arrowClick();
+  });
+});
+
+Cypress.Commands.add("grpEditAddTags", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("#Group-addTags").arrowType(item);
+    cy.get("#Group-addTags>div>div>div[id^=react-select]").contains(item).arrowClick();
+  });
+});
+
+Cypress.Commands.add("grpEditRemoveTags", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("#Group-addTags").contains(item).next().arrowClick();
+  });
+});
+
+Cypress.Commands.add("grpEditAddParentGroups", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("#Group-addParentGroups").arrowType(item);
+    cy.get("#Group-addParentGroups>div>div>div[id^=react-select]").contains(item).arrowClick();
+  });
+});
+
+Cypress.Commands.add("grpEditRemoveParentGroups", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.get("#Group-addParentGroups").contains(item).next().arrowClick();
+  });
+});
+
+Cypress.Commands.add("grpVerifyHistoryButton", () => {
+  cy.get("[data-cy=\"gm-open-history-panel\"]").should("exist");
+});
+
+Cypress.Commands.add("grpHistoryClickOpenButton", () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetGroupsAudit, () => {
+    cy.get("[data-cy=\"gm-open-history-panel\"]").arrowClick();
+  });
+  cy.wait(500);
+});
+
+Cypress.Commands.add("grpHistoryVerifyAddedGroup", (params: { name: string }) => {
+  cy.contains("Added group").eq(0).parent().next()
+    .should("have.text", params.name);
+});
+
+Cypress.Commands.add("grpHistoryVerifyAddedMember", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.contains("Added member").eq(0).parent().next().contains(item)
+      .should("exist");
+  });
+});
+
+Cypress.Commands.add("grpHistoryVerifyAddedPermissions", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.contains("Added permissions").eq(0).parent().next().contains(item)
+      .should("exist");
+  });
+});
+
+Cypress.Commands.add("grpHistoryVerifyAddedTags", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.contains("Added tags").eq(0).parent().next().contains(item)
+      .should("exist");
+  });
+});
+
+Cypress.Commands.add("grpHistoryVerifyAddedParentGroups", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.contains("Added parent groups").eq(0).parent().next().contains(item).should("exist");
+  });
+});
+
+Cypress.Commands.add("grpHistoryVerifyUpdatedGroup", (params: { groupName: string }) => {
+  cy.contains("Updated group").eq(0).next().should("have.text", params.groupName);
+});
+
+Cypress.Commands.add("grpHistoryVerifyGroupNameUpdated", (params: { oldGroupName: string; newGroupName: string }) => {
+  cy.contains("Group name updated").eq(0).parent().next().should("contain.text", params.oldGroupName);
+  cy.contains(params.oldGroupName + "to").eq(0).should("contain.text", params.newGroupName);
+});
+
+Cypress.Commands.add("grpHistoryVerifyRemovedMember", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.contains("Removed member").eq(0).parent().next().contains(item)
+      .should("exist");
+  });
+});
+
+Cypress.Commands.add("grpHistoryVerifyRemovedPermissions", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.contains("Removed permissions").eq(0).parent().next().contains(item)
+      .should("exist");
+  });
+});
+
+Cypress.Commands.add("grpHistoryVerifyRemovedTags", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.contains("Removed tags").eq(0).parent().next().contains(item)
+      .should("exist");
+  });
+});
+
+Cypress.Commands.add("grpHistoryVerifyRemovedParentGroups", (...list: string[]) => {
+  list.forEach((item) => {
+    cy.contains("Removed parent groups").eq(0).parent().next().contains(item)
+      .should("exist");
+  });
+});
+
+Cypress.Commands.add("grpHistoryVerifyRecordsCount", (params: { records: number }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy='external-container']").last().next()
+    .find("[data-cy=\"header-userInitials\"]").should("have.length", params.records);
+});
+
+Cypress.Commands.add("grpHistoryClickCloseButton", () => {
+  cy.get("[data-cy=\"gm-close-history-panel\"]").arrowClick();
 });

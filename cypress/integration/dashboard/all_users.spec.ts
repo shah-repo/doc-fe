@@ -9,6 +9,8 @@ import { purchaseOrderDefaultSchema } from "../../fixtures/default_po_schema";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
+import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -59,188 +61,8 @@ context("All regular users on new dashboard", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-                canRedLine: true,
-              },
-              {
-                documentTypeName: "Purchase Order test",
-                documentTypeAcronym: "POT-",
-                group: "PO",
-                category: "Purchase Order",
-                isQms: true,
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                    required: false,
-                  },
-                  D: {
-                    label: "Description",
-                    visible: true,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  F: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    label: "Cancel PO",
-                    visible: true,
-                  },
-                  L: {
-                    label: "Correct PO",
-                    visible: true,
-                  },
-                  M: {
-                    label: "Type of Change",
-                    visible: true,
-                    required: true,
-                  },
-                  N: {
-                    label: "Add Approvers",
-                    visible: false,
-                    required: false,
-                  },
-                  O: {
-                    label: "PO History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  S: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  V: {
-                    label: "Create PO",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  A3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  A4: {
-                    visible: false,
-                  },
-                  A5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  A6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  P3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  P4: {
-                    visible: false,
-                  },
-                  P5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  P6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                },
-                schema: [
-                  {
-                    name: "po-status-built-in",
-                    type: "select",
-                    index: 0,
-                    label: "PO Status",
-                    options: [
-                      {
-                        text: "Open",
-                        value: "Open",
-                      },
-                      {
-                        text: "Closed",
-                        value: "Closed",
-                      },
-                      {
-                        text: "Cancelled",
-                        value: "Cancelled",
-                      },
-                    ],
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "PO Status",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-supplier-built-in",
-                    type: "supplier",
-                    index: 1,
-                    label: "Supplier ",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Supplier",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-items-built-in",
-                    type: "purchaseorder",
-                    index: 2,
-                    label: "Purchase Order",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Purchase Order",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
+              TestDocumentType,
+              PurchaseOrderTest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -589,10 +411,6 @@ context("All regular users on new dashboard", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Verify Dashboard tabs", () => {
@@ -647,6 +465,7 @@ context("All regular users on new dashboard", () => {
 
   context("Verify content of each line item", () => {
     it(`For ${USERS[2].name}, verify each line contain icon, doc detail & datetime`, () => {
+      SystemRequirement("REQ-5000", "REQ-5010");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiAvatar-root").eq(0)
         .should("have.text", "GR");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
@@ -676,10 +495,10 @@ context("All regular users on new dashboard", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-      cy.cmpTurnOffAutosave();
     });
 
     it(`For ${USERS[1].name}, verify each line contain icon, doc detail & datetime`, () => {
+      SystemRequirement("REQ-5000", "REQ-5010");
       cy.contains("CLOSED").parent().parent().parent().parent().parent().find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
         .and("contain.text", "Releasing FM-00004, Purchase Order form")
@@ -763,7 +582,7 @@ context("All regular users on new dashboard", () => {
       });
 
       it(`Select '${USERS[1].name}' for Requestor`, () => {
-        cy.get("[data-cy^=requestor]").arrowClick();
+        cy.get("[data-cy^=po-requestor]").arrowClick();
         cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
 
@@ -774,18 +593,6 @@ context("All regular users on new dashboard", () => {
 
       it("Select 'SUP-00003' Supplier ", () => {
         cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00003");
-      });
-
-      it("Upload attachments 'test_image.jpg'", () => {
-        cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
-        cy.get("#attachments-button-file-clean-copy")
-          .attachFiles(
-            [
-              { name: "./test_image.jpg", type: "image/jpg" },
-            ]
-          );
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Third party Company' for Ship To", () => {
@@ -816,11 +623,26 @@ context("All regular users on new dashboard", () => {
 
         cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
       });
+
+      it("Save PO", () => {
+        cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
     });
 
     context("Add purchase order item", () => {
+      it("Open line items tab", () => {
+        cy.drSelectLineItems();
+      });
+
+      it("Upload attachments", () => {
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
       it("Click on 'Add item' button to add item without Part Number", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+        cy.get(`button[data-cy="fb-control-btn"]`).eq(0).arrowClick({ multiple: true, force: true }).wait(1000);
       });
 
       it("Enter Quantity Ordered", () => {
@@ -841,8 +663,7 @@ context("All regular users on new dashboard", () => {
 
       it("Add Required Date", () => {
         cy.get("input[name^=date]").parent().find("button").arrowClick();
-
-        cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+        cy.get(".MuiPickersDay-daySelected").arrowClick();
       });
 
       it("Check Tax box", () => {
@@ -852,9 +673,19 @@ context("All regular users on new dashboard", () => {
       it("Click on 'Add' inside PO dialog box", () => {
         cy.poAddPOButtonClick();
       });
+
+      it("Save PO", () => {
+        cy.poSaveDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
     });
 
     context("Finish PO", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enter 'Nothing to comment' inside PO dialog box", () => {
         cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
         cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
@@ -868,18 +699,15 @@ context("All regular users on new dashboard", () => {
 
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-        });
+        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
-      it("Save PO document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.checkToastMessage({ exists: false });
-
+      it("Save PO", () => {
+        cy.poSaveDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'Submit for Approval' button", () => {
@@ -887,7 +715,6 @@ context("All regular users on new dashboard", () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
       });
-
     });
   });
 
@@ -966,13 +793,13 @@ context("All regular users on new dashboard", () => {
 
     it("Clicking on the arrow should show the PO details", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
-
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).next()
-        .should("contain.text", "Supplier:API supplier")
-        .and("contain.text", "Total:USD 21.85")
-        .and("contain.text", "Description:New Purchase Order")
-        .and("contain.text", "Line Items:1")
-        .and("contain.text", "Attachments test_image.jpg");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Description:New Purchase Order` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Line Items:1` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Attachments` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `image.jpg` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `test_image.jpg` });
     });
 
     it("Buttons for PO should be displayed", () => {
@@ -1040,14 +867,14 @@ context("All regular users on new dashboard", () => {
 
     it("Verify updated info on PO notification", () => {
       cy.navigToDashboard();
-
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find("svg").eq(0).arrowClick();
-      cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).next()
-        .should("contain.text", "Supplier:API supplier")
-        .and("contain.text", "Total:USD 21.85")
-        .and("contain.text", "Description:New Purchase Order test")
-        .and("contain.text", "Line Items:1")
-        .and("contain.text", "Attachments test_image.jpg");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Supplier:API supplier` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Total:USD 21.85` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Description:New Purchase Order` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Line Items:1` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `Attachments` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `image.jpg` });
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `test_image.jpg` });
     });
 
     it(`${USERS[1].name} should see 2 pending PO on dashboard`, () => {

@@ -1,10 +1,11 @@
-import { Box, Link } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import React, { useMemo } from "react";
 import { trainingActions } from "../../../../state/ducks/training";
 import { TrainingPlanTransition } from "../../../../state/ducks/training/types";
 import { EffectiveDateFormValues } from "../../../change.request/form/types";
 import Text from "../../../components/Text";
 import { PasswordFormValues } from "../../../components/transitionDialog/types";
+import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -51,20 +52,20 @@ const TrainingControl: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Box mt={5} ml={2}>
-      <Link onClick={openDialog} style={{ fontSize: "1rem" }}>
+    <Box mt={3.75} mb={3.75} ml={2}>
+      <Typography style={AutoCompleteStyles.labelFont}>
         <Text translation="training.acknowledge.completion.link" />
-      </Link>
-      <TrainingDialog
-        transitionDialog={dialog}
-        openDialog={openDialog}
-        onSubmit={onSubmit}
-        asyncState={async.asyncState}
-        transition={transition}
-        label={label}
-        docDetails={docDetails}
-        trId={trainingRecord.trId}
-      />
+        <TrainingDialog
+          transitionDialog={dialog}
+          openDialog={openDialog}
+          onSubmit={onSubmit}
+          asyncState={async.asyncState}
+          transition={transition}
+          label={label}
+          docDetails={docDetails}
+          trId={trainingRecord.trId}
+        />
+      </Typography>
     </Box>
   );
 };

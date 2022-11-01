@@ -178,15 +178,15 @@ context("Revise Part from EB and release cloned EB test", () => {
       it("Select 'Engineering Build' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
       });
-
-      it("Verify that Approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
     });
 
     context("Create the form and release it", () => {
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Verify that Approvals field is automatically added", () => {
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and release the form", () => {
@@ -277,13 +277,15 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
     });
 
+
     context("Clone EB", () => {
       it("Click Clone EB button", () => {
-        cy.ebClickClone();
+        cy.ebClickCloneFromMenu();
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childForRevise\"]").should("contains.attr", "value", "PRT-00004 - " + PART_NAME);
+        cy.get("[data-cy=\"childrenParts\"]").arrowType(PART_NAME + "{downarrow}{enter}");
+        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - rev 1 - Test Part");
       });
     });
 

@@ -44,10 +44,10 @@ const columns: KendoColumn[] = [
     width: 500,
   },
   {
-    field: "active",
+    field: "activeStatus",
     title: "common.active",
     show: true,
-    filter: "boolean",
+    filter: "text",
     groupable: true,
     locked: false,
     orderIndex: 5,

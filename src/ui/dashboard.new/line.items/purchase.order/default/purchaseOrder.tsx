@@ -179,11 +179,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
         button
         onMouseEnter={onMouseHoverListItem}
         className={classes.listItem}
+        disableRipple
       >
         {open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
+          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
+          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemIcon>
           <POIcon height={30} width={30} />
@@ -293,6 +294,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                 <DownloadPdfIcon
                   data-cy="transition-download-pdf"
                   onMouseEnter={onMouseHoverDownloadPdfIcon}
+                  className={classes.cursorPointer}
                 />
               </span>
             )}
@@ -314,7 +316,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
             }
             <span className={classes.actionIcon}>
               {!pinHover && !pinned && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} />
+                <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
               {pinHover && !pinned && (
                 <StyleTooltip
@@ -325,6 +327,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handlePinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -337,6 +340,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               )}
@@ -350,7 +354,7 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} />
+              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
         )}

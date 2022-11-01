@@ -55,6 +55,7 @@ const CustomDialogTitle = (props) => {
         <IconButton
           onClick={onClose}
           className={classes.closeButton}
+          id="DialogContent-close"
         >
           <CloseIcon />
         </IconButton>

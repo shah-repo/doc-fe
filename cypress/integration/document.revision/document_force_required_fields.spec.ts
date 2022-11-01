@@ -1,8 +1,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -40,12 +42,7 @@ context("Document force required fields", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -142,9 +139,9 @@ context("Document force required fields", () => {
   });
 
   context("Document in Draft without title and description", () => {
-    it("Check if document status is Draft after creating a document", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
-      cy.get("#HeaderInfo-docId").then((x) => { docId = x.text(); });
+    it(`Check if document status is ${STATUS_TYPES_LABEL.DRAFT} after creating a document`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { docId = x.text(); });
     });
 
     it("title should be blank", () => {
@@ -152,8 +149,7 @@ context("Document force required fields", () => {
     });
 
     it("description should be blank", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]")
-        .should("have.value", "");
+      cy.get("[data-cy=\"description\"]").should("have.value", "");
     });
   });
 
@@ -180,6 +176,11 @@ context("Document force required fields", () => {
       cy.checkToastMessageContains({ message: "Title is required,Description is required" });
       cy.closeAllAlertMessages();
     });
+
+    it("Close dialog box", () => {
+      cy.drCloseApproveAndReleaseDialog();
+    });
+
   });
 
   context("Verify filled fields of created document", () => {
@@ -221,18 +222,22 @@ context("Document force required fields", () => {
   context("Revise the document and modify fields", () => {
     it("Click 'Revise Document' button", () => {
       cy.drClickReviseDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("remove description", () => {
-      cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear();
+      cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+      cy.get(`[data-cy="description"] [contenteditable]`).first().clear();
+      cy.unClick();
     });
 
     it("remove title", () => {
-      cy.get("#Title-field").find("svg").arrowClick();
+      cy.get("[data-cy=\"field-name\"]").arrowClick().find("svg").arrowClick();
+      cy.unClick();
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -251,14 +256,14 @@ context("Document force required fields", () => {
   context("Fill required fields and add fields to form", () => {
     it("Add TextField", () => {
       cy.fbAddNewField();
-      cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Text Editor", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbAddNewFieldButton();
     });

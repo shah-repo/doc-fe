@@ -1,49 +1,54 @@
-import { includes, isUndefined } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBFieldWrapperProps, FBFieldWrapperState, FBSchemaState } from "..";
+import { BlockTypeField, FB, FBFieldWrapperProps, FBFieldWrapperState } from "..";
 
 export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
     fieldWrapperState,
-    topBarMargin = 0,
-    grabMargin = 0,
     toolsVisible,
     addToolVisible,
     markDownVisible,
+    isDragged,
     inputProps,
+    position,
     ...props
   }: T) => {
 
-    const { workspaceState } = FB.useStores();
-    const { index = 0, designDisabled = false } = inputProps || {};
+    const { workspaceState, sortableState } = FB.useStores();
+    const { designDisabled = false, index, type } = inputProps || {};
     const reviseDisabled = inputProps?.editorProperties?.includes("reviseDisabled");
     fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
 
-    const { label, type, includeQRScan } = workspaceState?.getSchemaItemAt(index) || {};
-
-    if (!includes(FBSchemaState.omitLabel, type) && !isUndefined(label) && !includeQRScan) {
-      topBarMargin = -3;
-      grabMargin = 3.5;
-    }
-
     const onMouseOver = () => {
+      if (sortableState?.isDragPerfomed) {
+        return;
+      }
       fieldWrapperState?.setAddToolActive(true);
       if (designDisabled || (reviseDisabled && workspaceState?.isRevised)) { return; }
       fieldWrapperState?.setToolsActive(true);
     };
     const onMouseLeave = () => {
-      fieldWrapperState?.setToolsActive(false);
       fieldWrapperState?.setAddToolActive(false);
+      if (sortableState?.isDragPerfomed) {
+        return;
+      }
+      fieldWrapperState?.setToolsActive(false);
     };
 
     useObserver(() => {
       toolsVisible = fieldWrapperState?.toolsVisible;
       addToolVisible = fieldWrapperState?.addToolVisible;
       markDownVisible = fieldWrapperState?.markDownVisible;
+      isDragged = index === sortableState?.draggedIndex;
     });
+
+    const isSection = type === "section" || type === "subsection";
+    const isBlock = type && BlockTypeField.includes(type);
+    const isFirst = position === 1;
+    const mt = isFirst || isDragged ? 0 : isBlock ? 6 : 3.5;
+    const mb = isSection ? -0.5 : 2;
 
     return useObserver(() => Component({
       ...(props as T),
@@ -54,9 +59,12 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
       addToolVisible,
       markDownVisible,
       designDisabled,
-      topBarMargin,
-      grabMargin,
       inputProps,
+      index,
+      type,
+      isDragged,
+      mt,
+      mb,
     }));
   };
 

@@ -6,6 +6,10 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
+import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
+import { MPITest } from "../../utils/constants/documentTypes/mpi";
+import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -47,212 +51,10 @@ context("Autosave LHR", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Lot History Record Test",
-                documentTypeAcronym: "LHR-",
-                group: "LHR",
-                privateNumberPool: false,
-                needsSignature: true,
-                category: "Lhr",
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                  },
-                  D: {
-                    visible: false,
-                  },
-                  E: {
-                    visible: false,
-                  },
-                  U: {
-                    visible: true,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-                schema: [
-                  {
-                    name: "lhr-selected-part",
-                    type: "partsselection",
-                    index: 0,
-                    label: "Part to be Manufactured",
-                    deleteDisabled: true,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "lhr_initial_quantity",
-                    type: "quantity",
-                    index: 1,
-                    label: "Initial Quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Initial Quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhr-end-quantity",
-                    type: "quantity",
-                    index: 2,
-                    label: "End Quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    outputDisabled: true,
-                    validationAttribute: "End Quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhr-build-type",
-                    type: "radiogroup",
-                    index: 3,
-                    label: "Build Type",
-                    options: [
-                      {
-                        text: "R&D",
-                        value: "R&D",
-                      },
-                      {
-                        text: "Production",
-                        value: "Production",
-                      },
-                    ],
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Build Type",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhr-due-date",
-                    type: "datepicker",
-                    index: 4,
-                    label: "Due Date",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Due Date",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrstep-built-in",
-                    type: "lhrstep",
-                    index: 5,
-                    label: "LHR Step",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
-              {
-                documentTypeName: "Manufacturing Process Instructions Test",
-                documentTypeAcronym: "PI-",
-                group: "PI",
-                schema: [
-                  {
-                    name: "fb-mpi-procedure-section-built-in",
-                    type: "section",
-                    index: 0,
-                    label: "form.builder.mpiprocedure",
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "mpi-procedure-built-in",
-                    type: "mpiprocedure",
-                    index: 1,
-                    stepIndex: 1,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-start-quantity",
-                    type: "quantity",
-                    index: 2,
-                    label: "Start quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Start quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-accepted-quantity",
-                    type: "quantity",
-                    index: 3,
-                    label: "Accepted quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Accepted quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-rejected-quantity",
-                    type: "quantity",
-                    index: 4,
-                    label: "Rejected quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Rejected quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 5,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
-              {
-                documentTypeName: "LHR template",
-                documentTypeAcronym: "LHRT-",
-                group: "FORM",
-              },
-              {
-                documentTypeName: "Part",
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-                needsSignature: true,
-                category: "Parts",
-              },
+              LotHistoryRecordTest,
+              MPITest,
+              LHRTTest,
+              Part,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -419,6 +221,10 @@ context("Autosave LHR", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Navigate to Procedure Tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       context("Fill step #1", () => {
         it("Fill step #1 description", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -493,14 +299,14 @@ context("Autosave LHR", () => {
         });
       });
 
+      it("Navigate to Detail Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       context("Select created MPI in LHR template", () => {
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
-            $el.trigger("click");
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
-          });
+          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
+          cy.get("input[data-cy^=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
         });
       });
 
@@ -574,8 +380,12 @@ context("Autosave LHR", () => {
       cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
     });
 
-    it("check approvers after reload page", () => {
+    it("Reload Page'", () => {
       cy.reload();
+      cy.wait(2000);
+    });
+
+    it("check approvers after reload page", () => {
       cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
         .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
       cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
@@ -603,8 +413,17 @@ context("Autosave LHR", () => {
         });
       });
 
+      it("Navigate to Detail Tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Click 'START MPI'", () => {
+        cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
         cy.mpiStartStep({ stepNumber: 1 });
+      });
+
+      it("Navigate to Procedure Tab", () => {
+        cy.drSelectProcedureTab();
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
@@ -637,13 +456,19 @@ context("Autosave LHR", () => {
             res.setThrottle(10);
           });
         }).as("response");
-        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowClick({ force: true })
+          .clear().arrowType("2");
         cy.unClick();
         cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
       });
     });
 
     context("Add/remove approver and check autosave", () => {
+
+      it("Navigate to overview Tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Add first Approver'", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
       });
@@ -661,6 +486,10 @@ context("Autosave LHR", () => {
           .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
         cy.get("[name=\"fb-approvals-approvals-built-in\"]")
           .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
+      });
+
+      it("Navigate to Procedure Tab", () => {
+        cy.drSelectProcedureTab();
       });
 
       it("check Start quntity", () => {

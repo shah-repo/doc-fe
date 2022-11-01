@@ -9,6 +9,9 @@ export const styles = makeStyles(() =>
     listItemIcon: {
       paddingLeft: "10px",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     actionIcons: {
       display: "flex",
       flexDirection: "row",
@@ -22,6 +25,9 @@ export const styles = makeStyles(() =>
       top: "0px",
       background: Colors.sky_blue,
     },
+    cursorPointer: {
+      cursor: "pointer",
+    },
     actionIcon: {
       paddingLeft: "10px",
     },
@@ -30,19 +36,15 @@ export const styles = makeStyles(() =>
     },
     typography: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 400,
       letterSpacing: 0,
     },
     typographyBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 600,
       letterSpacing: 0,
     },
     dueOn: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
       lineHeight: "16px",
@@ -50,8 +52,6 @@ export const styles = makeStyles(() =>
       letterSpacing: 0,
     },
     timestampContainer: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "22px",

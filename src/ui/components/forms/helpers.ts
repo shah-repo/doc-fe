@@ -1,4 +1,4 @@
-import { every, get, includes, isArray, isEmpty, isEqual, omit } from "lodash";
+import { every, get, has, includes, isArray, isEmpty, isEqual, omit } from "lodash";
 import { toJS } from "mobx";
 
 const clearMobxObject = (value) => typeof value === "object" ?
@@ -35,6 +35,16 @@ const getDiff = (transformedValues, transformedInitialValues) => {
     if (!isEqual(value, transformedInitialValues[key])) {
       diff[key] = value;
     }
+    if (key === "referenceTo" && diff[key]) {
+      diff[key] = diff[key]?.filter((referenceValue) => {
+        if (isEmpty(referenceValue)) {
+          return false;
+        }
+        return Boolean(
+          Object.values(referenceValue).find((dataKeys) => !isEmpty(dataKeys))
+        );
+      });
+    }
   }
   return diff;
 };
@@ -58,6 +68,7 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   const transformedValues = transformMethod(values);
   let diff = getDiff(transformedValues, transformedInitialValues);
   const formInputDiff = getFormInputDiff(transformedValues, transformedInitialValues);
+
   // Added in case maintenance is created outside of EQ Maintenance
   const equipmentId = get(transformedValues, "formInput.equipment_id");
   if (!isEmpty(equipmentId)) {
@@ -77,10 +88,16 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
     return diff;
   }
 
+  const updatedFormInput = has(transformedValues.formInput, "formInput") ?
+    transformedValues.formInput.formInput : transformedValues.formInput;
+
   return {
     ...diff,
     // TEMPORARY FIX FOR BE VALIDATION
     // formInput: transformedValues.formInput,
-    formInput: omit(transformedValues.formInput, ["partType", "childForRevise"]),
+    formInput: omit(
+      updatedFormInput,
+      ["partType", "childForRevise"]
+    ),
   };
 };

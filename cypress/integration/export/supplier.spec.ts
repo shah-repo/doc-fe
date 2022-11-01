@@ -2,7 +2,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -36,145 +38,7 @@ context("Export Supplier", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Supplier",
-                documentTypeAcronym: "SUP-",
-                category: "Supplier",
-                group: "SUPPLIER",
-                isQms: true,
-                fieldsConfig: {
-                  C: {
-                    label: "Supplier Name",
-                    visible: true,
-                    required: true,
-                  },
-                  D: {
-                    label: "Supplier Address/Phone",
-                    visible: true,
-                    required: true,
-                  },
-                  E: {
-                    visible: false,
-                    required: false,
-                  },
-                  F: {
-                    visible: false,
-                    required: false,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Next Revision",
-                    visible: true,
-                  },
-                  J: {
-                    label: "Upgrade to Next Revision Level",
-                    visible: true,
-                  },
-                  K: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  L: {
-                    label: "Administrative Change",
-                    visible: true,
-                  },
-                  M: {
-                    label: "Type of Revision Change",
-                    visible: true,
-                  },
-                  N: {
-                    label: "Approve & Release",
-                    visible: false,
-                  },
-                  O: {
-                    label: "History",
-                    visible: true,
-                  },
-                  R: {
-                    label: "AR ID",
-                    visible: true,
-                  },
-                  S: {
-                    label: "Update Supplier",
-                    visible: true,
-                  },
-                  T: {
-                    label: "Revision",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Voided",
-                    visible: true,
-                  },
-                  A3: {
-                    label: "Superseded",
-                    visible: true,
-                  },
-                  A4: {
-                    label: "Released",
-                    visible: true,
-                  },
-                  A5: {
-                    label: "In Review",
-                    visible: true,
-                  },
-                  A6: {
-                    label: "Pending Change",
-                    visible: true,
-                  },
-                  A7: {
-                    label: "Approved",
-                    visible: true,
-                  },
-                  A8: {
-                    label: "Canceled",
-                    visible: true,
-                  },
-                  A9: {
-                    label: "Voided",
-                    visible: true,
-                  },
-                  P1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Voided",
-                    visible: true,
-                  },
-                  P3: {
-                    label: "Superseded",
-                    visible: true,
-                  },
-                  P4: {
-                    label: "Released",
-                    visible: true,
-                  },
-                  P5: {
-                    label: "In Review",
-                    visible: true,
-                  },
-                  P6: {
-                    label: "Pending Change",
-                    visible: true,
-                  },
-                  P7: {
-                    label: "Approved",
-                    visible: true,
-                  },
-                  P8: {
-                    label: "Canceled",
-                    visible: true,
-                  },
-                },
-              },
+              SupplierExport,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -228,17 +92,17 @@ context("Export Supplier", () => {
       cy.unClick();
     });
 
-    it("Verify approval field is added as result of predefined schema", () => {
-      cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
-      cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Verify approval field is added as result of predefined schema", () => {
+      cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
+      cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
     });
 
     it("Approve and release document", () => {
@@ -266,7 +130,7 @@ context("Export Supplier", () => {
 
   context("Supplier with Draft status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-1-Test-Supplier" });
+      cy.exportVerifyEmail({ pdfStatus: "Draft", filename: "-1-Test-Supplier", status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 
@@ -286,7 +150,10 @@ context("Export Supplier", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-1-Test-Supplier" });
+      cy.exportVerifyEmail({
+        pdfStatus: "In Review", filename: "-1-Test-Supplier",
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+      });
     });
   });
 
@@ -296,7 +163,10 @@ context("Export Supplier", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Released", filename: "-1-Test-Supplier" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Released", filename: "-1-Test-Supplier",
+        status: STATUS_TYPES_LABEL.RELEASED,
+      });
     });
   });
 
@@ -310,6 +180,10 @@ context("Export Supplier", () => {
       cy.ebApprove();
     });
 
+    it("Select Revision", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Superseded' record", () => {
       cy.contains("Superseded").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -317,11 +191,18 @@ context("Export Supplier", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Superseded", filename: "-1-Test-Supplier" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Superseded", filename: "-1-Test-Supplier",
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+      });
     });
   });
 
   context("Supplier with Voided status", () => {
+    it("Select Revision", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Released' record", () => {
       cy.contains("Released").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -346,7 +227,7 @@ context("Export Supplier", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-OBS-Test-Supplier" });
+      cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-OBS-Test-Supplier", status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 });

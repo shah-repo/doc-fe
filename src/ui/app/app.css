@@ -1,4 +1,31 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+
+* {
+  scroll-behavior: inherit !important;
+}
+
+/* use "hide-scroll" class to hide scrollbars but keep functionality */
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scroll::-webkit-scrollbar,
+.hide-scroll div::-webkit-scrollbar {
+  background-color: transparent;
+  width: 6px;
+  height: 6px;
+}
+
+.hide-scroll::-webkit-scrollbar-thumb,
+.hide-scroll div::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scroll,
+.hide-scroll div {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
 
 :root {
   --navy: #011FBB;
@@ -9,7 +36,6 @@
   --soft-peach: #EBEDF2;
   --zeron: #F5F8FF;
   --white: #FFFFFF;
-  --font-family: "Sora";
   --font_gray: #767B87;
   --iron-gray: #D3D3E2;
   --light-gray: #CCD4D9;
@@ -19,6 +45,7 @@
 
 body {
   background-color: var(--white) !important;
+  overflow: hidden;
 }
 
 .react-datepicker-wrapper,
@@ -64,13 +91,11 @@ body {
 }
 
 .k-pager-numbers-wrap {
-  font-family: var(--font-family);
   font-size: 14px;
   color: var(--almost_black);
 }
 
 .k-grid-pager {
-  font-family: var(--font-family);
   font-size: 12px;
 }
 
@@ -111,8 +136,9 @@ td#kendo-expandable-column[role="gridcell"] {
   flex-shrink: 1;
   overflow: hidden;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--almost_black);
+  text-transform: uppercase;
 }
 
 .k-toolbar,
@@ -184,7 +210,6 @@ td#kendo-expandable-column[role="gridcell"] {
 }
 
 .k-popup {
-  font-family: var(--font-family);
   font-size: "14px";
 }
 
@@ -197,10 +222,10 @@ td#kendo-expandable-column[role="gridcell"] {
 }
 
 .k-grid {
-  font-family: var(--font-family);
   color: var(--almost_black);
   border-radius: 4px;
   border: 1px solid var(--lavender-mist);
+  background-color: var(--lavender-mist);
 }
 
 .k-grid .k-grid-table tbody tr {
@@ -230,6 +255,7 @@ td#kendo-expandable-column[role="gridcell"] {
   background-color: var(--white);
   height: 30px;
 }
+
 .k-grouping-header .k-group-indicator .k-link {
   font-weight: normal;
   line-height: 20px;
@@ -318,25 +344,25 @@ td#kendo-expandable-column[role="gridcell"] {
   border-radius: 4px;
 }
 
-.k-columnmenu-item > .k-icon.k-grid-menu-icon  {
+.k-columnmenu-item>.k-icon.k-grid-menu-icon {
   color: transparent;
   height: 16px;
   width: 18px;
-  font-family: var(--font-family);
   font-size: 14px;
   margin-right: 10px;
 }
-.k-columnmenu-item > .k-icon.k-i-lock.k-grid-menu-icon  {
+
+.k-columnmenu-item>.k-icon.k-i-lock.k-grid-menu-icon {
   background: url("../../assets/images/freeze.svg");
   background-repeat: no-repeat;
 }
 
-.k-columnmenu-item > .k-icon.k-i-unlock.k-grid-menu-icon  {
+.k-columnmenu-item>.k-icon.k-i-unlock.k-grid-menu-icon {
   background: url("../../assets/images/unfreeze.svg");
   background-repeat: no-repeat;
 }
 
-.k-columnmenu-item > .k-icon.k-i-preview.k-grid-menu-icon  {
+.k-columnmenu-item>.k-icon.k-i-preview.k-grid-menu-icon {
   background: url("../../assets/images/hide.svg");
   background-repeat: no-repeat;
 }
@@ -349,3 +375,40 @@ td#kendo-expandable-column[role="gridcell"] {
 .k-list-container .k-popup .k-list .k-item {
   white-space: nowrap;
 }
+
+.MuiMenuItem-root span,
+.MuiAutocomplete-listbox {
+  font-family: "Sora"
+}
+
+.Toastify__toast,
+.Toastify__toast-body,
+.Toastify__toast-container,
+.Toastify__close-button {
+  font-family: 'Sora';
+}
+
+
+.containing-box-scrollbar::-webkit-scrollbar {
+  background-color: transparent;
+  width: 6px;
+  height: 6px;
+}
+
+.containing-box-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.containing-box-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--light-gray);
+  border-radius: 1ex;
+}
+
+.MuiFormGroup-root .MuiRadio-root {
+  padding-left: 0px;
+}
+
+.MuiFormGroup-row .MuiRadio-root {
+    padding-left: 11px;
+ }
+ 

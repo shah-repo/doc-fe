@@ -4,6 +4,8 @@
 import moment from "moment";
 import "moment-timezone";
 import { CONFIG } from "../../../support/config";
+import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
+import { Material } from "../../../utils/constants/documentTypes/material";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
@@ -40,20 +42,8 @@ context("Autocomplete 'Material' test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Material",
-                documentTypeAcronym: "MT-",
-                group: "MATERIAL",
-                isQms: true,
-                needsSignature: true,
-                category: "Materials",
-              },
+              ClinicalProtocolDocType,
+              Material,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -141,10 +131,14 @@ context("Autocomplete 'Material' test", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
         });
 
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 

@@ -45,7 +45,7 @@ const NavigationProfilePresenter: React.FunctionComponent<Props> = ({
     justifyContent="space-between"
     className={classes.bottomPush}
   >
-    <ClickAwayListener onClickAway={handleCloseMenu} mouseEvent="onClick">
+    <ClickAwayListener onClickAway={handleCloseMenu}>
       <Button
         disableFocusRipple={true}
         disableRipple={true}

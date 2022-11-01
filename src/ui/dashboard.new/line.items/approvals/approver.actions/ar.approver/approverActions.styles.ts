@@ -12,18 +12,17 @@ export const styles = makeStyles((theme: Theme) =>
       fontSize: "12px",
       fontWeight: 600,
       color: Colors.white,
-      fontFamily: "Sora",
       textTransform: "uppercase",
     },
     icon: {
       width: "15px",
+      cursor: "pointer",
     },
     listItem: {
       paddingLeft: "1px",
+      cursor: "unset",
     },
     viewTooltipText: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",
@@ -33,6 +32,7 @@ export const styles = makeStyles((theme: Theme) =>
       borderLeft: `1px solid ${Colors.light_gray_blue}`,
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
+      cursor: "unset",
     },
     customTooltipWidth: {
       maxWidth: 500,
@@ -59,30 +59,27 @@ export const styles = makeStyles((theme: Theme) =>
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
     },
+    cursorPointer: {
+      cursor: "pointer",
+    },
     typography: {
       "fontSize": "14px",
-      "fontFamily": "Sora",
       "fontWeight": 400,
       "& > p": { margin: "0px" },
       "letterSpacing": 0,
     },
     typographyBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 600,
       letterSpacing: 0,
     },
     typographyStatus: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "15px",
       letterSpacing: 0,
     },
     timestampContainer: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "22px",

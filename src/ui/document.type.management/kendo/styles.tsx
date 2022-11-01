@@ -1,10 +1,7 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
-const KendoGridStyles = makeStyles((theme: Theme) => ({
-  kGrid: {
-    height: "calc(100vh - 119px)",
-  },
+export const styles = makeStyles((theme: Theme) => ({
   exportBtn: {
     margin: 0,
     boxShadow: "none",
@@ -13,7 +10,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     textTransform: "none",
     paddingRight: theme.spacing(2.5),
     paddingLeft: theme.spacing(2.5),
-    fontFamily: "Sora",
     fontSize: 12,
     fontWeight: 600,
     color: Colors.navy,
@@ -27,7 +23,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     "borderRadius": 100,
     "background": Colors.navy,
     "color": Colors.white,
-    "fontFamily": "Sora",
     "paddingRight": theme.spacing(2.5),
     "paddingLeft": theme.spacing(2.5),
     "textTransform": "none",
@@ -42,7 +37,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     "borderRadius": 100,
     "background": Colors.white,
     "color": Colors.black,
-    "fontFamily": "Sora",
     "paddingRight": theme.spacing(2.5),
     "paddingLeft": theme.spacing(2.5),
     "textTransform": "none",
@@ -58,7 +52,6 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
     textTransform: "none",
     paddingRight: theme.spacing(2.5),
     paddingLeft: theme.spacing(2.5),
-    fontFamily: "Sora",
     fontSize: 12,
     fontWeight: 600,
     color: Colors.navy,
@@ -68,4 +61,3 @@ const KendoGridStyles = makeStyles((theme: Theme) => ({
   },
 }
 ));
-export default KendoGridStyles;

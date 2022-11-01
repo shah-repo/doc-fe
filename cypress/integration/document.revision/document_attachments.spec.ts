@@ -2,6 +2,8 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -43,20 +45,8 @@ context("Document Attachment Flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-                canRedLine: true,
-              },
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-                canRedLine: true,
-              },
+              ClinicalProtocolDocType,
+              TestDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -117,6 +107,17 @@ context("Document Attachment Flow", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Check if Selected Groups are set to 'Everyone' by default", () => {
+      SystemRequirement("REQ-0300");
+      cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
+        .should("have.text", "Enter the name of users to access the document");
+      cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Test download of uploaded attachments", () => {
       context("Test redline", () => {
         it("Upload redline and verify cleanCopyStatus is created", () => {
@@ -169,20 +170,12 @@ context("Document Attachment Flow", () => {
           cy.closeAllAlertMessages();
         });
 
-        it("Check if Selected Groups are set to 'Everyone' by default", () => {
-          SystemRequirement("REQ-0300");
-          cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
-            .should("have.text", "Enter the name of users to access the document");
-          cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
-        });
-
         it("Clicks Save button", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-
         });
 
         it("Download all attachments with redline document", () => {
@@ -204,7 +197,6 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-
         });
 
         it("Revise document", () => {
@@ -217,10 +209,10 @@ context("Document Attachment Flow", () => {
 
         it("Approves and releases document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-
         });
 
         it("Select Superseded version of document without redline attachments", () => {
+          cy.drClickRevisionsSidePanel();
           cy.drSelectReleasedVersionOfDocument({ docVersion: 1 });
         });
 
@@ -230,6 +222,7 @@ context("Document Attachment Flow", () => {
         });
 
         it("Select Superseded version of document without redline attachments", () => {
+          cy.drClickRevisionsSidePanel();
           cy.drSelectReleasedVersionOfDocument({ docVersion: 0 });
         });
 
@@ -281,16 +274,20 @@ context("Document Attachment Flow", () => {
       cy.drSelectDocumentType({ documentType: "Clinical Protocol" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Uploads redline attachment 'image.jpg'", () => {
       cy.atchUploadRedlineAttachment({ fileName: "image.jpg" });
     });
 
     it("Uploads text.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Clicks Save button", () => {
@@ -324,7 +321,7 @@ context("Document Attachment Flow", () => {
 
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Navigates to document list", () => {

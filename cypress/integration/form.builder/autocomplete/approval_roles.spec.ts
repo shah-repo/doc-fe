@@ -3,8 +3,10 @@
 
 import moment from "moment";
 import "moment-timezone";
+import { DOC_TYPE_GROUP } from "../../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
+import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
@@ -41,16 +43,11 @@ context("Autocomplete 'Approval Roles' test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
               {
                 documentTypeName: "purchaseorder",
                 documentTypeAcronym: "PO-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
               },
             ],
@@ -116,7 +113,6 @@ context("Autocomplete 'Approval Roles' test", () => {
       it("Approve and release FORM document", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          // cy.fbClickButton({ el: "updateRecord" });
         });
       });
     });
@@ -127,11 +123,19 @@ context("Autocomplete 'Approval Roles' test", () => {
       });
 
       it("Enter AR title 'test ar'", () => {
+        cy.wait(1000);
         cy.drEnterDocumentTitle({ name: "test ar" });
       });
 
       it("Enter description 'test description'", () => {
         cy.drEnterDocumentDescription({ description: "test description" });
+        cy.wait(2000);
+      });
+
+      it("Navigate to Approval Roles tab", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+          cy.drSelectApprovalRolesTab();
+        });
       });
 
       it("Click on 'Add Another Role' button", () => {
@@ -185,14 +189,18 @@ context("Autocomplete 'Approval Roles' test", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
 
-        it("Select 'Component Protocol' output document type", () => {
+        it("Select 'Clinical Protocol' output document type", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+        });
+
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
 
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 

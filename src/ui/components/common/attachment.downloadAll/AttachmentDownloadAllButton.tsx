@@ -10,6 +10,7 @@ import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevi
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import Colors from "../../../layout/theme/utils/colors";
 import { Translation } from "../../../translations/types";
 import { toastError } from "../../notifications";
 import PasswordDialog from "../../password/dialog";
@@ -39,6 +40,7 @@ const styles = makeStyles((theme: Theme) =>
     },
     link: {
       cursor: "pointer",
+      color: Colors.navy,
     },
   }));
 

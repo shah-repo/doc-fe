@@ -5,7 +5,6 @@ const commonButtonStyles = {
   "margin": 0,
   "boxShadow": "none",
   "borderRadius": 100,
-  "fontFamily": "Sora",
   "text-transform": "capitalize",
 };
 export const styles = makeStyles((theme: Theme) =>
@@ -37,7 +36,7 @@ export const styles = makeStyles((theme: Theme) =>
     },
     exportListbutton: {
       ...commonButtonStyles,
-      marginRight: theme.spacing(1.825),
+      marginRight: theme.spacing(1.875),
       paddingRight: theme.spacing(2.5),
       paddingLeft: theme.spacing(2.5),
       border: `1px solid ${Colors.navy}`,

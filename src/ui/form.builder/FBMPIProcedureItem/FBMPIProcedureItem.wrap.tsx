@@ -99,7 +99,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       if (!date) {
         return;
       }
-      return Date.parse(date) < Date.parse(new Date().toLocaleString());
+      return Date.parse(date) < Date.now();
     };
 
     const setFilteredParts = (data) => {
@@ -111,8 +111,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
             ...ref?.metadata,
             refId: ref?.id,
             overrideDocId: ref?.toDocRev?.document.docId,
-            pmDueDate: ref.toDocRev?.precalc.pm_due_date,
-            calDueDate: ref.toDocRev?.precalc.cali_due_date,
+            pmDueDate: ref.toDocRev?.precalc?.pm_due_date,
+            calDueDate: ref.toDocRev?.precalc?.cali_due_date,
           });
         }
         return selected;
@@ -122,6 +122,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     function onClose() {
       formState?.unlockField(`${name}.${type}`);
+      dialogState?.closeDialog();
     }
 
     // MARK: @methods

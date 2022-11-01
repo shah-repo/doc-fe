@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -44,7 +45,7 @@ context("Document sequential numbering test", () => {
               {
                 documentTypeName: "Clinical Protocol",
                 documentTypeAcronym: "CP-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
                 privateNumberPool: true,
                 startingNumber: 1,
@@ -52,7 +53,7 @@ context("Document sequential numbering test", () => {
               {
                 documentTypeName: "Clinical Part",
                 documentTypeAcronym: "CP-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
                 privateNumberPool: true,
                 startingNumber: 1,
@@ -60,7 +61,7 @@ context("Document sequential numbering test", () => {
               {
                 documentTypeName: "Clinical Testing",
                 documentTypeAcronym: "CT-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
                 privateNumberPool: true,
                 startingNumber: 1,
@@ -68,7 +69,7 @@ context("Document sequential numbering test", () => {
               {
                 documentTypeName: "Clinical Report",
                 documentTypeAcronym: "CR-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
                 privateNumberPool: true,
                 startingNumber: 1,

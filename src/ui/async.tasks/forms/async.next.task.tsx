@@ -57,7 +57,7 @@ const AsyncNextTask: React.FunctionComponent<AsyncProps> = ({
   };
 
   return (
-    <Grid item={true} sm={4}>
+    <Grid item={true} sm={4} data-cy={"next.task"} >
       <FormControl className={classes.formControl}>
         <InputLabel id="mutiple-select-label">
           <Text translation={"async.task.next.task"} />

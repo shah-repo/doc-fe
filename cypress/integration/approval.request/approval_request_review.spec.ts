@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
@@ -104,14 +105,12 @@ context("Approval request form scenario", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval request' outputdocument type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
-      });
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click on 'Approval request' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
     it("Click create document", () => {
@@ -146,13 +145,13 @@ context("Approval request form scenario", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Click on 'Component Specification' outputdocument type", () =>
     {
       cy.drSelectOutputDocumentType({ documentType: "Component Specification" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document", () => {
@@ -182,6 +181,8 @@ context("Approval request form scenario", () => {
     });
 
     it("Add sample document one", () => {
+      cy.arSelectDocumentTab();
+      cy.wait(1000);
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
@@ -192,11 +193,13 @@ context("Approval request form scenario", () => {
     // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
       SystemRequirement("REQ-0940");
+      cy.arSelectChangeDetailsTab();
+      cy.wait(1000);
       cy.arAddApproverOnApproverList({ approver: USERS[20].email });
       cy.arAddApproverOnApproverList({ approver: USERS[22].email });
     });
@@ -207,7 +210,7 @@ context("Approval request form scenario", () => {
 
     it("Verify AR status", () => {
       SystemRequirement("REQ-0020");
-      cy.arVerifyStatus({ status: "In Review" });
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 
@@ -225,6 +228,8 @@ context("Approval request form scenario", () => {
 
     it("Check Document's description is non-editable", () => {
       SystemRequirement("REQ-0850");
+      cy.arSelectDocumentTab();
+      cy.wait(1000);
       cy.get("div[name$=\"descriptionOfChange\"]").should("have.attr", "disabled");
     });
 
@@ -241,6 +246,8 @@ context("Approval request form scenario", () => {
     //  approvers 'In_review' should be enabled now 'ENC-4797'
     it("Check 'Approvers' are not disabled", () => {
       SystemRequirement("REQ-0850");
+      cy.arSelectChangeDetailsTab();
+      cy.wait(1000);
       cy.get("input[data-cy=\"fb-approvers-approvers\"]").should("not.be.disabled");
     });
   });
@@ -321,6 +328,7 @@ context("Approval request form scenario", () => {
 
     it("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
+      cy.arSelectDocumentTab();
       cy.arClickAddDocument();
       cy.arIsProposedDocumentEmpty();
       cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick();
@@ -345,6 +353,8 @@ context("Approval request form scenario", () => {
 
       it("Rejecting request gives prompt", () => {
         cy.arRejectComfirmationARNew();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Reject AR from dashboard", () => {
@@ -461,7 +471,7 @@ context("Approval request form scenario", () => {
     });
 
     it("Verify AR status is 'Approved'", () => {
-      cy.arVerifyStatus({ status: "Approved" });
+      cy.arVerifyStatus({ status: "APPROVED" });
     });
 
     it("Open history drawer", () => {
@@ -470,12 +480,12 @@ context("Approval request form scenario", () => {
 
     it("Capture Audit date", () => {
       SystemRequirement("REQ-0960", "REQ-2730");
-      cy.get("[data-cy=\"audit-time-0\"]").should("not.be.empty");
+      cy.get("[data-cy=\"audit-0\"]").should("not.be.empty");
     });
 
     it("Capture Audit timestamp", () => {
       SystemRequirement("REQ-0960", "REQ-2730");
-      cy.get("[data-cy=\"audit-time-0\"]").should("have.attr", "datetime").then(($time) => {
+      cy.get("[data-cy=\"audit-0\"]").should("have.attr", "datetime").then(($time) => {
         cy.wrap($time).should("not.be.empty");
       });
     });
@@ -495,19 +505,11 @@ context("Approval request form scenario", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        wait_time_sec: 5,
-        max_wait_time_sec: 50,
-        include_body: true,
         after: dateAfterEmailShouldArrive,
       };
       cy.wait(30000);
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
     });
 

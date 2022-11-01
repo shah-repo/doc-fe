@@ -33,21 +33,25 @@ export const GroupCell = ({
   const localizedData = [
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] }),
-      value: true,
+      value: intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] }),
     },
     {
       text: intl.formatMessage({ id: TranslatedText[DisplayText.UNOFFICIAL] }),
-      value: false,
+      value: intl.formatMessage({ id: TranslatedText[DisplayText.UNOFFICIAL] }),
     },
   ];
   const updateGroupField = ({ target }: DropDownListChangeEvent) => {
     const Selectedvalue = target?.value;
-    dataItem.isOfficial = Selectedvalue.value;
-    setOfficial(Selectedvalue.value);
+    dataItem.groupType = Selectedvalue.value;
+    dataItem.isOfficial = Selectedvalue.value === intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] });
+    setOfficial(dataItem.isOfficial);
   };
-  const valueSelected = localizedData.filter(
-    (e) => e.value === isOfficial
-  )[0];
+  const valueSelected = localizedData.find((e) => {
+    const groupType = isOfficial
+      ? intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] })
+      : intl.formatMessage({ id: TranslatedText[DisplayText.UNOFFICIAL] });
+    return e.value === groupType;
+  });
 
   if (rowType === "groupHeader") {
     return null;
@@ -70,13 +74,7 @@ export const GroupCell = ({
           value={valueSelected}
         />
       ) : (
-        <Tooltip
-          data ={groupData
-            ? intl.formatMessage({ id: TranslatedText[DisplayText.OFFICIAL] })
-            : intl.formatMessage({
-              id: TranslatedText[DisplayText.UNOFFICIAL],
-            })}
-        />
+        <Tooltip data={groupData} />
       )}
     </td>
   );

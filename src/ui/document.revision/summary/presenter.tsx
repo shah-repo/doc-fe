@@ -1,9 +1,9 @@
-import { Box, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
+import { Box, Grid, WithStyles, withStyles } from "@material-ui/core";
 import { Formik } from "formik";
-import { flatten, isEmpty, omit, set } from "lodash";
+import { flatten, includes, omit, set } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { SM } from "../../../App";
 import { LINE_TYPES } from "../../../state/ducks/attachments/constants";
 import { DataProps } from "../../../state/ducks/common/types";
 import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
@@ -11,30 +11,19 @@ import { Document, DocumentRevision, DocumentRevisionStatus, FBOutputDocumentTyp
 import { documentsActions } from "../../../state/ducks/documents";
 import { ApplicationState } from "../../../state/reducers";
 import SummaryField from "../../common/summary/base";
-import SummaryFieldWithHtml from "../../common/summary/baseWithHtml";
-import SummaryInfo from "../../common/summary/SummaryInfo";
 import { FormContext } from "../../components/forms/FormContext";
 import Text from "../../components/Text";
-import DocumentRevisionOutputInfo from "../../documentRevision/formBuilder/DocumentRevisionOutputInfo";
 import { getHighestRevision } from "../../documentRevision/forms/transform";
-import { checkIsDocumentEB, checkIsDocumentForm, checkIsDocumentPart, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
-import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
-import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
-import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
-import { FBSchemaProps, FBWorkspace } from "../../form.builder";
-import CustomLabelTooltip from "../../hooks/docCustomization/CustomLabelTooltip";
-import { useCRLink, useTitle, useTraining } from "../../hooks/docCustomization/useCustomization";
-import useDescription from "../../hooks/docCustomization/useDescription";
+import { checkIsDocumentEB, checkIsDocumentPart, checkIsDocumentPO, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { isDocumentRevisionInStatus } from "../../documentRevision/helpers/documentRevisionStatus";
+import { styles as AutoCompleteStyles } from "../../form.builder/styles/FBAutocomplete.styles";
+import { useTraining } from "../../hooks/docCustomization/useCustomization";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { Translation } from "../../translations/types";
-import SummaryHeader from "../header/SummaryHeader";
 import Attachment from "./attachment";
 import BuildsContainer from "./builds.container";
-import ChangeRequestLink from "./changeRequestLink";
-import ReferencedByContainer from "./referencedBy.container";
-import ReferenceToContainer from "./referenceTo.container";
 import styles from "./styles";
 import CompleteTraining from "./training/complete.training";
 import TrainingControl from "./training/training.control";
@@ -60,7 +49,6 @@ const Presenter: React.FunctionComponent<Props> = ({
     retrain,
     referenceTo,
     deprecatedAt,
-    description,
     trainingRecords,
     formTemplate,
     formDocument,
@@ -76,11 +64,6 @@ const Presenter: React.FunctionComponent<Props> = ({
   useScrollIntoView();
   const onSubmit = () => void 0;
   const { formInput } = dataProp || {};
-  let { schema } = formTemplate || formDocument?.formTemplate || {};
-  schema = dataProp.schema || schema;
-  const { docId } = formDocument?.document || {};
-  const FBIsOutput = Boolean(docId && !isEmpty(docId));
-  const FBIsActive = formInput || formTemplate || formDocument;
   const docTypeId = dataProp?.document?.documentType?.id;
   const docDetails: Partial<DocumentRevision> = {
     docId: document.docId,
@@ -89,19 +72,16 @@ const Presenter: React.FunctionComponent<Props> = ({
   };
 
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
-  const { isVisible: isDescriptionVisible, label: descriptionLabel } = useDescription(docTypeId);
-  const { isVisible: isTitleVisible, label: titleLabel, tooltipConfig } = useTitle(docTypeId);
-  const { isVisible: isCRLinkVisible } = useCRLink(docTypeId);
 
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(document.documentType.groupOptions);
+  const isPO = checkIsDocumentPO(document.documentType.groupOptions);
+  const { _tabsState } = SM.useStores();
   const isPart = checkIsDocumentPart(document?.documentType?.groupOptions);
   const [displayChildrenParts, setDisplayChildrenParts] = useState(childrenParts);
   const shouldRenderTrainingButton = isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Released, DocumentRevisionStatus.Approved],
     status);
-  const isInlineApproval = isFormWithInlineApproval(formDocument?.formTemplate?.schema);
-  const isFirstAlphaReleased = isDocumentAlphaReleased(dataProp?.revisionStage) && dataProp?.subRevision === 0;
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
@@ -146,109 +126,66 @@ const Presenter: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderReleaseDetails = () => (
-    <Box p={5} >
-      <Typography variant="h6" style={{ paddingBottom: 8 }}>
-        <Text translation="document.revision.release.details" />
-      </Typography>
-      <SummaryInfo
-        label={"record.released.by"}
-        value={dataProp.owner.user.name}
-      />
-      <SummaryInfo
-        label={"document.revision.released.date"}
-        value={getFormattedDateString(dataProp.releasedAt, MomentFormats.MonthDateYear)}
-      />
-    </Box>
-  );
+  const summaryStyles = {
+    labelStyle: { ...AutoCompleteStyles.labelProps, marginBottom: 2 },
+    valueStyle: { ...AutoCompleteStyles.labelFont, marginBottom: 22 },
+  };
 
   const contentRenderer = () => (
-    <Box className={classes.boxContainer}>
-      <SummaryHeader
-        documentRevision={dataProp}
-        canChangeOwnerShip={canChangeOwnerShip}
-        canShowCreateVersionButton={canShowCreateVersionButton}
-      />
-      <Grid
-        container={true}
-        className={classes.previewBox}
-        spacing={4}
-        direction="column"
-      >
-        {
-          isCRLinkVisible &&
-          <ChangeRequestLink dataProp={dataProp} />
-        }
-        {
-          isTitleVisible &&
-          <CustomLabelTooltip {...{ tooltipConfig }}>
-            <SummaryField label={titleLabel} value={name} />
-          </CustomLabelTooltip>
-        }
+    <Box minHeight={16} width="calc(100% - 8px)">
+      <Grid container>
         {
           isTrainingVisible && !isRecord &&
           <SummaryField
             label="document.revision.trainingRequired"
             value={<Text translation={`common.${retrain}` as Translation} />}
+            {...summaryStyles}
           />
-        }
-        {
-          isDescriptionVisible &&
-          <SummaryFieldWithHtml label={descriptionLabel} value={description} />
         }
         {formTemplate && (
           <SummaryField
             label="document.output.type"
             value={outputDocumentTypeName}
+            {...summaryStyles}
           />
-        )}
-        {referenceTo && (
-          <ReferenceToContainer
-            dataProp={referenceTo}
-            status={status}
-            deprecatedAt={deprecatedAt}
-          />
-        )}
-        {document.referencedBy && (
-          <ReferencedByContainer dataProp={document.referencedBy} />
         )}
         {isEB && parent && (
-          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build" docRevId={dataProp.id} />
+          <BuildsContainer dataProp={flatten([parent])} label="common.previous.build"
+            labelProps={AutoCompleteStyles.labelProps}
+            labelFont={AutoCompleteStyles.labelFont} docRevId={dataProp.id} />
         )}
         {isEB && children && (
-          <BuildsContainer dataProp={children} label="common.next.build" />
+          <BuildsContainer dataProp={children} label="common.next.build"
+            labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
         {isPart && parentParts && (
-          <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of" />
+          <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of"
+            labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
         {isEB && displayChildrenParts && (
-          <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part" />
+          <BuildsContainer dataProp={flatten([displayChildrenParts])} label="form.builder.part"
+            labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
-        {attachments && <Attachment
-          isAttachmentEmpty={attachments.length < 1}
-          docRevId = {id}
-          containsRedline = {containsRedline()}
-          docRevStatus={status}/>}{/* Need to put actual check here*/}
+        {isPO || includes(outputDocumentTypeName, "Purchase Order")
+          ? attachments && !_tabsState?.isTabActive("details") && (
+            <Attachment
+              isAttachmentEmpty={attachments.length < 1}
+              docRevId={id}
+              containsRedline={containsRedline()}
+              docRevStatus={status}
+            />
+          )
+          : attachments && (
+            <Attachment
+              isAttachmentEmpty={attachments.length < 1}
+              docRevId={id}
+              containsRedline={containsRedline()}
+              docRevStatus={status}
+            />
+          )}
         {renderTrainingControl}
         {renderSelfTaughtTraining}
       </Grid>
-
-      {FBIsActive && (
-        <Box px={5} mt={4} id="Presenter-FBWorkspace">
-          <FBWorkspace
-            document={dataProp}
-            initialValues={dataProp.formInput}
-            schema={schema as FBSchemaProps[]}
-            mode={checkIsDocumentForm(dataProp.document.documentType.groupOptions) ?
-              "formPreview" : "preview"}
-          />
-        </Box>
-      )}
-      {isRecord && isInlineApproval && isFirstAlphaReleased &&
-        isDocumentRevisionReleased(dataProp?.status) && renderReleaseDetails()}
-      {FBIsOutput && (
-        <DocumentRevisionOutputInfo formDocument={dataProp?.formDocument} />
-      )}
     </Box>
   );
 

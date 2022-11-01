@@ -23,6 +23,7 @@ interface AwsMqttClient {
 
 interface IAwsMqttClient {
   region: string;
+  expires: number;
   credentials: any;
   clientId: string;
   endpoint: string;
@@ -117,6 +118,7 @@ export class IotService {
 
     const clientConfig: IAwsMqttClient = {
       region: this.credentialsMqtt.region,
+      expires: 2700, // Updated expire time to 45 minutes
       credentials: new Credentials(
         {
           accessKeyId: this.credentialsMqtt.credentials.AccessKeyId,

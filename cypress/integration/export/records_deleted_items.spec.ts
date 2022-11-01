@@ -7,6 +7,7 @@ import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -46,11 +47,7 @@ context("Export Record doc", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
+                ...RecordDocumentType,
                 fieldsConfig: {
                   D: {
                     visible: false,
@@ -184,16 +181,20 @@ context("Export Record doc", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Add textfield", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for inline" });
       cy.fbAddField();
     });
 
     it("Add Checkbox group", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
@@ -201,14 +202,14 @@ context("Export Record doc", () => {
 
     it("Add Date picker", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbAddNewFieldButton();
     });
 
     it("Add Text Editor", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
       cy.fbEnterNameValue({ name: "label", value: "fb-text-editor" });
       cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
       cy.fbAddNewFieldButton();
@@ -216,7 +217,7 @@ context("Export Record doc", () => {
 
     it("Add Select Field", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.fbSelectItemFromNewFieldList({ field: "Select" });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
       cy.fbEnterPlaceholder({ placeholder: "fb-select-field placeholder" });
       cy.fbGroupOptions("option1", "option2");
@@ -225,12 +226,10 @@ context("Export Record doc", () => {
 
     it("Add inline approval", () => {
       cy.fbClickAddNewHiddenBtn();
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.fbSelectInlineApproval();
-      });
-      cy.get("[name=\"label\"]").arrowType("Inline field");
-      cy.fbAddApproverToInlineDialog({ approverName: USERS[1].name });
-      cy.fbAddField();
+      cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+      cy.fbEnterNameValue({ name: "label", value: "Inline field" });
+      cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
+      cy.fbAddNewFieldButton();
     });
 
     it("Click create document", () => {
@@ -253,7 +252,8 @@ context("Export Record doc", () => {
     });
 
     it("Click 'Create New' button", () => {
-      cy.drCreateNewDocumentFromFormRecord();
+      cy.drCreateNewDocumentFromForm();
+
     });
   });
 
@@ -296,22 +296,11 @@ context("Export Record doc", () => {
     it("Verify emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
     });
 
@@ -325,8 +314,6 @@ context("Export Record doc", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log(emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
@@ -349,20 +336,13 @@ context("Export Record doc", () => {
         to: CONFIG.TEST_EMAIL,
         // eslint-disable-next-line @typescript-eslint/camelcase
         wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
+        // eslint-disable-next-line @typescript-eslint/camelcase,
+
         after: dateAfterEmailShouldArrive,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
     });
 
@@ -376,8 +356,6 @@ context("Export Record doc", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log(emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,

@@ -3,8 +3,11 @@
 
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -44,330 +47,9 @@ context("Training by Groups", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4], USERS[7]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Training Curriculum test",
-                documentTypeAcronym: "TC-",
-                group: "TRAINING_CURRICULUM",
-                privateNumberPool: true,
-                canRedLine: false,
-                isQms: true,
-                needsSignature: true,
-                defaultTraining: false,
-                startingNumber: 1,
-                hiddenForCreationForUsersWithoutTags: [],
-                fieldsConfig: {
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    label: "Training Required",
-                    visible: false,
-                  },
-                  N: {
-                    label: "Finalize and Release",
-                    visible: false,
-                  },
-                },
-                defaultRevStage: "Alpha",
-                schema: [
-                  {
-                    name: "training-curriculum-details-section",
-                    type: "section",
-                    index: 0,
-                    label: "Periodic Training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Periodic Training",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-document-to-be-trained-on",
-                    type: "autocomplete",
-                    index: 1,
-                    label: "Documents to Train on",
-                    rules: "|required",
-                    multiple: true,
-                    optionId: "36",
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    placeholder: "Select documents for training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "visibility",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Documents to Train on",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-refresh-training-periodically",
-                    type: "radiogroup",
-                    index: 2,
-                    label: "Refresh/repeat training periodically?",
-                    rules: "required||",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if: false,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    rulesObject: {},
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    validationAttribute: "Refresh/repeat training periodically?",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-validity",
-                    type: "quantity",
-                    index: 3,
-                    label: "Training Frequency (in days)",
-                    rules: "required_if:training-refresh-training-periodically,Yes",
-                    validators: {
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if: {
-                        name: "training-refresh-training-periodically",
-                        value: [
-                          "Yes",
-                        ],
-                      },
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "visibility",
-                    validationAttribute: "Training Frequency (in days)",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-details-section",
-                    type: "section",
-                    index: 4,
-                    label: "Trainees Details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Trainees Details",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-groups-to-train",
-                    type: "autocomplete",
-                    index: 5,
-                    label: "Groups to Train",
-                    multiple: true,
-                    optionId: "10",
-                    placeholder: "Select groups",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Groups to Train",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-users-to-train",
-                    type: "autocomplete",
-                    index: 6,
-                    label: "Users to Train (if applicable)",
-                    multiple: true,
-                    optionId: "13",
-                    placeholder: "Select users",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Users to Train (if applicable)",
-                    applicableValidationSchema: true,
-                  },
-                ],
-                category: "Training Curriculums",
-                active: true,
-              },
-              {
-                documentTypeName: "One-Time Training test",
-                documentTypeAcronym: "TF-",
-                group: "TRAINING_CURRICULUM",
-                privateNumberPool: true,
-                canRedLine: false,
-                isQms: true,
-                needsSignature: true,
-                defaultTraining: false,
-                startingNumber: 1,
-                hiddenForCreationForUsersWithoutTags: [],
-                fieldsConfig: {
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    label: "Training Required",
-                    visible: false,
-                  },
-                  N: {
-                    label: "Finalize and Release",
-                    visible: false,
-                  },
-                },
-                defaultRevStage: "Alpha",
-                schema: [
-                  {
-                    name: "training-curriculum-details-section",
-                    type: "section",
-                    index: 0,
-                    label: "Forced Retraining / One-Time Training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Forced Retraining / One-Time Training",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-document-to-be-trained-on",
-                    type: "autocomplete",
-                    index: 1,
-                    label: "Documents to Train on",
-                    rules: "|required",
-                    multiple: true,
-                    optionId: "36",
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    placeholder: "Select documents for training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "visibility",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Documents to Train on",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-force-retraining-for-everyone",
-                    type: "radiogroup",
-                    index: 2,
-                    label: "Force retraining (everyone will be retrained regardless of their current status)",
-                    rules: "required||",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if: false,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    rulesObject: {},
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    validationAttribute:
-                      "Force retraining (everyone will be retrained regardless of their current status)",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-details-section",
-                    type: "section",
-                    index: 3,
-                    label: "Trainees Details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Trainees Details",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-groups-to-train",
-                    type: "autocomplete",
-                    index: 4,
-                    label: "Groups to Train",
-                    multiple: true,
-                    optionId: "10",
-                    placeholder: "Select groups",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Groups to Train",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-users-to-train",
-                    type: "autocomplete",
-                    index: 5,
-                    label: "Users to Train (if applicable)",
-                    multiple: true,
-                    optionId: "13",
-                    placeholder: "Select users",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Users to Train (if applicable)",
-                    applicableValidationSchema: true,
-                  },
-                ],
-                category: "Training Curriculums",
-                active: true,
-              },
+              ClinicalProtocolDocType,
+              TrainingCurriculum,
+              OneTimeTrainingTest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -646,10 +328,6 @@ context("Training by Groups", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -707,7 +385,7 @@ context("Training by Groups", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -741,6 +419,14 @@ context("Training by Groups", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Click Refresh on 'Document to trained on'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
@@ -759,19 +445,22 @@ context("Training by Groups", () => {
       cy.get("[name=training-validity]").arrowType("5");
     });
 
+    it("Select Groups to train 'Group1 and Group2'", () => {
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
+      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
+      cy.wait(2000);
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
-    it("Select Groups to train 'Group1 and Group2'", () => {
-      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
-      cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
-    });
-
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Click Submit for Approval", () => {
@@ -805,16 +494,12 @@ context("Training by Groups", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
     });
 
     it("Open created training", () => {
-      cy.contains("test training title").arrowClick();
+      cy.get(`[data-grid-row-index="0"]`).contains("test training title").arrowClick();
     });
 
     it("Click on 'Revise Document'", () => {
@@ -830,20 +515,23 @@ context("Training by Groups", () => {
       cy.drEnterDocumentTitle({ name: " update" });
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add new Group to train 'Group3'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
+      cy.wait(2000);
     });
 
     it("Remove group Group1", () => {
       cy.get("[data-cy=training-select-groups-to-train]").parent()
-        .find(".MuiAutocomplete-tag").eq(0).find(".MuiChip-deleteIcon").arrowClick();
+        .find(".MuiAutocomplete-tag").eq(1).find(".MuiChip-deleteIcon").arrowClick();
+      cy.wait(2000);
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   });
 
@@ -879,6 +567,7 @@ context("Training by Groups", () => {
     });
 
     it("Click Approve", () => {
+      cy.wait(2000);
       cy.trApproveTraining();
     });
   });

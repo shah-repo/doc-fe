@@ -38,7 +38,7 @@ export const styles = makeStyles((theme) => ({
     "borderRadius": "inherit",
     "min-width": "auto",
     "&:hover": {
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.light_red,
     },
   },
   fileNameContainer: {
@@ -132,5 +132,8 @@ export const styles = makeStyles((theme) => ({
     zIndex: 1,
     top: -5,
     left: 2,
+  },
+  tooltipPlacementTop: {
+    margin: "12px 0",
   },
 }));

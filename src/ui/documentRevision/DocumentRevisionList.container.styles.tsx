@@ -4,7 +4,7 @@ import Colors from "../layout/theme/utils/colors";
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-
+      width: "100%",
     },
     linkContainer: {
       borderBottom: `1px solid ${theme.palette.text.hint}`,

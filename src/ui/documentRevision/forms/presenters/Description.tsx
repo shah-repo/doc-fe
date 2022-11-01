@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useIntl } from "react-intl";
-import RichTextEditor from "../../../components/forms/fields/RichTextEditor";
+import { SMTextEditor } from "../../../../App";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import useDescription from "../../../hooks/docCustomization/useDescription";
 
@@ -17,9 +17,7 @@ const Description: React.FunctionComponent<Props> = ({
 }) => {
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useDescription(documentTypeId, isQms);
-  const placeholder: string = isQms ?
-    "" :
-    intl.formatMessage({ id: "document.revision.no.qms.message" });
+  const placeholder: string = intl.formatMessage({ id: "form.builder.enter.description" });
 
   if (!isVisible) {
     return null;
@@ -27,10 +25,10 @@ const Description: React.FunctionComponent<Props> = ({
 
   return (
     <CustomLabelTooltip {...{ tooltipConfig }}>
-      <RichTextEditor
+      <SMTextEditor
         name="description"
-        label={label}
-        editorProps={{ placeholder, readOnly: isDisabled }}
+        {...{ label, placeholder }}
+        disabled={isDisabled}
       />
     </CustomLabelTooltip>
   );

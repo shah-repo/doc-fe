@@ -1,9 +1,10 @@
 import { downloadFile } from "cypress-downloadfile/lib/addPlugin";
 import { rename, rmdirSync, writeFileSync } from "fs";
 import path from "path";
-import { getEmail, getEmails, getEmailWithLongerOffset } from "../support/commands/imap/imap";
+import { getEmails, GmailTesterOptions } from "../support/commands/imap/imap";
 import { pdfparser } from "../support/commands/pdfparser/pdfparser";
 import { unzip } from "../support/commands/unzip/unzip";
+import { parseXlsx } from "../support/commands/xlsx/xlsx";
 import { deleteJunitTestReports, deleteMochaTestReports } from "../support/deleteReports/deleteReranReports";
 import { allowedCharacters } from "../utils/context/constants";
 
@@ -37,13 +38,7 @@ export default (on, config) => {
       if (value != null) { shouldSkip = value; }
       return shouldSkip;
     },
-    gmailGetLastMail(email) {
-      return getEmail(email);
-    },
-    getAllEmailWithLongerOffset(email) {
-      return getEmailWithLongerOffset(email);
-    },
-    gmailGetMails(params: {userEmail; options}) {
+    gmailGetMails(params: {userEmail: string; options: GmailTesterOptions}) {
       return getEmails(params.userEmail, params.options);
     },
     downloadFile,
@@ -66,6 +61,7 @@ export default (on, config) => {
 
   on("task", {
     unzipFile: unzip,
+    parseXlsx,
     pdfparseFile: pdfparser,
   });
 
@@ -83,5 +79,31 @@ export default (on, config) => {
       });
     });
   });
+
+  on("before:browser:launch", (browser, launchOptions) => {
+    if (browser.isHeadless) {
+      const width = 1280;
+      const height = 960;
+
+      if ((browser.name === "chrome" || browser.name === "chromium")) {
+        launchOptions.args.push(`--window-size=${width},${height}`);
+        launchOptions.args.push("--force-device-scale-factor=1");
+      }
+
+      if (browser.name === "electron") {
+        launchOptions.preferences.width = width;
+        launchOptions.preferences.height = height;
+      }
+
+      if (browser.name === "firefox") {
+        launchOptions.args.push(`--width=${width}`);
+        launchOptions.args.push(`--height=${height}`);
+      }
+    }
+    launchOptions.args = launchOptions.args.filter((x) => x !== "--disable-dev-shm-usage");
+    return launchOptions;
+  });
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require("cypress-grep/src/plugin")(config);
 };
 

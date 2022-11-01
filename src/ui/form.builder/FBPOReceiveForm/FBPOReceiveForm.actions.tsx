@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBPOReceiveFormProps, FBSubmitButton } from "..";
+import { FBPOReceiveFormProps, FBSubmitButton } from "..";
+import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import { withFBPOReceiveForm } from "./FBPOReceiveForm.wrap";
 
 const FBPOReceiveFormActions: React.FunctionComponent<FBPOReceiveFormProps> = ({
@@ -13,7 +14,7 @@ const FBPOReceiveFormActions: React.FunctionComponent<FBPOReceiveFormProps> = ({
       label="form.builder.save"
       onClick={handleReceive}
     />
-    <FBButton
+    <StyledCancelFBButton
       variant="outlined"
       label="common.cancel"
       onClick={handleCancel}

@@ -50,8 +50,10 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "isInputOwner"
   | "autoScrollTo"
   | "autoFocus"
+  | "tabId"
 > & {
   validators?: Dictionary<any>;
+  tabId?: string;
 };
 
 export interface FBSchemaComponentProps {

@@ -9,7 +9,6 @@ export const styles = makeStyles((theme: Theme) =>
       borderRadius: "10px",
       minWidth: "unset",
       fontSize: "0.65rem",
-      fontFamily: "Sora",
       color: Colors.white,
     },
     triangleDown: {

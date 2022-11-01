@@ -59,7 +59,10 @@ Cypress.Commands.add("authLogin", (params: { email: string; password?: string })
       ;
       cy.get("[data-cy=\"LoginFormPresenter-submit\"]").arrowClick();
     });
+
   cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+
   addTestContext("user", params.email);
 });
 
@@ -122,7 +125,10 @@ Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: stri
 });
 
 Cypress.Commands.add("authClickSignIn", () => {
-  cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostNewUserSetPassword, CyRoutes.SessionDetails], () => {
+    cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
+  });
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("authLoginToDashboard", (params: { USER: IUser; employeeId: string }) => {

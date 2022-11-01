@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16.414" height="16.414" viewBox="0 0 16.414 16.414">
+  <g id="design" transform="translate(0.207 0.207)">
+    <path id="Path_2746" data-name="Path 2746" d="M3,6,.5,3.5l3-3L6,3" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <path id="Path_2747" data-name="Path 2747" d="M13,10l1.5,1.5,1,4-4-1L10,13" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <rect id="Rectangle_2870" data-name="Rectangle 2870" width="15.556" height="5.657" transform="translate(0.5 11.5) rotate(-45)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <line id="Line_644" data-name="Line 644" x2="1.5" y2="1.5" transform="translate(3 9)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <line id="Line_645" data-name="Line 645" x2="1.5" y2="1.5" transform="translate(5 7)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <line id="Line_646" data-name="Line 646" x2="1.5" y2="1.5" transform="translate(7 5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    <line id="Line_647" data-name="Line 647" x2="1.5" y2="1.5" transform="translate(9 3)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+  </g>
+</svg>

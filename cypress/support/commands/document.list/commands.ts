@@ -40,6 +40,7 @@ declare global {
       dlVerifyDocCounter(params: {docCounterNumber: integerType }): Chainable<Subject>;
       dlVerifyDescriptionOnHover(params: {description: string }): Chainable<Subject>;
       dlSelectFirstDocument(): Chainable<Subject>;
+      dlSelectFirstDocumentItem(): Chainable<Subject>;
     }
   }
 }
@@ -141,8 +142,8 @@ Cypress.Commands.add("dlVerifyFilterByArId", (params: {arId: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByStatus", (params: {status: string }) => {
-  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
-  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).scrollIntoView().arrowClick({ force: true });
+  cy.get("li").contains(params.status).arrowClick({ force: true }).wait(500);
   cy.landingPageLoadingElementShouldNotExist();
 });
 
@@ -192,9 +193,17 @@ Cypress.Commands.add("dlVerifyDescriptionOnHover", (params: {description: string
 });
 
 Cypress.Commands.add("dlSelectFirstDocument", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
     cy.get("tr.k-master-row").first().arrowClick();
   });
-  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("dlSelectFirstDocumentItem", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+    cy.get("tr.k-master-row").first().children("td").first().arrowClick();
+  });
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });

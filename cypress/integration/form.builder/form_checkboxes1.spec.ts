@@ -3,6 +3,7 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -44,12 +45,7 @@ context("Checkboxes test1", () => {
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -106,403 +102,253 @@ context("Checkboxes test1", () => {
       cy.unClick();
     });
 
-    context("Add Fields with Checkboxes", () => {
-      it("Add TextField with checkboxes", () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-approvals-\"]").parent().trigger("mouseover");
-        cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
-        cy.fbEnterNameValue({ name: "label", value: "textfield-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByName({ name: "textfield-wi-ch-" } );
-      });
-
-      it("Add TextField without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
-        cy.fbEnterNameValue({ name: "label", value: "textfield-wo-ch" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByName({ name: "textfield-wo-ch-" } );
-      });
-
-      it("Add Checkbox group with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
-        cy.fbGroupOptions("option1", "option2");
-        cy.fbEnterNameValue({ name: "label", value: "cbg-wi-ch" });
-        cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "cbg-wi-ch" });
-      });
-
-      it("Add Checkbox group without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
-        cy.fbEnterNameValue({ name: "label", value: "cbg-wo-ch" });
-        cy.fbGroupOptions("option1", "option2");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "cbg-wo-ch" });
-      });
-
-      it("Add Autocomplete with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        cy.fbEnterNameValue({ name: "label", value: "ac-wi-ch" });
-        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
-        cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-
-        cy.contains("ac-wi-ch").trigger("mouseover");
-      });
-
-      it("Add Autocomplete without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
-        cy.fbEnterNameValue({ name: "label", value: "ac-wo-ch" });
-        cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
-        cy.fbAddNewFieldButton();
-
-        cy.contains("ac-wo-ch").trigger("mouseover");
-      });
-
-      it("Add Text Editor with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
-        cy.fbEnterNameValue({ name: "label", value: "te-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "te-wi-ch" } );
-      });
-
-      it("Add Text Editor without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Text Editor" });
-        cy.fbEnterNameValue({ name: "label", value: "te-wo-ch" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "te-wo-ch" } );
-      });
-
-      it("Add Date picker with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
-        cy.fbEnterNameValue({ name: "label", value: "dp-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "dp-wi-ch" } );
-      });
-
-      it("Add Date picker without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Date picker" });
-        cy.fbEnterNameValue({ name: "label", value: "dp-wo-ch" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "dp-wo-ch" } );
-      });
-
-      it("Add Hyperlink with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
-        cy.fbEnterNameValue({ name: "label", value: "hl-wi-ch" });
-        cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "hl-wi-ch" } );
-      });
-
-      it("Add Hyperlink without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Hyperlink" });
-        cy.fbEnterNameValue({ name: "label", value: "hl-wo-ch" });
-        cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "hl-wo-ch" } );
-      });
-
-      it("Add Select Field with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Select" });
-        cy.fbEnterNameValue({ name: "label", value: "sf-wi-ch" });
-        cy.fbGroupOptions("option1", "option2");
-        cy.fbSelectCheckboxValue("includeNone", "includeContext", "reviseDisabled",
-          "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "sf-wi-ch" } );
-      });
-
-      it("Add Select Field without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Select" });
-        cy.fbEnterNameValue({ name: "label", value: "sf-wo-ch" });
-        cy.fbGroupOptions("option1", "option2");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "sf-wo-ch" } );
-      });
-
-      it("Add Radio Button group with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
-        cy.fbEnterNameValue({ name: "label", value: "rbg-wi-ch" });
-        cy.fbGroupOptions("option1", "option2");
-        cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "rbg-wi-ch" } );
-      });
-
-      it("Add Radio Button group without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
-        cy.fbEnterNameValue({ name: "label", value: "rbg-wo-ch" });
-        cy.fbGroupOptions("option1", "option2");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "rbg-wo-ch" } );
-      });
-
-      it("Add File Upload with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
-        cy.fbEnterNameValue({ name: "label", value: "fu-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "fu-wi-ch" } );
-      });
-
-      it("Add File Upload without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "File Upload" });
-        cy.fbEnterNameValue({ name: "label", value: "fu-wo-ch" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "fu-wo-ch" } );
-      });
-
-      it("Add Quantity with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
-        cy.fbEnterNameValue({ name: "label", value: "q-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "q-wi-ch" } );
-      });
-
-      it("Add Quantity without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Quantity" });
-        cy.fbEnterNameValue({ name: "label", value: "q-wo-ch" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "q-wo-ch" } );
-      });
-
-      it("Add Timer with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).arrowClick();
-        cy.fbEnterNameValue({ name: "label", value: "t-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "t-wi-ch" } );
-      });
-
-      it("Add Timer without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.get("div[data-cy=\"form.builder.timer\"]").eq(-1).arrowClick();
-        cy.fbEnterNameValue({ name: "label", value: "t-wo-ch" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "t-wo-ch" } );
-      });
-
-      it("Add Purchase Order with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-        cy.fbEnterNameValue({ name: "label", value: "po-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "po-wi-ch" } );
-      });
-
-      it("Add Purchase Order without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Purchase Order" });
-        cy.fbEnterNameValue({ name: "label", value: "po-wo-ch" });
-        cy.fbAddNewFieldButton();
-        cy.fbMouseOverByLabel({ label: "po-wo-ch" } );
-      });
-
-      it("Add Receive Purchase Order with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
-        cy.fbEnterNameValue({ name: "label", value: "rpo-wi-ch" });
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-
-        cy.fbMouseOverByLabel({ label: "rpo-wi-ch" } );
-      });
-
-      it("Add Receive Purchase Order without checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Receive Purchase Order" });
-        cy.fbEnterNameValue({ name: "label", value: "rpo-wo-ch" });
-        cy.fbAddNewFieldButton();
-
-        cy.fbMouseOverByLabel({ label: "rpo-wo-ch" } );
-      });
-
-      it("Add Actions 'Action Button' with checkboxes", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-1).arrowClick();
-        cy.fbSelectItemFromNewFieldList({ field: "Action Button" });
-        cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
-        cy.fbAddNewFieldButton();
-      });
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
-  context("Verify 'Deletion Disabled' checkbox property", () => {
-    it("Verify TextField without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClass({ name: "textfield-wo-ch-", el: "remove-schema-item", class: "MuiSvgIcon-colorError" });
+  context("Add Fields with Checkboxes", () => {
+    it("Add TextField with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "textfield-wi-ch" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByName({ name: "textfield-wi-ch-" } );
     });
 
-    it("Verify TextField with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClass({
-        name: "textfield-wi-ch-", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add TextField without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "textfield-wo-ch" });
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByName({ name: "textfield-wo-ch-" } );
     });
 
-    it("Verify Checkbox Group without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "cbg-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add Checkbox group with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbEnterNameValue({ name: "label", value: "cbg-wi-ch" });
+      cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "cbg-wi-ch" });
     });
 
-    it("Verify Checkbox Group with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "cbg-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add Checkbox group without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "cbg-wo-ch" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "cbg-wo-ch" });
     });
 
-    it("Verify Autocomplete without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "ac-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add Autocomplete with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "ac-wi-ch" });
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
+      cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+
+      cy.contains("ac-wi-ch").trigger("mouseover", { force: true });
     });
 
-    it("Verify Autocomplete with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "ac-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add Autocomplete without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
+      cy.fbEnterNameValue({ name: "label", value: "ac-wo-ch" });
+      cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
+      cy.fbAddNewFieldButton();
+
+      cy.contains("ac-wo-ch").trigger("mouseover");
     });
 
-    it("Verify Text Editor without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "te-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add Text Editor with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
+      cy.fbEnterNameValue({ name: "label", value: "te-wi-ch" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "te-wi-ch" } );
     });
 
-    it("Verify Text Editor with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "te-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add Text Editor without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text Editor" });
+      cy.fbEnterNameValue({ name: "label", value: "te-wo-ch" });
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "te-wo-ch" } );
     });
 
-    it("Verify Date picker without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "dp-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add Date picker with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
+      cy.fbEnterNameValue({ name: "label", value: "dp-wi-ch" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "dp-wi-ch" } );
     });
 
-    it("Verify Date picker with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "dp-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add Date picker without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Date picker" });
+      cy.fbEnterNameValue({ name: "label", value: "dp-wo-ch" });
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "dp-wo-ch" } );
     });
 
-    it("Verify Hyperlink without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "hl-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add Hyperlink with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Hyperlink" });
+      cy.fbEnterNameValue({ name: "label", value: "hl-wi-ch" });
+      cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "hl-wi-ch" } );
     });
 
-    it("Verify Hyperlink with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "hl-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add Hyperlink without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Hyperlink" });
+      cy.fbEnterNameValue({ name: "label", value: "hl-wo-ch" });
+      cy.fbEnterNameValue({ name: "linkUrl", value: "google.com" });
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "hl-wo-ch" } );
     });
 
-    it("Verify Select Field without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "sf-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add Select Field with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
+      cy.fbEnterNameValue({ name: "label", value: "sf-wi-ch" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbSelectCheckboxValue("includeNone", "includeContext", "reviseDisabled",
+        "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "sf-wi-ch" } );
     });
 
-    it("Verify Select Field with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "sf-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add Select Field without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
+      cy.fbEnterNameValue({ name: "label", value: "sf-wo-ch" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "sf-wo-ch" } );
     });
 
-    it("Verify Radio Button group without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "rbg-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add Radio Button group with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "rbg-wi-ch" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbSelectCheckboxValue("includeContext", "reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "rbg-wi-ch" } );
     });
 
-    it("Verify Radio Button group with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "rbg-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add Radio Button group without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+      cy.fbEnterNameValue({ name: "label", value: "rbg-wo-ch" });
+      cy.fbGroupOptions("option1", "option2");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "rbg-wo-ch" } );
     });
 
-    it("Verify File Upload without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "fu-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add File Upload with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
+      cy.fbEnterNameValue({ name: "label", value: "fu-wi-ch" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "fu-wi-ch" } );
     });
 
-    it("Verify File Upload with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "fu-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add File Upload without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "File Upload" });
+      cy.fbEnterNameValue({ name: "label", value: "fu-wo-ch" });
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "fu-wo-ch" } );
     });
 
-    it("Verify Quantity without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "q-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add Quantity with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
+      cy.fbEnterNameValue({ name: "label", value: "q-wi-ch" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "q-wi-ch" } );
     });
 
-    it("Verify Quantity with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "q-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add Quantity without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
+      cy.fbEnterNameValue({ name: "label", value: "q-wo-ch" });
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "q-wo-ch" } );
     });
 
-    it("Verify Timer without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "t-wo-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorError",
-      });
+    it("Add Timer with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Timer" });
+      cy.fbEnterNameValue({ name: "label", value: "t-wi-ch" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "t-wi-ch" } );
     });
 
-    it("Verify Timer with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "t-wi-ch", el: "remove-schema-item",
-        class: "MuiSvgIcon-colorDisabled",
-      });
+    it("Add Timer without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Timer" });
+      cy.fbEnterNameValue({ name: "label", value: "t-wo-ch" });
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "t-wo-ch" } );
+    });
+
+    it("Add Purchase Order with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Purchase Order" });
+      cy.fbEnterNameValue({ name: "label", value: "po-wi-ch" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "po-wi-ch" } );
+    });
+
+    it("Add Purchase Order without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Purchase Order" });
+      cy.fbEnterNameValue({ name: "label", value: "po-wo-ch" });
+      cy.fbAddNewFieldButton();
+      cy.fbMouseOverByLabel({ label: "po-wo-ch" } );
+    });
+
+    it("Add Receive Purchase Order with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
+      cy.fbEnterNameValue({ name: "label", value: "rpo-wi-ch" });
+      cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      cy.fbAddNewFieldButton();
+
+      cy.fbMouseOverByLabel({ label: "rpo-wi-ch" } );
+    });
+
+    it("Add Receive Purchase Order without checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Receive Purchase Order" });
+      cy.fbEnterNameValue({ name: "label", value: "rpo-wo-ch" });
+      cy.fbAddNewFieldButton();
+
+      cy.fbMouseOverByLabel({ label: "rpo-wo-ch" } );
+    });
+
+    it("Add Actions 'Action Button' with checkboxes", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Actions", field: "Action Button" });
+      cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
+      cy.fbAddNewFieldButton();
     });
   });
 
@@ -586,7 +432,7 @@ context("Checkboxes test1", () => {
     });
 
     it("Close Preview dialog", () => {
-      cy.fbClickButton({ el: "dialog-close" });
+      cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
     });
   });
 
@@ -742,6 +588,191 @@ context("Checkboxes test1", () => {
       cy.fbMouseOverByLabel({ label: "t-wi-ch" } );
       cy.fbVerifyElementNotVisibileByLabel({ label: "t-wi-ch", el: "edit-schema-item" });
       cy.fbVerifyElementNotVisibileByLabel({ label: "t-wi-ch", el: "remove-schema-item" });
+    });
+  });
+
+  context("Create a new document", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Filters form by name and status, and select it", () => {
+      cy.drFilterDocListByNameAndStatus({ title: "eb-title", status: "Released" });
+    });
+
+    it("Click to Create document", () => {
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Enter eb document title 'eb-doc-title'", () => {
+      cy.drEnterDocumentTitle({ name: "eb-doc-title" });
+    });
+
+    it("Enter document description 'eb document description'", () => {
+      cy.drEnterDocumentDescription({ description: "eb description" });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Verify 'Deletion Disabled' checkbox property", () => {
+    it("Verify TextField without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClass({ name: "textfield-wo-ch-", el: "remove-schema-item", class: "schema-delete-enabled" });
+    });
+
+    it("Verify TextField with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClass({
+        name: "textfield-wi-ch-", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify Checkbox Group without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "cbg-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify Checkbox Group with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "cbg-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify Autocomplete without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "ac-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify Autocomplete with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "ac-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify Text Editor without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "te-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify Text Editor with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "te-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify Date picker without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "dp-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify Date picker with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "dp-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify Hyperlink without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "hl-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify Hyperlink with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "hl-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify Select Field without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "sf-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify Select Field with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "sf-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify Radio Button group without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "rbg-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify Radio Button group with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "rbg-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify File Upload without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "fu-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify File Upload with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "fu-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify Quantity without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "q-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify Quantity with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "q-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+
+    it("Verify Timer without 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "t-wo-ch", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
+    it("Verify Timer with 'Deletion Disabled' checkbox", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "t-wi-ch", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
+    });
+  });
+
+  context("Create Document", () => {
+    it("Click create document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   });
 });

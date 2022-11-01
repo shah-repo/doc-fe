@@ -17,19 +17,31 @@ declare global {
       poAddPOButtonClick(): Chainable<Subject>;
       poEnterDocumentDescription(params: {description: string }): Chainable<Subject>;
       poSelectPartNumber(params: {partNo: string }): Chainable<Subject>;
+      poSelectPartNumberNew(params: {partNo: string }): Chainable<Subject>;
+      poVerifyPartNumber(params: {partNo: string }): Chainable<Subject>;
       poEnterQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
+      poCheckQuantityOrdered(params: {quantity: string}): Chainable<Subject>;
+      poEnterQuantityReceipt(params: {quantity: string}): Chainable<Subject>;
+      poCheckReceiptQty(params: {quantity: string}): Chainable<Subject>;
       poSelectUnits(): Chainable<Subject>;
+      poCheckUnits(params: {unit: string}): Chainable<Subject>;
       poSelectGLCode(): Chainable<Subject>;
       poEnterSupplierPartNumber(params: {partNumber: string}): Chainable<Subject>;
+      poEnterPartDescription(params: {partDescription: string}): Chainable<Subject>;
       poNumberOfUnits(params: {number: string}): Chainable<Subject>;
       poAddDateRequired(): Chainable<Subject>;
+      poCheckDateRequired(params: {dateRequired: string}): Chainable<Subject>;
       poShippingCost(params: {number: string}): Chainable<Subject>;
+      poCheckShippingCost(params: {cost: string}): Chainable<Subject>;
       poCheckCurrency(): Chainable<Subject>;
       poCheckAmount(params: {number: string}): Chainable<Subject>;
+      poCheckTotalAmount(params: {number: string}): Chainable<Subject>;
       poSelectTaxCheckbox(): Chainable<Subject>;
       poSelectOption(params: {optionName: string}): Chainable<Subject>;
       poEnterServiceID(params: {serviceId: string}): Chainable<Subject>;
+      poCheckServiceID(params: {serviceId: string}): Chainable<Subject>;
       poEnterDescription(params: {description: string}): Chainable<Subject>;
+      poCheckDescription(params: {description: string}): Chainable<Subject>;
       poSelectCurrency(params: { currencyValue: string }): Chainable<Subject>;
       poCheckMessageForConversionSite(): Chainable<Subject>;
       poCheckStatus(...list: string[]): Chainable<Subject>;
@@ -47,7 +59,9 @@ declare global {
       poAMCheckApprovalIconIfItsRed(): Chainable<Subject>;
       poAMCheckApprovalIconIfItsGray(): Chainable<Subject>;
       poAMSelectApprover(...list: string[]): Chainable<Subject>;
+      poAMEnterPassword(): Chainable<Subject>;
       poAMApproveButton(): Chainable<Subject>;
+      poAMApproveSubmissionButton(): Chainable<Subject>;
       poAMCheckIfApproverHasApprovalSign(): Chainable<Subject>;
       poAMCheckForAlertMessage(): Chainable<Subject>;
       poRejectAR(params: {password: string}): Chainable<Subject>;
@@ -59,8 +73,14 @@ declare global {
       poSelectPoFormFromMultiSelect(params: {poType: string; poForm?: string}): Chainable<Subject>;
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
       poCheckTax(params: {number: string}): Chainable<Subject>;
+      poCheckTaxRate(params: {taxRate: string}): Chainable<Subject>;
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
+      poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
+      poApprove(): Chainable<Subject>;
+      poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
+      poCheckOrderDate(params: {orderDate: string}): Chainable<Subject>;
+      poBuildInStatus(params: {status: string}): Chainable<Subject>;
     }
   }
 }
@@ -68,7 +88,7 @@ declare global {
 export interface PurchaseOrderItem {
   index: integer;
   partNumber?: string;
-  descritpion?: string;
+  description?: string;
   ordered: integer;
   received: integer;
   units?: string;
@@ -83,21 +103,21 @@ Cypress.Commands.add("poSelectPoForm", (params: {nameOfPoForm: string}) => {
 
 Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
-
   cy.get("[data-cy^=\"fb-po-approvals\"]").scrollIntoView().arrowClick().wait(500);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
+    cy.get("[data-cy^=\"fb-po-approvals\"]").autocompleteSelect(params.approver).wait(500);
   });
+  cy.unClick();
 
   cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-fullWidth\"]").contains("Add item").arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
-  cy.get("[class=\"MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
 });
 
 Cypress.Commands.add("poCreateNew", () => {
@@ -120,27 +140,58 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
 });
 
 Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
-  cy.get("[name=\"partNumber\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick();
+  cy.get("[name=\"partNumber\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick({ force: true });
+});
+
+Cypress.Commands.add("poSelectPartNumberNew", (params: {partNo: string }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"partNumber\"]").click({ force: true }).focused().autocompleteSelect(params.partNo);
+  cy.unClick();
+});
+
+Cypress.Commands.add("poVerifyPartNumber", (params: {partNo: string }) => {
+  cy.get(`[data-cy="supplierPartNumber"]`).contains(params.partNo);
 });
 
 Cypress.Commands.add("poEnterQuantityOrdered", (params: {quantity: string}) => {
   cy.get("[name=\"order\"]").arrowClick().arrowType(params.quantity);
 });
 
+Cypress.Commands.add("poCheckQuantityOrdered", (params: {quantity: string}) => {
+  cy.get(`[data-cy="order"]`).contains(params.quantity);
+});
+
+Cypress.Commands.add("poEnterQuantityReceipt", (params: {quantity: string}) => {
+  cy.get("[name=\"received\"]").arrowClick().arrowType(params.quantity);
+});
+
+Cypress.Commands.add("poCheckReceiptQty", (params: {quantity: string}) => {
+  cy.get(`[data-cy="received"]`).contains(params.quantity);
+});
+
 Cypress.Commands.add("poSelectUnits", () => {
-  cy.get("[name=\"units\"]").arrowClick();
-  cy.get("ul > li[role=option]").contains("Each").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[name=\"units\"]").click().focused().autocompleteSelect("Each");
+  cy.unClick();
+});
+
+Cypress.Commands.add("poCheckUnits", (params: {unit: string}) => {
+  cy.get(`[data-cy="units"]`).contains(params.unit);
 });
 
 Cypress.Commands.add("poSelectGLCode", () => {
   cy.listLoadingElementShouldNotExist();
-  cy.get("[name=\"glCode\"]").arrowClick();
-  cy.get("ul > li[role=option]").contains("code 1").arrowClick();
+  cy.get("[name=\"glCode\"]").click().focused().autocompleteSelect("code 1");
+  cy.unClick();
 });
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
   cy.get("[name=\"supplierPartNumber\"]").arrowClick().arrowType(params.partNumber);
+});
+
+Cypress.Commands.add("poEnterPartDescription", (params: {partDescription: string}) => {
+  cy.get("[name=\"partNumberTitle\"]").arrowClick().arrowType(params.partDescription);
 });
 
 Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {
@@ -153,8 +204,16 @@ Cypress.Commands.add("poAddDateRequired", () => {
     .click();
 });
 
+Cypress.Commands.add("poCheckDateRequired", (params: { dateRequired: string }) => {
+  cy.get("[data-cy='formattedDate']>span").contains(params.dateRequired);
+});
+
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
   cy.get("[name*=\"shippingCost\"]").arrowClick().arrowType("{leftarrow}{leftarrow}{leftarrow}{leftarrow}" + params.number);
+});
+
+Cypress.Commands.add("poCheckShippingCost", (params: {cost: string}) => {
+  cy.get(`[name*="shippingCost"]`).contains(params.cost);
 });
 
 Cypress.Commands.add("poCheckCurrency", () => {
@@ -175,34 +234,48 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
-  cy.get("[id$=\"po-status-built-in\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.status).arrowClick();
+  cy.get("[id$=\"po-status-built-in\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.status).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains(params.number).should("exist");
+  cy.get("[class*=\"MuiTableCell-root MuiTableCell-body FBTotal-root\"]").contains(params.number).should("exist");
+});
+
+Cypress.Commands.add("poCheckTotalAmount", (params: {number: string}) => {
+  cy.get(`[data-cy="poTotal"]`).contains(params.number).should("exist");
+});
+
+Cypress.Commands.add("poCheckTaxRate", (params: {taxRate: string}) => {
+  cy.get(`[name="po-items-built-in.taxRate"]`).should("have.text", params.taxRate);
 });
 
 Cypress.Commands.add("poCheckTax", (params: {number: string}) => {
-  cy.get("[name=\"po-items-built-in.tax\"]").should("have.attr", "value", params.number);
+  cy.get(`[name="po-items-built-in.tax"]`).should("have.value", params.number);
 });
 
 Cypress.Commands.add("poSelectOption", (params: {optionName: string}) => {
-  cy.get("input[value=" + params.optionName + "]").arrowClick();
+  cy.get("input[value=" + params.optionName + "]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poEnterServiceID", (params: {serviceId: string}) => {
   cy.get("[name=\"serviceId\"]").arrowClick().arrowType(params.serviceId);
 });
 
+Cypress.Commands.add("poCheckServiceID", (params: {serviceId: string}) => {
+  cy.get(`[data-cy="serviceId"]`).contains(params.serviceId);
+});
+
 Cypress.Commands.add("poEnterDescription", (params: {description: string}) => {
   cy.get("[name=\"description\"]").arrowClick().arrowType(params.description);
 });
 
+Cypress.Commands.add("poCheckDescription", (params: {description: string}) => {
+  cy.get(`[data-cy="description"]`).contains(params.description);
+});
+
 Cypress.Commands.add("poClickOnSpecificPOFromList", (params: {item: string}) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-    cy.get("tr.k-master-row").contains(params.item).arrowClick();
-  });
+  cy.get("tr.k-master-row").contains(params.item).arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -212,29 +285,28 @@ Cypress.Commands.add("poCheckForSpecificPOItemValue", (params: {itemValue: strin
 });
 
 Cypress.Commands.add("poCheckMessageForConversionSite", () => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "Exchange rate according to ");
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "fixer.io");
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").should("contain.text", "as of");
+  cy.get("[name=\"po-items-built-in\"]").contains("Exchange rate according to ").should("exist");
+  cy.get("[name=\"po-items-built-in\"]").contains("fixer.io").should("exist");
+  cy.get("[name=\"po-items-built-in\"]").contains("as of").should("exist");
 });
 
 Cypress.Commands.add("poConvertedToDollarsMessage", () => {
-  cy.get("[class*=\"FBTotal-root MuiTableCell-alignRight\"]").contains("Total in US dollars:").should("exist");
+  cy.get("[name=\"po-items-built-in\"]").contains("Total in US dollars:").should("exist");
 });
 
 Cypress.Commands.add("poCheckStatus", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[class=\"MuiList-root MuiList-padding\"] > div > a > div").contains(item).should("exist");
+    cy.get("[data-cy=\"HeaderInfo\"]").contains(item).should("exist");
   });
 });
 
 Cypress.Commands.add("poCheckIfFormPopUpIsActive", (params: {type: string; list: string[]}) => {
-  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+  cy.get("[data-cy=\"field-selectType\"]").arrowClick();
   cy.get("[id^=\"react-select\"]").contains(params.type).arrowClick();
-  cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowClick();
+  cy.get("[data-cy=\"field-selectForm\"]").arrowClick();
   params.list.forEach((item) => {
     cy.get("[id^=react-select]").contains(item).should("exist");
   });
-  cy.get("[data-cy=field-selectType]>div:nth-child(1)").arrowClick();
 });
 
 Cypress.Commands.add("poCloseFormPopUpOnLandingPage", () => {
@@ -266,6 +338,10 @@ Cypress.Commands.add("poAMSelectApprover", (...list: string[]) => {
   });
 });
 
+Cypress.Commands.add("poAMEnterPassword", () => {
+  cy.get(`input[name="password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+});
+
 Cypress.Commands.add("poSaveDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
@@ -274,7 +350,7 @@ Cypress.Commands.add("poSaveDocument", () => {
 });
 
 Cypress.Commands.add("poAMCheckForApproval", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
     cy.get("#ApproveAndRelease-button").arrowClick();
   });
 });
@@ -290,6 +366,10 @@ Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
 Cypress.Commands.add("poAMApproveButton", () => {
   cy.get("#ApproveAndRelease-submit").arrowClick();
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("poAMApproveSubmissionButton", () => {
+  cy.get(`[data-cy="transition-approve"]`).arrowClick();
 });
 
 Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {
@@ -318,7 +398,7 @@ Cypress.Commands.add("poRejectARNew", (params: {password: string}) => {
 });
 
 Cypress.Commands.add("poVerifyStatus", (params: { status: string }) => {
-  cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", params.status);
+  cy.get("div[data-cy=\"HeaderInfo-status\"]>span").should("contain", params.status);
 });
 
 Cypress.Commands.add("poAPICreatePO", (params: {
@@ -356,6 +436,10 @@ Cypress.Commands.add("poListVerifyFilterBySupplier", (params: {supplier: string 
   cy.get(`[aria-colindex="4"] input`).arrowType(params.supplier).wait(500);
 });
 
+Cypress.Commands.add("poListVerifyFilterByOrderDate", (params: {orderDate: string }) => {
+  cy.get(`[aria-colindex="9"] input`).arrowType(params.orderDate).wait(500);
+});
+
 Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
   cy.listLoadingElementShouldNotExist();
 
@@ -365,3 +449,24 @@ Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
   cy.progressBarShouldNotExist();
 });
 
+Cypress.Commands.add("poApprove", () => {
+  cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("poCheckRequestor", (params: {requestor: string }) => {
+  cy.get("[data-cy^='po-requestor-']").should("have.value", params.requestor);
+});
+
+Cypress.Commands.add("poCheckOrderDate", (params: {orderDate: string }) => {
+  cy.get("[name^='ordered-']").should("have.value", params.orderDate);
+});
+
+Cypress.Commands.add("poBuildInStatus", (params: {status: string }) => {
+  cy.get("#mui-component-select-po-status-built-in").should("have.text", params.status);
+});

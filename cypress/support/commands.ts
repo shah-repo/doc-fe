@@ -2,6 +2,7 @@
 // import "../../node_modules/cypress-movie/src/arrow
 import path from "path";
 import { Result } from "pdf-parse";
+import { DOC_TYPE_GROUP } from "../../src/state/ducks/documentRevisions/documentType/types";
 import { addTestContext } from "../utils/context/addTestContext";
 import { CONFIG } from "./config";
 import { CyRoutes, CyWaitOptions, routes } from "./routes";
@@ -33,10 +34,11 @@ declare global {
       unzipFile(params: { directory: string; fileName: string}): Chainable<Subject>;
       pdfparseFile(params: { directory: string; fileName: string}): Promise<Result>;
       sendToEmail(): Chainable<Subject>;
+      sendToEmailFromHeader(): Chainable<Subject>;
       createCompany(params: { payload: ICreateCompanyBootstrap; sessionId: string }): Chainable<Subject>;
       apiLogin(params: { email: string; password: string }): Chainable<Subject>;
       selectCompany(params: { name: string }): Chainable<Subject>;
-      unClick(): Chainable<Subject>;
+      unClick(options?: { force?: boolean }): Chainable<Subject>;
       checkIfInputHasValue(params: { inputSelector: string }): Chainable<Subject>;
       myCompanies(token: string): Chainable<Subject>;
       triggerDueDateEmailScript(params: {sessionId: string; currentDate: string});
@@ -51,6 +53,7 @@ declare global {
         options?: Partial<CyWaitOptions>
       ): Chainable<Subject>;
       arrow(options: any): Chainable<Subject>;
+      saveBarShouldNotExist(): Chainable<Subject>;
       progressBarShouldNotExist(): Chainable<Subject>;
       progressBarShouldExist(): Chainable<Subject>;
       progressBarShouldAppear(): Chainable<Subject>;
@@ -60,6 +63,8 @@ declare global {
       listLoadingElementShouldExist(): Chainable<Subject>;
       listLoadingElementShouldAppear(): Chainable<Subject>;
       dragAndDrop(params: {fromSelector: string; toSelector: string});
+      dragAndDropTopDown(params: {fromSelector: string; toSelector: string});
+      checkExternalLink(): Chainable<Subject>;
     }
   }
 }
@@ -68,17 +73,22 @@ export interface IUser {
   name: string;
 }
 
+export enum DEFAUL_REV_STAGE {
+  NUMERIC = "Numeric",
+  ALPHA = "Alpha"
+}
+
 interface IfieldsConfig{
   [key: string]: {
     visible: boolean;
     required?: boolean;
     label?: string;};
 }
-interface IdocumentTypeDto {
+export interface IdocumentTypeDto {
   documentTypeName: string;
   documentTypeAcronym: string;
   isQms?: boolean;
-  group: string;
+  group: DOC_TYPE_GROUP;
   privateNumberPool?: boolean;
   startingNumber?: number;
   needsSignature?: boolean;
@@ -88,7 +98,7 @@ interface IdocumentTypeDto {
   canRedLine?: boolean;
   defaultTraining?: boolean;
   hiddenForCreationForUsersWithoutTags?: any[];
-  defaultRevStage?: string;
+  defaultRevStage?: DEFAUL_REV_STAGE;
   active?: boolean;
 }
 
@@ -104,6 +114,8 @@ export interface ICreateCompanyBootstrap {
   numOfDocDigits: number;
   users: IUser[];
   documentTypes: IdocumentTypeDto[];
+  scheduledForDeletion: boolean;
+  testAutomationCompany: boolean;
   whiteLabeling?: any;
   addresses?: string[];
   remoteValidatorBundleName: string;
@@ -118,6 +130,10 @@ Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
     }
     return false;
   });
+});
+
+Cypress.Commands.add("saveBarShouldNotExist", () => {
+  cy.get(`[data-cy="Document-Save-Progress-Bar"]`, { timeout: 40000 }).should("not.exist");
 });
 
 Cypress.Commands.add("progressBarShouldNotExist", () => {
@@ -203,7 +219,13 @@ Cypress.Commands.add("pdfparseFile", (params: { directory: string; fileName: str
 });
 
 Cypress.Commands.add("sendToEmail", () => {
-  cy.get(".MuiButtonBase-root.MuiButton-root").contains("Send To Email").arrowClick();
+  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
+  cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
+  cy.get("div.Toastify__toast-container").should("exist");
+});
+
+Cypress.Commands.add("sendToEmailFromHeader", () => {
+  cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
   cy.get("div.Toastify__toast-container").should("exist");
 });
 
@@ -247,28 +269,9 @@ Cypress.Commands.add("selectCompany", (params: { name: string }) => {
   cy.get("#root", { timeout: 20 * 1000 }).contains(params.name).arrowClick();
 });
 
-Cypress.Commands.add("unClick", () => {
-  cy.get("body").arrowClick( 10, 10, { force: true });
+Cypress.Commands.add("unClick", (options = { force: true }) => {
+  cy.get("body").arrowClick( 10, 10, options);
 });
-
-// Cypress.Commands.add("wrapWithWaitOnApiCalls", (names: CyRoutes[], callback: () => void) => {
-//   const functionRequestTimeout: number = 40 * 1000;
-//   const functionResponseTimeout: number = 40 * 1000;
-//   const aliasesToWait: string[] = [];
-
-//   names.forEach((name) => {
-//     const { requestConfig } = routes[name];
-//     cy.intercept(requestConfig).as(name);
-//   });
-
-//   names.forEach((name) => {
-//     aliasesToWait.push(`@${name}`);
-//   });
-
-//   callback();
-
-//   cy.wait(aliasesToWait, { responseTimeout: functionResponseTimeout, requestTimeout: functionRequestTimeout });
-// });
 
 Cypress.Commands.add(
   "wrapWithWaitOnApiCalls",
@@ -342,43 +345,33 @@ Cypress.Commands.add("verifyAutocompleteList", { prevSubject: "element" }, (
 Cypress.Commands.add("dragAndDrop", (params: {fromSelector: string; toSelector: string}) => {
   cy.get(params.fromSelector)
     .realMouseDown({ position: "center", button: "left" });
+  cy.wait(3000);
   cy.get(params.toSelector)
     .realMouseMove(0, 0, { position: "center" })
     .realMouseUp();
 });
 
-// Cypress.Commands.overwrite("click", (originalFn, element, options) => {
-//   const state = cy.state("current").attributes.name;
+Cypress.Commands.add("dragAndDropTopDown", (params: {fromSelector: string; toSelector: string}) => {
+  cy.get(params.fromSelector)
+    .realMouseDown({ position: "top" });
+  cy.wait(3000);
+  cy.get(params.toSelector)
+    .realMouseMove(0, 200, { position: "bottom" })
+    .realMouseUp();
+});
 
-//   if (state === "click") {
-//     cy.wrap(element)
-//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-//       .then(() => originalFn(element, options));
-//   }
-//   else {
-//     return originalFn(element, options);
-//   }
-// });
-
-// Cypress.Commands.overwrite("type", (originalFn, element,  text, options) => {
-//   const state = cy.state("current").attributes.name;
-
-//   if (state === "type") {
-//     cy.wrap(element)
-//       .arrow({ duration: CONFIG.ARROW_DURATION, blocking: true })
-//       .then(() => originalFn(element, text, options));
-//   }
-//   else {
-//     return originalFn(element, text, options);
-//   }
-// });
-
-// Cypress.Commands.add("type", { prevSubject: true }, (subject, thingToTypeIn: string, options?: any) => {
-//   cy.wrapWithWaitOnApiCalls([CyRoutes.PostFieldLocks], () => {
-//     cy.wrap(subject).arrowClick();
-//   });
-//   cy.wrapWithWaitOnApiCalls([CyRoutes.ExpireFieldLocks], () => {
-//     cy.wrap(subject).arrowType(thingToTypeIn, options).unClick();
-//   });
-// });
-
+Cypress.Commands.add("checkExternalLink", { prevSubject: "element" }, (
+  subject: JQuery<HTMLElement>
+) => {
+  cy.wrap(subject)
+    .should("have.attr", "target", "_blank")
+    .should("have.attr", "rel", "noopener noreferrer")
+    .should("have.attr", "href")
+    .then((href) => {
+      cy
+        .request(href)
+        .its("status")
+        .should("eq", 200);
+    });
+  return cy.wrap(subject);
+});

@@ -1,7 +1,7 @@
 # Enlil Frontend Service
 
 - [Enlil Frontend Service](#enlil-frontend-service)
-  * [Runing dev server](#runing-dev-server)
+  * [Running dev server](#running-dev-server)
     + [Environment variables](#environment-variables)
     + [Available Scripts](#available-scripts)
       - [`yarn start`](#-yarn-start-)
@@ -29,22 +29,37 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Runing dev server
+## Running dev server
+
+### Requirements
+
+- **Node.js**. Check actual version in `package.json engines.node`
+- **Yarn** v1
+
+### First time config
+
+1. Create `.env` file
+    ```
+    cp .env.example .env
+    ```
+2. Create `buildInfo.json` file
+    ```
+    cp src/data/buildInfo.json.example src/data/buildInfo.json
+    ```
+3. Install dependencies
+    ```
+    yarn install --frozen-lockfile
+    ```
+4. That's it! You are ready to start the app
+    ```
+    yarn start
+    ```
+
+After opening the app you will receive CORS errors on each API requests. Install [Moesif Origin & CORS Changer](https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc) Chrome extension to avoid that. By default, it works on all domains, but for your security, configure it only for API domains.
+
 ### Environment variables
 
-```bash
-REACT_APP_API_ENDPOINT='https://api.develop.enlil.io/api'
-REACT_APP_REFRESH_TOKEN_VALIDITY_DAYS="30"
-REACT_APP_AWS_COGNITO_CLIENT_ID="5ts2oghmmo5bv2hik76b9rt8of"
-REACT_APP_FRONTEND_URL="https://develop.enlil.io"
-REACT_APP_SIGNUP_DOMAIN_URL="https://shifamed-doc-develop.auth.us-west-2.amazoncognito.com"
-REACT_APP_HELLOSIGN_TEST_MODE="1"
-REACT_APP_THEME='DEV_THEME'
-REACT_APP_HELLOSIGN_CLIENT_ID="ENV_ID"
-REACT_APP_DATADOG_APPLICATION_ID="REACT_APP_DATADOG_APPLICATION_ID"
-REACT_APP_DATADOG_CLIENT_TOKEN="REACT_APP_DATADOG_CLIENT_TOKEN"
-
-```
+All used env variables you can find in `.env.example` file.
 
 ### Available Scripts
 
@@ -161,11 +176,20 @@ Optional environment variables:
 
 *NUMBER_OF_WORKERS* - number of workers :grin: , defaults to 4. Go as high as you can without having (too many?) specs failing due to timeouts or you system becomes unbearably slow.
 *CYPRESS_BROWSER* - browser to use. Defaults to 'chrome'. Options are 'chrome', 'chromium', 'firefox', 'electron'
-
+*CYPRESS_NO_COMMAND_LOG* - show empty command log. Defaults to false. It can increase speed of tests by ~20%
+*CYPRESS_INCLUDE_TAGS* - If any tag provided then only those specs will be executed
+Example
+```
+CYPRESS_INCLUDE_TAGS=@timetool ./scripts/cypress/run_in_parallel.sh All specs tagged as timetool will be executed 
+CYPRESS_INCLUDE_TAGS=-@timetool ./scripts/cypress/run_in_parallel.sh All specs tagged as timetool will be ignored 
+```
 Example
 ```
 NUMBER_OF_WORKERS=4 ./scripts/cypress/run_in_parallel.sh
 ```
+You can add tags in tests as below
+context("Description of the test", { tags: ["@timetool"] }, () => {}
+
 
 #### Take screenshots after every step
 Set env variable `CYPRESS_TAKE_SCREENSHOT_AFTER_EACH` to `true`

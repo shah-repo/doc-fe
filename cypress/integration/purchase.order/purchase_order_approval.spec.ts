@@ -3,6 +3,8 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -51,7 +53,7 @@ context("PO approval test", () => {
               {
                 documentTypeName: "PO Part",
                 documentTypeAcronym: "PRT-",
-                group: "PART",
+                group: DOC_TYPE_GROUP.PART,
                 isQms: true,
               },
             ],
@@ -150,7 +152,7 @@ context("PO approval test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -188,7 +190,7 @@ context("PO approval test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -207,8 +209,16 @@ context("PO approval test", () => {
       cy.drEnterDocumentDescription({ description: "New POAM description" });
     });
 
+    it("Navigate to MatrixDetails tab", () => {
+      cy.drSelectMatrixDetailsTab();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Click on 'Add Item'", () => {
-      cy.poAddNewFieldItem();
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
     });
 
     it("Enter Level Name value to be '1'", () => {
@@ -228,7 +238,7 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Add Item'", () => {
-      cy.poAddNewFieldItem();
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
     });
 
     it("Enter Level Name value to be '2'", () => {
@@ -263,6 +273,14 @@ context("PO approval test", () => {
 
     it("Click on 'Create PO' button", () => {
       cy.poClickCreatePO();
+    });
+
+    it("Enter description 'POAM test", () => {
+      cy.drEnterDocumentDescription({ description: "POAM testing description" });
+    });
+
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
     });
 
     it("Click on 'Add item' button", () => {
@@ -301,8 +319,12 @@ context("PO approval test", () => {
       cy.poAddPOButtonClick();
     });
 
-    it("Enter description 'POAM test", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "POAM testing description" });
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Add required order date", () => {
@@ -314,9 +336,8 @@ context("PO approval test", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if error message says that approvers are not present", () => {
@@ -361,7 +382,11 @@ context("PO approval test", () => {
     });
 
     it("Enter description 'POAM test", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "POAM test" });
+      cy.drEnterDocumentDescription({ description: "POAM test" });
+    });
+
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
     });
 
     it("Click on 'Add item' button", () => {
@@ -404,6 +429,10 @@ context("PO approval test", () => {
       cy.poSaveDocument();
     });
 
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
@@ -434,6 +463,8 @@ context("PO approval test", () => {
     });
 
     it("Click on 'Reject' PO and enter confirmation password", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dashToggleMoreDetailsForListItemNumber({ listItemNumb: 0 });
       cy.dashRejectApprovalForListItem({ listItem: `${USERS[2].name}needs your approval forPO-00001` });
     });
@@ -456,10 +487,8 @@ context("PO approval test", () => {
 
     it("Verify rejected PO status, should be 'Draft'", () => {
       SystemRequirement("REQ-0020", "REQ-0570", "REQ-1570");
-      cy.poVerifyStatus({ status: "Draft" });
+      cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 });
-
-export { };
 

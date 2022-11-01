@@ -1,0 +1,27 @@
+import moment from "moment-timezone";
+
+export const momentInPST = () => moment().tz("America/Los_Angeles");
+export const lotDateSuffix = () => momentInPST().format("YYMMDD");
+export const emailDateOffset = (5 * 1000);
+export const fileTimeFormat = momentInPST().format("_YYYY-MMM-DD_HH-MM-SS");
+export const pdfFooterDate = momentInPST().format("D MMM YYYY");
+export const pdfDocRelDate = momentInPST().format("D MMM YYYY");
+export const pdfDocRelDateMonthFirst = momentInPST().format("MMMM D, YYYY");
+export const pdfDocDraftDay = momentInPST().format("D");
+export const pdfDocDraftMonth = momentInPST().format("MMMM");
+export const pdfDocDraftDayMonth = momentInPST().format("MMMM D");
+export const pdfDocDraftyear = momentInPST().format("YYYY");
+export const equimentDueDays = 365;
+export const equimentDueDaysFmt = momentInPST().add(equimentDueDays, "days").format("ddd MMMM D YYYY");
+export const lotDocumentIdRef = ` - LOT #` + lotDateSuffix();
+export const lotIdRef = `LOT #` + lotDateSuffix();
+export const equimentPMDueDays = 40;
+export const equimentCALDueDays = 31;
+export const equimentPMDueDaysFmt = momentInPST().add(equimentPMDueDays, "days").format("ddd MMM D YYYY");
+export const equimentCALDueDaysFmt = momentInPST().add(equimentCALDueDays, "days").format("ddd MMM D YYYY");
+export const dueDate = momentInPST().subtract(1, "days").format("ddd, MMMM D, YYYY");
+export const trAssignedDate =  momentInPST().add(30, "days").subtract(10, "days").format("MMM D");
+export const trCompleteDate =  momentInPST().format("M/D/YYYY");
+export const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
+export const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/D/YYYY");
+export const currentTime = moment().tz("America/Los_Angeles").format("hh:mm:ss a");

@@ -1,10 +1,13 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { MPITest } from "../../utils/constants/documentTypes/mpi";
+import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -47,130 +50,8 @@ context("Mpi/Qpi flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Manufacturing Process Instructions Test",
-                documentTypeAcronym: "MPI-",
-                group: "PI",
-                schema: [
-                  {
-                    name: "fb-mpi-procedure-section-built-in",
-                    type: "section",
-                    index: 0,
-                    label: "form.builder.mpiprocedure",
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "mpi-procedure-built-in",
-                    type: "mpiprocedure",
-                    index: 1,
-                    stepIndex: 1,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    deleteInFormDisabled: false,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-start-quantity",
-                    type: "quantity",
-                    index: 2,
-                    label: "Start quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Start quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-accepted-quantity",
-                    type: "quantity",
-                    index: 3,
-                    label: "Accepted quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Accepted quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-rejected-quantity",
-                    type: "quantity",
-                    index: 4,
-                    label: "Rejected quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Rejected quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 5,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
-              {
-                documentTypeName: "Quantity Process Instructions Test",
-                documentTypeAcronym: "QPI-",
-                group: "PI",
-                schema: [
-                  {
-                    name: "fb-mpi-procedure-section-built-in",
-                    type: "section",
-                    index: 0,
-                    label: "form.builder.mpiprocedure",
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "mpi-procedure-built-in",
-                    type: "mpiprocedure",
-                    index: 1,
-                    stepIndex: 1,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 2,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
+              MPITest,
+              QPITest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -348,10 +229,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1 and check autosave", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Add attachment and check autosave", () => {
             cy.contains("Step #1").parentsUntil("li")
               .find("[data-cy=\"albumMediaButton\"]").arrowClick();
@@ -414,6 +299,10 @@ context("Mpi/Qpi flow", () => {
             cy.reload();
           });
 
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Step description should be exist", () => {
             cy.get("[data-cy=\"mpi-procedure-built-in.description\"]").next()
               .should("have.text", "Description of step one");
@@ -434,7 +323,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify MPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           });
         });
       });
@@ -477,10 +366,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -500,14 +393,12 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release MPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify MPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -557,7 +448,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify MPI state should be Approved", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
       });
     });
   });
@@ -598,10 +489,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify MPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -621,14 +516,12 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release MPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify MPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -673,7 +566,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify MPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Pending Change");
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_CHANGE });
       });
     });
   });
@@ -714,10 +607,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -744,7 +641,7 @@ context("Mpi/Qpi flow", () => {
 
           it("Verify QPI state should be 'Released'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           });
         });
       });
@@ -787,10 +684,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -810,14 +711,12 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release QPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify QPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -865,7 +764,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Approved", () => {
         SystemRequirement("REQ-3050");
-        cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
       });
     });
   });
@@ -906,10 +805,14 @@ context("Mpi/Qpi flow", () => {
 
         it("Verify QPI state should be 'Draft'", () => {
           SystemRequirement("REQ-3050");
-          cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Draft");
+          cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
         context("Fill step #1", () => {
+          it("Select Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Fill step #1 description", () => {
             cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
           });
@@ -929,14 +832,12 @@ context("Mpi/Qpi flow", () => {
           });
 
           it("Approve and release QPI document with selecting approver", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-              cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
-            });
+            cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
           });
 
           it("Verify QPI state should be 'In Review'", () => {
             SystemRequirement("REQ-3050");
-            cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "In Review");
+            cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
           });
         });
       });
@@ -981,7 +882,7 @@ context("Mpi/Qpi flow", () => {
 
       it("Verify QPI state should be Pending Change", () => {
         SystemRequirement("REQ-3050");
-        cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Pending Change");
+        cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_CHANGE });
       });
     });
   });

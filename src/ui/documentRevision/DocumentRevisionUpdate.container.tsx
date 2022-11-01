@@ -1,15 +1,17 @@
-import { debounce, isEmpty, pick } from "lodash";
+import { debounce, get, has, isEmpty, map, pick, set } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFormattedDateString, MomentFormats } from "../../common/utils/date";
+import { DocumentRevisionSummary } from "../../App";
 import { authSelectors } from "../../state/ducks/auth";
 import { companyActions, companySelectors } from "../../state/ducks/company";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
-import DocumentRevisionSummaryPresenter from "../document.revision/summary/presenter";
+import { FBDAMFields } from "../form.builder";
 import { FBEndpoint } from "../form.builder/defaults/FBEndpoint";
+import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
+import FBDataStore from "../form.builder/FBStore/FBDataStore";
 import FBStore from "../form.builder/FBStore/FBStore";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
@@ -18,6 +20,7 @@ import { isOperator } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
+import { checkIsDocumentDAM } from "./helpers/checkDocumentGroup";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
 
 interface Props {
@@ -43,6 +46,8 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const initialValues = useMemo(() => toDocumentRevisionFormValues(documentRevision), [documentRevision]);
   const isCurrentUserOperator = React.useContext(isOperator);
   const { docId } = documentRevision.document;
+  const formGroupOptions = documentRevision?.document.documentType.groupOptions;
+  const isDAM = checkIsDocumentDAM(formGroupOptions);
   useDocumentTitle(docId);
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
@@ -50,12 +55,9 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   // Disabled because of ENC-7826
   // const saveWithNoResponseAction = useActionCreator(documentRevisionsActions.saveWithNoResponse);
 
-  const [lastSavedTimestamp, setLastSavedTimestamp] = React.useState<string>();
-
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
   const async = useAsync<DocumentRevision>({
     onSuccess: () => {
-      setLastSavedTimestamp(getFormattedDateString(Date.now(), MomentFormats.Time));
       if (redlineActive) {
         dispatch(companyActions.redlineConfig(false));
       }
@@ -64,16 +66,13 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   });
 
   useEffect(() => () => {
+    FBStore.damData = { approvalMatrix: [], approvalRoles: [] };
     documentRevisionStatusContextFromCR = React.createContext<undefined | DocumentRevisionStatus>(undefined);
   }, []);
 
   if (!(canEditDocumentRevision(documentRevision, currentUserEmail, isCurrentUserOperator) )) {
     return (
-      <DocumentRevisionSummaryPresenter
-        dataProp={documentRevision}
-        canShowCreateVersionButton={true}
-        canChangeOwnerShip={canChangeOwnerShip}
-      />
+      <DocumentRevisionSummary {...{ documentRevision, canChangeOwnerShip }}/>
     );
   }
 
@@ -97,11 +96,63 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
           method: "get",
         });
       }
+
+      FBDataStore?.setRefreshData({
+        ...FBDataStore?.refreshData,
+        formInput: data.formInput ?? FBDataStore?.refreshData?.formInput,
+      });
     });
   };
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
+    // Hack to take updated formInput
+    const formStateContext = FBFormStateContext as any;
+    if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
+      set(values, "formInput", formStateContext?._currentValue);
+    }
     const dataToSubmit = compareValuesToSubmit(cleanInitialValues, values, toDocumentRevisionEditRequestBody);
+    const formInput = get(dataToSubmit, "formInput");
+
+    if (isDAM && !isEmpty(FBStore.damData?.approvalMatrix) && isEmpty(dataToSubmit)) {
+      set(dataToSubmit, "formInput", {
+        ...formInput, ...{
+          [FBDAMFields.DAM]: FBStore.damData?.["approvalMatrix"],
+          [FBDAMFields.DAR]: FBStore.damData?.["approvalRoles"],
+        },
+      });
+    }
+    if (has(formInput, FBDAMFields.DAR) && has(formInput, FBDAMFields.DAM)) {
+      const approvalRoles = get(formInput, FBDAMFields.DAR);
+      const approvalMatrix = map(get(formInput, FBDAMFields.DAM), (am) => {
+        map(new Array(approvalRoles.length), (_, i) => {
+          if (isEmpty(am.approvalRoles.stage1)) {
+            am.approvalRoles.stage1 = [am.approvalRoles.stage1?.[i] || false];
+          } else {
+            am.approvalRoles.stage1[i] = am.approvalRoles.stage1?.[i] || false;
+          }
+          if (isEmpty(am.approvalRoles.stage2)) {
+            am.approvalRoles.stage2 = [am.approvalRoles.stage2?.[i] || false];
+          } else {
+            am.approvalRoles.stage2[i] = am.approvalRoles.stage2?.[i] || false;
+          }
+          if (isEmpty(am.approvalRoles.stage3)) {
+            am.approvalRoles.stage3 = [am.approvalRoles.stage3?.[i] || false];
+          } else {
+            am.approvalRoles.stage3[i] = am.approvalRoles.stage3?.[i] || false;
+          }
+          if (isEmpty(am.approvalRoles.admStage)) {
+            am.approvalRoles.admStage = [am.approvalRoles.admStage?.[i] || false];
+          } else {
+            am.approvalRoles.admStage[i] = am.approvalRoles.admStage?.[i] || false;
+          }
+        });
+        return am;
+      });
+      set(dataToSubmit, "formInput", {
+        ...formInput,
+        [FBDAMFields.DAR]: approvalRoles, [FBDAMFields.DAM]: approvalMatrix,
+      });
+    }
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 
     if (redlineActive) {
@@ -151,7 +202,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         canChangeOwnerShip={canChangeOwnerShip}
         showRevisionTypeChange
         isNewVersion={isNewVersion}
-        {...{ lastSavedTimestamp }}
       />
     </FormContext.Provider>
   );

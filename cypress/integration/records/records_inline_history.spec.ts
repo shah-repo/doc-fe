@@ -1,8 +1,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { HistoryTestRecord } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -38,14 +40,7 @@ context("Record inline history Flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "History Test Record",
-                documentTypeAcronym: "HTR-",
-                group: "RECORD",
-                isQms: true,
-                needsSignature: true,
-                category: "Record",
-              },
+              HistoryTestRecord,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -104,55 +99,59 @@ context("Record inline history Flow", () => {
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
+    });
+
+    context("Create document and release it", () => {
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get(`span[data-cy="form.builder.approvals"]`).should("exist");
       });
 
       it("Add textfield", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectTextField();
-        cy.fbAddLabelName({ name: "Textfield for inline" });
-        cy.fbAddField();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
+        cy.fbAddNewFieldButton();
       });
 
       it("Add checkbox group", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbCheckboxGroupField();
-        cy.fbGroupName({ name: "CheckboxGroup for inline" });
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "CheckboxGroup for inline" });
         cy.fbGroupOptions("Red", "Green", "Blue");
         cy.fbAddField();
       });
 
       it("Add radio button group", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbRadioBtnGroupField();
-        cy.fbGroupName({ name: "RadioBtnGroup for inline" });
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
+        cy.fbEnterNameValue({ name: "label", value: "RadioBtnGroup for inline" });
         cy.fbGroupOptions("One", "Two", "Three");
         cy.fbAddField();
       });
 
       it("Add Select field", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectField();
-        cy.fbGroupName({ name: "Select field for inline" });
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
+        cy.fbEnterNameValue({ name: "label", value: "Select field for inline" });
         cy.fbGroupOptions("SelectOne", "SelectTwo", "SelectThree");
         cy.fbAddField();
       });
 
       it("Add inline approval", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.fbSelectInlineApproval();
-        });
-        cy.get("[name=\"label\"]").arrowType("Inline field");
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
+        cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
         cy.fbAddField();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
-    });
 
-    context("Create document and release it", () => {
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithApiCall();
 
@@ -178,6 +177,7 @@ context("Record inline history Flow", () => {
       cy.recSelectRecordFormFromMultiSelect({
         recordType: "History Test Record",
       });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     context("Fill in document attributes", () => {
@@ -186,7 +186,7 @@ context("Record inline history Flow", () => {
       });
 
       it("Enter description 'History Test Record description'", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "History Test Record description" });
+        cy.drEnterDocumentDescription({ description: "History Test Record description" });
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
@@ -196,6 +196,7 @@ context("Record inline history Flow", () => {
           cy.unClick();
         });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check 'Red' and 'Green' value on checkbox", () => {
@@ -204,6 +205,7 @@ context("Record inline history Flow", () => {
           cy.unClick();
         });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'One' value on radiobutton", () => {
@@ -212,6 +214,7 @@ context("Record inline history Flow", () => {
           cy.unClick();
         });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'SelectOne' value on select field", () => {
@@ -220,14 +223,17 @@ context("Record inline history Flow", () => {
           cy.unClick();
         });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select approver for first inline", () => {
         SystemRequirement("REQ-4340");
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
           cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
-          cy.get("ul>li[role=option]").contains(USERS[2].email).arrowClick();
+          cy.get("[name*=\"fb-ia-inline-field\"] input").autocompleteSelect(USERS[2].email);
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save record", () => {
@@ -238,7 +244,7 @@ context("Record inline history Flow", () => {
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
         cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
           CyRoutes.PostApprovalsApprove,
           CyRoutes.SessionDetails], () => {
@@ -259,12 +265,12 @@ context("Record inline history Flow", () => {
             cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
             cy.unClick();
             cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
-          cy.get("[data-cy=\"RichTextEditor.description\"]>div>div>div>div>div[contenteditable]").clear();
-          cy.drEnterDocumentDescriptionWithWait({ description: "History Test Inline Record description" });
+          cy.drEnterDocumentDescription({ description: "History Test Inline Record description" });
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -276,6 +282,7 @@ context("Record inline history Flow", () => {
 
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4400");
+          cy.wait(3000);
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
           cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
@@ -289,40 +296,30 @@ context("Record inline history Flow", () => {
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostOrPatchDocRev,
-            CyRoutes.SessionDetails], () => {
-            cy.fbUnSelectCheckboxValue( "Red" );
-            cy.progressBarShouldNotExist();
-          });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.fbUnSelectCheckboxValue( "Green" );
-            cy.unClick();
-          });
+          cy.fbUnSelectCheckboxValue( "Red" );
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.fbUnSelectCheckboxValue( "Green" );
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Check 'Blue' value on checkbox", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.fbSelectCheckboxValue( "Blue" );
-            cy.unClick();
-          });
+          cy.fbSelectCheckboxValue( "Blue" );
           cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Select 'Two' value on radiobutton", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.fbSelectRadioButtonValue({ value: "Two" });
-            cy.unClick();
-          });
+          cy.fbSelectRadioButtonValue({ value: "Two" });
           cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Select 'SelectTwo' value on select field", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit], () => {
-            cy.fbSelectFieldValue({ value: "SelectTwo" });
-            cy.unClick();
-          });
+          cy.fbSelectFieldValue({ value: "SelectTwo" });
           cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Save record", () => {
@@ -345,14 +342,15 @@ context("Record inline history Flow", () => {
           );
         });
 
-        it("Check record status is in 'Draft'", () => {
-          cy.drCheckDocumentStatus({ status: "Draft" });
+        it(`Check record status is in ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
       });
 
       context("Check inline approval history on released document", () => {
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4350");
+          cy.wait(3000);
           cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
           cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
           cy.wrapWithWaitOnApiCalls([
@@ -367,6 +365,7 @@ context("Record inline history Flow", () => {
 
         it("Navigate to released document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
           });
         });
@@ -388,14 +387,15 @@ context("Record inline history Flow", () => {
           );
         });
 
-        it("Check record status is in 'Last Signed'", () => {
-          cy.drCheckDocumentStatus({ status: "Last Signed" });
+        it(`Check record status is in ${STATUS_TYPES_LABEL.LAST_SIGNED}`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.LAST_SIGNED });
         });
       });
 
       context("Check inline approval history on released Superseded document", () => {
         it("Navigate to Superseded document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
+            cy.drClickRevisionsSidePanel();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).arrowClick();
           });
         });
@@ -413,8 +413,8 @@ context("Record inline history Flow", () => {
           );
         });
 
-        it("Check record status is in 'Superseded'", () => {
-          cy.drCheckDocumentStatus({ status: "Superseded" });
+        it(`Check record status is in ${STATUS_TYPES_LABEL.SUPERSEDED}`, () => {
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.SUPERSEDED });
         });
       });
     });

@@ -16,6 +16,7 @@ interface Props {
   bannerPortal?: React.MutableRefObject<HTMLDivElement | null>;
   setShouldDisplay?: (value: boolean) => void;
   shouldShowUpgrade: boolean;
+  renderAsButton?: boolean;
 }
 
 const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
@@ -25,6 +26,7 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
   bannerPortal,
   setShouldDisplay,
   shouldShowUpgrade,
+  renderAsButton,
 }) => {
   const dispatch = useDispatch();
 
@@ -47,7 +49,7 @@ const UpgradeToLatestContainer: React.FunctionComponent<Props> = ({
     <>
       {
         type === "button" &&
-        <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade }}/>
+        <UpgradeToLatestButton {...{ onUpgradeClick, setShouldDisplay, shouldShowUpgrade, renderAsButton }}/>
       }
       {
         type === "banner" &&

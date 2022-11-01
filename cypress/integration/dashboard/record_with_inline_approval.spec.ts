@@ -2,12 +2,16 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
+let firstEmployee;
+let secondEmployee;
 
 context("Records test with Inline approval", () => {
   before(() => {
@@ -32,16 +36,12 @@ context("Records test with Inline approval", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
+                ...RecordDocumentType,
                 fieldsConfig: {
                   D: {
                     visible: false,
@@ -120,6 +120,8 @@ context("Records test with Inline approval", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
+          firstEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -127,7 +129,7 @@ context("Records test with Inline approval", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[12].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -136,7 +138,7 @@ context("Records test with Inline approval", () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -145,15 +147,8 @@ context("Records test with Inline approval", () => {
   });
 
   context("Login user", () => {
-    it("Logs user in", () => {
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: firstEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -169,10 +164,6 @@ context("Records test with Inline approval", () => {
 
       it("Clicks on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
-      });
-
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
       });
     });
 
@@ -201,16 +192,20 @@ context("Records test with Inline approval", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
 
+      it("Open details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Add TextField", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Name" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add Inline Approval", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval1" });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
@@ -219,14 +214,14 @@ context("Records test with Inline approval", () => {
 
       it("Add TextField", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "Age" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add Inline Approval", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Inline Approval" });
+        cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval2" });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
@@ -252,12 +247,16 @@ context("Records test with Inline approval", () => {
       cy.drEnterDocumentTitle({ name: "Record title" });
     });
 
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter name", () => {
       cy.get("[name^=name-]").arrowType("test");
     });
 
     it("Select approver", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-1-]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-1-]").autocompleteSelect(`${USERS[12].name}`);
     });
 
     it("Save Record'", () => {
@@ -266,56 +265,53 @@ context("Records test with Inline approval", () => {
 
     it("Send request for approval", () => {
       cy.get("[data-cy=\"form.builder.request.approval\"]").arrowClick();
+      cy.wait(5000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Record is in WIP status", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
     });
 
     it("The owner should have a notification that Record rev 1 is for approval of User 2", () => {
       cy.navigToDashboard();
-      cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
+      cy.listLoadingElementShouldNotExist();
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
-        .and("contain.text", "IN REVIEW")
+        .and("contain.text", `${STATUS_TYPES_LABEL.IN_REVIEW}`)
         .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .and("contain.text", `${USERS[2].name}`);
+        .and("contain.text", `${USERS[12].name}`);
+    });
+
+    it("Log out", () => {
+      cy.authLogout();
     });
   });
 
-  context(`Notification for approval for ${USERS[2].name}`, () => {
-    it(`Login as ${USERS[2].name}`, () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+  context(`Notification for approval for ${USERS[12].name}`, () => {
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[12], employeeId: secondEmployee.id });
     });
 
     it("Click approve for Record", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostApprovalsApprove], () => {
-          cy.contains("needs your approval for").eq(0).trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+      cy.wait(2000);
+      cy.dashApproverFirstFromList();
     });
 
-    it(`Login as ${USERS[1].name}`, () => {
+    it("Log out", () => {
       cy.authLogout();
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    });
+
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: firstEmployee.id });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -329,7 +325,11 @@ context("Records test with Inline approval", () => {
       cy.contains("RD-00003").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.cmpTurnOffAutosave();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Click on revisions tab on side panel", () => {
+      cy.drClickRevisionsSidePanel();
     });
 
     it("Rev 1 will be released and rev 2 will automatically be created", () => {
@@ -343,12 +343,13 @@ context("Records test with Inline approval", () => {
       cy.get("[data-cy=\"revision\"]").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.drSelectDetailsTab();
       cy.get("[name^=age-]").should("exist");
       cy.get("[name^=age-]").arrowType("10");
     });
 
     it("Select approver", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-2-]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-2-]").autocompleteSelect(`${USERS[11].name}`);
     });
 
     it("Save Record'", () => {
@@ -357,10 +358,13 @@ context("Records test with Inline approval", () => {
 
     it("Send request for approval", () => {
       cy.get("[data-cy=\"form.builder.request.approval\"]").arrowClick();
+      cy.wait(5000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Record is in WIP status", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
     });
 
     it("Goto Dashboard", () => {
@@ -369,7 +373,7 @@ context("Records test with Inline approval", () => {
 
     it("check notification", () => {
       cy.contains("needs your approval for").eq(0).parent().parent().parent().parent()
-        .should("contain.text", USERS[1].name)
+        .should("contain.text", USERS[11].name)
         .and("contain.text", "RD-00003")
         .and("contain.text", "Record title");
 
@@ -397,16 +401,23 @@ context("Records test with Inline approval", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Click on revisions tab on side panel", () => {
+      cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("rev 3 will be created", () => {
       cy.get("[data-cy=\"revision\"]").eq(0).should("have.text", "Revision 3  - WIP");
       cy.get("[data-cy=\"revision\"]").eq(1).should("have.text", "Revision 2  - Last Signed");
       cy.get("[data-cy=\"revision\"]").eq(2).should("have.text", "Revision 1  - Archive");
+      cy.wait(3000);
     });
   });
 
   context("Click on 'Finalize and Release', rev 3 will update to rev A and will be released", () => {
     it("Click on 'Finalize and Release'", () => {
-      cy.get("[data-cy=\"revision\"]").eq(0).arrowClick();
+      cy.get("[data-cy=\"revision\"]").eq(0).arrowClick().wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
 
@@ -414,9 +425,14 @@ context("Records test with Inline approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.ReleaseDocRevWithoutAr], () => {
         cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("There should be a notification that rev A is released", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
       cy.get("[data-cy=\"revision\"]").eq(0).should("have.text", "Revision A  - Released");
     });
 
@@ -425,10 +441,10 @@ context("Records test with Inline approval", () => {
     });
 
     it("There should be a notification that rev A is released", () => {
-      cy.contains("RELEASED").eq(0).parent().parent().parent().parent()
+      cy.contains(`${STATUS_TYPES_LABEL.RELEASED}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
-        .and("contains.text", "RELEASED");
+        .and("contains.text", `${STATUS_TYPES_LABEL.RELEASED}`);
 
       cy.contains("Rev A Record title").parent()
         .should("have.text", "Rev A Record title");
@@ -447,8 +463,8 @@ context("Records test with Inline approval", () => {
 
     it("Add approvals", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[11].name);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[12].name);
       });
     });
 
@@ -466,7 +482,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Status is 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 
@@ -476,29 +492,25 @@ context("Records test with Inline approval", () => {
     });
 
     it("Owner should get a notification that Record is in review and pending approval from 2 users", () => {
-      cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
-        .and("contain.text", "IN REVIEW")
+        .and("contain.text", `${STATUS_TYPES_LABEL.IN_REVIEW}`)
         .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`)
-        .and("contain.text", `${USERS[2].name}`);
+        .should("contain.text", `${USERS[11].name}`)
+        .and("contain.text", `${USERS[12].name}`);
+    });
+
+    it("Log out", () => {
+      cy.authLogout();
     });
   });
 
   context("User 2 approve the Record", () => {
-    it("Logs user in", () => {
-      cy.authLogout();
-      cy.authLogin({
-        email: USERS[2].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
-    });
-
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[12], employeeId: secondEmployee.id });
     });
 
     it("Click approve for the Record", () => {
@@ -517,27 +529,23 @@ context("Records test with Inline approval", () => {
   });
 
   context("Check notifications on owner dashboard", () => {
-    it("Logs user in", () => {
+    it("Log out", () => {
       cy.authLogout();
-      cy.authLogin({
-        email: USERS[1].email,
-        password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
-      });
     });
 
-    it("Selects company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: firstEmployee.id });
     });
 
     it("Owner should get a notification that Record is in review and pending approval from 1 user", () => {
-      cy.contains("IN REVIEW").eq(0).parent().parent().parent().parent()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
-        .and("contain.text", "IN REVIEW")
+        .and("contain.text", `${STATUS_TYPES_LABEL.IN_REVIEW}`)
         .and("contain.text", "pending approvals from");
-      cy.contains("IN REVIEW").parent().parent().parent().parent().next()
+      cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`);
+        .should("contain.text", `${USERS[11].name}`);
     });
 
     it("Click approve for the Record", () => {
@@ -555,7 +563,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Record notification should change to Released", () => {
-      cy.contains("RELEASED").parent().parent().parent().parent()
+      cy.contains(`${STATUS_TYPES_LABEL.RELEASED}`).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title");
     });

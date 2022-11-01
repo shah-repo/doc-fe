@@ -1,19 +1,23 @@
 import { Box } from "@material-ui/core";
 import { useFormikContext } from "formik";
-import { compact, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
+import { compact, concat, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover } from "..";
+import { useDispatch } from "react-redux";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderItemType, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
-import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
+import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
-import useDidMount from "../../hooks/useDidMount";
 import Colors from "../../layout/theme/utils/colors";
+import FBDataStore from "../FBStore/FBDataStore";
 import FBPOApprovalsState from "./FBPOApprovals.state";
+
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -39,7 +43,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
-    const { isSubmitting } = useFormikContext();
+    const formik = useFormikContext();
     const { document, changeRequest, id, isOutput } = workspaceState || {};
     const outputId = isOutput ? id : null;
     const poName = workspaceState?.schema?.find((item) => item.type === "purchaseorder")?.name || "";
@@ -48,13 +52,14 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     dialogState = FB.useRef(FBDialogState);
     const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
     const updateApprovers = isDocumentRevisionInDraft(document?.status) && !isAdministrativeChange;
-    let deletedRequestor = "";
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
       { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
     );
-    const didMount = useDidMount();
+    let availableApprovers: string[] = [];
     const hasPOItems = useRef(false);
+    const dispatch = useDispatch();
+    const prevRequester = useRef<string>();
 
     isIncluded = (group: FBRequiredApprover): boolean =>
       (includes(map(poApprovalsState?.checkedGroups, "id"), group.id));
@@ -66,6 +71,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         window.location.reload();
       } else {
         const stateApprovals = filter(poApprovalsState?.approvals, (a) => a.approver?.id !== approval.approver?.id);
+        availableApprovers = getApprovals(unionBy(stateApprovals, [approval], "id"));
         poApprovalsState?.setApprovals(getApprovals(unionBy(stateApprovals, [approval], "id")));
       }
     }
@@ -91,92 +97,74 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
-    const checkEnlilProductExist = (poItems: FBPurchaseOrderValue) =>
-      poItems?.items?.some(
-        (item) => item.type === "service" || (item.type === "product" && item.partNumberDocId)
-      );
-    React.useEffect(() => reaction(
+    const checkServiceOrProductPartExists = (poItems: FBPurchaseOrderValue) => poItems?.items?.some((item) =>
+      item.type === FBPurchaseOrderItemType.SERVICE
+      || (item.type === FBPurchaseOrderItemType.PRODUCT && item.partNumberDocId)
+    );
+
+    useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
       (poItems) => {
         const previousPOItems = poApprovalsState.getPrevPOItems;
-        const isEnlilPOItemsExist = checkEnlilProductExist(poItems);
-        const isPrevEnlilPOItemsExist = checkEnlilProductExist(previousPOItems);
+        const isServiceOrProductPartExist = checkServiceOrProductPartExists(poItems);
+        const isPrevServiceOrProductPartExist = checkServiceOrProductPartExists(previousPOItems);
         poApprovalsState.setPrevPOItems(poItems);
-        hasPOItems.current = !(isEnlilPOItemsExist || isPrevEnlilPOItemsExist);
-        outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
+        hasPOItems.current = !(isServiceOrProductPartExist || isPrevServiceOrProductPartExist);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    const checkLineItems = (poItems: FBPurchaseOrderValue, requester: string) => {
-      const approvers = map(poApprovalsState?.getApprovals, "approver.id");
-      const proceedToNewReq = poItems.items.some((item) =>
-        item.type === "service" || (item.type === "product" && item.partNumberDocId)
-      );
-      if (updateApprovers && requester && proceedToNewReq && !approvers?.includes(requester)) {
-        addApprover([requester]);
-      } else if (updateApprovers && !requester && approvers?.includes(deletedRequestor)) {
-        removeApprover([deletedRequestor]);
-      } else if (updateApprovers && requester && !proceedToNewReq && approvers?.includes(requester)) {
-        if (poApprovalsState.getDidMountPhase) { return; }
-        removeApprover([deletedRequestor]);
+    function checkLineItems() {
+      if (!updateApprovers) {
+        return;
       }
-    };
 
-    // On required approval API call
-    React.useEffect(() => reaction(
-      () => poApprovalsState.getIsRequiredApprovals,
-      () => {
-        const approvers = map(poApprovalsState?.getApprovals, "approver.id");
-        const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
-        if (hasPOItems.current) {
-          return;
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        deletedRequestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-        if (poItems && poItems.items.length) {
-          checkLineItems(
-            poItems,
-            workspaceState?.revisionChangeType ===
-              RevisionChangeType.AdministrativeChange
-              ? ""
-              : deletedRequestor
-          );
-          // For adding missing required approvals
-          if (poApprovalsState.getDidMountPhase) {
-            const prevApprovers = workspaceState?.formInputSync?.get(name);
-            const diffIds = difference(Object.values(prevApprovers), approvers);
-            if (diffIds.length) {
-              addApprover(difference(approvers, [deletedRequestor]));
-              if (approvers.length === 0) {
-                addApprover(difference([deletedRequestor], approvers));
-              }
-            }
-            if (approvers.length === 0) {
-              addApprover(difference(Object.values(prevApprovers), [deletedRequestor]));
-            }
-            poApprovalsState.setDidMount(false);
-          }
-        } else if (approvers?.includes(deletedRequestor)) {
-          if (poApprovalsState.getDidMountPhase) { return; }
-          checkLineItems(poItems, "");
-        }
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      const prevRequesterValue = prevRequester.current;
+      const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
+
+      const allApprovers = poApprovalsState?.getApprovals
+        ?.map((item) => item?.approver?.id);
+      const hasRequesterInAllApprovers = allApprovers?.includes(requester);
+
+      if (requester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
+        return addApprover([requester], { manually: false });
       }
-    ), []);
+
+      // We can remove only automatically added approvers.
+      const autoApprovers = poApprovalsState?.getApprovals
+        ?.filter((item) => !item.manually)
+        ?.map((item) => item?.approver?.id);
+      const hasRequesterInAutoApprovers = autoApprovers?.includes(requester);
+      const hasPrevRequesterInAutoApprovers = autoApprovers?.includes(prevRequesterValue as string);
+
+      if (requester && hasRequesterInAutoApprovers && !hasServiceOrProductPart) {
+        return removeApprover([requester]);
+      }
+
+      if (!requester && prevRequesterValue && hasPrevRequesterInAutoApprovers) {
+        return removeApprover([prevRequesterValue]);
+      }
+    }
 
     // On add approver
-    React.useEffect(() => reaction(
+    useEffect(() => reaction(
       () => poApprovalsState?.approvalApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        concatApprovals(data);
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    React.useEffect(() => reaction(
+    useEffect(() => reaction(
       () => poApprovalsState?.transitionApi.data,
       (data) => {
         const filteredApprovals: FBInlineApprovalBody[] = compact(map(poApprovalsState.approvals, (approval) =>
           approval.approverId === data?.approverId ? data : approval
         ));
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
         poApprovalsState.setApprovals(getApprovals(filteredApprovals));
         if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
           window.location.reload();
@@ -185,12 +173,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    React.useEffect(() => reaction(
+    // This runs when you manually remove an approver from the list
+    useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         const employeesToBeAdded = difference(fieldValue, formValue);
-        employeesToBeAdded.length > 0 && addApprover(employeesToBeAdded);
+        employeesToBeAdded.length > 0 && addApprover(employeesToBeAdded, { manually: true });
         const employeesToBeRemoved = difference(formValue, fieldValue);
         employeesToBeRemoved.length > 0 && removeApprover(employeesToBeRemoved);
         formState?.getInputState(name)?.setRender();
@@ -198,31 +187,46 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    React.useEffect(() => reaction(
+    // Store previous requester value.
+    useEffect(
+      () => {
+        prevRequester.current = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      []
+    );
+
+    // On requester change.
+    useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
-      (requestor) => {
-        const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
-        if (!requestor) {
-          checkLineItems(poItems, requestor);
-          formState?.getInputState(name)?.setRender();
+      (requester) => {
+        checkLineItems();
+        prevRequester.current = requester;
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+
+    useEffect(() => {
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      poApprovalsState.setPrevPOItems(poItems);
+
+      // checkLineItems();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => reaction(
+      () => Object.values((poApprovalsState?.groups as {})).slice(),
+      (groups) => {
+        if (groups) {
+          checkLineItems();
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-    React.useEffect(() => {
-      const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
-      poApprovalsState.setPrevPOItems(poItems);
-      if (didMount) {
-        const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-        if (requestor) {
-          checkLineItems(poItems, requestor);
-          formState?.getInputState(name)?.setRender();
-        }
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     const checkGroups = (id: string) => {
+
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
       const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
@@ -247,28 +251,43 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
     };
 
-    function addApprover(ids?: string[]) {
+    const addApprover = (ids: string[], { manually = true } = {}) => {
       if (!id) { return; }
       if (!ids) { return; }
       const groupName = checkGroups(ids[0]);
+      if (
+        poApprovalsState.getDidMountPhase &&
+        ( difference(ids, availableApprovers).length === 0 )
+      ) {
+        return;
+      }
+      ids.length && (availableApprovers = concat(availableApprovers, ids));
       map(ids, (approver) => poApprovalsState?.addApproval({
         assigned: { id: approver },
         type: "MASTER",
         fieldId: name,
         partOf: { id },
         signatureGroupName: groupName,
+        manually,
+      }, () => {
+        const id  = workspaceState?.id;
+        if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
       }));
-    }
+    };
 
-    function removeApprover(ids?: string[]) {
+    const removeApprover = (ids?: string[]) => {
       if (!ids) { return; }
       if (formState?.workspaceMode === "preview") { return; }
+      availableApprovers = difference(availableApprovers, ids);
       map(ids, (approver) => {
         const approval = find(poApprovalsState?.getApprovals, (a) => a.approver?.id === approver);
         poApprovalsState?.removeCheckedGroups(approval?.signatureGroupName);
-        poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id);
+        poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
+          const id  = workspaceState?.id;
+          if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+        });
       });
-    }
+    };
 
     approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
       if (!approvalId) { return; }
@@ -308,7 +327,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     formState?.setFieldValue(`${name}`, fieldValue, true);
     documentStatus = document?.status as any;
     // Should be disabled while submitting if group levels changes while adding/editing PO items
-    disabled = disabled || loading || isSubmitting;
+    disabled = disabled || loading || formik?.isSubmitting;
 
     disabledOptions = [];
     if (formState?.inputState.get(name)?.value.length) {
@@ -316,11 +335,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         ? formState?.inputState.get(name)?.value
         : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
 
-      const poItems = workspaceState?.formInputSync?.get("po-items-built-in");
-      const proceedToNewReq = poItems?.items.some((item) =>
-        item.type === "service" || (item.type === "product" && item.partNumberDocId)
-      );
-      if (!proceedToNewReq) {
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      if (!checkServiceOrProductPartExists(poItems)) {
         disabledOptions = [];
       }
     }

@@ -1,10 +1,6 @@
 import { BaseTextFieldProps, BoxProps } from "@material-ui/core";
 import { SMTextProps } from "../../..";
 
-
-// export type SMInputType =
-// | "textfield";
-
 interface SMInputValidationProps {
   /**
    * @cfg {Boolean} If true allow form state to record the value

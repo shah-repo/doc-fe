@@ -8,7 +8,6 @@ export const styles = makeStyles(() =>
       fontSize: 18,
       color: Colors.almost_black,
       textTransform: "capitalize",
-      fontFamily: "Sora",
     },
   })
 );

@@ -4,11 +4,14 @@
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { DEFAUL_REV_STAGE } from "../../support/commands";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { Categories } from "../../utils/constants/categories";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -34,6 +37,7 @@ const FGLandSLSchema = [
     validationAttribute: "Quantity Received",
     deleteInFormDisabled: true,
     applicableValidationSchema: true,
+    tabId: "details",
   },
   {
     name: "100-inspection-override",
@@ -55,6 +59,7 @@ const FGLandSLSchema = [
     validationAttribute: "100% Inspection Override",
     deleteInFormDisabled: true,
     applicableValidationSchema: true,
+    tabId: "details",
   },
 ];
 const FGLandSLFieldsConfig = {
@@ -157,6 +162,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Make vs Buy",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "primary-supplier",
@@ -178,6 +184,7 @@ const subassemblySchema = [
     omitFinalValidation: true,
     validationAttribute: "Primary Supplier",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "other-suppliers",
@@ -199,6 +206,7 @@ const subassemblySchema = [
     omitFinalValidation: true,
     validationAttribute: "Other Suppliers",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "unit-of-measure",
@@ -319,6 +327,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Unit of measure",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "traceability-required",
@@ -338,6 +347,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Traceability required",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "serialized",
@@ -362,6 +372,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Serialized",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "select-serialization",
@@ -386,6 +397,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Select serialization",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "iqc-required",
@@ -405,6 +417,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "IQC Required",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "limited-shelf-life",
@@ -424,6 +437,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "Limited Shelf Life",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
   {
     name: "fai-required",
@@ -443,6 +457,7 @@ const subassemblySchema = [
     editorProperties: [],
     validationAttribute: "FAI Required",
     applicableValidationSchema: true,
+    tabId: "specification",
   },
 ];
 
@@ -476,26 +491,21 @@ context("Inspection flow", () => {
               {
                 documentTypeName: "Test Subassembly",
                 documentTypeAcronym: "SA-",
-                group: "PART",
+                group: DOC_TYPE_GROUP.PART,
                 isQms: true,
-                category: "Parts",
+                category: Categories.Parts,
                 schema: subassemblySchema,
-              },
-              {
-                documentTypeName: "Finished Good Lot",
-                documentTypeAcronym: "FGL-",
-                group: "PART_LOT",
-                isQms: true,
-                category: "Parts",
-                schema: FGLandSLSchema,
-                fieldsConfig: FGLandSLFieldsConfig,
               },
               {
                 documentTypeName: "Subassembly Lot",
                 documentTypeAcronym: "SA-",
-                group: "PART_LOT",
+                group: DOC_TYPE_GROUP.PART_LOT,
+                privateNumberPool: true,
                 isQms: true,
-                category: "Record",
+                category: Categories.Record,
+                needsSignature: true,
+                startingNumber: 1,
+                defaultRevStage: DEFAUL_REV_STAGE.NUMERIC,
                 schema: FGLandSLSchema,
                 fieldsConfig: FGLandSLFieldsConfig,
               },
@@ -742,6 +752,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Make vs Buy",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "primary-supplier",
@@ -762,6 +773,7 @@ context("Inspection flow", () => {
                       ],
                       validationAttribute: "Primary Supplier",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "other-suppliers",
@@ -782,6 +794,7 @@ context("Inspection flow", () => {
                       ],
                       validationAttribute: "Other Suppliers",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "unit-of-measure",
@@ -902,6 +915,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Unit of measure",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "traceability-required",
@@ -921,6 +935,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Traceability required",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "serialized",
@@ -946,6 +961,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Serialized",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "select-serialization",
@@ -971,6 +987,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Select serialization",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "iqc-required",
@@ -990,6 +1007,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "IQC Required",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "limited-shelf-life",
@@ -1009,6 +1027,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "Limited Shelf Life",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                     {
                       name: "fai-required",
@@ -1028,6 +1047,7 @@ context("Inspection flow", () => {
                       editorProperties: [],
                       validationAttribute: "FAI Required",
                       applicableValidationSchema: true,
+                      tabId: "specification",
                     },
                   ],
                 },
@@ -1077,51 +1097,50 @@ context("Inspection flow", () => {
       context("Add Inspection fields", () => {
         it("Add inspection section", () => {
           cy.fbClickAddNewHiddenBtn();
-          cy.fbSelectCustomFieldToAdd({ name: "Section" });
-          cy.fbEnterLabel({ label: "Inspection template" });
-          cy.get("[value=\"inspectionSection\"]").check();
-          cy.fbAddField();
+          cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
+          cy.fbEnterNameValue({ name: "label", value: "Inspection template" });
+          cy.fbSelectCheckboxValue("inspectionSection");
+          cy.fbAddNewFieldButton();
         });
 
-        it("Add 'Height field'", () => {
-          SystemRequirement("FB-0090");
-          cy.fbClickAddNewHiddenBtn();
-          cy.fbSelectCustomFieldToAdd({ name: "Text field with range" });
-          cy.fbEnterLabel({ label: "Height" });
-          cy.fbEnterPlaceholder({ placeholder: "Enter Value" });
-          cy.get("[name$=\"rangeOption\"]").check();
-          cy.get("[name=\"editorConfig.range.from\"]").arrowType("20");
-          cy.get("[name=\"editorConfig.range.to\"]").arrowType("150");
-          cy.get("[name=\"editorConfig.criticalToQuality\"]").check();
-          cy.get("[name=\"editorConfig.inspection\"]").check();
-          cy.get("[name=\"editorConfig.passValue\"]").check();
+        it("Add Text field with range", () => {
+          cy.fbAddNewFieldWhenHiddenLastPlace();
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
+          cy.fbEnterNameValue({ name: "label", value: "Height" });
+          cy.fbEnterNameValue({ name: "placeholder", value: "Enter Value" });
+          cy.get(`[data-cy="fb-control-form.builder.range"]`).arrowClick();
+          cy.fbSelectTextFieldRangeFromValue({ value: "20" });
+          cy.fbSelectTextFieldRangeToValue({ value: "150" });
+          cy.get(`[data-cy="fb-control-form.builder.critical.to.quality"]`).arrowClick();
+          cy.get(`[data-cy="fb-control-form.builder.inspection"]`).arrowClick();
+          cy.get(`[data-cy="fb-control-form.builder.pass.value"]`).arrowClick();
           cy.get("[name=\"editorConfig.pass.value.from\"]").arrowType("20");
           cy.get("[name=\"editorConfig.pass.value.to\"]").arrowType("150");
           cy.get("[id$=\"editorConfig.aql\"]").arrowClick();
           cy.get("ul>li[role=option]").contains("1.0").arrowClick();
-          cy.get("[value=\"includeInInspection\"]").check();
-          cy.get("[value=\"includeInFaiInspection\"]").check();
-          cy.fbAddField();
+          cy.unClick();
+          cy.fbSelectCheckboxValue("includeInInspection", "includeInFaiInspection");
+          cy.fbAddNewFieldButton();
         });
 
         it("Add 'Width field'", () => {
-          cy.fbClickAddNewHiddenBtn();
-          cy.fbSelectCustomFieldToAdd({ name: "Text field with range" });
-          cy.fbEnterLabel({ label: "Width" });
-          cy.fbEnterPlaceholder({ placeholder: "Enter Value" });
-          cy.get("[name$=\"rangeOption\"]").check();
-          cy.get("[name=\"editorConfig.range.from\"]").arrowType("20");
-          cy.get("[name=\"editorConfig.range.to\"]").arrowType("150");
-          cy.get("[name=\"editorConfig.criticalToQuality\"]").check();
-          cy.get("[name=\"editorConfig.inspection\"]").check();
-          cy.get("[name=\"editorConfig.passValue\"]").check();
+          cy.fbAddNewFieldWhenHiddenLastPlace();
+          cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field with range" });
+          cy.fbEnterNameValue({ name: "label", value: "Width" });
+          cy.fbEnterNameValue({ name: "placeholder", value: "Enter Value" });
+          cy.get(`[data-cy="fb-control-form.builder.range"]`).arrowClick();
+          cy.fbSelectTextFieldRangeFromValue({ value: "20" });
+          cy.fbSelectTextFieldRangeToValue({ value: "150" });
+          cy.get(`[data-cy="fb-control-form.builder.critical.to.quality"]`).arrowClick();
+          cy.get(`[data-cy="fb-control-form.builder.inspection"]`).arrowClick();
+          cy.get(`[data-cy="fb-control-form.builder.pass.value"]`).arrowClick();
           cy.get("[name=\"editorConfig.pass.value.from\"]").arrowType("20");
           cy.get("[name=\"editorConfig.pass.value.to\"]").arrowType("150");
           cy.get("[id$=\"editorConfig.aql\"]").arrowClick();
           cy.get("ul>li[role=option]").contains("1.0").arrowClick();
-          cy.get("[value=\"includeInInspection\"]").check();
-          cy.get("[value=\"includeInFaiInspection\"]").check();
-          cy.fbAddField();
+          cy.unClick();
+          cy.fbSelectCheckboxValue("includeInInspection", "includeInFaiInspection");
+          cy.fbAddNewFieldButton();
         });
       });
 
@@ -1158,34 +1177,38 @@ context("Inspection flow", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
+      it("Navigate to Specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
       it("Select make vs buy", () => {
-        cy.get("[id$=\"make-vs-buy\"]").arrowClick();
+        cy.get("[id$=\"make-vs-buy\"]").arrowClick({ force: true });
         cy.get("ul>li[role=option]").contains("Make").arrowClick();
       });
 
       it("Select unit of measure", () => {
-        cy.get("[id$=\"unit-of-measure\"]").arrowClick();
+        cy.get("[id$=\"unit-of-measure\"]").arrowClick({ force: true });
         cy.get("ul>li[role=option]").contains("Batch").arrowClick();
       });
 
       it("Select traceability required", () => {
-        cy.get("[value=\"Traceability required\"]").check();
+        cy.get("[value=\"Traceability required\"]").check({ force: true });
       });
 
       it("Select 'No' for Serialized option", () => {
-        cy.get("[name=\"serialized\"][value=\"No\"]").check();
+        cy.get("[name=\"serialized\"][value=\"No\"]").check({ force: true });
       });
 
       it("Select 'IQC Required'", () => {
-        cy.get("[value=\"IQC Required\"]").check();
+        cy.get("[value=\"IQC Required\"]").check({ force: true });
       });
 
       it("Select 'Limited Shelf Life'", () => {
-        cy.get("[value=\"Limited Shelf Life\"]").check();
+        cy.get("[value=\"Limited Shelf Life\"]").check({ force: true });
       });
 
       it("Select 'FAI Required'", () => {
-        cy.get("[value=\"FAI Required\"]").check();
+        cy.get("[value=\"FAI Required\"]").check({ force: true });
       });
 
       context("Release part document", () => {
@@ -1225,13 +1248,6 @@ context("Inspection flow", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Add output type named 'Test Component Specifications Lot'", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Component Specification Lot" });
-    });
-
-    it("Add output type named 'Test Finished Good Lot'", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Finished Good Lot" });
-    });
 
     it("Add output type named 'Subassembly Lot'", () => {
       cy.drSelectOutputDocumentType({ documentType: "Subassembly Lot" });
@@ -1255,12 +1271,8 @@ context("Inspection flow", () => {
       cy.drEnterDocumentTitle({ name: "Inspection Document" });
     });
 
-    it("Change document type", () => {
-      cy.drSelectDocumentType({ documentType: "Subassembly Lot" });
-    });
-
-    it("Add reference to part", () => {
-      cy.drSelectReferences("New Part for Inspection");
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Enter quantity received", () => {
@@ -1269,21 +1281,32 @@ context("Inspection flow", () => {
 
     it("Check 100% override", () => {
       cy.get("[value=\"100% Inspection Override\"]").check();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-
+    it("Click on save", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
-    it("Add 'Expiry Date'", () => {
-      cy.get("input[name=expiry-date]").parent().find("button").arrowClick();
+    it("Add reference to part", () => {
+      cy.drSelectReferences("New Part for inspection");
+      cy.listLoadingElementShouldNotExist();
+    });
 
-      cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
-
+    it("Click on save", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     context("Fill samples with values", () => {
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Add 'Expiry Date'", () => {
+        cy.xpath("//input[@name]/ ../div/button").arrowClick({ force: true });
+        cy.get("button.MuiPickersDay-current").arrowClick();
+      });
+
       it("Insert height for 'SAMPLE-1'", () => {
         cy.get("input[name^=height]").eq(0).arrowType("30");
       });
@@ -1359,7 +1382,6 @@ context("Inspection flow", () => {
       });
     });
 
-
     context("Release Inspection document", () => {
       it("Save document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
@@ -1378,17 +1400,17 @@ context("Inspection flow", () => {
         cy.ebApprove();
       });
 
-      it("Check status is 'Released'", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Check status is ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       });
 
       it("Check referenced by parts", () => {
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", `LOT #${lotDateSuffix}04 - A - Inspection Document - 3 Restricted Use`);
+          .should("contain.text", `LOT #${lotDateSuffix}04 - 1 - Inspection Document - 3 Restricted Use`);
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", `LOT #${lotDateSuffix}03 - A - Inspection Document - 2 Use as Is`);
+          .should("contain.text", `LOT #${lotDateSuffix}03 - 1 - Inspection Document - 2 Use as Is`);
         cy.get("[data-cy=\"common.referenced.by\"]")
-          .should("contain.text", `LOT #${lotDateSuffix}02 - A - Inspection Document - 4 Rework`);
+          .should("contain.text", `LOT #${lotDateSuffix}02 - 1 - Inspection Document - 4 Rework`);
       });
     });
 
@@ -1408,6 +1430,7 @@ context("Inspection flow", () => {
         });
 
         it("Verify quantity value", () => {
+          cy.drSelectDetailsTab();
           cy.get("[name=\"lot_quantity\"]").should("have.attr", "value", "3");
         });
       });
@@ -1427,6 +1450,7 @@ context("Inspection flow", () => {
         });
 
         it("Verify quantity value", () => {
+          cy.drSelectDetailsTab();
           cy.get("[name=\"lot_quantity\"]").should("have.attr", "value", "2");
         });
       });
@@ -1446,6 +1470,7 @@ context("Inspection flow", () => {
         });
 
         it("Verify quantity value", () => {
+          cy.drSelectDetailsTab();
           cy.get("[name=\"lot_quantity\"]").should("have.attr", "value", "4");
         });
       });

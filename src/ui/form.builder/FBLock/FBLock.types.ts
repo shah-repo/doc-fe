@@ -15,14 +15,6 @@ export interface FBLockBody {
   ownerName: string;
   expiresAt?: string;
 }
-
-// export interface FBLockData {
-//   documentRevision: DocumentRevision;
-//   lock: {
-//     id: string;
-//   };
-// }
-
 export interface FBLockValue {
   fieldName?: string;
   lockId?: string;

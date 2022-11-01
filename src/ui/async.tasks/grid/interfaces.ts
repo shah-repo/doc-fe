@@ -21,6 +21,7 @@ export interface KendoPresenterProps {
   handlePasswordExpirationFormSubmit: (data: any) => void;
   handlePasswordExpirationEmailSpecificFormSubmit: (data: any) => void;
   handleuuidFormSubmit: (uuid: string) => void;
+  handleEmailFormSubmit: (email: string) => void;
   handleTimeTravelFormSubmit: (values: TimeTravelProps) => void;
   handleTimeTravelCompany: (values: TimeTravelProps) => void;
   handleTimeTravelUser: (values: TimeTravelProps) => void;

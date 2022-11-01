@@ -183,16 +183,16 @@ context("Parts from EB flow test", () => {
       it("Select 'Engineering Build' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
       });
-
-      it("Verify that Approvals field is automatically added", () => {
-        SystemRequirement("REQ-0980");
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
     });
 
     context("Create the form and release it", () => {
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Verify that Approvals field is automatically added", () => {
+        SystemRequirement("REQ-0980");
+        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and release the form", () => {
@@ -261,7 +261,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Save the EB", () => {
@@ -341,7 +341,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Save the EB", () => {
@@ -382,11 +382,7 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () =>  {
       it("Save EB", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
 
       it("Submit for Approval", () => {
@@ -433,7 +429,7 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () => {
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Submit for Approval", () => {
@@ -463,7 +459,7 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });
@@ -521,7 +517,7 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+          cy.wrapWithWaitOnApiCalls([], () => {
             cy.visit(CONFIG.FE_URL + link);
           });
         });
@@ -531,6 +527,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Verify that a new revision has been created", () => {
+        cy.get("[data-cy=\"note-icon\"]").arrowClick();
         cy.ebVerifyNewRevisionCreated();
       });
     });

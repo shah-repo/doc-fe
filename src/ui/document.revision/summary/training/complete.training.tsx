@@ -1,4 +1,4 @@
-import { Box, Link } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { isEmpty } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import { TrainingPlanTransition, TrainingRecord } from "../../../../state/ducks/
 import { ApplicationState } from "../../../../state/reducers";
 import { EffectiveDateFormValues, PasswordFormValues } from "../../../change.request/form/types";
 import Text from "../../../components/Text";
+import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -63,9 +64,9 @@ const CompleteTraining: React.FunctionComponent<Props> = ({
 
   return (
     <Box mt={5} ml={2}>
-      <Link onClick={openDialog} style={{ fontSize: "1rem" }}>
+      <Typography style={AutoCompleteStyles.labelFont}>
         <Text translation="training.acknowledge.completion.link" />
-      </Link>
+      </Typography>
       <TrainingDialog
         transitionDialog={dialog}
         openDialog={openDialog}

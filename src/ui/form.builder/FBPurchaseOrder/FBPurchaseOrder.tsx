@@ -3,7 +3,6 @@ import React from "react";
 import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
-
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   handleItem,
   handleLot,
@@ -16,29 +15,20 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   disabled,
   isReceivable,
   name,
+  isPO,
 }) => (
   <FBProvider {...{ purchaseOrderState, dialogState }}>
     <FBDialog />
     <FBInput {...{ name, disabled }} type="purchaseorder">
       <Box mb={gutter ? 5 : 0}>
-        {mode === "form" && <FBSection name={`fb-po-section-${name}`} {...{ label }}  />}
-        <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode }} />
+        {mode === "form" && !isPO && <FBSection name={`fb-po-section-${name}`} {...{ label }}  />}
+        <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
         {isReceivable && (
           <FBButton
             variant="outlined"
             color="primary"
             label="form.builder.receive"
             onClick={handleReceiveAll}
-          />
-        )}
-        {!disabled && (
-          <FBButton
-            fullWidth={true}
-            label="form.builder.add.item"
-            onClick={() => handleItem && handleItem()}
-            variant="outlined"
-            style={{ margin: 0 }}
-            {...{ disabled }}
           />
         )}
       </Box>

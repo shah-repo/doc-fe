@@ -12,7 +12,6 @@ import {
   FBEBPartState,
   FBEditorCustomControlState,
   FBEditorState,
-  FBEQMaintenanceHistoryState,
   FBEQMaintenanceState,
   FBFieldWrapperState,
   FBFilePresenterState,
@@ -33,6 +32,7 @@ import {
   FBPurchaseOrderState,
   FBSchemaState,
   FBSnackbarState,
+  FBSortableState,
   FBSupplierState,
   FBTaskState,
   FBTextEditorOptionsState,
@@ -40,6 +40,7 @@ import {
   FBTextFieldWithRangeState,
   FBWorkspaceState,
 } from "..";
+import FBLeftPanelState from "../FBLeftPanel/FBLeftPanel.state";
 import FBLHRBuildState from "../FBLHRBuild/FBLHRBuild.state";
 import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSelect.state";
 
@@ -47,6 +48,7 @@ import FBMPIProcedureSelectState from "../FBMPIProcedureSelect/FBMPIProcedureSel
 export interface FBProviderProps {
   workspaceState?: FBWorkspaceState;
   dialogState?: FBDialogState;
+  leftPanelState?: FBLeftPanelState;
   fieldWrapper?: FBFieldWrapperState;
   filePresenterState?: FBFilePresenterState;
   mediaAlbumState?: FBMediaAlbumState;
@@ -76,7 +78,6 @@ export interface FBProviderProps {
   procedureDiffState?: FBProcedureDiffState;
   partsState?: FBPartsState;
   eqMaintenanceState?: FBEQMaintenanceState;
-  eqMaintenanceHistoryState?: FBEQMaintenanceHistoryState;
   ebPartState?: FBEBPartState;
   textFieldWithRangeState?: FBTextFieldWithRangeState;
   filesPresenterState?: FBFilesPresenterState;
@@ -88,4 +89,5 @@ export interface FBProviderProps {
   datePickerState?: FBDatePickerState;
   lhrBuildState?: FBLHRBuildState;
   downloadSheetTplState?: FBDownloadSheetTplState;
+  sortableState?: FBSortableState;
 }

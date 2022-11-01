@@ -12,7 +12,6 @@ export const styles = makeStyles((theme: Theme) =>
       marginLeft: 50,
       zIndex: 1,
       position: "relative",
-      top: -14,
     },
     root: {
       width: "100%",
@@ -20,7 +19,7 @@ export const styles = makeStyles((theme: Theme) =>
       flex: 1,
       overflowX: "hidden",
       overflowY: "auto",
-      height: "calc(100vh - 120px)",
+      height: "calc(100vh - 124px)",
     },
     item: {
       flexGrow: 1,

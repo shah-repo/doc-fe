@@ -85,7 +85,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   docDocumentId = docDocumentId || "";
   docRevId = docRevId || "";
   return (
-    <StyledListItem button onMouseEnter={onMouseHoverItemListItem}>
+    <StyledListItem button onMouseEnter={onMouseHoverItemListItem} className={classes.buttoncursor} disableRipple>
       <ListItemIcon>
         <TrainingIcon height={30} width={30} />
       </ListItemIcon>
@@ -258,7 +258,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       />
       {hoverItem && !pinned && (
         <Box component="div" className={classes.actionIcons}>
-          {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+          {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
           {pinHover && (
             <StyleTooltip
               title={<Text translation="common.pin" />}
@@ -268,6 +268,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               <PinSolidIcon
                 onClick={handlePinClick}
                 onMouseLeave={onMouseLeavePinIcon}
+                className={classes.cursorPointer}
               />
             </StyleTooltip>
           )}
@@ -280,7 +281,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
             placement="top"
             arrow
           >
-            <PinSolidIcon onClick={handleUnPinClick} />
+            <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
           </StyleTooltip>
         </Box>
       )}

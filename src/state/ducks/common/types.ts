@@ -32,6 +32,7 @@ export interface Approval {
   type: "MASTER" | "SECTION";
   fieldId?: string;
   approver: Owner;
+  approverId?: string;
   approverName?: string;
   approverEmail?: string;
   approverGroups?: string[];
@@ -41,6 +42,7 @@ export interface Approval {
   assignedAt?: string;
   assigned: Partial<Employee>;
   partOf?: Partial<DocumentRevision> | Partial<ChangeRequest>;
+  manually?: boolean;
 }
 
 export interface Id {

@@ -1,8 +1,10 @@
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
 import moment from "moment";
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -30,7 +32,7 @@ let createdEquipmentDocument;
 let createdPMRecord;
 let createdCalibrationRecord;
 let group;
-const eqPMSchemaName = "pm-ki5wtk5l";
+let calDocId;
 let eqLowerFrequencyURL;
 let eqHigherFrequencyURL;
 
@@ -145,6 +147,7 @@ context("Equipment due date calculation while changing frequency", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     deleteDisabled: true,
+                    tabId: "overview",
                     deleteInFormDisabled: true,
                   },
                   {
@@ -161,6 +164,7 @@ context("Equipment due date calculation while changing frequency", () => {
                     validationAttribute: "Primary Owner",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "specification",
                   },
                   {
                     name: "fb-coordinator-eq",
@@ -176,6 +180,7 @@ context("Equipment due date calculation while changing frequency", () => {
                     validationAttribute: "Coordinator",
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
+                    tabId: "specification",
                   },
                   {
                     index: 3,
@@ -191,6 +196,7 @@ context("Equipment due date calculation while changing frequency", () => {
                     ],
                     applicableValidationSchema: true,
                     validationAttribute: "PM",
+                    tabId: "specification",
                   },
                   {
                     index: 4,
@@ -205,6 +211,7 @@ context("Equipment due date calculation while changing frequency", () => {
                       "ON_STATE_TO_IN_REVIEW",
                     ],
                     applicableValidationSchema: true,
+                    tabId: "specification",
                     validationAttribute: "Calibration",
                   },
                 ],
@@ -270,6 +277,7 @@ context("Equipment due date calculation while changing frequency", () => {
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 deleteDisabled: true,
+                tabId: "details",
                 deleteInFormDisabled: true,
               },
               {
@@ -279,6 +287,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 label: "Equipment",
                 rules: "required",
                 optionId: "20",
+                tabId: "details",
                 placeholder: "[Select revision here]",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -294,6 +303,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 label: "Maintainer",
                 rules: "required",
                 optionId: "13",
+                tabId: "details",
                 placeholder: "[Select name here]",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -308,6 +318,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 index: 3,
                 label: "Completion Date",
                 rules: "required",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -321,6 +332,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 index: 4,
                 label: "Equipment Maintenance Section",
                 rules: "required",
+                tabId: "details",
                 hidden: true,
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -333,6 +345,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 label: "form.builder.approvals",
                 type: "approvals",
                 deleteDisabled: true,
+                tabId: "overview",
                 name: "fb-approvals-kybkhbpt",
                 uniqueSchemaItem: true,
                 index: 5,
@@ -398,6 +411,7 @@ context("Equipment due date calculation while changing frequency", () => {
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 deleteDisabled: true,
+                tabId: "details",
                 deleteInFormDisabled: true,
               },
               {
@@ -406,6 +420,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 index: 1,
                 label: "Equipment",
                 rules: "required",
+                tabId: "details",
                 optionId: "20",
                 placeholder: "[Select revision here]",
                 applicableOn: [
@@ -421,6 +436,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 index: 2,
                 label: "Maintainer",
                 rules: "required",
+                tabId: "details",
                 optionId: "13",
                 placeholder: "[Select name here]",
                 applicableOn: [
@@ -435,6 +451,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -448,6 +465,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -461,6 +479,7 @@ context("Equipment due date calculation while changing frequency", () => {
                 label: "form.builder.approvals",
                 type: "approvals",
                 deleteDisabled: true,
+                tabId: "overview",
                 name: "fb-approvals-kybkhbpt",
                 uniqueSchemaItem: true,
                 index: 5,
@@ -863,6 +882,10 @@ context("Equipment due date calculation while changing frequency", () => {
       cy.dlSelectFirstDocument();
     });
 
+    it("Navigate to CalPmHistoryTab ", () => {
+      cy.drSelectCalPmHistoryTab();
+    });
+
     context("Verify due date before lowering frequency", () => {
       it("Check PM due date calculation is 365 days from now", () => {
         const PMComplianceDate = moment().tz("America/Los_Angeles")
@@ -888,6 +911,10 @@ context("Equipment due date calculation while changing frequency", () => {
     });
 
     context("Lower frequency on EQ-00001", () => {
+      it("Navigate to CalPmHistoryTab ", () => {
+        cy.drSelectCalPmHistoryTab();
+      });
+
       it("Click revise on maintenance record", () => {
         cy.drClickReviseDocument();
       });
@@ -898,6 +925,10 @@ context("Equipment due date calculation while changing frequency", () => {
 
       it("Click save to confirm revise", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Navigate to CalPmHistoryTab ", () => {
+        cy.drSelectCalPmHistoryTab();
       });
 
       it("Change frequency on PM from 365 to 60", () => {
@@ -942,7 +973,7 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Click Create Approval Request", () => {
-          cy.arClickCreateApprovalRequestAfterCompletingForm();
+          cy.arSaveApiCall();
         });
 
         it("Add approvers to approval request on approver list", () => {
@@ -973,22 +1004,30 @@ context("Equipment due date calculation while changing frequency", () => {
             eqLowerFrequencyURL = url;
           });
         });
+
+        it("Navigate to specification tab", () => {
+          cy.drSelectSpecificationTab();
+        });
       });
 
       context("Create new PM for EQ-00001", () => {
         it("Click 'NEW PM' on preventative maintenace section", () => {
-          cy.url().then((url: any) => {
-            const docIdFromUrl = url.split("/").pop();
-            // eslint-disable-next-line max-len
-            const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${eqPMSchemaName}`;
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              CyRoutes.GetAvailableApprovers,
-              CyRoutes.GetAutocompleteOptions], () => {
-              cy.visit(newPMUrl);
-            });
-            cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
+          cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+          cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+          cy.wait("@response").then((res) => {
+            if (res.response) {
+              const response = res.response.body;
+              calDocId = response.documentId;
+              const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+                CyRoutes.GetAvailableApprovers], () => {
+                cy.visit(newUrl);
+              });
+            }
           });
+          cy.checkToastMessage({ exists: false });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Turn off autosave", () => {
@@ -999,12 +1038,8 @@ context("Equipment due date calculation while changing frequency", () => {
           cy.drEnterDocumentTitle({ name: "Preventative maintenance after lowering frequency" });
         });
 
-        it("Select document type 'Maintenance Record'", () => {
-          cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-        });
-
-        it("Select revision stage 'Numeric'", () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        it("navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
         });
 
         it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -1026,8 +1061,16 @@ context("Equipment due date calculation while changing frequency", () => {
             });
         });
 
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
         it("Create 'Preventative maintenance document'", () => {
           cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        });
+
+        it("navigate to overview tab", () => {
+          cy.drSelectOverviewTab();
         });
 
         it("Add an Approval", () => {
@@ -1045,7 +1088,7 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Verify status is 'Released'", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         });
       });
 
@@ -1055,6 +1098,10 @@ context("Equipment due date calculation while changing frequency", () => {
             cy.visit(eqLowerFrequencyURL);
           });
           cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Navigate to CalPmHistoryTab ", () => {
+          cy.drSelectCalPmHistoryTab();
         });
 
         it("Check PM due date calculation is 60 days from now", () => {
@@ -1095,6 +1142,10 @@ context("Equipment due date calculation while changing frequency", () => {
         cy.dlSelectFirstDocument();
       });
 
+      it("Navigate to CalPmHistoryTab ", () => {
+        cy.drSelectCalPmHistoryTab();
+      });
+
       context("Verify due date before lowering frequency", () => {
         it("Check PM due date calculation is 5 days from now", () => {
           const PMComplianceDate = moment().tz("America/Los_Angeles")
@@ -1130,6 +1181,10 @@ context("Equipment due date calculation while changing frequency", () => {
 
         it("Click save to confirm revise", () => {
           cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Navigate to CalPmHistoryTab ", () => {
+          cy.drSelectCalPmHistoryTab();
         });
 
         it("Change frequency on PM from 5 to 20", () => {
@@ -1174,7 +1229,7 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Click Create Approval Request", () => {
-            cy.arClickCreateApprovalRequestAfterCompletingForm();
+            cy.arSaveApiCall();
           });
 
           it("Add approvers to approval request on approver list", () => {
@@ -1205,22 +1260,30 @@ context("Equipment due date calculation while changing frequency", () => {
               eqHigherFrequencyURL = url;
             });
           });
+
+          it("Navigate to specification tab", () => {
+            cy.drSelectSpecificationTab();
+          });
         });
 
         context("Create new PM for EQ-00002", () => {
           it("Click 'NEW PM' on preventative maintenace section", () => {
-            cy.url().then((url: any) => {
-              const docIdFromUrl = url.split("/").pop();
-              // eslint-disable-next-line max-len
-              const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${eqPMSchemaName}`;
-              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                CyRoutes.GetAvailableApprovers,
-                CyRoutes.GetAutocompleteOptions], () => {
-                cy.visit(newPMUrl);
-              });
-              cy.progressBarShouldNotExist();
-              cy.listLoadingElementShouldNotExist();
+            cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+            cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+            cy.wait("@response").then((res) => {
+              if (res.response) {
+                const response = res.response.body;
+                calDocId = response.documentId;
+                const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+                cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+                  CyRoutes.GetAvailableApprovers], () => {
+                  cy.visit(newUrl);
+                });
+              }
             });
+            cy.checkToastMessage({ exists: false });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Turn off autosave", () => {
@@ -1231,12 +1294,8 @@ context("Equipment due date calculation while changing frequency", () => {
             cy.drEnterDocumentTitle({ name: "Preventative maintenance after increasing frequency" });
           });
 
-          it("Select document type 'Maintenance Record'", () => {
-            cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-          });
-
-          it("Select revision stage 'Numeric'", () => {
-            cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+          it("navigate to Details tab", () => {
+            cy.drSelectDetailsTab();
           });
 
           it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -1258,8 +1317,16 @@ context("Equipment due date calculation while changing frequency", () => {
               });
           });
 
+          it("Click save document", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
+
           it("Create 'Preventative maintenance document'", () => {
             cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+          });
+
+          it("navigate to overview tab", () => {
+            cy.drSelectOverviewTab();
           });
 
           it("Add an Approval", () => {
@@ -1277,7 +1344,7 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Verify status is 'Released'", () => {
-            cy.drCheckDocumentStatus({ status: "Released" });
+            cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           });
         });
 
@@ -1287,6 +1354,10 @@ context("Equipment due date calculation while changing frequency", () => {
               cy.visit(eqHigherFrequencyURL);
             });
             cy.listLoadingElementShouldNotExist();
+          });
+
+          it("Navigate to CalPmHistoryTab ", () => {
+            cy.drSelectCalPmHistoryTab();
           });
 
           it("Check PM due date calculation is 20 days from now", () => {

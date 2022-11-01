@@ -3,6 +3,7 @@
 
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
+import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
@@ -40,12 +41,7 @@ context("Autocomplete 'Employees' test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -114,6 +110,10 @@ context("Autocomplete 'Employees' test", () => {
         it("Checks on 'Enable Hello Sign' button", () => {
           cy.contains("Enable Hello Sign").arrowClick();
         });
+        it("Close Popup", () => {
+          cy.get("[role=\"dialog\"]").scrollTo("top");
+          cy.get("#DialogContent-close").arrowClick();
+        });
       });
     });
 
@@ -147,10 +147,14 @@ context("Autocomplete 'Employees' test", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
         });
 
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 

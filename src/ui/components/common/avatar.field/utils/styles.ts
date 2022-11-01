@@ -20,7 +20,6 @@ export default makeStyles((theme: Theme) =>
     },
     link: {
       "color": "#fff",
-      "fontFamily": "Open Sans, sans-serif",
       "fontSize": "15px",
       "fontWeight": "bold",
       "textTransform": "uppercase",

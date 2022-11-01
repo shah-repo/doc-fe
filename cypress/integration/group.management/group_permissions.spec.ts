@@ -3,6 +3,7 @@
 
 import { PreventSkipOnFailure } from "../../support";
 import { CONFIG } from "../../support/config";
+import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -41,7 +42,9 @@ context("Group Permissions Flow", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [
+              TestDocumentType,
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -125,18 +128,33 @@ context("Group Permissions Flow", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
+    it("Selects 'Test Document Type' output document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Test Document Type" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Click 'Add field'", () => {
       cy.fbAddNewFieldOption();
     });
 
     it("Check if specific fields are shown in list", () => {
-      cy.fbCheckFieldsDoesntExist("purchaseorder", "poreceive", "requestapproval");
+      cy.fbCheckFieldsDoesntExistOnInputsList("Purchase Order", "Receive Purchase Order");
+    });
+
+    it("Check if specific fields are shown in list", () => {
+      cy.fbCheckFieldsDoesntExistOnApprovalsList("Request Approval");
     });
   });
 
   context("Login company admin", () => {
     it("Logout", () => {
-      cy.get("[data-cy=\"dialog-close\"]").arrowClick();
       cy.authLogout();
     });
 
@@ -316,22 +334,37 @@ context("Group Permissions Flow", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
+    it("Selects 'Test Document Type' output document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Test Document Type" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Click 'Add field'", () => {
       cy.fbAddNewFieldOption();
     });
 
     it("Check if specific fields are shown in list", () => {
-      cy.fbCheckFields("purchaseorder", "poreceive", "requestapproval");
+      cy.fbCheckFieldsExistInputsList("Purchase Order", "Receive Purchase Order");
+    });
+
+    it("Check if specific fields are shown in list", () => {
+      cy.fbCheckFieldsExistApprovalsList("Request Approval");
     });
 
     it("Navigate to existing document", () => {
       cy.navigToDocumentList();
       cy.drClickOnSpecificDocFromList({ item: "AR Form" });
-
     });
 
     it("Check if 'Request Access' and 'Change Owner' button exists on document", () => {
-      cy.get("#PreviewControlsContainer-access").should("be.visible");
+      cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 
@@ -344,7 +377,6 @@ context("Group Permissions Flow", () => {
     });
 
     it("Check if 'Change Owner' button exists on AR", () => {
-      SystemRequirement("REQ-2520");
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });

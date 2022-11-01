@@ -25,6 +25,8 @@ declare global {
       mpiAddEquipmentToStep(params: {checkParameter?: boolean; numbOfStep: integer; equipment: string}): Chainable;
       mpiAddEquipmentParameterToStep(params: {numbOfStep: integer; equipmentDescription: string}): Chainable;
       mpiStartStep(params: {stepNumber: number}): Chainable;
+      mpiClickNotStarted(params: {stepNumber: number}): Chainable;
+      selectLot(params: {lot: string}): Chainable;
     }
   }
 }
@@ -62,8 +64,7 @@ Cypress.Commands.add("mpiAddMaterialDocumentToStep", (params: {
   cy.get("ul>li[role=option]").contains(params.material).arrowClick();
   cy.get("[name=\"quantity\"]").arrowType(params.quntity);
   cy.wait(500);
-  cy.get("[data-cy=\"unit\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.unit).arrowClick();
+  cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.unit);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -96,8 +97,8 @@ Cypress.Commands.add("mpiAddMaterialParameterToStep", (params: {
     cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   });
   cy.listLoadingElementShouldNotExist();
-  cy.get("[data-cy=\"title\"]").arrowType(params.material);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowType(params.material, { force: true });
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -136,4 +137,21 @@ Cypress.Commands.add("mpiStartStep", (params: {stepNumber: number}) => {
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("mpiClickNotStarted", (params: {stepNumber: number}) => {
+  cy.get("[data-cy=\"form.builder.step.noStarted\"]").eq(params.stepNumber - 1).arrowClick();
+});
+
+Cypress.Commands.add("mpiSelectRedLine", () => {
+  cy.get("[data-cy='HeaderMenuButton']").arrowClick();
+  cy.get("[data-cy='redlineButton']").arrowClick();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("selectLot", (params: {lot: string}) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.wait(2000);
+  cy.get("input[data-cy=usedOverride]").arrowClick();
+  cy.get("ul>li[role=option]").contains(params.lot).arrowClick();
 });

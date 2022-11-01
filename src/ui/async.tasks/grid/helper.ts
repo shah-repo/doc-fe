@@ -50,6 +50,7 @@ export const dropDownOptions = [
     text: "SEND_PASSWORD_EXPIRATION_EMAILS",
   },
   { value: "PRECALC_PAGE_DETAILS", text: "PRECALC_PAGE_DETAILS" },
+  { value: "UNLOCK_USER_AND_SET_DEFAULT_PASSWORD", text: "UNLOCK_USER_AND_SET_DEFAULT_PASSWORD" },
 ];
 
 export const AsyncStatus = [

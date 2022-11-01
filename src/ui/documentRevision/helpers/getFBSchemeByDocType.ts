@@ -1,6 +1,8 @@
-import { find, get, map, some, union, unionBy } from "lodash";
-import { DocumentType, DocumentTypeByIdState } from "../../../state/ducks/documentRevisions/documentType/types";
+import { find, get, isEmpty, map, maxBy, some, union, unionBy } from "lodash";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { DocumentType, DocumentTypeByIdState, tabIdByInternalType, TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, FBFormTemplateProps } from "../../../state/ducks/documentRevisions/types";
+import { store as appStore } from "../../../state/store";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FB, FBSchemaProps } from "../../form.builder";
 import { checkIsDocumentDirectApproved, checkIsDocumentPO } from "./checkDocumentGroup";
@@ -11,7 +13,7 @@ import { checkIsDocumentDirectApproved, checkIsDocumentPO } from "./checkDocumen
  * @param outputTypes Array of output types that will be checked.
  */
 const hasDirectApproval = (outputTypes: DocumentType[]) =>
-  some(outputTypes, (type) => checkIsDocumentDirectApproved(type.groupOptions));
+  some(outputTypes, (type) => checkIsDocumentDirectApproved(type?.groupOptions));
 
 const hasPO = (outputTypes: DocumentType[]) =>
   some(outputTypes, (type) => checkIsDocumentPO(type.groupOptions));
@@ -33,33 +35,42 @@ export const getFBSchemeByDocType = (
   formValue: Partial<DocumentRevision> & Partial<FBFormTemplateProps>,
   documentTypesById: DocumentTypeByIdState,
   originScheme?: FBSchemaProps[],
+  tabId?: string,
 ): FBSchemaProps[] => {
-
   const outputTypes = map(formValue.outputDocumentTypes as OptionType[], "value");
   const outputTypesWithGroups = outputTypes?.map((docType) => documentTypesById[docType]);
   const tplType = get(formValue, "document.documentType.id") || "";
   const documentTypes = union([tplType], outputTypes);
 
-  const finalScheme = documentTypes.reduce((scheme, typeId) => {
+  const finalScheme: FBSchemaProps[] = documentTypes.reduce((scheme, typeId) => {
     const rec = documentTypesById[typeId];
     // If type has scheme
-    if (!rec.schema) { return scheme; }
+    if (!rec?.schema) { return scheme; }
     const typeScheme = map(rec.schema, ((schemaItem) => ({
       ...schemaItem,
       ...find(originScheme, { name: schemaItem.name }),
       deleteDisabled: schemaItem.deleteInFormDisabled,
     })));
+
     return unionBy(scheme, typeScheme, "name");
   }, [] as FBSchemaProps[]);
-
+  let indexLast;
+  !isEmpty(finalScheme) ? indexLast = maxBy(finalScheme, "index")?.index : indexLast = 0;
   if (hasDirectApproval(outputTypesWithGroups)) {
     if (hasPO(outputTypesWithGroups)) {
+
+      const tabConfig: TabInfo[] = documentTypeSelectors.getTabConfiguration(
+        appStore.getState(), outputTypesWithGroups[0].group);
+      const tabId = get(tabConfig, "0.tabId", "details");
+
       finalScheme.push({
         label: "form.builder.approvals",
         type: "poapprovals",
         deleteDisabled: false,
         name: `fb-po-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
+        tabId,
+        index: indexLast + 1,
       });
     } else {
       finalScheme.push({
@@ -68,6 +79,8 @@ export const getFBSchemeByDocType = (
         deleteDisabled: true,
         name: `fb-approvals-${FB.uniqid}`,
         uniqueSchemaItem: true,
+        tabId: tabIdByInternalType[outputTypesWithGroups[0].group] || tabId,
+        index: indexLast + 1,
       });
     }
   }

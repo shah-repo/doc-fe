@@ -9,7 +9,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import { sortBy } from "lodash";
+import cx from "classnames";
+import { camelCase, sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -39,9 +40,21 @@ const styles = makeStyles((theme: Theme) =>
       fontSize: theme.spacing(2.5),
       fontWeight: "bold",
       backgroundColor: Colors.light_gray,
+      cursor: "pointer",
     },
     cell: {
       padding: theme.spacing(0),
+    },
+    containingBox: {
+      overflow: "auto",
+      height: "76vh",
+    },
+    thead: {
+      "& th": {
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
+      },
     },
   },
   ));
@@ -53,13 +66,13 @@ function Row(props: { row: PageDetails }) {
 
   return (
     <React.Fragment>
-      <TableRow className={classes.row}>
-        <TableCell >
-          <IconButton size="small" onClick={() => setOpen(!open)}>
+      <TableRow className={classes.row} onClick={() => setOpen(!open)}>
+        <TableCell>
+          <IconButton size="small">
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" data-cy={`page-detail.${camelCase(row.category)}`}>
           {row.category}
         </TableCell>
       </TableRow>
@@ -94,19 +107,21 @@ export const PageDetailsManagementContainer: React.FunctionComponent = () => {
           <Text translation={"common.add.page.details"} />
         </Button>
       </Box>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell className={classes.header}>
-              <Text translation={"page.details"} />
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {sortBy(pageDetails, "category").map((row) => <Row key={row.category} row={row} />)}
-        </TableBody>
-      </Table>
+      <Box width="100%" className={cx(classes.containingBox, "containing-box-scrollbar")}>
+        <Table>
+          <TableHead className={classes.thead}>
+            <TableRow>
+              <TableCell />
+              <TableCell className={classes.header}>
+                <Text translation={"page.details"} />
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {sortBy(pageDetails, "category").map((row) => <Row key={row.category} row={row} />)}
+          </TableBody>
+        </Table>
+      </Box>
       <PageDetailsForm {...{ dialog }}/>
     </Box>
 

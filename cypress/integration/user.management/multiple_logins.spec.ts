@@ -5,6 +5,7 @@ import faker from "faker";
 import { CONFIG } from "../../support/config";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -69,9 +70,8 @@ context("Multiple consecutive logins", () => {
       });
 
       it("Clicks the save button", () => {
-        cy.usrClickSaveButton();
+        cy.usrClickPlusSaveButton();
         cy.checkToastMessage({ exists: false });
-        cy.wait(10000);
       });
 
       it("Verify activation email", () => {
@@ -125,9 +125,8 @@ context("Multiple consecutive logins", () => {
       });
 
       it("Clicks the save button", () => {
-        cy.usrClickSaveButton();
+        cy.usrClickPlusSaveButton();
         cy.checkToastMessage({ exists: false });
-        cy.wait(10000);
       });
 
       it("Verify activation email", () => {
@@ -155,6 +154,7 @@ context("Multiple consecutive logins", () => {
   context("Lock unlock normal user", () => {
     context("Login with normal user by inserting wrong password 5 times", () => {
       it("Enter wrong password 5 times", () => {
+        SystemRequirement("REQ-3970");
         cy.authLoginWithInvalidPassword({ email: emailOfUserToSignUp, password: "tester123" });
         cy.authSubmitLoginError({ show: true, message: "Incorrect username or password." });
         cy.authLoginWithInvalidPassword({ email: emailOfUserToSignUp, password: "tester123" });
@@ -164,12 +164,16 @@ context("Multiple consecutive logins", () => {
         cy.authLoginWithInvalidPassword({ email: emailOfUserToSignUp, password: "tester123" });
         cy.authSubmitLoginError({ show: true, message: "Incorrect username or password." });
         cy.authLoginWithInvalidPassword({ email: emailOfUserToSignUp, password: "tester123" });
+        cy.wait(5000);
       });
     });
 
     context("User should see locked notification", () => {
-      it("should see locked notification", () => {
+      it("Should see locked notification", () => {
+        SystemRequirement("REQ-3970");
         cy.get("[data-cy=UserLocked-lockedInfo]").should("have.text", "Your account has been locked.");
+        cy.get("[data-cy=UserLocked-infoLink]").should("have.text",
+          "Please contact your Company Admin for Enlil to reset your password.");
       });
     });
 
@@ -193,7 +197,6 @@ context("Multiple consecutive logins", () => {
       it("click reset password for user", () => {
         cy.usrFilterByEmail({ email: emailOfUserToSignUp });
         cy.contains("Reset Password").arrowClick();
-        cy.wait(10000);
       });
 
       it("Get email to unlock account", () => {
@@ -203,6 +206,7 @@ context("Multiple consecutive logins", () => {
 
     context("Error message should be displayed on input invalid passwords", () => {
       it("Error message on input old password", () => {
+        SystemRequirement("REQ-4200");
         cy.authEnterSignUpPassword();
         cy.authEnterSignUpConfirmPassword();
         cy.get("[id=\"ConfirmPasswordPresenter-loginSubmit\"]").arrowClick();
@@ -291,6 +295,7 @@ context("Multiple consecutive logins", () => {
         cy.authLoginWithInvalidPassword({ email: emailOfAdminUserToSignUp, password: "tester123" });
         cy.authSubmitLoginError({ show: true, message: "Incorrect username or password." });
         cy.authLoginWithInvalidPassword({ email: emailOfAdminUserToSignUp, password: "tester123" });
+        cy.wait(5000);
       });
     });
 
@@ -320,7 +325,6 @@ context("Multiple consecutive logins", () => {
       it("click reset password for user", () => {
         cy.usrFilterByEmail({ email: emailOfAdminUserToSignUp });
         cy.contains("Reset Password").arrowClick();
-        cy.wait(10000);
       });
 
       it("Get email to unlock account", () => {
@@ -392,11 +396,6 @@ context("Multiple consecutive logins", () => {
 
     it("Login admin user with correct password", () => {
       cy.authLogin({ email: emailOfAdminUserToSignUp, password: newPassword });
-    });
-
-    it("Check that notification 'scheduled for deletion' is shown", () => {
-      cy.get("body").should("contain.text", "This company tenant is scheduled to be deleted. If there are" +
-        " concerns about this tenant being deleted, please reach out toenlil-feedback@shifamed.com");
     });
 
     it("Verify admin user is loged in", () => {

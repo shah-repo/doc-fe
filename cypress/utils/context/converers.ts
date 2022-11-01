@@ -1,3 +1,5 @@
+import Base64 from "Base64";
+
 export function HEX2RGB(hex) {
 
   if (hex.charAt(0) === "#") {
@@ -29,3 +31,6 @@ export function HEX2RGB(hex) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
+export function encodeString(stringToEncode: string): string {
+  return Base64.btoa(stringToEncode);
+}

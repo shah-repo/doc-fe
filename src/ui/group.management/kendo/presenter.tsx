@@ -1,4 +1,4 @@
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { GROUPS_URL } from "../../../state/ducks/userManagement/constants";
 import { LoadCompanyGroup } from "../../../state/ducks/userManagement/types";
@@ -43,33 +43,29 @@ const GroupManagementKendoPresenter: React.FunctionComponent<Props> = ({
     editGroupsDialog.close();
   };
   return (
-    <Box p={2}>
-      <Grid container={true}>
-        <Grid item={true} xs>
-          <KendoPanel<LoadCompanyGroup>
-            gridConfiguration={gridConfiguration}
-            queryUrl={GROUPS_URL}
-            tableName={tableName}
-            onSelect={({ dataItem }) => () => handlePermission(dataItem)}
-            refreshTable={refreshTable}
-            canCreateGroups={canCreateGroups}
-            gridData={tableData}
-            tableCriteria={tableCriteria}
-          />
-        </Grid>
-        <GroupsDisplay
-          closeDialog={previewGroupsDialog.close}
-          isOpen={previewGroupsDialog.isOpen}
-          selectedGroup={selectedGroup}
-        />
-        <AddGroup
-          isOpen={editGroupsDialog.isOpen}
-          closeDialog={closeDialog}
-          selectedGroup={selectedGroup}
-          title={"group.management.edit.group"}
-        />
-      </Grid>
-    </Box>
+    <Grid container>
+      <KendoPanel<LoadCompanyGroup>
+        gridConfiguration={gridConfiguration}
+        queryUrl={GROUPS_URL}
+        tableName={tableName}
+        onSelect={({ dataItem }) => () => handlePermission(dataItem)}
+        refreshTable={refreshTable}
+        canCreateGroups={canCreateGroups}
+        gridData={tableData}
+        tableCriteria={tableCriteria}
+      />
+      <GroupsDisplay
+        closeDialog={previewGroupsDialog.close}
+        isOpen={previewGroupsDialog.isOpen}
+        selectedGroup={selectedGroup}
+      />
+      <AddGroup
+        isOpen={editGroupsDialog.isOpen}
+        closeDialog={closeDialog}
+        selectedGroup={selectedGroup}
+        title={"group.management.edit.group"}
+      />
+    </Grid>
   );
 };
 

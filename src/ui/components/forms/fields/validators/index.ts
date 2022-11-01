@@ -1,12 +1,13 @@
+import { isEmpty } from "lodash";
 import * as Yup from "yup";
 import { Translation } from "../../../../translations/types";
 
-export const reactQuillEmptyString = "<p><br></p>";
+const reactQuillEmptyString = "<p><br></p>";
 
 export type Validator = (value: any) => Translation | undefined;
 
 export const required: Validator = (value) => {
-  if (value === undefined || value === null || value === "" || value === reactQuillEmptyString) {
+  if (value === reactQuillEmptyString || isEmpty(value)) {
     return "validators.required";
   }
 };
@@ -16,12 +17,6 @@ export const email: Validator = (value: string) => {
   // eslint-disable-next-line max-len
   if (!/^[a-z0-9!'#$%&*+/=?^_`{|}~-]+(?:\.[a-z0-9!'#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-zA-Z]{2,}$/i.test(value)) {
     return "validators.email";
-  }
-};
-
-export const requiredAtLeastOne: Validator = (value) => {
-  if (!value || value.length === 0) {
-    return "validators.requiredAtLeastOne";
   }
 };
 

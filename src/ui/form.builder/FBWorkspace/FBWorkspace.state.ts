@@ -4,12 +4,12 @@ import { FBInlineApprovalBody, FBLHRBuildOptions, FBSchemaState, FBWorkspaceCons
 import { appGlobals } from "../../../appGlobals";
 import { GroupTag, UserState } from "../../../state/ducks/auth/types";
 import { ChangeRequest, ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { Id } from "../../../state/ducks/common/types";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionEditRequestBody, DocumentRevisionStatus, RevisionChangeType, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
+import FBDataStore from "../FBStore/FBDataStore";
 import FBStore from "../FBStore/FBStore";
 
 class FBWorkspaceState extends FBSchemaState {
@@ -17,9 +17,12 @@ class FBWorkspaceState extends FBSchemaState {
   @observable approvals?: FBInlineApprovalBody[];
   @observable loadAudit = false;
   @observable revisionChangeType?: RevisionChangeType;
+  // Buffer between _formState loading and documentRevApi loading until we switch
+  // everything to _formState
+  @observable public loading = false;
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
-  public changeRequest?: ChangeRequest;
+  @observable public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
   public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
@@ -28,17 +31,15 @@ class FBWorkspaceState extends FBSchemaState {
   public formInput?: Record<string, any>;
 
   @observable public isDirty = false;
-  @observable public disabledAction = false;
 
-  // Hack because formik context from autosave & reference comp are not the same ref
-  // and we need to know the values from both FB and AvailableReferences to create
-  // new merged value
-  public referenceValue: Id[] = [];
+  // @todo: Remove after moving fields validation to higher level.
+  @observable public hiddenFieldsByRules = new Set<string>();
+
   public omitAutosave = false;
 
   public constructor({ schema, mode, autosave }: FBWorkspaceConstructor) {
     super(schema);
-    this.schema = schema;
+    this.schema = schema || [];
     this.mode = mode || "none";
     this.autosave = autosave;
   }
@@ -92,8 +93,8 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isOutput(): boolean {
-    const { docId } = this.document?.formDocument?.document || {};
-    return Boolean(docId && !isEmpty(docId));
+    const { id } = this.document?.formDocument || {};
+    return !isEmpty(id);
   }
 
   public get isLHRProductionBuild(): boolean {
@@ -135,12 +136,12 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, "mode", mode);
   };
 
-  @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
-    set(this, "revisionChangeType", revisionChangeType);
-  };
-
   @action public setAutosave = (autosave: boolean) => {
     set(this, "autosave", autosave);
+  };
+
+  @action public setDocumentRevisionChangeType = (revisionChangeType: RevisionChangeType) => {
+    set(this, "revisionChangeType", revisionChangeType);
   };
 
   @action public getMode = (): FBWorkspaceMode => get(this, "mode");
@@ -168,10 +169,6 @@ class FBWorkspaceState extends FBSchemaState {
     set(this, "isDirty", isDirty);
   };
 
-  @action public setDisabledAction = (disabledAction: boolean) => {
-    set(this, "disabledAction", disabledAction);
-  };
-
   @action public setFormInputSync = (name: string, value: any) => {
     set(this.formInputSync, name, value);
   };
@@ -186,8 +183,8 @@ class FBWorkspaceState extends FBSchemaState {
     if ((mode === "form") && !values) { return; }
     if (!autosave) { return; }
     if (!id) { return; }
+    this.loading = true;
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
-    this.setDirty(true);
     let body = {};
     switch (mode) {
       case "design":
@@ -224,6 +221,7 @@ class FBWorkspaceState extends FBSchemaState {
       this.omitAutosave = false;
       if (error) {
         this.documentRevApi.onError(error);
+        this.loading = false;
       } else {
         this.setDirty(false);
         this.setFormInputData(data);
@@ -238,6 +236,8 @@ class FBWorkspaceState extends FBSchemaState {
           this.loadAudit = true;
         }
         this.documentRevApi.onSuccess();
+        FBDataStore.setRefreshData(data);
+        this.loading = false;
       }
     });
   };
@@ -266,6 +266,14 @@ class FBWorkspaceState extends FBSchemaState {
         this.setFormInputData(data);
       }
     });
+  };
+
+  @action public addHiddenFieldByRules = (name: string): void => {
+    this.hiddenFieldsByRules.add(name);
+  };
+
+  @action public deleteHiddenFieldByRules = (name: string): void => {
+    this.hiddenFieldsByRules.delete(name);
   };
 }
 

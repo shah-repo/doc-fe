@@ -1,13 +1,12 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Colors from "../layout/theme/utils/colors";
 
-export const DRAWER_WIDTH = 240;
-
 export default makeStyles((theme: Theme) =>
   createStyles({
     link: {
       "color": Colors.white,
       "backgroundColor": Colors.mirage,
+      "border-bottom": "1px solid transparent",
       "&:hover": {
         color: Colors.white,
         backgroundColor: Colors.bright_grey,
@@ -44,13 +43,14 @@ export default makeStyles((theme: Theme) =>
     itemText: {
       color: "inherit !important",
       letterSpacing: 0,
-      fontFamily: "Open Sans",
+      fontSize: "13px",
     },
     menu: {
       paddingTop: 4,
       paddingBottom: 4,
       marginTop: 5,
       fontSize: "11px",
+      borderbottom: "1px solid transparent",
     },
     icon: ({ iconLink }) => ({
       "width": 20,

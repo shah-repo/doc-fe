@@ -15,7 +15,7 @@ import {
   GridExpandChangeEvent, GridFilterCellProps, GridNoRecords, GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, get, isEmpty, map, set, sortBy, startCase } from "lodash";
+import { find, flatten, get, isEmpty, map, set, sortBy, startCase, values } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -29,7 +29,6 @@ import { userManagementActions, userManagementSelectors } from "../../../state/d
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { AsyncActionErrorResponse } from "../../../state/middlewares/api/types";
 import { store } from "../../../state/store";
-import { ActiveDropdown } from "../../components/common/kendo.column.templates/ActiveDropdown";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
@@ -39,6 +38,7 @@ import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
+import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import useActionCreator from "../../hooks/useActionCreator";
@@ -53,8 +53,8 @@ import { GroupsCell } from "./cell.template/GroupsCell";
 import { NameCell } from "./cell.template/NameCell";
 import { SignedCell } from "./cell.template/SignedCell";
 import { enterUserInfo } from "./column.definition";
-import KendoGridStyles from "./styles";
 import { AddUserManage, UserManage, UserManagementProps } from "./types";
+import UMExport from "./UMExport";
 
 let call: CancelTokenSource;
 
@@ -159,7 +159,7 @@ export function KendoPanel<T>({
       filter:
         {
           logic: "and",
-          filters: [{ field: "active", operator: "eq", value: true }],
+          filters: [],
         },
       skip: 0,
       take: 25,
@@ -281,6 +281,9 @@ export function KendoPanel<T>({
               : !el?.user?.confirmed
                 ? getTranslatedText("user.management.resend.signup.email")
                 : getTranslatedText("reset.password"),
+          activeStatus: el?.active
+            ? getTranslatedText(TranslatedText[DisplayText.ACTIVE])
+            : getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
         }));
         const newDataState = processWithGroups(data, initialDataState);
         setDataState(initialDataState);
@@ -372,15 +375,15 @@ export function KendoPanel<T>({
     />
   ;
 
-  const BooleanFilterCell = (props: GridFilterCellProps) => (
+  const ActiveFilterCell = (props: GridFilterCellProps) => (
     <DropdownFilterTemplate
       {...props}
       data={[{
         text: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
-        value: true,
+        value: getTranslatedText(TranslatedText[DisplayText.ACTIVE]),
       }, {
         text: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
-        value: false,
+        value: getTranslatedText(TranslatedText[DisplayText.INACTIVE]),
       }]}
       defaultItem={{
         text: getTranslatedText(TranslatedText[DisplayText.ALL]),
@@ -405,7 +408,7 @@ export function KendoPanel<T>({
 
   const filterCellMapping = {
     groups: GroupDropdown,
-    active: BooleanFilterCell,
+    activeStatus: ActiveFilterCell,
     status: SignUpFilterCell,
   };
   const userGroups = (props: GridCellProps) =>
@@ -415,7 +418,6 @@ export function KendoPanel<T>({
     "user.name": NameCell,
     "user.email": EmailCell,
     "groups": userGroups,
-    "active": ActiveDropdown,
     "status": SignedCell,
     "": commandCell,
   };
@@ -496,7 +498,7 @@ export function KendoPanel<T>({
     <>
       <KendoGlobalization>
         <KendoGrid
-          className={`${classes.kGrid} no-row-pointer`}
+          className={`${classes.grid} no-row-pointer`}
           style={{ width: `${width}px` }}
           data={result}
           total={resultState.total}
@@ -533,21 +535,33 @@ export function KendoPanel<T>({
       {isLoading && <Loader/>}
     </>
   );
+  const getExportData = (data) => {
+    if (data.length && data[0].items) {
+      return getExportData(flatten(map(values(data), "items")));
+    }
+    return data;
+  };
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
   return (
-    <Box>
-      <Box mb={2}>
-        <Grid container justify="space-between" alignItems="center">
-          <GridTitle translation="navigation.user.management" />
+    <>
+      <Grid item xs={12} className={classes.headerGridItem}>
+        <Grid container alignItems="center" justify="space-between">
           <Grid item>
-            <AddEmployeeContainer addGroup={addNew} />
+            <GridTitle translation="navigation.user.management" />
+          </Grid>
+          <Grid item>
+            <Box display="flex">
+              <UMExport gridData={dataState.group?.length ? getExportData(result) : result}
+                columns={columnDefinitions} />
+              <AddEmployeeContainer addGroup={addNew} />
+            </Box>
           </Grid>
         </Grid>
-      </Box>
-      <Grid item xs>
-        <div className={classes.errorClass}>{tableCriteria.apiError}</div>
+      </Grid>
+      <Grid item xs={12} className={classes.kendoGridItem}>
+        <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
         {renderBody()}
       </Grid>
-    </Box>
+    </>
   );
 }

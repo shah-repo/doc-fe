@@ -4,7 +4,7 @@ import { removeLastCharacterIfNotAlphaNumeric } from "../../../../ui/common/util
 import { checkIfDocumentHasOptions } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { ApplicationState } from "../../../reducers";
 import { AsyncState } from "../../../types";
-import { DocumentType, DOC_TYPE_GROUP_OPTION } from "./types";
+import { DocumentGroupType, DocumentType, DOC_TYPE_GROUP_OPTION, TabInfo } from "./types";
 
 const allIds = (state: ApplicationState) => state.documentType.allIds;
 const byId = (state: ApplicationState) => state.documentType.byId;
@@ -93,6 +93,9 @@ const docRevTypeForms = (state: ApplicationState) => state.documentType.docRevTy
 
 const getDocumentTypesByCategory = (state: ApplicationState) => state.documentType.docTypesByCategory;
 
+const getTabConfiguration = (state: ApplicationState, group: DocumentGroupType): TabInfo[] =>
+  state.documentType.tabsConfiguration[group];
+
 const getDocTypeName = createSelector(
   byId,
   (state, docTypeId) => docTypeId,
@@ -121,4 +124,5 @@ export default {
   docRevTypeForms,
   makeGetDocTypeByAcronym,
   getDocumentTypesByCategory,
+  getTabConfiguration,
 };

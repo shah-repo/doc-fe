@@ -5,6 +5,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolPrivatePoolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -60,14 +61,7 @@ context("Check DAM enforcement rules for document types", () => {
             importerEmail: IMPORTER_USER.email,
             users: [FIRST_USER, SECOND_USER, THIRD_USER, INDIVIDUAL_USER],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-                privateNumberPool: true,
-                startingNumber: 1,
-              },
+              ClinicalProtocolPrivatePoolDocType,
             ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -137,11 +131,13 @@ context("Check DAM enforcement rules for document types", () => {
                   index: 0,
                   type: "purchaseorder",
                   label: "PO",
+                  tabId: "details",
                   name: "po-kdpqvhc7",
                   applicableOn: ["ON_STATE_TO_IN_REVIEW"],
                 },
                 {
                   label: "form.builder.approvals",
+                  tabId: "details",
                   type: "poapprovals",
                   deleteDisabled: false,
                   name: "fb-po-approvals-kpmd2alc",
@@ -206,6 +202,7 @@ context("Check DAM enforcement rules for document types", () => {
               index: 0,
               type: "poApprovalMatrix",
               label: "POAM",
+              tabId: "details",
               name: "poam-keva19by",
               applicableOn: ["ON_STATE_TO_IN_REVIEW"],
             }],
@@ -264,6 +261,7 @@ context("Check DAM enforcement rules for document types", () => {
             schema: [
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kvjba97m",
@@ -345,7 +343,9 @@ context("Check DAM enforcement rules for document types", () => {
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
   });
 
@@ -357,9 +357,17 @@ context("Check DAM enforcement rules for document types", () => {
     it("type a description", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
+
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
   });
 
   context("Add New Role: Role One", () => {
+    it("Open approval roles tab", () => {
+      cy.drSelectApprovalRolesTab();
+    });
+
     it("Open 'Add Role' dialog", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.drAddAnotherRoleBtn();
@@ -375,13 +383,19 @@ context("Check DAM enforcement rules for document types", () => {
     });
 
     it("Save role", () => {
-      cy.drAddApprovalRole();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drAddApprovalRole();
+      });
     });
   });
 
   context("Select 'Role One' is needed for 'Approvals Numeric' on all document types", () => {
+    it("Navigate to matrix details tab", () => {
+      cy.cmpTurnOffAutosave();
+      cy.drSelectMatrixDetailsTab();
+    });
+
     it("Click edit DAM", () => {
-      cy.drOpenCloseSidebarDrawer();
       cy.drClickDAMEditBtn();
     });
 
@@ -580,7 +594,7 @@ context("Check DAM enforcement rules for document types", () => {
 
       it("Enter description 'POAM test'", () => {
         SystemRequirement("REQ-1290");
-        cy.drEnterDocumentDescriptionWithWait({ description: "PO enfocment test" });
+        cy.drEnterDocumentDescription({ description: "PO enfocment test" });
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -620,7 +634,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Fill document description", () => {
-        cy.drEnterDocumentDescriptionWithWait({ description: "Suppliers address" });
+        cy.drEnterDocumentDescription({ description: "Suppliers address" });
       });
 
       it("Add approver to approvals", () => {

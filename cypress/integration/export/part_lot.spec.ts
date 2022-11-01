@@ -2,10 +2,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { CSLDocument } from "../../utils/constants/documentTypes/csl";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -46,86 +48,7 @@ context("Export Part Lot", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "CSL Document",
-                documentTypeAcronym: "CSL-",
-                category: "Record",
-                group: "PART_LOT",
-                isQms: true,
-                fieldsConfig: {
-                  D: {
-                    visible: false,
-                    required: false,
-                  },
-                  E: {
-                    label: "Record Type",
-                    visible: true,
-                    required: true,
-                  },
-                  F: {
-                    label: "Record ID",
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    visible: false,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  L: {
-                    label: "Correction",
-                    visible: true,
-                  },
-                  N: {
-                    label: "Finalize and Release",
-                    visible: true,
-                  },
-                  O: {
-                    label: "Record History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  S: {
-                    label: "Update Record",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Voided",
-                    visible: true,
-                  },
-                  A3: {
-                    label: "Archive",
-                    visible: true,
-                  },
-                  P1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Voided",
-                    visible: true,
-                  },
-                  P3: {
-                    label: "Archive",
-                    visible: true,
-                  },
-                },
-              },
+              CSLDocument,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -196,6 +119,7 @@ context("Export Part Lot", () => {
                     type: "quantity",
                     index: 0,
                     label: "Initial Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -210,6 +134,7 @@ context("Export Part Lot", () => {
                     type: "quantity",
                     index: 1,
                     label: "Usable Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -224,6 +149,7 @@ context("Export Part Lot", () => {
                     type: "datepicker",
                     index: 2,
                     label: "Expiration Date",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -237,6 +163,7 @@ context("Export Part Lot", () => {
                     type: "autocomplete",
                     index: 3,
                     label: "Part Selection",
+                    tabId: "details",
                     optionId: "21",
                     placeholder: "Select the appropriate part for this lot",
                     deleteDisabled: true,
@@ -247,6 +174,7 @@ context("Export Part Lot", () => {
                     type: "checkboxgroup",
                     index: 4,
                     label: "100% Inspection Override",
+                    tabId: "details",
                     options: [
                       {
                         text: "100% Inspection Override",
@@ -265,6 +193,7 @@ context("Export Part Lot", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
@@ -277,6 +206,7 @@ context("Export Part Lot", () => {
                     name: "textfield-kn7fc209",
                     validationMode: "default",
                     label: "Section 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -290,6 +220,7 @@ context("Export Part Lot", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -312,6 +243,7 @@ context("Export Part Lot", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     label: "Inline approval",
+                    tabId: "details",
                     editorConfig: {
                       groups: [
                         group.body[0].id,
@@ -324,6 +256,7 @@ context("Export Part Lot", () => {
                     name: "textfield-kn7fc208",
                     validationMode: "default",
                     label: "Section 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -337,6 +270,7 @@ context("Export Part Lot", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -359,6 +293,7 @@ context("Export Part Lot", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     label: "Inline approval",
+                    tabId: "details",
                     editorConfig: {
                       groups: [
                         group.body[0].id,
@@ -435,6 +370,7 @@ context("Export Part Lot", () => {
                     type: "quantity",
                     index: 0,
                     label: "Initial Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -449,6 +385,7 @@ context("Export Part Lot", () => {
                     type: "quantity",
                     index: 1,
                     label: "Usable Quantity",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -463,6 +400,7 @@ context("Export Part Lot", () => {
                     type: "datepicker",
                     index: 2,
                     label: "Expiration Date",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -476,6 +414,7 @@ context("Export Part Lot", () => {
                     type: "autocomplete",
                     index: 3,
                     label: "Part Selection",
+                    tabId: "details",
                     optionId: "21",
                     placeholder: "Select the appropriate part for this lot",
                     deleteDisabled: true,
@@ -486,6 +425,7 @@ context("Export Part Lot", () => {
                     type: "checkboxgroup",
                     index: 4,
                     label: "100% Inspection Override",
+                    tabId: "details",
                     options: [
                       {
                         text: "100% Inspection Override",
@@ -504,6 +444,7 @@ context("Export Part Lot", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
@@ -557,11 +498,19 @@ context("Export Part Lot", () => {
     });
 
     it("Click on Create New button", () => {
-      cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.drCreateNewDocumentFromForm();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Enter title", () => {
       cy.drEnterDocumentTitle( { name: "CSL inline form" });
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Enter quantity received", () => {
@@ -577,13 +526,13 @@ context("Export Part Lot", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
   context("CSL with WIP status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-1-CSL-inline-form" });
+      cy.exportVerifyEmail({ pdfStatus: "WIP", filename: "-1-CSL-inline-form", status: STATUS_TYPES_LABEL.WIP });
     });
   });
 
@@ -606,6 +555,10 @@ context("Export Part Lot", () => {
         cy.inlineApproval();
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Select Last Signed", () => {
         cy.contains("Last Signed").arrowClick();
         cy.progressBarShouldNotExist();
@@ -613,15 +566,26 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Last Signed", filename: "-1-CSL-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Last Signed", filename: "-1-CSL-inline-form",
+          status: STATUS_TYPES_LABEL.LAST_SIGNED,
+        });
       });
     });
   });
 
   context("CSL with Archive status", () => {
     context("Add CSL with Archive", () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status CSL", () => {
         cy.contains("WIP").arrowClick();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Update section", () => {
@@ -629,17 +593,31 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+        cy.wait(2000);
         cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Click Request Approval button", () => {
         cy.contains("Request approval").arrowClick();
       });
 
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Approve inline approval", () => {
         cy.inlineApproval();
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Select Archive", () => {
@@ -649,17 +627,28 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Archive", filename: "-1-CSL-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Archive", filename: "-1-CSL-inline-form",
+          status: STATUS_TYPES_LABEL.ARCHIVE,
+        });
       });
     });
   });
 
   context("CSL with Released status", () => {
     context("Add CSL with Released", () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status CSL", () => {
         cy.contains("WIP").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Fill section", () => {
@@ -685,11 +674,14 @@ context("Export Part Lot", () => {
 
       it("Finalize and release button click'", () => {
         cy.reload();
-        cy.recApproveAndReleaseInlineRecord();
+        cy.recFinalizeAndReleaseRecord();
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-A-CSL-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Released", filename: "-A-CSL-inline-form",
+          status: STATUS_TYPES_LABEL.RELEASED,
+        });
       });
     });
   });
@@ -709,7 +701,10 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Canceled", filename: "-A-1-CSL-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Canceled", filename: "-A-1-CSL-inline-form",
+          status: STATUS_TYPES_LABEL.CANCELED,
+        });
       });
     });
   });
@@ -731,11 +726,15 @@ context("Export Part Lot", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
         cy.drEnterDocumentTitle( { name: "CSL form" });
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Enter quantity received", () => {
@@ -747,7 +746,7 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -767,7 +766,7 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "In Review", filename: "-A-CSL-form" });
+        cy.exportVerifyEmail({ pdfStatus: "In Review", filename: "-A-CSL-form", status: STATUS_TYPES_LABEL.IN_REVIEW });
       });
     });
   });
@@ -789,7 +788,7 @@ context("Export Part Lot", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
@@ -798,6 +797,10 @@ context("Export Part Lot", () => {
 
       it("Upload logo picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Enter quantity received", () => {
@@ -809,7 +812,7 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -821,7 +824,7 @@ context("Export Part Lot", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Voided", filename: "-A-Void" });
+        cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-A-Void", status: STATUS_TYPES_LABEL.VOIDED });
       });
     });
   });

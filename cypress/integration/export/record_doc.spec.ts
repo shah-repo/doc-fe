@@ -3,10 +3,12 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -48,11 +50,7 @@ context("Export Record doc", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
+                ...RecordDocumentType,
                 fieldsConfig: {
                   D: {
                     visible: false,
@@ -194,6 +192,7 @@ context("Export Record doc", () => {
                 schema: [
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
@@ -206,6 +205,7 @@ context("Export Record doc", () => {
                     name: "textfield-kn7fc209",
                     validationMode: "default",
                     label: "Section 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -219,6 +219,7 @@ context("Export Record doc", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -241,6 +242,7 @@ context("Export Record doc", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     label: "Inline approval",
+                    tabId: "details",
                     editorConfig: {
                       groups: [
                         group.body[0].id,
@@ -253,6 +255,7 @@ context("Export Record doc", () => {
                     name: "textfield-kn7fc208",
                     validationMode: "default",
                     label: "Section 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -266,6 +269,7 @@ context("Export Record doc", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -288,6 +292,7 @@ context("Export Record doc", () => {
                     applicableValidationSchema: true,
                     editorProperties: [],
                     label: "Inline approval",
+                    tabId: "details",
                     editorConfig: {
                       groups: [
                         group.body[0].id,
@@ -361,6 +366,7 @@ context("Export Record doc", () => {
                 schema: [
                   {
                     label: "form.builder.approvals",
+                    tabId: "overview",
                     type: "approvals",
                     deleteDisabled: true,
                     name: "fb-approvals-l02u8tzp",
@@ -414,11 +420,15 @@ context("Export Record doc", () => {
     });
 
     it("Click on Create New button", () => {
-      cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter title", () => {
       cy.drEnterDocumentTitle( { name: "Record inline form" });
+    });
+
+    it("Select 'Details' tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Enter text in textfield", () => {
@@ -430,14 +440,14 @@ context("Export Record doc", () => {
     });
   });
 
-  context("Record with WIP status", () => {
+  context(`Record with ${STATUS_TYPES_LABEL.WIP} status`, () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-1-Record-inline-form" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-1-Record-inline-form" });
     });
   });
 
-  context("Record with Last Signed status", () => {
-    context("Add Record with Last Signed", () => {
+  context(`Record with ${STATUS_TYPES_LABEL.LAST_SIGNED} status`, () => {
+    context(`Add Record with ${STATUS_TYPES_LABEL.LAST_SIGNED}`, () => {
       it("Add inline approver", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
@@ -455,6 +465,10 @@ context("Export Record doc", () => {
         cy.inlineApproval();
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Select Last Signed", () => {
         cy.contains("Last Signed").arrowClick();
         cy.progressBarShouldNotExist();
@@ -462,15 +476,26 @@ context("Export Record doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Last Signed", filename: "-1-Record-inline-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.LAST_SIGNED, filename: "-1-Record-inline-form",
+          pdfStatus: "Last Signed",
+        });
       });
     });
   });
 
-  context("Record with Archive status", () => {
-    context("Add Record with Archive", () => {
+  context(`Record with ${STATUS_TYPES_LABEL.ARCHIVE} status`, () => {
+    context(`Add Record with ${STATUS_TYPES_LABEL.ARCHIVE}`, () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status record", () => {
         cy.contains("WIP").arrowClick();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Update section", () => {
@@ -478,17 +503,31 @@ context("Export Record doc", () => {
       });
 
       it("Save the document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.wait(2000);
         cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Click Request Approval button", () => {
         cy.contains("Request approval").arrowClick();
       });
 
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Approve inline approval", () => {
         cy.inlineApproval();
+      });
+
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
       });
 
       it("Select Archive", () => {
@@ -498,17 +537,28 @@ context("Export Record doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Archive", filename: "-1-Record-inline-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.ARCHIVE, filename: "-1-Record-inline-form",
+          pdfStatus: "Archive",
+        });
       });
     });
   });
 
-  context("Record with Released status", () => {
-    context("Add Record with Released", () => {
+  context(`Record with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
+    context(`Add Record with ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status record", () => {
         cy.contains("WIP").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Fill section", () => {
@@ -526,6 +576,8 @@ context("Export Record doc", () => {
 
       it("Click Request Approval button", () => {
         cy.contains("Request approval").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve inline approval", () => {
@@ -534,17 +586,20 @@ context("Export Record doc", () => {
 
       it("Finalize and release button click'", () => {
         cy.reload();
-        cy.recApproveAndReleaseInlineRecord();
+        cy.recFinalizeAndReleaseRecord();
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-A-Record-inline-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.RELEASED, filename: "-A-Record-inline-form",
+          pdfStatus: "Released",
+        });
       });
     });
   });
 
-  context("Record with Canceled status", () => {
-    context("Add Record with Canceled", () => {
+  context(`Record with ${STATUS_TYPES_LABEL.CANCELED} status`, () => {
+    context(`Add Record with ${STATUS_TYPES_LABEL.CANCELED}`, () => {
       it("Click Update record", () => {
         cy.drClickReviseDocument();
       });
@@ -558,12 +613,15 @@ context("Export Record doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Canceled", filename: "-A-1-Record-inline-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.CANCELED, filename: "-A-1-Record-inline-form",
+          pdfStatus: "Canceled",
+        });
       });
     });
   });
 
-  context("Record with In Review status", () => {
+  context(`Record with ${STATUS_TYPES_LABEL.IN_REVIEW} status`, () => {
     context("Create a record from form", () => {
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
@@ -580,7 +638,7 @@ context("Export Record doc", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
@@ -608,12 +666,15 @@ context("Export Record doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "In Review", filename: "-A-Record-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-A-Record-form",
+          pdfStatus: "In Review",
+        });
       });
     });
   });
 
-  context("Record with Voided status", () => {
+  context(`Record with ${STATUS_TYPES_LABEL.VOIDED} status`, () => {
     context("Create a record from form", () => {
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
@@ -630,7 +691,7 @@ context("Export Record doc", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
@@ -654,7 +715,7 @@ context("Export Record doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Voided", filename: "-A-Void" });
+        cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.VOIDED, filename: "-A-Void", pdfStatus: "Voided" });
       });
     });
   });

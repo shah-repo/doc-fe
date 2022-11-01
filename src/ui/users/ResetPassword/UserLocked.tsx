@@ -1,4 +1,4 @@
-import { Box, Link, Paper, Typography } from "@material-ui/core";
+import { Box, Paper, Typography } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { logo } from "../../../common/utils/helpers";
@@ -31,11 +31,7 @@ const UserLocked: React.FunctionComponent<{}> = () => {
         </Box>
         <Box display="flex" textAlign="center" mb={5} data-cy="UserLocked-infoLink">
           <Typography variant="h5"className={classes.lockedInfo}>
-            Please reach out to your company admin or contact &nbsp;
-            <Link href={"mailto:enlil-feedback@shifamed.com"} variant="h1" className={classes.link}>
-              enlil-feedback@shifamed.com
-            </Link>
-            &nbsp; to reset your password.
+          Please contact your Company Admin for Enlil to reset your password.
           </Typography>
         </Box>
       </Paper>

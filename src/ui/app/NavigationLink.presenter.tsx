@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom";
 import { NavigationItem, NavigationItemType } from "../../state/ducks/company/types";
 import Text from "../components/Text";
 import { DOCUMENT_BY_CATEGORY_ROOT_URL } from "../constants/urls";
+import { SIDE_BAR_TAB_INDEX } from "../documentRevision/Sidebar/constants";
 import styles from "./NavigationLink.styles";
 
 interface NavigationLinkPresenterProps extends
@@ -51,6 +52,7 @@ const NavigationLinkPresenter: React.FunctionComponent<NavigationLinkPresenterPr
             [classes.activeLink]: isItemActive,
           })}
         to={type === "CATEGORY" ? `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${category}` : path}
+        onClick={() => localStorage.setItem(SIDE_BAR_TAB_INDEX, "0")}
       >
         <ListItemIcon className={classes.itemIcon} onClick={toggleChildren}>
           <div

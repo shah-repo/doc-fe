@@ -1,8 +1,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 Cypress.Screenshot.defaults({
@@ -55,12 +57,7 @@ context("Document Approval Matrix Revise", () => {
             slackIntegrationEnabled: false,
             users: [INDIVIDUAL_USER],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -79,6 +76,10 @@ context("Document Approval Matrix Revise", () => {
   });
 
   context("Create DAM", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -120,7 +121,9 @@ context("Document Approval Matrix Revise", () => {
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+      });
     });
   });
 
@@ -130,11 +133,15 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "Description" });
+      cy.drEnterDocumentDescription({ description: "Description" });
     });
   });
 
   context("Add New Role: Role One", () => {
+    it("Open approval roles tab", () => {
+      cy.drSelectApprovalRolesTab();
+    });
+
     it("Open 'Add Role' dialog", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.drAddAnotherRoleBtn();
@@ -153,14 +160,16 @@ context("Document Approval Matrix Revise", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drAddApprovalRole();
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Add New Document Type", () => {
+    it("Open matrix details tab", () => {
+      cy.cmpTurnOffAutosave();
+      cy.drSelectMatrixDetailsTab();
+    });
+
     it("Click on 'Add Item' button", () => {
-      cy.drOpenCloseSidebarDrawer();
       cy.drAddApprovalMatrixItem();
     });
 
@@ -186,10 +195,12 @@ context("Document Approval Matrix Revise", () => {
 
     it("Save Approval Matrix Item", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateSupplierWithApiCall();
     });
   });
 
@@ -274,9 +285,15 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Revise document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
-        cy.drClickReviseDocument();
-      });
+      cy.drClickReviseDocument();
+    });
+
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to matrix details tab", () => {
+      cy.drSelectMatrixDetailsTab();
       cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
 
@@ -299,7 +316,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Verify revision status is 'Revision 1.1  - Draft'", () => {
-      cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1.1  - Draft" });
+      cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1.1", status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("'Approve and Release' the document", () => {
@@ -389,9 +406,15 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Revise document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.ApprovalMatrix, () => {
-        cy.drClickReviseDocument();
-      });
+      cy.drClickReviseDocument();
+    });
+
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to matrix details tab", () => {
+      cy.drSelectMatrixDetailsTab();
       cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
 
@@ -400,7 +423,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it(`Uncheck Approvals Numeric for ${roleOne}`, () => {
-      cy.get("div:nth-child(2) > div> table > tbody > tr:nth-child(6) > td:nth-child(1)").click();
+      cy.get("div:nth-child(2) > div> table > tbody > tr:nth-child(26) > td:nth-child(1)").click();
     });
   });
 

@@ -1,23 +1,33 @@
 import { Dialog } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
+import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
+import { ReactComponent as DownloadHTMLIcon } from "../../../assets/images/download_html.svg";
 import { attachmentsActions } from "../../../state/ducks/attachments";
 import { AttachmentDownloadResponse } from "../../../state/ducks/attachments/types";
 import { PDF } from "../../../state/ducks/documentRevisions/types";
+import { AsyncStatus } from "../../../state/types";
 import AsyncButton from "../../components/AsyncButton";
 import ViewFileContent from "../../components/common/view.file/components/dialog.content";
 import { styles } from "../../components/common/view.file/utils/styles";
 import { toastError } from "../../components/notifications";
+import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 
 interface Props {
   pdf?: PDF;
+  renderAsButton?: boolean;
 }
 const DownloadHTML: React.FunctionComponent<Props> = ({
-  pdf,
+  pdf, renderAsButton,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const intl = useIntl();
   const dialog = useDialog();
   const [URL, setURL] = React.useState<string>("");
@@ -42,9 +52,51 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
     async.start(action, pdf.s3Url, async);
   };
 
+  let button: React.ReactElement;
+
+  if (isNewLayout) {
+    const isActive = async.asyncState.status === AsyncStatus.Active;
+
+    button = renderAsButton
+      ? (
+        <StyledButton
+          color="primary"
+          disabled={isActive}
+          data-cy="downloadHtml"
+          onClick={handleClick}
+        >
+          <Text translation="common.download.html" />
+        </StyledButton>
+      )
+      : (
+        <StyledMenuListItem disabled={isActive} button alignItems="flex-start">
+          <StyledMenuListIcon>
+            <DownloadHTMLIcon/>
+          </StyledMenuListIcon>
+          <StyledMenuListItemText
+            data-cy="downloadHtml"
+            primary={<Text translation="common.download.html" />}
+            onClick={handleClick}
+          />
+        </StyledMenuListItem>
+      );
+  } else {
+    button = (
+      <AsyncButton
+        label="common.download.pdf"
+        data-cy="downloadHtml"
+        onClick={handleClick}
+        asyncState={async.asyncState}
+        color="secondary"
+        variant="outlined"
+      />
+    );
+  }
+
   return (
     <>
-      {dialog.isOpen && <Dialog
+      {button}
+      <Dialog
         onClose={dialog.close}
         open={dialog.isOpen}
         classes={{
@@ -59,17 +111,8 @@ const DownloadHTML: React.FunctionComponent<Props> = ({
           type={"PDF"}
           handleClose={dialog.close}
         />
-      </Dialog>}
-      <AsyncButton
-        label="common.download.pdf"
-        data-cy="downloadHtml"
-        onClick={handleClick}
-        asyncState={async.asyncState}
-        color="secondary"
-        variant="outlined"
-      />
+      </Dialog>
     </>
-
   );
 };
 

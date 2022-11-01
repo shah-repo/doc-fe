@@ -9,7 +9,7 @@ import { toastInfo } from "../../../components/notifications";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
-import KendoGridStyles from "../styles";
+import { styles } from "./styles";
 
 export const SignedCell = ({
   rowType,
@@ -19,7 +19,7 @@ export const SignedCell = ({
   className,
   columnIndex,
 }: GridCellProps) => {
-  const classes = KendoGridStyles();
+  const classes = styles();
   const intl = useIntl();
   const getTranslatedText = (key: string) => intl.formatMessage({ id: key });
   const getResendSignupEmailAction = useActionCreator(

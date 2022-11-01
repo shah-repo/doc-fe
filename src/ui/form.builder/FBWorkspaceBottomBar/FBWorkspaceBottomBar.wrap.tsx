@@ -3,6 +3,7 @@ import { find, get, map, unionBy } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
 import { toastError } from "../../components/notifications";
+import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   Component: React.FunctionComponent<T>,
@@ -17,10 +18,23 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   }: T) => {
 
     const { workspaceState, dialogState } = FB.useStores();
-    previewDisabled = !(workspaceState?.mode === "formPreview" || workspaceState?.mode === "design");
-    includeTransport = includeTransport &&
-      (workspaceState?.mode === "formPreview" || workspaceState?.mode === "design");
+    previewDisabled = !(
+      workspaceState?.mode === "formPreview" ||
+      workspaceState?.mode === "design" ||
+      workspaceState?.mode === "preview"
+    );
+    includeTransport =
+      includeTransport &&
+      (workspaceState?.mode === "formPreview" ||
+        workspaceState?.mode === "design" ||
+        workspaceState?.mode === "preview");
 
+    const { document: { document: { documentType = {} } = {} } = {} } = workspaceState || {};
+    // Form options should remain disabled in output doc types, regardless of their state.
+    if (!checkIsDocumentForm(documentType?.groupOptions)) {
+      previewDisabled = true;
+      includeTransport = false;
+    }
     const readFile = (file: Blob) => {
       const reader = new FileReader();
       reader.readAsText(file);
@@ -73,7 +87,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
       dialogState?.config({
         open: true,
         content: (
-          <FBForm>
+          <FBForm workspaceMode="form">
             <FBTextField
               label="form.builder.template.name"
               name={FBFieldName.TemplateName}

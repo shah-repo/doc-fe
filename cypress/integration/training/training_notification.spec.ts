@@ -1,14 +1,22 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment";
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { LINE_ITEMS_STATUS_TYPES, STATUS_TYPES_LABEL, TrainingStatus } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset, fileTimeFormat, momentInPST, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -24,12 +32,17 @@ let tmpRegex;
 let downloadFile;
 let fileId;
 let dateAfterEmailShouldArrive;
+let asyncTasksGroup;
 
-const dateOffset = (5 * 1000);
-const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
-const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
+const approvalRequestName = "Releasing FM-00003, released form";
+const aRID = "AR-00003";
+const assignDate = momentInPST().format("l");
+const dueDate = momentInPST().add(30, "days").format("l");
 
-context("Training notification test", () => {
+const adjAssignDate = momentInPST().subtract(23, "days").format("l");
+const adjDueDate = momentInPST().add(30, "days").subtract(23, "days").format("l");
+
+context("Training notification test", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -56,182 +69,8 @@ context("Training notification test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Training Curriculum test",
-                documentTypeAcronym: "TC-",
-                group: "TRAINING_CURRICULUM",
-                privateNumberPool: true,
-                canRedLine: false,
-                isQms: true,
-                needsSignature: true,
-                defaultTraining: false,
-                startingNumber: 1,
-                hiddenForCreationForUsersWithoutTags: [],
-                fieldsConfig: {
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    label: "Training Required",
-                    visible: false,
-                  },
-                  N: {
-                    label: "Finalize and Release",
-                    visible: false,
-                  },
-                },
-                defaultRevStage: "Alpha",
-                schema: [
-                  {
-                    name: "training-curriculum-details-section",
-                    type: "section",
-                    index: 0,
-                    label: "Periodic Training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Periodic Training",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-document-to-be-trained-on",
-                    type: "autocomplete",
-                    index: 1,
-                    label: "Documents to Train on",
-                    rules: "|required",
-                    multiple: true,
-                    optionId: "36",
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    placeholder: "Select documents for training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "visibility",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Documents to Train on",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-refresh-training-periodically",
-                    type: "radiogroup",
-                    index: 2,
-                    label: "Refresh/repeat training periodically?",
-                    rules: "required||",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if: false,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    rulesObject: {},
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    validationAttribute: "Refresh/repeat training periodically?",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-validity",
-                    type: "quantity",
-                    index: 3,
-                    label: "Training Frequency (in days)",
-                    rules: "required_if:training-refresh-training-periodically,Yes",
-                    validators: {
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if: {
-                        name: "training-refresh-training-periodically",
-                        value: [
-                          "Yes",
-                        ],
-                      },
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "visibility",
-                    validationAttribute: "Training Frequency (in days)",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-details-section",
-                    type: "section",
-                    index: 4,
-                    label: "Trainees Details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Trainees Details",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-groups-to-train",
-                    type: "autocomplete",
-                    index: 5,
-                    label: "Groups to Train",
-                    multiple: true,
-                    optionId: "10",
-                    placeholder: "Select groups",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Groups to Train",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-users-to-train",
-                    type: "autocomplete",
-                    index: 6,
-                    label: "Users to Train (if applicable)",
-                    multiple: true,
-                    optionId: "13",
-                    placeholder: "Select users",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Users to Train (if applicable)",
-                    applicableValidationSchema: true,
-                  },
-                ],
-                category: "Training Curriculums",
-                active: true,
-              },
+              ClinicalProtocolDocType,
+              TrainingCurriculum,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -276,6 +115,28 @@ context("Training notification test", () => {
             GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
             GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
           ],
+        },
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }],
         },
       });
     });
@@ -533,8 +394,8 @@ context("Training notification test", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedFormId = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedFormId = x.text(); });
     });
   });
 
@@ -568,6 +429,14 @@ context("Training notification test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Click Refresh on 'Document to trained on'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
@@ -590,8 +459,26 @@ context("Training notification test", () => {
       cy.get("#training-details-section").should("have.text", "Trainees Details");
     });
 
-    it("Select User to train", () => {
+    it("Select First User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+    });
+
+    it("Select Second User to train", () => {
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+    });
+
+    it("Select Third User to train", () => {
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
     });
 
     it("Select Approver", () => {
@@ -615,6 +502,31 @@ context("Training notification test", () => {
     });
   });
 
+  context("Navigate to Training Records and check separate training record for each user", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it(`${USERS[1].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
+      cy.trLandingPageCompletedOn({ completed: "Pending" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
+    });
+
+    it(`${USERS[2].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
+    });
+
+    it(`${USERS[3].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+      cy.trLandingPageDocRevTitle({ title: "released form" });
+      cy.trLandingPageUsername({ username: USERS[3].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
+    });
+  });
+
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
@@ -633,9 +545,47 @@ context("Training notification test", () => {
     it("Button 'Complete training' should be visible", () => {
       cy.contains("Complete training").should("be.visible");
     });
+  });
 
-    it("click complete training button", () => {
-      cy.trCompleteTraining();
+  context("Check for training text inside dialog box and complete training", () => {
+    it("Check if 'Send To Email' button is displayed", () => {
+      cy.sendToEmail();
+    });
+
+    it("Check for training complete and check training ID, Title", () => {
+      cy.get("button[data-cy=\"training-complete\"]").contains("Complete training").arrowClick();
+      cy.get("form>div").should("contain.text", "TRN ID");
+      cy.get("form>div>div:nth-child(1)").should("contain.text", "TRN-00001");
+      cy.get("form>div>div:nth-child(1)").should("be.visible");
+      cy.get("form>div").should("contain.text", "Title");
+    });
+
+    it("Check if 'I completed training on' message is displayed", () => {
+      cy.get("form>div>div:nth-child(2)>div>").contains("I acknowledge I am trained on");
+    });
+
+    it("Check if 'FM-00003 Rev 1' revision is displayed", () => {
+      cy.get("form>div").should("contain.text", "Doc ID Rev");
+      cy.get("[role='dialog']").then(($el) => {
+        const text = $el.text();
+        expect(text.replace(/\u00a0/g, " ")).to.contain("FM-00003  Rev  1");
+      });
+    });
+
+    it("Check if trainee name is correct", () => {
+      cy.get("[role='dialog']").should("contain.text", USERS[1].name);
+      cy.get("[role='dialog']").contains(USERS[1].name).should("be.visible");
+    });
+
+    it("Click on acknowladge", () => {
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCompleteTraining], () => {
+          cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+          cy.progressBarShouldAppear();
+        });
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
     });
   });
 
@@ -698,15 +648,18 @@ context("Training notification test", () => {
 
     it(`Click training notification and check doc with Approved status`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 2 released form` });
-      cy.get(`[data-cy="HeaderInfo-status"]`).should("have.text", "Approved");
+      cy.arVerifyStatus({ status: LINE_ITEMS_STATUS_TYPES.APPROVED });
     });
 
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[1].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[1].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
@@ -723,7 +676,8 @@ context("Training notification test", () => {
       cy.get(`[data-grid-col-index="0"]`).contains(`${trnId}`).arrowClick();
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      cy.sendToEmail();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -739,28 +693,17 @@ context("Training notification test", () => {
 
   context("Verify email for pending training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${trnId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
@@ -789,8 +732,7 @@ context("Training notification test", () => {
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${trnId}${filetime}.zip`;
+          downloadFile  =  `${trnId}${fileTimeFormat}.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -840,7 +782,7 @@ context("Training notification test", () => {
 
         expect(cdata.text).match(/Page 1 of 1/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
@@ -860,12 +802,10 @@ context("Training notification test", () => {
     });
 
     it("Navigate to Training Records", () => {
-      cy.get("[data-cy=\"navigation.documentControl\"]").arrowClick();
-      cy.get("[data-cy=\"navigation.training\"]").should("be.exist");
-      cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
+      cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
+    it(`${USERS[1].name} with timestamp on 'COMPLETED ON' column should be present`, () => {
       cy.trClearFilters();
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[1].name });
@@ -883,7 +823,8 @@ context("Training notification test", () => {
       cy.get(`[data-grid-col-index="0"]`).contains(`${trnId}`).arrowClick();
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
-      cy.sendToEmail();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -899,28 +840,17 @@ context("Training notification test", () => {
 
   context("Verify email for completed training notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${trnId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-          expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
-          downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+        expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+        downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
       });
     });
 
@@ -943,14 +873,14 @@ context("Training notification test", () => {
     });
 
     it("Download zip file containing completed training notification", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
         if (res.body !== "") {
           downloadUrl = res.body.url;
-          const filetime = moment().tz("America/Los_Angeles").format("_YYYY-MMM-DD_HH-MM-SS");
-          downloadFile  =  `${trnId}${filetime}.zip`;
+          downloadFile  =  `${trnId}${fileTimeFormat}.zip`;
           cy.downloadFile({
             url: downloadUrl,
             directory: CONFIG.DOWNLOADS_DIR,
@@ -974,6 +904,7 @@ context("Training notification test", () => {
     });
 
     it("Verify PDF file for completed training notification", () => {
+      SystemRequirement("REQ-4880", "REQ-4850");
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -995,17 +926,243 @@ context("Training notification test", () => {
         expect(cdata.text).match(tmpRegex);
 
         tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1]
-          .name} \\| Trainee \\| ${docRelDate}`, "gi");
+          .name} \\| Trainee \\| ${pdfDocRelDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         expect(cdata.text).match(/Page 1 of 1/);
 
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(cdata.text).not.match(tmpRegex);
       });
+    });
+  });
+
+  context("Verify email for completed training notification", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("Clear filters", () => {
+      cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Verify ASSIGN DATE is Today", () => {
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("ASSIGN DATE").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
+        .should("have.text", `${assignDate}`);
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
+        .should("have.text", `${assignDate}`);
+    });
+
+    it("Verify DUE DATE is 30 days from Now", () => {
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("DUE DATE").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
+        .should("have.text", `${dueDate}`);
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
+        .should("have.text", `${dueDate}`);
+    });
+  });
+
+  context("Navigate to approval request list and set effective date to 23 days from now", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter list by status", () => {
+      cy.alFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.APPROVED });
+    });
+
+    it("Verify filter by TITLE", () => {
+      cy.alVerifyFilterByTitle({ title: approvalRequestName });
+    });
+
+    it(`Verify AR ID as ${aRID}`, () => {
+      cy.dlVerifyFilterByDocId({ docId: aRID });
+    });
+
+    it(`Open AR filtered request`, () => {
+      cy.get("#root").contains(approvalRequestName).arrowClick();
+    });
+
+    it("Click Close button", () => {
+      cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+    });
+
+    it("Select option No", () => {
+      cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
+    });
+
+    it("Advance Effective Date to 23 days from now", () => {
+      const effectiveDate = momentInPST().add(23, "days");
+      const month = effectiveDate.format("MMM");
+      const day = effectiveDate.format("D");
+
+      cy.get("[aria-label=\"change date\"]").arrowClick();
+
+      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
+        const monthYearText = $el.text();
+        if (!monthYearText.includes(month)) {
+          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
+        }
+
+        cy.wait(500);
+
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            if (day === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+          cy.get("#confirmEffectiveDate").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_COMPANY", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 23 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 23 });
+    });
+
+    it("On Next Task, SELECT_ALL", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify the time travel will appear in History list as 'Requested'", () => {
+      cy.get("tr.k-master-row").should("have.length", 1);
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", SQS_TYPES.TIME_TRAVEL_COMPANY);
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", SQS_TYPES.CLOSE_CR_BY_EFFECTIVE_DATE);
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
+    });
+
+    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
+      cy.wait(5000);
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
+          CyRoutes.GetAvailableApprovers], () => {
+          cy.reload();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("tr.k-master-row").should("have.length", 1);
+      cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", SQS_TYPES.TIME_TRAVEL_COMPANY);
+      cy.get(`td[data-grid-col-index="2"]`).eq(0).should("contain.text", "23 days");
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", SQS_TYPES.CLOSE_CR_BY_EFFECTIVE_DATE);
+      cy.get(`td[data-grid-col-index="4"]`).eq(0).should("contain.text", "COMPLETE");
+    });
+  });
+
+  context("Verify ASSIGN DATE and Due Date are adjusted accordingly", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("Clear filters", () => {
+      cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Verify ASSIGN DATE is adjusted by 23 days", { retries: 3 }, () => {
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).contains("ASSIGN DATE").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
+        .should("have.text", `${adjAssignDate}`);
+      cy.get(`th[aria-colindex="6"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="6"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="5"]`)
+        .should("have.text", `${adjAssignDate}`);
+    });
+
+    it("Verify DUE DATE is adjusted by 23 days", () => {
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).contains("DUE DATE").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-asc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
+        .should("have.text", `${adjDueDate}`);
+      cy.get(`th[aria-colindex="7"] span.k-column-title`).arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`th[aria-colindex="7"] span.k-i-sort-desc-sm`).should("exist");
+      cy.get(`[data-grid-row-index="0"]>td[data-grid-col-index="6"]`)
+        .should("have.text", `${adjDueDate}`);
+    });
+  });
+
+  context(`Check training notifications as ${TrainingStatus.DUE_IN_7_DAYS}`, () => {
+    it("Goto Dashboard", () => {
+      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+    });
+
+    it("Verify training notification", () => {
+      cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
+    });
+  });
+
+  context("Verify the AR in CLOSED State", () => {
+    it("Navigate to ar list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.trClearFilters();
+    });
+
+    it(`Verify AR ID as ${aRID}`, () => {
+      cy.dlFilterByDocId({ docId: aRID });
+    });
+
+    it("Verify first AR is: " + approvalRequestName, () => {
+      cy.alVerifyFilterByTitle({ title: approvalRequestName });
+    });
+
+    it(`Verify filter by STATUS as ${LINE_ITEMS_STATUS_TYPES.CLOSED}`, () => {
+      cy.alVerifyFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.CLOSED });
     });
   });
 });

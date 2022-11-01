@@ -1,11 +1,20 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
+import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -14,8 +23,9 @@ let adminEmployee;
 let secondEmployee;
 let developersGroup;
 let releasedDocId;
+let asyncTasksGroup;
 
-context("Training notifications for documents with approved and released revision", () => {
+context("Training notifications for documents with approved and released revision", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -42,182 +52,8 @@ context("Training notifications for documents with approved and released revisio
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Training Curriculum test",
-                documentTypeAcronym: "TC-",
-                group: "TRAINING_CURRICULUM",
-                privateNumberPool: true,
-                canRedLine: false,
-                isQms: true,
-                needsSignature: true,
-                defaultTraining: false,
-                startingNumber: 1,
-                hiddenForCreationForUsersWithoutTags: [],
-                fieldsConfig: {
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    label: "Training Required",
-                    visible: false,
-                  },
-                  N: {
-                    label: "Finalize and Release",
-                    visible: false,
-                  },
-                },
-                defaultRevStage: "Alpha",
-                schema: [
-                  {
-                    name: "training-curriculum-details-section",
-                    type: "section",
-                    index: 0,
-                    label: "Periodic Training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Periodic Training",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-document-to-be-trained-on",
-                    type: "autocomplete",
-                    index: 1,
-                    label: "Documents to Train on",
-                    rules: "|required",
-                    multiple: true,
-                    optionId: "36",
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    placeholder: "Select documents for training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "visibility",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Documents to Train on",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-refresh-training-periodically",
-                    type: "radiogroup",
-                    index: 2,
-                    label: "Refresh/repeat training periodically?",
-                    rules: "required||",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if: false,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    rulesObject: {},
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    validationAttribute: "Refresh/repeat training periodically?",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-validity",
-                    type: "quantity",
-                    index: 3,
-                    label: "Training Frequency (in days)",
-                    rules: "required_if:training-refresh-training-periodically,Yes",
-                    validators: {
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if: {
-                        name: "training-refresh-training-periodically",
-                        value: [
-                          "Yes",
-                        ],
-                      },
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "visibility",
-                    validationAttribute: "Training Frequency (in days)",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-details-section",
-                    type: "section",
-                    index: 4,
-                    label: "Trainees Details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Trainees Details",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-groups-to-train",
-                    type: "autocomplete",
-                    index: 5,
-                    label: "Groups to Train",
-                    multiple: true,
-                    optionId: "10",
-                    placeholder: "Select groups",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Groups to Train",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-users-to-train",
-                    type: "autocomplete",
-                    index: 6,
-                    label: "Users to Train (if applicable)",
-                    multiple: true,
-                    optionId: "13",
-                    placeholder: "Select users",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Users to Train (if applicable)",
-                    applicableValidationSchema: true,
-                  },
-                ],
-                category: "Training Curriculums",
-                active: true,
-              },
+              ClinicalProtocolDocType,
+              TrainingCurriculum,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -262,6 +98,28 @@ context("Training notifications for documents with approved and released revisio
             GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
             GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
           ],
+        },
+      });
+    });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }],
         },
       });
     });
@@ -519,8 +377,8 @@ context("Training notifications for documents with approved and released revisio
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
-      cy.drCheckDocumentStatus({ status: "Released" });
-      cy.get("#HeaderInfo-docId").then((x) => { releasedDocId = x.text(); });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDocId = x.text(); });
     });
   });
 
@@ -554,6 +412,14 @@ context("Training notifications for documents with approved and released revisio
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Click Refresh on 'Document to trained on'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
@@ -581,8 +447,18 @@ context("Training notifications for documents with approved and released revisio
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
     });
 
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListNw({ approver: USERS[1].name });
     });
 
     it("Save training", () => {
@@ -680,6 +556,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Approve AR", () => {
+      cy.wait(2000);
       cy.arApproveARFromDashboard();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -697,13 +574,17 @@ context("Training notifications for documents with approved and released revisio
 
     it("Verify training notification", () => {
       cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
     });
 
-    it("Click training notification and check doc with Approved status", () => {
+    it(`Click training notification and check doc with ${STATUS_TYPES_LABEL.APPROVED} status`, () => {
+      SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Button 'Complete training' should be visible", () => {
@@ -714,9 +595,10 @@ context("Training notifications for documents with approved and released revisio
       cy.navigToDashboard();
     });
 
-    it("Click training notification and check doc with Released status", () => {
+    it(`Click training notification and check doc with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
+      SystemRequirement("REQ-4810");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Released");
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
     it("Button 'Complete training' should be visible", () => {
@@ -740,13 +622,404 @@ context("Training notifications for documents with approved and released revisio
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
     });
 
-    it("Click training notification and check doc with Approved status", () => {
+    it(`Click training notification and check doc with ${STATUS_TYPES_LABEL.APPROVED} status`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
-      cy.get("[data-cy=\"HeaderInfo-status\"]").should("have.text", "Approved");
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Button 'Complete training' should be visible", () => {
       cy.contains("Complete training").should("be.visible");
+    });
+  });
+
+  context("Use time tool to travel user back to future", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 1 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 1 });
+    });
+
+    it("Select next task TRAINING_RECORDS_REFRESH", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH });
+    });
+
+    it("Select next task TRAINING_RECORDS_STATUS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_STATUS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context(`Login with ${USERS[2].name} and complete Rev 1 released form training`, () => {
+    it("Logs user in", () => {
+      cy.authLogout();
+      cy.authLogin({
+        email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Click on the Training notification", () => {
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 1 released form` });
+    });
+
+    it("Button 'Complete training' should be visible", () => {
+      cy.contains("Complete training").should("be.visible");
+    });
+
+    it(`complete training for ${USERS[2].name}`, () => {
+      cy.trCompleteTraining();
+    });
+  });
+
+  context("Check training records", () => {
+    it("Logs user in", () => {
+      cy.authLogout();
+      cy.authLogin({
+        email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+      });
+    });
+
+    it("Selects company", () => {
+      cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+    });
+
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("4 records should be created", () => {
+      cy.get("tbody>tr").should("have.length", 4);
+    });
+
+    it(`Training record for ${USERS[1].name} Rev1`, () => {
+      cy.trClearFilters();
+      cy.trLandingPageOwner({ owner: "1" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[1].name).and("not.contain", "Pending");
+      const completedDate = moment().tz("America/Los_Angeles").subtract(1, "days").format("M/D/YYYY");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
+      cy.get("tbody>tr").should("have.length", 1);
+    });
+
+    it(`Training record for ${USERS[1].name} Rev2`, () => {
+      cy.trClearFilters();
+      cy.trLandingPageOwner({ owner: "2" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[1].name).and("contain", "Pending");
+      const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
+      cy.get(`[data-grid-row-index="0"]`).should("not.contain", completedDate);
+      cy.get("tbody>tr").should("have.length", 1);
+    });
+
+    it(`Training record for ${USERS[2].name} Rev1`, () => {
+      cy.trClearFilters();
+      cy.trLandingPageOwner({ owner: "1" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[2].name).and("not.contain", "Pending");
+      const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
+      cy.get("tbody>tr").should("have.length", 1);
+    });
+
+    it(`Training record for ${USERS[2].name} Rev2`, () => {
+      cy.trClearFilters();
+      cy.trLandingPageOwner({ owner: "2" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[2].name).and("contain", "Pending");
+      const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
+      cy.get(`[data-grid-row-index="0"]`).should("not.contain", completedDate);
+      cy.get("tbody>tr").should("have.length", 1);
+    });
+  });
+
+  context("Use time tool to travel by 29 days", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 1 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 29 });
+    });
+
+    it("Select next task TRAINING_RECORDS_REFRESH", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH });
+    });
+
+    it("Select next task TRAINING_RECORDS_STATUS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_STATUS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(10000);
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Check new training records", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("5 records should be created", () => {
+      cy.trClearFilters();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("tbody>tr").should("have.length", 5);
+    });
+
+    it(`Training record for ${USERS[1].name} Rev1`, () => {
+      cy.trClearFilters();
+      cy.trLandingPageOwner({ owner: "1" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.contains("COMPLETED ON").arrowClick().wait(500);
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[1].name).and("not.contain", "Pending");
+      const completedDate = moment().tz("America/Los_Angeles").subtract(30, "days").format("M/D/YYYY");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
+      cy.get("tbody>tr").should("have.length", 2);
+
+      cy.get(`[data-grid-row-index="1"]`).should("contain", releasedDocId)
+        .and("contain", USERS[1].name).and("contain", "Pending");
+    });
+
+    it(`Training record for ${USERS[1].name} Rev2`, () => {
+      cy.trClearFilters();
+      cy.trLandingPageOwner({ owner: "2" });
+      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[1].name).and("contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
+    });
+
+    it(`Training record for ${USERS[2].name} Rev1`, () => {
+      cy.trClearFilters();
+      cy.trLandingPageOwner({ owner: "1" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[2].name).and("not.contain", "Pending");
+      const completedDate = moment().tz("America/Los_Angeles").subtract(29, "days").format("M/D/YYYY");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
+      cy.get("tbody>tr").should("have.length", 1);
+    });
+
+    it(`Training record for ${USERS[2].name} Rev2`, () => {
+      cy.trClearFilters();
+      cy.trLandingPageOwner({ owner: "2" });
+      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[2].name).and("contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
+    });
+  });
+
+  context("Revise training", () => {
+    it("Navigate to Training Curriculums", () => {
+      cy.navigToTrainingCurriculums();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Select training", () => {
+      cy.trSelectFirstDocument();
+    });
+
+    it(`Click on Revise Document`, () => {
+      cy.get("#PreviewControlsContainer-revise").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRev, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
+        CyRoutes.GetFieldLocks], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
+    it("Change frequency to 10 days", () => {
+      cy.get("[name=training-validity]").clear().arrowType("10");
+    });
+
+    it("Save training", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
+    });
+
+    it("Navigate to Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverListNw({ approver: USERS[1].name });
+    });
+
+    it("Click Submit for Approval", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
+    });
+
+    it("Click Approve", () => {
+      cy.trApproveTraining();
+    });
+  });
+
+  context("Open assigned Training", () => {
+    it("Goto Dashboard", () => {
+      cy.navigToDashboard();
+    });
+
+    it("Click on the Training notification", () => {
+      cy.dashGoToListItemFromDashboard({ listItem: `${releasedDocId}Rev 2 released form` });
+    });
+
+    it("Button 'Complete training' should be visible", () => {
+      cy.contains("Complete training").should("be.visible");
+    });
+
+    it(`complete training for ${USERS[1].name}`, () => {
+      cy.trCompleteTraining();
+    });
+  });
+
+  context("Check training records", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("5 records should be present", () => {
+      cy.trClearFilters();
+      cy.get("tbody>tr").should("have.length", 5);
+    });
+  });
+
+  context("Use time tool to travel by 1 day", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 1 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 1 });
+    });
+
+    it("Select next task TRAINING_RECORDS_REFRESH", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH });
+    });
+
+    it("Select next task TRAINING_RECORDS_STATUS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_STATUS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(10000);
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Check new training records", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("6 records should be created", () => {
+      cy.get("tbody>tr").should("have.length", 6);
+    });
+
+    it(`New Training record for ${USERS[2].name} Rev1`, () => {
+      cy.trClearFilters();
+      cy.trLandingPagetrId({ trId: "TRN-00006" });
+      cy.trLandingPageOwner({ owner: "1" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[2].name).and("contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
+    });
+  });
+
+  context("Use time tool to travel by 9 days", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_USER", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 9 day to back in future", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 9 });
+    });
+
+    it("Select next task TRAINING_RECORDS_REFRESH", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH });
+    });
+
+    it("Select next task TRAINING_RECORDS_STATUS", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_STATUS });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(10000);
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Check new training records", () => {
+    it("Navigate to Training Records", () => {
+      cy.navigToTrainingRecords();
+    });
+
+    it("7 records should be created", () => {
+      cy.trClearFilters();
+      cy.get("tbody>tr").should("have.length", 7);
+    });
+
+    it(`New Training record for ${USERS[1].name} Rev2`, () => {
+      cy.trClearFilters();
+      cy.trLandingPagetrId({ trId: "TRN-00007" });
+      cy.trLandingPageOwner({ owner: "2" });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
+        .and("contain", USERS[1].name).and("contain", "Pending");
+      cy.get("tbody>tr").should("have.length", 1);
     });
   });
 });

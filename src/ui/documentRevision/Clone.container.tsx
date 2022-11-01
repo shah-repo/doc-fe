@@ -10,6 +10,12 @@ import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevision
 
 export type DocumentCloneType = "none" | "newVersion" | "newOutput";
 
+export enum DocumentCloneTypeOptions {
+  none = "none",
+  newVersion = "newVersion",
+  newOutput = "newOutput",
+}
+
 interface OwnProps {
   documentRevision: DocumentRevision;
   type: DocumentCloneType;

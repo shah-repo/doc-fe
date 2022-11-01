@@ -9,8 +9,7 @@ export default (theme: Theme) =>
       minHeight: "calc(100vh - 105px)",
     },
     previewBox: {
-      margin: 0,
-      width: "100%",
+      marginTop: theme.spacing(5),
       paddingLeft: theme.spacing(3),
     },
   });

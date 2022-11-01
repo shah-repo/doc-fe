@@ -1,3 +1,4 @@
+import { PasswordType } from "aws-sdk/clients/cognitoidentityserviceprovider";
 import axios from "axios";
 import { documentVersionPath } from "../../../ui/document.revision/utils/paths";
 import { checkIsDocumentRecord } from "../../../ui/documentRevision/helpers/checkDocumentGroup";
@@ -320,26 +321,31 @@ const setPrimaryAttachment = (
     handlers,
   });
 
-const cloneEB = (id: string, handlers: Handlers): ApiAction<DocumentRevision> => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_ROOT_URL}/copy/${id}`,
-  method: "post",
-  handlers,
-});
+const cloneEB = (id: string, payload: PasswordType, handlers: Handlers): ApiAction<DocumentRevision> =>
+  apiActionWithCallbacks({
+    url: `${DOCUMENT_REVISION_ROOT_URL}/copy/${id}`,
+    method: "post",
+    data: payload,
+    handlers,
+  });
 
 const getDocRevStatuses = (
   handlers: Handlers,
   states: DocumentRevisionStatus[] = [],
   notGroupOptions?: DocumentGroupOptionsType[],
   category?: string,
+  notIncategory?: string,
 ): ApiAction<Partial<DocumentRevisionStatus[]>> => {
   const categoryUrl = category === undefined ?
     states.reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?`) :
     states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?category=${category}&`);
-  const url = notGroupOptions && notGroupOptions?.length !== 0 ?
+  const notInGroupcheckURL = notGroupOptions && notGroupOptions?.length !== 0 ?
     notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
       `${categoryUrl}`) : categoryUrl;
+  const url = notIncategory === undefined ?
+    notInGroupcheckURL : `${notInGroupcheckURL}` + `notIncategory=${notIncategory}&`;
   return apiActionWithCallbacks({
     url,
     method: "get",

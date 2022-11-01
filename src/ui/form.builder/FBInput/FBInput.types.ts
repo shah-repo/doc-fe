@@ -38,6 +38,7 @@ export type FBInputType =
   | "evidencemediaupload"
   | "purchaseorder"
   | "approvalMatrix"
+  | "approvalRoles"
   | "poreceive"
   | "stepsection"
   | "teststep"
@@ -74,6 +75,7 @@ export type FBInputType =
   | "mediaalbum"
   | "poapprovals"
   | "lhrbuild"
+  | "purchaseordersummary"
   | "downloadsheet";
 
 export type FBInputProps =
@@ -114,6 +116,8 @@ export type FBInputProps =
     includeQRScan?: boolean;
     isInputOwner?: boolean;
     designDisabled?: boolean;
+    tabId?: string;
+    removeBorder?: boolean;
 
     /**
      * @cfg {Bool} Whether the field can be deleted in the output document.
@@ -196,6 +200,10 @@ export type FBInputProps =
      * @cfg {string} Username that holds the lock.
      */
     lockOwnerName?: string;
+    /**
+     * @cfg {Bool} MUI Box props that can be passed to input section.
+     */
+    labelProps?: BoxProps;
   };
 
 export const OmitInputClones: FBInputType[] = [
@@ -239,6 +247,18 @@ export const FBAutosave: FBInputType[] = [
   "select",
   "quantity",
   "texteditor",
+];
+
+export const BlockTypeField: FBInputType[] = [
+  "section",
+  "approvals",
+  "blanktplform",
+  "purchaseorder",
+  "poapprovals",
+  "poApprovalMatrix",
+  "eqmaintenance",
+  "stepsection",
+  "teststep",
 ];
 
 export interface FBInputConstructor {

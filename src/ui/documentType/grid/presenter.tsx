@@ -1,17 +1,16 @@
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { cloneDeep, has, map } from "lodash";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
+import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
 import { TableDataProps } from "../../components/table/types";
 import { documentRevisionQueryStatus } from "../../document.revision/utils/helpers";
-import Colors from "../../layout/theme/utils/colors";
 import { isTranslation } from "../../translations/types";
 import CreateDocumentByType from "../list/CreateDocumentByType";
 import { KendoPresenterProps } from "./interfaces";
-
 
 export function DocumentTypePresenter({
   statuses,
@@ -28,6 +27,7 @@ export function DocumentTypePresenter({
   documentType,
   documentCategory,
 }: KendoPresenterProps) {
+  const classes = KendoGridStyles();
   const ref = useRef(tableName);
   useEffect(() => {
     ref.current = tableName;
@@ -80,8 +80,8 @@ export function DocumentTypePresenter({
     setDataToBeExported(copyDate);
   };
   return (
-    <Box p={2} style={{ background: Colors.background_white }}>
-      <Grid container={true}>
+    <Grid container>
+      <Grid item xs={12} className={classes.headerGridItem}>
         <CreateDocumentByType
           {...createDocumentProps}
           {...{ isByCategory, headers, tableData: dataToBeExported }}
@@ -91,23 +91,23 @@ export function DocumentTypePresenter({
               : documentType.documentTypeName
           }
         />
-        <Grid item={true} xs={12}>
-          {ref.current === tableName && <KendoGrid
-            tableName={tableName}
-            tableCriteria={tableCriteria}
-            schema={schema}
-            statuses={statuses}
-            exportDataChanges={handleExportData}
-            onRowClick={onRowClick}
-            queryUrl={queryUrl}
-            defaultPayloadData={{
-              documentTypeCategory: "Record",
-              status: documentRevisionQueryStatus(),
-            }}
-            documentTypeCategory={documentTypeCategory}
-          />}
-        </Grid>
       </Grid>
-    </Box>
+      <Grid item xs={12} className={classes.kendoGridItem}>
+        {ref.current === tableName && <KendoGrid
+          tableName={tableName}
+          tableCriteria={tableCriteria}
+          schema={schema}
+          statuses={statuses}
+          exportDataChanges={handleExportData}
+          onRowClick={onRowClick}
+          queryUrl={queryUrl}
+          defaultPayloadData={{
+            documentTypeCategory: "Record",
+            status: documentRevisionQueryStatus(),
+          }}
+          documentTypeCategory={documentTypeCategory}
+        />}
+      </Grid>
+    </Grid>
   );
 }

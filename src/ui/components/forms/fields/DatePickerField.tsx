@@ -42,6 +42,7 @@ const DatePicker: React.FunctionComponent<DatePickerPropsWithFormik> = ({
               minDate,
             }
           }
+          size="small"
           defaultValue={value}
           value={fieldProps.field.value}
           fullWidth={true}

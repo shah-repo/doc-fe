@@ -50,16 +50,25 @@ export const toFieldsOptions = (targetField: FBSchemaProps, sourceSchema: FBSche
   });
 
   return map(fieldsFilteredByType, (field) => {
-    const label = field.type === "paragraph" ?
-      "Paragraph" :
-      find(sourceSchema, (x) => x.name === field.name)?.label;
-
-    return {
-      label,
+    const option = {
+      label: determineLabel(field),
       value: field.name,
       targetId: targetField.name,
     };
+    return option;
   });
+};
+
+export const determineLabel = (field) => {
+  let label;
+  if (field.type === "paragraph") {
+    label = "Paragraph";
+  } else if (field.type === "procedure") {
+    label = `Step #${field.stepIndex}`;
+  } else {
+    label = field.label;
+  }
+  return label;
 };
 
 export const toUpdateFormRequestBody = (values: any): UpdateFormRequestBody => {

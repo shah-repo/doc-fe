@@ -2,6 +2,7 @@ import { isEmpty } from "lodash";
 import React from "react";
 import { FBFileField, FBFilesPresenter, FBFileUploadProps, FBInput, FBProvider } from "..";
 import FBFileFieldIcon from "../FBFileField/FBFileField.icon";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBFileUpload } from "./FBFileUpload.wrap";
 
 const FileUploadChild: React.FunctionComponent<FBFileUploadProps> = ({
@@ -26,7 +27,7 @@ const FBFileUpload: React.FunctionComponent<FBFileUploadProps> = ({
   ...props
 }) =>  (
   <FBProvider {...{ fileUploadState }}>
-    <FBInput {...props} type="fileupload">
+    <FBInput {...props} type="fileupload" labelProps={FBFontStyle.labelProps}>
       <FileUploadChild  {...props}  />
     </FBInput>
   </FBProvider>

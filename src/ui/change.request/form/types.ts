@@ -33,7 +33,7 @@ export interface EffectiveDateFormValues {
 }
 
 export interface SelectTemplateFormValues {
-  chosenFormId: string;
+  chosenOption: string;
 }
 
 export interface TemplateOption {

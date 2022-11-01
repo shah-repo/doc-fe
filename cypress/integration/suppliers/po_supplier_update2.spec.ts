@@ -1,10 +1,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ncoFormName = "NCO Form";
@@ -58,533 +60,7 @@ context("DAM approvals in LHR", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "New Company Record",
-                documentTypeAcronym: "NCO-",
-                group: "NEW_COMPANY",
-                privateNumberPool: true,
-                canRedLine: true,
-                isQms: true,
-                schema: [
-                  {
-                    name: "company-details-kknucnd4",
-                    type: "section",
-                    index: 0,
-                    label: "Company Details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Company Details",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "company-name-kknuh7mr",
-                    rows: 1,
-                    type: "textfield",
-                    index: 1,
-                    label: "Company Name",
-                    rules: "required",
-                    placeholder: "Select the company name to be used",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Company Name",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "company-abbreviation-kknuhx5k",
-                    rows: 1,
-                    type: "textfield",
-                    index: 2,
-                    label: "Company Abbreviation",
-                    rules: "required",
-                    placeholder: "This has to be unique in the system",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Company Abbreviation",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "company-admin-email-kknuh8mr",
-                    rows: 1,
-                    type: "textfield",
-                    index: 3,
-                    label: "Company Admin Email",
-                    rules: "required",
-                    placeholder: "Select the company admin email to be used",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Company Admin Email",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "companys-logo-avatar-kobccmoe",
-                    type: "section",
-                    index: 4,
-                    label: "Client's Logo & Avatar",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Client's Logo & Avatar",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "use-this-source-to-resize-the-company-logo-and-avatar-if-needed-kobcbize",
-                    type: "hyperlink",
-                    index: 5,
-                    label: "Use this source to resize the company logo and avatar if needed",
-                    linkUrl: "https://www.iloveimg.com/resize-image",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationAttribute: "Use this source to resize the company logo and avatar if needed",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "clients-logo-kknwh2my",
-                    type: "evidencemediaupload",
-                    index: 6,
-                    label: "Client's Logo (max 180px x 75px)",
-                    isTemplate: false,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationAttribute: "Client's Logo (max 180px x 75px)",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-dam-json-kljtd74j",
-                    type: "section",
-                    index: 7,
-                    label: "APPROVED DAM JSON",
-                    deleted: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "APPROVED DAM JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "avatars-logo-ko2ylk33",
-                    type: "evidencemediaupload",
-                    index: 8,
-                    label: "Client's Avatar (58px x 58px)",
-                    isTemplate: false,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationAttribute: "Client's Avatar (58px x 58px)",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "white-labeling-ko2ypvsj",
-                    type: "section",
-                    index: 9,
-                    label: "White-labeling",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "White-labeling",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "-ko2ysl4d",
-                    type: "paragraph",
-                    index: 10,
-                    // eslint-disable-next-line max-len
-                    paragraph: "<p>If the whitelabeling section is empty, the system will use default Enlil colors.</p>",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "instructions-media-upload-ko2yqqry",
-                    type: "instructionsmediaupload",
-                    index: 11,
-                    label: "Instructions Media upload",
-                    isTemplate: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationAttribute: "Instructions Media upload",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "colors-ko2ytbtm",
-                    type: "subsection",
-                    index: 12,
-                    label: "Colors:",
-                    deleted: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Colors:",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "default-background-ko2yv2ks",
-                    rows: 1,
-                    type: "textfield",
-                    index: 13,
-                    label: "defaultBackground",
-                    placeholder: "#F8921E",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    validationAttribute: "defaultBackground",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "primary-ko2yw85e",
-                    rows: 1,
-                    type: "textfield",
-                    index: 14,
-                    label: "primary",
-                    placeholder: "#401A64",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    validationAttribute: "primary",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "secondary-ko2yxws8",
-                    rows: 1,
-                    type: "textfield",
-                    index: 15,
-                    label: "secondary",
-                    placeholder: "#401A64",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "secondary",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "-kknufjy0",
-                    type: "paragraph",
-                    index: 16,
-                    // eslint-disable-next-line max-len
-                    paragraph: "<p>DAM JSON will include all the following details:</p>\n<ol>\n<li>List of all the documents to be created in the next company</li>\n<li>All the roles necessary as defined in the approval matrix</li>\n</ol>",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-dam-json-kljteki1",
-                    type: "blanktplform",
-                    index: 17,
-                    label: "APPROVED DAM JSON",
-                    gutter: false,
-                    autosave: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "APPROVED DAM JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-dam-json-is-used-kljtf3fy",
-                    type: "radiogroup",
-                    index: 18,
-                    label: "Approved DAM json is used",
-                    rules: "required",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                      {
-                        text: "No",
-                        value: "No",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Approved DAM json is used",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "dom-json-kknwbegh",
-                    type: "fileupload",
-                    index: 19,
-                    label: "DAM JSON ",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "DAM JSON ",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-page-details-json-kljtfrrz",
-                    type: "blanktplform",
-                    index: 20,
-                    label: "APPROVED PAGE DETAILS JSON",
-                    gutter: false,
-                    autosave: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "APPROVED PAGE DETAILS JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-page-details-json-is-used-kljtglop",
-                    type: "radiogroup",
-                    index: 21,
-                    label: "Approved Page Details json is used",
-                    rules: "required",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                      {
-                        text: "No",
-                        value: "No",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Approved Page Details json is used",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "page-details-json-kknzjq6c",
-                    type: "fileupload",
-                    index: 22,
-                    label: "Page Details JSON",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Page Details JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-navigation-json-kljth6ck",
-                    type: "blanktplform",
-                    index: 23,
-                    label: "APPROVED NAVIGATION JSON",
-                    gutter: false,
-                    autosave: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "APPROVED NAVIGATION JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-navigation-json-is-used-kljthw2e",
-                    type: "radiogroup",
-                    index: 24,
-                    label: "Approved Navigation json is used",
-                    rules: "required",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                      {
-                        text: "No",
-                        value: "No",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Approved Navigation json is used",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "navigation-json-kknzjzkx",
-                    type: "fileupload",
-                    index: 25,
-                    label: "Navigation JSON",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Navigation JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "launching-details-kknwbuor",
-                    type: "section",
-                    index: 26,
-                    label: "Launching Details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Launching Details",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "scheduled-go-live-date-kknwfx7f",
-                    type: "datepicker",
-                    index: 27,
-                    label: "Scheduled Go Live Date",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Scheduled Go Live Date",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "employees-template-list-kljtijb4",
-                    type: "blanktplform",
-                    index: 28,
-                    label: "EMPLOYEES TEMPLATE LIST",
-                    gutter: false,
-                    autosave: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "EMPLOYEES TEMPLATE LIST",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "users-list-kknwg5mb",
-                    type: "fileupload",
-                    index: 29,
-                    label: "Users List",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Users List",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "clients-gl-codes-list-kobexykq",
-                    type: "blanktplform",
-                    index: 30,
-                    label: "GL Codes template list",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "GL Codes template list",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "clients-gl-codes-list-kobez14x",
-                    type: "fileupload",
-                    index: 31,
-                    label: "Client's GL codes list",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Client's GL codes list",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "seed-documents-to-be-included-kknz6afl",
-                    type: "autocomplete",
-                    index: 32,
-                    label: "Seed documents to be included",
-                    multiple: true,
-                    optionId: "28",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Seed documents to be included",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "post-creation-records-kknzl4t6",
-                    type: "section",
-                    index: 33,
-                    label: "Post Creation Records",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Post Creation Records",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "logs-created-kknzkrnl",
-                    type: "fileupload",
-                    index: 34,
-                    label: "Logs Created",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Logs Created",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "fb-approvals-klmeeadi",
-                    type: "approvals",
-                    index: 35,
-                    label: "form.builder.approvals",
-                    deleted: true,
-                    deleteDisabled: false,
-                    uniqueSchemaItem: true,
-                  },
-                ],
-              },
+              NCORecord,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -681,6 +157,10 @@ context("DAM approvals in LHR", () => {
         cy.drEnterDocumentTitle({ name: "New Company" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Enters description 'New Company description'", () => {
         cy.drEnterDocumentDescription({ description: "New Company description" });
       });
@@ -735,7 +215,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Approve and release document - create company", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
@@ -834,6 +314,7 @@ context("DAM approvals in LHR", () => {
                   {
                     name: "approvals-kycw6cjf",
                     type: "approvals",
+                    tabId: "overview",
                     index: 0,
                     label: "Approvals",
                     rules: "",
@@ -941,16 +422,19 @@ context("DAM approvals in LHR", () => {
         cy.drSelectDocumentType({ documentType: "Form" });
       });
 
-      it("Select 'Purchase Order' output document type from dropdown", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
-      });
-
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Set document type", () => {
         cy.drSetDocTypeId({ docId: "00006" });
+      });
+
+      it("Select 'Purchase Order' output document type from dropdown", () => {
+        cy.get("[data-cy=\"field-outputDocumentTypes\"]").arrowClick();
+        cy.wait(1500);
+        cy.get(`[id^="react-select"]`).contains("Purchase Order").arrowClick();
+        cy.unClick();
       });
 
       it("Click create document after filling document", () => {
@@ -1034,6 +518,10 @@ context("DAM approvals in LHR", () => {
     });
 
     context("Create Purchase Order document and verify supplier", () => {
+      it("Turn on autosave", () => {
+        cy.cmpTurnOnAutosave();
+      });
+
       it("Create new document from form", () => {
         cy.drCreateNewDocumentFromForm();
       });
@@ -1053,10 +541,9 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Enter Supplier Description 'Supplier Description'", () => {
-        cy.xpath("//div[@data-cy=\"description\"]/../div[2]").arrowClick();
-        cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").clear()
-          .arrowType("Supplier Description");
-        cy.get("[data-cy=\"description\"]>div").arrowClick();
+        cy.xpath("//div[@data-cy=\"description\"]/../div[2]").eq(-1).arrowClick();
+        cy.get("#fb-mpiprocedure-ref-description").find("div[contenteditable]").arrowType("Supplier Description");
+        cy.wait(4000);
         cy.checkToastMessage({ exists: false });
       });
 
@@ -1083,8 +570,8 @@ context("DAM approvals in LHR", () => {
       });
 
       it("clicks on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.poVerifyStatus({ status: "Draft" });
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
 
       it("Navigates to Supplier and Select created supplier", () => {
@@ -1093,52 +580,75 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Verify supplier status should be 'Draft'", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       });
 
-      it("Release supplier", () => {
+      it("Add approver", () => {
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0).arrowClick();
+      });
+
+      it("Release supplier", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+          cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebApprove();
-      });
-
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
-      it("Update Supplier name and Release it", () => {
-        cy.drClickReviseDocument();
-        cy.get("#Title-field input").clear().arrowType("1");
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.ReleaseDocRev,
+          () => {
+            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
           });
         cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+      });
 
+      it("Update Supplier name", () => {
+        cy.drClickReviseDocument();
+        cy.drEnterDocumentTitle({ name: "1" });
+      });
+
+      it("Click Save button", () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Add approver", () => {
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click Save button", () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
+
+      it("Release supplier", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+          cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0).arrowClick();
-        });
+        cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.ReleaseDocRev,
+          () => {
+            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+          });
+        cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebApprove();
+        cy.wait(2000);
       });
 
       it("Turn off autosave", () => {
@@ -1148,7 +658,7 @@ context("DAM approvals in LHR", () => {
       it("Open PO again - verify PO in Draft is updated to the newly released version of the Supplier", () => {
         cy.navigToPurchaseOrder();
         cy.dlSelectFirstDocument();
-        cy.poVerifyStatus({ status: "Draft" });
+        cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 2 - New Supplier1");
       });
 
@@ -1171,15 +681,15 @@ context("DAM approvals in LHR", () => {
         });
       });
 
-      it("check status should be 'Pending Approval'", () => {
-        cy.poVerifyStatus({ status: "Pending Approval" });
+      it(`check status should be '${STATUS_TYPES_LABEL.PENDING_APPROVAL}'`, () => {
+        cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
       });
 
       it("Update Supplier name and Release it", () => {
         cy.navigToSuppliers();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
         cy.drClickReviseDocument();
-        cy.get("#Title-field input").clear().arrowType("2");
+        cy.drEnterDocumentTitle({ name: "2" });
         cy.wrapWithWaitOnApiCalls(
           [CyRoutes.PostDocRev], () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
@@ -1194,12 +704,25 @@ context("DAM approvals in LHR", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+          cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebApprove();
+      });
+
+      it("Approve supplier", () => {
+        cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.ReleaseDocRev,
+          () => {
+            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+          });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Turn off autosave", () => {
@@ -1220,7 +743,7 @@ context("DAM approvals in LHR", () => {
 
       it("Open PO again - verify PO in Pending Approval updated to the newly released version of the Supplier", () => {
         cy.poClickOnSpecificPOFromList({ item: "PO-00001" });
-        cy.poVerifyStatus({ status: "Pending Approval" });
+        cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 3 - New Supplier12");
       });
 
@@ -1270,7 +793,7 @@ context("DAM approvals in LHR", () => {
         cy.navigToSuppliers();
         cy.supClickOnSpecificSupplierFileFromList({ item: "SUP-00002" });
         cy.drClickReviseDocument();
-        cy.get("#Title-field input").clear().arrowType("3");
+        cy.drEnterDocumentTitle({ name: "3" });
         cy.wrapWithWaitOnApiCalls(
           [CyRoutes.PostDocRev], () => {
             cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
@@ -1285,12 +808,24 @@ context("DAM approvals in LHR", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").eq(0).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+          cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebApprove();
+      });
+
+      it("Approve supplier", () => {
+        cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+        cy.unClick();
+        cy.wrapWithWaitOnApiCall(
+          CyRoutes.ReleaseDocRev,
+          () => {
+            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+          });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -1352,9 +887,17 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
         cy.drEnterDocumentDescription({ description: "Test description1" });
         cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Submit for Approval", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Approve PO", () => {
         cy.ebApprove();
       });
 

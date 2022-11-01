@@ -1,14 +1,15 @@
-version: "3.9"
+version: "3.8"
 x-const:
   be_env_vars: &BE_ENV_VARS
-    - AWS_CONTAINER_CREDENTIALS_RELATIVE_URI=${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI}
-    - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-    - AWS_SQS_QUEUE_URL=${ENLIL_BE_AWS_SQS_QUEUE_URL}
-    - ENLIL_DB_PERSIST=${ENLIL_DB_PERSIST}
-    - ENV_NAME=${ENLIL_BE_ENV_NAME}
-    - TYPEORM_DATABASE=${TYPEORM_DATABASE}
-    - TYPEORM_HOST=${TYPEORM_HOST}
-    - VALIDATORS_CYPRESS_FE_URL=${VALIDATORS_CYPRESS_FE_URL}
+    AWS_CONTAINER_CREDENTIALS_RELATIVE_URI: ${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI}
+    AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+    AWS_SQS_QUEUE_URL: ${ENLIL_BE_AWS_SQS_QUEUE_URL}
+    AWS_SQS_QUEUE_URL_EXPORT: ${ENLIL_EXPORT_AWS_SQS_QUEUE_URL}
+    ENLIL_DB_PERSIST: ${ENLIL_DB_PERSIST}
+    ENV_NAME: ${ENLIL_BE_ENV_NAME}
+    TYPEORM_DATABASE: ${TYPEORM_DATABASE}
+    TYPEORM_HOST: ${TYPEORM_HOST}
+    VALIDATORS_CYPRESS_FE_URL: ${VALIDATORS_CYPRESS_FE_URL}
 
   enlil_cypress_worker_config: &ENLIL_CYPRESS_WORKER_CONFIG
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:be_worker_${BE_GIT_COMMIT_HASH}
@@ -25,24 +26,39 @@ x-const:
 
 services:
   director:
-    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-3-retries-v1.1.1
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:sorry-cypress-director-n-retries-v1.1.1
     ports:
       - 1234:1234
+    environment:
+    - NUMBER_OF_SPEC_RETRIES=${NUMBER_OF_SPEC_RETRIES}
     networks:
       cypress_network:
         aliases: 
           - director
 
   test_run_container:
-    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_92_cy_8_3_1_aws
+    container_name: enlil_cypress_test_run_container
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:run_cypress_specs_node_14_10_0_chrome_100_cy_8_3_1_aws
     command: tail -F anything
     volumes:
-      - "$FE_REPO:/opt/app/tests"
+      - "$FE_REPO:/opt/app"
     networks:
       cypress_network:
     depends_on:
       - enlil_fe_server
-
+    environment:
+    - NUMBER_OF_WORKERS=${NUMBER_OF_WORKERS}
+    - FE_GIT_COMMIT_HASH=${FE_GIT_COMMIT_HASH}
+    - VALIDATORS_GIT_COMMIT_HASH=${VALIDATORS_GIT_COMMIT_HASH}
+    - BE_GIT_COMMIT_HASH=${BE_GIT_COMMIT_HASH}
+    - EXPORT_GIT_COMMIT_HASH=${EXPORT_GIT_COMMIT_HASH}
+    - DOCXTOPDF_GIT_COMMIT_HASH=${DOCXTOPDF_GIT_COMMIT_HASH}
+    - WORDSERVICE_GIT_COMMIT_HASH=${WORDSERVICE_GIT_COMMIT_HASH}
+    - CODEBUILD_START_TIME=${CODEBUILD_START_TIME}
+    - CODEBUILD_INITIATOR=${CODEBUILD_INITIATOR}
+    - SLACK_CHANNELS=${SLACK_CHANNELS}
+    - SLACK_TOKEN=${SLACK_TOKEN}
+    shm_size: 2GB
   enlil_fe_server:
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:fe_${FE_GIT_COMMIT_HASH}
     depends_on:
@@ -76,7 +92,7 @@ services:
       cypress_network:
         aliases: 
           - postgres
-          
+
   enlil_cypress_validators:
     image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:validators_${VALIDATORS_GIT_COMMIT_HASH}
     ports:
@@ -112,7 +128,7 @@ services:
       cypress_network:
         aliases: 
           - worker
-          
+
   enlil_cypress_worker_replicas:
     <<: *ENLIL_CYPRESS_WORKER_CONFIG
 
@@ -143,24 +159,84 @@ services:
       *BE_ENV_VARS
     env_file:
       - be_env.env
-
-  enlil_cypress_haproxy:
-    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:haproxy
+      - be_server_env.env
+  enlil_cypress_server_load_balancer:
+    container_name: enlil_cypress_server_load_balancer
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/testing-ecr:nginxproxy_nginx-proxy
+    ports:
+      - 6000:80
+    expose:
+      - 80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       cypress_network:
         aliases: 
           - backend
-    ports:
-      - ${ENLIL_COMPOSE_EXPOSE_HAPROXY_PORT}:80
     depends_on:
       - enlil_cypress_server
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment: 
-      - BALANCE=leastconn
-    links:
-      - enlil_cypress_server
 
+  enlil_gotenberg:
+    container_name: enlil_gotenberg
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:gotenberg6
+    ports:
+      - ${ENLIL_COMPOSE_EXPOSE_GOTENBERG_PORT}:3000
+    networks:
+      - cypress_network
+
+  enlil_doc_export:
+    container_name: enlil_doc_export
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:doc_export_${EXPORT_GIT_COMMIT_HASH}
+    environment: 
+      AWS_CONTAINER_CREDENTIALS_RELATIVE_URI: ${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      GOTENBERG_HOST: http://enlil_gotenberg
+      GOTENBERG_PORT: 3000
+      ENLIL_BASE_URL: http://backend:$ENLIL_COMPOSE_EXPOSE_HAPROXY_PORT
+      ENLIL_APP_SECRET: doc_export_cypress
+      INPUT_SQS_URL: ${ENLIL_EXPORT_AWS_SQS_QUEUE_URL}
+      EXPORT_BUCKATE_NAME: dev-boris-test-bucket
+      AWS_REGION: us-west-2
+      EMAIL_FROM: no-reply@dev.enlil.io
+      ENLIL_WEB_URL: http://frontend:$ENLIL_COMPOSE_EXPOSE_FE_PORT
+    networks:
+      - cypress_network
+  enlil_cypress_docxtopdf:
+    container_name: enlil_cypress_docxtopdf
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:docx_to_pdf_${DOCXTOPDF_GIT_COMMIT_HASH}
+    ports:
+      - ${ENLIL_COMPOSE_EXPOSE_DOCXTOPDF_PORT}:4216
+    expose:
+      - 4216
+    networks:
+      - cypress_network
+    environment:
+      AWS_CONTAINER_CREDENTIALS_RELATIVE_URI: ${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI}
+      HTTP_PORT: 4216
+      WORKDIR: "/home/docxpdf/output"
+      GIN_MODE: "debug"
+      ENABLE_UI: "true"
+      ENABLE_TEMP_URLS: "true"
+      AWS_S3_BUCKET: "doc-docx-to-pdf-dev"
+      AWS_S3_OBJECT_ACL: "public-read"
+      AWS_S3_TEMP_URL_TTL: "15m"
+      AWS_REGION: "us-west-2"
+
+  enlil_cypress_wordservice:
+    container_name: enlil_cypress_wordservice
+    image: 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:word_service_${WORDSERVICE_GIT_COMMIT_HASH}
+    ports:
+      - ${ENLIL_COMPOSE_EXPOSE_WORD_SERVICE_PORT}:5000
+    expose:
+      - 5000
+    networks:
+      - cypress_network
+    environment:
+      AWS_CONTAINER_CREDENTIALS_RELATIVE_URI: ${AWS_CONTAINER_CREDENTIALS_RELATIVE_URI}
+      AWS_REGION: "us-west-2"
+      AWS_DEFAULT_REGION: "us-west-2"
+      KMS_KEY: 7d4eed48-6b75-46c2-ab89-9c1032189495
+      SNS_TOPIC_ARN: arn:aws:sns:us-west-2:817083319299:dev_accept_revisions_errors
 volumes:
   enlil_cypress_postgres_tmpfs_volume:
     driver_opts:

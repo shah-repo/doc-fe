@@ -6,9 +6,10 @@ enum Colors {
   alabaster = "#F9FBFF",
   lily_white="#F8F9F9",
   water="#EEF3FF",
+  titan_white="#EBEFF7",
   // black
   black = "#000",
-  almost_black = "#080B11",
+  almost_black = "#080B11", // font_black
   // gray
   hint_gray = "#b4c0ca",
   light_gray = "#F2F4F6",
@@ -22,13 +23,26 @@ enum Colors {
   bright_grey = "#32424E",
   lightest_grey = "rgba(0, 0, 0, 0.12)",
   grey_cloud = "#B4B4B4",
+  gray_goose ="#CCD4D9",
+  raven = "#767B87",
+  whitest_grey="#EBEDF2",
+  lightest_grey1="#CCD4D9",
+  lightest_grey2= "#9A9FAB",
+  athens_gray= "#F5F6F8",
+  link_water = "#ccd4d9",
   platinum_grey = "#E2E2E2",
+  cultured="#f6f7f7",
+  light_athens_gray ="#E9EBF0",
+  bright_gray2="#E1E7F2",
+  dark_gray2="#ABB0BA",
   // blue
   light_blue = "#edf4ff",
+  light_blue2 = "#EDF3FF",
   blue = "#0066FF",
   medium_blue = "#5C9DFC",
   background_blue = "#DBE9FF",
   navy = "#011FBB",
+  navy_active = "#011994",
   sky_blue = "#F5F8FF",
   latest_blue_varient = "#3080EA",
   bright_blue="#0075FF",
@@ -37,7 +51,12 @@ enum Colors {
   cerulean="#01A6C7",
   light_slate_blue="#7B61FF",
   steel_blue="#457AB5",
+  dodger_blue="#4D88FF",
+  ultramarine_blue="#4C69FF",
+  mild_wind_blue="#CCD4D9",
   topaz="#03C0C1",
+  clear_blue="#2684FF",
+  light_cream_blue = "#EEF1F9",
   // red
   red = "#c40000",
   dark_red = "#a10808",
@@ -47,6 +66,9 @@ enum Colors {
   opal_red = "#f05a5c",
   latest_red_varient = "#EC2B00",
   trinary_red = "#F14822",
+  mandy = "#EB4770",
+  dawn="#A2A2A2",
+  seashell="#FCF0ED",
   // purple
   deep_purple = "#29064C",
   purple = "#99c",
@@ -58,12 +80,15 @@ enum Colors {
   olivine = "#9EB774",
   carla="#E6FCD9",
   light_forest_green="#4C9646",
+  green_blue="#0DB78D",
   light_forest_green_border="#509849",
+  dark_jungle_green="#162229",
   // yellow
   light_yellow = "#FFF3CD",
   dark_yellow = "#856404",
   latest_yellow_varient = "#FEAA2C",
   pink_red = "#f50057",
+  school_bus_yellow = "#EFA20B",
   // orange
   basket_ball_orange = "#F88961",
   old_lace="#FEF8EE",
@@ -74,6 +99,14 @@ enum Colors {
   light_cyan="#DCF4FD",
   lochmara="#306AAC",
   peri_winkle_blue="#8295FA",
+  bright_gray="#EBEDF2",
+  light_gray_border="#CCD4D9",
+  // Platinum
+  platinum="#E5E5E5",
+  chinese_silver="#C8CACF",
+  spanish_gray="#999999",
+  gains_boro="#DDDDDD",
+  white_smoke="#F9F9F9"
 }
 
 export default Colors;

@@ -5,9 +5,9 @@ import { GetAsyncTaskResponse } from "../../../state/ducks/async.tasks/types";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import { KendoGrid } from "../../components/KendoGrid/KendoGrid";
 import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
 import PasswordDialogueContainer from "../dialogs/PasswordDialogue";
 import DateForm from "../forms/date.form/date.form";
+import EmailForm from "../forms/email.form/email.form";
 import EmptyForm from "../forms/empty.form/empty.form";
 import PasswordExpirationEmailSpecificForm from "../forms/password.expiration.email.specific/password.expiration.email.specific.form";
 import PasswordExpirationForm from "../forms/password.expiration.form/password.expiration.form";
@@ -36,6 +36,7 @@ export function AsyncTasksPresenter({
   handlePasswordExpirationFormSubmit,
   handlePasswordExpirationEmailSpecificFormSubmit,
   handleuuidFormSubmit,
+  handleEmailFormSubmit,
   handleTimeTravelFormSubmit,
   handleTimeTravelCompany,
   handleTimeTravelUser,
@@ -44,7 +45,7 @@ export function AsyncTasksPresenter({
   const classes = styles();
 
   return (
-    <Box p={2} style={{ background: Colors.background_white }}>
+    <Box p={2}>
       <Grid container>
         <Grid item xs={12}>
           <FormControl className={classes.formControl}>
@@ -101,6 +102,12 @@ export function AsyncTasksPresenter({
           SQS_TYPES.PRECALC_PAGE_DETAILS,
         ].includes(SQS_TYPES[type]) && (
             <UUIDBasedForm {...{ handleuuidFormSubmit, type }} key={type}/>
+          )}
+          {type &&
+        [
+          SQS_TYPES.UNLOCK_USER_AND_SET_DEFAULT_PASSWORD,
+        ].includes(SQS_TYPES[type]) && (
+            <EmailForm {...{ handleEmailFormSubmit, type }} key={type}/>
           )}
           {type &&
         [

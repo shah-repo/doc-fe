@@ -1,8 +1,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -37,12 +39,7 @@ context("Field validations test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-              },
+              TestDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -102,13 +99,17 @@ context("Field validations test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Test Document Type" });
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Add normal textfield", () => {
       it("Click Add a Field", () => {
         cy.fbAddNewField();
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label Normal text field", () => {
@@ -126,7 +127,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label required text field", () => {
@@ -157,7 +158,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label required text field", () => {
@@ -193,7 +194,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label Enable/disable text field", () => {
@@ -235,7 +236,7 @@ context("Field validations test", () => {
       });
 
       it("Verify revision status is 'Revision 1  - Released'", () => {
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
   });

@@ -3,6 +3,7 @@
 
 import "moment-timezone";
 import moment from "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -25,9 +26,8 @@ let approvalRequestDocumentType;
 let initialArDocument;
 let createdEquipmentFormDocument;
 let createdMaintenanceInlineRecordFormDocument;
-let createdMaintenanceRecordFormDocument;
 let group;
-let docIdFromUrl;
+let eqMaintenanceURL;
 
 context("Export maintenance record", () => {
   before(() => {
@@ -125,6 +125,7 @@ context("Export maintenance record", () => {
                     type: "radiogroup",
                     index: 0,
                     label: "EQ Status",
+                    tabId: "overview",
                     rules: "required",
                     options: [
                       {
@@ -147,6 +148,7 @@ context("Export maintenance record", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Primary Owner",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as primary owner",
                     applicableOn: [
@@ -162,6 +164,7 @@ context("Export maintenance record", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Coordinator",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as coordinator",
                     applicableOn: [
@@ -181,6 +184,7 @@ context("Export maintenance record", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -196,6 +200,7 @@ context("Export maintenance record", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -226,7 +231,7 @@ context("Export maintenance record", () => {
       });
     });
 
-    it("[API]Create Maintenance inline record form", (done: any) => {
+    it("[API]Create Maintenance record form", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -261,6 +266,7 @@ context("Export maintenance record", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -272,6 +278,7 @@ context("Export maintenance record", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -286,6 +293,7 @@ context("Export maintenance record", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -300,6 +308,7 @@ context("Export maintenance record", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -312,6 +321,7 @@ context("Export maintenance record", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -322,6 +332,7 @@ context("Export maintenance record", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "details",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ki5yh7ba",
@@ -334,6 +345,7 @@ context("Export maintenance record", () => {
                 name: "textfield-kn7fc209",
                 validationMode: "default",
                 label: "Section 1",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -347,33 +359,12 @@ context("Export maintenance record", () => {
                 rows: 1,
                 validationMode: "default",
                 label: "textfield 1",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
                 applicableValidationSchema: true,
                 validationAttribute: "textfield",
-              },
-              {
-                index: 8,
-                type: "inlineapproval",
-                name: "inline-approval-kw6gbxwm",
-                hidden: false,
-                outputDisabled: false,
-                deleted: false,
-                deleteInFormDisabled: false,
-                validationMode: "default",
-                validationAttribute: "Inline approval",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                applicableValidationSchema: true,
-                editorProperties: [],
-                label: "Inline approval",
-                editorConfig: {
-                  groups: [
-                    group.body[0].id,
-                  ],
-                },
               },
             ],
           },
@@ -385,130 +376,6 @@ context("Export maintenance record", () => {
         createdMaintenanceInlineRecordFormDocument = response;
         cy.drAPIApproveAndRelease({
           documentId: createdMaintenanceInlineRecordFormDocument.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
-      });
-    });
-
-    it("[API]Create Maintenance record form", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Maintenance form record</p>",
-          document: {
-            docId: "FM-00005",
-            documentType: {
-              id: formDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Maintenance record form",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [{
-              id: maintenanceRecordDocumentType[0].id,
-            }],
-            schema: [
-              {
-                name: "fb-maintenance-details-section",
-                type: "section",
-                index: 0,
-                label: "Maintenance Details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "equipment_id",
-                type: "autocomplete",
-                index: 1,
-                label: "Equipment",
-                rules: "required",
-                optionId: "20",
-                placeholder: "[Select revision here]",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "equipment_maintainer",
-                type: "autocomplete",
-                index: 2,
-                label: "Maintainer",
-                rules: "required",
-                optionId: "13",
-                placeholder: "[Select name here]",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "fb-equipment_due_date",
-                type: "datepicker",
-                index: 3,
-                label: "Completion Date",
-                rules: "required",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "fb-requipment-maintenance-section",
-                type: "textfield",
-                index: 4,
-                label: "Equipment Maintenance Section",
-                rules: "required",
-                hidden: true,
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                label: "form.builder.approvals",
-                type: "approvals",
-                deleteDisabled: true,
-                name: "fb-approvals-ki5yh7ba",
-                uniqueSchemaItem: true,
-                index: 5,
-              },
-            ],
-          },
-
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdMaintenanceRecordFormDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdMaintenanceRecordFormDocument.id,
           payload: {
             effectiveDate: (new Date()).toISOString(),
             documentType: { id: approvalRequestDocumentType[0].id },
@@ -550,21 +417,34 @@ context("Export maintenance record", () => {
     });
 
     it("Select 'Active' as EQ status", () => {
-      cy.get("input[name=fb-default-eq-status][value=Active]").check();
+      cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
+      cy.unClick();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
+    it("Select 'CAL/PM' tab", () => {
+      cy.get("[data-cy=\"tabId.specification\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
-      cy.get("[value=\"Yes\"]").eq(0).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
     });
 
-    it("Select 'Maintenance inline record form' for preventative maintenance required", () => {
+    it("Select 'Preventative Maintenance form' for preventative maintenance required", () => {
+      cy.get("[name$=\"preventativeForm\"] button").eq(2).arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.unClick();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Maintenance inline record form").arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains("00004").arrowClick();
     });
 
     it("Select preventative maintenance frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(0).arrowType("10");
+      cy.get("[name*=\"frequency\"]").eq(0).arrowType("365");
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -574,17 +454,19 @@ context("Export maintenance record", () => {
     });
 
     it("Select document 'Yes' for calibration required", () => {
-      cy.get("[value=\"Yes\"]").eq(1).arrowClick();
+      cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true });
     });
 
-    it("Select 'Maintenance record form' for calibration required", () => {
+    it("Select 'Calibration form' for calibration required", () => {
+      cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
+      cy.unClick();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Maintenance record form").arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains("00004").arrowClick();
     });
 
     it("Select calibration frequency", () => {
-      cy.get("[name*=\"frequency\"]").eq(1).arrowType("5");
+      cy.get("[name*=\"frequency\"]").eq(1).arrowType("365");
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -601,41 +483,51 @@ context("Export maintenance record", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Check equipment status is 'Released'", () => {
-      cy.arVerifyStatus({ status: "Released" });
+    it(`Check equipment status is '${STATUS_TYPES_LABEL.RELEASED}'`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.url().then((url: any) => {
+        eqMaintenanceURL = url;
+      });
     });
   });
 
-  context("Fill new maintenance inline form", () => {
-    it("Click 'NEW PM' on preventative maintenace section", () => {
-      cy.url().then((url: any) => {
-        docIdFromUrl = url.split("/").pop();
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceInlineRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
-          cy.visit(newPMUrl);
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+  context("Fill new maintenance form", () => {
+
+    it("Click on New PM", () => {
+      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.drSelectSpecificationTab();
+      cy.wait(1000);
+      cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+      cy.wait("@response").then((res) => {
+        if (res.response) {
+          const response = res.response.body;
+          const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers], () => {
+            cy.visit(newUrl);
+          });
+        }
       });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
     });
 
-    it("Enter title 'Maintenance Record inline form'", () => {
-      cy.drEnterDocumentTitle({ name: "Maintenance Record inline form" });
+    it("Create 'Preventative maintenance document'", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Select document type 'Maintenance Record'", () => {
-      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
-    it("Select revision stage 'Numeric'", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    it("Select Equipment", () => {
+      cy.get("[data-cy=equipment_id]").autocompleteSelect("EQ-00001");
+      cy.unClick();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -657,121 +549,66 @@ context("Export maintenance record", () => {
         });
     });
 
-    it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+    it("Save 'Preventative maintenance document'", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
   context("Maintenance Record with WIP status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "WIP", filename: "-1-Maintenance-Record-inline-form" });
-    });
-  });
-
-  context("Maintenance Record with Last Signed status", () => {
-    context("Add Maintenance Record with Last Signed", () => {
-      it("Add inline approver", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
-              .autocompleteSelect("enlil.testmail+cy1");
-          });
-      });
-
-      it("Click Request Approval button", () => {
-        cy.contains("Request approval").arrowClick();
-      });
-
-      it("Approve inline approval", () => {
-        cy.ebTryToApprove();
-      });
-
-      it("Select Last Signed", () => {
-        cy.contains("Last Signed").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Last Signed", filename: "-1-Maintenance-Record-inline-form" });
-      });
-    });
-  });
-
-  context("Maintenance Record with Archive status", () => {
-    context("Add Maintenance Record with Archive", () => {
-      it("Click WIP status Maintenance Record", () => {
-        cy.contains("WIP").arrowClick();
-      });
-
-      it("Update section", () => {
-        cy.get("[name^=\"textfield1\"]").arrowType("1");
-      });
-
-      it("Save the document", () => {
-        cy.unClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Click Request Approval button", () => {
-        cy.contains("Request approval").arrowClick();
-      });
-
-      it("Approve inline approval", () => {
-        cy.ebTryToApprove();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Select Archive", () => {
-        cy.contains("Archive").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Archive", filename: "-1-Maintenance-Record-inline-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: STATUS_TYPES_LABEL.WIP, filename: "-A",
+        status: STATUS_TYPES_LABEL.WIP,
       });
     });
   });
 
   context("Maintenance Record with Released status", () => {
     context("Add Maintenance Record with Released", () => {
+      it("Add approver", () => {
+        cy.get("[data-cy*='fb-approvals-fb-approvals']").eq(0)
+          .autocompleteSelect(USERS[1].name);
+        cy.wait(2000);
+      });
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Click WIP status Maintenance Record", () => {
         cy.contains("WIP").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Select Equipment", () => {
-        cy.get("[data-cy=equipment_id]").autocompleteSelect("ET-00002");
-        cy.unClick();
-      });
-
-      it("Select Maintainer", () => {
-        cy.get("[data-cy=equipment_maintainer]").autocompleteSelect(`${USERS[1].name}`);
-      });
-
-      it("Select Completion date", () => {
-        cy.get("input[name=fb-equipment_due_date]").parent().find("button").arrowClick();
-        cy.get(".MuiPickersDay-daySelected").arrowClick();
+      it("Select 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Save the document", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
-      it("Finalize and release button click'", () => {
-        cy.reload();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.recApproveAndReleaseInlineRecord();
+      });
+
+      it("Save and submit for Approval", () => {
+        cy.pmSubmitForApproval();
+      });
+
+      it("Open details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Approve inline approval", () => {
+        cy.inlineApproval();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-A-Maintenance-Record-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Released", filename: "-A",
+          status: STATUS_TYPES_LABEL.RELEASED,
+        });
       });
     });
   });
@@ -791,21 +628,34 @@ context("Export maintenance record", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Canceled", filename: "-A-1-Maintenance-Record-inline-form" });
+        cy.exportVerifyEmail({
+          pdfStatus: "Canceled", filename: "-A-1",
+          status: STATUS_TYPES_LABEL.CANCELED,
+        });
       });
     });
   });
 
   context("Maintenance Record with Voided status", () => {
     context("Fill new maintenance form", () => {
-      it("Click 'NEW PM' on preventative maintenace section", () => {
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
-          cy.visit(newPMUrl);
+      it("Click on New PM", () => {
+        cy.visit(eqMaintenanceURL);
+        cy.wait(5000);
+        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+        cy.drSelectSpecificationTab();
+        cy.wait(1000);
+        cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+        cy.wait("@response").then((res) => {
+          if (res.response) {
+            const response = res.response.body;
+            const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
+            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+              CyRoutes.GetAvailableApprovers], () => {
+              cy.visit(newUrl);
+            });
+          }
         });
+        cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -814,20 +664,21 @@ context("Export maintenance record", () => {
         cy.cmpTurnOffAutosave();
       });
 
-      it("Enter title 'Maintenance Record form'", () => {
-        cy.drEnterDocumentTitle({ name: "Maintenance Record form" });
-      });
-
-      it("Select document type 'Maintenance Record'", () => {
-        cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-      });
-
       it("Upload logo picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
-      it("Select revision stage 'Numeric'", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      it("Create 'Preventative maintenance document'", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Open details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Select Equipment", () => {
+        cy.get("[data-cy=equipment_id]").autocompleteSelect("EQ-00001");
+        cy.unClick();
       });
 
       it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -850,7 +701,7 @@ context("Export maintenance record", () => {
       });
 
       it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
@@ -862,21 +713,31 @@ context("Export maintenance record", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Voided", filename: "-A-Void" });
+        cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-A-Void", status: STATUS_TYPES_LABEL.VOIDED });
       });
     });
   });
 
   context("Maintenance Record with In Review status", () => {
     context("Fill new maintenance form", () => {
-      it("Click 'NEW PM' on preventative maintenace section", () => {
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers,
-          CyRoutes.GetAutocompleteOptions], () => {
-          cy.visit(newPMUrl);
+      it("Click on New PM", () => {
+        cy.visit(eqMaintenanceURL);
+        cy.wait(5000);
+        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+        cy.drSelectSpecificationTab();
+        cy.wait(1000);
+        cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+        cy.wait("@response").then((res) => {
+          if (res.response) {
+            const response = res.response.body;
+            const newUrl = `${CONFIG.FE_URL}/document_revision/${response.documentId}/version/${response.id}`;
+            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+              CyRoutes.GetAvailableApprovers], () => {
+              cy.visit(newUrl);
+            });
+          }
         });
+        cy.checkToastMessage({ exists: false });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -885,16 +746,17 @@ context("Export maintenance record", () => {
         cy.cmpTurnOffAutosave();
       });
 
-      it("Enter title 'Maintenance Record form'", () => {
-        cy.drEnterDocumentTitle({ name: "Maintenance Record" });
+      it("Create 'Preventative maintenance document'", () => {
+        cy.drClickCreateDocumentWithApiCall();
       });
 
-      it("Select document type 'Maintenance Record'", () => {
-        cy.drSelectDocumentType({ documentType: "Maintenance Record" });
+      it("Open details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
-      it("Select revision stage 'Numeric'", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      it("Select Equipment", () => {
+        cy.get("[data-cy=equipment_id]").autocompleteSelect("EQ-00001");
+        cy.unClick();
       });
 
       it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -917,13 +779,19 @@ context("Export maintenance record", () => {
       });
 
       it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
 
     context("Add Maintenance Record with In Review", () => {
-      it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Add approver", () => {
+        cy.get("[data-cy*='fb-approvals-fb-approvals']").eq(0)
+          .autocompleteSelect(USERS[1].name);
+        cy.wait(2000);
       });
 
       it("Save the document", () => {
@@ -937,9 +805,13 @@ context("Export maintenance record", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "In Review", filename: "-A-Maintenance-Record" });
+        cy.exportVerifyEmail({
+          pdfStatus: "In Review", filename: "-A",
+          status: STATUS_TYPES_LABEL.IN_REVIEW,
+        });
       });
     });
   });
 
 });
+

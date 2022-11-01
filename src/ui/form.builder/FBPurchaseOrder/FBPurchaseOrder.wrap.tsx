@@ -3,10 +3,11 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBDialogState, FBPurchaseOrderActions, FBPurchaseOrderForm, FBPurchaseOrderItem, FBPurchaseOrderProps, FBPurchaseOrderState, FBPurchaseOrderValue } from "..";
+import { SM } from "../../../App";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentPO, checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,
@@ -24,9 +25,11 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   }: T) => {
 
     const dispatch = useDispatch();
+    const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
+    const isPO = checkIsDocumentPO(workspaceState?.document?.document.documentType.groupOptions);
     purchaseOrderState = FB.useRef<FBPurchaseOrderState>(FBPurchaseOrderState, {
       ...formValue,
       documentId: isReceivable ? poReceiveState?.data?.documentId : workspaceState?.document?.document?.id,
@@ -34,7 +37,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
     useObserver(() => {
-      disabled = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange || disabled;
+      disabled = _documentRevisionFormState?.revisionChangeType === RevisionChangeType.AdministrativeChange || disabled;
     });
 
     !handleItem && (handleItem = (item?: FBPurchaseOrderItem) => {
@@ -97,6 +100,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       disabled,
       name,
       isReceivable,
+      isPO,
     });
   };
 

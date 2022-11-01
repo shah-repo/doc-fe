@@ -1,0 +1,186 @@
+import { DOC_TYPE_GROUP } from "../../../../src/state/ducks/documentRevisions/documentType/types";
+import { IdocumentTypeDto } from "../../../support/commands";
+import { Categories } from "../categories";
+
+export const LotsTest: IdocumentTypeDto = {
+  documentTypeName: "Lots test",
+  documentTypeAcronym: "LTT-",
+  group: DOC_TYPE_GROUP.LOT,
+  category: Categories.Lot,
+  isQms: true,
+  privateNumberPool: true,
+  needsSignature: true,
+  fieldsConfig: {
+    D: {
+      label: "Description",
+      visible: false,
+      required: false,
+    },
+    E: {
+      visible: false,
+      required: true,
+    },
+    F: {
+      visible: false,
+      required: true,
+    },
+    G: {
+      visible: false,
+      required: false,
+    },
+    I: {
+      label: "Update",
+      visible: true,
+    },
+    J: {
+      visible: false,
+    },
+    K: {
+      visible: false,
+    },
+    L: {
+      label: "Correction",
+      visible: true,
+    },
+    O: {
+      label: "Lot History",
+      visible: true,
+    },
+    R: {
+      visible: false,
+    },
+    A1: {
+      label: "WIP",
+      visible: true,
+    },
+    A2: {
+      label: "Rejected",
+      visible: true,
+    },
+    A3: {
+      visible: false,
+    },
+    A4: {
+      label: "Accepted",
+      visible: true,
+    },
+    A5: {
+      label: "Quarantine",
+      visible: true,
+    },
+    A6: {
+      visible: false,
+    },
+    P1: {
+      label: "WIP",
+      visible: true,
+    },
+    P2: {
+      label: "Rejected",
+      visible: true,
+    },
+    P3: {
+      visible: false,
+    },
+    P4: {
+      label: "Accepted",
+      visible: true,
+    },
+    P5: {
+      label: "Quarantine",
+      visible: true,
+    },
+    P6: {
+      visible: false,
+    },
+  },
+};
+
+export const LotsTestWithSchama: IdocumentTypeDto = {
+  documentTypeName: "Lots test with Schema",
+  documentTypeAcronym: "LTT-",
+  group: DOC_TYPE_GROUP.LOT,
+  category: Categories.Lot,
+  isQms: true,
+  privateNumberPool: true,
+  needsSignature: true,
+  schema: [
+    {
+      name: "lot_quantity",
+      type: "quantity",
+      index: 0,
+      label: "Initial Quantity",
+      tabId: "details",
+      applicableOn: [
+        "ON_STATE_TO_IN_REVIEW",
+      ],
+      deleteDisabled: true,
+      editorProperties: [],
+      validationAttribute: "Initial Quantity",
+      deleteInFormDisabled: true,
+      applicableValidationSchema: true,
+    },
+    {
+      name: "lot_usable_quantity",
+      type: "quantity",
+      index: 1,
+      label: "Usable Quantity",
+      tabId: "details",
+      applicableOn: [
+        "ON_STATE_TO_IN_REVIEW",
+      ],
+      deleteDisabled: true,
+      editorProperties: [],
+      validationAttribute: "Usable Quantity",
+      deleteInFormDisabled: true,
+      applicableValidationSchema: true,
+    },
+    {
+      name: "lot_expiry_date",
+      type: "datepicker",
+      index: 2,
+      label: "Expiration Date",
+      tabId: "details",
+      applicableOn: [
+        "ON_STATE_TO_IN_REVIEW",
+      ],
+      deleteDisabled: true,
+      validationAttribute: "Expiration Date",
+      deleteInFormDisabled: true,
+      applicableValidationSchema: true,
+    },
+    {
+      name: "lot_part",
+      type: "autocomplete",
+      index: 3,
+      label: "Part Selection",
+      tabId: "details",
+      optionId: "21",
+      placeholder: "Select the appropriate part for this lot",
+      deleteDisabled: true,
+      deleteInFormDisabled: true,
+    },
+    {
+      name: "100-inspection-override",
+      type: "checkboxgroup",
+      index: 4,
+      label: "100% Inspection Override",
+      tabId: "details",
+      options: [
+        {
+          text: "100% Inspection Override",
+          value: "100% Inspection Override",
+        },
+      ],
+      applicableOn: [
+        "ON_STATE_TO_IN_REVIEW",
+      ],
+      deleteDisabled: true,
+      validationMode: "default",
+      editorProperties: [],
+      validationAttribute: "100% Inspection Override",
+      deleteInFormDisabled: true,
+      applicableValidationSchema: true,
+    },
+  ],
+};

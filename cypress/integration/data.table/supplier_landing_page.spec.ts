@@ -15,6 +15,14 @@ let supplierDocumentType;
 let adminEmployee;
 let group;
 
+const supplierId = "SUPPLIER ID";
+const supplierName = "SUPPLIER NAME";
+const supplierLevel = "SUPPLIER LEVEL";
+const supplierStatus = "SUPPLIER STATUS";
+const state = "STATE";
+const owner = "OWNER";
+const approvalId = "APPROVAL ID";
+
 context("Suppliers landing page", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -123,13 +131,13 @@ context("Suppliers landing page", () => {
     });
 
     it("Verify all columns are present", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "Supplier ID");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Supplier Name");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Supplier Level");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Supplier Status");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "State");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Owner");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Approval ID");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${supplierId}`);
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${supplierName}`);
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${supplierLevel}`);
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${supplierStatus}`);
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${state}`);
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", `${owner}`);
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", `${approvalId}`);
     });
 
     it(`Verify buttons "Clear Filter" and "Export List" "Add Supplier" are present`, () => {
@@ -199,17 +207,17 @@ context("Suppliers landing page", () => {
       cy.unClick();
     });
 
-    it("Verify approval field is added as result of predefined schema", () => {
-      cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
-      cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
-    });
-
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Verify approval field is added as result of predefined schema", () => {
+      cy.get("[id^=\"fb-approvals-section-fb-approvals\"]").should("exist");
+      cy.get("input[data-cy^=\"fb-approvals-fb-approvals\"]").should("exist");
     });
 
     it("Approve and release document", () => {
@@ -260,17 +268,17 @@ context("Suppliers landing page", () => {
       });
 
       it("Supplier ID should be in ascending order", () => {
-        cy.contains("Supplier ID").eq(0).click();
+        cy.contains(`${supplierId}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${supplierId}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 0, colLength: 7 });
       });
 
       it("Supplier ID should be in descending order", () => {
-        cy.contains("Supplier ID").eq(0).click();
+        cy.contains(`${supplierId}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${supplierId}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 0, colLength: 7 });
       });
@@ -278,17 +286,17 @@ context("Suppliers landing page", () => {
 
     context("Sort 'Supplier Name'", () => {
       it("Supplier Name should be in ascending order", () => {
-        cy.contains("Supplier Name").eq(0).click();
+        cy.contains(`${supplierName}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${supplierName}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 7 });
       });
 
       it("Supplier Name should be in descending order", () => {
-        cy.contains("Supplier Name").eq(0).click();
+        cy.contains(`${supplierName}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Name").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${supplierName}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 7 });
       });
@@ -296,37 +304,38 @@ context("Suppliers landing page", () => {
 
     context("Sort 'Supplier Level'", () => {
       it("Supplier Level should be in ascending order", () => {
-        cy.contains("Supplier Level").eq(0).click();
+        cy.contains(`${supplierLevel}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${supplierLevel}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 7 });
       });
 
       it("Supplier Level should be in descending order", () => {
-        cy.contains("Supplier Level").eq(0).click();
+        cy.contains(`${supplierLevel}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Level").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${supplierLevel}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 7 });
+
+        // workaround for sorting issue between 'Supplier Level' and 'Supplier Status' columns
+        cy.contains(`${supplierLevel}`).eq(0).click();
       });
     });
 
     context("Sort 'Supplier Status'", () => {
       it("Supplier Status should be in ascending order", () => {
-        cy.contains("Supplier Status").eq(0).click();
+        cy.contains(`${supplierStatus}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Status").eq(0).click();
-        cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${supplierStatus}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 7 });
       });
 
       it("Supplier Status should be in descending order", () => {
-        cy.contains("Supplier Status").eq(0).click();
+        cy.contains(`${supplierStatus}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Supplier Status").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${supplierStatus}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 3, colLength: 7 });
       });
@@ -334,17 +343,17 @@ context("Suppliers landing page", () => {
 
     context("Sort 'State'", () => {
       it("State should be in ascending order", () => {
-        cy.contains("State").eq(0).click();
+        cy.contains(`${state}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${state}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 4, colLength: 7 });
       });
 
       it("State should be in descending order", () => {
-        cy.contains("State").eq(0).click();
+        cy.contains(`${state}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${state}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 4, colLength: 7 });
       });
@@ -352,17 +361,17 @@ context("Suppliers landing page", () => {
 
     context("Sort 'Owner'", () => {
       it("Owner should be in ascending order", () => {
-        cy.contains("Owner").eq(0).click();
+        cy.contains(`${owner}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${owner}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 7 });
       });
 
       it("Owner should be in descending order", () => {
-        cy.contains("Owner").eq(0).click();
+        cy.contains(`${owner}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${owner}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 7 });
       });
@@ -370,17 +379,17 @@ context("Suppliers landing page", () => {
 
     context("Sort 'Approval ID'", () => {
       it("Approval ID should be in ascending order", () => {
-        cy.contains("Approval ID").eq(0).click();
+        cy.contains(`${approvalId}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${approvalId}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 7 });
       });
 
       it("Approval ID should be in descending order", () => {
-        cy.contains("Approval ID").eq(0).click();
+        cy.contains(`${approvalId}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Approval ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${approvalId}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 7 });
       });
@@ -461,40 +470,40 @@ context("Suppliers landing page", () => {
 
   context("Verify hide and freeze", () => {
     it("Verify hide on Suppiler Level", () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Supplier Level");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${supplierLevel}`);
       cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("div.k-columnmenu-item ").contains("Hide Column").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Supplier Level");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${supplierLevel}`);
     });
 
     it("Verify unhide on Suppiler Level", () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Supplier Level");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${supplierLevel}`);
       cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get("ul>li[role=menuitem]").contains("SUPPLIER LEVEL").parents("li").find("svg").arrowClick();
+      cy.get("ul>li[role=menuitem]").contains(`${supplierLevel}`).parents("li").find("svg").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("body").type("{esc}");
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Supplier Level");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${supplierLevel}`);
     });
 
     it("Verify freeze on ID", () => {
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Supplier ID");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${supplierId}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Supplier Name");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${supplierName}`);
     });
 
     it("Verify un-freeze on ID", () => {
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", "Supplier Name");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("not.have.text", `${supplierName}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", "Supplier ID");
+      cy.get(`th[aria-colindex="1"] span.k-column-title`).should("have.text", `${supplierId}`);
     });
   });
 

@@ -1,3 +1,4 @@
+import { BoxProps, Grid } from "@material-ui/core";
 import React from "react";
 import { DataProps } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -13,6 +14,8 @@ interface OwnProps {
   isDraft?: boolean;
   docRevId?: string;
   showRemoveButton?: boolean;
+  labelProps?: BoxProps;
+  labelFont?: BoxProps;
 }
 type Props = OwnProps & DataProps<DocumentRevision[]>;
 
@@ -22,6 +25,8 @@ const BuildsContainer: React.FunctionComponent<Props> = ({
   isDraft,
   docRevId,
   showRemoveButton,
+  labelProps,
+  labelFont,
 }) => {
   const async = useAsync<any>({
     onError: (error) => {
@@ -33,7 +38,9 @@ const BuildsContainer: React.FunctionComponent<Props> = ({
     async.start(removeAction, docRevId, async);
   };
   return (
-    <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, showRemoveButton }}/>
+    <Grid xs={12}>
+      <BuildsPresenter {...{ label, dataProp, isDraft, handleRemoveBuild, showRemoveButton, labelProps, labelFont }}/>
+    </Grid>
   );
 };
 

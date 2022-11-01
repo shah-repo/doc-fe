@@ -6,6 +6,7 @@ import { FB } from "..";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
+import FBStore from "../FBStore/FBStore";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 
@@ -69,12 +70,14 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       }
       formState?.setFieldValue(name, { ...purchaseOrderState?.value }, true);
       loading = purchaseOrderState?.loading || workspaceState?.loadDocumentRevApi.loading;
+      FBStore?.setPurchaseOrderValue(value);
     });
 
     useEffect(() => reaction(
       () => purchaseOrderState?.value,
       (value) => {
         formState?.setFieldValue(name, value);
+        FBStore?.setPurchaseOrderValue(value);
         workspaceState?.saveDocRev(formState?.getValues());
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,6 +115,7 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       disabled,
       items,
       name,
+      isReceivable,
     });
   };
 

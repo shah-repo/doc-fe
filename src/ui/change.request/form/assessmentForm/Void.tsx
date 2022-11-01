@@ -1,5 +1,10 @@
 import { Box, Button } from "@material-ui/core";
 import React from "react";
+import { SM } from "../../../../App";
+import { StyledMenuListIcon } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import { ReactComponent as VoidDocumentIcon } from "../../../../assets/images/void_document.svg";
 import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
 import { AsyncStatus } from "../../../../state/types";
@@ -30,6 +35,7 @@ const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
       async,
     );
   };
+  const isNewLayout = SM.isNewCRLayout;
 
   if (!changeRequest) {
     return null;
@@ -41,15 +47,34 @@ const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
         <FormMessage asyncState={async.asyncState} />
         <FormProgress asyncState={async.asyncState} />
       </Box>
-      <Button
-        id="void"
-        variant="outlined"
-        color="secondary"
-        onClick={dialog.open}
-        disabled={async.asyncState.status === AsyncStatus.Active}
-      >
-        <Text translation="common.void" />
-      </Button>
+      {isNewLayout ? (
+        <StyledMenuListItem
+          button
+          disabled={async.asyncState.status === AsyncStatus.Active}
+          alignItems="flex-start"
+        >
+          <StyledMenuListIcon>
+            <VoidDocumentIcon />
+          </StyledMenuListIcon>
+          <StyledMenuListItemText
+            id="void-button"
+            data-cy="void-button"
+            primary={<Text translation="common.void" />}
+            onClick={dialog.open}
+          />
+        </StyledMenuListItem>
+      ) : (
+        <Button
+          id="void-button"
+          data-cy="void-button"
+          variant="outlined"
+          color="secondary"
+          onClick={dialog.open}
+          disabled={async.asyncState.status === AsyncStatus.Active}
+        >
+          <Text translation="common.void" />
+        </Button>
+      )}
       <AlertDialog
         confirmAction={voidDocument}
         message={"change.request.void.alert"}

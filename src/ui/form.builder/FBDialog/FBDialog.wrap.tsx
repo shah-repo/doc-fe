@@ -11,6 +11,7 @@ export const withFBDialog = <T extends FBDialogProps>(
     title,
     actions,
     open,
+    classes,
     ...props
   }: T) => {
 
@@ -38,6 +39,7 @@ export const withFBDialog = <T extends FBDialogProps>(
       content = dialogState?.content;
       title = dialogState?.title;
       maxWidth = dialogState?.maxWidth || "sm";
+      classes = dialogState?.classes;
       actions = dialogState?.actions;
     });
 
@@ -53,6 +55,7 @@ export const withFBDialog = <T extends FBDialogProps>(
       content,
       title,
       maxWidth,
+      classes,
       actions,
     });
   };

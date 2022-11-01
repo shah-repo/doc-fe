@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, Typography } from "@material-ui/core";
+import { BoxProps, FormControl, FormHelperText, Typography } from "@material-ui/core";
 import { FormControlProps } from "@material-ui/core/FormControl";
 import { InputLabelProps } from "@material-ui/core/InputLabel";
 import { FieldProps as FormikFieldProps } from "formik";
@@ -21,6 +21,7 @@ export interface FieldOwnProps {
   minDate?: string;
   value?: string;
   actionsRenderer?: () => any;
+  labelProps?: BoxProps;
 }
 
 export interface FieldStyleProps {
@@ -42,6 +43,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
   size = "md",
   gutter = true,
   actionsRenderer,
+  labelProps,
 }) => {
   // storing BE response in status
   const error = get(errors, field.name);
@@ -66,6 +68,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
           <Typography
             variant={TypographySize[size]}
             className={classes.typography}
+            style={labelProps}
           >
             <Text message={label} />
           </Typography>
@@ -88,6 +91,7 @@ const Field: React.FunctionComponent<FieldProps> = ({
       fullWidth={true}
       error={shouldDisplayError}
       className={classes.form}
+      style={labelProps}
       data-cy={`field-${field.name}`}
       {...formControlProps}
     >

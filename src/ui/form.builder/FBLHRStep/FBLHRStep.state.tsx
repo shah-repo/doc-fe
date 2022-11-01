@@ -18,6 +18,7 @@ class FBLHRStepState {
   @observable public materials: any;
   @observable public equipment: any;
   @observable public editedParameters: any;
+  @observable public approvals: any;
 
   public constructor(lhrs?: DocumentRevision) {
     this.stepLHRs = lhrs;
@@ -54,6 +55,7 @@ class FBLHRStepState {
     set(this, type, items);
   };
 
+  @action public setApproval = (approvals) => set(this, "approvals", approvals);
   // MARK: @helpers
   public getLHRsDocument = (id?: string) => {
     if (!id) { return; }
