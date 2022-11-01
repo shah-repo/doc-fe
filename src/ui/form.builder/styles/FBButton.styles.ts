@@ -27,4 +27,8 @@ export const FBButtonStyles = makeStyles(() =>
     btnMargin: {
       margin: "7px 10px 0 10px",
     },
+    receiveAllBtn: {
+      margin: "16px 0 0",
+      padding: "19px 59px",
+    },
   }));
