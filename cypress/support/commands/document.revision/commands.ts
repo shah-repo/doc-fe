@@ -30,6 +30,7 @@ declare global {
       drSelectCalPmHistoryTab(): Chainable<Subject>;
       drSelectPrimaryOwner(params: { owner: string; noWait?: bool }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
+      drEnterDocumentDescriptionWithPatchWrapCall(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drEnterHtmlText(params: { htmlText: string }): Chainable<Subject>;
@@ -341,6 +342,14 @@ Cypress.Commands.add("drEnterDocumentDescription", (params: { description: strin
   cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
   cy.get(`[data-cy="description"] [contenteditable]`).first().clear().arrowType(params.description);
   cy.unClick();
+});
+
+Cypress.Commands.add("drEnterDocumentDescriptionWithPatchWrapCall", (params: { description: string }) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+    cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+    cy.get(`[data-cy="description"] [contenteditable]`).first().clear().arrowType(params.description);
+    cy.unClick();
+  });
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
