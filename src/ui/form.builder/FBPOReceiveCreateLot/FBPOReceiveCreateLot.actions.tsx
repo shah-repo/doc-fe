@@ -13,9 +13,11 @@ const FBPOReceiveCreateLotActions: React.FunctionComponent<FBPOReceiveCreateLotP
       variant="contained"
       label="form.builder.po.create.lot"
       onClick={handleCreateLot}
+      style={{ padding: "5px 20px" }}
     />
     <StyledCancelFBButton
       variant="outlined"
+      color="primary"
       label="common.cancel"
       onClick={handleCancel}
     />

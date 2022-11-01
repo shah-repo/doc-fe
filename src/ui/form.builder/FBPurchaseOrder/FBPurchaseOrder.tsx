@@ -25,7 +25,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
         <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
         {isReceivable && (
           <FBButton
-            variant="outlined"
+            style={{ width: "187px", height: "40px", margin: "16px 0" }}
             color="primary"
             label="form.builder.receive"
             onClick={handleReceiveAll}
