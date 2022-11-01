@@ -296,7 +296,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click on Create New button", () => {
-      cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter title", () => {
@@ -324,6 +324,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     it("Click create document", () => {
       cy.recClickSaveBtn();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -453,12 +454,12 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         cy.drSelectDocumentType({ documentType: "LHR Template" });
       });
 
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
       it("Select 'Lot History Record' output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Click create document", () => {
@@ -606,8 +607,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     context("Create CSL revision from revised EFM-10605", () => {
       it("Click on Create New button", () => {
-        cy.drCreateNewDocumentFromFormRecord();
-        cy.wait(3000);
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
@@ -632,6 +632,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
       it("Click create document", () => {
         cy.recClickSaveBtn();
+        cy.wait(2000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -762,12 +763,12 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
       it("Select 'Lot History Record' output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Click create document", () => {
