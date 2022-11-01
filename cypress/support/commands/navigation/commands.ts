@@ -34,7 +34,6 @@ declare global {
       navigToTrainingRecords(): Chainable<Subject>;
       navigToTrainingCurriculums(): Chainable<Subject>;
       navigToAsyncTasks(): Chainable<Subject>;
-      navigToPageDetailsManagement(): Chainable<Subject>;
     }
   }
 }
@@ -303,16 +302,6 @@ Cypress.Commands.add("navigToAsyncTasks", () => {
     navigItems: [
       NavigationItems.DASHBOARD,
       NavigationItems.ASYNC_TASKS,
-    ],
-  });
-  cy.landingPageLoadingElementShouldNotExist();
-});
-
-Cypress.Commands.add("navigToPageDetailsManagement", () => {
-  cy.navigToNestedItem({
-    navigItems: [
-      NavigationItems.DASHBOARD,
-      NavigationItems.PAGE_DETAILS_MANAGEMENT,
     ],
   });
   cy.landingPageLoadingElementShouldNotExist();

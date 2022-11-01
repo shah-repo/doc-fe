@@ -239,7 +239,7 @@ export const BulkImportWithSchema: IdocumentTypeDto = {
       name: "fb-spreadsheet-for-import",
       type: "section",
       index: 4,
-      label: "EXCEL FOR IMPORT",
+      label: "Excel For Import",
       deleteDisabled: false,
       deleteInFormDisabled: true,
       tabId: "details",

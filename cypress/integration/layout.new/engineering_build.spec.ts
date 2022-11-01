@@ -261,6 +261,7 @@ context("Verify New Layout for EB Document", () => {
         body: {
           category: "EB",
           addNewBtnLabel: "Create EB",
+          config: {},
           columns: [
             {
               label: "EB ID",

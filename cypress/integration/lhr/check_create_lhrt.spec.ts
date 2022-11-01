@@ -690,8 +690,10 @@ context("Verify the user is able to create LHRT", () => {
     it("Enter title", () => {
       cy.get("[data-cy=\"field-name\"]").should("exist");
       cy.get("[data-cy=\"field-name\"]").arrowClick({ force: true }).wait(1000);
-      cy.get("[data-cy=\"field-name\"]").arrowType("CSL with part number and CS reference");
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"field-name\"]").arrowType("CSL with part number and CS reference");
+        cy.unClick();
+      });
     });
 
     it("Select Details tab", () => {
@@ -699,13 +701,18 @@ context("Verify the user is able to create LHRT", () => {
     });
 
     it("Enter quantity received", () => {
-      cy.get("[name=\"lot_quantity\"]").focus().arrowType("12");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lot_quantity\"]").focus().arrowType("12");
+        cy.unClick();
+      });
     });
 
     it(`Select '${CSPartDocumentTitle}' for Part Number`, () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"lot_part\"]").focus().arrowType(CSPartDocumentTitle);
-      cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"lot_part\"]").focus().arrowType(CSPartDocumentTitle);
+        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+      });
     });
 
     it("Click create document", () => {
@@ -753,6 +760,7 @@ context("Verify the user is able to create LHRT", () => {
     });
 
     it("Select 'Numeric' revision stage", () => {
+      cy.wait(3000);
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
@@ -825,6 +833,7 @@ context("Verify the user is able to create LHRT", () => {
     });
 
     it("Select 'Numeric' revision stage", () => {
+      cy.wait(3000);
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
@@ -1073,6 +1082,7 @@ context("Verify the user is able to create LHRT", () => {
     });
 
     it("Submit for approval", () => {
+      cy.wait(2000);
       cy.lhrSubmitForApproval();
     });
 
