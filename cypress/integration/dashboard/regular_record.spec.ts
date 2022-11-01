@@ -158,7 +158,7 @@ context("Regular Records test", () => {
         });
 
         it("Verify approvals field is automatically added", () => {
-          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+          cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
         });
 
         it("Approve and Release document", () => {
