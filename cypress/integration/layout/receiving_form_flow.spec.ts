@@ -472,8 +472,8 @@ context("Receiving landing page test", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.fbAddField();
       });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(3000);
     });
 
     it("move component", () => {
@@ -633,7 +633,6 @@ context("Receiving landing page test", () => {
       });
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
-      cy.wait(3000);
     });
 
 
@@ -802,7 +801,6 @@ context("Receiving landing page test", () => {
       cy.get("[data-cy=\"form.builder.approvals\"]").eq(0).contains("Approvals")
         .should("exist");
     });
-
   });
 
   context("Move & Edit & Remove component", () => {
@@ -824,7 +822,7 @@ context("Receiving landing page test", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for LFPO" });
       cy.fbAddField();
-      cy.wait(3000);
+      cy.listLoadingElementShouldExist();
     });
 
     it("move component", () => {
