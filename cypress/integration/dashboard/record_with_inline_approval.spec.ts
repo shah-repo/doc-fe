@@ -265,9 +265,9 @@ context("Records test with Inline approval", () => {
 
     it("Send request for approval", () => {
       cy.get("[data-cy=\"form.builder.request.approval\"]").arrowClick();
+      cy.wait(5000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(5000);
     });
 
     it("Record is in WIP status", () => {
@@ -358,9 +358,9 @@ context("Records test with Inline approval", () => {
 
     it("Send request for approval", () => {
       cy.get("[data-cy=\"form.builder.request.approval\"]").arrowClick();
+      cy.wait(5000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(5000);
     });
 
     it("Record is in WIP status", () => {
