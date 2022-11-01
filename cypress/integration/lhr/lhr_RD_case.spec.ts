@@ -688,6 +688,9 @@ context("LHR: RD case specs", () => {
 
     it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: MPI });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select 'Numeric' revision stage", () => {
