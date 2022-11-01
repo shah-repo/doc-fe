@@ -4029,23 +4029,32 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
 
     context("Enter LHR atributes", () => {
       it("Enter initial quantity", () => {
-        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
-        cy.url().then((url: any) => {
-          lhrDocUrl = url;
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+          cy.unClick();
+          cy.url().then((url: any) => {
+            lhrDocUrl = url;
+          });
         });
       });
 
       it("Select 'R&D' build type", () => {
-        cy.unClick();
-        cy.get("[value=\"R&D\"]").check();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[value=\"R&D\"]").check();
+        });
       });
 
       it("Add 'Due Date'", () => {
-        cy.poAddDateRequired();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.poAddDateRequired();
+        });
       });
 
       it("Click save document", () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.wait(7000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -4063,7 +4072,10 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       });
 
       it("Click save document", () => {
+        cy.wait(5000);
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify status is WIP", () => {
@@ -4093,14 +4105,21 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       });
 
       it("Add approval", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
       it("Submit for approval", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.pmSubmitForApproval();
       });
 
       it("Approve approval", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.ebApprove();
       });
     });
@@ -4113,7 +4132,10 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       });
 
       it("Add approval", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+        });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Submit for approval", () => {
@@ -4121,6 +4143,8 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       });
 
       it("Approve approval", () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
         cy.lhrApprove();
       });
     });
