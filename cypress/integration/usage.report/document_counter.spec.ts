@@ -4132,7 +4132,10 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       });
 
       it("Add approval", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+        });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Submit for approval", () => {
@@ -4140,6 +4143,8 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       });
 
       it("Approve approval", () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
         cy.lhrApprove();
       });
     });
