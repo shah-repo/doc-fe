@@ -165,10 +165,6 @@ context("Records test with Inline approval", () => {
       it("Clicks on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
       });
-
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
     });
 
     context("Fill in document attributes", () => {
@@ -309,6 +305,10 @@ context("Records test with Inline approval", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: firstEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Notification to Record owner", () => {
@@ -321,7 +321,7 @@ context("Records test with Inline approval", () => {
       cy.contains("RD-00003").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.cmpTurnOffAutosave();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click on revisions tab on side panel", () => {
@@ -395,21 +395,22 @@ context("Records test with Inline approval", () => {
     });
 
     it("Click on revisions tab on side panel", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drClickRevisionsSidePanel();
-      });
+      cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("rev 3 will be created", () => {
       cy.get("[data-cy=\"revision\"]").eq(0).should("have.text", "Revision 3  - WIP");
       cy.get("[data-cy=\"revision\"]").eq(1).should("have.text", "Revision 2  - Last Signed");
       cy.get("[data-cy=\"revision\"]").eq(2).should("have.text", "Revision 1  - Archive");
+      cy.wait(3000);
     });
   });
 
   context("Click on 'Finalize and Release', rev 3 will update to rev A and will be released", () => {
     it("Click on 'Finalize and Release'", () => {
-      cy.get("[data-cy=\"revision\"]").eq(0).arrowClick();
+      cy.get("[data-cy=\"revision\"]").eq(0).should("have.text", "Revision 3  - WIP").arrowClick().wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
 
@@ -417,13 +418,14 @@ context("Records test with Inline approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.ReleaseDocRevWithoutAr], () => {
         cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
       });
-    });
-
-    it("Click on revisions tab on side panel", () => {
-      cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("There should be a notification that rev A is released", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
       cy.get("[data-cy=\"revision\"]").eq(0).should("have.text", "Revision A  - Released");
     });
 
