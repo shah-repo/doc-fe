@@ -88,6 +88,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   }
   if (isEquipmentDocument) {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
+    iconLink = "/navigation_icons/microscope.svg";
   }
   if (SM.isNewCRLayout) {
     url = `${CHANGE_REQUEST_LIST_URL}`;
