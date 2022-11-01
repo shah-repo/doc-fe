@@ -20,7 +20,8 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
   children,
 }) => {
   const classes = FBButtonStyles();
-  const revisonMode = partTypeDefaultValue === PartType.DocumentRevision;
+  const revisionMode =
+    partType === PartType.DocumentRevision || (!partType && partTypeDefaultValue === PartType.DocumentRevision);
 
   return (
     <FBProvider {...{ dialogState, ebPartState }}>
@@ -39,36 +40,21 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
         <Box display="flex" alignItems="flex-end" mt={2.5}>
           <Box flexGrow={1}>
             <FBAutocompleteAsync
-              key={childrenPartsValue}
+              key={revisionMode ? childrenPartsValue : childForReviseValue}
               label="form.builder.part"
               placeholder="form.builder.select.existing.part"
               gutter={false}
               shouldReloadOnInit
               withState
               omitFormValue
-              hidden={partType === PartType.Document || (!partType && !revisonMode)}
-              name="childrenParts"
-              optionId={FBAutocompleteAsyncOption.availableParts}
-              additionalData={childrenParts}
-              defaultValue={childrenPartsValue}
-              {...{
-                disabled,
-                loading,
-              }}
-            />
-            <FBAutocompleteAsync
-              label="form.builder.part"
-              key={childForReviseValue}
-              placeholder="form.builder.select.existing.part"
-              gutter={false}
-              shouldReloadOnInit
-              withState
-              omitFormValue
-              hidden={partType === PartType.DocumentRevision || (!partType && revisonMode)}
-              name="childForRevise"
-              optionId={FBAutocompleteAsyncOption.availablePartDocuments}
-              additionalData={childrenPartsForRevise}
-              defaultValue={childForReviseValue}
+              name={revisionMode ? "childrenParts" : "childForRevise"}
+              optionId={
+                revisionMode
+                  ? FBAutocompleteAsyncOption.availableParts
+                  : FBAutocompleteAsyncOption.availablePartDocuments
+              }
+              additionalData={revisionMode ? childrenParts : childrenPartsForRevise}
+              defaultValue={revisionMode ? childrenPartsValue : childForReviseValue}
               {...{
                 disabled,
                 loading,
@@ -82,7 +68,7 @@ const FBEBPart: React.FunctionComponent<FBEBPartProps> = ({
               size="large"
               onClick={handleAdd}
               className={cx(classes.button, classes.margin)}
-              disabled={disabled || partType === PartType.Document || (!partType && !revisonMode)}
+              disabled={disabled || !revisionMode}
             />
           </Box>
         </Box>
