@@ -69,7 +69,7 @@ context("Approval request form", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response: any) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
@@ -78,7 +78,7 @@ context("Approval request form", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
       }).then((response: any) => {
         loginResponse = response;
         done();
@@ -170,7 +170,7 @@ context("Approval request form", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
   });
 
@@ -260,7 +260,7 @@ context("Approval request form", () => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
-      cy.sendToEmailFromHeader();
+      cy.sendToEmail();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -288,8 +288,8 @@ context("Approval request form", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -416,7 +416,7 @@ context("Approval request form", () => {
 
         expect(el).match(/Description of change\nJustification of change/);
 
-        expect(el).match(/APPROVERS\nNone\nCheckbox\nTEXT FIELD/);
+        expect(el).match(/APPROVERS\nNone\nCheckbox\nTEXT FIELD\n/);
 
         tmpRegex = new RegExp( `1 2 3`, "gi" );
         expect(el).match(tmpRegex);
@@ -506,24 +506,24 @@ context("Approval request form", () => {
 
     it("Add first Approver'", () => {
       cy.get(`[data-cy="tabCon-tabId.changedetails"]`).arrowClick();
-      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].name });
     });
 
     it("Add second Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.arAddApproverOnApproverList({ approver: USERS[2].name });
     });
 
     it("Remove second Approver'", () => {
-      cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick({ force: true });
+      cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick({ force: true });
       cy.unClick();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("check first approvers exists and second Approver removed", () => {
       cy.get("[name^=\"fb-approvers-approvers\"]")
-        .should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+        .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
       cy.get("[name^=\"fb-approvers-approvers\"]")
-        .should("not.contain", `${USERS[1].name} - ${USERS[1].email}`);
+        .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
     });
 
     it("Click on Save", () => {
@@ -565,7 +565,7 @@ context("Approval request form", () => {
     });
 
     it("Reject AR from dashboard", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").contains(`${USERS[2].name}needs your approval for`)
+      cy.get("[data-cy=dashboardFeedList]>div").contains(`${USERS[1].name}needs your approval for`)
         .parent()
         .parent()
         .parent().trigger("mouseover")
@@ -577,7 +577,7 @@ context("Approval request form", () => {
 
     it(`Verify reject notification`, () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
-        .should("contain", USERS[2].name)
+        .should("contain", USERS[1].name)
         .and("contain", STATUS_TYPES_LABEL.REJECTED)
         .and("contain", releasedFormId);
     });
@@ -624,8 +624,8 @@ context("Approval request form", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -710,10 +710,10 @@ context("Approval request form", () => {
 
         expect(el).match(/Justification of change\njustification for added document/);
 
-        tmpRegex = new RegExp(`Checkbox\\nAPPROVERS\\n${USERS[2].name} \\n(.*)\\n1 2 3`, "gi" );
+        tmpRegex = new RegExp(`APPROVERS\\n${USERS[1].name} \\n(.*)Checkbox\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`${USERS[1].name}`, "gi" );
+        tmpRegex = new RegExp(`${USERS[2].name}`, "gi" );
         expect(el).not.match(tmpRegex);
 
         expect(el).not.match(/REJECTED/);
@@ -847,8 +847,8 @@ context("Approval request form", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -933,10 +933,10 @@ context("Approval request form", () => {
         expect(el).match(/Justification of change\njustification for added document/);
 
         tmpRegex = new
-        RegExp(`Checkbox\\nAPPROVERS\\n${USERS[2].name} \\| APPROVED \\| ${docRelDate} (.*) \\n(.*)\\n1 2 3`, "gi" );
+        RegExp(`APPROVERS\\n${USERS[1].name} \\| APPROVED \\| ${docRelDate} (.*) \\n(.*)\\nCheckbox\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`${USERS[1].name}`, "gi" );
+        tmpRegex = new RegExp(`${USERS[2].name}`, "gi" );
         expect(el).not.match(tmpRegex);
 
         expect(el).match(/CLOSED/);
