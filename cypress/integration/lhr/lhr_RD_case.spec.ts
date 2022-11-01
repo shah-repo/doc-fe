@@ -622,8 +622,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Click on Create New button", () => {
-      cy.drCreateNewDocumentFromFormRecord();
-      cy.wait(2000);
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter title", () => {
@@ -946,14 +945,13 @@ context("LHR: RD case specs", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
-      cy.wait(2000);
+      cy.wait(5000);
     });
 
     it("Select 'R&D' build type", () => {
       cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
       cy.contains("Build Type").should("be.visible");
-      cy.get("[value='R&D']").check();
-      cy.wait(2000);
+      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
     });
 
     it("Select button to switch", () => {
