@@ -331,6 +331,10 @@ context("Check Document History", () => {
       cy.navigToDocumentList();
     });
 
+    it("Clear document filter", () => {
+      cy.dlClearFilters();
+    });
+
     it("Filter the DRAFT document", () => {
       cy.dlFilterByStatus({ status: "Draft" });
     });
