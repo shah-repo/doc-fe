@@ -871,6 +871,10 @@ context("LHR: RD case specs", () => {
       cy.mpiStartStep({ stepNumber: 1 });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Select Procedure tab", () => {
       cy.drSelectProcedureTab();
     });
@@ -891,7 +895,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
       cy.wait(2000);
     });
 
@@ -922,8 +926,6 @@ context("LHR: RD case specs", () => {
       ], () => {
         cy.visit(lhrDocUrl1);
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
     });
 
@@ -932,7 +934,12 @@ context("LHR: RD case specs", () => {
       cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
+    it("Click save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
     it("Submit for approval", () => {
+      cy.wait(2000);
       cy.lhrSubmitForApproval();
     });
 
