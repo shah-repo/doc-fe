@@ -341,7 +341,7 @@ context("Supplier test with Field Config", () => {
     });
 
     it("Verify Approvals block", () => {
-      cy.get(`[data-cy="form.builder.approvals"]`).eq(1).should("exist").should("have.length", "1");
+      cy.get(`[data-cy^="fb-approvals-"]`).eq(0).should("exist").should("have.length", "1");
     });
 
     it("Approve and release", () => {

@@ -1,12 +1,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { CyRoutes } from "./../../support/routes";
 
 let createdCompany;
 let loginResponse;
@@ -362,26 +362,32 @@ context("Approval request implementation tasks", () => {
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
       cy.fbAddNewFieldButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Edit, Move and Remove", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
-      cy.fbEnterPlaceholder({ placeholder: " changed" });
-      cy.fbAddNewFieldButton();
-      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
-      cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+        cy.fbEnterPlaceholder({ placeholder: " changed" });
+        cy.fbAddNewFieldButton();
+        cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+
+        cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      });
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithApiCall();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Move component", () => {
       cy.unClick();
       cy.get("[data-cy='fb-textfield-1']").scrollIntoView();
-      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover").wait(500);
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover", { force: true }).wait(500);
       cy.get(".drag-handle").eq(3)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
