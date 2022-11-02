@@ -613,7 +613,7 @@ context("Export training curriculum", () => {
       cy.drSelectDetailsTab();
     });
 
-    it("Verify Forced Retraining / One-Time Training", () => {
+    it("Verify Forced Retraining One Time Training", () => {
       cy.get(`[data-cy="Forced Retraining / One-Time Training"]`).should("exist");
     });
 
@@ -677,7 +677,7 @@ context("Export training curriculum", () => {
     });
 
     it("Move component", () => {
-      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover", { force: true });
       cy.wait(2000);
       cy.get(".drag-handle").eq(1)
         .realMouseDown({ position: "center", button: "left" });
@@ -766,7 +766,7 @@ context("Export training curriculum", () => {
       cy.drSelectDetailsTab();
     });
 
-    it("Verify Forced Retraining / One-Time Training", () => {
+    it("Verify Forced Retraining One Time Training", () => {
       cy.get(`[data-cy="Forced Retraining / One-Time Training"]`).should("exist").should("have.length", "1");
     });
 
@@ -818,12 +818,12 @@ context("Export training curriculum", () => {
     });
 
     it("Move component", () => {
-      cy.get("[data-cy='approvals-1']").trigger("mouseover");
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover", { force: true });
       cy.wait(2000);
-      cy.get(".drag-handle").eq(1)
+      cy.get(".drag-handle").eq(0)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
-      cy.get(".drag-handle").eq(0)
+      cy.get(".drag-handle").eq(1)
         .realMouseMove(0, 0, { position: "center" })
         .realMouseUp();
       cy.unClick();
@@ -1021,9 +1021,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -1035,9 +1033,7 @@ context("Export training curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Open details tab", () => {

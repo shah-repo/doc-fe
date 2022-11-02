@@ -39,8 +39,6 @@ const Container: React.FunctionComponent<Props> = ({
     setOpen(isDrawerOpen);
   };
 
-  /*   const [summaryDocumentTypeGroups, setSummaryDocTypeGroups] = useState<any[]>([]);
- */
   const [isDrawerOpen, setOpen] = React.useState(true);
   const classes = styles({ isDrawerOpen });
   useDocumentTitle(changeRequest.crId);
@@ -64,7 +62,6 @@ const Container: React.FunctionComponent<Props> = ({
   const schema = changeRequest.formDocument?.formTemplate?.schema || [];
 
   const async = useAsync<ChangeRequest>();
-  // TODO : uncomment this
   if (canEditChangeRequest({ dataProp: changeRequest, currentUserEmail })) {
     return <Redirect to={changeRequestEditPath(changeRequest.id)} />;
   }
@@ -97,28 +94,6 @@ const Container: React.FunctionComponent<Props> = ({
       displayLastSaved={displayLastSaved}
       {...props}
     />
-
-    // <FBWorkspace
-    //   portalContainer={FBContainer}
-    //   isPortal={true}
-    //   initialValues={changeRequest.formInput}
-    //   changeRequest={changeRequest}
-    //   autosave={autosaveEnabled}
-    //   withoutBottomBar={true}
-    //   schema={schema}
-    //   mode={"preview"}
-    // >
-    //   <Form>
-    //     <Presenter
-    //       dataProp={changeRequest}
-    //       asyncState={async.asyncState}
-    //       canEdit={canEdit}
-    //       canChangeOwnerShip={canChangeOwnerShip}
-    //       {...props}
-    //       {...{ FBContainer }}
-    //     />
-    //   </Form>
-    // </FBWorkspace>
   );
 
 

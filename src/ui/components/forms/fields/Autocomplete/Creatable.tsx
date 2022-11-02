@@ -98,7 +98,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
   return (
     <Field {...fieldProps} label={undefined} labelProps={labelProps}>
       <ClickAwayListener onClickAway={onAway}>
-        <div>
+        <div id="doc-header-title">
           {showOnlyText &&
         <Box
           alignItems="center"
@@ -140,6 +140,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
                 lineHeight: "24px",
                 minHeight: "32px",
                 boxShadow: "none",
+                maxWidth: document.getElementById("doc-header-title")?.offsetWidth,
               }),
               menu: (provided) => ({
                 ...provided,

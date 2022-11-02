@@ -774,6 +774,7 @@ context("Create new LHRT Layout Verification", () => {
 
     it("Verify overview tab predefiend fields up to attachment", () => {
       cy.verifyPredefiendFields();
+      cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
     });
 
     it("Verify Part field exist", () => {
@@ -801,10 +802,11 @@ context("Create new LHRT Layout Verification", () => {
       cy.get(".formOptionsBox").should("exist");
     });
 
-    context("fill the fields", () => {
+    context("fill the fields and select part", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("CS-00005 - Part document");
       });
+
       it("Save the document", () => {
         cy.drSaveDocumentWithoutaudit();
       });
@@ -815,7 +817,7 @@ context("Create new LHRT Layout Verification", () => {
     it("Verify Click details Tab", () => {
       cy.drSelectDetailsTab();
       cy.cmpTurnOffAutosave();
-      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Click details Tab, clicking on it should open that tab and close the other one", () => {
@@ -899,21 +901,27 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Verify material", () => {
-      cy.get("[data-cy='materialInfo']").find("li").eq(0).should("have.text", "MT-00004 - Material one | sets : 2");
-      cy.get("[data-cy='materialInfo']").find("li").eq(1).should("have.text", "MT-00006 - Material two | boxes : 4");
+      cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
+        .should("have.text", "MT-00004 - Material one | sets : 2");
+      cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(1)
+        .should("have.text", "MT-00006 - Material two | boxes : 4");
     });
 
     it("Verify equipment", () => {
-      cy.get("[data-cy='equipmentInfo']").find("li").eq(0).should("have.text", "ET-00003 Equipment one");
-      cy.get("[data-cy='equipmentInfo']").find("li").eq(1).should("have.text", "ET-00007 Equipment two");
+      cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(0).should("have.text", "ET-00003 - Equipment one");
+      cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(1).should("have.text", "ET-00007 - Equipment two");
+    });
+
+    it("Verify that Form Options", () => {
+      cy.get(".formOptionsBox").should("not.exist");
+    });
+
+    it("Verify training tab should not visible", () => {
+      cy.get("[data-cy='tabId.training']").should("not.exist");
     });
   });
 
   context("Verify right side pannel", () => {
-    it("Verify training tab should not visible", () => {
-      cy.get("[data-cy='tabid.training']").should("not.exist");
-    });
-
     it("Verify that right side panel opens by default to the References tab", () => {
       cy.get("[data-cy='References']").should("exist");
       cy.get("[data-cy='generalInfo']").should("be.visible");
@@ -922,7 +930,7 @@ context("Create new LHRT Layout Verification", () => {
 
   context("Verify Book Mark", () => {
     it("Verify Book Mark Navigation for Approval block", () => {
-      cy.get("[data-cy='bookmark-icon']").arrowClick();
+      cy.drSelectBookmarksTab();
       cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
       cy.get("[data-cy='Bookmarks-detail'] P").arrowClick();
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "true");
@@ -943,7 +951,7 @@ context("Create new LHRT Layout Verification", () => {
 
   context("Verify Scroll", () => {
     it("Navigate to history tab", () => {
-      cy.get("[data-cy='timeline-icon']").arrowClick();
+      cy.drSelectHistoryTab();
     });
 
     it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -1011,10 +1019,7 @@ context("Create new LHRT Layout Verification", () => {
     it("Verify Step 2 visible in detail tab", () => {
       cy.get("[data-cy='LHR Step 2']").should("be.visible");
     });
-
   });
-
-
 });
 
 export { };

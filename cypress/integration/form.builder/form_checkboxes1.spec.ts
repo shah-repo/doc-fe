@@ -152,7 +152,7 @@ context("Checkboxes test1", () => {
       cy.fbSelectCheckboxValue("multiple", "includeQRScan", "reviseDisabled", "deleteDisabled", "copyableValue");
       cy.fbAddNewFieldButton();
 
-      cy.contains("ac-wi-ch").trigger("mouseover");
+      cy.contains("ac-wi-ch").trigger("mouseover", { force: true });
     });
 
     it("Add Autocomplete without checkboxes", () => {

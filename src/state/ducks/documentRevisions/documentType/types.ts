@@ -1,3 +1,4 @@
+import { HelpModule } from "../../../../App/Enlil/Features/HelpCenter/HelpCenter.types";
 import { FBSchemaProps } from "../../../../ui/form.builder";
 import { Translation } from "../../../../ui/translations/types";
 import { GroupTag } from "../../auth/types";
@@ -58,6 +59,7 @@ export enum DOC_TYPE_GROUP_OPTION {
   DYNAMIC_FORM = "DYNAMIC_FORM",
   POAM = "POAM",
   PO = "PO",
+  OTHER = "OTHER",
   MATERIAL = "MATERIAL",
   PART = "PART",
   SUPPLIER = "SUPPLIER",
@@ -134,6 +136,9 @@ export enum TabTypeOptions {
   MIXED = "MIXED",
 }
 
+export enum CATEGORY {
+  WORKORDER_CATEGORY = "Work Order"
+}
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export const GroupWithGroupOptions =  {
   FORM: [
@@ -152,6 +157,7 @@ export const GroupWithGroupOptions =  {
   OTHER: [
     DOC_TYPE_GROUP_OPTION.CAN_BE_OUTPUT,
     DOC_TYPE_GROUP_OPTION.DOCUMENT,
+    DOC_TYPE_GROUP_OPTION.OTHER,
     DOC_TYPE_GROUP_OPTION.EXPORTABLE,
     DOC_TYPE_GROUP_OPTION.TABS_OTHER,
   ],
@@ -383,6 +389,10 @@ export const GroupWithGroupOptions =  {
   ],
 };
 
+interface PageDetailsConfig {
+  helpModule?: HelpModule;
+}
+
 export interface PageDetailsColumn {
   label: Translation;
   sourcePath: string;
@@ -395,6 +405,7 @@ export interface PageDetails {
   id: string;
   addNewBtnLabel: string;
   columns: PageDetailsColumn[];
+  config: PageDetailsConfig;
   category: string;
   exportList: boolean;
 }

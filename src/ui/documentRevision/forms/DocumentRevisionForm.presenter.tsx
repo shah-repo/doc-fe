@@ -36,9 +36,7 @@ import RevisionStage from "./presenters/RevisionStage";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
 import { DocumentRevisionFormValues } from "./types";
 
-interface Props
-  extends FormikProps<DocumentRevisionFormValues>
-{
+interface Props extends FormikProps<DocumentRevisionFormValues> {
   documentRevision: DocumentRevision;
   documentRevisions?: DocumentRevision[];
   showRevisionTypeChange?: boolean;
@@ -48,7 +46,6 @@ interface Props
   canChangeOwnerShip: boolean;
   type?: DocumentCloneType;
   showAdministrativeAndVoidChange: boolean;
-  pmFormId?: string;
   releasedDocRev?: DocumentRevision;
   redlineActive: boolean;
   mode: FBWorkspaceMode;
@@ -73,7 +70,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   setFieldValue,
   type,
   showAdministrativeAndVoidChange,
-  pmFormId,
   releasedDocRev,
   redlineActive,
   mode,
@@ -123,9 +119,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const documentTypeId = values.document?.documentType?.id || "";
   const defaultRevisionStage = values.document?.documentType?.defaultRevStage || "";
   const shouldShowRevStageForDocType = !isDocumentPOAM && !isDocumentDAM && !isRecord;
-  const outputDocumentTypes = pmFormId ?
-    initialValues.outputDocumentTypes :
-    initialValues.formDocument?.formTemplate?.outputDocumentTypes;
+  const outputDocumentTypes = initialValues.formDocument?.formTemplate?.outputDocumentTypes;
   const { isVisible } = useDocumentTypeSelect(documentTypeId);
   const isDocIdVisible = useDocId(documentTypeId).isVisible;
   const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
@@ -290,7 +284,28 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           </Grid>
           {isEB && (
             <Grid item xs={12}>
-              <FBEBPart name="childrenParts" />
+              <FBEBPart name="childrenParts">
+                {isEB && documentRevision?.parent && (
+                  <Grid item xs={6}>
+                    <BuildsContainer
+                      dataProp={flatten([documentRevision.parent])}
+                      label="common.previous.build"
+                      docRevId={docRevId}
+                      showRemoveButton={isDocRevStatusDraft || isDocRevStatusInPendingChange}
+                      isDraft={isDocRevStatusDraft || isRevised}
+                    />
+                  </Grid>
+                )}
+                {isEB && documentRevision?.children && (
+                  <Grid item xs={6}>
+                    <BuildsContainer
+                      dataProp={documentRevision.children}
+                      label="common.next.build"
+                      isDraft={isDocRevStatusDraft || isRevised}
+                    />
+                  </Grid>
+                )}
+              </FBEBPart>
             </Grid>
           )}
           {isPart && documentRevision?.parentParts && (
@@ -310,26 +325,6 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               ></RelatedPartsWrapper>
             </Grid>
           }
-          {isEB && documentRevision?.parent && (
-            <Grid item xs={6}>
-              <BuildsContainer
-                dataProp={flatten([documentRevision.parent])}
-                label="common.previous.build"
-                docRevId={docRevId}
-                showRemoveButton={isDocRevStatusDraft || isDocRevStatusInPendingChange}
-                isDraft={isDocRevStatusDraft || isRevised}
-              />
-            </Grid>
-          )}
-          {isEB && documentRevision?.children && (
-            <Grid item xs={6}>
-              <BuildsContainer
-                dataProp={documentRevision.children}
-                label="common.next.build"
-                isDraft={isDocRevStatusDraft || isRevised}
-              />
-            </Grid>
-          )}
           {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft && (
             <Grid item xs={12}>
               <RevisionTypeChange
@@ -348,20 +343,20 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {showOutputSection ? (
             <>
               {(isPO || outputIsPO
-                ? _tabsState?.tabID !== "details" && (
-                <Grid item xs={12}>
-                  <AttachmentsField
-                    isDisabled={isDisabledInput}
-                    isNewVersion={false}
-                    docRevId={docRevId}
-                    isAttachmentEmpty={isAttachmentEmpty}
-                    containsRedline={false}
-                    docRevStatus={documentRevision?.status}
-                    documentRevision={documentRevision}
-                    documentTypeId={documentTypeId || ""}
-                  />
-                </Grid>
-              ) : (
+                ? !_tabsState?.isTabActive("details") && (
+                  <Grid item xs={12}>
+                    <AttachmentsField
+                      isDisabled={isDisabledInput}
+                      isNewVersion={false}
+                      docRevId={docRevId}
+                      isAttachmentEmpty={isAttachmentEmpty}
+                      containsRedline={false}
+                      docRevStatus={documentRevision?.status}
+                      documentRevision={documentRevision}
+                      documentTypeId={documentTypeId || ""}
+                    />
+                  </Grid>
+                ) : (
                   <Grid item xs={12}>
                     <AttachmentsField
                       isDisabled={isDisabledInput}

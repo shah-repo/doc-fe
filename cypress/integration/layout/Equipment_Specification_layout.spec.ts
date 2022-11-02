@@ -67,6 +67,88 @@ context("Verification of Equipment Specification", () => {
     });
   });
 
+  context("Create ES document for migration", () => {
+    context("Start document creation flow", () => {
+      it("Navigate to Document list", () => {
+        cy.unClick();
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+    });
+  });
+
+  context("Fill ES document attributes", () => {
+    it("Verify predefiend fields title description doc id revision output type", () => {
+      cy.verifyPredefiendFields();
+      cy.get("#AttachmentFieldPresenter-field").should("exist");
+    });
+
+    it("Enter document title 'ES document'", () => {
+      cy.drEnterDocumentTitle({ name: "Migration Equipment specification form" });
+    });
+
+    it("Fill ES document description", () => {
+      cy.drEnterDocumentDescription({ description: "Equipment specification description" });
+    });
+
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select 'Equipment specification' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Equipment Specification" });
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    context("Add FB Fields", () => {
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
+      it("Add textfield", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "ES Speciffication Textfield" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add Checkbox group", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+        cy.fbGroupOptions("1", "2", "3");
+        cy.fbOpenValidation();
+        cy.fbFieldRequired();
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Add Section", () => {
+        cy.fbAddNewFieldWhenHidden();
+        cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
+        cy.fbEnterNameValue({ name: "label", value: "Section1" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
+      it("Approve and released", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+  });
+
   context("Create ES document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
@@ -79,6 +161,7 @@ context("Verification of Equipment Specification", () => {
       });
     });
   });
+
   context("Fill ES document attributes", () => {
     it("Verify predefiend fields title description doc id revision output type", () => {
       cy.verifyPredefiendFields();
@@ -109,13 +192,12 @@ context("Verification of Equipment Specification", () => {
     });
   });
 
-
   context("Verify Layout of document and Tabs", () => {
     it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Draft)", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.DRAFT,
         title: "Document List",
-        docId: "FM-00002",
+        docId: "FM-00003",
         revision: "Rev 1",
       });
     });
@@ -134,6 +216,7 @@ context("Verification of Equipment Specification", () => {
 
     it("Verify overview tab predefiend fields up to attachment", () => {
       cy.verifyPredefiendFields();
+      cy.get("#AttachmentFieldPresenter-field").should("exist");
     });
 
     it("Verify Render HTML or comment field ", () => {
@@ -167,6 +250,13 @@ context("Verification of Equipment Specification", () => {
       cy.fbAddNewFieldButton();
     });
 
+    it("Add Section", () => {
+      cy.fbAddNewFieldWhenHidden();
+      cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
+      cy.fbEnterNameValue({ name: "label", value: "Section1" });
+      cy.fbAddNewFieldButton();
+    });
+
     it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
@@ -187,18 +277,17 @@ context("Verification of Equipment Specification", () => {
       cy.get("[data-cy='form.builder.add.field']").should("exist");
     });
 
-    it("Verify Add field button Exist in Specification tab", () => {
-      cy.get("[data-cy='form.builder.add.field']").should("exist");
+    it("Verify add FB Field Checked checbox", () => {
+      cy.get(`input[type="checkbox"][value="1"]`).should("exist");
     });
 
-    it("Verify add FB Field Checked chebox", () => {
-      cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+    it("Verify section", () => {
+      cy.get(`[data-cy='Section1']`).should("exist");
     });
 
     it("Verify that Form Options should  appear for this tab ", () => {
       cy.get(".formOptionsBox").should("exist");
     });
-
   });
 
   context("Release ES", () => {
@@ -210,10 +299,13 @@ context("Verification of Equipment Specification", () => {
   });
 
   context("Create a required document from release form Verify the layout and Release It", () => {
-
     context("Create New Document from Release form", () => {
       it("Click 'Create New'", () => {
         cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
     });
 
@@ -222,7 +314,7 @@ context("Verification of Equipment Specification", () => {
         cy.verifyHeaderInfoContent({
           status: STATUS_TYPES_LABEL.DRAFT,
           title: "Document List",
-          docId: "ES-00003",
+          docId: "ES-00004",
           revision: "Rev 1",
         });
       });
@@ -241,6 +333,7 @@ context("Verification of Equipment Specification", () => {
 
       it("Verify overview tab predefiend fields up to attachment", () => {
         cy.verifyPredefiendFields();
+        cy.get("#AttachmentFieldPresenter-field").should("exist");
       });
     });
 
@@ -270,7 +363,6 @@ context("Verification of Equipment Specification", () => {
       it("Verify that Form Options should  appear for this tab ", () => {
         cy.get(".formOptionsBox").should("exist");
       });
-
     });
 
     context("Fill the form", () => {
@@ -278,6 +370,19 @@ context("Verification of Equipment Specification", () => {
         cy.drEnterDocumentTitle({ name: "ES Test title" });
         cy.drEnterDocumentDescription({ description: "ES Test Description" });
       });
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
+      it("Checked chebox value", () => {
+        cy.get(`input[type="checkbox"][value="1"]`).check({ force: true });
+      });
+
+      it("Enter value in textfield", () => {
+        cy.get("[name^='es-speciffication-textfield']").arrowType("Test");
+      });
+
       it("Save the Document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
@@ -302,14 +407,20 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Verify References selection Add Remove", () => {
-        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+        it("Verify Add/Remove References", () => {
+          cy.get(`[data-cy="referenceTo"]`).arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+          cy.wait(2000).type(`{downarrow}{enter}`);
+          cy.drRemoveReferences({ reference: "FM-00001" });
+        });
       });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
         cy.verifyReferenceInfo();
         cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
         cy.get("[data-cy='common.revision']").parent().should("contain.text",
-          moment().tz("America/Los_Angeles").format("YYYY.MM.DD"));
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
 
       context("Verify Revision", () => {
@@ -371,6 +482,16 @@ context("Verification of Equipment Specification", () => {
           cy.get("[data-cy='bookmark-icon']").arrowClick();
           cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
         });
+
+        it("Navigate to overview tab", () => {
+          cy.drSelectOverviewTab();
+        });
+
+        it("Click on bookmarked section, section should be navigated", () => {
+          cy.contains("Section1").arrowClick();
+          cy.get("[data-cy='Section1']").should("be.visible");
+        });
+
       });
 
       context("Verify Scroll", () => {
@@ -382,10 +503,73 @@ context("Verification of Equipment Specification", () => {
           cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
         });
       });
+
+
+      context("Verify form migration", () => {
+        it("Verify migrate form button is visible", () => {
+          cy.get("[data-cy=references-icon]").arrowClick();
+          cy.get("[data-cy='common.form.migration']").should("be.visible");
+        });
+
+        it("Click on migrate form button", () => {
+          cy.get("[data-cy='common.form.migration']").arrowClick();
+        });
+
+        it("Select form to be migrated", () => {
+          cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+          cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+        });
+
+        it("Mapped Es Specification text field", () => {
+          cy.get("[data-cy^='field-es-speciffication-textfield']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(1).autocompleteSelect("ES Speciffication Textfield");
+        });
+
+        it("Mapped section1 field", () => {
+          cy.get("[data-cy^='field-section-1']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(2).autocompleteSelect("Section1");
+        });
+
+        it("Mapped checkbox field", () => {
+          cy.get("[data-cy^='field-checkbox']" ).arrowClick();
+          cy.get("[id^='react-select']").eq(3).autocompleteSelect("Checkbox");
+        });
+
+        it("Click on confirm change", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+            cy.get("[data-cy='common.confirm.change']").arrowClick();
+          });
+        });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
+        it("Navigate to specification Tab", () => {
+          cy.drSelectSpecificationTab();
+        });
+
+        it("Verify the fields data after migration", () => {
+          cy.get("[name^='es-speciffication-textfield']").should("have.value", "Test");
+          cy.get("[data-cy='Section1']").should("exist");
+          cy.get("[value='1']").should("be.checked");
+        });
+
+        it("Verify form info should have migrated form 'FM-00002'", () => {
+          cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+        });
+      });
     });
 
-
     context("Fill the fields and Released", () => {
+      it("Enter document title 'ES document'", () => {
+        cy.drEnterDocumentTitle({ name: "Equipment specification form" });
+      });
+
+      it("Fill ES document description", () => {
+        cy.drEnterDocumentDescription({ description: "Equipment specification description" });
+      });
+
       it("Navigate to overview tab", () => {
         cy.drSelectOverviewTab();
       });

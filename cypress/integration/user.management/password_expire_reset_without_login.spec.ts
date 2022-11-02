@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import faker from "faker";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
@@ -27,7 +30,7 @@ const nameOfUserToSignUp = faker.name.findName();
 const emailOfUserToSignUp =
 `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`.toLowerCase();
 
-context("Password expire reset flow", () => {
+context("Password expire reset flow", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -128,7 +131,7 @@ context("Password expire reset flow", () => {
       context("Create new user", () => {
         it("Clicks the save button", () => {
           cy.intercept({ method: "POST", pathname: "/api/v1/employees" }).as("postEmployee");
-          cy.get("button>span>svg>path").eq(1).arrowClick();
+          cy.get("td>span>button>span>svg>path").eq(0).arrowClick();
           cy.wait("@postEmployee").then((res) => {
             if (res.response) {
               const response = res.response.body;

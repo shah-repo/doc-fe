@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { uniqBy } from "lodash";
 import React, { useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -12,14 +11,14 @@ interface OwnProps {
   name: string;
   documentTypeId?: string;
   disabled?: boolean;
-  value?: string; // making the component more usable.
+  value?: string;
 }
 
 type Props = OwnProps;
 
 const Title: React.FunctionComponent<Props> = ({
   documentTypeId = "",
-  name,
+  name = "name",
   ...props
 }) => {
   const intl = useIntl();
@@ -45,12 +44,10 @@ const Title: React.FunctionComponent<Props> = ({
     return null;
   }
 
-  const nameToUse = name ?? "name";
-
   return (
     <CustomLabelTooltip {...{ tooltipConfig }}>
       <CreatableField
-        name={nameToUse}
+        name={name}
         creatableProps={{ id: "Title-field" }}
         isDisabled={props.disabled}
         placeholder={intl.formatMessage({ id: "form.builder.enter.title" })}

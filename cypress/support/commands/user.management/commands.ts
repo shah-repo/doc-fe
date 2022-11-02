@@ -25,6 +25,7 @@ declare global {
       usrEnterName(params: {name: string}): Chainable;
       usrClickEditUser(params: {name: string}): Chainable;
       usrClickSaveButton(): Chainable;
+      usrClickPlusSaveButton(): Chainable;
       usrClickCancelButton(): Chainable;
       usrClickStatusButton(): Chainable;
       usrClickCloseDialogButton(): Chainable;
@@ -135,15 +136,15 @@ Cypress.Commands.add("usrClickAddEmployee", () => {
 });
 
 Cypress.Commands.add("usrEnterEmail", (params: {email: string }) => {
-  cy.get("[id=\"input-with-icon-textfield\"]").eq(1).arrowType(params.email);
+  cy.get("[id=\"input-with-icon-textfield\"]").eq(1).arrowType(params.email, { force: true });
 });
 
 Cypress.Commands.add("usrEnterName", (params: {name: string }) => {
-  cy.get("[id=\"input-with-icon-textfield\"]").eq(0).arrowType(params.name);
+  cy.get("[id=\"input-with-icon-textfield\"]").eq(0).arrowType(params.name, { force: true });
 });
 
 Cypress.Commands.add("usrClickEditUser", (params: {name: string }) => {
-  cy.get("tr.k-master-row").contains(params.name).parents("tr").find(`td[data-grid-col-index="5"]>span>button`).eq(0)
+  cy.get("tr.k-master-row").contains(params.name).parents("tr").find(`td[data-grid-col-index="5"]>span>button>span>svg`).eq(0)
     .arrowClick();
 });
 
@@ -161,7 +162,16 @@ Cypress.Commands.add("usrGetInitials", (params: {fullName: string }) => {
 
 Cypress.Commands.add("usrClickSaveButton", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
-    cy.get("button>span>svg>path").eq(1).arrowClick({ force: true });
+    cy.get("td>span>button>span>svg>path").eq(0).arrowClick({ force: true });
+  });
+  cy.checkToastMessage({ exists: false });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+
+Cypress.Commands.add("usrClickPlusSaveButton", () => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.EmployeesPost, CyRoutes.EmployeesGet], () => {
+    cy.get("td>span>button>span>svg>path").eq(0).arrowClick({ force: true });
   });
   cy.checkToastMessage({ exists: false });
   cy.landingPageLoadingElementShouldNotExist();
@@ -331,7 +341,7 @@ Cypress.Commands.add("usrHistoryVerifyReactivatedUser", (params: { name: string 
 
 Cypress.Commands.add("usrHistoryVerifyRecordsCount", (params: { records: number }) => {
   cy.listLoadingElementShouldNotExist();
-  cy.get("div[class^=\"makeStyles-externalContainer-\"]").last().next()
+  cy.get("[data-cy='external-container']").last().next()
     .find("[data-cy=\"header-userInitials\"]").should("have.length", params.records);
 });
 

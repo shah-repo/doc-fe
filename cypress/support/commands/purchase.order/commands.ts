@@ -59,7 +59,9 @@ declare global {
       poAMCheckApprovalIconIfItsRed(): Chainable<Subject>;
       poAMCheckApprovalIconIfItsGray(): Chainable<Subject>;
       poAMSelectApprover(...list: string[]): Chainable<Subject>;
+      poAMEnterPassword(): Chainable<Subject>;
       poAMApproveButton(): Chainable<Subject>;
+      poAMApproveSubmissionButton(): Chainable<Subject>;
       poAMCheckIfApproverHasApprovalSign(): Chainable<Subject>;
       poAMCheckForAlertMessage(): Chainable<Subject>;
       poRejectAR(params: {password: string}): Chainable<Subject>;
@@ -111,7 +113,7 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick();
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -138,8 +140,8 @@ Cypress.Commands.add("poEnterDocumentDescription", (params: {description: string
 });
 
 Cypress.Commands.add("poSelectPartNumber", (params: {partNo: string }) => {
-  cy.get("[name=\"partNumber\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick();
+  cy.get("[name=\"partNumber\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.partNo).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poSelectPartNumberNew", (params: {partNo: string }) => {
@@ -232,8 +234,8 @@ Cypress.Commands.add("poSelectTaxCheckbox", () => {
 });
 
 Cypress.Commands.add("poSelectPOStatus", (params: {status: string}) => {
-  cy.get("[id$=\"po-status-built-in\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.status).arrowClick();
+  cy.get("[id$=\"po-status-built-in\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.status).arrowClick({ force: true });
 });
 
 Cypress.Commands.add("poCheckAmount", (params: {number: string}) => {
@@ -336,6 +338,10 @@ Cypress.Commands.add("poAMSelectApprover", (...list: string[]) => {
   });
 });
 
+Cypress.Commands.add("poAMEnterPassword", () => {
+  cy.get(`input[name="password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+});
+
 Cypress.Commands.add("poSaveDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
     cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
@@ -344,7 +350,7 @@ Cypress.Commands.add("poSaveDocument", () => {
 });
 
 Cypress.Commands.add("poAMCheckForApproval", () => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetAvailableApprovers, () => {
+  cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApprovers, () => {
     cy.get("#ApproveAndRelease-button").arrowClick();
   });
 });
@@ -360,6 +366,10 @@ Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
 Cypress.Commands.add("poAMApproveButton", () => {
   cy.get("#ApproveAndRelease-submit").arrowClick();
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("poAMApproveSubmissionButton", () => {
+  cy.get(`[data-cy="transition-approve"]`).arrowClick();
 });
 
 Cypress.Commands.add("poAMCheckIfApproverHasApprovalSign", () => {

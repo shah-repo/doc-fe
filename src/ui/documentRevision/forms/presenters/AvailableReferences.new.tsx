@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Chip, CircularProgress, TextField, TooltipProps, Typography } from "@material-ui/core";
+import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { debounce, map, some, truncate } from "lodash";
+import { debounce, isArray, map, some, truncate } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
-import { tooltipStyles } from "../../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
+import { ReactComponent as RemoveReference } from "../../../../assets/images/trash.svg";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -18,6 +19,7 @@ import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
 import { FBTooltip } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
+import { isTranslation } from "../../../translations/types";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
 import { getHighestReleasedRevision, getHighestRevision } from "../transform";
 import { styles } from "./AvailableReferences.new.styles";
@@ -43,11 +45,6 @@ const getReferenceValues = (
   return { highestRev, isReferencePart, canReferenceCreateInspection };
 };
 
-const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="top" classes={classes} {...props} />;
-};
-
 const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithFormik> = ({
   availableReferences,
   disabled = false,
@@ -55,6 +52,11 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   documentGroupOptions,
   ...fieldProps
 }) => {
+  const intl = useIntl();
+  const getDisplayText = (localiseString) =>
+    isTranslation(localiseString)
+      ? intl.formatMessage({ id: localiseString })
+      : null;
   const classes = styles();
   const { submitForm } = useFormContext();
   const { _documentRevisionFormState } = SM.useStores();
@@ -65,9 +67,10 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
-  const truncateLable = (label) => truncate(label, { length: 30, omission: " ..." });
+  const truncateLable = (label) => truncate(label, { length: 20, omission: " ..." });
 
-  const onChange = (e, value) => {
+  const onChange = (e, val) => {
+    const newValue = isArray(val) ? val : [...value, val];
     const {
       form: { setFieldValue, setFieldTouched, touched },
       field: { name },
@@ -75,10 +78,10 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     if (!touched[name]) {
       setFieldTouched(name, true);
     }
-    setFieldValue(name, value);
-    setValue(value);
+    setFieldValue(name, newValue);
+    setValue(newValue);
     if (!_documentRevisionFormState) { return; }
-    _documentRevisionFormState.referenceValue = map(value, (obj) => ({ id: obj.value }));
+    _documentRevisionFormState.referenceValue = map(newValue, (obj) => ({ id: obj.value }));
     submitForm();
   };
 
@@ -163,7 +166,10 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
     }
   };
 
-  const debounceFunction = debounce(onInputChange, 1000);
+  const debounceFunction = debounce(onInputChange, 1000, {
+    leading: true,
+    trailing: true,
+  });
 
   const onScroll = (event: React.SyntheticEvent) => {
     const listboxNode = event.currentTarget;
@@ -199,8 +205,9 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
       <Autocomplete
         {...{ onChange, disabled }}
         classes={{ option: classes.option }}
-        value={value}
+        value={{ label: inputValue }}
         options={ModifiedOptions}
+        getOptionLabel={(option) => option.label }
         // disable filtering on client
         filterOptions={(x) => x}
         renderInput={(params: RenderInputParams) => (
@@ -210,6 +217,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
                 {...params}
                 fullWidth
                 variant="outlined"
+                label={!open && getDisplayText("common.select.placeholder")}
                 InputProps={{
                   ...params.InputProps,
                   style: { padding: "0px 30px 0px 9px", height: value.length ? "100%" : "40px" },
@@ -236,33 +244,36 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
           </Box>
         )}
         renderOption={(option) => option.label}
-        renderTags={(value, getTagProps) => (
-          value?.map((option, index) => (
-            <Chip
-              key={option.value}
-              label={
-                <Typography className={classes.chip}>
-                  <StyledTooltip title={option.label}>
-                    <>{truncateLable(option.label)}</>
-                  </StyledTooltip>
-                </Typography>}
-              {...getTagProps({ index })}
-              disabled={option.deleteDisabled}
-              style={{ height: "100%" }}
-            />
-          ))
-        )}
         onInputChange={debounceFunction}
-        multiple
         disableClearable
         ListboxProps={{ onScroll }}
         open={open}
         onOpen={onOpen}
         onClose={() => {
           setOpen(false);
+          setInputValue("");
         }}
         loading={loading}
       />
+      <Box>
+        {value?.map((option, index) => (
+          <Chip
+            key={option.value}
+            className={classes.chipRoot}
+            label={
+              <Typography className={classes.chip}>
+                <FBTooltip title={option.label}>
+                  <>{truncateLable(option.label)}</>
+                </FBTooltip>
+              </Typography>}
+            disabled={option.deleteDisabled}
+            deleteIcon={<RemoveReference className={classes.deleteIcon}/>}
+            onDelete={(e) => {
+              onChange(e, value.filter((obj) => obj.value !== option.value));
+            }}
+          />
+        ))}
+      </Box>
     </Field>
   ); };
 

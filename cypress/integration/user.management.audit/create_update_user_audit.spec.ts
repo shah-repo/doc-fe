@@ -5,6 +5,7 @@ import faker from "faker";
 import { CONFIG } from "../../support/config";
 import { emailDateOffset, momentInPST } from "../../utils/constants/dateHandler";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let companyAdmin;
@@ -98,6 +99,7 @@ context("User Creation Flow", () => {
   });
 
   context(`Check if the history is created for ${nameOfFirstUserToSignUp}`, () => {
+    SystemRequirement("REQ-2640");
     it("Open history panel", () => {
       cy.usrHistoryClickOpenButton();
     });
@@ -107,6 +109,7 @@ context("User Creation Flow", () => {
     });
 
     it("Verify user added datetime", () => {
+      cy.wait(3000);
       cy.usrHistoryVerifyCurrentDate({ dateTime: currentDate });
     });
 
@@ -182,6 +185,7 @@ context("User Creation Flow", () => {
   });
 
   context(`Check if the signup history is created for ${nameOfFirstUserToSignUp}`, () => {
+    SystemRequirement("REQ-2640");
     it("Check history is created", () => {
       it("Open history panel", () => {
         cy.usrHistoryClickOpenButton();
@@ -282,6 +286,7 @@ context("User Creation Flow", () => {
   });
 
   context(`Check if the reset password email history is created for ${nameOfFirstUserToSignUp}`, () => {
+    SystemRequirement("REQ-2640");
     it("Check history is created", () => {
       it("Open history panel", () => {
         cy.usrHistoryClickOpenButton();
@@ -324,6 +329,7 @@ context("User Creation Flow", () => {
     });
 
     context(`Check if the deactivate history is created for ${nameOfThirdUserToSignUp}`, () => {
+      SystemRequirement("REQ-2640");
       it("Check history is created", () => {
         it("Open history panel", () => {
           cy.usrHistoryClickOpenButton();
@@ -349,6 +355,7 @@ context("User Creation Flow", () => {
 
     context(`Reactivate ${nameOfThirdUserToSignUp}`, () => {
       it(`Click edit button for ${nameOfThirdUserToSignUp}`, () => {
+        cy.grpClearFilter();
         cy.usrClickEditUser({ name: nameOfThirdUserToSignUp });
       });
 
@@ -360,6 +367,7 @@ context("User Creation Flow", () => {
     });
 
     context(`Check if the reactivate history is created for ${nameOfThirdUserToSignUp}`, () => {
+      SystemRequirement("REQ-2640");
       it("Check history is created", () => {
         it("Open history panel", () => {
           cy.usrHistoryClickOpenButton();

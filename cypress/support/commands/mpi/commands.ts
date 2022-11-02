@@ -26,6 +26,7 @@ declare global {
       mpiAddEquipmentParameterToStep(params: {numbOfStep: integer; equipmentDescription: string}): Chainable;
       mpiStartStep(params: {stepNumber: number}): Chainable;
       mpiClickNotStarted(params: {stepNumber: number}): Chainable;
+      selectLot(params: {lot: string}): Chainable;
     }
   }
 }
@@ -96,8 +97,8 @@ Cypress.Commands.add("mpiAddMaterialParameterToStep", (params: {
     cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   });
   cy.listLoadingElementShouldNotExist();
-  cy.get("[data-cy=\"title\"]").arrowType(params.material);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowType(params.material, { force: true });
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -146,4 +147,11 @@ Cypress.Commands.add("mpiSelectRedLine", () => {
   cy.get("[data-cy='HeaderMenuButton']").arrowClick();
   cy.get("[data-cy='redlineButton']").arrowClick();
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("selectLot", (params: {lot: string}) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.wait(2000);
+  cy.get("input[data-cy=usedOverride]").arrowClick();
+  cy.get("ul>li[role=option]").contains(params.lot).arrowClick();
 });

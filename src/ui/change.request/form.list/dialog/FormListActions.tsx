@@ -6,11 +6,10 @@ import { styles } from "../FormList.styles";
 
 interface Props {
   dialog: DialogHandler;
-  createCr: () => void;
+  createChangeRequest: () => void;
 }
-const FormListActions: React.FunctionComponent<Props> = ({ dialog, createCr }) => {
+const FormListActions: React.FunctionComponent<Props> = ({ dialog, createChangeRequest }) => {
   const classes = styles();
-  // const history = useHistory();
 
   return (
     <Grid container spacing={1}>
@@ -33,7 +32,7 @@ const FormListActions: React.FunctionComponent<Props> = ({ dialog, createCr }) =
           fullWidth
           id="FormList-continueButton"
           data-cy="create.approval.request.continue"
-          onClick={createCr}
+          onClick={createChangeRequest}
         >
           <Text translation="common.continue" />
         </Button>

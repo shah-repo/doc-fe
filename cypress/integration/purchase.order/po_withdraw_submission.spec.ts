@@ -6,6 +6,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
@@ -436,6 +437,7 @@ context("po withdraw submission", () => {
 
   context("Create PO document in pending approval state ", () => {
     it("Navigate to PO", () => {
+      cy.wait(1000);
       cy.navigToPurchaseOrder();
     });
 
@@ -478,6 +480,12 @@ context("po withdraw submission", () => {
 
     it("Add an Approval", () => {
       cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
     });
 
     it("Submit for approval", () => {
@@ -545,7 +553,7 @@ context("po withdraw submission", () => {
       cy.navigToPurchaseOrder();
     });
 
-    it("Veryfy the part document on lot", () => {
+    it("Verify the part document on lot", () => {
       cy.get(`[aria-colindex="1"] input`).arrowType("PO-00001");
       cy.dlSelectFirstDocument();
     });
@@ -568,8 +576,10 @@ context("po withdraw submission", () => {
       cy.drSelectLineItems();
     });
 
-    it("Click on 'Add' inside PO dialog box and check for required fields", () => {
-      cy.get("[data-cy=\"form.builder.add.line.item\"]").click();
+    it("Click on 'Add Line Item", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.poAddNewFieldItem();
+      });
     });
 
     it("Select Part Number", () => {
@@ -667,16 +677,17 @@ context("po withdraw submission", () => {
     });
 
     it("Verify Requestor Added as User 1 ", () => {
-      cy.get("[data-cy=\"form.builder.audit.STRING_NEW\"]").eq(1).contains("Requestor Added")
+      cy.get("[data-cy='form.builder.audit.STRING_NEW']").contains("Requestor Added")
         .should("exist");
-      cy.get("[class^=\"makeStyles-auditValue-\"]").eq(4).contains("Giovanni Reynolds enlil.testmail+cy1@gmail.com")
+      cy.get("[data-cy='form.builder.audit.STRING_NEW']").next()
+        .contains("Giovanni Reynolds enlil.testmail+cy1@gmail.com")
         .should("exist");
     });
 
     it("Verify Approver Added as User 1 ", () => {
-      cy.get("[data-cy=\"change-key-2-0\"]").contains("Approver Added")
+      cy.get("[data-cy='change-key-2-0']").contains("Approver Added")
         .should("exist");
-      cy.get("[class^=\"makeStyles-auditValue-\"]").eq(2).contains("Giovanni Reynolds")
+      cy.get("[data-cy='change-key-2-0']").parent().next().contains("Giovanni Reynolds")
         .should("exist");
     });
   });

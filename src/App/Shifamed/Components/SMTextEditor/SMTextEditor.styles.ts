@@ -7,7 +7,7 @@ export const editorStyles = {
     borderBottom: `1px solid ${Colors.hint_gray}`,
     position: "sticky",
     top: 0,
-    zIndex: 2,
+    zIndex: 5,
   },
   editorStyle: {
     padding: "0 4px",
@@ -36,6 +36,7 @@ export const SMEditorStyles = makeStyles(() =>
       borderTop: "1px solid #2684FF !important",
       borderRight: "1px solid #2684FF !important",
       borderRadius: "4px 4px 0px 0px !important",
+      position: "inherit !important" as any,
     },
     descriptionMainEditorClass: {
       borderLeft: "1px solid #2684FF !important",

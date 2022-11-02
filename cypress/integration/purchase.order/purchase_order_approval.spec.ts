@@ -152,7 +152,7 @@ context("PO approval test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -190,7 +190,7 @@ context("PO approval test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -275,6 +275,10 @@ context("PO approval test", () => {
       cy.poClickCreatePO();
     });
 
+    it("Enter description 'POAM test", () => {
+      cy.drEnterDocumentDescription({ description: "POAM testing description" });
+    });
+
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
     });
@@ -315,8 +319,8 @@ context("PO approval test", () => {
       cy.poAddPOButtonClick();
     });
 
-    it("Enter description 'POAM test", () => {
-      cy.drEnterDocumentDescription({ description: "POAM testing description" });
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("navigate to Details tab", () => {

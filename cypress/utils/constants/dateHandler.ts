@@ -24,3 +24,4 @@ export const trAssignedDate =  momentInPST().add(30, "days").subtract(10, "days"
 export const trCompleteDate =  momentInPST().format("M/D/YYYY");
 export const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
 export const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/D/YYYY");
+export const currentTime = moment().tz("America/Los_Angeles").format("hh:mm:ss a");

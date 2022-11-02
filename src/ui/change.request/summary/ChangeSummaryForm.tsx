@@ -1,13 +1,13 @@
 import { BoxProps } from "@material-ui/core";
 import { cloneDeep, map } from "lodash";
 import { Observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { SM, SMBox, SMForm, SMProviderProps, SMTabs, SMTabsHOCProps, SMTemplate } from "../../../App";
 import { withSMTabs } from "../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
-import { changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { TabInfo } from "../../../state/ducks/documentRevisions/documentType/types";
+import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
+import { TabInfo, TabTypeOptions } from "../../../state/ducks/documentRevisions/documentType/types";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../form.builder";
@@ -15,6 +15,7 @@ import { FBWorkspaceMode } from "../../form.builder/types/workspace";
 import Colors from "../../layout/theme/utils/colors";
 import ChangeRequestSidebar from "../form/ChangeRequest.sidebar";
 import { toChangeRequestFormValues } from "../form/transform";
+import Approvers from "./approvers";
 import ChangeSummaryFormHeader from "./ChangeSummaryFormHeader";
 import SummaryHeader from "./SummaryHeader";
 
@@ -51,12 +52,12 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   canChangeOwnership,
   displayLastSaved,
   errors,
+  _documentRevisionFormState,
 }) => {
   const { _tabsState } = SM.useStores();
   _formState?.setMode(mode);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
-  // const classes = styles({ isDrawerOpen });
 
   const changeSidebarOpenStatus = (status) => {
     setOpen(status);
@@ -66,23 +67,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   // eslint-disable-next-line dot-notation
   const docTypeGroup = (changeRequest)["documentType"].group ?? "OTHER";
   const tabConfig = useSelector((state: ApplicationState) =>
-    changeRequestsSelectors.getTabConfiguration(state, docTypeGroup));
-
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-
-  const onTabChange = (event, newValue, tabConfig) => {
-    // console.log(event, newValue, tabConfig);
-    _tabsState?.setValue(newValue);
-    _tabsState?.setTabID(tabConfig[newValue].tabId);
-  };
-
-  useEffect(() => {
-    if (!tabConfig) {
-      return;
-    }
-    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabConfig]);
+    documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
   return (
     <SMForm
@@ -117,7 +102,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
-              contentBoxProps={{ minHeight: "0px", height: "auto" }}
+              contentBoxProps={{ minHeight: _documentRevisionFormState?.expanded ? "100%" : "0px", height: "auto" }}
               boxProps={{ overflow: "auto" }}
               header={<ChangeSummaryFormHeader
                 title={changeRequest?.title}
@@ -130,18 +115,18 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
               <Observer>
                 {() => (
                   <SMTabs
-                    onChange={(ev, newValue) => onTabChange?.(ev, newValue, tabConfig)}
-                    tabs={tabLabels}
+                    tabs={tabConfig}
                     boxProps={{ px: 3.75, py: 2, stretchY: "100%", display: "flex", flexDirection: "column" }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
                       const tabType = tabInfo.type;
-                      const showTabContent = _tabsState?.tabID === tabInfo.tabId;
+                      const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
                         <SMBox key={index} {...{ py: 2 }}>
-                          {tabType === "MIXED" && showTabContent && changeRequest &&
+                          {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
+                            <>
                               <FBWorkspace
                                 isPortal={false}
                                 initialValues={cloneDeep(changeRequest?.formInput)}
@@ -151,8 +136,11 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 schema={schema}
                                 mode={mode}
                               />
+                              <Approvers dataProp={changeRequest.approvals}/>
+                            </>
+
                           }
-                          {tabType === "DYNAMIC" && showTabContent &&
+                          {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
                             _formState?.mode !== FBWorkspaceModeOptions.NONE &&
                             <FBWorkspace
                               isPortal={false}

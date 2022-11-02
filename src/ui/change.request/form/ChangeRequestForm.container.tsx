@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Formik, FormikProps } from "formik";
 import { cloneDeep } from "lodash";
 import { useObserver } from "mobx-react";
@@ -45,11 +44,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
   const calcInitialValues = useMemo(() => {
-    // console.log(initialValues);
-    // console.log(FBDataStore?.refreshData);
-
-    initialValues.formInput = FBDataStore?.refreshData?.formInput ?? initialValues.formInput;
-    // console.log(initialValues);
+    initialValues.formInput = initialValues.formInput ?? FBDataStore?.refreshData?.formInput;
 
     return {
       ...initialValues,
@@ -58,7 +53,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   }, [initialValues, FBDataStore?.refreshData]);
 
   useObserver(() => {
-    calcInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? calcInitialValues.formInput;
+    calcInitialValues.formInput = calcInitialValues.formInput ?? FBDataStore?.refreshData?.formInput;
   });
 
   const formInput = useMemo(() =>
@@ -81,7 +76,6 @@ const ChangeRequestFormContainer: React.FunctionComponent<
     : chosenForm?.formTemplate?.schema;
 
   _formState?.setMode(FBWorkspaceModeOptions.FORM);
-  // console.log(_formState);
 
   const render = (props: FormikProps<ChangeRequestFormValues>) => (
     <ChangeRequestForm
@@ -98,29 +92,6 @@ const ChangeRequestFormContainer: React.FunctionComponent<
       formInput={formInput}
       {...props}
     />
-
-    // <FBWorkspace
-    //   portalContainer={FBContainer}
-    //   isPortal={true}
-    //   initialValues={cloneDeep(changeRequest?.formInput)}
-    //   changeRequest={cloneDeep(changeRequest)}
-    //   autosave={autosaveEnabled}
-    //   withoutBottomBar={true}
-    //   schema={schemaData}
-    //   mode="form"
-    // >
-    //   <AssessmentFormPresenter
-    //     asyncState={asyncState}
-    //     changeRequest={changeRequest}
-    //     chosenForm={chosenForm}
-    //     doNotPrompt={doNotPrompt}
-    //     sidebar={changeRequest && <Sidebar sidebarList={sidebarList}
-    //       isDrawerOpen={isDrawerOpen} setOpen={setOpen} fromEdit={true} />}
-    //     {...props}
-    //     {...{ FBContainer }}
-    //   />
-    // </FBWorkspace>
-
   );
 
   return (

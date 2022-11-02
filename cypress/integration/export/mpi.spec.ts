@@ -376,7 +376,7 @@ context("Export MPI", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add Approver'", () => {
@@ -394,6 +394,7 @@ context("Export MPI", () => {
       cy.visit(recordUrl);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Verify export", () => {
@@ -419,6 +420,7 @@ context("Export MPI", () => {
       cy.visit(recordUrl);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Verify export", () => {
@@ -444,6 +446,7 @@ context("Export MPI", () => {
       cy.visit(recordUrl);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Verify export", () => {

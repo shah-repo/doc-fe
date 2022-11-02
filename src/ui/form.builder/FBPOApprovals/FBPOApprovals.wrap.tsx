@@ -5,17 +5,19 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderValue, FBRequiredApprover, FBPurchaseOrderItemType } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderItemType, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import { PO_REQUESTOR_COMPONENT_NAME, PO_ITEMS_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
+import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
+import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBDataStore from "../FBStore/FBDataStore";
 import FBPOApprovalsState from "./FBPOApprovals.state";
+
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -99,6 +101,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       item.type === FBPurchaseOrderItemType.SERVICE
       || (item.type === FBPurchaseOrderItemType.PRODUCT && item.partNumberDocId)
     );
+
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
       (poItems) => {
@@ -107,7 +110,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const isPrevServiceOrProductPartExist = checkServiceOrProductPartExists(previousPOItems);
         poApprovalsState.setPrevPOItems(poItems);
         hasPOItems.current = !(isServiceOrProductPartExist || isPrevServiceOrProductPartExist);
-        outputId && poApprovalsState.fetchRequiredApprovals(outputId as unknown as string[]);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -120,21 +122,28 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
       const prevRequesterValue = prevRequester.current;
-      const approvers = map(poApprovalsState?.getApprovals, "approver.id");
-
       const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
-      const hasRequesterInApprovers = approvers?.includes(requester);
-      const hasPrevRequesterInApprovers = approvers?.includes(prevRequesterValue);
 
-      if (requester && !hasRequesterInApprovers && hasServiceOrProductPart) {
-        return addApprover([requester]);
+      const allApprovers = poApprovalsState?.getApprovals
+        ?.map((item) => item?.approver?.id);
+      const hasRequesterInAllApprovers = allApprovers?.includes(requester);
+
+      if (requester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
+        return addApprover([requester], { manually: false });
       }
 
-      if (requester && hasRequesterInApprovers && !hasServiceOrProductPart) {
+      // We can remove only automatically added approvers.
+      const autoApprovers = poApprovalsState?.getApprovals
+        ?.filter((item) => !item.manually)
+        ?.map((item) => item?.approver?.id);
+      const hasRequesterInAutoApprovers = autoApprovers?.includes(requester);
+      const hasPrevRequesterInAutoApprovers = autoApprovers?.includes(prevRequesterValue as string);
+
+      if (requester && hasRequesterInAutoApprovers && !hasServiceOrProductPart) {
         return removeApprover([requester]);
       }
 
-      if (!requester && prevRequesterValue && hasPrevRequesterInApprovers) {
+      if (!requester && prevRequesterValue && hasPrevRequesterInAutoApprovers) {
         return removeApprover([prevRequesterValue]);
       }
     }
@@ -144,7 +153,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => poApprovalsState?.approvalApi.data,
       (data) => {
         concatApprovals(data);
-        FBDataStore.setPoApprovals(data);
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -155,7 +164,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         const filteredApprovals: FBInlineApprovalBody[] = compact(map(poApprovalsState.approvals, (approval) =>
           approval.approverId === data?.approverId ? data : approval
         ));
-        FBDataStore.setPoApprovals(data);
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
         poApprovalsState.setApprovals(getApprovals(filteredApprovals));
         if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
           window.location.reload();
@@ -164,12 +173,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    // This runs when you manually remove an approver from the list
     useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (fieldValue: string[]) => {
         const formValue: string[] = map(poApprovalsState?.getApprovals, "approver.id");
         const employeesToBeAdded = difference(fieldValue, formValue);
-        employeesToBeAdded.length > 0 && addApprover(employeesToBeAdded);
+        employeesToBeAdded.length > 0 && addApprover(employeesToBeAdded, { manually: true });
         const employeesToBeRemoved = difference(formValue, fieldValue);
         employeesToBeRemoved.length > 0 && removeApprover(employeesToBeRemoved);
         formState?.getInputState(name)?.setRender();
@@ -196,15 +206,27 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+
     useEffect(() => {
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       poApprovalsState.setPrevPOItems(poItems);
 
-      checkLineItems();
+      // checkLineItems();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => reaction(
+      () => Object.values((poApprovalsState?.groups as {})).slice(),
+      (groups) => {
+        if (groups) {
+          checkLineItems();
+        }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     const checkGroups = (id: string) => {
+
       const approversGroups = compact(map(poApprovalsState.groups, (group) =>
         (group.joinedEmployees as string[]).includes(id) ? group : ""));
       const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
@@ -229,13 +251,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
     };
 
-    const addApprover = (ids?: string[]) => {
+    const addApprover = (ids: string[], { manually = true } = {}) => {
       if (!id) { return; }
       if (!ids) { return; }
       const groupName = checkGroups(ids[0]);
       if (
         poApprovalsState.getDidMountPhase &&
-        difference(ids, availableApprovers).length === 0
+        ( difference(ids, availableApprovers).length === 0 )
       ) {
         return;
       }
@@ -246,6 +268,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         fieldId: name,
         partOf: { id },
         signatureGroupName: groupName,
+        manually,
       }, () => {
         const id  = workspaceState?.id;
         if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }

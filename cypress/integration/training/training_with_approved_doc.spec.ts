@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import moment from "moment";
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
@@ -22,7 +25,7 @@ let developersGroup;
 let releasedDocId;
 let asyncTasksGroup;
 
-context("Training notifications for documents with approved and released revision", () => {
+context("Training notifications for documents with approved and released revision", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -455,7 +458,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListNw({ approver: USERS[1].name });
     });
 
     it("Save training", () => {
@@ -553,6 +556,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Approve AR", () => {
+      cy.wait(2000);
       cy.arApproveARFromDashboard();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -784,6 +788,7 @@ context("Training notifications for documents with approved and released revisio
 
     it("5 records should be created", () => {
       cy.trClearFilters();
+      cy.listLoadingElementShouldNotExist();
       cy.get("tbody>tr").should("have.length", 5);
     });
 
@@ -853,6 +858,7 @@ context("Training notifications for documents with approved and released revisio
         CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
@@ -875,7 +881,7 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListNw({ approver: USERS[1].name });
     });
 
     it("Click Submit for Approval", () => {

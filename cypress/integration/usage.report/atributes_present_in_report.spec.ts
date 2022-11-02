@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
 
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
@@ -24,7 +28,7 @@ const usageReportTomorrow = momentInPST().add("days", "2").format("YYYY-MM-DDThh
 const usageReportXlsxFileName = "Usage_report_" + fileTimeFormat + ".xlsx";
 const usageReportXlsxFileNameAndPath = "cypress/downloads/" + usageReportXlsxFileName;
 
-context("Check Usage report atributes are present in report", () => {
+context("Check Usage report atributes are present in report", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

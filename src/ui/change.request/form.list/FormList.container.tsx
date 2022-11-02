@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { flatten, isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -7,6 +6,7 @@ import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { documentTypeActions } from "../../../state/ducks/documentRevisions/documentType";
 import { DocumentTypeById } from "../../../state/ducks/documentRevisions/documentType/types";
 import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
+import { toastError } from "../../components/notifications";
 import { TableDataProps } from "../../components/table/types";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
@@ -32,7 +32,7 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData 
       createdChangeRequest && history.push(changeRequestEditPath(createdChangeRequest.id));
     },
     onError: (err) => {
-      console.log(err);
+      toastError(err as string);
     },
   });
 
@@ -80,7 +80,6 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData 
   const handleCreateButton = () => {
     if (templateOptions.length === 1) {
       processCreatingRevision(templateOptions[0]);
-      // history.push(`/change_request/${templateOptions[0].value}/create/${templateOptions[0].docTypeId}`);
     } else {
       dialog.open();
     }

@@ -2,22 +2,32 @@ import { Box } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import React, { useState } from "react";
 import { FBButton, FBStarterProps } from "..";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
+import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./FBStarter.styles";
 import { withFBStarter } from "./FBStarter.wrap";
 
 const FBStarter: React.FunctionComponent<FBStarterProps> = ({
+  index = 0,
   onClick,
   isNewLayout,
 }) => {
   const classes = styles();
   const [isHover, setIsHover] = useState(false);
+  const { _tabsState } = SM.useStores();
+  const { _documentRevisionFormState } = SM.useStores();
+
+  const isEQ = checkIsDocumentEquipment(
+    _documentRevisionFormState?.documentRevision?.document?.documentType?.groupOptions
+  );
   if (isNewLayout) {
     return (
       <Box
         display="flex"
         className={"fbStarterAddField"}
-        my={1}
+        mb={1}
+        mt={6}
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
       >
@@ -31,7 +41,11 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
         />
         <FBButton
           className={classes.button}
-          label="form.builder.add.field"
+          label={
+            (_tabsState?.isTabActive("specification") && isEQ)
+              ? "form.builder.addEquiSpec"
+              : "form.builder.add.field"
+          }
           dataCy="form.builder.add.field"
           size="medium"
           variant="contained"
@@ -39,7 +53,7 @@ const FBStarter: React.FunctionComponent<FBStarterProps> = ({
           isHover={isHover}
           showNewButton={isNewLayout}
           startIcon={<AddIcon fontSize="small" />}
-          onClick={() => onClick && onClick(0)}
+          onClick={() => onClick && onClick(index)}
         />
         <Box
           border={0}

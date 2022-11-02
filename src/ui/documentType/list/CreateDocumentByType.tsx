@@ -23,6 +23,7 @@ import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import Text from "../../components/Text";
+import { toastError } from "../../components/notifications";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
@@ -61,7 +62,10 @@ export const useHandleCreateDoc = () => {
   const fetchDocIdAsync = useAsync<DocumentProposedId>({
     onSuccess: (data) => {
       createDoc(data?.docId as string);
-    }, onError: () => redirect(),
+    },
+    onError: (error) => {
+      toastError(error);
+    },
   });
   docIdAsyncContext = React.createContext(fetchDocIdAsync.asyncState);
   const createDocAction = useActionCreator(documentRevisionsActions.create);
@@ -69,7 +73,10 @@ export const useHandleCreateDoc = () => {
     onSuccess: (documentRevision) => {
       const path = documentVersionPath(documentRevision?.id || "", documentRevision?.document?.id || "");
       history.push(path);
-    }, onError: (msg) => redirect(),
+    },
+    onError: (error) => {
+      toastError(error);
+    },
   });
 
   const createDoc = (docId: string) => {

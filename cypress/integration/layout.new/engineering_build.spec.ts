@@ -35,6 +35,13 @@ const docDescription = "Test EB Description";
 const formTitle = "New EB Form";
 const formDescription = "New EB Form Description";
 
+const FIELD_HEADERS = [
+  "form.builder.approvals",
+  "fb-textfield",
+  "form.builder.procedure",
+  "Step #1",
+];
+
 context("Verify New Layout for EB Document", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
@@ -254,6 +261,7 @@ context("Verify New Layout for EB Document", () => {
         body: {
           category: "EB",
           addNewBtnLabel: "Create EB",
+          config: {},
           columns: [
             {
               label: "EB ID",
@@ -462,9 +470,77 @@ context("Verify New Layout for EB Document", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
-  // Scenario 8a - Newly Created Engineering Build Document
+  context("Create EB migration form", () => {
+    context("Create EB  migration form", () => {
+      it("Navigate to Document List", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Click on 'Create a document'", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it(`Enter title "EB Migration Form"`, () => {
+        cy.drEnterDocumentTitle({ name: "EB Migration Form" });
+      });
+
+      it(`Enter description "EB migration form Description"`, () => {
+        cy.drEnterDocumentDescription({ description: "EB migration form Description" });
+      });
+
+      it("Click on 'Form' document type", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Click on 'Engineering Build Test' document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "Engineering Build Test" });
+        cy.unClick();
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Click create document after filling document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Add Text Field", () => {
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save Form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Navigate to Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Add EB Procedure", () => {
+        cy.fbAddNewField();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
+        cy.fbAddNewFieldButton();
+      });
+
+      it("Save Form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Approve and release document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+  });
 
   context("Create EB form", () => {
     it("Navigate to Document List", () => {
@@ -500,6 +576,17 @@ context("Verify New Layout for EB Document", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Add Text Field", () => {
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+      cy.fbAddNewFieldButton();
+    });
+
+    it("Save Form", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
@@ -541,6 +628,7 @@ context("Verify New Layout for EB Document", () => {
 
         it("Verify that Form Options should appear for Overview tab", () => {
           cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -576,6 +664,7 @@ context("Verify New Layout for EB Document", () => {
 
         it("Verify that Form Options should appear for Procedure tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
           cy.verifyFormOptionsVisibility();
         });
       });
@@ -644,6 +733,10 @@ context("Verify New Layout for EB Document", () => {
 
     it("Click on create Engineering Builds", () => {
       cy.get(`button[id="DocumentByTypeListPresenter-openDocRev"]`).arrowClick();
+      cy.get("[id='MultipleFormTemplate-selectDocType']").type("New EB Form");
+      cy.wait(1500);
+      cy.get(`div[id^="react-select"]`).contains("New EB Form").arrowClick({ force: true });
+      cy.unClick();
     });
 
     it(`Enter title ${docTitle}`, () => {
@@ -652,6 +745,10 @@ context("Verify New Layout for EB Document", () => {
 
     it(`Enter description ${docDescription}`, () => {
       cy.drEnterDocumentDescription({ description: docDescription });
+    });
+
+    it("Enter fb-textfield", () => {
+      cy.get("[name^=\"fb-textfield-\"]").arrowType("fb-textfield");
     });
 
     it("Save document", () => {
@@ -706,6 +803,7 @@ context("Verify New Layout for EB Document", () => {
 
           it("Verify that Form Options should appear for Overview tab", () => {
             cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView().should("exist");
+            cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("be.visible");
             cy.verifyFormOptionsVisibility();
           });
         });
@@ -720,15 +818,19 @@ context("Verify New Layout for EB Document", () => {
           cy.get("#sm-tabpanel-1").find("button[data-cy=\"form.builder.add.field\"]").should("exist");
         });
 
+        it("Enter description to Step #1", () => {
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Step #1 description" });
+        });
+
         it("Add Text Field", () => {
           cy.fbAddNewFieldWhenHiddenLastPlace();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-          cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
+          cy.fbEnterNameValue({ name: "label", value: "textfield" });
           cy.fbAddNewFieldButton();
         });
 
         it("Save Form", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
       });
 
@@ -736,16 +838,16 @@ context("Verify New Layout for EB Document", () => {
         context("Verify Procedure tab predefined fields", () => {
           it("Verify EB Procedure", () => {
             cy.get("#sm-tabpanel-1").should("exist");
-            cy.contains("Step #1").should("exist");
-            cy.contains("Materials").should("exist");
-            cy.contains("Equipment").should("exist");
-            cy.contains("EB Procedure").should("exist");
+            cy.get(`[data-cy="form.builder.step.number"]`).contains("Step #1").should("exist");
+            cy.get(`[data-cy="form.builder.materials"]`).eq(0).contains("Materials").should("exist");
+            cy.get(`[data-cy="form.builder.equipment"]`).eq(0).contains("Equipment").should("exist");
+            cy.get(`[data-cy="form.builder.procedure"]`).contains("EB Procedure").should("exist");
           });
 
           it("Verify Add/Clone Step button", () => {
-            cy.get(`[data-cy="form.builder.add.step"]`).should("contain.text", "Add Step");
+            cy.get(`[data-cy="form.builder.add.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.add.step"]`).should("not.have.attr", "disabled");
-            cy.get(`[data-cy="form.builder.clone.step"]`).should("contain.text", "Clone Step");
+            cy.get(`[data-cy="form.builder.clone.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.clone.step"]`).should("not.have.attr", "disabled");
           });
 
@@ -756,14 +858,18 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add Material/Equipment button", () => {
-            cy.get(`[data-cy="form.builder.materials.btn"]`).should("contain.text", "Add Material");
-            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("contain.text", "Add Equipment");
+            cy.get(`[data-cy="form.builder.materials.btn"]`).should("exist");
+            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("exist");
           });
         });
 
         context("Verify Procedure tab added fields", () => {
+          it("Navigate to Procedure tab", () => {
+            cy.drSelectProcedureTab();
+          });
+
           it("Verify Text Field", () => {
-            cy.contains("fb-textfield").should("exist");
+            cy.contains("textfield").should("exist");
           });
 
           it("Verify that Form Options should appear for Procedure tab", () => {
@@ -822,6 +928,57 @@ context("Verify New Layout for EB Document", () => {
       });
     });
 
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^='react-select']").contains("FM-00003").arrowClick();
+      });
+
+      FIELD_HEADERS.forEach( (fieldHeader, i) => {
+        it(`Mapped '${fieldHeader}' field`, () => {
+          cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+          cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+        });
+      });
+
+      it("Click on confirm change", () => {
+        cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Verify 'fb-textfield' value after migration", () => {
+        cy.get("[value='fb-textfield']").should("exist");
+      });
+
+      it("Verify form info should have migrated form 'FM-00003'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
+      });
+
+      it("Navigate to procedure Tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
+      it("Verify 'Step #1' value after migration", () => {
+        cy.get("div[id^=\"fb-mpiprocedure\"] p")
+          .should("have.text", "Step #1 description");
+        cy.wait(2000);
+      });
+    });
+
     context("Verify Revisions tab", () => {
       it("Open revisions tab, click and verify current revision", () => {
         cy.openRevisionsTabAndVerifyCurrentRevision("A");
@@ -858,6 +1015,12 @@ context("Verify New Layout for EB Document", () => {
           owner,
           actions: [
             { key: "Access granted to user", value: userOne },
+          ],
+        },
+        {
+          owner,
+          actions: [
+            { key: "Form Set To", value: "FM-00003 - revision 1 - EB Migration Form" },
           ],
         },
         {
@@ -918,13 +1081,11 @@ context("Verify New Layout for EB Document", () => {
         cy.drSelectProcedureTab();
       });
 
-      it("Enter description to Step #1", () => {
-        cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Step #1 description" });
-      });
-
       it("Upload attachment 'image.jpg'", () => {
         cy.get("[data-cy=\"albumMediaButton\"]").scrollIntoView().arrowClick();
         cy.pmUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add material document", () => {
@@ -947,19 +1108,21 @@ context("Verify New Layout for EB Document", () => {
 
     context("Enter values for Procedure tab added fields", () => {
       it("Fill text field", () => {
-        cy.get("[name^=fb-textfield-]").arrowType("EB Text Field");
+        cy.get("[name^=textfield-]").arrowType("EB Text Field");
         cy.unClick();
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
   });
 
-  // Scenario 8b - Existing Engineering Build Record
-
   context("Select existing draft engineering build document", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Navigate to Engineering Build", () => {
       cy.navigToEB();
     });
@@ -1044,9 +1207,9 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add/Clone Step button", () => {
-            cy.get(`[data-cy="form.builder.add.step"]`).should("contain.text", "Add Step");
+            cy.get(`[data-cy="form.builder.add.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.add.step"]`).should("not.have.attr", "disabled");
-            cy.get(`[data-cy="form.builder.clone.step"]`).should("contain.text", "Clone Step");
+            cy.get(`[data-cy="form.builder.clone.step"]`).should("exist");
             cy.get(`[data-cy="form.builder.clone.step"]`).should("not.have.attr", "disabled");
           });
 
@@ -1056,8 +1219,8 @@ context("Verify New Layout for EB Document", () => {
           });
 
           it("Verify Add Material/Equipment button", () => {
-            cy.get(`[data-cy="form.builder.materials.btn"]`).should("contain.text", "Add Material");
-            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("contain.text", "Add Equipment");
+            cy.get(`[data-cy="form.builder.materials.btn"]`).should("exist");
+            cy.get(`[data-cy="form.builder.equipment.btn"]`).should("exist");
           });
 
           it("Verify added Materials and Equipment", () => {
@@ -1070,7 +1233,7 @@ context("Verify New Layout for EB Document", () => {
 
         context("Verify Procedure tab added fields", () => {
           it("Verify Text Field", () => {
-            cy.contains("fb-textfield").should("exist");
+            cy.contains("textfield").should("exist");
           });
 
           it("Verify that Form Options should appear for Procedure tab", () => {
@@ -1098,7 +1261,7 @@ context("Verify New Layout for EB Document", () => {
           cy.get(`[data-cy="common.expand.all"]`).arrowClick();
           cy.get(".MuiExpansionPanel-root")
             .should("contain.text", "PRT-00002 - Part for EB document | each : 2")
-            .and("contain.text", "ET-00001 Equipment document");
+            .and("contain.text", "ET-00001 - Equipment document");
         });
 
         it("Verify that Form Options should not appear for Materials&Equipment tab", () => {
@@ -1223,6 +1386,10 @@ context("Verify New Layout for EB Document", () => {
       cy.navigToEB();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Filter by EB Id", () => {
       cy.dlClearFilters();
       cy.dlFilterByDocId({ docId: "EB-00001" });
@@ -1312,7 +1479,7 @@ context("Verify New Layout for EB Document", () => {
 
         context("Verify Procedure tab added fields", () => {
           it("Verify Text Field", () => {
-            cy.contains("fb-textfield").should("exist");
+            cy.contains("textfield").should("exist");
           });
 
           it("Verify that Form Options should appear for Procedure tab", () => {
@@ -1340,7 +1507,7 @@ context("Verify New Layout for EB Document", () => {
           cy.get(`[data-cy="common.expand.all"]`).arrowClick();
           cy.get(".MuiExpansionPanel-root")
             .should("contain.text", "PRT-00002 - Part for EB document | each : 2")
-            .and("contain.text", "ET-00001 Equipment document");
+            .and("contain.text", "ET-00001 - Equipment document");
         });
 
         it("Verify that Form Options should not appear for Materials&Equipment tab", () => {

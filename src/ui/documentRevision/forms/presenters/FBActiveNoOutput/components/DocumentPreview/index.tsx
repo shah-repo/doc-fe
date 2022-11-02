@@ -4,12 +4,11 @@ import { Observer } from "mobx-react";
 import * as React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import {
-  DocumentRevisionFormProgressBar, DocumentRevisionFormHeader,
-  SMBox, SMTabs, SMTemplate, SM, SMTabsState, SMFormState,
-} from "../../../../../../../App";
-import { withSMTabs } from "../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
+import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from "../../../../../../../App";
 import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
+import { withSMForm } from "../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc";
+import { withSMTabs } from "../../../../../../../App/Shifamed/Components/SMTabs/SMTabs.hoc";
+import { emptyFunction } from "../../../../../../../common/utils/helpers";
 import { authSelectors } from "../../../../../../../state/ducks/auth";
 import { documentTypeSelectors } from "../../../../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../../../../state/ducks/documentRevisions/documentType/types";
@@ -28,7 +27,6 @@ import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../../hel
 import DocumentRevisionFormPresenter from "../../../../DocumentRevisionForm.presenter";
 import { DocumentRevisionFormValues } from "../../../../types";
 import styles from "./styles";
-import { withSMForm } from "../../../../../../../App/Shifamed/Components/SMForm/SMForm.hoc";
 
 interface ContainerProps {
   docRevId?: string;
@@ -39,8 +37,6 @@ interface ContainerProps {
 interface ComponentProps extends ContainerProps {
   formik: FormikProps<DocumentRevisionFormValues>;
 }
-
-const emptyFunction = () => undefined;
 
 const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   docRevId,
@@ -113,7 +109,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     .includes(group as DOC_TYPE_GROUP)) {
     tabConfig = [ ...tabConfig, {
       labelId: "tabId.materialsandequipment",
-      tabId: TabTypeOptions.TABS_MEQ,
+      tabId: TabTypeOptions.TABS_MEQ.toLowerCase(),
       type: TabTypeOptions.TABS_MEQ,
     }];
   }
@@ -121,30 +117,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   if (formik.values?.retrain && tabConfig) {
     tabConfig = [...tabConfig, {
       labelId: "tabId.training",
-      tabId: TabTypeOptions.TRAINING,
+      tabId: TabTypeOptions.TRAINING.toLowerCase(),
       type: TabTypeOptions.TRAINING,
     }];
   }
-
-  const tabLabels: string[] = tabConfig?.map((tabInfo) => tabInfo.labelId);
-  const trainingTabIndex = tabLabels?.findIndex((tab) => tab === "tabId.training");
-
-  useEffect(() => {
-    if (!tabConfig) {
-      return;
-    }
-    _tabsState?.setTabID(tabConfig[_tabsState.value].tabId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabConfig]);
-
-  const onTabChange = (_ev, newValue, tabConfig) => {
-    if (!tabConfig) {
-      return;
-    }
-
-    _tabsState?.setValue(newValue);
-    _tabsState?.setTabID(tabConfig[newValue].tabId);
-  };
 
   useEffect(() => {
     _formState?.setValues(initialValues);
@@ -170,14 +146,14 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
           <Observer>
             {() => (
               <SMTabs
-                onChange={(ev, newValue) => onTabChange(ev, newValue, tabConfig)}
-                tabs={tabLabels}
+                tabs={tabConfig}
                 boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                 panelProps={{ flex: 1 }}
               >
                 {map(tabConfig, (tabInfo: TabInfo) => {
                   const tabType = tabInfo.type;
-                  const showTabContent = _tabsState?.tabID === tabInfo.tabId;
+                  const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
+
                   return (
                     <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
                       {tabType === TabTypeOptions.MIXED && <>
@@ -243,11 +219,11 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       )}
                       {tabType === TabTypeOptions.TABS_MEQ && (
                         <FBMaterialEqInfoContainer
-                          documentRevisionId={documentRevision?.id}
-                          inView = {_tabsState?.tabID === TabTypeOptions.TABS_MEQ}
+                          documentRevision={documentRevision}
+                          inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
                         />
                       )}
-                      {tabType === TabTypeOptions.TRAINING && _tabsState?.value === trainingTabIndex && (
+                      {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
                         <FBTrainingInfoContainer
                           documentRevisionId={documentRevision?.id}
                         />

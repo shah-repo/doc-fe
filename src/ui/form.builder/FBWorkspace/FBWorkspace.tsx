@@ -1,7 +1,7 @@
 import { Portal } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React from "react";
-import { FBDialog, FBFieldName, FBForm, FBLock, FBProcedureDiff, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceModeOptions, FBWorkspaceProps } from "..";
+import { FBDialog, FBForm, FBLock, FBProvider, FBSnackbar, FBWorkspaceMemo, FBWorkspaceModeOptions, FBWorkspaceProps } from "..";
 import { withFBWorkspace } from "./FBWorkspace.wrap";
 
 const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
@@ -14,7 +14,6 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
   mode,
   initialValues,
   includeTransport,
-  includeProcedureDiff,
   isPortal,
   _tabsState,
   isStarterRequired,
@@ -37,9 +36,6 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                 <>
                   {isPortal && portalContainer?.current && (
                     <Portal container={portalContainer?.current}>
-                      {includeProcedureDiff && (
-                        <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
-                      )}
                       <FBWorkspaceMemo
                         {...{ includeTransport, workspaceState, _tabsState }}
                         isStarter={isStarterRequired?.()}
@@ -50,18 +46,13 @@ const FBWorkspace: React.FunctionComponent<FBWorkspaceProps> = ({
                     </Portal>
                   )}
                   {!isPortal && (
-                    <>
-                      {includeProcedureDiff && (
-                        <FBProcedureDiff name={FBFieldName.ProcedureDiff} />
-                      )}
-                      <FBWorkspaceMemo
-                        {...{ schema, includeTransport, workspaceState, _tabsState }}
-                        isStarter={isStarterRequired?.()}
-                        mode={workspaceState?.mode}
-                        schema={workspaceState?.schema}
-                        withoutBottomBar={withoutBottomBar}
-                      />
-                    </>
+                    <FBWorkspaceMemo
+                      {...{ schema, includeTransport, workspaceState, _tabsState }}
+                      isStarter={isStarterRequired?.()}
+                      mode={workspaceState?.mode}
+                      schema={workspaceState?.schema}
+                      withoutBottomBar={withoutBottomBar}
+                    />
                   )}
                 </>
               )}

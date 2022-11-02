@@ -1,15 +1,10 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, find, findIndex, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
 import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
 import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
-import { SM } from "../../../App";
-import { documentTypeSelectors } from "../../../state/ducks/documentRevisions/documentType";
-import { ApplicationState } from "../../../state/reducers";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -80,9 +75,7 @@ export const withFBInput = <T extends FBInputProps>(
     includeNotes,
     ...props
   }: T) => {
-
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
-    const { _documentRevisionFormState } = SM.useStores();
     const { isOutput } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
@@ -101,10 +94,6 @@ export const withFBInput = <T extends FBInputProps>(
       !workspaceState?.isLHRProductionBuild;
       inputState?.setIncludeNotes(includeNotes || false);
     }, []);
-
-    useEffect(() => {
-      formState?.validate();
-    }, [formState]);
 
     useEffect(() => {
       const disposeAutorun = autorun(() => {
@@ -255,7 +244,7 @@ export const withFBInput = <T extends FBInputProps>(
       formState?.inputState.set(name, inputState!);
 
       // Validation settings
-      let attr = (label as string) || placeholder || validationAttribute || name;
+      let attr = validationAttribute || (label as string) || placeholder || name;
       isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
       formState?.setValidationAttributeName(name, attr);
       if (!rules) { return; }
@@ -291,18 +280,18 @@ export const withFBInput = <T extends FBInputProps>(
         }
       );
     }, []);
-    const group = _documentRevisionFormState?.documentType?.group || "OTHER";
-    const tabConfig = useSelector((state: ApplicationState) =>
-      documentTypeSelectors.getTabConfiguration(state, group));
+
     useEffect(() => {
       if (!bookmarked) { return; }
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
-      const schemaItm = find(
+      const schemaItem = find(
         workspaceState?.schema,
         (schemaItem) => !!(schemaItem.name && name?.includes(schemaItem.name))
       );
-      const tabIndex = findIndex(tabConfig, (tab) => tab.tabId === schemaItm?.tabId);
-      bookmarkState?.addBookmark({ name, label, tabIndex });
+
+      if (schemaItem) {
+        bookmarkState?.addBookmark({ name, label, tabId: schemaItem.tabId });
+      }
     }, [bookmarked]);
 
     useEffect(() => {
@@ -321,6 +310,10 @@ export const withFBInput = <T extends FBInputProps>(
         );
       });
     }, []);
+
+    useEffect(() => {
+      formState?.validate();
+    }, [formState]);
 
     return Component({
       ...(props as T),

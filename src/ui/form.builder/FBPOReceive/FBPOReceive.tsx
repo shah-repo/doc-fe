@@ -19,22 +19,24 @@ const FBPOReceive: React.FunctionComponent<FBPOReceiveProps> = ({
 }) => (
   <FBProvider {...{ poReceiveState, dialogState }} >
     <FBDialog />
-    <FBInput {...{ name }} {...props} type="poreceive" labelProps={FBFontStyle.labelProps}>
-      <FBAutocompleteAsync
-        {...{ onChange, defaultValue, gutter, disabled }}
-        name={`porec-${name}`}
-        optionId={FBAutocompleteAsyncOption.POList}
-        omitFormValue
-        shouldReloadOnInit
-        withState
-      />
-      {loading && (
-        <Box display="flex" justifyContent="center">
-          <CircularProgress />
-        </Box>
-      )}
-      {!loading && schema && <FBForm {...{ schema, initialValues }} />}
-    </FBInput>
+    <Box mb={3.5}>
+      <FBInput {...{ name, gutter }} {...props} type="poreceive" labelProps={FBFontStyle.labelProps}>
+        <FBAutocompleteAsync
+          {...{ onChange, defaultValue, gutter, disabled }}
+          name={`porec-${name}`}
+          optionId={FBAutocompleteAsyncOption.POList}
+          omitFormValue
+          shouldReloadOnInit
+          withState
+        />
+        {loading && (
+          <Box display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        )}
+      </FBInput>
+    </Box>
+    {!loading && schema && <FBForm {...{ schema, initialValues }} />}
   </FBProvider>
 );
 

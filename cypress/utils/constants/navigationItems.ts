@@ -17,6 +17,7 @@ export enum NavigationItems{
   PARTS = "parts",
   INSPECTION = "inspection",
   DOCUMENT_TYPE_MANAGEMENT = "documentTypeManagement",
+  PAGE_DETAILS_MANAGEMENT = "pageDetailsManagement",
   SUPPLIER_MANAGEMENT = "supplierManagement",
   LHR = "lhr",
   TRAINING= "training",
@@ -24,4 +25,5 @@ export enum NavigationItems{
   TRAINING_CURRICULUMS= "trainingCurriculums",
   EB = "engineeringBuilds",
   ASYNC_TASKS = "asyncTasks",
+  PAGE_DETAILS_MANAGEMENT = "pageDetailsManagement",
 }

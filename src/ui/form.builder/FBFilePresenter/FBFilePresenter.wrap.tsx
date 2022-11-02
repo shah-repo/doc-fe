@@ -31,7 +31,6 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
   }: T) => {
 
     const intl = useIntl();
-    const { formState } = FB.useStores();
     filePresenterState = FB.useRef<FBFilePresenterState>(FBFilePresenterState, file);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
 
@@ -95,7 +94,6 @@ export const withFBFilePresenter = <T extends FBFilePresenterProps>(
 
     handleRemove = () => {
       fileUploadState?.removeFile(file);
-      formState?.setFieldValue(name, fileUploadState?.files);
     };
 
     handleDownload = (type: FBFilePresenterDownloadType = "download") => {

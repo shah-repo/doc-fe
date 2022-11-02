@@ -33,6 +33,7 @@ let createdPartDocument;
 const checkErrorMessage = () => {
   it("Verify Error Message 'The Build Type is a required field'", () => {
     cy.get("p.Mui-error span").should("contain.text", "The Build Type is a required field");
+    cy.get("p.Mui-error span").scrollIntoView();
     cy.get("p.Mui-error span").should("be.visible");
     cy.get("p.Mui-error").should("have.class", "Mui-error");
     cy.get("p.Mui-error").invoke("css", "color").should("equal", "rgb(244, 67, 54)");
@@ -789,7 +790,9 @@ context("Create new LHR and verify start step with and without selecting build t
       });
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.listLoadingElementShouldNotExist();
-        cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
+        });
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -806,7 +809,6 @@ context("Create new LHR and verify start step with and without selecting build t
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
-    checkErrorMessage();
   });
 
   context("Create new and verify User can start step or not using build type selection", () => {
@@ -833,7 +835,9 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select build type Prod", () => {
-      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
+      });
     });
 
     it("Save the document", () => {
@@ -854,7 +858,8 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Click on start step", () => {
-      cy.get("[data-cy='form.builder.start.step']").arrowClick({ force: true }).wait(2000);
+      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      cy.mpiStartStep({ stepNumber: 1 });
     });
 
     it("Select Overview Tab", () => {
@@ -862,7 +867,7 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select Approval", () => {
-      cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
+      cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Navigate to procedure tab", () => {
@@ -871,9 +876,18 @@ context("Create new LHR and verify start step with and without selecting build t
 
     it("Fill the start accepted and rejected quantity", () => {
       cy.get("[name='lhrs-start-quantity']").scrollIntoView();
-      cy.get("[name='lhrs-start-quantity']").arrowType("12");
-      cy.get("[name='lhrs-accepted-quantity']").arrowType("11");
-      cy.get("[name='lhrs-rejected-quantity']").arrowType("1").wait(2000);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name='lhrs-start-quantity']").arrowType("12");
+        cy.unClick();
+      });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name='lhrs-accepted-quantity']").arrowType("11");
+        cy.unClick();
+      });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name='lhrs-rejected-quantity']").arrowType("1").wait(2000);
+        cy.unClick();
+      });
     });
 
     it("Save the document", () => {
@@ -881,7 +895,7 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Complete the step", () => {
-      cy.pmSubmitForApproval();
+      cy.get("[data-cy='ApproveAndRelease-button']").arrowClick({ force: true });
     });
 
     it("Approve  Inline Approval", () => {
@@ -906,14 +920,11 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-      ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
-      });
+      cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`).wait(2000);
     });
 
     it("Approve and released", () => {
-      cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
+      cy.get("#ApproveAndRelease-button").arrowClick({ force: true });
     });
 
     it("Approve  Inline Approval", () => {
