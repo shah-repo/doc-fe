@@ -13,7 +13,9 @@ import {
 } from "../../../state/ducks/dashboard.new/my.feeds/types";
 import { AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
+import LoadMoreButton from "../../components/common/load.more.button/LoadMoreButton";
 import { DialogHandler } from "../../hooks/useDialog";
+import useStyles from "../Dashboard.styles";
 import ApprovalApproved from "../line.items/approvals/approval.approved/approvalApproved";
 import ApprovalClosed from "../line.items/approvals/approval.closed/approvalClosed";
 import NonPOApproverActions from "../line.items/approvals/approver.actions/approverActions";
@@ -30,8 +32,7 @@ import PurchaseOrderPendingReview from "../line.items/purchase.order/pending.rev
 import POTaskApproval from "../line.items/purchase.order/task.approval/POTaskApproval";
 import NONPOTaskApproval from "../line.items/purchase.order/task.approval/taskApproval";
 import TrainingItem from "../line.items/training/default/DefaultTraining";
-import { LoadMoreButton } from "../LoadMoreButton";
-import NoPendingActions from "../no.pending.actions/NoPendingActions";
+import NoPendingActions from "../NoPendingActions";
 
 interface Props {
   loadMyFeeds: any;
@@ -61,6 +62,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
   onLoadMoreData,
   dialogPDF,
 }) => {
+  const classes = useStyles();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
 
   const PendingActions = () => (
@@ -614,11 +616,15 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                 </>
               );
           }
-        })}
-
-      <LoadMoreButton onLoadMore={onLoadMoreData} disable={ overallLimit >= feedItems.total } id="myFeedBoxLoadMore"/>
+        })
+      }
+      <LoadMoreButton
+        onLoadMore={onLoadMoreData}
+        disable={overallLimit >= feedItems.total}
+        className={classes.loadMore}
+        id="myFeedBoxLoadMore"
+      />
     </List>
-
   );
 
   return (

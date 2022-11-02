@@ -7,7 +7,6 @@ import Text from "../../Text";
 
 const useStyles = makeStyles({
   root: {
-    "margin": 0,
     "fontSize": 10,
     "color": Colors.navy,
     "fontWeight": 600,
@@ -42,7 +41,7 @@ const LoadMoreButton: React.FC<Props> = ({
       disableRipple
       variant="text"
       endIcon={<LoadMoreIcon />}
-      onClick={() => onLoadMore()}
+      onClick={onLoadMore}
       className={cx(classes.root, className)}
       disabled={disable}
       id={id}

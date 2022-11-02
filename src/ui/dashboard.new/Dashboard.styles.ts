@@ -1,5 +1,9 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core";
 import Colors from "../layout/theme/utils/colors";
+
+export const loadMoreStyles = (theme: Theme) => ({
+  margin: theme.spacing(5, 1, .5),
+});
 
 export default makeStyles((theme) => ({
   box: {
@@ -28,4 +32,5 @@ export default makeStyles((theme) => ({
     height: "100%",
     paddingTop: 56,
   },
+  loadMore: loadMoreStyles(theme),
 }));

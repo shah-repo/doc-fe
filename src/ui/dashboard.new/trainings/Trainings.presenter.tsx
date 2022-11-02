@@ -7,10 +7,11 @@ import {
 } from "../../../common/utils/date";
 import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
+import LoadMoreButton from "../../components/common/load.more.button/LoadMoreButton";
 import Text from "../../components/Text";
+import useStyles from "../Dashboard.styles";
 import NewTraining from "../line.items/training/new.training/newTraining";
-import { LoadMoreButton } from "../LoadMoreButton";
-import NoPendingActions from "../no.pending.actions/NoPendingActions";
+import NoPendingActions from "../NoPendingActions";
 
 interface Props {
   pinLineItem: (id: string) => void;
@@ -25,6 +26,7 @@ const TrainingsLineItemPresenter: React.FC<Props> = ({
   onLoadMoreData,
   overallLimit,
 }) => {
+  const classes = useStyles();
   const [hoverItemId, setHoverItemId] = React.useState("");
   const onMouseHoverItem = (id) => {
     setHoverItemId(id);
@@ -73,6 +75,7 @@ const TrainingsLineItemPresenter: React.FC<Props> = ({
         onLoadMore={onLoadMoreData}
         disable={overallLimit >= trainingItems.total}
         id="trainingBoxLoadMore"
+        className={classes.loadMore}
       />
     </List>
   );
