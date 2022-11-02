@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
 import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
-import { FBButtonStyles } from "../styles/FBButton.styles";
+import { FBPurchaseOrderStyles } from "./FBPurchaseOrder.styles";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
@@ -18,7 +18,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   name,
   isPO,
 }) => {
-  const classes = FBButtonStyles();
+  const classes = FBPurchaseOrderStyles();
   return (
     <FBProvider {...{ purchaseOrderState, dialogState }}>
       <FBDialog />
