@@ -83,12 +83,12 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         boxProps={{ className: "hide-scroll" }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
-        rightSidebarBoxProps={{ zIndex: 2 }}
+        rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
         {...changeRequest && changeRequest.crId && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
-                setOpen={changeSidebarOpenStatus} fromEdit={true}/>}
+                setOpen={changeSidebarOpenStatus} fromEdit={true} />}
             </Observer>
           ),
         }}

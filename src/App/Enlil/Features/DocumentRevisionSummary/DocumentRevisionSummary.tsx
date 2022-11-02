@@ -94,7 +94,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
       templateBoxProps={{ stretchY: "100%" }}
       headerBoxProps={{ maxHeight: "30%", minHeight: 84 }}
       contentBoxProps={{
-        minHeight: "calc(70%)", height: "100%",
+        height: "100%",
         bgcolor: Colors.alabaster,
       }}
       values={documentRevision}
@@ -109,7 +109,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         boxProps={{ className: "hide-scroll" }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
-        rightSidebarBoxProps={{ zIndex: 2 }}
+        rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
         {..._documentRevisionFormState?.documentRevision && {
           rightSidebar: (
             <Observer>

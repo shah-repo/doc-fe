@@ -88,7 +88,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         boxProps={{ className: "hide-scroll" }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
-        rightSidebarBoxProps={{ zIndex: 2 }}
+        rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
         {...changeRequest && changeRequest.crId && {
           rightSidebar: (
             <Observer>
