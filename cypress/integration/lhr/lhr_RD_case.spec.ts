@@ -872,10 +872,6 @@ context("LHR: RD case specs", () => {
       cy.drSelectProcedureTab();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Enter 'Start quantity' for LHRs #1", () => {
       cy.get("[name=\"lhrs-start-quantity\"]").arrowType("8");
       cy.unClick();
@@ -923,6 +919,7 @@ context("LHR: RD case specs", () => {
       ], () => {
         cy.visit(lhrDocUrl1);
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approval", () => {
