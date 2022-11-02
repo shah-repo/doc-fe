@@ -198,7 +198,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release document", () => {
@@ -666,7 +666,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release document", () => {
@@ -823,7 +823,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Add an Approval", () => {
@@ -871,7 +873,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click 'Click here' button to upgrade form to latest revision", () => {
