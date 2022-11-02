@@ -165,7 +165,7 @@ Cypress.Commands.add("fbClickAddNewHiddenBtn", () => {
 });
 
 Cypress.Commands.add("fbAddApproverToInlineDialog", (params: { approverName: string }) => {
-  cy.get("[data-cy=\"editorConfig.approvers\"]").arrowClick();
+  cy.get("[data-cy=\"editorConfig.approvers\"]").scrollIntoView().arrowClick();
   cy.get("[role=option]").contains(params.approverName).arrowClick();
   cy.unClick();
 });
@@ -324,7 +324,7 @@ Cypress.Commands.add("fbSelectRadioButtonValue", (params: { value: string }) => 
 });
 
 Cypress.Commands.add("fbSelectFieldValue", (params: { value: string }) => {
-  cy.get("[id*=\"mui-component-select-select-field-for-inline\"]").arrowClick().wait(400);
+  cy.get("[id*=\"mui-component-select-select-field-for-inline\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.value).arrowClick();
 });
 
@@ -390,7 +390,7 @@ Cypress.Commands.add("fbEditHiddenBtn", () =>
   cy.get("[data-cy=\"edit-schema-item\"]").first().arrowClick({ force: true }));
 
 Cypress.Commands.add("fbEnterNameValue", (params: { name: string; value: string }) => {
-  cy.get(`input[name^="${params.name}"]`).clear().arrowType(params.value).arrowClick();
+  cy.get(`input[name^="${params.name}"]`).clear().arrowType(params.value).wait(1000).arrowClick();
 });
 
 Cypress.Commands.add("verifyFieldConfigExist", () => {
