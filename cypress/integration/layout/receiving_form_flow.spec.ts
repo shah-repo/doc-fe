@@ -817,7 +817,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Add component", () => {
-      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for LFPO" });
@@ -901,10 +901,10 @@ context("Receiving landing page test", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(3000);
     });
 
     it("Verify that Approvals field is automatically added", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='form.builder.approvals']").should("exist");
     });
 
@@ -1836,7 +1836,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Add approver", () => {
-      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy^=\"fb-po-approvals\"]").arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       cy.progressBarShouldNotExist();
