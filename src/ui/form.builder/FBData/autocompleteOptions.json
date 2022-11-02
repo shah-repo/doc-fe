@@ -225,7 +225,7 @@
     "id": "25",
     "label": "Available Part Documents",
     "valueKey": "id",
-    "labelKey": "documentRevisions.name",
+    "labelKey": "documentRevisions[0].name",
     "labelPrefixRoot": "docId",
     "root": "",
     "hidden": false

@@ -186,7 +186,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Verify that Approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and release the form", () => {

@@ -36,9 +36,9 @@ context("Records test with Inline approval", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[3], USERS[4]],
             documentTypes: [
               {
                 ...RecordDocumentType,
@@ -120,8 +120,8 @@ context("Records test with Inline approval", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          firstEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          firstEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -129,7 +129,7 @@ context("Records test with Inline approval", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[12].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -138,7 +138,7 @@ context("Records test with Inline approval", () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -148,7 +148,7 @@ context("Records test with Inline approval", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: firstEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: firstEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -164,10 +164,6 @@ context("Records test with Inline approval", () => {
 
       it("Clicks on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
-      });
-
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
       });
     });
 
@@ -260,7 +256,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Select approver", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-1-]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-1-]").autocompleteSelect(`${USERS[12].name}`);
     });
 
     it("Save Record'", () => {
@@ -269,6 +265,9 @@ context("Records test with Inline approval", () => {
 
     it("Send request for approval", () => {
       cy.get("[data-cy=\"form.builder.request.approval\"]").arrowClick();
+      cy.wait(5000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Record is in WIP status", () => {
@@ -277,6 +276,7 @@ context("Records test with Inline approval", () => {
 
     it("The owner should have a notification that Record rev 1 is for approval of User 2", () => {
       cy.navigToDashboard();
+      cy.listLoadingElementShouldNotExist();
       cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).eq(0).parent().parent().parent().parent()
         .should("contain.text", "RD-00003")
         .and("contain.text", "Record title")
@@ -284,7 +284,7 @@ context("Records test with Inline approval", () => {
         .and("contain.text", "pending approvals from");
       cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .and("contain.text", `${USERS[2].name}`);
+        .and("contain.text", `${USERS[12].name}`);
     });
 
     it("Log out", () => {
@@ -292,9 +292,9 @@ context("Records test with Inline approval", () => {
     });
   });
 
-  context(`Notification for approval for ${USERS[2].name}`, () => {
+  context(`Notification for approval for ${USERS[12].name}`, () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[12], employeeId: secondEmployee.id });
     });
 
     it("Click approve for Record", () => {
@@ -307,7 +307,11 @@ context("Records test with Inline approval", () => {
     });
 
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: firstEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: firstEmployee.id });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -321,7 +325,7 @@ context("Records test with Inline approval", () => {
       cy.contains("RD-00003").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.cmpTurnOffAutosave();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click on revisions tab on side panel", () => {
@@ -345,7 +349,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Select approver", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-2-]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-2-]").autocompleteSelect(`${USERS[11].name}`);
     });
 
     it("Save Record'", () => {
@@ -354,6 +358,9 @@ context("Records test with Inline approval", () => {
 
     it("Send request for approval", () => {
       cy.get("[data-cy=\"form.builder.request.approval\"]").arrowClick();
+      cy.wait(5000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Record is in WIP status", () => {
@@ -366,7 +373,7 @@ context("Records test with Inline approval", () => {
 
     it("check notification", () => {
       cy.contains("needs your approval for").eq(0).parent().parent().parent().parent()
-        .should("contain.text", USERS[1].name)
+        .should("contain.text", USERS[11].name)
         .and("contain.text", "RD-00003")
         .and("contain.text", "Record title");
 
@@ -395,21 +402,22 @@ context("Records test with Inline approval", () => {
     });
 
     it("Click on revisions tab on side panel", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drClickRevisionsSidePanel();
-      });
+      cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("rev 3 will be created", () => {
       cy.get("[data-cy=\"revision\"]").eq(0).should("have.text", "Revision 3  - WIP");
       cy.get("[data-cy=\"revision\"]").eq(1).should("have.text", "Revision 2  - Last Signed");
       cy.get("[data-cy=\"revision\"]").eq(2).should("have.text", "Revision 1  - Archive");
+      cy.wait(3000);
     });
   });
 
   context("Click on 'Finalize and Release', rev 3 will update to rev A and will be released", () => {
     it("Click on 'Finalize and Release'", () => {
-      cy.get("[data-cy=\"revision\"]").eq(0).arrowClick();
+      cy.get("[data-cy=\"revision\"]").eq(0).arrowClick().wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
 
@@ -417,13 +425,14 @@ context("Records test with Inline approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.ReleaseDocRevWithoutAr], () => {
         cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
       });
-    });
-
-    it("Click on revisions tab on side panel", () => {
-      cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("There should be a notification that rev A is released", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
       cy.get("[data-cy=\"revision\"]").eq(0).should("have.text", "Revision A  - Released");
     });
 
@@ -454,8 +463,8 @@ context("Records test with Inline approval", () => {
 
     it("Add approvals", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[11].name);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[12].name);
       });
     });
 
@@ -490,8 +499,8 @@ context("Records test with Inline approval", () => {
         .and("contain.text", "pending approvals from");
       cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`)
-        .and("contain.text", `${USERS[2].name}`);
+        .should("contain.text", `${USERS[11].name}`)
+        .and("contain.text", `${USERS[12].name}`);
     });
 
     it("Log out", () => {
@@ -501,7 +510,7 @@ context("Records test with Inline approval", () => {
 
   context("User 2 approve the Record", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[12], employeeId: secondEmployee.id });
     });
 
     it("Click approve for the Record", () => {
@@ -525,7 +534,7 @@ context("Records test with Inline approval", () => {
     });
 
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: firstEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: firstEmployee.id });
     });
 
     it("Owner should get a notification that Record is in review and pending approval from 1 user", () => {
@@ -536,7 +545,7 @@ context("Records test with Inline approval", () => {
         .and("contain.text", "pending approvals from");
       cy.contains(`${STATUS_TYPES_LABEL.IN_REVIEW}`).parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`);
+        .should("contain.text", `${USERS[11].name}`);
     });
 
     it("Click approve for the Record", () => {
