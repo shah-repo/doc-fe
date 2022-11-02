@@ -492,7 +492,7 @@ context("Mpi/Qpi test", () => {
             expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
 
-            expect(el).match(/Checkbox\nfb-TEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
 
             expect(el).match(/Draft/);
 
@@ -706,7 +706,7 @@ context("Mpi/Qpi test", () => {
         expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
         expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
-        expect(el).match(/Checkbox\nfb-TEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+        expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
 
         expect(el).match(/Released/);
 
@@ -1027,7 +1027,7 @@ context("Mpi/Qpi test", () => {
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
 
             expect(el).match(/Draft/);
 
@@ -1235,7 +1235,7 @@ context("Mpi/Qpi test", () => {
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
 
             expect(el).match(/Released/);
 

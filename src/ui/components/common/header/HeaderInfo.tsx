@@ -13,8 +13,8 @@ import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisi
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
-import { DocTypeGroups, DocCategories } from "../../../dashboard.new/line.items/common/types";
-import { checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
+import { DocCategories, DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
+import { checkIsDocumentEquipment, checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
@@ -65,12 +65,15 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
       documentType?.pageDetails?.category || ""
     )
   );
+  const isEquipmentDocument = checkIsDocumentEquipment(documentType?.groupOptions);
   const getRoute = () => {
     let title;
     if (SM.isNewCRLayout) {
       title = intl.formatMessage({ id: "page.table.title.changeRequest" });
     } else if (isTypeMpiOutput) {
       title = DocTypeGroups.LHR;
+    } else if (isEquipmentDocument) {
+      title = intl.formatMessage({ id: "form.builder.equipment" });
     } else if (SM.isNewLayout) {
       title = intl.formatMessage({ id: "navigation.document.list" });
     }
@@ -82,6 +85,10 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   if (navigationDetails.type === "CATEGORY") {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
     iconLink = navigationDetails?.icon || "";
+  }
+  if (isEquipmentDocument) {
+    url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${documentType?.pageDetails?.category}`;
+    iconLink = "/navigation_icons/microscope.svg";
   }
   if (SM.isNewCRLayout) {
     url = `${CHANGE_REQUEST_LIST_URL}`;
