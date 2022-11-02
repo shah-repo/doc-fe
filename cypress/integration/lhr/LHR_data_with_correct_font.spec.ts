@@ -1092,8 +1092,8 @@ context("LHR steps verification", () => {
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Lot History Record");
+        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true });
+        cy.get("div[id^=react-select]").contains(new RegExp("^Lot History Record$", "g")).arrowClick();
       });
     });
 
@@ -1183,7 +1183,7 @@ context("LHR steps verification", () => {
     });
 
     it(`Verify 'Approvals' with font-size ${FONT_SIZE_16} font-family ${soraSansserif}  line-height ${LINE_HT_18} font-weight ${FONT_WT_700}`, () => {
-      cy.get(`[data-cy="form.builder.approvals"]`).eq(1)
+      cy.get(`[data-cy="form.builder.approvals"]`)
         .checkStylePropExists({
           content: "Approvals",
           props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_24, "font-weight": FONT_WT_600 },
@@ -1306,7 +1306,7 @@ context("LHR steps verification", () => {
   context("Verify The side bar options History's fonts", () => {
     it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
       cy.get(`[data-cy="timeline-icon"]`).arrowClick();
-      cy.get(`[data-cy="change-key-1"]`)
+      cy.get(`[data-cy="change-key-0"]`)
         .checkStylePropExists({
           content: USERS[1].name,
           props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
@@ -1314,7 +1314,7 @@ context("LHR steps verification", () => {
     });
 
     it(`Verify 'New Doc ID' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_400}`, () => {
-      cy.get(`[data-cy="change-key-1-0"]`)
+      cy.get(`[data-cy="change-key-0-0"]`)
         .checkStylePropExists({
           content: "New Doc ID",
           props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_400 },
@@ -1322,7 +1322,7 @@ context("LHR steps verification", () => {
     });
 
     it(`Verify 'LHR-00001' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_400}`, () => {
-      cy.get(`[data-cy="change-value-1-0"]`)
+      cy.get(`[data-cy="change-value-0-0"]`)
         .checkStylePropExists({
           content: "LHR-00001",
           props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_700 },
@@ -1330,7 +1330,7 @@ context("LHR steps verification", () => {
     });
 
     it(`Verify 'LHRT-00003 - revision 1 - API LHRt document' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_700}`, () => {
-      cy.get(`[data-cy="change-value-1-1"]`)
+      cy.get(`[data-cy="change-value-0-1"]`)
         .checkStylePropExists({
           content: "LHRT-00003 - revision 1 - API LHRt document",
           props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
@@ -1338,7 +1338,7 @@ context("LHR steps verification", () => {
     });
 
     it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
-      cy.get(`[data-cy="change-value-1-2"]`)
+      cy.get(`[data-cy="change-value-0-2"]`)
         .checkStylePropExists({
           content: USERS[1].name,
           props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
@@ -1346,7 +1346,7 @@ context("LHR steps verification", () => {
     });
 
     it(`Verify 'Everyone' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
-      cy.get(`[data-cy="change-value-1-3"]`)
+      cy.get(`[data-cy="change-value-0-3"]`)
         .checkStylePropExists({
           content: "Everyone",
           props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
@@ -1354,7 +1354,7 @@ context("LHR steps verification", () => {
     });
 
     it(`Verify 'Set to Draft by Giovanni Reynolds' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
-      cy.get(`[data-cy="change-value-1-4"]`)
+      cy.get(`[data-cy="change-value-0-4"]`)
         .checkStylePropExists({
           content: "Set to Draft by Giovanni Reynolds",
           props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
@@ -1436,7 +1436,7 @@ context("LHR steps verification", () => {
     });
 
     it("Submit for approval", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
     });
 
     it("Verify error message", () => {
@@ -1451,6 +1451,7 @@ context("LHR steps verification", () => {
           content: "Approvals not present",
           props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
         });
+      cy.closeAllAlertMessages();
     });
   });
 });

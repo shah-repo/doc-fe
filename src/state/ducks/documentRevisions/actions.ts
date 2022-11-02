@@ -334,15 +334,18 @@ const getDocRevStatuses = (
   states: DocumentRevisionStatus[] = [],
   notGroupOptions?: DocumentGroupOptionsType[],
   category?: string,
+  notIncategory?: string,
 ): ApiAction<Partial<DocumentRevisionStatus[]>> => {
   const categoryUrl = category === undefined ?
     states.reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?`) :
     states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?category=${category}&`);
-  const url = notGroupOptions && notGroupOptions?.length !== 0 ?
+  const notInGroupcheckURL = notGroupOptions && notGroupOptions?.length !== 0 ?
     notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
       `${categoryUrl}`) : categoryUrl;
+  const url = notIncategory === undefined ?
+    notInGroupcheckURL : `${notInGroupcheckURL}` + `notIncategory=${notIncategory}&`;
   return apiActionWithCallbacks({
     url,
     method: "get",

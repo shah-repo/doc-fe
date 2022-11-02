@@ -56,9 +56,9 @@ context("Repeat One Time Training with Training Curriculum", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[3], USERS[4]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -67,8 +67,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -76,7 +76,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
     it("[API]Login first tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -294,7 +294,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -441,8 +441,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
+          sentToUser: USERS[11].email,
+          contains: [`Hello <b>${USERS[11].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -575,7 +575,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
         expect(el).match(/APPROVALS\nApprovers/);
 
-        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
+        tmpRegex = new RegExp( `Checkbox\\nTEXT FIELD\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
@@ -671,8 +671,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
     });
 
     it("Click save document", () => {
@@ -715,8 +715,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
+          sentToUser: USERS[11].email,
+          contains: [`Hello <b>${USERS[11].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -818,11 +818,10 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
         expect(el).match(/Groups to Train\nNone/);
 
-        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[11].name}\n${USERS[12].name}`);
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
-        expect(el).match(tmpRegex);
+        expect(el).match(/APPROVALS\nNone/);
 
         expect(el).match(/Draft/);
 
@@ -845,9 +844,10 @@ context("Repeat One Time Training with Training Curriculum", () => {
         RegExp( `One-Time Training test\n${releasedFormId}, Revision 1\nONE-TIME TRAINING PDF EXPORT`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).not.match(/TEXT FIELD/);
+        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
+        expect(el).match(tmpRegex);
 
-        expect(el).match(/APPROVALS\nNone/);
+        expect(el).not.match(/TEXT FIELD/);
 
         expect(el).match(/Draft/);
 
@@ -871,7 +871,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Save training", () => {
@@ -928,8 +928,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
+          sentToUser: USERS[11].email,
+          contains: [`Hello <b>${USERS[11].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -1032,10 +1032,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
 
         expect(el).match(/Groups to Train\nNone/);
 
-        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[1].name}\n${USERS[2].name}`);
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
+        tmpRegex = new RegExp(`Users to Train \\(if applicable\\)\n${USERS[11].name}\n${USERS[12].name}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
@@ -1062,7 +1059,10 @@ context("Repeat One Time Training with Training Curriculum", () => {
         expect(el).not.match(/TEXT FIELD/);
 
         tmpRegex = new
-        RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
+        RegExp(`APPROVALS\\n${USERS[11].name} \\- (.*) \\| APPROVED \\| ${docRelDate}`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
@@ -1110,17 +1110,17 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with completed date inside 'Completed on' column should be present`, () => {
+    it(`${USERS[11].name} with completed date inside 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", completedDate);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name).and("contain", completedDate);
     });
 
-    it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[12].name} with Pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[2].name });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
+      cy.trLandingPageUsername({ username: USERS[12].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[12].name).and("contain", "Pending");
     });
   });
 });

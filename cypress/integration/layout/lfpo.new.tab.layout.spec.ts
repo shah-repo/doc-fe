@@ -747,6 +747,10 @@ context("LFPO new layout verification", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Migration FORM document creation flow", () => {
@@ -817,6 +821,10 @@ context("LFPO new layout verification", () => {
         cy.fbAddNewFieldButton();
       });
 
+      it("Save the form data", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Approve and released", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
@@ -868,10 +876,8 @@ context("LFPO new layout verification", () => {
         cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+      it("Save the form data", () => {
+        cy.drClickCreateDocumentWithApiCall();
       });
     });
   });
@@ -893,6 +899,11 @@ context("LFPO new layout verification", () => {
       cy.fbFieldRequired();
       cy.fbAddNewFieldButton();
     });
+
+    it("Save the form data", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.DRAFT,
@@ -1014,12 +1025,8 @@ context("LFPO new layout verification", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Save the form", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-      cy.listLoadingElementShouldNotExist();
+    it("Save the form data", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Click on create lot", () => {
@@ -1039,15 +1046,19 @@ context("LFPO new layout verification", () => {
       cy.get(`.MuiDialogContent-root input[name="expirationDate"]`)
         .parent().find("button").arrowClick({ force: true });
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document type", () => {
-      cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
+        cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
+      });
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select form", () => {
       cy.get("[data-cy='lotForm']").wait(2000).autocompleteSelect("LFPO Document Title");
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create lot", () => {
@@ -1063,10 +1074,10 @@ context("LFPO new layout verification", () => {
   context("Verify created lot", () => {
     it("Navigate to Lot landing page", () => {
       cy.navigToLots();
+      cy.dlClearFilters();
     });
 
     it("Click to open that LOT", () => {
-      cy.dlClearFilters();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick();
       cy.get("li").contains(STATUS_TYPES_LABEL.WIP).arrowClick();
@@ -1144,7 +1155,16 @@ context("LFPO new layout verification", () => {
     });
 
     it("Verify References selection Add Remove", () => {
-      cy.verifyAddRemoveReference({ formId: "FM-00001" });
+      const docId = "FM-00001";
+      cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
+      });
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.drRemoveReferences({ reference: docId });
+      });
     });
 
     it("Verify Referenced By,and Release date Item exist or not", () => {
@@ -1298,7 +1318,9 @@ context("LFPO new layout verification", () => {
   });
 
   context("Fill in the fields and Release", () => {
+
     it("Checked chebox value", () => {
+      cy.cmpTurnOffAutosave();
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
@@ -1306,6 +1328,10 @@ context("LFPO new layout verification", () => {
       cy.get("[data-cy^='fb-approvals-fb-approvals-']").eq(0).autocompleteSelect(`${USERS[1].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save the form data", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and release Record", () => {
