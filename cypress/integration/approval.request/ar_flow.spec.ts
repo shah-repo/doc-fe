@@ -710,7 +710,7 @@ context("Approval request form", () => {
 
         expect(el).match(/Justification of change\njustification for added document/);
 
-        tmpRegex = new RegExp(`APPROVERS\\n${USERS[1].name} \\n(.*)Checkbox\\n1 2 3`, "gi" );
+        tmpRegex = new RegExp(`APPROVERS\\n${USERS[1].name} \\n(.*)\\nCheckbox\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`${USERS[2].name}`, "gi" );
