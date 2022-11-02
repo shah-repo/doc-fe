@@ -1,4 +1,5 @@
 import { Button, makeStyles } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
 import { ReactComponent as LoadMoreIcon } from "../../../../assets/images/load_more_arrow.svg";
 import Colors from "../../../layout/theme/utils/colors";
@@ -21,6 +22,7 @@ const useStyles = makeStyles({
 
 interface Props {
   onLoadMore: () => void;
+  className?: string;
   disable?: boolean;
   label?: string;
   id?: string;
@@ -28,18 +30,20 @@ interface Props {
 
 const LoadMoreButton: React.FC<Props> = ({
   onLoadMore,
+  className,
   disable = false,
   label = "common.load.more",
   id = "boxLoadMore",
 }) => {
   const classes = useStyles();
+
   return (
     <Button
       disableRipple
       variant="text"
       endIcon={<LoadMoreIcon />}
       onClick={() => onLoadMore()}
-      className={classes.root}
+      className={cx(classes.root, className)}
       disabled={disable}
       id={id}
     >
