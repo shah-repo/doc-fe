@@ -751,9 +751,7 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Navigate to Details tab", () => {
@@ -1164,6 +1162,8 @@ context("Record inline Flow", () => {
         it("Filter record by name and status, and select it", () => {
           SystemRequirement("REQ-0120");
           cy.recFilterByTitle({ revision: "Record Document Revision" });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
           cy.wait(1000);
           cy.recFilterByStatus({ status: "Released" });
           cy.wrapWithWaitOnApiCalls([
@@ -1187,7 +1187,7 @@ context("Record inline Flow", () => {
             recDocId = $docIdElement.text();
           });
           dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-          cy.sendToEmailFromHeader();
+          cy.sendToEmail();
         });
 
         it("Verify popup message \"File will be sent to your email shortly.\"", () => {
