@@ -28,6 +28,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
   const intl = useIntl();
   const cellStyle = FBTableCellStyles();
   return (
+
     <Box width="100%" overflow="auto" className={"containing-box-scrollbar"}>
       <Table className={classes?.table}>
         <TableHead>
@@ -86,6 +87,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                       (!label && key === "supplierPartNumber")) {
                       label = "N/A";
                     }
+
                     if (key === "description" && item.type === "product") {
                       key = "partNumberTitle";
                       label = truncate(item[key], { length: 35, omission: " ..." });

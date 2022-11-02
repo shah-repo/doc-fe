@@ -2,7 +2,7 @@ import { TableBody } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
-import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
+import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBSection, FBTableCell } from "..";
 import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon_add_btn.svg";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
@@ -26,17 +26,9 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   isReceivable,
   gutter,
 }) => (
-  <Table className={classes?.root}>
-    {/* Commenting as per design */}
-    {/* <TableHead>
-       <TableRow>
-        <FBTableCell
-          colSpan={8}
-          label={mode === "form" ? "form.builder.details" : "form.builder.select.line.to.receive.against"}
-        />
-        <FBTableCell colSpan={3} label={mode === "form" ? "form.builder.field.ext.amount" : ""} align="right" />
-      </TableRow>
-    </TableHead>*/}
+  <><FBSection
+    name={`fb-approvals-section-${name}`}
+    label="form.purchare.order.table.headline" /><Table className={classes?.root}>
     <TableBody>
       <TableRow>
         <FBTableCell colSpan={9}>
@@ -51,7 +43,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
       </TableRow>
       {!disabled && (
         <TableRow>
-          <FBTableCell colSpan={10}>
+          <FBTableCell colSpan={1}>
             <FBButton
               label="form.builder.add.line.item"
               onClick={() => handleItem && handleItem()}
@@ -60,8 +52,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
               startIcon={<PlusIcon />}
               className={classes?.button}
               newVariant={true}
-              {...{ disabled }}
-            />
+              {...{ disabled }} />
           </FBTableCell>
         </TableRow>
       )}
@@ -78,7 +69,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         }} />
       )}
     </TableBody>
-  </Table>
+  </Table></>
 );
 
 export default withFBPurchaseOrderTable(FBPurchaseOrderTable);
