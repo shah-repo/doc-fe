@@ -420,7 +420,7 @@ context("Export Record doc", () => {
     });
 
     it("Click on Create New button", () => {
-      cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter title", () => {
@@ -503,7 +503,7 @@ context("Export Record doc", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.wait(2000);
         cy.unClick();
         cy.progressBarShouldNotExist();
@@ -576,6 +576,8 @@ context("Export Record doc", () => {
 
       it("Click Request Approval button", () => {
         cy.contains("Request approval").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve inline approval", () => {
@@ -636,7 +638,7 @@ context("Export Record doc", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
@@ -689,7 +691,7 @@ context("Export Record doc", () => {
       });
 
       it("Click on Create New button", () => {
-        cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
