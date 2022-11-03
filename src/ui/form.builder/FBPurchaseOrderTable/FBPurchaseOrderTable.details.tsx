@@ -28,12 +28,13 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
   const intl = useIntl();
   const cellStyle = FBTableCellStyles();
   return (
+
     <Box width="100%" overflow="auto" className={"containing-box-scrollbar"}>
       <Table className={classes?.table}>
         <TableHead>
           {isReceivable && <TableRow>
             <FBTableCell />
-            <FBTableCell>
+            <FBTableCell colSpan={9}>
               <Box display="flex">
                 <InfoIcon />
                 <Typography className={cellStyle.headerCellText}>
@@ -49,7 +50,6 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 <FBTableCell
                   label={head}
                   key={`fb-po-head-${head}-${index}`}
-                  align={(index > 2 && head !== "form.builder.field.lots") ? "right" : "left"}
                   className={`${cellStyle.cellFont} ${cellStyle.cellFontWeightLow}`}
                 />
               )}
@@ -65,7 +65,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 data-cy="poItems"
                 className={cellStyle.cell}
               >
-                <FBTableCell align="right">
+                <FBTableCell>
                   {mode === "form" && (
                     <FBTooltip title="form.builder.delete">
                       <DeleteIcon
@@ -86,6 +86,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                       (!label && key === "supplierPartNumber")) {
                       label = "N/A";
                     }
+
                     if (key === "description" && item.type === "product") {
                       key = "partNumberTitle";
                       label = truncate(item[key], { length: 35, omission: " ..." });
@@ -96,11 +97,10 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     }
                     return (
                       <React.Fragment  key={`fb-po-item-${key}-${index}`}>
-                        {index === 0 && <TableCell data-cy = "poItemIndex" >{item.index + 1}</TableCell>}
+                        {index === 0 && <TableCell data-cy = "poItemIndex">{item.index + 1}</TableCell>}
                         {index > 0 && (
                           <FBTableCell
                             data-cy = {dataCy}
-                            align={(index > 2 && key !== "lots") ? "right" : "left"}
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}
                             className={`${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
