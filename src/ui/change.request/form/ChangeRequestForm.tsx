@@ -70,10 +70,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
-      contentBoxProps={{
-        minHeight: "calc(70%)",
-        bgcolor: Colors.alabaster,
-      }}
+      contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={formValues.values}
       header= {
         <FormHeader {...{ changeRequest, asyncState }}/>
