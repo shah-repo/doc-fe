@@ -6,7 +6,7 @@ import { AttachmentDownloadResponse } from "../../../../state/ducks/attachments/
 import { DocumentRevisionStatus } from "../../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../../state/types";
 import Text from "../../../components/Text";
-import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionObsolete, isDocumentRevisionReleased } from "../../../documentRevision/helpers/documentRevisionStatus";
+import { isDocumentRevisionDeprecated, isDocumentRevisionInDraft, isDocumentRevisionInStatusFlag, isDocumentRevisionObsolete } from "../../../documentRevision/helpers/documentRevisionStatus";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
@@ -111,7 +111,7 @@ const AttachmentDownloadAllButton: React.FunctionComponent<Props> = ({
     if (isDocumentRevisionInDraft(docRevStatus)) {
       setIsDownloading(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
-    } else if (!containsRedline && isDocumentRevisionReleased(docRevStatus)) {
+    } else if (!containsRedline && isDocumentRevisionInStatusFlag(docRevStatus)) {
       setIsDownloading(true);
       async.start(downloadAllAttachments, documentRevisionId, async);
     } else {
