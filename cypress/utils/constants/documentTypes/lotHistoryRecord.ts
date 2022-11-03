@@ -128,11 +128,39 @@ export const LotHistoryRecordOperators: IdocumentTypeDto = {
   category: Categories.Record,
   isQms: true,
   fieldsConfig:
-      {
-        U: {
-          visible: true,
-          required: false,
-          label: "Operators",
-        },
+    {
+      U: {
+        visible: true,
+        required: false,
+        label: "Operators",
       },
+    },
+  schema: [
+    {
+      name: "lhr-build-type",
+      type: "radiogroup",
+      index: 0,
+      label: "Build Type",
+      rules: "required",
+      options: [
+        {
+          text: "R&D",
+          value: "R&D",
+        },
+        {
+          text: "Production",
+          value: "Production",
+        },
+      ],
+      applicableOn: [
+        "ON_STATE_TO_IN_REVIEW",
+      ],
+      deleteDisabled: true,
+      validationMode: "default",
+      validationAttribute: "Build Type",
+      deleteInFormDisabled: true,
+      applicableValidationSchema: true,
+      tabId: "overview",
+    },
+  ],
 };
