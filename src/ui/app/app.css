@@ -411,7 +411,3 @@ td#kendo-expandable-column[role="gridcell"] {
 .MuiFormGroup-row .MuiRadio-root {
   padding-left: 11px;
 }
-
-.MuiAutocomplete-listbox .MuiAutocomplete-option {
-  overflow-x: hidden !important;
-}
