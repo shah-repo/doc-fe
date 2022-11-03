@@ -284,7 +284,7 @@ context("Records flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.intPageVerifyApprovalsExist();
       });
     });
 
@@ -698,7 +698,7 @@ context("Records flow", () => {
 
         it("Verify approvals field is automatically added", () => {
           SystemRequirement("REQ-0980");
-          cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+          cy.intPageVerifyApprovalsExist();
         });
 
         it("Approve and Release document", () => {
@@ -808,7 +808,6 @@ context("Records flow", () => {
     });
 
     it("Reject document", () => {
-      cy.wait(2000);
       cy.get(`.MuiListItemText-dense`).first().trigger("mouseover").wait(2000);
       cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover").wait(2000);
       cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
@@ -866,7 +865,6 @@ context("Records flow", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
