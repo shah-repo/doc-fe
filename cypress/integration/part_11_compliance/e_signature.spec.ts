@@ -182,6 +182,7 @@ context("E-signature test", () => {
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
       cy.checkToastMessage({ exists: false });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Logout user", () => {
@@ -351,8 +352,12 @@ context("E-signature test", () => {
 
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
+      cy.wait(1000);
       cy.arAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
+      cy.wait(1000);
       cy.arAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
+      cy.unClick();
+      cy.wait(5000);
     });
 
     it("Send to review", () => {
@@ -402,20 +407,24 @@ context("E-signature test", () => {
     });
 
     it("Enters title 'EB document'", () => {
-      cy.drEnterDocumentTitle({ name: "EB document" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drEnterDocumentTitle({ name: "EB document" });
+      });
     });
 
     it("Enters description 'EB description'", () => {
-      cy.drEnterDocumentDescription({ description: "EB description" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drEnterDocumentDescription({ description: "EB description" });
+      });
     });
 
     it("Add first approver to EB document", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
-      cy.wait(500);
+      cy.wait(1000);
       cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
-      cy.wait(500);
+      cy.wait(1000);
       cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
-      cy.wait(500);
+      cy.wait(1000);
     });
 
     it("Submit for Approval", () => {
@@ -722,19 +731,23 @@ context("E-signature test", () => {
       it("Go back to new revision of EB, add approver", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("WIP").arrowClick();
         cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
+        cy.wait(1000);
         cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
+        cy.wait(1000);
         cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
+        cy.wait(1000);
+        cy.unClick();
       });
 
       it("Release EB and check if correct new name is shown", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.progressBarShouldNotExist();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.wait(7000);
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.wait(7000);
         cy.progressBarShouldNotExist();
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(newNameThirdApproverSecondTime);
       });

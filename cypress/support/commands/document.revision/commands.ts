@@ -30,6 +30,7 @@ declare global {
       drSelectCalPmHistoryTab(): Chainable<Subject>;
       drSelectPrimaryOwner(params: { owner: string; noWait?: bool }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
+      drEnterDocumentDescriptionWithPatchWrapCall(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drEnterHtmlText(params: { htmlText: string }): Chainable<Subject>;
@@ -135,6 +136,9 @@ declare global {
 
       verifyDesSort(params: { index: number; colLength: number }): Chainable<Subject>;
       verifyAscSort(params: { index: number; colLength: number }): Chainable<Subject>;
+      drClickMigrateForm(): Chainable<Subject>;
+      drClickConfirmChange(): Chainable<Subject>;
+      drSelectFormToBeMigrated(params: {formContains: string}): Chainable<Subject>;
     }
   }
 }
@@ -310,14 +314,14 @@ Cypress.Commands.add("drSelectPrimaryOwner", (params: { owner: string; noWait?: 
 });
 
 Cypress.Commands.add("drRemoveReferences", (params: {reference: string}) => {
-  cy.get("div[data-tag-index]").contains(params.reference)
+  cy.get(`div[data-cy="field-referenceTo"]`).contains(params.reference)
     .parent().parent().parent()
     .find("svg").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("drEnterDocumentTitle", (params: { name: string }) => {
   cy.get("[data-cy=\"field-name\"]").arrowClick().wait(500);
-  cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
+  cy.get("[data-cy=\"field-name\"]").arrowType(params.name).scrollIntoView();
   cy.unClick();
 });
 
@@ -338,6 +342,14 @@ Cypress.Commands.add("drEnterDocumentDescription", (params: { description: strin
   cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
   cy.get(`[data-cy="description"] [contenteditable]`).first().clear().arrowType(params.description);
   cy.unClick();
+});
+
+Cypress.Commands.add("drEnterDocumentDescriptionWithPatchWrapCall", (params: { description: string }) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+    cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+    cy.get(`[data-cy="description"] [contenteditable]`).first().clear().arrowType(params.description);
+    cy.unClick();
+  });
 });
 
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
@@ -369,7 +381,7 @@ Cypress.Commands.add("drEnterHtmlText", (params: { htmlText: string }) => {
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?: { approverName?: string; toastifyExists?: boolean }) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
-    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(1000);
   });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -380,10 +392,12 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?
   }
   cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.unClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCall(
     CyRoutes.ReleaseDocRev,
     () => {
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick().wait(1000);
     });
   if (params === undefined)
   {
@@ -428,10 +442,15 @@ Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
 });
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", () => {
-  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
+    cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(500);
+  });
   cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
-  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+  cy.unClick();
+  cy.get(`[data-cy="ApproveAndRelease-submit"]`).arrowClick().wait(500);
   cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
@@ -442,7 +461,7 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev?: boolean }) => {
   let routesToWait;
   if (params && params.requiredApproversDocRev) {
-    routesToWait = [CyRoutes.PostOrPatchDocRev];
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApproversDocRev];
   }
   else {
     routesToWait = [CyRoutes.PostOrPatchDocRev];
@@ -579,7 +598,7 @@ Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string
   cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick({ force: true });
-  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.get("li").contains(params.status).arrowClick({ force: true }).wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
 });
@@ -1016,4 +1035,17 @@ Cypress.Commands.add("drPatchDocType", (params: {
     body: params.payload,
   }).then((response) => response ? response.body : {})
     .then((response) => JSON.stringify(response));
+});
+
+Cypress.Commands.add("drClickMigrateForm", () => {
+  cy.get(`[data-cy="common.form.migration"]`).arrowClick();
+});
+
+Cypress.Commands.add("drClickConfirmChange", () => {
+  cy.get("[data-cy='common.confirm.change']").arrowClick();
+});
+
+Cypress.Commands.add("drSelectFormToBeMigrated", (params: {formContains: string}) => {
+  cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+  cy.get("[id^='react-select']").contains(params.formContains).arrowClick();
 });

@@ -68,7 +68,15 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
 
       const objectValue: Record<FBOptionValueType, () => any> = {
         object: () => formValue,
-        key: () => sliceValue(formValue) || formValue,
+        key: () => {
+          const slicedValue = sliceValue(formValue);
+
+          if (isEmpty(slicedValue)) {
+            return formValue;
+          }
+
+          return slicedValue;
+        },
         id: (value?: any) =>  {
           const slicedValue = multiple
             ? map(value || formValue, optionValueKey)
@@ -92,7 +100,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
       if (!isObject(option)) {
         option = defaultValue;
       }
-      let optionText = get(option, optionLabelKey);
+      let optionText = get(option, optionLabelKey) || option;
       if (isTranslation(optionText)) {
         optionText = intl.formatMessage({ id: optionText });
       }

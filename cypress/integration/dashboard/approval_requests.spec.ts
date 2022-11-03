@@ -1,6 +1,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -19,7 +22,7 @@ let group;
 let asyncTasksGroup;
 const documentRevisionName = "New document for testing AR";
 
-context("Approval request form", () => {
+context("Approval request form", { tags: ["@timetool"] },  () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -43,7 +46,7 @@ context("Approval request form", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
@@ -54,7 +57,7 @@ context("Approval request form", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
@@ -63,7 +66,7 @@ context("Approval request form", () => {
 
     it("[API]Login first tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -260,7 +263,7 @@ context("Approval request form", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -308,11 +311,11 @@ context("Approval request form", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
+      cy.arAddApproverOnApproverList({ approver: USERS[11].email, noWait: true });
       cy.arAddApproverOnApproverList({ approver: USERS[2].email, noWait: true });
       cy.arAddApproverOnApproverList({ approver: USERS[3].email, noWait: true });
     });
@@ -361,10 +364,6 @@ context("Approval request form", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
-    });
-
     it("Save AR", () => {
       cy.arSaveApiCall();
     });
@@ -406,7 +405,7 @@ context("Approval request form", () => {
         .and("contain.text", "pending approvals from");
       cy.contains("IN REVIEW").parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`)
+        .should("contain.text", `${USERS[11].name}`)
         .and("contain.text", `${USERS[2].name}`)
         .and("contain.text", `${USERS[3].name}`);
     });
@@ -468,7 +467,7 @@ context("Approval request form", () => {
 
     it("For User 2 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
+        .should("contain.text", USERS[11].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00001")
         .and("contain.text", "Approval request form");
@@ -518,11 +517,11 @@ context("Approval request form", () => {
     });
   });
 
-  context(`Check ${USERS[1].name} dashboard notifications`, () => {
-    it(`Login as ${USERS[1].name}`, () => {
+  context(`Check ${USERS[11].name} dashboard notifications`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
@@ -536,7 +535,7 @@ context("Approval request form", () => {
         .and("contain.text", "pending approvals from");
       cy.contains("IN REVIEW").parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`)
+        .should("contain.text", `${USERS[11].name}`)
         .and("contain.text", `${USERS[3].name}`);
     });
   });
@@ -553,7 +552,7 @@ context("Approval request form", () => {
 
     it("For User 3 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
+        .should("contain.text", USERS[11].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00001")
         .and("contain.text", "Approval request form");
@@ -594,11 +593,11 @@ context("Approval request form", () => {
     });
   });
 
-  context(`Check ${USERS[1].name} dashboard notifications`, () => {
-    it(`Login as ${USERS[1].name}`, () => {
+  context(`Check ${USERS[11].name} dashboard notifications`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
@@ -632,7 +631,7 @@ context("Approval request form", () => {
       cy.navigToDashboard();
     });
 
-    it(`Approve the AR by ${USERS[1].name}`, () => {
+    it(`Approve the AR by ${USERS[11].name}`, () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.ChangeRequestApproveNew], () => {
           cy.contains("needs your approval for").trigger("mouseover");
@@ -693,11 +692,11 @@ context("Approval request form", () => {
     });
   });
 
-  context(`Check ${USERS[1].name} notifications on dashboard`, () => {
-    it(`Login as ${USERS[1].name}`, () => {
+  context(`Check ${USERS[11].name} notifications on dashboard`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
@@ -774,7 +773,7 @@ context("Approval request form", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
@@ -819,7 +818,7 @@ context("Approval request form", () => {
 
     it("For User 2 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
+        .should("contain.text", USERS[11].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00003")
         .and("contain.text", "Approval request form1");
@@ -868,10 +867,10 @@ context("Approval request form", () => {
         .and("contain.text", "Approval request form1");
     });
 
-    it(`Login as ${USERS[1].name}`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
@@ -925,8 +924,8 @@ context("Approval request form", () => {
       cy.alFilterByTitle({ title: "Second AR" });
     });
 
-    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
-      cy.alFilterByOwner({ owner: USERS[1].name });
+    it(`Filter list by OWNER as ${USERS[11].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[11].name });
     });
 
     it("Filter list by STATUS as DRAFT", () => {
@@ -944,7 +943,7 @@ context("Approval request form", () => {
     });
 
     it("Add approver", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.arAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Send to review", () => {
@@ -1011,8 +1010,8 @@ context("Approval request form", () => {
       cy.alFilterByTitle({ title: "Second AR" });
     });
 
-    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
-      cy.alFilterByOwner({ owner: USERS[1].name });
+    it(`Filter list by OWNER as ${USERS[11].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[11].name });
     });
 
     it("Filter list by STATUS as APPROVED", () => {
@@ -1061,15 +1060,17 @@ context("Approval request form", () => {
       cy.alFilterByTitle({ title: "Second AR" });
     });
 
-    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
-      cy.alFilterByOwner({ owner: USERS[1].name });
+    it(`Filter list by OWNER as ${USERS[11].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[11].name });
     });
 
     it("Filter list by STATUS as APPROVED", () => {
+      cy.wait(2000);
       cy.alFilterByStatus({ status: "APPROVED" });
     });
 
     it("Verify filter by STATUS as APPROVED", () => {
+      cy.wait(2000);
       cy.alVerifyFilterByStatus({ status: "APPROVED" });
     });
   });
@@ -1107,8 +1108,8 @@ context("Approval request form", () => {
       cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
     });
 
-    it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
-      cy.wait(5000);
+    it("Reload the page and Check status as COMPLETE", { retries: 5 }, () => {
+      cy.wait(8000);
       cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1133,8 +1134,8 @@ context("Approval request form", () => {
       cy.alFilterByTitle({ title: "Second AR" });
     });
 
-    it(`Filter list by OWNER as ${USERS[1].name}`, () => {
-      cy.alFilterByOwner({ owner: USERS[1].name });
+    it(`Filter list by OWNER as ${USERS[11].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[11].name });
     });
 
     it("Filter list by STATUS as CLOSED", () => {

@@ -188,7 +188,7 @@ context("Approval request form", () => {
     });
 
     it("Enter description 'New form template for approval request'", () => {
-      cy.drEnterDocumentDescription({ description: "New form template for approval request" });
+      cy.arEnterApprovalRequestDescription({ description: "New form template for approval request" });
     });
 
     it("Click on 'Form' document type", () => {
@@ -477,12 +477,13 @@ context("Approval request form", () => {
     });
 
     it("Enter description 'AR from New form template for approval request'", () => {
-      cy.get("[data-cy=\"field-description\"]").click();
-      cy.get("[data-cy=\"field-description\"]").arrowType("AR from New form template for approval request").wait(2000);
+      cy.get(`#SMHeaderTmpl>[data-cy="description"]`).click();
+      cy.arEnterApprovalRequestDescription({ description: "AR from New form template for approval request" });
       cy.unClick();
     });
 
     it("Add created document revision", () => {
+      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
@@ -500,7 +501,8 @@ context("Approval request form", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.get(`[data-cy="tabCon-tabId.changedetails"]`).arrowClick();
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
     });
 
     it("Add second Approver'", () => {
@@ -585,7 +587,7 @@ context("Approval request form", () => {
   context("Check doc status and click on Send To Email", () => {
     it(`Check doc status as ${STATUS_TYPES_LABEL.DRAFT} and click on Send To Email`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-      cy.get(`textarea[name="title"]`).should("have.text", approvalRequestTitle);
+      cy.get(`div[data-cy="field-title"]`).should("have.text", approvalRequestTitle);
       cy.get(`[data-cy="HeaderInfo-docId"]`).then(($x) => {
         releasedFormId = $x.text();
       });
@@ -985,6 +987,7 @@ context("Approval request form", () => {
 
     it("Add created document revision with description", () => {
       SystemRequirement("REQ-4290", "REQ-4280");
+      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });

@@ -1431,7 +1431,7 @@ context("Autosave LHR", () => {
 
         expect(el).match(/Equipment\nB: Equipment one/);
 
-        expect(el).match(/Select field\nTEXT FIELD\nAPPROVALS\nApprovers/);
+        expect(el).match(/APPROVALS\nApprovers\nSelect field\nTEXT FIELD/);
 
         expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
 
@@ -1501,6 +1501,10 @@ context("Autosave LHR", () => {
       cy.unClick();
       cy.get("[data-cy=\"unit\"]").autocompleteSelect("Day(s)");
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+    });
+
+    it("Click 'LHR Step'", () => {
+      cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
     });
 
     it("Add equipment parameter", () => {

@@ -1,12 +1,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { CyRoutes } from "./../../support/routes";
 
 let createdCompany;
 let loginResponse;
@@ -138,6 +138,10 @@ context("Approval request implementation tasks", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create new AR form", () => {
@@ -171,6 +175,10 @@ context("Approval request implementation tasks", () => {
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Check status should be Draft", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 
@@ -240,6 +248,13 @@ context("Approval request implementation tasks", () => {
       cy.unClick();
     });
 
+    it("Verify Text Field Remove enabled", () => {
+      cy.fbVerifyElementClassByLabel({
+        label: "fb-textfield-1", el: "remove-schema-item",
+        class: "schema-delete-enabled",
+      });
+    });
+
     it("Select Documents tab", () => {
       cy.drSelectDocumentTab();
     });
@@ -259,7 +274,6 @@ context("Approval request implementation tasks", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
-
 
   context("Create a Other type form", () => {
     it("Navigate to document list", () => {
@@ -348,24 +362,37 @@ context("Approval request implementation tasks", () => {
       cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
       cy.fbAddNewFieldButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Edit, Move and Remove", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
-      cy.fbEnterPlaceholder({ placeholder: " changed" });
-      cy.fbAddNewFieldButton();
-      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
-      cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
+        cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+        cy.fbEnterPlaceholder({ placeholder: " changed" });
+        cy.fbAddNewFieldButton();
+        cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+
+        cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      });
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on Save", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Move component", () => {
-      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover");
-      cy.wait(2000);
+      cy.unClick();
+      cy.get("[data-cy='fb-textfield-1']").scrollIntoView();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy='fb-textfield-1']").trigger("mouseover", { force: true }).wait(500);
       cy.get(".drag-handle").eq(3)
         .realMouseDown({ position: "center", button: "left" });
       cy.wait(3000);
       cy.get(".drag-handle").eq(2)
-        .realMouseMove(0, 0, { position: "center" })
+        .realMouseMove(0, -100, { position: "center" })
         .realMouseUp();
       cy.unClick();
     });
@@ -384,14 +411,17 @@ context("Approval request implementation tasks", () => {
 
     it("Approve and Release the document", () => {
       cy.get(`[data-cy="ApproveAndRelease-submit"]`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Export", () => {
     it("Export template", () => {
-      cy.wait(2000);
-      cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).click({ force: true });
+      cy.get(`button[data-cy="FBWorkspace-exportTemplate"]`).scrollIntoView();
+      cy.get(`button[data-cy="FBWorkspace-exportTemplate"]`).click();
       cy.get(`[data-cy="fb-template-name"]`).arrowType("Other_Form_Template");
+      cy.unClick();
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
   });
@@ -420,7 +450,9 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Choose newly AR Form template", () => {
-      cy.arSelectARForm({ formTitle: approvalRequestFormName });
+      cy.get("div[data-cy='field-select-form']>#FormList-selectForm").arrowClick();
+      cy.get("div[id^=react-select]").contains(approvalRequestFormName).arrowClick();
+      cy.get("[data-cy='create.approval.request.continue']").arrowClick();
     });
 
     it("Enter title AR title: " + approvalRequestTitle, () => {
@@ -432,6 +464,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Add created document revision", () => {
+      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
@@ -439,12 +472,18 @@ context("Approval request implementation tasks", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+    it("Click on Save", () => {
+      cy.arSaveApiCall();
+    });
+
+    it("Switch to ChangeDetails tab", () => {
+      cy.arSelectChangeDetailsTab();
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {
@@ -494,11 +533,15 @@ context("Approval request implementation tasks", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
+
+    it("Check status should be Draft", () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
   });
 
   context("import", () => {
     it("Import template", () => {
-      cy.get("#fb-import-schema").attachFile("../downloads/Other_Form_Template.json");
+      cy.get("#fb-import-schema").attachFile("../fixtures/Other_Form_Template.json");
     });
   });
 

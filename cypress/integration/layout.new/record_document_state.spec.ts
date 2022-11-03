@@ -277,12 +277,12 @@ context(
           });
 
           it("Last save should be present", () => {
-            cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
           });
 
           it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
             cy.wait(120000);
-            cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved 2 minutes ago");
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
           });
 
           it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
@@ -361,10 +361,11 @@ context(
         context("Right side:", () => {
           it("Last save should not be present", () => {
             // cy.contains("Last saved:").should("not.exist");
-            cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+            cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
           });
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
             cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
@@ -438,10 +439,11 @@ context(
 
         context("Right side:", () => {
           it("Last save should not be present", () => {
-            cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+            cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
           });
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
             cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
@@ -587,16 +589,18 @@ context(
 
         context("Right side:", () => {
           it("Last save should not be present", () => {
-            cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+            cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
           });
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
             cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
 
           it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
+            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
             cy.checkToastMessageContains({
               message: "File will be sent to your email shortly.",

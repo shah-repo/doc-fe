@@ -566,6 +566,7 @@ context("Clone EB Flow test", () => {
         body: {
           category: "EB",
           addNewBtnLabel: "Create Engineering Build",
+          config: {},
           columns: [
             {
               label: "EB ID",
@@ -940,6 +941,10 @@ context("Clone EB Flow test", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+
       it("Add attachment", () => {
         cy.get("[data-cy=\"albumMediaButton\"]").arrowClick({force: true});
         cy.wrapWithWaitOnApiCalls([ ], () => {
@@ -1038,7 +1043,12 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add Approvers", () => {
+        cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().parent().find(".MuiChip-deleteIcon").arrowClick();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
+
+      it("Save doc", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for Approval", () => {
@@ -1064,6 +1074,14 @@ context("Clone EB Flow test", () => {
       it("Verify the next Build link", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]")
           .should('not.exist');
+      });
+
+      it("Add Approvers", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
+
+      it("Save doc", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for Approval", () => {
@@ -1247,6 +1265,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add Approvers", () => {
+        cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().parent().find(".MuiChip-deleteIcon").arrowClick();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
@@ -1277,6 +1296,14 @@ context("Clone EB Flow test", () => {
       it("Verify the next Build link", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]")
           .should('not.exist');
+      });
+
+      it("Add Approvers", () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      });
+
+      it("Save doc", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for Approval", () => {

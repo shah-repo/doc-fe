@@ -51,8 +51,8 @@ export default makeStyles(() =>
       },
       "&.Mui-disabled": {
         border: "none",
-        backgroundColor: Colors.gains_boro,
-        color: Colors.spanish_gray,
+        backgroundColor: Colors.dark_gray2,
+        color: Colors.white,
       },
       "&.MuiButton-outlinedPrimary": {
         "backgroundColor": Colors.white,
