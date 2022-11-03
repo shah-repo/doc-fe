@@ -1,6 +1,6 @@
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDocumentRevisionsFormProps, FBForm, FBTextField } from "..";
-import FBDocumentRevisionsStyles from "./FBDocumentRevisions.styles";
+import useStyles from "./FBDocumentRevisions.styles";
 
 const FBDocumentRevisionsForm: React.FunctionComponent<FBDocumentRevisionsFormProps> = ({
   renderOption,
@@ -8,8 +8,7 @@ const FBDocumentRevisionsForm: React.FunctionComponent<FBDocumentRevisionsFormPr
   disabledOptions,
   children,
 }) => {
-  const classes = FBDocumentRevisionsStyles();
-
+  const classes = useStyles();
   return (
     <FBForm {...{ formState }} >
       <FBAutocompleteAsync

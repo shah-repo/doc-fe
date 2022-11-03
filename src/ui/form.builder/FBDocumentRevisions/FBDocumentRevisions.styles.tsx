@@ -1,13 +1,9 @@
+import { makeStyles } from "@material-ui/core";
 
-
-import { makeStyles, Theme } from "@material-ui/core";
-
-const FBDocumentRevisionsStyles = makeStyles((theme: Theme) => ({
+export default makeStyles(() => ({
   option: {
     textOverflow: "ellipsis",
     overflow: "hidden",
     display: "block",
   },
 }));
-
-export default FBDocumentRevisionsStyles;
