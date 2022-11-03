@@ -153,7 +153,11 @@ context("Document Field Owners Test", () => {
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
 
     it("Change build type to 'R&D'", () => {
@@ -169,10 +173,6 @@ context("Document Field Owners Test", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.drAssignDocumentTo({ username: USERS[3].name });
       });
-    });
-
-    it("Click on sidebar permission icon to add Operators", () => {
-      cy.drSelectPermissionTab();
     });
 
     it(`Select '${USERS[4].name}' to Assign document to`, () => {
@@ -318,7 +318,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Verify status is 'In Review'", () => {
