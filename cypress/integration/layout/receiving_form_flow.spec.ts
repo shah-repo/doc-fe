@@ -1836,10 +1836,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Add approver", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy^=\"fb-po-approvals\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      cy.progressBarShouldNotExist();
+      cy.poAddApproverOnApproverList({ approver: USERS[1].name });
       cy.listLoadingElementShouldNotExist();
     });
 
