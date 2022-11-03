@@ -788,7 +788,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
     it("Click on 'Add Line Item' button", () => {
       cy.poAddNewFieldItem();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldAppear();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 

@@ -30,6 +30,7 @@ declare global {
       drSelectCalPmHistoryTab(): Chainable<Subject>;
       drSelectPrimaryOwner(params: { owner: string; noWait?: bool }): Chainable<Subject>;
       drEnterDocumentDescription(params: { description: string }): Chainable<Subject>;
+      drEnterDocumentDescriptionWithPatchWrapCall(params: { description: string }): Chainable<Subject>;
       drSelectDocumentType(params: { documentType: string }): Chainable<Subject>;
       drSelectOutputDocumentType(params: { documentType: string }): Chainable<Subject>;
       drEnterHtmlText(params: { htmlText: string }): Chainable<Subject>;
@@ -343,6 +344,14 @@ Cypress.Commands.add("drEnterDocumentDescription", (params: { description: strin
   cy.unClick();
 });
 
+Cypress.Commands.add("drEnterDocumentDescriptionWithPatchWrapCall", (params: { description: string }) => {
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+    cy.get("[data-cy=\"description\"]").first().arrowClick().wait(1000);
+    cy.get(`[data-cy="description"] [contenteditable]`).first().clear().arrowType(params.description);
+    cy.unClick();
+  });
+});
+
 Cypress.Commands.add("drSelectDocumentType", (params: { documentType: string }) => {
   cy.wrapWithWaitOnApiCall(
     CyRoutes.GetProposedDocId, () => {
@@ -452,7 +461,7 @@ Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
 Cypress.Commands.add("drClickCreateDocumentWithApiCall", (params?: { toastifyExists: boolean; requiredApproversDocRev?: boolean }) => {
   let routesToWait;
   if (params && params.requiredApproversDocRev) {
-    routesToWait = [CyRoutes.PostOrPatchDocRev];
+    routesToWait = [CyRoutes.PostOrPatchDocRev, CyRoutes.GetRequiredApproversDocRev];
   }
   else {
     routesToWait = [CyRoutes.PostOrPatchDocRev];
@@ -676,6 +685,7 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
     .autocompleteSelect(`${params.username}`, { force: true });
   cy.get("[data-cy='add-user'").eq(2).arrowClick({ force: true });
+  cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
