@@ -198,6 +198,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           }}
         />
       )}
+      {isQms &&
       <InputField
         label="transition.action.password"
         name="password"
@@ -211,6 +212,7 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
         }}
         validate={validator(required)}
       />
+      }
       {selectedInvalid && (
         <Box mt={-3} mb={3} color={Colors.medium_blue}>
           <Text translation="document.revision.tpl.invalid" />
