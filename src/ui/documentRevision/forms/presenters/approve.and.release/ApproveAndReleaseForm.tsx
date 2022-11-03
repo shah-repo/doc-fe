@@ -198,21 +198,21 @@ const ApproveAndReleaseForm: React.FunctionComponent<Props> = ({
           }}
         />
       )}
-      {isQms &&
-      <InputField
-        label="transition.action.password"
-        name="password"
-        size="sm"
-        inputProps={{
-          type: "password",
-          autoComplete: "new-password",
-          classes: {
-            root: classes.passwordInput,
-          },
-        }}
-        validate={validator(required)}
-      />
-      }
+      {isQms && (
+        <InputField
+          label="transition.action.password"
+          name="password"
+          size="sm"
+          inputProps={{
+            type: "password",
+            autoComplete: "new-password",
+            classes: {
+              root: classes.passwordInput,
+            },
+          }}
+          validate={validator(required)}
+        />
+      )}
       {selectedInvalid && (
         <Box mt={-3} mb={3} color={Colors.medium_blue}>
           <Text translation="document.revision.tpl.invalid" />
