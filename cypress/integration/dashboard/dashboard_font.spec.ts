@@ -1383,6 +1383,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.wait(2000);
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -1451,24 +1452,32 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Enter initial quantity", () => {
-      cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist");
-      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist");
+        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.unClick();
+      });
     });
 
     it("Select 'Production' build type", () => {
-      cy.unClick();
-      cy.get("[value=\"Production\"]").check();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[value=\"Production\"]").check();
+      });
     });
 
     it("Add 'Due Date'", () => {
-      cy.poAddDateRequired();
-      cy.url().then((url: any) => {
-        lhrUrl = url;
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poAddDateRequired();
+        cy.url().then((url: any) => {
+          lhrUrl = url;
+        });
       });
     });
 
     it("Add approver", () => {
-      cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+      });
     });
 
     it("Select 'Details' tab", () => {
@@ -1499,11 +1508,17 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Enter 'Start quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("1");
+        cy.unClick();
+      });
     });
 
     it("Enter 'Accepted quntity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
+        cy.unClick();
+      });
     });
 
     it("Click save document", () => {
@@ -1535,6 +1550,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
 
     it("Approve step", () => {
+      cy.wait(2000);
       cy.lhrApprove();
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.COMPLETED });
     });
@@ -1684,6 +1700,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
   context("Verify font for APPROVED LHR ID", () => {
     it(`Verify notification exists for APPROVED LHR ID ${lhrid}`, () => {
+      cy.wait(2000);
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
           `APPROVED${lhrid}Rev A`,
@@ -1691,6 +1708,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it(`Verify APPROVED LHR ID ${lhrid} has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+      cy.wait(2000);
       cy.checkStylePropExists({
         content: lhrid,
         props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
@@ -1806,7 +1824,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify approvals field is automatically added", () => {
-      cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+      cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
     });
 
     it("Approve and Release document", () => {

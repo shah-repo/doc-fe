@@ -529,7 +529,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Add an Approval", () => {
@@ -722,13 +722,14 @@ context("Procedure and parts flow test", () => {
         });
         cy.progressBarShouldNotExist();
         cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("have.text", "Step #2");
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Remove step", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
-        });
+        cy.fbRemoveLastAddedItem();
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save document", () => {
@@ -831,7 +832,6 @@ context("Procedure and parts flow test", () => {
           CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick();
         });
-        cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick();
         cy.wait(10000);
         cy.progressBarShouldNotExist();
       });
@@ -879,6 +879,7 @@ context("Procedure and parts flow test", () => {
           cy.get("[data-cy='remove-schema-item']").last().arrowClick({ force: true });
         });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy='form.builder.step.number']").eq(2).should("not.exist");
       });
     });
@@ -889,6 +890,7 @@ context("Procedure and parts flow test", () => {
           cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Part for EB document");
         });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save document", () => {
@@ -896,12 +898,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wait(2000);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.wait(2000);
+        cy.drApproveAndReleaseDialog();
       });
 
       it("Check if the part is displayed in the document summary", () => {
