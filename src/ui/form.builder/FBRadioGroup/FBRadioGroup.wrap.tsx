@@ -61,7 +61,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
     !onChange && (onChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) => {
       formState?.setFieldValue(name, value);
       formState?.validate();
-      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+      const isUnderWorkspace = workspaceState?.getSchemaItem(name?.split(".")[0]);
       if (!isUnderWorkspace) { return; }
       workspaceState?.saveDocRev(formState?.getValues());
     });

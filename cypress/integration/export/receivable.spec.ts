@@ -703,7 +703,7 @@ context("Export Receivable doc", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.unClick();
         cy.wait(2000);
         cy.progressBarShouldNotExist();

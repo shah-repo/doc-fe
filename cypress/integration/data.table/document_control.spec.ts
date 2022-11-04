@@ -694,7 +694,7 @@ context("Document list test", () => {
         });
 
         it("Verify approvals field is automatically added", () => {
-          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+          cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
         });
 
         it("Approve and Release document", () => {
@@ -742,7 +742,7 @@ context("Document list test", () => {
         });
 
         it("Verify approvals field is automatically added", () => {
-          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+          cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
         });
 
         it("Approve and Release document", () => {
@@ -782,19 +782,17 @@ context("Document list test", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
-      it("Save Record'", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-
       it("release button click'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("Create second Record with Draft state", () => {
-      it("Navigate to Records", () => {
+      it("Navigate to Document List", () => {
         cy.navigToDocumentList();
       });
 
@@ -808,7 +806,9 @@ context("Document list test", () => {
       });
 
       it("Clicks on 'create New' button", () => {
-        cy.drCreateNewDocumentFromFormRecord();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.drCreateNewDocumentFromFormRecord();
+        });
       });
 
       it("Enters title as Approval Record title", () => {

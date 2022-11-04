@@ -710,17 +710,26 @@ context("PO and parts ", () => {
     });
 
     it("Select 'Open' for PO status", () => {
-      cy.poSelectPOStatus({ status: "Open" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poSelectPOStatus({ status: "Open" });
+      });
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      });
     });
 
     it("Add Required Date", () => {
-      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+        cy.get(".MuiPickersDay-daySelected").arrowClick();
+        cy.unClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save PO", () => {
@@ -739,6 +748,7 @@ context("PO and parts ", () => {
 
     it("type a description", () => {
       cy.drEnterDocumentDescription({ description: "New Purchase order record" });
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify that the top left of the page displays docId", () => {
@@ -943,22 +953,32 @@ context("PO and parts ", () => {
 
   context("Fill all fields", () => {
     it("Select 'Open' for PO status", () => {
-      cy.poSelectPOStatus({ status: "Open" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poSelectPOStatus({ status: "Open" });
+      });
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      });
     });
 
     it("Select Supplier", () => {
-      cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001 - rev 1 - API Supplier Document");
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001 - rev 1 - API Supplier Document");
+        cy.unClick();
+      });
     });
 
     it("Add Required Date", () => {
-      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+        cy.get(".MuiPickersDay-daySelected").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save PO", () => {
@@ -1072,6 +1092,7 @@ context("PO and parts ", () => {
     });
 
     it("Select Part Number", () => {
+      cy.wait(2000);
       cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
     });
 
@@ -1104,6 +1125,8 @@ context("PO and parts ", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.poAddPOButtonClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save PO", () => {
@@ -1111,10 +1134,14 @@ context("PO and parts ", () => {
     });
 
     it("Enter Shipping Cost", () => {
-      cy.poShippingCost({ number: "2" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poShippingCost({ number: "2" });
+      });
+      cy.progressBarShouldNotExist();
     });
 
     it("Check Subtotal value", () => {
+      cy.wait(1000);
       cy.poCheckAmount({ number: "$10.00" });
     });
 
@@ -1243,6 +1270,7 @@ context("PO and parts ", () => {
     });
 
     it("Select Part Number", () => {
+      cy.wait(2000);
       cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
     });
 
@@ -1275,6 +1303,8 @@ context("PO and parts ", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.poAddPOButtonClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save PO", () => {
@@ -1282,8 +1312,12 @@ context("PO and parts ", () => {
     });
 
     it("Enter Shipping Cost", () => {
-      cy.poShippingCost({ number: "2" });
-      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poShippingCost({ number: "2" });
+        cy.unClick();
+      });
+      cy.progressBarShouldNotExist();
     });
 
     it("Check Subtotal value", () => {
@@ -1321,7 +1355,9 @@ context("PO and parts ", () => {
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
+      cy.wait(2000);
       cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
     });
 
     it("navigate to Details tab ", () => {
@@ -1346,10 +1382,12 @@ context("PO and parts ", () => {
 
     it("Uploads test.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.progressBarShouldNotExist();
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
     });
 
     it("navigate to Details tab ", () => {
@@ -1441,9 +1479,12 @@ context("PO and parts ", () => {
       cy.get("[data-cy=\"clearFilter\"]").arrowClick();
       cy.get("[class='k-textbox']").eq(0).clear().arrowType("PO-00001");
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approver", () => {
+      cy.wait(2000);
       cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       cy.progressBarShouldNotExist();
@@ -1485,9 +1526,12 @@ context("PO and parts ", () => {
       cy.get("[data-cy=\"clearFilter\"]").arrowClick();
       cy.get("[class='k-textbox']").eq(0).clear().arrowType("PO-00002");
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("navigate to Line Items", () => {
+      cy.wait(2000);
       cy.drSelectLineItems();
     });
 
@@ -1506,17 +1550,26 @@ context("PO and parts ", () => {
     });
 
     it("type a description", () => {
-      cy.drEnterDocumentDescription({ description: "Another new purchase order description" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drEnterDocumentDescription({ description: "Another new purchase order description" });
+      });
+      cy.progressBarShouldNotExist();
     });
 
     it(`Select Requestor`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      });
+      cy.progressBarShouldNotExist();
     });
 
     it("Add Required Date", () => {
-      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+        cy.get(".MuiPickersDay-daySelected").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
     });
 
     it("Save PO", () => {
@@ -1524,6 +1577,8 @@ context("PO and parts ", () => {
     });
 
     it("navigate to Line Items", () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.drSelectLineItems();
     });
 
@@ -1534,10 +1589,12 @@ context("PO and parts ", () => {
 
     it("Uploads image.jpg", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
     });
 
     it("Uploads test.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.progressBarShouldNotExist();
     });
 
     it("Check attachment is displayed: image.jpg", () => {

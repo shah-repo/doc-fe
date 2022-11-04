@@ -136,6 +136,9 @@ export enum TabTypeOptions {
   MIXED = "MIXED",
 }
 
+export enum CATEGORY {
+  WORKORDER_CATEGORY = "Work Order"
+}
 // Copied from BE repo: src/modules/documentTypes/documentType.entity.ts
 export const GroupWithGroupOptions =  {
   FORM: [
