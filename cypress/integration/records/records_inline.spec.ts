@@ -411,13 +411,15 @@ context("Record inline Flow", () => {
           expect(el).match(/Attachments/);
           expect(el).match(/image.jpg/);
 
+          expect(el).match(/APPROVALS\nApprovers/);
+
           expect(el).match(/Textfield for inline/);
 
           expect(el).match(/Inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
+          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -441,11 +443,11 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
+          expect(el).match(/Second textfield for inline/);
+
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
-
-          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -629,13 +631,15 @@ context("Record inline Flow", () => {
           expect(el).match(/Attachments/);
           expect(el).match(/image.jpg/);
 
+          expect(el).match(/APPROVALS\nApprovers/);
+
           expect(el).match(/Textfield for inline/);
 
           expect(el).match(/Inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
 
-          expect(el).match(/Checkbox\nTEXT FIELD\nSecond textfield for inline\n1 2 3/);
+          expect(el).match(/Checkbox\nTEXT FIELD\n1 2 3/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -659,11 +663,11 @@ context("Record inline Flow", () => {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
           expect(el).match(tmpRegex);
 
+          expect(el).match(/Second textfield for inline/);
+
           expect(el).match(/Second inline field\nInline approval pending/);
 
           expect(el).match(/At least one approval required/);
-
-          expect(el).match(/APPROVALS\nApprovers/);
 
           tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
           expect(el).not.match(tmpRegex);
@@ -1142,6 +1146,8 @@ context("Record inline Flow", () => {
         it("Filter record by name and status, and select it", () => {
           SystemRequirement("REQ-0120");
           cy.recFilterByTitle({ revision: "Record Document Revision" });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
           cy.wait(1000);
           cy.recFilterByStatus({ status: "Released" });
           cy.wrapWithWaitOnApiCalls([
@@ -1165,7 +1171,7 @@ context("Record inline Flow", () => {
             recDocId = $docIdElement.text();
           });
           dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-          cy.sendToEmailFromHeader();
+          cy.sendToEmail();
         });
 
         it("Verify popup message \"File will be sent to your email shortly.\"", () => {

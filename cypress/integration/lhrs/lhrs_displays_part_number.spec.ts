@@ -296,7 +296,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click on Create New button", () => {
-      cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter title", () => {
@@ -312,18 +312,21 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       cy.drSelectDetailsTab();
     });
 
-    it("Enter quantity received", () => {
-      cy.get("input[name=\"lot_quantity\"]").clear().arrowType("12").wait(2000);
-      cy.unClick();
-    });
-
     it(`Select '${CSPartDocumentTitle}' for Part Number`, () => {
       cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
       cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
     });
 
+    it("Enter quantity received", () => {
+      cy.get("input[name=\"lot_quantity\"]").clear().arrowType("12").wait(2000);
+      cy.unClick();
+    });
+
     it("Click create document", () => {
       cy.recClickSaveBtn();
+      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context(`Verify '${CSPartDocumentTitle}' is selected`, () => {
@@ -378,6 +381,9 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: MPI });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -451,12 +457,12 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         cy.drSelectDocumentType({ documentType: "LHR Template" });
       });
 
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
       it("Select 'Lot History Record' output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Click create document", () => {
@@ -604,8 +610,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
     context("Create CSL revision from revised EFM-10605", () => {
       it("Click on Create New button", () => {
-        cy.drCreateNewDocumentFromFormRecord();
-        cy.wait(3000);
+        cy.drCreateNewDocumentFromForm();
       });
 
       it("Enter title", () => {
@@ -616,20 +621,23 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         cy.drSelectDetailsTab();
       });
 
-      it("Enter quantity received", () => {
-        cy.get("[name=\"lot_quantity\"]").arrowType("12");
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
-
       it(`Select '${CSPartDocumentTitle}' for Part Number`, () => {
         cy.get("[data-cy=\"lot_part\"]").arrowType(CSPartDocumentTitle);
         cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
         cy.unClick();
       });
 
+      it("Enter quantity received", () => {
+        cy.get("[name=\"lot_quantity\"]").arrowType("12");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Click create document", () => {
         cy.recClickSaveBtn();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       context(`Verify '${CSPartDocumentTitle}' is selected`, () => {
@@ -758,12 +766,12 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      });
-
       it("Select 'Lot History Record' output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
       it("Click create document", () => {
@@ -789,8 +797,6 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
-          cy.wait(2000);
           cy.get("input[data-cy=\"lhrstep-built-in\"]")
             .autocompleteSelect("MPI document (revised EFM-10605)", { force: true });
           cy.progressBarShouldNotExist();
