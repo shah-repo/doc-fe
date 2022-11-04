@@ -99,6 +99,8 @@ declare global {
       drClickDAMEditBtn(): Chainable<Subject>;
       drEditAddApprovingGroups(params: {eq: number}, ...groups: string[]): Chainable<Subject>;
       drEditRemoveApprovingGroups(params: {eq: number}, ...groups: string[]): Chainable<Subject>;
+      drEditAddApprovingUsers(params: {eq: number}, ...users: string[]): Chainable<Subject>;
+      drEditRemoveApprovingUsers(params: {eq: number}, ...users: string[]): Chainable<Subject>;
 
       /* Document Approval Matrix End */
       drCreateNewDocumentFromForm(): Chainable<Subject>;
@@ -218,6 +220,19 @@ Cypress.Commands.add("drEditAddApprovingGroups", (params: {eq: number}, ...group
 Cypress.Commands.add("drEditRemoveApprovingGroups", (params: {eq: number}, ...groups: string[]) => {
   groups.forEach((item) => {
     cy.get(`[data-cy="dar-built-in.${params.eq}.groups"]`).parent()
+      .contains(item).parent().parent().find("svg").arrowClick();
+  });
+});
+
+Cypress.Commands.add("drEditAddApprovingUsers", (params: {eq: number}, ...users: string[]) => {
+  users.forEach((item) => {
+    cy.get(`[data-cy="dar-built-in.${params.eq}.employees"]`).autocompleteSelect(item);
+  });
+});
+
+Cypress.Commands.add("drEditRemoveApprovingUsers", (params: {eq: number}, ...users: string[]) => {
+  users.forEach((item) => {
+    cy.get(`[data-cy="dar-built-in.${params.eq}.employees"]`).parent()
       .contains(item).parent().parent().find("svg").arrowClick();
   });
 });
@@ -597,7 +612,7 @@ Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string
   cy.listLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] input`).arrowType(params.docId).wait(500);
   cy.listLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick({ force: true });
+  cy.get(`[aria-colindex="7"] [class="k-input"]`).scrollIntoView().arrowClick({ force: true });
   cy.get("li").contains(params.status).arrowClick({ force: true }).wait(500);
   cy.listLoadingElementShouldNotExist();
   cy.dlSelectFirstDocument();
@@ -685,6 +700,7 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
     .autocompleteSelect(`${params.username}`, { force: true });
   cy.get("[data-cy='add-user'").eq(2).arrowClick({ force: true });
+  cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
