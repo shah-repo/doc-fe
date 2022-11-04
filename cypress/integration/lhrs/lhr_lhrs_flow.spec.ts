@@ -1265,7 +1265,8 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Select 'Numeric' revision stage", () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        cy.get("[data-cy^=\"common.\"]");
+        cy.get("label").contains(new RegExp("^Numeric$", "g")).click({ force: true });
       });
 
       it("Click create document", () => {
@@ -1678,7 +1679,18 @@ context("LHR & LHRS Flow", () => {
           cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
         });
         it("Verify References selection Add Remove", () => {
-          cy.verifyAddRemoveReference({ formId: "FM-00001" });
+          const docId = "FM-00001";
+          cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+            cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
+          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(1000);
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+            cy.drRemoveReferences({ reference: docId });
+          });
         });
         it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
           cy.verifyReferenceInfo();
@@ -2290,10 +2302,15 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Select button to switch", () => {
-      cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").then(() => {
-        cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").last().arrowClick();
+      cy.get("body").find("[data-cy=\"form.builder.lhr.build.switch\"]").its("length").then((res) => {
+        if (res > 0) {
+          cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").last().arrowClick();
+        }
       });
     });
+    // cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").then(() => {
+    //   cy.get("[data-cy=\"form.builder.lhr.build.switch\"]").last().arrowClick();
+    // });
   });
 
   context("verify the following fields for LHR Step2", () => {
@@ -2496,14 +2513,20 @@ context("LHR & LHRS Flow", () => {
 
       it("Fill step #2 description", () => {
         cy.wait(1000);
-        cy.xpath("//div[@data-cy='mpi-procedure-built-in.description']/../div[2]").scrollIntoView()
+        cy.get("[id$=\"description\"][id^=\"fb-mpiprocedure\"]>div>div>div>div>div")
+          .eq(1)
           .click();
-        cy.xpath("//div[@data-cy='mpi-procedure-built-in.description']/../div[2]")
-          .type("Description of step one", { force: true });
+        cy.get("[data-cy$=\"description\"]>div>div>div>div>div[contenteditable]")
+          .type("Description of step one");
+        cy.wait(500);
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.unClick();
       });
 
       it("Add attachment", () => {
+        cy.wait(1000);
         cy.contains("Step #1").parentsUntil("li")
           .find("[data-cy='mediaUploadField']").arrowClick();
         cy.elUploadAttachment({
