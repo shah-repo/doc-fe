@@ -1,4 +1,4 @@
-import { Box, Divider, List } from "@material-ui/core";
+import { Box, List } from "@material-ui/core";
 import cx from "classnames";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -41,20 +41,17 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
     value === index && (
       <List className={classes.listRoot}>
         {panelData.map((data, index) => (
-          <>
-            <TrainingItem
-              key={index}
-              id={data.id}
-              avatar={data.user.avatar}
-              initialColor={data.user.initialColor}
-              name={data.user.name}
-              status={data.status}
-              documentId={data.docId}
-              title={data.docTitle}
-              date={data.dueOn}
-            />
-            <Divider />
-          </>
+          <TrainingItem
+            key={data.id}
+            id={data.id}
+            avatar={data.user.avatar}
+            initialColor={data.user.initialColor}
+            name={data.user.name}
+            status={data.status}
+            documentId={data.docId}
+            title={data.docTitle}
+            date={data.dueOn}
+          />
         ))}
         {totalTrainingData > 0 && (
           <LoadMoreButton
