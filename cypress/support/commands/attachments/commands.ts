@@ -349,7 +349,7 @@ Cypress.Commands.add("atchDownloadAll", () => {
       }
     });
   }).as("attach");
-  cy.get("#AttachmentFieldPresenter-downloadAllButton").arrowClick();
+  cy.get("#AttachmentFieldPresenter-downloadAllButton").arrowClick({ force: true });
   cy.get("body").then(($body) => {
     if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
       cy.get("[id=\"passwordConfirm\"]").arrowClick();
