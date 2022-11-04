@@ -786,7 +786,9 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add another group", () => {
-        cy.drAddGroupFromPermissionTab("CEO");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+          cy.drAddGroupFromPermissionTab("CEO");
+        });
       });
 
       it("Reload page", () => {
@@ -801,7 +803,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click on sidebar permission icon to add Operators", () => {
-        cy.get("[data-cy='permission-icon']").arrowClick();
+        cy.get("[data-cy='permission-icon']").arrowClick().wait(2000);
       });
 
       it(`Assign operator '${USERS[3].name}'`, () => {
@@ -911,7 +913,7 @@ context("DAM approvals in LHR", () => {
 
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev], () => {
           cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
         });
       });
@@ -1076,8 +1078,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it(`Add ${USERS[4].name} in approving users`, () => {
-        cy.contains("Approving Users").eq(0).parent().parent().parent().parent().parent()
-          .find("input").arrowClick({ force: true }).autocompleteSelect(`${USERS[4].name}`);
+        cy.drEditAddApprovingUsers({ eq: 0 }, USERS[4].name);
       });
 
       it("Click the save button", () => {
@@ -1254,12 +1255,11 @@ context("DAM approvals in LHR", () => {
       });
 
       it(`Remove ${USERS[4].name} in approving users`, () => {
-        cy.contains(USERS[4].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+        cy.drEditRemoveApprovingUsers({ eq: 0 }, USERS[4].name);
       });
 
       it(`Add owner ${USERS[1].name} in approving users`, () => {
-        cy.contains("Approving Users").eq(0).parent().parent().parent().parent().parent()
-          .find("input").arrowClick({ force: true }).autocompleteSelect(`${USERS[1].name}`);
+        cy.drEditAddApprovingUsers({ eq: 0 }, USERS[1].name);
       });
 
       it("Click the save button", () => {
@@ -1879,7 +1879,7 @@ context("DAM approvals in LHR", () => {
 
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev], () => {
           cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
