@@ -34,7 +34,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
         <TableHead>
           {isReceivable && <TableRow>
             <FBTableCell />
-            <FBTableCell colSpan={9}>
+            <FBTableCell colSpan={10}>
               <Box display="flex">
                 <InfoIcon />
                 <Typography className={cellStyle.headerCellText}>
