@@ -24,6 +24,8 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
 
     React.useEffect(() => {
       formState?.setFieldValue("type", get(initialValues, "type") || "product");
+      const item = formState?.getValues() as FBPurchaseOrderItem;
+      purchaseOrderState?.sePartNumber(item.partNumber);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
