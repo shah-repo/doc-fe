@@ -245,7 +245,7 @@ context("DAM and POAM", () => {
         });
       });
 
-      context("Create DAM Migration FORM", () => {
+      context("Create 'Document Approval Matrix' Migration FORM", () => {
         it("Turn off autosave", () => {
           cy.cmpTurnOffAutosave();
         });
@@ -314,6 +314,10 @@ context("DAM and POAM", () => {
 
         it("Click CREATE DOCUMENT", () => {
           cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("Click on Save button", () => {
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("'Approve and Release' the DAM Form", () => {
@@ -831,12 +835,28 @@ context("DAM and POAM", () => {
         });
       });
 
-      context("Verify Scroll", () => {
-        it("Navigate to history tab", () => {
-          cy.get("[data-cy='timeline-icon']").arrowClick();
+      context("Hover over the history panel in overview tab", () => {
+        it("Navigate to overview tab", () => {
+          cy.drSelectOverviewTab();
         });
+
+        it("Navigate to history tab", () => {
+          cy.drSelectHistoryTab();
+        });
+
         it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
           cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+        });
+      });
+
+      context("Click on Revisions and Choose previous Revision of DAM and verify", () => {
+        it("Open revisions tab, click and verify revision", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drClickRevisionsSidePanel();
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+            cy.recCheckRevisionStage({ stage: "Revision 1" });
+            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
+          });
         });
       });
     });
@@ -852,7 +872,7 @@ context("DAM and POAM", () => {
         });
       });
 
-      context("Create Migration PO Approval Matrix FORM", () => {
+      context("Create Migration form for 'PO Approval Matrix FORM'", () => {
         it("Turn off autosave", () => {
           cy.cmpTurnOffAutosave();
         });
@@ -954,6 +974,10 @@ context("DAM and POAM", () => {
           cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
+        it("Verify 'Render HTML' exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Render HTML").should("exist");
+        });
+
         it("Verify that it contains Overview and Matrix Details tab", () => {
           cy.get("[data-cy=\"tabId.overview\"]").should("exist");
           cy.get("[data-cy=\"tabId.matrixdetails\"]").should("exist");
@@ -983,6 +1007,11 @@ context("DAM and POAM", () => {
       });
 
       context("Verify that Matrix Details tab contain", () => {
+        it("Verify that “PO approval matrix for New companies (NCO) will be added as predefined schema", () => {
+          cy.get("[data-cy=\"Purchase Order Approval Matrix\"]").should("exist");
+
+        });
+
         it("Verify that Form Options should appear for this tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
@@ -1437,6 +1466,66 @@ context("DAM and POAM", () => {
         it(`Verify PO Approval Matrix and table header contains: Level Name, Limit, Signature 1, 
         Signature 2 and Signature 3`, () => {
           cy.contains("Purchase Order Approval Matrix").should("exist");
+
+          it("Verify Level 1 Name  value  after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Level 1");
+          });
+
+          it("Verify Limit value  as '5000' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "5000");
+          });
+
+          it("Verify Signature 1 value  as 'Everyone' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Everyone");
+          });
+
+          it("Verify Level 2 Name  value after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Level 2");
+          });
+
+          it("Verify Limit value  as '25000' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "25000");
+          });
+
+          it("Verify Signature 1 value  as 'Can be approver' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Can be approver");
+          });
+
+          it("Verify Signature 2 value  as 'Groups Management Unofficial' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Groups Management Unofficial");
+          });
+
+          it("Verify Level 3 Name  value after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Level 3");
+          });
+
+          it("Verify Limit value  as '100000' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "100000");
+          });
+
+          it("Verify Signature 1 value  as 'Owner as approver' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Owner as approver");
+          });
+
+          it("Verify Signature 2 value  as 'User Management' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "User Management");
+          });
+
+          it("Verify Signature 3 value  as 'Company Admin' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Company Admin");
+          });
           cy.get("table").contains("th", "Level Name");
           cy.get("table").contains("th", "Limit");
           cy.get("table").contains("th", "Signature 1");
@@ -1547,6 +1636,37 @@ context("DAM and POAM", () => {
           it("Open revision history tab", () => {
             cy.drSelectRevisionHistoryTab();
             cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
+          });
+        });
+
+        context("Verify History tab content scroll", () => {
+          it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
+            cy.verifyHistoryScroll();
+          });
+        });
+
+        context("Hover over the history panel in overview tab", () => {
+          it("Navigate to overview tab", () => {
+            cy.drSelectOverviewTab();
+          });
+
+          it("Navigate to history tab", () => {
+            cy.drSelectHistoryTab();
+          });
+
+          it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+            cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+          });
+        });
+
+        context("Click on Revisions and Choose previous Revision of DAM and verify", () => {
+          it("Open revisions tab, click and verify revision", () => {
+            cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+              cy.drClickRevisionsSidePanel();
+              cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+              cy.recCheckRevisionStage({ stage: "Revision 1" });
+              cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
+            });
           });
         });
       });
