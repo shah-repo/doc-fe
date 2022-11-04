@@ -1,4 +1,3 @@
-import { Divider } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import React from "react";
 import { useSelector } from "react-redux";
@@ -73,265 +72,193 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
             case ActionTypes.EQ_MAINTENANCE_OWNER_OR_COORDINATOR:
             case ActionTypes.EQ_CALIBRATION_OWNER_OR_COORDINATOR:
               return (
-                <>
-                  <CalibrationItem
-                    key={index}
-                    id={pendingAction.id}
-                    docDocumentId={pendingAction.docDocumentId}
-                    type={pendingAction.type}
-                    timestamp={getFormattedDateString(
-                      pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
-                    )}
-                    dueOn={getFormattedDateString(
-                      pendingAction.dueOn,
-                      MomentFormats.ShortBriefDate
-                    )}
-                    docId={pendingAction.docId}
-                    docRevId={pendingAction.docRevId}
-                    docRevOwnerId={pendingAction.docRevOwnerId}
-                    docRevName={pendingAction.docRevName}
-                    docRevVersion={pendingAction?.docRevVersion}
-                    equipmentInterval={pendingAction.equipmentInterval}
-                    onMouseHoverItem={onMouseHoverItem}
-                    pinLineItem={pinLineItem}
-                    unPinLineItem={unPinLineItem}
-                    pinned={pendingAction.pinned}
-                    hoverItemId={hoverItemId}
-                  />
-                  <Divider />
-                </>
+                <CalibrationItem
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  docDocumentId={pendingAction.docDocumentId}
+                  type={pendingAction.type}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  dueOn={getFormattedDateString(
+                    pendingAction.dueOn,
+                    MomentFormats.ShortBriefDate
+                  )}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  docRevOwnerId={pendingAction.docRevOwnerId}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction?.docRevVersion}
+                  equipmentInterval={pendingAction.equipmentInterval}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                />
               );
             case ActionTypes.DIRECT_PO_APPROVAL_REQ_APPROVER:
               return (
-                <>
-                  <POTaskApproval
-                    key={index}
-                    id={pendingAction.id}
-                    docDocumentId={pendingAction.docDocumentId}
-                    approvalId={pendingAction.approvalId}
-                    type={pendingAction.type}
-                    timestamp={getFormattedDateString(
-                      pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
-                    )}
-                    purchaseOrderSupplierDocRevId={
-                      pendingAction.purchaseOrderSupplierDocRevId
-                    }
-                    purchaseOrderSupplierDocId={
-                      pendingAction.purchaseOrderSupplierDocId
-                    }
-                    purchaseOrderTotalAmount={
-                      pendingAction.purchaseOrderTotalAmount
-                    }
-                    purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
-                    purchaseOrderDescription={
-                      pendingAction.purchaseOrderDescription
-                    }
-                    purchaseOrdeLineItemCount={
-                      pendingAction.purchaseOrdeLineItemCount
-                    }
-                    purchaseOrderAttachments={
-                      pendingAction.purchaseOrderAttachments
-                    }
-                    purchaseSupplierName={pendingAction.purchaseSupplierName}
-                    docId={pendingAction.docId}
-                    docRevId={pendingAction.docRevId}
-                    docRevOwnerName={pendingAction.docRevOwnerName}
-                    docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
-                    docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
-                    docRevName={pendingAction.docRevName}
-                    docRevVersion={pendingAction?.docRevVersion}
-                    onMouseHoverItem={onMouseHoverItem}
-                    pinLineItem={pinLineItem}
-                    unPinLineItem={unPinLineItem}
-                    pinned={pendingAction.pinned}
-                    hoverItemId={hoverItemId}
-                    dialogPDF={dialogPDF}
-                  />
-                  <Divider />
-                </>
+                <POTaskApproval
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  docDocumentId={pendingAction.docDocumentId}
+                  approvalId={pendingAction.approvalId}
+                  type={pendingAction.type}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  purchaseOrderSupplierDocRevId={
+                    pendingAction.purchaseOrderSupplierDocRevId
+                  }
+                  purchaseOrderSupplierDocId={
+                    pendingAction.purchaseOrderSupplierDocId
+                  }
+                  purchaseOrderTotalAmount={
+                    pendingAction.purchaseOrderTotalAmount
+                  }
+                  purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
+                  purchaseOrderDescription={
+                    pendingAction.purchaseOrderDescription
+                  }
+                  purchaseOrdeLineItemCount={
+                    pendingAction.purchaseOrdeLineItemCount
+                  }
+                  purchaseOrderAttachments={
+                    pendingAction.purchaseOrderAttachments
+                  }
+                  purchaseSupplierName={pendingAction.purchaseSupplierName}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  docRevOwnerName={pendingAction.docRevOwnerName}
+                  docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
+                  docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction?.docRevVersion}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                  dialogPDF={dialogPDF}
+                />
               );
             case ActionTypes.APPROVAL_REQ_INLINE_APPROVER:
             case ActionTypes.DIRECT_APPROVAL_REQ_APPROVER:
               return (
-                <>
-                  <NONPOTaskApproval
-                    key={index}
-                    id={pendingAction.id}
-                    docDocumentId={pendingAction.docDocumentId}
-                    approvalId={pendingAction.approvalId}
-                    type={pendingAction.type}
-                    timestamp={getFormattedDateString(
-                      pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
-                    )}
-                    docId={pendingAction.docId}
-                    docRevId={pendingAction.docRevId}
-                    docRevOwnerName={pendingAction.docRevOwnerName}
-                    docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
-                    docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
-                    docRevName={pendingAction.docRevName}
-                    docRevVersion={pendingAction?.docRevVersion}
-                    onMouseHoverItem={onMouseHoverItem}
-                    pinLineItem={pinLineItem}
-                    unPinLineItem={unPinLineItem}
-                    pinned={pendingAction.pinned}
-                    hoverItemId={hoverItemId}
-                  />
-                  <Divider />
-                </>
+                <NONPOTaskApproval
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  docDocumentId={pendingAction.docDocumentId}
+                  approvalId={pendingAction.approvalId}
+                  type={pendingAction.type}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  docRevOwnerName={pendingAction.docRevOwnerName}
+                  docRevOwnerAvatar={pendingAction.docRevOwnerAvatar}
+                  docRevOwnerInitialColor={pendingAction.docRevOwnerInitialColor}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction?.docRevVersion}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                />
               );
             case ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER_APPROVER_APPROVED:
               return (
-                <>
-                  <POApproverActions
-                    key={index}
-                    id={pendingAction.id}
-                    docDocumentId={pendingAction.docDocumentId}
-                    docId={pendingAction.docId}
-                    docRevId={pendingAction.docRevId}
-                    type={pendingAction.type}
-                    approverName={pendingAction.approverName}
-                    approvalId={pendingAction.approvalId}
-                    approverAvatar={pendingAction.approverAvatar}
-                    approverInitialColor={pendingAction.approverInitialColor}
-                    timestamp={getFormattedDateString(
-                      pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
-                    )}
-                    purchaseOrderSupplierDocRevId={
-                      pendingAction.purchaseOrderSupplierDocRevId
-                    }
-                    purchaseOrderSupplierDocId={
-                      pendingAction.purchaseOrderSupplierDocId
-                    }
-                    status={pendingAction.approvalStatusChanged}
-                    docRevName={pendingAction.docRevName}
-                    docRevVersion={pendingAction?.docRevVersion}
-                    purchaseOrderTotalAmount={
-                      pendingAction.purchaseOrderTotalAmount
-                    }
-                    purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
-                    purchaseOrderDescription={
-                      pendingAction.purchaseOrderDescription
-                    }
-                    purchaseOrdeLineItemCount={
-                      pendingAction.purchaseOrdeLineItemCount
-                    }
-                    purchaseOrderAttachments={
-                      pendingAction.purchaseOrderAttachments
-                    }
-                    purchaseSupplierName={pendingAction.purchaseSupplierName}
-                    onMouseHoverItem={onMouseHoverItem}
-                    pinLineItem={pinLineItem}
-                    unPinLineItem={unPinLineItem}
-                    pinned={pendingAction.pinned}
-                    hoverItemId={hoverItemId}
-                    dialogPDF={dialogPDF}
-                  />
-                  <Divider />
-                </>
+                <POApproverActions
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  docDocumentId={pendingAction.docDocumentId}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  type={pendingAction.type}
+                  approverName={pendingAction.approverName}
+                  approvalId={pendingAction.approvalId}
+                  approverAvatar={pendingAction.approverAvatar}
+                  approverInitialColor={pendingAction.approverInitialColor}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  purchaseOrderSupplierDocRevId={
+                    pendingAction.purchaseOrderSupplierDocRevId
+                  }
+                  purchaseOrderSupplierDocId={
+                    pendingAction.purchaseOrderSupplierDocId
+                  }
+                  status={pendingAction.approvalStatusChanged}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction?.docRevVersion}
+                  purchaseOrderTotalAmount={
+                    pendingAction.purchaseOrderTotalAmount
+                  }
+                  purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
+                  purchaseOrderDescription={
+                    pendingAction.purchaseOrderDescription
+                  }
+                  purchaseOrdeLineItemCount={
+                    pendingAction.purchaseOrdeLineItemCount
+                  }
+                  purchaseOrderAttachments={
+                    pendingAction.purchaseOrderAttachments
+                  }
+                  purchaseSupplierName={pendingAction.purchaseSupplierName}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                  dialogPDF={dialogPDF}
+                />
               );
             case ActionTypes.DIRECT_APPROVAL_REQ_OWNER_APPROVER_APPROVED_OR_REJECTED:
               return (
-                <>
-                  <NonPOApproverActions
-                    key={index}
-                    id={pendingAction.id}
-                    docDocumentId={pendingAction.docDocumentId}
-                    docId={pendingAction.docId}
-                    docRevId={pendingAction.docRevId}
-                    type={pendingAction.type}
-                    approverName={pendingAction.approverName}
-                    approverAvatar={pendingAction.approverAvatar}
-                    approverInitialColor={pendingAction.approverInitialColor}
-                    timestamp={getFormattedDateString(
-                      pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
-                    )}
-                    status={pendingAction.approvalStatusChanged}
-                    docRevName={pendingAction.docRevName}
-                    docRevVersion={pendingAction?.docRevVersion}
-                    onMouseHoverItem={onMouseHoverItem}
-                    pinLineItem={pinLineItem}
-                    unPinLineItem={unPinLineItem}
-                    pinned={pendingAction.pinned}
-                    hoverItemId={hoverItemId}
-                  />
-                  <Divider />
-                </>
+                <NonPOApproverActions
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  docDocumentId={pendingAction.docDocumentId}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  type={pendingAction.type}
+                  approverName={pendingAction.approverName}
+                  approverAvatar={pendingAction.approverAvatar}
+                  approverInitialColor={pendingAction.approverInitialColor}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  status={pendingAction.approvalStatusChanged}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction?.docRevVersion}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                />
               );
             case ActionTypes.DIRECT_PO_APPROVAL_REQ_OWNER:
               if (
                 LINE_ITEMS_STATUS_TYPES.IN_REVIEW === pendingAction.docRevStatus
               ) {
                 return (
-                  <>
-                    <PurchaseOrderPendingReview
-                      key={index}
-                      id={pendingAction.id}
-                      docDocumentId={pendingAction.docDocumentId}
-                      docId={pendingAction.docId}
-                      docRevId={pendingAction.docRevId}
-                      docTypeGroup={pendingAction.docTypeGroup}
-                      type={pendingAction.type}
-                      timestamp={getFormattedDateString(
-                        pendingAction.timestamp,
-                        MomentFormats.BriefDateTime
-                      )}
-                      purchaseOrderSupplierDocRevId={
-                        pendingAction.purchaseOrderSupplierDocRevId
-                      }
-                      purchaseOrderSupplierDocId={
-                        pendingAction.purchaseOrderSupplierDocId
-                      }
-                      status={pendingAction.docRevStatus}
-                      displaystatus={pendingAction.docRevDisplayStatus}
-                      docRevName={pendingAction.docRevName}
-                      docRevVersion={pendingAction?.docRevVersion}
-                      docRevPendingApprovals={
-                        pendingAction.docRevPendingApprovals
-                      }
-                      docRevApprovedApprovals={
-                        pendingAction.docRevApprovedApprovals
-                      }
-                      purchaseOrderTotalAmount={
-                        pendingAction.purchaseOrderTotalAmount
-                      }
-                      purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
-                      purchaseOrderDescription={
-                        pendingAction.purchaseOrderDescription
-                      }
-                      purchaseOrdeLineItemCount={
-                        pendingAction.purchaseOrdeLineItemCount
-                      }
-                      purchaseOrderAttachments={
-                        pendingAction.purchaseOrderAttachments
-                      }
-                      purchaseSupplierName={pendingAction.purchaseSupplierName}
-                      onMouseHoverItem={onMouseHoverItem}
-                      pinLineItem={pinLineItem}
-                      unPinLineItem={unPinLineItem}
-                      pinned={pendingAction.pinned}
-                      hoverItemId={hoverItemId}
-                      pendingEmailSentAt={pendingAction.pendingEmailSentAt}
-                      dialogPDF={dialogPDF}
-                    />
-                    <Divider />
-                  </>
-                );
-              }
-              return (
-                <>
-                  <PurchaseOrder
-                    key={index}
+                  <PurchaseOrderPendingReview
+                    key={pendingAction.id}
                     id={pendingAction.id}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
                     docRevId={pendingAction.docRevId}
+                    docTypeGroup={pendingAction.docTypeGroup}
                     type={pendingAction.type}
-                    pinned={pendingAction.pinned}
                     timestamp={getFormattedDateString(
                       pendingAction.timestamp,
                       MomentFormats.BriefDateTime
@@ -343,10 +270,15 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                       pendingAction.purchaseOrderSupplierDocId
                     }
                     status={pendingAction.docRevStatus}
-                    docTypeGroup={pendingAction.docTypeGroup}
                     displaystatus={pendingAction.docRevDisplayStatus}
                     docRevName={pendingAction.docRevName}
                     docRevVersion={pendingAction?.docRevVersion}
+                    docRevPendingApprovals={
+                      pendingAction.docRevPendingApprovals
+                    }
+                    docRevApprovedApprovals={
+                      pendingAction.docRevApprovedApprovals
+                    }
                     purchaseOrderTotalAmount={
                       pendingAction.purchaseOrderTotalAmount
                     }
@@ -364,56 +296,65 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
+                    pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
+                    pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                     dialogPDF={dialogPDF}
                   />
-                  <Divider />
-                </>
+                );
+              }
+              return (
+                <PurchaseOrder
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  docDocumentId={pendingAction.docDocumentId}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  type={pendingAction.type}
+                  pinned={pendingAction.pinned}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  purchaseOrderSupplierDocRevId={
+                    pendingAction.purchaseOrderSupplierDocRevId
+                  }
+                  purchaseOrderSupplierDocId={
+                    pendingAction.purchaseOrderSupplierDocId
+                  }
+                  status={pendingAction.docRevStatus}
+                  docTypeGroup={pendingAction.docTypeGroup}
+                  displaystatus={pendingAction.docRevDisplayStatus}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction?.docRevVersion}
+                  purchaseOrderTotalAmount={
+                    pendingAction.purchaseOrderTotalAmount
+                  }
+                  purchaseOrderCurrency={pendingAction.purchaseOrderCurrency}
+                  purchaseOrderDescription={
+                    pendingAction.purchaseOrderDescription
+                  }
+                  purchaseOrdeLineItemCount={
+                    pendingAction.purchaseOrdeLineItemCount
+                  }
+                  purchaseOrderAttachments={
+                    pendingAction.purchaseOrderAttachments
+                  }
+                  purchaseSupplierName={pendingAction.purchaseSupplierName}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  hoverItemId={hoverItemId}
+                  dialogPDF={dialogPDF}
+                />
               );
             case ActionTypes.DIRECT_APPROVAL_REQ_OWNER:
               if (pendingAction.docRevStatus === "IN_REVIEW") {
                 return (
-                  <>
-                    <DirectApprovalActionPRItem
-                      key={index}
-                      id={pendingAction.id}
-                      docTypeGroup={pendingAction.docTypeGroup}
-                      docDocumentId={pendingAction.docDocumentId}
-                      docId={pendingAction.docId}
-                      docRevId={pendingAction.docRevId}
-                      type={pendingAction.type}
-                      timestamp={getFormattedDateString(
-                        pendingAction.timestamp,
-                        MomentFormats.BriefDateTime
-                      )}
-                      status={pendingAction.docRevStatus}
-                      displaystatus={pendingAction.docRevDisplayStatus}
-                      docRevName={pendingAction.docRevName}
-                      docRevVersion={pendingAction?.docRevVersion}
-                      docRevPendingApprovals={
-                        pendingAction.docRevPendingApprovals
-                      }
-                      docRevApprovedApprovals={
-                        pendingAction.docRevApprovedApprovals
-                      }
-                      onMouseHoverItem={onMouseHoverItem}
-                      pinLineItem={pinLineItem}
-                      unPinLineItem={unPinLineItem}
-                      pinned={pendingAction.pinned}
-                      hoverItemId={hoverItemId}
-                      pendingEmailSentAt={pendingAction.pendingEmailSentAt}
-                    />
-                    <Divider />
-                  </>
-                );
-              }
-              return (
-                <>
-                  <DirectApprovalActionItem
-                    key={index}
+                  <DirectApprovalActionPRItem
+                    key={pendingAction.id}
                     id={pendingAction.id}
                     docTypeGroup={pendingAction.docTypeGroup}
-                    displaystatus={pendingAction.docRevDisplayStatus}
                     docDocumentId={pendingAction.docDocumentId}
                     docId={pendingAction.docId}
                     docRevId={pendingAction.docRevId}
@@ -423,197 +364,207 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                       MomentFormats.BriefDateTime
                     )}
                     status={pendingAction.docRevStatus}
+                    displaystatus={pendingAction.docRevDisplayStatus}
                     docRevName={pendingAction.docRevName}
                     docRevVersion={pendingAction?.docRevVersion}
+                    docRevPendingApprovals={
+                      pendingAction.docRevPendingApprovals
+                    }
+                    docRevApprovedApprovals={
+                      pendingAction.docRevApprovedApprovals
+                    }
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
+                    pendingEmailSentAt={pendingAction.pendingEmailSentAt}
                   />
-                  <Divider />
-                </>
+                );
+              }
+              return (
+                <DirectApprovalActionItem
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  docTypeGroup={pendingAction.docTypeGroup}
+                  displaystatus={pendingAction.docRevDisplayStatus}
+                  docDocumentId={pendingAction.docDocumentId}
+                  docId={pendingAction.docId}
+                  docRevId={pendingAction.docRevId}
+                  type={pendingAction.type}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  status={pendingAction.docRevStatus}
+                  docRevName={pendingAction.docRevName}
+                  docRevVersion={pendingAction?.docRevVersion}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                />
               );
             case ActionTypes.TRAINING_STATUS_TRAINEE:
               return (
-                <>
-                  <TrainingItem
-                    key={index}
-                    id={pendingAction.id}
-                    type={pendingAction.type}
-                    docRevName={pendingAction.docRevName}
-                    docId={pendingAction.docId}
-                    docDocumentId={pendingAction?.docDocumentId}
-                    docRevId={pendingAction?.docRevId}
-                    docRevVersion={pendingAction?.docRevVersion}
-                    status={pendingAction.trainingStatus}
-                    timestamp={getFormattedDateString(
-                      pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
-                    )}
-                    dueOn={getFormattedDateString(
-                      pendingAction.dueOn,
-                      MomentFormats.ShortBriefDate
-                    )}
-                    hoverItemId={hoverItemId}
-                    onMouseHoverItem={onMouseHoverItem}
-                    pinLineItem={pinLineItem}
-                    unPinLineItem={unPinLineItem}
-                    pinned={pendingAction.pinned}
-                  />
-                  <Divider />
-                </>
+                <TrainingItem
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  type={pendingAction.type}
+                  docRevName={pendingAction.docRevName}
+                  docId={pendingAction.docId}
+                  docDocumentId={pendingAction?.docDocumentId}
+                  docRevId={pendingAction?.docRevId}
+                  docRevVersion={pendingAction?.docRevVersion}
+                  status={pendingAction.trainingStatus}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  dueOn={getFormattedDateString(
+                    pendingAction.dueOn,
+                    MomentFormats.ShortBriefDate
+                  )}
+                  hoverItemId={hoverItemId}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                />
               );
             case ActionTypes.APPROVAL_REQ_APPROVER:
               return (
-                <>
-                  <ARTaskApproval
-                    key={index}
-                    id={pendingAction.id}
-                    docRevs={pendingAction.docRevs}
-                    arChangeRequestId={pendingAction.arChangeRequestId}
-                    type={pendingAction.type}
-                    timestamp={getFormattedDateString(
-                      pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
-                    )}
-                    arId={pendingAction.arId}
-                    docRevOwnerName={pendingAction.arOwnerName}
-                    docRevOwnerAvatar={pendingAction.arOwnerAvatar}
-                    docRevOwnerInitialColor={pendingAction.arOwnerInitialColor}
-                    title={pendingAction.arTitle}
-                    onMouseHoverItem={onMouseHoverItem}
-                    pinLineItem={pinLineItem}
-                    unPinLineItem={unPinLineItem}
-                    pinned={pendingAction.pinned}
-                    hoverItemId={hoverItemId}
-                  />
-                  <Divider />
-                </>
+                <ARTaskApproval
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  docRevs={pendingAction.docRevs}
+                  arChangeRequestId={pendingAction.arChangeRequestId}
+                  type={pendingAction.type}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  arId={pendingAction.arId}
+                  docRevOwnerName={pendingAction.arOwnerName}
+                  docRevOwnerAvatar={pendingAction.arOwnerAvatar}
+                  docRevOwnerInitialColor={pendingAction.arOwnerInitialColor}
+                  title={pendingAction.arTitle}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                />
               );
             case ActionTypes.APPROVAL_REQ_OWNER_APPROVER_APPROVED_OR_REJECTED:
               return (
-                <>
-                  <ARApproverActions
-                    key={index}
-                    id={pendingAction.id}
-                    arChangeRequestId={pendingAction.arChangeRequestId}
-                    type={pendingAction.type}
-                    docRevs={pendingAction.docRevs}
-                    arId={pendingAction.arId}
-                    arTitle={pendingAction.arTitle}
-                    approvalStatusChanged={pendingAction.approvalStatusChanged}
-                    approverName={pendingAction.approverName}
-                    approverAvatar={pendingAction.approverAvatar}
-                    approverInitialColor={pendingAction.approverInitialColor}
-                    timestamp={getFormattedDateString(
-                      pendingAction.timestamp,
-                      MomentFormats.BriefDateTime
-                    )}
-                    onMouseHoverItem={onMouseHoverItem}
-                    pinLineItem={pinLineItem}
-                    unPinLineItem={unPinLineItem}
-                    pinned={pendingAction.pinned}
-                    hoverItemId={hoverItemId}
-                  />
-                  <Divider />
-                </>
+                <ARApproverActions
+                  key={pendingAction.id}
+                  id={pendingAction.id}
+                  arChangeRequestId={pendingAction.arChangeRequestId}
+                  type={pendingAction.type}
+                  docRevs={pendingAction.docRevs}
+                  arId={pendingAction.arId}
+                  arTitle={pendingAction.arTitle}
+                  approvalStatusChanged={pendingAction.approvalStatusChanged}
+                  approverName={pendingAction.approverName}
+                  approverAvatar={pendingAction.approverAvatar}
+                  approverInitialColor={pendingAction.approverInitialColor}
+                  timestamp={getFormattedDateString(
+                    pendingAction.timestamp,
+                    MomentFormats.BriefDateTime
+                  )}
+                  onMouseHoverItem={onMouseHoverItem}
+                  pinLineItem={pinLineItem}
+                  unPinLineItem={unPinLineItem}
+                  pinned={pendingAction.pinned}
+                  hoverItemId={hoverItemId}
+                />
               );
             case ActionTypes.APPROVED_APPROVAL_REQUESTS:
             case ActionTypes.APPROVAL_REQ_OWNER:
               if (pendingAction.arStatus === "CLOSED") {
                 return (
-                  <>
-                    <ApprovalClosed
-                      key={index}
-                      id={pendingAction.id}
-                      arChangeRequestId={pendingAction.arChangeRequestId}
-                      type={pendingAction.type}
-                      arId={pendingAction.arId}
-                      title={pendingAction?.arTitle}
-                      docRevs={pendingAction.docRevs}
-                      arStatus={pendingAction.arStatus}
-                      timestamp={getFormattedDateString(
-                        pendingAction.timestamp,
-                        MomentFormats.BriefDateTime
-                      )}
-                      onMouseHoverItem={onMouseHoverItem}
-                      pinLineItem={pinLineItem}
-                      unPinLineItem={unPinLineItem}
-                      pinned={pendingAction.pinned}
-                      hoverItemId={hoverItemId}
-                    />
-                    <Divider />
-                  </>
+                  <ApprovalClosed
+                    key={pendingAction.id}
+                    id={pendingAction.id}
+                    arChangeRequestId={pendingAction.arChangeRequestId}
+                    type={pendingAction.type}
+                    arId={pendingAction.arId}
+                    title={pendingAction?.arTitle}
+                    docRevs={pendingAction.docRevs}
+                    arStatus={pendingAction.arStatus}
+                    timestamp={getFormattedDateString(
+                      pendingAction.timestamp,
+                      MomentFormats.BriefDateTime
+                    )}
+                    onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
+                    pinned={pendingAction.pinned}
+                    hoverItemId={hoverItemId}
+                  />
                 );
               }
               if (pendingAction.arStatus === "APPROVED") {
                 return (
-                  <>
-                    <ApprovalApproved
-                      key={index}
-                      id={pendingAction.id}
-                      arChangeRequestId={pendingAction.arChangeRequestId}
-                      type={pendingAction.type}
-                      arId={pendingAction.arId}
-                      title={pendingAction?.arTitle}
-                      docRevs={pendingAction.docRevs}
-                      arStatus={pendingAction.arStatus}
-                      timestamp={getFormattedDateString(
-                        pendingAction.timestamp,
-                        MomentFormats.BriefDateTime
-                      )}
-                      onMouseHoverItem={onMouseHoverItem}
-                      pinLineItem={pinLineItem}
-                      unPinLineItem={unPinLineItem}
-                      pinned={pendingAction.pinned}
-                      hoverItemId={hoverItemId}
-                    />
-                    <Divider />
-                  </>
+                  <ApprovalApproved
+                    key={pendingAction.id}
+                    id={pendingAction.id}
+                    arChangeRequestId={pendingAction.arChangeRequestId}
+                    type={pendingAction.type}
+                    arId={pendingAction.arId}
+                    title={pendingAction?.arTitle}
+                    docRevs={pendingAction.docRevs}
+                    arStatus={pendingAction.arStatus}
+                    timestamp={getFormattedDateString(
+                      pendingAction.timestamp,
+                      MomentFormats.BriefDateTime
+                    )}
+                    onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
+                    pinned={pendingAction.pinned}
+                    hoverItemId={hoverItemId}
+                  />
                 );
               }
               if (pendingAction.arStatus === "IN_REVIEW") {
                 return (
-                  <>
-                    <PendingReview
-                      key={index}
-                      id={pendingAction.id}
-                      arChangeRequestId={pendingAction.arChangeRequestId}
-                      type={pendingAction.type}
-                      arId={pendingAction.arId}
-                      title={pendingAction?.arTitle}
-                      docRevs={pendingAction.docRevs}
-                      arStatus={pendingAction.arStatus}
-                      timestamp={getFormattedDateString(
-                        pendingAction.timestamp,
-                        MomentFormats.BriefDateTime
-                      )}
-                      pendingApprovers={pendingAction.pendingApprovers}
-                      approvedApprovers={pendingAction.approvedApprovers}
-                      onMouseHoverItem={onMouseHoverItem}
-                      pinLineItem={pinLineItem}
-                      unPinLineItem={unPinLineItem}
-                      pinned={pendingAction.pinned}
-                      hoverItemId={hoverItemId}
-                      pendingEmailSentAt={pendingAction.pendingEmailSentAt}
-                    />
-                    <Divider />
-                  </>
+                  <PendingReview
+                    key={pendingAction.id}
+                    id={pendingAction.id}
+                    arChangeRequestId={pendingAction.arChangeRequestId}
+                    type={pendingAction.type}
+                    arId={pendingAction.arId}
+                    title={pendingAction?.arTitle}
+                    docRevs={pendingAction.docRevs}
+                    arStatus={pendingAction.arStatus}
+                    timestamp={getFormattedDateString(
+                      pendingAction.timestamp,
+                      MomentFormats.BriefDateTime
+                    )}
+                    pendingApprovers={pendingAction.pendingApprovers}
+                    approvedApprovers={pendingAction.approvedApprovers}
+                    onMouseHoverItem={onMouseHoverItem}
+                    pinLineItem={pinLineItem}
+                    unPinLineItem={unPinLineItem}
+                    pinned={pendingAction.pinned}
+                    hoverItemId={hoverItemId}
+                    pendingEmailSentAt={pendingAction.pendingEmailSentAt}
+                  />
                 );
               }
               // falls through
             default:
               return (
-                <>
-                  <DefaultLineItem
-                    key={index}
-                    type={pendingAction.type}
-                    status={pendingAction.arStatus || pendingAction.docRevStatus}
-                    onMouseHoverItem={onMouseHoverItem}
-                  />
-                  <Divider />
-                </>
+                <DefaultLineItem
+                  key={pendingAction.id}
+                  type={pendingAction.type}
+                  status={pendingAction.arStatus || pendingAction.docRevStatus}
+                  onMouseHoverItem={onMouseHoverItem}
+                />
               );
           }
         })
@@ -633,7 +584,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
       asyncState={loadMyFeedsListAsyncState}
       startActionOnMount={!!currentEmployeeId}
     >
-      {feedItems.total === 0 ? <NoPendingActions /> : <PendingActions />}
+      {feedItems.total === 0 ? <NoPendingActions /> : PendingActions() }
     </AsyncGate>
   );
 };

@@ -1,11 +1,8 @@
-import { Divider, List } from "@material-ui/core";
+import { List } from "@material-ui/core";
 import React from "react";
 import { ActionCreator } from "redux";
 import { getHumanizedFormat } from "../../../common/utils/date";
-import {
-  RecentItems,
-  RecentTypes,
-} from "../../../state/ducks/dashboard.new/recents/types";
+import { RecentItems, RecentTypes } from "../../../state/ducks/dashboard.new/recents/types";
 import { ApiAction, AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
@@ -27,36 +24,18 @@ const RecentsPresenter: React.FC<Props> = ({
       {recents.map((data, index) => {
         switch (data.itemType) {
           case RecentTypes.DOCUMENT:
-            return (
-              <>
-                <RecentsItem
-                  key={index}
-                  itemId={data.itemId}
-                  docId={data.docId}
-                  itemType={data.itemType}
-                  docTypeGroup={data.docTypeGroup}
-                  docRevId={data.docRevId}
-                  docTitle={data.docTitle}
-                  accessedAt={getHumanizedFormat(data.accessedAt)}
-                />
-                <Divider />
-              </>
-            );
           case RecentTypes.CHANGE_REQUEST:
             return (
-              <>
-                <RecentsItem
-                  key={index}
-                  itemId={data.itemId}
-                  docId={data.docId}
-                  itemType={data.itemType}
-                  docTypeGroup={data.docTypeGroup}
-                  docRevId={data.docRevId}
-                  docTitle={data.docTitle}
-                  accessedAt={getHumanizedFormat(data.accessedAt)}
-                />
-                <Divider />
-              </>
+              <RecentsItem
+                key={data.itemId}
+                itemId={data.itemId}
+                docId={data.docId}
+                itemType={data.itemType}
+                docTypeGroup={data.docTypeGroup}
+                docRevId={data.docRevId}
+                docTitle={data.docTitle}
+                accessedAt={getHumanizedFormat(data.accessedAt)}
+              />
             );
           default:
             return <Text key={index} translation="common.undefined" />;

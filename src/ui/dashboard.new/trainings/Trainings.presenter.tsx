@@ -80,7 +80,7 @@ const TrainingsLineItemPresenter: React.FC<Props> = ({
     </List>
   );
 
-  return trainingItems.total === 0 ? <NoPendingActions /> : <PendingActions />;
+  return trainingItems.total === 0 ? <NoPendingActions /> : PendingActions();
 };
 
 export default TrainingsLineItemPresenter;
