@@ -1,12 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import {
-  Avatar,
-  Box,
-  Grid,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Box, Grid, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
@@ -32,7 +24,7 @@ import DocTitle from "../../common/DocTitle/presenter";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
-import { styles } from "./taskApproval.styles";
+import useStyles from "./taskApproval.styles";
 
 interface Props {
   id: string;
@@ -53,7 +45,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (pinnedItemId: string) => void;
 }
-const taskApprovalPresenter: React.FunctionComponent<Props> = ({
+const TaskApprovalPresenter: React.FC<Props> = ({
   id,
   docDocumentId,
   docId,
@@ -71,7 +63,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
@@ -149,7 +141,13 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <StyledListItem button onMouseEnter={onMouseHoverListItem} className={classes.buttoncursor} disableRipple>
+      <StyledListItem
+        button
+        divider
+        disableRipple
+        onMouseEnter={onMouseHoverListItem}
+        className={classes.buttoncursor}
+      >
         <ListItemAvatar>
           {docRevOwnerAvatar ? (
             <Avatar
@@ -347,4 +345,4 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default taskApprovalPresenter;
+export default TaskApprovalPresenter;

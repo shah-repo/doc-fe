@@ -1,16 +1,20 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../layout/theme/utils/colors";
 
 const SIDEBAR_WIDTH = 300;
 
-export default makeStyles((theme: Theme) =>
+export default makeStyles((theme) =>
   createStyles({
+    iconBar: (isDrawerOpen: boolean) => ({
+      width: 48,
+      borderRight: isDrawerOpen ? `1px solid ${Colors.light_gray_border}` : "none",
+    }),
     changeContainer: {
       boxShadow: `inset 0px 1px 1px -1px ${Colors.gray_goose}, inset 0px -1px 1px 0px ${Colors.gray_goose}`,
       padding: theme.spacing(1.875),
     },
     listItem: {
-      "padding": "0px 0px 0px 0px",
+      "padding": 0,
       "& .MuiListItemAvatar-root": {
         maxWidth: "35px",
         minWidth: "35px",
@@ -18,7 +22,7 @@ export default makeStyles((theme: Theme) =>
       },
     },
     drawerPaper: {
-      marginTop: "105px",
+      marginTop: 105,
       position: "fixed",
       height: "100%",
       overflow: "auto",
@@ -38,7 +42,7 @@ export default makeStyles((theme: Theme) =>
     },
     drawerInner: {
       width: SIDEBAR_WIDTH,
-      height: "calc(100% - 105px)",
+      height: "100%",
       display: "flex",
       flexDirection: "column",
     },
@@ -46,19 +50,19 @@ export default makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end",
-      padding: "0 8px",
-      minHeight: "10px",
+      padding: theme.spacing(0, 1),
+      minHeight: 10,
     },
     sidebarList: {
-      height: "calc(100% - 60px)",
+      height: "100%",
       overflow: "auto",
-      paddingRight: "17px",
-      minWidth: "calc(100% + 17px)",
+      paddingRight: 17,
+      minWidth: "100%",
     },
     menuIcon: {
       "margin": "8px 13px 13px 11px",
-      "paddingTop": "5px",
-      "paddingBottom": "5px",
+      "paddingTop": 5,
+      "paddingBottom": 5,
       "justifyContent": "unset",
       "&:hover": {
         background: "none",
@@ -66,11 +70,11 @@ export default makeStyles((theme: Theme) =>
     },
     iconButton: {
       "margin": "8px 13px 13px 11px",
-      "paddingTop": "5px",
-      "paddingBottom": "5px",
+      "paddingTop": 5,
+      "paddingBottom": 5,
       "&:hover, &:focus, li.active > a": {
         "background": Colors.light_blue,
-        "borderRadius": "5px",
+        "borderRadius": 5,
         "& svg": {
           stroke: Colors.medium_blue,
         },
@@ -80,13 +84,13 @@ export default makeStyles((theme: Theme) =>
       },
     },
     iconButtonNew: {
-      "width": "36px",
-      "height": "30px",
-      "padding": "0px",
+      "width": 36,
+      "height": 30,
+      "padding": 0,
       "margin": "9px 6px 0px 6px",
       "&:hover, &:focus, li.active > a": {
         "background": Colors.light_blue,
-        "borderRadius": "5px",
+        "borderRadius": 5,
         "& svg": {
           stroke: Colors.medium_blue,
         },
@@ -101,35 +105,36 @@ export default makeStyles((theme: Theme) =>
       fontWeight: theme.typography.fontWeightBold,
     },
     avatar: {
-      width: "35px",
-      height: "35px",
-      fontSize: "12px",
+      width: 35,
+      height: 35,
+      fontSize: 12,
       fontWeight: 600,
       color: Colors.white,
       textTransform: "uppercase",
     },
     secondaryText: {
-      fontSize: "12px",
+      fontSize: 12,
       color: Colors.font_gray,
     },
     generalInfo: {
       fontWeight: 600,
-      fontSize: "14px",
-      lineHeight: "21px",
+      fontSize: 14,
+      lineHeight: 1.5,
       color: Colors.almost_black,
     },
     linkButton: {
       textDecoration: "none",
       color: Colors.navy,
-      fontSize: "14px",
+      fontSize: 14,
     },
     references: {
       overflowX: "hidden",
       overflowY: "auto",
+      flexGrow: 1,
     },
     bgIsActiveTab: {
       "background": Colors.light_blue,
-      "borderRadius": "5px",
+      "borderRadius": 5,
       "& svg": {
         stroke: Colors.medium_blue,
       },

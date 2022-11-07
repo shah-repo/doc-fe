@@ -1,4 +1,5 @@
 import { Box, Typography } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
 import { useSelector } from "react-redux";
 import { ReactComponent as MyFeedIcon } from "../../assets/images/my_feed.svg";
@@ -11,13 +12,13 @@ import { GroupTag } from "../../state/ducks/auth/types";
 import { dashboardMyFeedsSelectors } from "../../state/ducks/dashboard.new/my.feeds";
 import Text from "../components/Text";
 import useGetHasTag from "../hooks/useGetHasTag";
-import { styles } from "./DashboardTabs.styles";
+import useStyles from "./DashboardTabs.styles";
 import { StyledTab } from "./StyledTab";
 import { StyledTabs } from "./StyledTabs";
 import TabPanel from "./TabPanel";
 
 const DashboardTabs: React.FunctionComponent = () => {
-  const classes = styles();
+  const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
 
@@ -32,7 +33,7 @@ const DashboardTabs: React.FunctionComponent = () => {
   const feedItems: any = useSelector(dashboardMyFeedsSelectors.myFeedsList);
 
   return (
-    <Box marginTop={1}>
+    <Box className={classes.root}>
       <StyledTabs
         value={value}
         onChange={handleChange}
@@ -117,7 +118,7 @@ const DashboardTabs: React.FunctionComponent = () => {
           }
         />
       </StyledTabs>
-      <Box marginTop={2}>
+      <Box className={cx(classes.tabs, "containing-box-scrollbar")}>
         <TabPanel
           value={value}
           index={0}

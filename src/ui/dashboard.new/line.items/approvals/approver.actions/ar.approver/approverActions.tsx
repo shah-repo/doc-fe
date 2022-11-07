@@ -1,14 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Collapse,
-  Grid,
-  IconButton,
-  List,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Box, Collapse, Grid, IconButton, List, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../../assets/images/approved_status_white.svg";
@@ -36,7 +26,7 @@ import { NormalStyleChip as RejectedNormalStyleChip } from "../../../common/Norm
 import { StyledListItem } from "../../../common/StyledListItem";
 import { StyleTooltip } from "../../../common/StyleTooltip";
 import { DocTypeGroups } from "../../../common/types";
-import { styles } from "./approverActions.styles";
+import useStyles from "./approverActions.styles";
 
 interface Props {
   id: string;
@@ -65,7 +55,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
 }
-const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
+const ARApproverActionItemPresenter: React.FC<Props> = ({
   id,
   arId,
   arChangeRequestId,
@@ -82,7 +72,7 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
@@ -114,11 +104,12 @@ const ARApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem
-        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onMouseEnter={onMouseHoverListItem}
-        className={classes.listItem}
+        divider
         disableRipple
+        className={classes.listItem}
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        onMouseEnter={onMouseHoverListItem}
       >
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
