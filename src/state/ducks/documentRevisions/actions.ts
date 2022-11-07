@@ -172,7 +172,7 @@ const approveAndReleaseNonQms = (
   password: string,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_ROOT_URL}/release/release_non_qms/${id}`,
+  url: `${DOCUMENT_REVISION_ROOT_URL}/release_unsigned/${id}`,
   method: "post",
   data: body,
   password,

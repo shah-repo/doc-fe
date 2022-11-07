@@ -44,6 +44,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   disableChipDelete = false,
   type,
   customStyles,
+  autoCompleteClasses,
   ...props
 }) => {
   const { workspaceState, dialogState } = FB.useStores();
@@ -151,6 +152,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               filterOptions,
               disableClearable,
             }}
+            classes={autoCompleteClasses}
             options={modifiedOptions}
             onInputChange={debounceFilterInput}
             ListboxComponent={groupByKey ? undefined : ListBoxComponent }
@@ -169,6 +171,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               filterOptions,
               disableClearable,
             }}
+            classes={autoCompleteClasses}
             options={modifiedOptions}
             onInputChange={debounceFilterInput}
             ListboxComponent={groupByKey ? undefined : ListBoxComponent }
