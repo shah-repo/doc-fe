@@ -1034,7 +1034,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("navigate to overview tab", () => {
