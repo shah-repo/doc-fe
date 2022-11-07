@@ -365,6 +365,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Filter document by ID", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00004", status: "Draft" });
     });
 
@@ -1884,7 +1885,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Save the form", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click on create lot", () => {
