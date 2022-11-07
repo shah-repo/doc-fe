@@ -1879,7 +1879,7 @@ context("DAM approvals in LHR", () => {
 
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev], () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
