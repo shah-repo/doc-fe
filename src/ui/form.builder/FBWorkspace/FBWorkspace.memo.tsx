@@ -12,7 +12,7 @@ import {
 import SummaryInfo from "../../common/summary/SummaryInfo";
 import Text from "../../components/Text";
 import { DocTypeGroups } from "../../dashboard.new/line.items/common/types";
-import { checkIsDocumentEquipment, checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
@@ -55,7 +55,6 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
 
   const documentInfo = workspaceState?.document;
-  const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
   const isInlineApproval = isFormWithInlineApproval(documentInfo?.formDocument?.formTemplate?.schema);
   const isRecord = checkIsDocumentRecord(documentInfo?.document?.documentType?.groupOptions);
   const isFirstAlphaReleased = isDocumentAlphaReleased(documentInfo?.revisionStage) && documentInfo?.subRevision === 0;
@@ -112,7 +111,7 @@ const FBWorkspaceMemo: React.FunctionComponent<FBWorkspaceProps> = ({
               </Button>
             )}
           { isStarter && <FBStarter index={size(schema)} />}
-          {!withoutBottomBar && !isEquipmentDoc && <FBWorkspaceBottomBar {...{ includeTransport }} />}
+          {!withoutBottomBar && <FBWorkspaceBottomBar {...{ includeTransport }} />}
         </Box>
       )}
     </Observer>

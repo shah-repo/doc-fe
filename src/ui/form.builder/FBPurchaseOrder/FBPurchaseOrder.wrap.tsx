@@ -82,7 +82,6 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         formInput: receivedItemsInput,
         referenceTo: hasNoReference ?
           [{
-            ...workspaceState.document?.referenceTo,
             id: poReceiveState?.data?.document.id,
           }] as Id[] : undefined,
       });

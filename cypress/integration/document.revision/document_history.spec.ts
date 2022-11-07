@@ -211,11 +211,13 @@ context("Check Document History", () => {
   context("Create document", () => {
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Edit document attributes", () => {
     it("Select reference for document", () => {
+      cy.wait(2000);
       cy.drSelectReferences( reference.value );
     });
 
@@ -280,6 +282,10 @@ context("Check Document History", () => {
       cy.navigToDocumentList();
     });
 
+    it("Clear document filter", () => {
+      cy.dlClearFilters();
+    });
+
     it("Filter the DRAFT document", () => {
       cy.dlFilterByStatus({ status: "Draft" });
     });
@@ -323,6 +329,10 @@ context("Check Document History", () => {
   context(`Open created document, ${formTitle.newValue} document creation`, () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+    });
+
+    it("Clear document filter", () => {
+      cy.dlClearFilters();
     });
 
     it("Filter the DRAFT document", () => {

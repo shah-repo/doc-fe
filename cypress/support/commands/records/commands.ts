@@ -109,7 +109,7 @@ Cypress.Commands.add("recFilterRecordListByIdAndStatus", (params: { id: string; 
   cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] input`).arrowType(params.id).wait(500);
   cy.unClick();
-  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.get(`[aria-colindex="3"] [class="k-select"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.unClick();
   cy.landingPageLoadingElementShouldNotExist();

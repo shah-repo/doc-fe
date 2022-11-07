@@ -163,7 +163,8 @@ context("AA Document Layout verification", () => {
   context("Navigate to DAM and Verify training 'Training required is checked YES for AA Document'", () => {
 
     it("Filter AA type document", () => {
-      cy.get(`[aria-colindex="2"] [class="k-textbox"]`).arrowType("AA");
+      cy.listLoadingElementShouldNotExist().wait(2000);
+      cy.get(`[aria-colindex="2"] input`).arrowType("AA");
     });
 
     it("Verify training checkbox is checked and internal type is other", () => {
@@ -401,7 +402,9 @@ context("AA Document Layout verification", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
-      cy.fbAddNewFieldButton();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.fbAddNewFieldButton();
+      });
     });
 
     it("Add checkbox group", () => {
@@ -871,6 +874,7 @@ context("AA Document Layout verification", () => {
     });
 
     it(`select 'AA Title'`, () => {
+      cy.listLoadingElementShouldNotExist();
       cy.dlFilterByDocTitle({ docTitle: "AA Title" });
       cy.dlSelectFirstDocument();
     });
@@ -1015,12 +1019,14 @@ context("AA Document Layout verification", () => {
         cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigate to DAM and Verify training 'Training required is checked YES for Design Document'", () => {
 
     it("Filter Design type document", () => {
+      cy.listLoadingElementShouldNotExist().wait(2000);
       cy.get(`[aria-colindex="2"] [class="k-textbox"]`).arrowType("Design");
     });
 

@@ -2040,6 +2040,7 @@ context("LHR flow", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"updateRecord\"]").arrowClick();
           });
+          cy.wait(3000);
         });
 
         it("Check lot number", () => {
