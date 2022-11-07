@@ -1306,7 +1306,7 @@ context("LHR steps verification", () => {
   context("Verify The side bar options History's fonts", () => {
     it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
       cy.get(`[data-cy="timeline-icon"]`).arrowClick();
-      cy.get(`[data-cy^="change-key-1"]`)
+      cy.get(`[data-cy="change-key-1"]`)
         .checkStylePropExists({
           content: USERS[1].name,
           props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
