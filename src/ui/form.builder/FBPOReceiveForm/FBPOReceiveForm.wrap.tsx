@@ -74,7 +74,6 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
           formInput: receivedItemsInput,
           referenceTo: hasNoReference ?
             [{
-              ...workspaceState.document?.referenceTo,
               id: poReceiveState?.data?.document.id,
             }] as Id[] : undefined,
         });
