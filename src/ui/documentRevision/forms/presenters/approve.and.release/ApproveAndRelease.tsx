@@ -1,5 +1,5 @@
-import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
+import { Button, createStyles, Dialog, makeStyles } from "@material-ui/core";
+import { FormikProps } from "formik";
 import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash";
 import moment from "moment";
 import React, { useState } from "react";
@@ -22,10 +22,11 @@ import { DocumentTypeById } from "../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
+import FormListContent from "../../../../change.request/form.list/dialog/FormListContent";
+import FormListHeader from "../../../../change.request/form.list/dialog/FormListHeader";
 import { toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
 import { ApproverPayload, TemplateOption } from "../../../../change.request/form/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
-import { FormContext } from "../../../../components/forms/FormContext";
 import Text from "../../../../components/Text";
 import { FB } from "../../../../form.builder";
 import CustomLabelTooltip from "../../../../hooks/docCustomization/CustomLabelTooltip";
@@ -227,13 +228,13 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // MARK: @methods
   const openDialog = () => {
     async.reset();
-    if (showApprovers && docRevId) {
-      asyncGroups.start(
-        getGroupsByStage,
-        docRevId,
-        asyncGroups,
-      );
-    }
+    // if (showApprovers && docRevId) {
+    //   asyncGroups.start(
+    //     getGroupsByStage,
+    //     docRevId,
+    //     asyncGroups,
+    //   );
+    // }
     asyncGetDocTypeByGroup.start(
       getDocTypeByGroupAction,
       { docTypeGroupOption: "CHANGE_REQUEST" },
@@ -349,7 +350,15 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           </Button>
         )}
       </CustomLabelTooltip>
-      {
+      <Dialog
+        open={dialog.isOpen}
+        onClose={dialog.close}
+        classes={{ paper: classes.dialogPaper }}
+      >
+        <FormListHeader {...{ dialog }} />
+        <FormListContent {...{ dialog, templateOptions, handleTemplateSelection: (option: TemplateOption) => null }} />
+      </Dialog>
+      {/* {
         dialog.isOpen &&
         <Dialog
           disableEscapeKeyDown={true}
@@ -381,7 +390,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             </FormContext.Provider>
           </DialogContent>
         </Dialog>
-      }
+      } */}
       <AlertDialog
         message="record.release.alert"
         dialog={alertDialog}
