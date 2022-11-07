@@ -5,7 +5,7 @@ import { createContext, useContext } from "react";
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
 
-export class RelatedPartsStore {
+class RelatedPartsStore {
   @observable relatedPartsList: RelatedPartsListItem[] = [];
   @observable docIdExists = false;
 
