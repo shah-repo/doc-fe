@@ -5,7 +5,7 @@ import { TrainingStatusChartLabelTypes } from "../../../../state/ducks/dashboard
 import Text from "../../../components/Text";
 import Colors from "../../../layout/theme/utils/colors";
 import { linearScale } from "../../line.items/common/Utils";
-import { StyledTabs } from "../../StyledTabs";
+import StyledTabs from "../../tabs/common/StyledTabs";
 import DoughnutChartOptions from "./DoughnutChartOptions";
 import { styles } from "./TrainingChart.styles";
 
