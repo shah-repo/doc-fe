@@ -62,6 +62,7 @@ context("Export restricted access doc", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
+      cy.wait(2000);
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
   });
@@ -133,7 +134,7 @@ context("Export restricted access doc", () => {
     });
 
     it("Click 'Send To Email'", () => {
-      cy.sendToEmailFromHeader();
+      cy.sendToEmail();
     });
 
     it("Verify restricted access message", () => {
