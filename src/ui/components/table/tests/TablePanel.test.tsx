@@ -1,4 +1,5 @@
 import { mount } from "enzyme";
+import React from "react";
 import { IntlProvider } from "react-intl";
 import { Document } from "../../../../state/ducks/documents/types";
 import messagesEn from "../../../translations/en.json";
