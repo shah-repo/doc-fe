@@ -263,23 +263,23 @@ context("Check Document History", () => {
     });
 
     it("Remove attachment test_image.jpg", () => {
-
       cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Upload test.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("add another output document type: Lots", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.drSelectOutputDocumentType({ documentType: "Lots" });
-        });
+      cy.drSelectOutputDocumentType({ documentType: "Lots" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
