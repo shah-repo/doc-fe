@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   Button,
   Checkbox,
@@ -33,7 +32,7 @@ import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import { styles } from "./RelatedPart.styles";
+import useStyles from "./RelatedPart.styles";
 import { useRelatedPartsStore } from "./RelatedParts.state";
 
 const ParentPartSelector: React.FunctionComponent<{
@@ -49,12 +48,11 @@ const ParentPartSelector: React.FunctionComponent<{
     disable3: false,
   });
 
-  const classes = styles();
+  const classes = useStyles();
 
   useEffect(() => {
     disableOptions(status as string);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [status]);
 
 
   const disableOptions = (value: string) => {
@@ -137,34 +135,30 @@ const RelatedPartGrid: React.FunctionComponent<{
   fetchRelatedParts,
   voidRelatedPart,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const { relatedPartsStore } = useRelatedPartsStore();
 
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const [showButton, setShowButton] = useState(true);
 
   const showEditRow = () => {
-    console.log("showing Edit Row");
     setIsEditRowVisible(true);
     setShowButton(false);
   };
 
   useEffect(() => {
     fetchRelatedParts(documentRevision.document.id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchRelatedParts, documentRevision.document.id]);
 
 
   useEffect(() => {
     reaction(
       () => relatedPartsStore.relatedPartsList.length,
       (length) => {
-        // console.log("length changed : ", length);
         setIsEditRowVisible(false);
         setShowButton(true);
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [relatedPartsStore.relatedPartsList.length]);
 
   const cancelEdit = () => {
     setIsEditRowVisible(false);
@@ -231,7 +225,7 @@ const RelatedPartList: React.FunctionComponent<{
   rootPartName,
 }) => {
   const { relatedPartsStore } = useRelatedPartsStore();
-  const classes = styles();
+  const classes = useStyles();
   return useObserver(() => (
     <div className={classes.fullWidth}>
       <Table stickyHeader aria-label="related parts table">
@@ -270,7 +264,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
   viewRelatedPart,
   rootPartName,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
   || listItem.status === DocumentRevisionStatus.Voided;
 
@@ -315,7 +309,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
     name: "",
   });
 
-  const classes = styles();
+  const classes = useStyles();
   const { relatedPartsStore } = useRelatedPartsStore();
 
   const resetAndCancelEdit = () => {
@@ -385,7 +379,7 @@ const RelatedParts = ({
   voidRelatedPart,
 }) => {
 
-  const classes = styles();
+  const classes = useStyles();
 
   return (
     <>

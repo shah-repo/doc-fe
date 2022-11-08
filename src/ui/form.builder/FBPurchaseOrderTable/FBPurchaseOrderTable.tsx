@@ -31,19 +31,19 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
     label="form.purchare.order.table.headline" /><Table className={classes?.root}>
     <TableBody>
       <TableRow>
-        <FBTableCell colSpan={9}>
+        <FBTableCell colSpan={8} className={classes?.list}>
           <FBPurchaseOrderTableDetails {...{
             handleDelete, handleItem, classes, items, mode,
             loading, calculation, isReceivable,
           }} />
         </FBTableCell>
-        <FBTableCell colSpan={1} style={{ verticalAlign: "baseline" }}>
+        <FBTableCell colSpan={2} className={classes?.sum}>
           <FBPurchaseOrderTableSum {...{ handleItem, handleLot, classes, items, calculation, mode, isReceivable }} />
         </FBTableCell>
       </TableRow>
       {!disabled && (
         <TableRow>
-          <FBTableCell colSpan={1}>
+          <FBTableCell colSpan={10}>
             <FBButton
               label="form.builder.add.line.item"
               onClick={() => handleItem && handleItem()}

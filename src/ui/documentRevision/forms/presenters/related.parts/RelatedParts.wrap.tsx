@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Link, Typography } from "@material-ui/core";
 import { get } from "lodash";
 import { useObserver } from "mobx-react";
@@ -13,7 +12,7 @@ import { toastSuccess } from "../../../../components/notifications";
 import { documentPreviewPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
-import { styles } from "./RelatedPart.styles";
+import useStyles from "./RelatedPart.styles";
 import RelatedParts from "./RelatedParts";
 import { relatedPartsStore, RelatedPartsStoreContext, useRelatedPartsStore } from "./RelatedParts.state";
 
@@ -21,19 +20,6 @@ interface Props {
   documentRevision: DocumentRevision;
   parentPartStatus: RELATED_STATUS | undefined;
 }
-
-
-// interface RelatedPartsProps {
-//   documentRevision: DocumentRevision;
-//   parentStatus: RELATED_STATUS | undefined;
-//   parentStatusChanged;
-//   createNewDocument: (relatedPartDetails: any) => void;
-//   newRelatedPart;
-//   viewRelatedPart;
-//   fetchRelatedParts;
-//   voidRelatedPart;
-// }
-
 
 const SuccessMsg: React.FunctionComponent<{
   docId: string;
@@ -46,7 +32,7 @@ const SuccessMsg: React.FunctionComponent<{
   documentId,
   viewRelatedPart,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   return (
     <>
       <Typography variant="body1">
@@ -83,7 +69,6 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const createPartAsync = useAsync({
     onSuccess: ({ createdDocumentRevision, suffixName }: any) => {
       if (createdDocumentRevision) {
-        console.log(createdDocumentRevision);
         if (parentStatus === RELATED_STATUS.PARENT_SEPARATE) {
           // Show a toast
           showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
@@ -113,7 +98,6 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const createParentPartChoiceAction = useActionCreator(relatedPartsActions.parentPartChoiceAction);
   const parentChoiceAsync = useAsync<any>({
     onSuccess: (data) => {
-      // console.log(data);
       if (data) {
         setParentStatus(data.relatedStatus);
         dispatch(documentRevisionsActions.reload(documentRevision.id));
@@ -125,7 +109,6 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const fetchAllRelatedPartsAction = useActionCreator(relatedPartsActions.fetchAllRelatedParts);
   const fetchRelatedPartsAsync = useAsync({
     onSuccess: (relatedPartsList) => {
-      // console.log(relatedPartsList);
       relatedPartsStore.setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
     },
   });
@@ -181,15 +164,12 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       };
     }
 
-    // console.log(documentRevision, docDto);
     createPartAsync.start(createRelatedPartAction, documentRevision.document.id, docDto,
       relatedPartDetails?.name, createPartAsync);
   };
 
 
   const parentStatusChanged = (value) => {
-    // setParentStatus(value);
-
     // Make an API call to persist the parent row.
     if (value) {
       parentChoiceAsync.start(createParentPartChoiceAction, {

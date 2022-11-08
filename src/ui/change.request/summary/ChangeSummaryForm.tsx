@@ -72,10 +72,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
-      contentBoxProps={{
-        minHeight: "calc(70%)",
-        bgcolor: Colors.alabaster,
-      }}
+      contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={toChangeRequestFormValues(changeRequest)}
       header= {
         <SummaryHeader {...{
@@ -88,7 +85,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         boxProps={{ className: "hide-scroll" }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
-        rightSidebarBoxProps={{ zIndex: 2 }}
+        rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
         {...changeRequest && changeRequest.crId && {
           rightSidebar: (
             <Observer>
