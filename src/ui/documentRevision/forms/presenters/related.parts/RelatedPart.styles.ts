@@ -1,4 +1,6 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import Colors from "../../../../layout/theme/utils/colors";
+
 
 export default makeStyles((theme) =>
   createStyles({
@@ -33,12 +35,12 @@ export default makeStyles((theme) =>
       "width": "100%",
       "margin": 0,
       "borderRadius": "0 0 5px 5px",
-      "color": "#011FBB",
+      "color": Colors.navy,
       "&:hover": {
         backgroundColor: "transparent",
         borderStyle: "solid",
         borderColor: "blue",
-        color: "#011FBB",
+        color: Colors.navy,
       },
     },
     customTooltip: {

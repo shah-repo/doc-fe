@@ -1,5 +1,6 @@
-import { Button, createStyles, Dialog, makeStyles } from "@material-ui/core";
-import { FormikProps } from "formik";
+/* eslint-disable no-console */
+import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
+import { Formik, FormikProps } from "formik";
 import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash";
 import moment from "moment";
 import React, { useState } from "react";
@@ -27,6 +28,7 @@ import FormListHeader from "../../../../change.request/form.list/dialog/FormList
 import { toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
 import { ApproverPayload, TemplateOption } from "../../../../change.request/form/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
+import { FormContext } from "../../../../components/forms/FormContext";
 import Text from "../../../../components/Text";
 import { FB } from "../../../../form.builder";
 import CustomLabelTooltip from "../../../../hooks/docCustomization/CustomLabelTooltip";
@@ -37,6 +39,7 @@ import useDialog from "../../../../hooks/useDialog";
 import { checkIsDocumentPO } from "../../../helpers/checkDocumentGroup";
 import { ApproveAndReleaseFormValues } from "../../types";
 import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
+import SplitReleaseButton from "./SplitReleaseButton";
 
 interface Props {
   id?: string;
@@ -91,6 +94,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [documentType, setDocumentType] = useState<string>("");
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
   const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
+  const [optionSelected, setOptionSelected] = useState<string>("");
 
   // MARK: @config
   const isNewLayout = SM.isNewLayout;
@@ -226,19 +230,22 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   );
 
   // MARK: @methods
-  const openDialog = () => {
+  const openDialog = (option?: any) => {
+    console.log(option);
+    setOptionSelected(option);
     async.reset();
-    // if (showApprovers && docRevId) {
-    //   asyncGroups.start(
-    //     getGroupsByStage,
-    //     docRevId,
-    //     asyncGroups,
-    //   );
-    // }
-    asyncGetDocTypeByGroup.start(
-      getDocTypeByGroupAction,
-      { docTypeGroupOption: "CHANGE_REQUEST" },
-      asyncGetDocTypeByGroup);
+    if (option) {
+      asyncGetDocTypeByGroup.start(
+        getDocTypeByGroupAction,
+        { docTypeGroupOption: "CHANGE_REQUEST" },
+        asyncGetDocTypeByGroup);
+    } else if (showApprovers && docRevId) {
+      asyncGroups.start(
+        getGroupsByStage,
+        docRevId,
+        asyncGroups,
+      );
+    }
     dialog.open();
   };
 
@@ -323,21 +330,23 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
         {isNewLayout ? (
-          renderAsButton ? <StyledButton
-            color="primary"
-            onClick={isRecord ? alertDialog.open : openDialog}
-            id="ApproveAndRelease-button"
-            data-cy="ApproveAndRelease-button"
-          >
-            <Text message={isRecord ? "record.finalize.and.release" : label} />
-          </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
-            <StyledMenuListItemText
+          renderAsButton ?
+            <StyledButton
+              color="primary"
+              onClick={isRecord ? alertDialog.open : openDialog}
               id="ApproveAndRelease-button"
               data-cy="ApproveAndRelease-button"
-              primary={ <Text message={isRecord ? "record.finalize.and.release" : label} />}
-              onClick={isRecord ? alertDialog.open : openDialog}
-            />
-          </StyledMenuListItem>
+            >
+              <Text message={isRecord ? "record.finalize.and.release" : label} />
+            </StyledButton> :
+            <StyledMenuListItem button alignItems="flex-start">
+              <StyledMenuListItemText
+                id="ApproveAndRelease-button"
+                data-cy="ApproveAndRelease-button"
+                primary={ <Text message={isRecord ? "record.finalize.and.release" : label} />}
+                onClick={isRecord ? alertDialog.open : openDialog}
+              />
+            </StyledMenuListItem>
         ) : (
           <Button
             color="secondary"
@@ -350,16 +359,25 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
           </Button>
         )}
       </CustomLabelTooltip>
-      <Dialog
-        open={dialog.isOpen}
-        onClose={dialog.close}
-        classes={{ paper: classes.dialogPaper }}
-      >
-        <FormListHeader {...{ dialog }} />
-        <FormListContent {...{ dialog, templateOptions, handleTemplateSelection: (option: TemplateOption) => null }} />
-      </Dialog>
-      {/* {
-        dialog.isOpen &&
+      <CustomLabelTooltip {...{ tooltipConfig }}>
+        <SplitReleaseButton onClick = {openDialog}></SplitReleaseButton>
+      </CustomLabelTooltip>
+      {
+        dialog.isOpen && optionSelected &&
+        <Dialog
+          open={dialog.isOpen}
+          onClose={dialog.close}
+          classes={{ paper: classes.dialogPaper }}
+        >
+          <FormListHeader {...{ dialog }} />
+          <FormListContent {...{
+            dialog, templateOptions,
+            handleTemplateSelection: (option: TemplateOption) => null,
+          }} />
+        </Dialog>
+      }
+      {
+        dialog.isOpen && !optionSelected &&
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
@@ -390,7 +408,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             </FormContext.Provider>
           </DialogContent>
         </Dialog>
-      } */}
+      }
       <AlertDialog
         message="record.release.alert"
         dialog={alertDialog}
