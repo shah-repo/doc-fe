@@ -284,8 +284,8 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childrenParts\"]").arrowType(PART_NAME + "{downarrow}{enter}");
-        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - rev 1 - Test Part");
+        cy.get("[data-cy=\"childForRevise\"]").arrowType(PART_NAME + "{downarrow}{enter}");
+        cy.get("[data-cy=\"childForRevise\"]").should("contains.attr", "value", "PRT-00004 - rev 1 - Test Part");
       });
     });
 
