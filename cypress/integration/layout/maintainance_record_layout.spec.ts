@@ -937,6 +937,8 @@ context("Layout Verification of maintainance records", () => {
 
       it("Select Approval", () => {
         cy.drSelectOverviewTab();
+        cy.progressBarShouldNotExist();
+        cy.wait(3000);
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
         });
@@ -969,9 +971,18 @@ context("Layout Verification of maintainance records", () => {
       });
 
       it("Verify References selection Add Remove", () => {
-        cy.cmpTurnOffAutosave();
-        cy.verifyAddRemoveReference({ formId: "FM-0000" });
-        cy.cmpTurnOnAutosave();
+        const docId = "FM-00001";
+        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+          cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(1000);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+          cy.drRemoveReferences({ reference: docId });
+        });
       });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
@@ -984,6 +995,7 @@ context("Layout Verification of maintainance records", () => {
       context("Verify Revision", () => {
         it("On click of revision Selcted revision should be open", () => {
           cy.openRevisionsTabAndVerifyCurrentRevision("A");
+          cy.progressBarShouldNotExist();
         });
       });
 
@@ -993,6 +1005,7 @@ context("Layout Verification of maintainance records", () => {
         });
 
         it("Add another user permission", () => {
+          cy.wait(2000);
           cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
             cy.drAddUserFromPermissionTab(USERS[3].name);
           });

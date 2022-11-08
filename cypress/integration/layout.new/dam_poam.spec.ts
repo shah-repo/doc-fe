@@ -1,6 +1,7 @@
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
 
@@ -13,10 +14,24 @@ const userTwo = USERS[3].name;
 const groupOne = "Developers";
 const groupTwo = "Company Admin";
 
+const ncoFormName = "NCO Form";
+const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
+const newCompanyName = "New company " + randomNumberForCompany;
+const newCompanyAbbr = "NC-" + randomNumberForCompany;
+
 const tablePOAM = [
   ["Level 1", 5000, "Everyone"],
   ["Level 2", 25000, "Can be approver", "Groups Management UnofficialUser Management"],
   ["Level 3", 100000, "Owner as approver", "User ManagementAsync Tasks", "Company Admin"],
+];
+
+const FIELD_HEADERS = [
+  "Approval Matrix",
+  "Approval Roles",
+];
+
+const FIELD_HEADERS1 = [
+  "Purchase Order Approval Matrix",
 ];
 
 context("DAM and POAM", () => {
@@ -45,7 +60,7 @@ context("DAM and POAM", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [NCORecord],
           },
           sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -65,6 +80,160 @@ context("DAM and POAM", () => {
       });
     });
 
+    context("Create form for NCO document", () => {
+      it("Navigates to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Clicks on 'create a document' button", () => {
+        cy.cmpClickCreateNewDocument();
+      });
+
+      it(`Enters title '${ncoFormName}'`, () => {
+        cy.drEnterDocumentTitle({ name: ncoFormName });
+      });
+
+      it("Enters description 'New NCO Form description'", () => {
+        cy.drEnterDocumentDescription({ description: "New NCO Form description" });
+      });
+
+      it("Select 'Form' document type from dropdown", () => {
+        cy.drSelectDocumentType({ documentType: "Form" });
+      });
+
+      it("Select 'New Company Record' output document type", () => {
+        cy.drSelectOutputDocumentType({ documentType: "New Company Record" });
+      });
+
+      it("Select 'Numeric' revision stage", () => {
+        cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      });
+
+      it("Click on 'Save' button", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("'Approve and Release' the document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
+    context("Create NCO document and add required jsons and company details", () => {
+      it("Navigate to document list", () => {
+        cy.navigToDocumentList();
+      });
+
+      it("Select released NCO Form", () => {
+        cy.drFilterDocListByNameAndStatus({ title: ncoFormName, status: "Released" });
+      });
+
+      it("Create new document from form", () => {
+        cy.drCreateNewDocumentFromForm();
+      });
+
+      it("Enters title 'New Company'", () => {
+        cy.drEnterDocumentTitle({ name: "New Company" });
+      });
+
+      it("Enters description 'New Company description'", () => {
+        cy.drEnterDocumentDescription({ description: "New Company description" });
+      });
+
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+      });
+
+      it(`Enters company name '${newCompanyName}'`, () => {
+        cy.get("[name^=company-name-]").arrowType(newCompanyName, { force: true });
+      });
+
+      it(`Enters company abbriviation '${newCompanyAbbr}'`, () => {
+        cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
+      });
+
+      it(`Enters company email '${USERS[11].email}'`, () => {
+        cy.get("[name^=company-admin-email-]").arrowType(USERS[11].email, { force: true });
+      });
+
+      it("Select 'Yes' for 'Approved DAM json is used'", () => {
+        cy.get(`[data-cy="Approved DAM json is used"]`).scrollIntoView();
+        cy.get("[name*='approved-dam-json-is-used']").eq(0).should("have.value", "Yes").click();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Upload DAM JSON", () => {
+        cy.get(`[data-cy="DAM JSON "]`).scrollIntoView();
+        cy.atchUploadDOMJSONForNCO({ fileName: "po_dam.json", queue: 0 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Yes' for 'Approved Page Details json is used'", () => {
+        cy.get(`[data-cy="Approved Page Details json is used"]`).scrollIntoView();
+        cy.get(`[name*="approved-page-details-json-is-used-"]`).eq(0)
+          .should("have.value", "Yes").arrowClick().wait(500);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Upload Page Details JSON", () => {
+        cy.get(`[data-cy="Page Details JSON"]`).scrollIntoView();
+        cy.fixture("PageDetails.json").then((fileContent) => {
+          cy.get(`[id^="fb-attachment-field-page-details-json-"]`).eq(0).attachFile({
+            fileContent,
+            fileName: "PageDetails.json",
+            mimeType: "*",
+            filePath: `fixtures/PageDetails.json`,
+          });
+        });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Select 'Yes' for 'Approved Navigation json is used'", () => {
+        cy.get(`[data-cy="Approved Navigation json is used"]`).scrollIntoView();
+        cy.get("[name*='approved-navigation-json-is-used-']").eq(0)
+          .should("have.value", "Yes").click();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Upload Navigation JSON", () => {
+        cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Upload Users List JSON", () => {
+        cy.get(`[data-cy="Users List"]`).scrollIntoView();
+        cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Upload logo picture 'image.jpg'", () => {
+        cy.get(`[data-cy^="Client\\'s Logo (max 180px x 75px)"]`).scrollIntoView();
+        cy.get("[data-cy='albumMediaButton']").eq(0).arrowClick();
+        cy.pmUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click on 'Save' button", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Approve and release document for create company", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      });
+    });
+
     context("Scenario 12a - DAM for Newly Created NCO", () => {
       context("Go to Document List and create a document", () => {
         it("Navigates to document list", () => {
@@ -76,7 +245,53 @@ context("DAM and POAM", () => {
         });
       });
 
+      context("Create 'Document Approval Matrix' Migration FORM", () => {
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
+        it("Enters title", () => {
+          cy.drEnterDocumentTitle({ name: `DAM Migration FORM` });
+        });
+
+        it("Enters description", () => {
+          cy.drEnterDocumentDescription({ description: "DAM Migration FORM Description" });
+        });
+
+        it("Select 'Form' document type from dropdown", () => {
+          cy.drSelectDocumentType({ documentType: "Form" });
+        });
+
+        it("Selects output document type: Document Approval Matrix", () => {
+          cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
+        });
+
+        it("Select 'Numeric' revision stage", () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
+
+        it("Click CREATE DOCUMENT", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("'Approve and Release' the DAM Form", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+      });
+
       context("Create DAM FORM", () => {
+        it("Navigates to document list", () => {
+          cy.navigToDocumentList();
+        });
+
+        it("Clicks on 'create a document' button", () => {
+          cy.cmpClickCreateNewDocument();
+        });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
         it("Enters title", () => {
           cy.drEnterDocumentTitle({ name: `DAM FORM` });
         });
@@ -101,12 +316,19 @@ context("DAM and POAM", () => {
           cy.drClickCreateDocumentWithApiCall();
         });
 
+        it("Click on Save button", () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+        });
+
         it("'Approve and Release' the DAM Form", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
 
         it("Create New Document out of the Form", () => {
           cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(3000);
         });
 
         it(`Enters title`, () => {
@@ -115,6 +337,10 @@ context("DAM and POAM", () => {
 
         it("Enters description", () => {
           cy.drEnterDocumentDescription({ description: "DAM Description" });
+        });
+
+        it("Click on Save button", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
       });
 
@@ -295,23 +521,76 @@ context("DAM and POAM", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          cy.get("[data-cy=\"field-referenceTo\"]").should("exist");
-          cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-          cy.drSelectReferences("FM-00001");
-          cy.drRemoveReferences({ reference: "FM-00001" });
+          cy.verifyAddRemoveReference({ formId: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
           cy.verifyReferencesOtherInfo();
         });
+      });
 
-        xit("Open migrate form tab", () => {
-          cy.drSelectMigrateFormTab();
+      context("Verify form migration", () => {
+        it("Verify migrate form button is visible", () => {
+          cy.get("[data-cy=references-icon]").arrowClick();
+          cy.get("[data-cy='common.form.migration']").should("be.visible");
         });
 
-        xit("Select migration form", () => {
-          cy.get("[data-cy=\"field-changeDocumentForm\"]").eq(0).arrowClick();
+        it("Click on migrate form button", () => {
+          cy.get("[data-cy='common.form.migration']").arrowClick();
         });
+
+        it("Select form to be migrated", () => {
+          cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+          cy.get("[id^='react-select']").contains("FM-00003").arrowClick();
+        });
+
+        FIELD_HEADERS.forEach( (fieldHeader, i) => {
+          it(`Mapped '${fieldHeader}' field`, () => {
+            cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+            cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader);
+          });
+        });
+
+        it("Click on confirm change", () => {
+          cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+        });
+
+        it("Navigate to matrixdetails Tab", () => {
+          cy.drSelectMatrixDetailsTab();
+        });
+
+        it("Verify form info should have migrated form 'FM-00003'", () => {
+          cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
+        });
+
+        it("Verify prefix value 'DT' after migration", () => {
+          cy.get("[data-cy='approvalMatrix-undefined']")
+            .should("contain.text", "DT");
+          cy.wait(2000);
+        });
+
+        it("Verify Internal type value 'OTHER' after migration", () => {
+          cy.get("[data-cy='approvalMatrix-undefined']")
+            .should("contain.text", "OTHER");
+        });
+
+        it("Verify Document Type value 'Developer Test' after migration", () => {
+          cy.get("[data-cy='documentTypeApprovalMatrix']")
+            .should("contain.text", "Developer Test");
+        });
+
+        it("Navigate to Approval roles Tab", () => {
+          cy.drSelectApprovalRolesTab();
+        });
+
+        it("Verify 'Approval Role' value after migration", () => {
+          cy.get("[value='Role One']").should("exist");
+        });
+
+        it("Verify 'Approving Users' value after migration", () => {
+          cy.get("[data-cy='autocomplete-undefined']").should("contain.text", "Harry Bartoletti");
+        });
+
       });
 
       context("Verify Revisions tab", () => {
@@ -401,6 +680,10 @@ context("DAM and POAM", () => {
           cy.drFilterDocListByNameAndStatus({ title: "DAM Title", status: "Released" });
         });
 
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
         it("Verify that DAM contains Overview, Matrix Details and Approval roles tab", () => {
           cy.get("[data-cy=\"tabId.overview\"]").should("exist");
           cy.get("[data-cy=\"tabId.matrixdetails\"]").should("exist");
@@ -429,12 +712,12 @@ context("DAM and POAM", () => {
           cy.isTabActive({ name: "overview", index: 0 });
         });
 
-        xit("Verify Training required exist", () => {
-          cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        it("Verify Training required exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Training Required").should("exist");
         });
 
-        xit("Verify Attachments exist", () => {
-          cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+        it("Verify Attachments exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Attachments").should("exist");
         });
 
         it("Verify that Form Options should not appear for this tab", () => {
@@ -497,14 +780,6 @@ context("DAM and POAM", () => {
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
           cy.verifyReferencesOtherInfo();
         });
-
-        xit("Open migrate form tab", () => {
-          cy.drSelectMigrateFormTab();
-        });
-
-        xit("Select migration form", () => {
-          cy.get("[data-cy=\"field-changeDocumentForm\"]").eq(0).arrowClick();
-        });
       });
 
       context("Verify Revisions tab", () => {
@@ -560,12 +835,28 @@ context("DAM and POAM", () => {
         });
       });
 
-      context("Verify Scroll", () => {
-        it("Navigate to history tab", () => {
-          cy.get("[data-cy='timeline-icon']").arrowClick();
+      context("Hover over the history panel in overview tab", () => {
+        it("Navigate to overview tab", () => {
+          cy.drSelectOverviewTab();
         });
+
+        it("Navigate to history tab", () => {
+          cy.drSelectHistoryTab();
+        });
+
         it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
           cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+        });
+      });
+
+      context("Click on Revisions and Choose previous Revision of DAM and verify", () => {
+        it("Open revisions tab, click and verify revision", () => {
+          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+            cy.drClickRevisionsSidePanel();
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+            cy.recCheckRevisionStage({ stage: "Revision 1" });
+            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
+          });
         });
       });
     });
@@ -581,7 +872,66 @@ context("DAM and POAM", () => {
         });
       });
 
+      context("Create Migration form for 'PO Approval Matrix FORM'", () => {
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
+        it("Enters title", () => {
+          cy.drEnterDocumentTitle({ name: `Migration PO Approval Matrix FORM` });
+        });
+
+        it("Enters description", () => {
+          cy.drEnterDocumentDescription({ description: "Migration PO Approval Matrix FORM Description" });
+        });
+
+        it("Select 'Form' document type from dropdown", () => {
+          cy.drSelectDocumentType({ documentType: "Form" });
+        });
+
+        it("Selects output document type: PO Approval Matrix", () => {
+          cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+        });
+
+        it("Select 'Numeric' revision stage", () => {
+          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        });
+
+        it("Verify that predefined field appears", () => {
+          cy.verifyDefaultFields();
+        });
+
+        it("Verify 'Selected Users' field is visible", () => {
+          cy.get("[data-cy=\"field-securityEmployees\"]").should("exist");
+        });
+
+        it("Verify 'Selected Groups' field is visible", () => {
+          cy.get("[data-cy=\"field-securityGroups\"]").should("exist");
+        });
+
+        it("Click CREATE DOCUMENT", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
+        it("'Approve and Release' the PO Approval Matrix Form", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        });
+
+      });
+
       context("Create PO Approval Matrix FORM", () => {
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
+        it("Navigates to document list", () => {
+          cy.navigToDocumentList();
+        });
+
+        it("Clicks on 'create a document' button", () => {
+          cy.cmpClickCreateNewDocument();
+        });
+
         it("Enters title", () => {
           cy.drEnterDocumentTitle({ name: `PO Approval Matrix FORM` });
         });
@@ -624,6 +974,10 @@ context("DAM and POAM", () => {
           cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         });
 
+        it("Verify 'Render HTML' exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Render HTML").should("exist");
+        });
+
         it("Verify that it contains Overview and Matrix Details tab", () => {
           cy.get("[data-cy=\"tabId.overview\"]").should("exist");
           cy.get("[data-cy=\"tabId.matrixdetails\"]").should("exist");
@@ -653,6 +1007,11 @@ context("DAM and POAM", () => {
       });
 
       context("Verify that Matrix Details tab contain", () => {
+        it("Verify that “PO approval matrix for New companies (NCO) will be added as predefined schema", () => {
+          cy.get("[data-cy=\"Purchase Order Approval Matrix\"]").should("exist");
+
+        });
+
         it("Verify that Form Options should appear for this tab", () => {
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
           cy.get("#sm-tabpanel-1").find(".formOptionsBox").should("be.visible");
@@ -682,6 +1041,10 @@ context("DAM and POAM", () => {
       });
 
       context("Click 'Create New' and new POAM should be created", () => {
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
+
         it("Create New Document out of the Form", () => {
           cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
         });
@@ -787,6 +1150,10 @@ context("DAM and POAM", () => {
           cy.poAddPOButtonClick();
         });
 
+        it("Click on Save button", () => {
+          cy.drClickCreateDocumentWithApiCall();
+        });
+
         it(" Verify that data is save in table", () => {
           cy.get("tbody tr").each(($row, rowIndex) => {
             cy.wrap($row)
@@ -824,11 +1191,106 @@ context("DAM and POAM", () => {
           });
 
           it("Verify Add/Remove References", () => {
+            cy.wait(2000);
             cy.verifyAddRemoveReference({ formId: "FM-00001" });
           });
 
           it("Verify Referenced By, Training, Release Date and Form Info", () => {
             cy.verifyReferencesOtherInfo();
+          });
+        });
+
+        context("Verify form migration", () => {
+          it("Verify migrate form button is visible", () => {
+            cy.get("[data-cy='common.form.migration']").should("be.visible");
+          });
+
+          it("Click on migrate form button", () => {
+            cy.get("[data-cy='common.form.migration']").arrowClick();
+          });
+
+          it("Select form to be migrated", () => {
+            cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+            cy.get("[id^='react-select']").contains("FM-00006").arrowClick();
+          });
+
+          FIELD_HEADERS1.forEach( (fieldHeader1, i) => {
+            it(`Mapped '${fieldHeader1}' field`, () => {
+              cy.get("[id='formMigrationField']" ).eq(i).arrowClick();
+              cy.get("[id^='react-select']").eq(i + 1).autocompleteSelect(fieldHeader1);
+            });
+          });
+
+          it("Click on confirm change", () => {
+            cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
+          });
+
+          it("Navigate to matrixdetails Tab", () => {
+            cy.drSelectMatrixDetailsTab();
+          });
+
+          it("Verify form info should have migrated form 'FM-00006'", () => {
+            cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00006");
+          });
+
+          it("Verify Level 1 Name  value  after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Level 1");
+          });
+
+          it("Verify Limit value  as '5000' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "5000");
+          });
+
+          it("Verify Signature 1 value  as 'Everyone' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Everyone");
+          });
+
+          it("Verify Level 2 Name  value after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Level 2");
+          });
+
+          it("Verify Limit value  as '25000' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "25000");
+          });
+
+          it("Verify Signature 1 value  as 'Can be approver' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Can be approver");
+          });
+
+          it("Verify Signature 2 value  as 'Groups Management Unofficial' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Groups Management Unofficial");
+          });
+
+          it("Verify Level 3 Name  value after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Level 3");
+          });
+
+          it("Verify Limit value  as '100000' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "100000");
+          });
+
+          it("Verify Signature 1 value  as 'Owner as approver' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Owner as approver");
+          });
+
+          it("Verify Signature 2 value  as 'User Management' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "User Management");
+          });
+
+          it("Verify Signature 3 value  as 'Company Admin' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Company Admin");
           });
         });
 
@@ -850,6 +1312,8 @@ context("DAM and POAM", () => {
           });
 
           it("Add another group permission", () => {
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
               cy.drAddGroupFromPermissionTab(groupOne);
             });
@@ -937,12 +1401,12 @@ context("DAM and POAM", () => {
           cy.isTabActive({ name: "overview", index: 0 });
         });
 
-        xit("Verify Training required exist", () => {
-          cy.get("[data-cy=\"field-retrain\"]").should("exist");
+        it("Verify Training required exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Training Required").should("exist");
         });
 
-        xit("Verify Attachments exist", () => {
-          cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+        it("Verify Attachments exist", () => {
+          cy.get("[id='sm-tabpanel-0']").contains("Attachments").should("exist");
         });
 
         it("Verify that Form Options should not appear for Overview tab", () => {
@@ -1002,6 +1466,66 @@ context("DAM and POAM", () => {
         it(`Verify PO Approval Matrix and table header contains: Level Name, Limit, Signature 1, 
         Signature 2 and Signature 3`, () => {
           cy.contains("Purchase Order Approval Matrix").should("exist");
+
+          it("Verify Level 1 Name  value  after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Level 1");
+          });
+
+          it("Verify Limit value  as '5000' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "5000");
+          });
+
+          it("Verify Signature 1 value  as 'Everyone' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Everyone");
+          });
+
+          it("Verify Level 2 Name  value after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Level 2");
+          });
+
+          it("Verify Limit value  as '25000' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "25000");
+          });
+
+          it("Verify Signature 1 value  as 'Can be approver' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Can be approver");
+          });
+
+          it("Verify Signature 2 value  as 'Groups Management Unofficial' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Groups Management Unofficial");
+          });
+
+          it("Verify Level 3 Name  value after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Level 3");
+          });
+
+          it("Verify Limit value  as '100000' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "100000");
+          });
+
+          it("Verify Signature 1 value  as 'Owner as approver' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Owner as approver");
+          });
+
+          it("Verify Signature 2 value  as 'User Management' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "User Management");
+          });
+
+          it("Verify Signature 3 value  as 'Company Admin' after migration", () => {
+            cy.get("[data-cy='poApprovalMatrix-undefined']")
+              .should("contain.text", "Company Admin");
+          });
           cy.get("table").contains("th", "Level Name");
           cy.get("table").contains("th", "Limit");
           cy.get("table").contains("th", "Signature 1");
@@ -1112,6 +1636,37 @@ context("DAM and POAM", () => {
           it("Open revision history tab", () => {
             cy.drSelectRevisionHistoryTab();
             cy.get(`[data-cy="Revision History-detail"]`).should("be.visible");
+          });
+        });
+
+        context("Verify History tab content scroll", () => {
+          it("Verify that scroll bar appearing only on hover and user can scroll the content", () => {
+            cy.verifyHistoryScroll();
+          });
+        });
+
+        context("Hover over the history panel in overview tab", () => {
+          it("Navigate to overview tab", () => {
+            cy.drSelectOverviewTab();
+          });
+
+          it("Navigate to history tab", () => {
+            cy.drSelectHistoryTab();
+          });
+
+          it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+            cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+          });
+        });
+
+        context("Click on Revisions and Choose previous Revision of DAM and verify", () => {
+          it("Open revisions tab, click and verify revision", () => {
+            cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+              cy.drClickRevisionsSidePanel();
+              cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+              cy.recCheckRevisionStage({ stage: "Revision 1" });
+              cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
+            });
           });
         });
       });
