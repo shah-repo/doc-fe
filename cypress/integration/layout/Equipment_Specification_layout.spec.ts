@@ -423,6 +423,19 @@ context("Verification of Equipment Specification", () => {
           moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
 
+      it("Verify formInfo Document ID, Revision, and Release date of the Form ", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
+        cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "1");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text",
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
+      });
+
+      it("Verify release date should be none", () => {
+        cy.get("[data-cy='releaseDate']").should("exist");
+        cy.get("[data-cy='releaseDate']").parent().parent().should("contain.text", "None");
+      });
+
       context("Verify Revision", () => {
         it("open revision tab", () => {
           cy.get("[data-cy='note-icon']").arrowClick();
@@ -602,6 +615,22 @@ context("Verification of Equipment Specification", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
+      });
+    });
+
+    context("Verify ES is released and Released date", () => {
+      it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Released)", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.RELEASED,
+          title: "Document List",
+          docId: "ES-00004",
+          revision: "Rev 1",
+        });
+      });
+
+      it("Verify released date", () => {
+        cy.get("[data-cy='releaseDate']").parent().parent().should("contain.text",
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
     });
   });
