@@ -900,7 +900,26 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.get("[data-tag-index='0']>span>div")
         .should("contain.text", "Giovanni Reynolds - enlil.testmail+cy1@gmail.com");
     });
+  });
 
+  context("Verify that history tab is capturing the changes - Adding requestor to the approval field", () => {
+    it("navigate to history tab", () => {
+      cy.drSelectHistoryTab();
+    });
+
+    it("Verify requestor added field", () => {
+      // eslint-disable-next-line max-len
+      cy.get("[data-cy=\"form.builder.audit.STRING_NEW\"]").eq(0).contains("Requestor Added").should("exist");
+    });
+
+    it("Verify requestor value", () => {
+      // // eslint-disable-next-line max-len
+      cy.get("[data-cy=\"no-padding-margin\"]").eq(0).contains("Giovanni Reynolds enlil.testmail+cy1@gmail.com")
+        .should("exist");
+    });
+  });
+
+  context("Navigate to Approval block and try to remove approver", () => {
     it("Navigate to Approval block and try to remove approver", () => {
       cy.get(".MuiAutocomplete-tag").should("have.class", "Mui-disabled");
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
@@ -914,24 +933,24 @@ context("Create company with JSON's and verify Purchase Order", () => {
     it("Check approval icon if it's colored", () => {
       cy.poAMCheckApprovalIconIfItsRed();
     });
+  });
 
-    context("Submit for Approval and verify PO can be released", () => {
-      it("Click on Submit for approval", () => {
-        cy.pmSubmitForApproval();
-      });
+  context("Submit for Approval and verify PO can be released", () => {
+    it("Click on Submit for approval", () => {
+      cy.pmSubmitForApproval();
+    });
 
-      it(`Verify document header details and status is in ${STATUS_TYPES_LABEL.PENDING_APPROVAL}`, () => {
-        cy.verifyHeaderInfoContent({
-          status: STATUS_TYPES_LABEL.PENDING_APPROVAL,
-          title: "Purchase Orders",
-          docId: "PO-00001",
-          revision: "Rev 1",
-        });
+    it(`Verify document header details and status is in ${STATUS_TYPES_LABEL.PENDING_APPROVAL}`, () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.PENDING_APPROVAL,
+        title: "Purchase Orders",
+        docId: "PO-00001",
+        revision: "Rev 1",
       });
+    });
 
-      it("Approve PO", () => {
-        cy.ebApprove();
-      });
+    it("Approve PO", () => {
+      cy.ebApprove();
     });
   });
 
@@ -1078,7 +1097,26 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.get("[data-tag-index='1']>span>div")
         .should("contain.text", "Harry Bartoletti - enlil.testmail+cy2@gmail.com");
     });
+  });
 
+  context("Verify that history tab is capturing the changes - Adding requestor to the approval field", () => {
+    it("navigate to history tab", () => {
+      cy.drSelectHistoryTab();
+    });
+
+    it("Verify requestor updated field", () => {
+      // eslint-disable-next-line max-len
+      cy.get("[data-cy=\"form.builder.audit.STRING_EDITED\"]").eq(0).contains("Requestor Updated").should("exist");
+    });
+
+    it("Verify requestor value", () => {
+      // // eslint-disable-next-line max-len
+      cy.get("[data-cy=\"no-padding-margin\"]").eq(0).contains("Harry Bartoletti enlil.testmail+cy2@gmail.com")
+        .should("exist");
+    });
+  });
+
+  context("Navigate to Approval block and try to remove approver", () => {
     it("Navigate to Approval block and try to remove approver", () => {
       cy.get(".MuiAutocomplete-tag").should("have.class", "Mui-disabled");
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
