@@ -1,5 +1,4 @@
 import { mount } from "enzyme";
-import React from "react";
 import { IntlProvider } from "react-intl";
 import { Document } from "../../../../state/ducks/documents/types";
 import messagesEn from "../../../translations/en.json";
@@ -21,8 +20,9 @@ describe("TablePanel component tests", () => {
 
   const noRowsTranslation = "table.no.results.found";
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {};
+  const onActionSelect = ({ rowData, actionType }: TableSelectionProps<Document>) => () => {
+    // do nothing
+  };
 
   const columns: TableColumnProps<Document>[] = [
     {
