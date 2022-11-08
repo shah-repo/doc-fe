@@ -360,8 +360,11 @@ context("Receiving landing page test", () => {
 
   context("Create receiving  form", () => {
     it("Navigate to document list", () => {
-      cy.navigToDocumentList();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+        cy.navigToDocumentList();
+      });
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Filter document by ID", () => {
@@ -523,8 +526,11 @@ context("Receiving landing page test", () => {
 
   context("Create Another receiving  form", () => {
     it("Navigate to document list", () => {
-      cy.navigToDocumentList();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+        cy.navigToDocumentList();
+      });
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Filter document by ID", () => {
