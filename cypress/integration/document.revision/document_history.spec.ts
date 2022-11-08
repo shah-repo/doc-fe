@@ -232,10 +232,13 @@ context("Check Document History", () => {
 
     it("Select reference for document", () => {
       cy.drSelectReferences( reference.value );
+      cy.unClick();
     });
 
     it("Uploads test_image.jpg", () => {
       cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove reference for document", () => {
@@ -243,6 +246,7 @@ context("Check Document History", () => {
         cy.drRemoveReferences({ reference: "FM-00001" });
       });
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Unmark 'Training Required'", () => {
