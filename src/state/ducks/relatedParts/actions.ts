@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { apiAction } from "../../factories";
 import { DOCUMENT_REVISION_ROOT_URL } from "../documentRevisions/constants";
 import { DocumentRevision, DocumentRevisionEditRequestBody } from "../documentRevisions/types";
