@@ -98,6 +98,12 @@ interface Part{
   label: string;
 }
 
+export interface RelatedParentPartDetails {
+  parentDocId: string;
+  documentId: string;
+  docRevId: string;
+}
+
 interface LSHS{
   lhr: LHR;
   lot: LOT;
@@ -180,7 +186,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
   redline?: boolean;
   relatedStatus?: RELATED_STATUS;
-  relatedParentPartDetails?: any;
+  relatedParentPartDetails?: RelatedParentPartDetails;
 }
 
 export interface SmartReference {

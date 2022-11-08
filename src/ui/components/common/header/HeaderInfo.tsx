@@ -10,7 +10,7 @@ import { companySelectors } from "../../../../state/ducks/company";
 import { STATUS_TYPES_LABEL } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus, RelatedParentPartDetails, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
 import { DocCategories, DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
@@ -37,7 +37,7 @@ interface Props {
   displayStatus?: string;
   subtitle?: any;
   displayRevision?: string;
-  relatedParentPartDetails?: any;
+  relatedParentPartDetails?: RelatedParentPartDetails;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -166,7 +166,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 
   const viewDocument = () => {
     const urlPath = documentPreviewPath(
-      relatedParentPartDetails.docRevId, relatedParentPartDetails.documentId);
+      relatedParentPartDetails?.docRevId as string, relatedParentPartDetails?.documentId as string);
     history.push(urlPath);
   };
 
