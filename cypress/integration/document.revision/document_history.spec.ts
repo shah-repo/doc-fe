@@ -67,6 +67,11 @@ const history = [
     owner,
     actions: [
       { key: "Attachment added", value: "test_image.jpg" },
+    ],
+  },
+  {
+    owner,
+    actions: [
       { key: "Reference removed", value: reference.valueCode },
     ],
   },
@@ -232,19 +237,15 @@ context("Check Document History", () => {
 
     it("Select reference for document", () => {
       cy.drSelectReferences( reference.value );
-      cy.unClick();
-    });
-
-    it("Uploads test_image.jpg", () => {
-      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
+
     it("Remove reference for document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drRemoveReferences({ reference: "FM-00001" });
-      });
+      cy.contains(reference.valueCode).arrowClick();
+      cy.contains(reference.valueCode).parent().parent().parent().find("svg").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -253,15 +254,25 @@ context("Check Document History", () => {
       cy.drClickTrainingRequired();
     });
 
-    it("Remove attachment test_image.jpg", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
-      });
+    it("Uploads test_image.jpg", () => {
+      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(5000);
+    });
+
+    it("Remove attachment test_image.jpg", () => {
+
+      cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload test.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("add another output document type: Lots", () => {

@@ -201,7 +201,9 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(item);
+    cy.get(`[data-cy="referenceTo"]`).arrowClick().wait(500);
+    cy.get(`[data-cy="referenceTo"]`).autocompleteSelect(item);
+    cy.unClick();
   });
 });
 
