@@ -43,18 +43,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
   const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
   const navigationSelectorItems = useSelector(companySelectors.getNavigationItems) || [];
-  // TODO:: REMOVE THIS once Navigation item coming from backend
-  const index = navigationSelectorItems.findIndex((x) => x.path === "/async_tasks");
-  if (index === -1) {
-    navigationSelectorItems.push({
-      icon: "/navigation_icons/document-menu.svg",
-      label: "Async Tasks",
-      path: "/async_tasks",
-      restrictedToUsersWithTags: [GroupTag.ASYNC_TASKS_UI],
-      type: "LINK",
-    });
-  }
-  // const navigationItems = (useSelector(companySelectors.getNavigationItems) || [])
+
   const navigationItems = (navigationSelectorItems)
     .reduce<NavigationItem[]>((acc, item) => {
       if (itemAllowedForUser(item, userTags)) {
@@ -65,6 +54,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       }
       return acc;
     }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (currentEmployeeId) {
@@ -72,15 +62,18 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentEmployeeId]);
+
   return (
     <Drawer
       PaperProps={{ id: "navigation" }}
-      className={classes.drawer}
       variant="permanent"
-      classes={{ paper: classes.drawerPaper }}
+      classes={{
+        root: classes.drawer,
+        paper: classes.drawerPaper,
+      }}
       anchor="left"
     >
-      <Box flexGrow="1">
+      <Box className={classes.root}>
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6" className={classes.toolbarTitle}>
             <Link to={HOME_URL} className={classes.headerLink}>
@@ -90,29 +83,23 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
         </Toolbar>
         {
           isLoading
-            ? (
-              <Box display="flex" justifyContent="center" mt={2}>
-                <CircularProgress size={20} />
-              </Box>
-            )
+            ? <CircularProgress size={20} className={classes.progress} />
             : (
               <List className={cx(classes.list, "containing-box-scrollbar")}>
-                {
-                  navigationItems.map((link: NavigationItem) => (
-                    <NavigationLinkContainer
-                      key={link.label}
-                      currentPath={location.pathname}
-                      {...link}
-                    />
-                  ))
-                }
+                {navigationItems.map((link: NavigationItem) => (
+                  <NavigationLinkContainer
+                    key={link.label}
+                    currentPath={location.pathname}
+                    {...link}
+                  />
+                ))}
               </List>
             )
         }
-      </Box>
-      <NavigationProfileContainer />
-      <Box paddingBottom="20px">
-        <BottomLogo />
+        <NavigationProfileContainer />
+        <Box className={classes.bottom}>
+          <BottomLogo />
+        </Box>
       </Box>
     </Drawer>
   );

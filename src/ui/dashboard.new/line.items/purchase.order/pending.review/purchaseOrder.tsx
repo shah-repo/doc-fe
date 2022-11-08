@@ -1,14 +1,4 @@
-import {
-  Box,
-  Collapse,
-  Grid,
-  Link,
-  List,
-  ListItemIcon,
-  ListItemText,
-  Modal,
-  Typography,
-} from "@material-ui/core";
+import { Box, Collapse, Grid, Link, List, ListItemIcon, ListItemText, Modal, Typography } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
@@ -43,7 +33,7 @@ import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { formatCurrency, getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
-import { styles } from "./purchaseOrder.styles";
+import useStyles from "./purchaseOrder.styles";
 
 interface Props {
   id: string;
@@ -91,7 +81,7 @@ interface Props {
   unPinLineItem: (id: string) => void;
   dialogPDF: DialogHandler;
 }
-const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
+const PurchaseOrderItemPresenter: React.FC<Props> = ({
   id,
   docDocumentId,
   docId,
@@ -120,7 +110,8 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   pendingEmailSentAt,
   dialogPDF,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
+
   const PoItems: any = [
     {
       id: "id1",
@@ -215,11 +206,12 @@ const PurchaseOrderItemPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem
-        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onMouseEnter={onMouseHoverListItem}
-        className={classes.listItem}
+        divider
         disableRipple
+        className={classes.listItem}
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        onMouseEnter={onMouseHoverListItem}
       >
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />

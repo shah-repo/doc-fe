@@ -70,10 +70,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
-      contentBoxProps={{
-        minHeight: "calc(70%)",
-        bgcolor: Colors.alabaster,
-      }}
+      contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={formValues.values}
       header= {
         <FormHeader {...{ changeRequest, asyncState }}/>
@@ -83,12 +80,12 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         boxProps={{ className: "hide-scroll" }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
-        rightSidebarBoxProps={{ zIndex: 2 }}
+        rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
         {...changeRequest && changeRequest.crId && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
-                setOpen={changeSidebarOpenStatus} fromEdit={true}/>}
+                setOpen={changeSidebarOpenStatus} fromEdit={true} />}
             </Observer>
           ),
         }}
