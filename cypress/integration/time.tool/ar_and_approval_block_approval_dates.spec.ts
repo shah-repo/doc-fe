@@ -1165,6 +1165,50 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
     });
   });
 
+  context("Verify received emails", () => {
+    it("Get emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+        subject: `Can you please approve my request`,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.wait(20000);
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
+      });
+    });
+
+    it("Verify 'in review' emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: FIRST_USER.email,
+          contains: [approvalNotificationToday, "LR-00002"],
+        },
+        {
+          sentToUser: FIRST_USER.email,
+          contains: [approvalNotificationToday, "TCT-00001"],
+        },
+        {
+          sentToUser: FIRST_USER.email,
+          contains: [approvalNotificationToday, "POT-00001"],
+        },
+        {
+          sentToUser: FIRST_USER.email,
+          contains: [approvalNotificationToday, "AR-00004"],
+        },
+      ];
+
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
+      });
+    });
+  });
+
   context("Time travel one day back to the future", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
@@ -1206,6 +1250,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Click on 'EMAIL ALL'", () => {
+        dateAfterEmailShouldArrive = new Date(new Date().getTime());
         cy.get("button").contains("EMAIL ALL").arrowClick();
       });
 
@@ -1322,22 +1367,6 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         {
           sentToUser: FIRST_USER.email,
           contains: [approvalNotificationToday, "AR-00004"],
-        },
-        {
-          sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationYesterday, "LR-00002"],
-        },
-        {
-          sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationYesterday, "TCT-00001"],
-        },
-        {
-          sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationYesterday, "POT-00001"],
-        },
-        {
-          sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationYesterday, "AR-00004"],
         },
       ];
 
