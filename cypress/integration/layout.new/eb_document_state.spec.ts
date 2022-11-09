@@ -162,20 +162,91 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
       });
 
-      context(`The status bar is BLUE(${Colors.dodger_blue})`, () => {
-        it(`Color of Header status bar is BLUE(${Colors.dodger_blue})`, () => {
-          cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
-        });
-      });
-
       context("Right side:", () => {
-        it("Turn off autosave", () => {
-          cy.cmpTurnOffAutosave();
+        it("Make a change", () => {
+          cy.drEnterDocumentTitle({ name: "EB Title" });
+        });
+        context("Status bar displays “Last saved a few seconds min ago”", () => {
+          it("Check Last save should be present", () => {
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+          });
+
+          context(`The last saved should be updated every time there 
+          is a “save” event (manual or auto)`, () => {
+            it("Click on save button", () => {
+              cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
+            });
+            it(`Make a change that triggers autosave→ 
+            While it saves the changes it should say “Auto-saving, please wait…”`, () => {
+              cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+                cy.drEnterDocumentDescription({ description: "EB Description" });
+                cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
+              });
+              cy.progressBarShouldNotExist();
+            });
+            it("Check Last save should be updated", () => {
+              cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+            });
+          });
+
+          it(`Wait for 2 min. It should display “Last saved 2 min ago”`, () => {
+            cy.wait(120000);
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
+          });
+
+          context("Edit all the fields, and make sure the “last saved” data is updated each time", () => {
+            it("Enters title 'EB Title'", () => {
+              cy.drEnterDocumentTitle({ name: "Engineering Build Title" });
+              cy.progressBarShouldNotExist();
+            });
+            it("Check Last save should be present in autosave", () => {
+              cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+            });
+            it("Enters description 'EB description'", () => {
+              cy.drEnterDocumentDescription({ description: "Engineering Build description" });
+              cy.progressBarShouldNotExist();
+            });
+            it("Check Last save should be present in autosave", () => {
+              cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+            });
+            it("Add Approver to approvals list", () => {
+              cy.wait(3000);
+              cy.pmAddApproverOnApproverList({ approver: owner });
+              cy.progressBarShouldNotExist();
+            });
+            it("Check Last save should be present in autosave", () => {
+              cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+            });
+            it("remove Approver to approvals list", () => {
+              cy.wait(3000);
+              cy.get(`[class*="MuiChip-root MuiAutocomplete-tag MuiChip-deletable"] div`).contains(owner)
+                .parent().parent().find("svg").arrowClick({ force: true });
+            });
+            it("Check Last save should be present in autosave", () => {
+              cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+            });
+          });
+
+          context(`The status bar is BLUE(${Colors.dodger_blue})`, () => {
+            it(`Color of Header status bar is BLUE(${Colors.dodger_blue})`, () => {
+              cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+            });
+          });
         });
 
-        it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
-          email shortly`, () => {
-          cy.sendToEmail();
+        it("check three dots are visible", () => {
+          cy.get(`[data-cy="HeaderMenuButton"]`).should("exist");
+        });
+
+        it("Check if 'Change Owner' button header menu is visible and functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
+          cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+          cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+        });
+
+        it(`Send to email buttons → Verify it is visible and functional`, () => {
+          cy.get("#HeaderMenuButton").arrowClick();
+          cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
           cy.checkToastMessageContains({
             message: "File will be sent to your email shortly.",
           });
@@ -184,9 +255,13 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       context(
-        `Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” options are displayed → 
+        `Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” and "Send to Email" options are displayed → 
         Verify they’re functional`,
         () => {
+          it("check three dots are visible", () => {
+            cy.get(`[data-cy="HeaderMenuButton"]`).should("exist");
+          });
+
           it("Clicks on VOID button in header menu and is functional", () => {
             cy.get("#HeaderMenuButton").arrowClick();
             cy.get("[data-cy=\"void-button\"]").arrowClick();
@@ -198,6 +273,14 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
             cy.get("#HeaderMenuButton").arrowClick();
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
             cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+          });
+
+          it(`Send to email buttons → Verify it is functional`, () => {
+            cy.sendToEmail();
+            cy.checkToastMessageContains({
+              message: "File will be sent to your email shortly.",
+            });
+            cy.closeAllAlertMessages();
           });
         }
       );
@@ -220,21 +303,12 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
     });
 
-    context("Fill in Form attributes", () => {
-      it("Enters title 'EB Title'", () => {
-        cy.drEnterDocumentTitle({ name: "Engineering Build Title" });
-      });
-
-      it("Enters description 'EB description'", () => {
-        cy.drEnterDocumentDescription({ description: "Engineering Build description" });
-      });
-    });
-
     context(
       `Add an approver and submit for approval → The Engineering Build will be in 
       ${STATUS_TYPES_LABEL.IN_REVIEW}`,
       () => {
         it("Add Approver to approvals list", () => {
+          cy.wait(3000);
           cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
@@ -265,27 +339,30 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
-        it("Check if 'Change Owner' button header menu and is functional", () => {
+        it("Click 'Withdraw Submission' button", () => {
+          cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+            cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+          });
+        });
+
+        it("check three dots are visible", () => {
+          cy.get(`[data-cy="HeaderMenuButton"]`).should("exist");
+        });
+
+        it("Check if 'Change Owner' button header menu is visible and functional", () => {
           cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
 
-        it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
-          email shortly`, () => {
+        it(`Send to email buttons → Verify it is visible and functional`, () => {
           cy.get("#HeaderMenuButton").arrowClick();
           cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
           cy.checkToastMessageContains({
             message: "File will be sent to your email shortly.",
           });
           cy.closeAllAlertMessages();
-        });
-
-        it("Click 'Withdraw Submission' button", () => {
-          cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-            cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-          });
         });
 
         it("Click on Submit For Approval", () => {
@@ -340,14 +417,17 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
-        it("Check if 'Change Owner' button header menu and is functional", () => {
+        it("check three dots are visible", () => {
+          cy.get(`[data-cy="HeaderMenuButton"]`).should("exist");
+        });
+
+        it("Check if 'Change Owner' button header menu is visible and functional", () => {
           cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
 
-        it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
-          email shortly`, () => {
+        it(`Send to email buttons → Verify it is visible and functional`, () => {
           cy.get("#HeaderMenuButton").arrowClick();
           cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
           cy.checkToastMessageContains({
@@ -489,14 +569,17 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
-        it("Check if 'Change Owner' button header menu and is functional", () => {
+        it("check three dots are visible", () => {
+          cy.get(`[data-cy="HeaderMenuButton"]`).should("exist");
+        });
+
+        it("Check if 'Change Owner' button header menu is visible and functional", () => {
           cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
 
-        it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
-          email shortly`, () => {
+        it(`Send to email buttons → Verify it is visible and functional`, () => {
           cy.get("#HeaderMenuButton").arrowClick();
           cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
           cy.checkToastMessageContains({
