@@ -1866,13 +1866,13 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("release button click'", () => {
+    it("Approve and Release button click'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
 
-    it(`Get the document Id as ${recDocId}`, () => {
+    it(`Get the document Id`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         recDocId = $docIdElement.text();
