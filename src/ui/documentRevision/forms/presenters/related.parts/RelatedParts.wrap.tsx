@@ -73,15 +73,17 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const createPartAsync = useAsync({
     onSuccess: ({ createdDocumentRevision, suffixName }: any) => {
-      if (createdDocumentRevision) {
-        if (parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
-          // Show a toast
-          showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
+      if (!createdDocumentRevision) {
+        return;
+      }
 
-        } else if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
-          // populate the list with the new added part
-          relatedPartsStore.addNewRelatedPart(createdDocumentRevision, suffixName);
-        }
+      if (parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
+        // Show a toast
+        showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
+
+      } else if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
+        // populate the list with the new added part
+        relatedPartsStore.addNewRelatedPart(createdDocumentRevision, suffixName);
       }
     },
   });
