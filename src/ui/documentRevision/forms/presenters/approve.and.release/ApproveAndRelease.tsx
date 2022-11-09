@@ -3,7 +3,7 @@ import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } 
 import { Formik, FormikProps } from "formik";
 import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -23,12 +23,14 @@ import { DocumentTypeById } from "../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
+import ChangeRequestUpdateContainer from "../../../../change.request/ChangeRequestUpdate.container";
 import FormListContent from "../../../../change.request/form.list/dialog/FormListContent";
 import FormListHeader from "../../../../change.request/form.list/dialog/FormListHeader";
-import { toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
+import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
 import { ApproverPayload, TemplateOption } from "../../../../change.request/form/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import { FormContext } from "../../../../components/forms/FormContext";
+import { toastError } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
 import { FB } from "../../../../form.builder";
 import CustomLabelTooltip from "../../../../hooks/docCustomization/CustomLabelTooltip";
@@ -95,6 +97,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
   const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
   const [optionSelected, setOptionSelected] = useState<string>("");
+  const [changeRequestDetails, setChangeRequestDetails] = useState<ChangeRequest>();
 
   // MARK: @config
   const isNewLayout = SM.isNewLayout;
@@ -105,8 +108,13 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const intl = useIntl();
   const { isVisible, label, tooltipConfig } = useApproveAndRelease(documentTypeId);
   const classes = styles();
-  const dialog = useDialog();
+
+  const expressApprovalDialog = useDialog();
+  const templateSelectionDialog = useDialog();
+  const changeOrderDialog = useDialog();
+
   const alertDialog = useDialog();
+
   const transformedDocTypeGroups = ([] as Group[]).concat(...documentTypeGroups);
   const initialValues = {
     password: "",
@@ -128,7 +136,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
 
   // MARK: @async
-  const async = useAsync({ onSuccess: dialog.close });
+  const async = useAsync({ onSuccess: expressApprovalDialog.close });
   const asyncGroups = useAsync({
     onSuccess: (response: Group[] = []) => {
       setDocTypeGroups([
@@ -171,6 +179,38 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       setTemplateOptions(options);
     },
   });
+
+  const createCRAction = useActionCreator(changeRequestsActions.create);
+  const createCRAsync = useAsync<ChangeRequest>({
+    onSuccess: (createdChangeRequest?) => {
+      console.log(createdChangeRequest?.id);
+      setChangeRequestDetails(createdChangeRequest);
+      changeOrderDialog.open();
+      // createdChangeRequest && history.push(changeRequestEditPath(createdChangeRequest.id));
+    },
+    onError: (err) => {
+      toastError(err as string);
+    },
+  });
+
+  const processCreatingRevision = useCallback((templateChosen) => {
+    const data = templateOptionToChangeRequestCreateBody(templateChosen);
+    console.log(data);
+    createCRAsync.start(createCRAction, data, createCRAsync);
+  }, [createCRAction, createCRAsync]);
+
+
+  useEffect(() => {
+    if (templateOptions.length > 0) {
+      if (templateOptions.length === 1) {
+        processCreatingRevision(templateOptions[0]);
+      } else {
+        templateSelectionDialog.open();
+      }
+    }
+
+  }, [templateOptions, templateSelectionDialog, processCreatingRevision]);
+
 
   const asyncAR = useAsync<ChangeRequest>({
     onSuccess: (createdChangeRequest?) => {
@@ -245,15 +285,15 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         docRevId,
         asyncGroups,
       );
+      expressApprovalDialog.open();
     }
-    dialog.open();
   };
 
   const closeDialog = () => {
     setFormDocument("");
     setDocumentType("");
     setSelectedInvalid(false);
-    dialog.close();
+    expressApprovalDialog.close();
   };
 
   const getApproverPayload = (approverId?: string): ApproverPayload => ({
@@ -363,27 +403,27 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         <SplitReleaseButton onClick = {openDialog}></SplitReleaseButton>
       </CustomLabelTooltip>
       {
-        dialog.isOpen && optionSelected &&
+        templateSelectionDialog.isOpen && optionSelected &&
         <Dialog
-          open={dialog.isOpen}
-          onClose={dialog.close}
+          open={templateSelectionDialog.isOpen}
+          onClose={templateSelectionDialog.close}
           classes={{ paper: classes.dialogPaper }}
         >
-          <FormListHeader {...{ dialog }} />
+          <FormListHeader {...{ dialog: templateSelectionDialog }} />
           <FormListContent {...{
-            dialog, templateOptions,
-            handleTemplateSelection: (option: TemplateOption) => null,
+            dialog: templateSelectionDialog, templateOptions,
+            handleTemplateSelection: processCreatingRevision,
           }} />
         </Dialog>
       }
       {
-        dialog.isOpen && !optionSelected &&
+        expressApprovalDialog.isOpen &&
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}
           fullWidth={true}
           maxWidth="xs"
-          open={dialog.isOpen}
+          open={expressApprovalDialog.isOpen}
           onSubmit={(event: React.FormEvent) => event.stopPropagation()}
           classes={{ paper: classes.dialogContent }}
           id="ApproveAndRelease-dialog"
@@ -406,6 +446,30 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
                 {renderForm}
               </Formik>
             </FormContext.Provider>
+          </DialogContent>
+        </Dialog>
+      }
+      {
+        changeOrderDialog.isOpen &&
+        <Dialog
+          disableEscapeKeyDown={true}
+          disableBackdropClick={true}
+          fullWidth={true}
+          maxWidth="lg"
+          open={changeOrderDialog.isOpen}
+          onSubmit={(event: React.FormEvent) => event.stopPropagation()}
+          classes={{ paper: classes.dialogContent }}
+          id="ChangeOrder-dialog"
+        >
+          <DialogTitle>
+            This is a Dialog - Yay
+          </DialogTitle>
+          <DialogContent
+            classes={{ root: classes.dialogContent }}
+            id="ChangeOrder-content"
+          >
+            <ChangeRequestUpdateContainer
+              changeRequest={changeRequestDetails as ChangeRequest}></ChangeRequestUpdateContainer>
           </DialogContent>
         </Dialog>
       }
