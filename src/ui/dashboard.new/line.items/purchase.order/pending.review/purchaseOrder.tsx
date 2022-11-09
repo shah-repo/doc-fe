@@ -436,139 +436,91 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
-          {PoItems.map((poItem, index) => {
-            if (poItem.isSupplier) {
-              return (
-                <StyledListItem
-                  key={index}
-                  button
-                  className={classes.nested}
-                  disableRipple
-                >
-                  <Grid container className={classes.gridContainer}>
-                    <Grid item md={3} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyChildrenBold}
-                        color="textSecondary"
-                      >
-                        {poItem.ltext}
-                      </Typography>
-                    </Grid>
-                    <Grid item md={9} sm={6}>
-                      <RouterLink
-                        to={
-                          poItem.rtext
-                            ? documentVersionPath(
-                              purchaseOrderSupplierDocRevId || "",
-                              purchaseOrderSupplierDocId
-                            )
-                            : "#"
-                        }
-                        color="inherit"
-                        className={classes.link}
-                      >
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          className={classes.linkText}
-                          color="textPrimary"
-                        >
-                          {poItem.rtext}
-                        </Typography>
-                      </RouterLink>
-                    </Grid>
-                  </Grid>
-                </StyledListItem>
-              );
-            }
-            if (poItem.isRegular) {
-              return (
-                <StyledListItem
-                  key={index}
-                  button
-                  className={classes.nested}
-                  disableRipple
-                >
-                  <Grid container className={classes.gridContainer}>
-                    <Grid item md={3} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyChildrenBold}
-                        color="textSecondary"
-                      >
-                        {poItem.ltext}
-                      </Typography>
-                    </Grid>
-                    <Grid item md={9} sm={6}>
+          {PoItems.map((poItem, index) => (
+            <StyledListItem
+              key={index}
+              button
+              className={classes.nested}
+              disableRipple
+            >
+              <Grid container className={classes.gridContainer}>
+                <Grid item md={3} sm={6}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyChildrenBold}
+                    color="textSecondary"
+                  >
+                    {poItem.ltext}
+                  </Typography>
+                </Grid>
+                <Grid item md={9} sm={6}>
+                  {poItem.isSupplier && (
+                    <RouterLink
+                      to={
+                        poItem.rtext
+                          ? documentVersionPath(
+                            purchaseOrderSupplierDocRevId || "",
+                            purchaseOrderSupplierDocId
+                          )
+                          : "#"
+                      }
+                      color="inherit"
+                      className={classes.link}
+                    >
                       <Typography
                         component="span"
                         variant="body2"
-                        className={classes.typography}
+                        className={classes.linkText}
                         color="textPrimary"
-                        dangerouslySetInnerHTML={{ __html: poItem.rtext }}
-                      />
-                    </Grid>
-                  </Grid>
-                </StyledListItem>
-              );
-            }
-            if (poItem.isAttachments) {
-              return (
-                <StyledListItem
-                  key={index}
-                  button
-                  className={classes.nested}
-                  disableRipple
-                >
-                  <Grid container className={classes.gridContainer}>
-                    <Grid item md={3} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyChildrenBold}
-                        color="textSecondary"
                       >
-                        {poItem.ltext}
+                        {poItem.rtext}
                       </Typography>
-                    </Grid>
-                    <Grid item md={9} sm={6}>
-                      <Grid
-                        container
-                        justify="space-between"
-                        alignContent="center"
-                      >
-                        {poItem.rtext.map((attachmentInfo, index) => (
-                          <Grid item key={index}>
-                            <AttachmentIcon
-                              className={classes.attachmentIcon}
-                            />
-                            <Link
-                              href="#"
-                              onClick={downloadAttachment(attachmentInfo)}
-                              color="inherit"
-                              className={classes.linkTextColor}
+                    </RouterLink>
+                  )}
+                  {poItem.isRegular && (
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      dangerouslySetInnerHTML={{ __html: poItem.rtext }}
+                    />
+                  )}
+                  {poItem.isAttachments && (
+                    <Grid
+                      container
+                      justify="space-between"
+                      alignContent="center"
+                    >
+                      {poItem.rtext.map((attachmentInfo, index) => (
+                        <Grid item key={index}>
+                          <AttachmentIcon
+                            className={classes.attachmentIcon}
+                          />
+                          <Link
+                            href="#"
+                            onClick={downloadAttachment(attachmentInfo)}
+                            color="inherit"
+                            className={classes.linkTextColor}
+                          >
+                            <Typography
+                              component="span"
+                              variant="body2"
+                              className={classes.linkText}
+                              color="textPrimary"
                             >
-                              <Typography
-                                component="span"
-                                variant="body2"
-                                className={classes.linkText}
-                                color="textPrimary"
-                              >
-                                {` ${attachmentInfo.name}.${attachmentInfo.type}`}
-                              </Typography>
-                            </Link>
-                          </Grid>
-                        ))}
-                      </Grid>
+                              {` ${attachmentInfo.name}.${attachmentInfo.type}`}
+                            </Typography>
+                          </Link>
+                        </Grid>
+                      ))}
                     </Grid>
-                  </Grid>
-                </StyledListItem>
-              );
-            }
-          })}
+                  )}
+                </Grid>
+              </Grid>
+            </StyledListItem>
+          ))}
         </List>
       </Collapse>
       <Modal
