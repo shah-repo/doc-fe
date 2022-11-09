@@ -1522,7 +1522,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Click save document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1965,7 +1965,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context("Verify font for Outstanding Training Chart", () => {
+  context("Verify font for 'TRAININGS OUTSTANDING' Chart", () => {
     it(`Verify Outstanding Training Chart font-size ${FONT_SIZE_16} and form-family ${soraSansserif} line-height ${LINE_HT_20} font-weight ${FONT_WT_600}`, () => {
       cy.checkStylePropExists({
         content: "TRAININGS OUTSTANDING",
@@ -1974,10 +1974,10 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context("Verify font for Welcome back, Username!", () => {
+  context(`Verify font for 'Welcome back, ${USERS[1].name}!'`, () => {
     it(`Verify Welcome back, Username! font-size as ${FONT_SIZE_28} and form-family as ${soraSansserif} font-weight ${FONT_WT_300}`, () => {
       cy.checkStylePropExists({
-        content: "Welcome Back, Giovanni Reynolds!",
+        content: `Welcome Back, ${USERS[1].name}!`,
         props: { "font-size": FONT_SIZE_28, "font-family": soraSansserif, "font-weight": FONT_WT_300 },
       });
     });
