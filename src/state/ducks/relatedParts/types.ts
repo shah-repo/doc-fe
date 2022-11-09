@@ -1,4 +1,4 @@
-export enum RELATED_STATUS {
+export enum RELATED_PARTS_STATUS {
   RELATED_SEPARATE = "related_separate",
   RELATED_TOGETHER = "related_together",
   PARENT_NO = "parent_no",
@@ -9,7 +9,7 @@ export enum RELATED_STATUS {
 export interface RelatedPartsChoiceRequestBody {
   documentId: string;
   rootDocId: string;
-  relatedStatus: RELATED_STATUS;
+  relatedPartsStatus: RELATED_PARTS_STATUS;
 }
 
 export interface RelatedPartsListItem {

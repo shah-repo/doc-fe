@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
-import { RelatedPartsListItem, RELATED_STATUS } from "../../../../../state/ducks/relatedParts/types";
+import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { toastSuccess } from "../../../../components/notifications";
 import { documentPreviewPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
@@ -18,7 +18,7 @@ import { relatedPartsStore, RelatedPartsStoreContext, useRelatedPartsStore } fro
 
 interface Props {
   documentRevision: DocumentRevision;
-  parentPartStatus: RELATED_STATUS | undefined;
+  parentPartStatus: RELATED_PARTS_STATUS | undefined;
 }
 
 const SuccessMsg: React.FunctionComponent<{
@@ -69,11 +69,11 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const createPartAsync = useAsync({
     onSuccess: ({ createdDocumentRevision, suffixName }: any) => {
       if (createdDocumentRevision) {
-        if (parentStatus === RELATED_STATUS.PARENT_SEPARATE) {
+        if (parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
           // Show a toast
           showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
 
-        } else if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
+        } else if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
           // populate the list with the new added part
           relatedPartsStore.addNewRelatedPart(createdDocumentRevision, suffixName);
         }
@@ -155,7 +155,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       },
     };
 
-    if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
+    if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
       docDto = {
         ...docDto,
         name: `${documentRevision.name}-${relatedPartDetails?.name}`,

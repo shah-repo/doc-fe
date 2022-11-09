@@ -7,7 +7,7 @@ import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest/types";
 import { Approval, Id, Nullable, Owner, User } from "../common/types";
 import { Employee } from "../company/types";
-import { RELATED_STATUS } from "../relatedParts/types";
+import { RELATED_PARTS_STATUS } from "../relatedParts/types";
 import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from "./documentType/types";
@@ -185,7 +185,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   smartReferencesTo?: SmartReference[];
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
   redline?: boolean;
-  relatedStatus?: RELATED_STATUS;
+  relatedPartsStatus?: RELATED_PARTS_STATUS;
   relatedParentPartDetails?: RelatedParentPartDetails;
 }
 

@@ -19,7 +19,7 @@ import {
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
-import { RelatedPartsListItem, RELATED_STATUS } from "../../../../../state/ducks/relatedParts/types";
+import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton } from "../../../../form.builder";
 
 
@@ -36,7 +36,7 @@ import useStyles from "./RelatedPart.styles";
 import { useRelatedPartsStore } from "./RelatedParts.state";
 
 const ParentPartSelector: React.FunctionComponent<{
-  status: RELATED_STATUS | undefined;
+  status: RELATED_PARTS_STATUS | undefined;
   parentStatusChanged: (value: string) => void;
 }> = ({
   status,
@@ -57,13 +57,13 @@ const ParentPartSelector: React.FunctionComponent<{
 
   const disableOptions = (value: string) => {
     switch (value) {
-      case RELATED_STATUS.PARENT_NO:
+      case RELATED_PARTS_STATUS.PARENT_NO:
         setDisable({ disable1: false, disable2: true, disable3: true });
         break;
-      case RELATED_STATUS.PARENT_TOGETHER:
+      case RELATED_PARTS_STATUS.PARENT_TOGETHER:
         setDisable({ disable1: true, disable2: false, disable3: true });
         break;
-      case RELATED_STATUS.PARENT_SEPARATE:
+      case RELATED_PARTS_STATUS.PARENT_SEPARATE:
         setDisable({ disable1: true, disable2: true, disable3: false });
         break;
       default:
@@ -97,19 +97,19 @@ const ParentPartSelector: React.FunctionComponent<{
       <FormControl className={classes.formControlPad}>
         <RadioGroup row value={status} onChange={(e) => parentStatusHandler(e.target.value)}>
           <FormControlLabel
-            value={RELATED_STATUS.PARENT_NO}
+            value={RELATED_PARTS_STATUS.PARENT_NO}
             control={<Radio color="primary" disableRipple={true} />}
             label="No"
             disabled={disable.disable1}
           />
           <FormControlLabel
-            value={RELATED_STATUS.PARENT_TOGETHER}
+            value={RELATED_PARTS_STATUS.PARENT_TOGETHER}
             control={<Radio color="primary" disableRipple={true} />}
             label="Yes, Child Released Together"
             disabled={disable.disable2}
           />
           <FormControlLabel
-            value={RELATED_STATUS.PARENT_SEPARATE}
+            value={RELATED_PARTS_STATUS.PARENT_SEPARATE}
             control={<Radio color="primary" disableRipple={true} />}
             label="Yes, Child Released Separately"
             disabled={disable.disable3}
@@ -383,16 +383,16 @@ const RelatedParts = ({
 
   return (
     <>
-      {documentRevision.relatedStatus !== RELATED_STATUS.RELATED_SEPARATE &&
-      documentRevision.relatedStatus !== RELATED_STATUS.RELATED_TOGETHER &&
+      {documentRevision.relatedStatus !== RELATED_PARTS_STATUS.RELATED_SEPARATE &&
+      documentRevision.relatedStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER &&
       <div className={classes.mainDiv}>
         <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
-        {parentStatus === RELATED_STATUS.PARENT_SEPARATE && (
+        {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && (
           <Grid item xs={12}>
             <FBButton label="Add Related Part" onClick = {createNewDocument}></FBButton>
           </Grid>
         )}
-        {parentStatus === RELATED_STATUS.PARENT_TOGETHER && (
+        {parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER && (
           <RelatedPartGrid documentRevision={documentRevision} createNewDocument={createNewDocument}
             viewRelatedPart={viewRelatedPart} fetchRelatedParts = {fetchRelatedParts}
             voidRelatedPart = {voidRelatedPart}

@@ -320,7 +320,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <Grid item xs={12}>
               <RelatedPartsWrapper
                 documentRevision={documentRevision}
-                parentPartStatus= {documentRevision?.relatedStatus}
+                parentPartStatus= {documentRevision?.relatedPartsStatus}
               ></RelatedPartsWrapper>
             </Grid>
           }
