@@ -32,6 +32,7 @@ import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
+import Text from "../../../../components/Text";
 import useStyles from "./RelatedPart.styles";
 import { useRelatedPartsStore } from "./RelatedParts.state";
 
@@ -86,7 +87,7 @@ const ParentPartSelector: React.FunctionComponent<{
           variant="h6"
           id="tableTitle"
         >
-          Is this a parent part?
+          <Text translation="relatedParts.parentPart.question"/>
         </Typography>
         <Tooltip title="Parent part info" placement="right"
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
@@ -99,19 +100,19 @@ const ParentPartSelector: React.FunctionComponent<{
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_NO}
             control={<Radio color="primary" disableRipple={true} />}
-            label="No"
+            label={<Text translation="relatedParts.parentPart.answer.no"/>}
             disabled={disable.disable1}
           />
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_TOGETHER}
             control={<Radio color="primary" disableRipple={true} />}
-            label="Yes, Child Released Together"
+            label={<Text translation="relatedParts.parentPart.answer.yes.together"/>}
             disabled={disable.disable2}
           />
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_SEPARATE}
             control={<Radio color="primary" disableRipple={true} />}
-            label="Yes, Child Released Separately"
+            label={<Text translation="relatedParts.parentPart.answer.yes.separate"/>}
             disabled={disable.disable3}
           />
         </RadioGroup>
@@ -171,7 +172,7 @@ const RelatedPartGrid: React.FunctionComponent<{
         <Grid style={{ justifyContent: "space-between", alignItems: "center" }} container>
           <Grid item>
             <Typography variant="h6" id="tableTitle" component="div">
-                Related Parts
+              <Text translation="relatedParts.grid.title"/>
             </Typography>
           </Grid>
 
@@ -184,7 +185,7 @@ const RelatedPartGrid: React.FunctionComponent<{
                     startIcon={<AddCircleIcon color="primary" />}
                     onClick={showEditRow}
                   >
-                    Add Related part
+                    <Text translation="relatedParts.button.addText"/>
                   </Button>
                 </Typography>
               </Grid>
@@ -206,7 +207,7 @@ const RelatedPartGrid: React.FunctionComponent<{
             startIcon={<AddOutlinedIcon />}
             onClick={showEditRow}
           >
-              ADD RELATED PART
+            <Text translation="relatedParts.button.addText"/>
           </Button>
         }
       </div>
@@ -231,12 +232,18 @@ const RelatedPartList: React.FunctionComponent<{
       <Table stickyHeader aria-label="related parts table">
         <TableHead className={classes.tableHeadHeight}>
           <TableRow>
-            <TableCell className={cx(classes.tableCell, classes.tableCellOne)} align="left">DOC ID</TableCell>
+            <TableCell className={cx(classes.tableCell, classes.tableCellOne)} align="left">
+              <Text translation="relatedParts.grid.heading.docId"/>
+            </TableCell>
             <TableCell className={classes.tableCell} align="left">
-              <span className={classes.verticalDivider}>TITLE</span>
+              <span className={classes.verticalDivider}>
+                <Text translation="relatedParts.grid.heading.title"/>
+              </span>
             </TableCell>
             <TableCell className={cx(classes.tableCell, classes.tableCellThree)} align="center">
-              <span className={classes.verticalDivider}>OBSOLETE</span>
+              <span className={classes.verticalDivider}>
+                <Text translation="relatedParts.grid.heading.obsolete"/>
+              </span>
             </TableCell>
             <TableCell className={cx(classes.tableCell, classes.tableCellFour)} align="center"></TableCell>
           </TableRow>
@@ -338,7 +345,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             onBlur = {checkForDuplicateDocIds}
             value={relatedPartDetails.docId}
             error = {relatedPartsStore.docIdExists}
-            helperText={relatedPartsStore.docIdExists ? "Duplicate Entry" : ""}
+            helperText={relatedPartsStore.docIdExists ? <Text translation="relatedParts.docId.exists.msg"/> : ""}
           />
         </div>
         <div
@@ -389,7 +396,8 @@ const RelatedParts = ({
         <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && (
           <Grid item xs={12}>
-            <FBButton label="Add Related Part" onClick = {createNewDocument}></FBButton>
+            <FBButton label={<Text translation="relatedParts.button.addText"/>}
+              onClick = {createNewDocument}></FBButton>
           </Grid>
         )}
         {parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER && (
