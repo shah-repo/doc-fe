@@ -466,7 +466,7 @@ context("Layout Verification of EQ", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Add EQUIPMENT SECTIONS FOR PM", () => {
+    xit("Add EQUIPMENT SECTIONS FOR PM", () => {
       fbclickOnAddCalPM();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
@@ -474,7 +474,7 @@ context("Layout Verification of EQ", () => {
       cy.fbAddField();
     });
 
-    it("Add EQUIPMENT SECTIONS FOR CAL", () => {
+    xit("Add EQUIPMENT SECTIONS FOR CAL", () => {
       fbclickOnAddCalPM();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "Calibration" });
@@ -556,7 +556,7 @@ context("Layout Verification of EQ", () => {
       cy.verifyFixedTab();
     });
 
-    it("Verify EQ opens to the Overview tab by default", () => {
+    it("Verify Form opens to the Overview tab by default", () => {
       cy.isTabActive({ name: "overview", index: 0 });
     });
 
@@ -564,9 +564,13 @@ context("Layout Verification of EQ", () => {
       cy.get("[data-cy='EQ Status']").should("exist");
     });
 
-    it("Verify overview tab predefiend fields up to attachment", () => {
+    it("Verify default fields up to attachment", () => {
       cy.verifyPredefiendFields();
       cy.get("#AttachmentFieldPresenter-field").should("exist");
+    });
+
+    it("Verify that Form Options should  appear for this tab ", () => {
+      cy.get(".formOptionsBox").should("exist");
     });
   });
 
@@ -624,7 +628,7 @@ context("Layout Verification of EQ", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Add EQUIPMENT SECTIONS FOR PM", () => {
+    xit("Add EQUIPMENT SECTIONS FOR PM", () => {
       fbclickOnAddCalPM();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
@@ -632,7 +636,7 @@ context("Layout Verification of EQ", () => {
       cy.fbAddField();
     });
 
-    it("Add EQUIPMENT SECTIONS FOR CAL", () => {
+    xit("Add EQUIPMENT SECTIONS FOR CAL", () => {
       fbclickOnAddCalPM();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
       cy.fbEnterNameValue({ name: "label", value: "Calibration" });
@@ -650,7 +654,7 @@ context("Layout Verification of EQ", () => {
       cy.drSelectSpecificationTab();
     });
 
-    it("Verify Click on EQ  Specification Tab, clicking on it should open that tab and close the other one", () => {
+    it("Verify Click on Specification Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
       cy.get("#sm-tabpanel-0").should("be.hidden");
       cy.isTabActive({ name: "specification", index: 1 });
@@ -676,6 +680,11 @@ context("Layout Verification of EQ", () => {
     it("Verify that Form Options should  appear for this tab ", () => {
       cy.get(".formOptionsBox").should("exist");
     });
+
+    it("Verify that right side panel opens by default to the References tab", () => {
+      cy.get("[data-cy='References']").should("exist");
+      cy.get("[data-cy='generalInfo']").should("be.visible");
+    });
   });
 
   context("Release EQ", () => {
@@ -693,8 +702,86 @@ context("Layout Verification of EQ", () => {
       });
     });
 
+    context("Verify form migration", () => {
+      it("Verify migrate form button is visible", () => {
+        cy.get("[data-cy=references-icon]").arrowClick();
+        cy.get("[data-cy='common.form.migration']").should("be.visible");
+      });
+
+      it("Click on migrate form button", () => {
+        cy.get("[data-cy='common.form.migration']").arrowClick();
+      });
+
+      it("Select form to be migrated", () => {
+        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
+        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
+      });
+
+      it("Mapped EQ Status field", () => {
+        cy.get("[data-cy='field-fb-default-eq-status']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(1).autocompleteSelect("EQ Status");
+      });
+
+      it("Mapped Primary Owner field", () => {
+        cy.get("[data-cy='field-fb-primary-owner-eq']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(2).autocompleteSelect("Primary Owner");
+      });
+
+      it("Mapped Coordinator field", () => {
+        cy.get("[data-cy='field-fb-coordinator-eq']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(3).autocompleteSelect("Coordinator");
+      });
+
+      it("Mapped Autocomplete-Approvers field", () => {
+        cy.get("[data-cy^='field-autocomplete-approvers']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(4).autocompleteSelect("Autocomplete-Approvers");
+      });
+
+      it("Mapped Eq Textfield field", () => {
+        cy.get("[data-cy^='field-eq-textfield']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(5).autocompleteSelect("Eq Textfield");
+      });
+
+      it("Mapped checkbox field", () => {
+        cy.get("[data-cy^='field-checkbox']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(6).autocompleteSelect("Checkbox");
+      });
+
+      xit("Mapped Preventative Maintenance field", () => {
+        cy.get("[data-cy^='field-preventative-maintenance']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(7).autocompleteSelect("Preventative Maintenance");
+      });
+
+      xit("Mapped Calibration field", () => {
+        cy.get("[data-cy^='field-calibration']" ).arrowClick();
+        cy.get("[id^='react-select']").eq(8).autocompleteSelect("Calibration");
+      });
+
+      it("Click on confirm change", () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+          cy.get("[data-cy='common.confirm.change']").arrowClick();
+        });
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
+      it("Verify the checkbox field data after migration", () => {
+        cy.get("[value='1']").should("be.checked");
+      });
+
+      it("Verify form info should have migrated form 'FM-00002'", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
+      });
+    });
+
     context("Verify Layout of document and Tabs", () => {
-      it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (DRAFT)", () => {
+      it("Verify EQ is created, The top left of the page displays: Icon and type, ID, Rev stage,status (DRAFT)", () => {
         cy.verifyHeaderInfoContent({
           status: STATUS_TYPES_LABEL.DRAFT,
           title: "Equipment",
@@ -742,14 +829,14 @@ context("Layout Verification of EQ", () => {
         cy.cmpTurnOffAutosave();
       });
 
-      it("Verify Add Cal or PM is displayed", () => {
-        cy.get("[data-cy='form.builder.addEquiSpec']").should("exist");
-      });
-
       it("Verify Click Specification Tab, clicking on it should open that tab and close the other one", () => {
         cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
         cy.get("#sm-tabpanel-0").should("be.hidden");
         cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
+      });
+
+      xit("Verify Add Cal or PM is displayed", () => {
+        cy.get("[data-cy='form.builder.addEquiSpec']").should("exist");
       });
 
       it("Verify Primary owner and co-ordinator fields", () => {
@@ -769,6 +856,26 @@ context("Layout Verification of EQ", () => {
         cy.get("[name^='eq-textfield']").should("exist");
       });
 
+      it("Verify Add Cal or PM is displayed", () => {
+        cy.get("[data-cy='form.builder.addEquiSpec']").should("exist");
+      });
+
+      it("Add EQUIPMENT SECTIONS FOR PM", () => {
+        fbclickOnAddCalPM();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+        cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
+        cy.get("input[value='preventativeMaintenance']").arrowClick();
+        cy.fbAddField();
+      });
+
+      it("Add EQUIPMENT SECTIONS FOR CAL", () => {
+        fbclickOnAddCalPM();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+        cy.fbEnterNameValue({ name: "label", value: "Calibration" });
+        cy.get("input[value='calibration']").arrowClick();
+        cy.fbAddField();
+      });
+
       it("Verify PM section exist or not", () => {
         cy.get("[class*='fb-field-wrapper-preventative-maintenance']").should("exist");
       });
@@ -777,13 +884,15 @@ context("Layout Verification of EQ", () => {
         cy.get("[class*='fb-field-wrapper-calibration']").should("exist");
       });
 
-      it("Verify Add Cal or PM is displayed", () => {
-        cy.get("[data-cy='form.builder.addEquiSpec']").should("exist");
-      });
-
       it("Verify that Form Options should  appear for this tab ", () => {
         cy.get(".formOptionsBox").should("exist");
+        // cy.pause();
       });
+
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
     });
 
     context("Fill the form", () => {
@@ -883,83 +992,6 @@ context("Layout Verification of EQ", () => {
       });
     });
 
-    context("Verify form migration", () => {
-      it("Verify migrate form button is visible", () => {
-        cy.get("[data-cy=references-icon]").arrowClick();
-        cy.get("[data-cy='common.form.migration']").should("be.visible");
-      });
-
-      it("Click on migrate form button", () => {
-        cy.get("[data-cy='common.form.migration']").arrowClick();
-      });
-
-      it("Select form to be migrated", () => {
-        cy.get("[data-cy='field-changeDocumentForm']").arrowClick();
-        cy.get("[id^='react-select']").contains("FM-00002").arrowClick();
-      });
-
-      it("Mapped EQ Status field", () => {
-        cy.get("[data-cy='field-fb-default-eq-status']" ).arrowClick();
-        cy.get("[id^='react-select']").eq(1).autocompleteSelect("EQ Status");
-      });
-
-      it("Mapped Primary Owner field", () => {
-        cy.get("[data-cy='field-fb-primary-owner-eq']" ).arrowClick();
-        cy.get("[id^='react-select']").eq(2).autocompleteSelect("Primary Owner");
-      });
-
-      it("Mapped Coordinator field", () => {
-        cy.get("[data-cy='field-fb-coordinator-eq']" ).arrowClick();
-        cy.get("[id^='react-select']").eq(3).autocompleteSelect("Coordinator");
-      });
-
-      it("Mapped Autocomplete-Approvers field", () => {
-        cy.get("[data-cy^='field-autocomplete-approvers']" ).arrowClick();
-        cy.get("[id^='react-select']").eq(4).autocompleteSelect("Autocomplete-Approvers");
-      });
-
-      it("Mapped Eq Textfield field", () => {
-        cy.get("[data-cy^='field-eq-textfield']" ).arrowClick();
-        cy.get("[id^='react-select']").eq(5).autocompleteSelect("Eq Textfield");
-      });
-
-      it("Mapped checkbox field", () => {
-        cy.get("[data-cy^='field-checkbox']" ).arrowClick();
-        cy.get("[id^='react-select']").eq(6).autocompleteSelect("Checkbox");
-      });
-
-      it("Mapped Preventative Maintenance field", () => {
-        cy.get("[data-cy^='field-preventative-maintenance']" ).arrowClick();
-        cy.get("[id^='react-select']").eq(7).autocompleteSelect("Preventative Maintenance");
-      });
-
-      it("Mapped Calibration field", () => {
-        cy.get("[data-cy^='field-calibration']" ).arrowClick();
-        cy.get("[id^='react-select']").eq(8).autocompleteSelect("Calibration");
-      });
-
-      it("Click on confirm change", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-          cy.get("[data-cy='common.confirm.change']").arrowClick();
-        });
-      });
-
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
-      it("Navigate to specification tab", () => {
-        cy.drSelectSpecificationTab();
-      });
-
-      it("Verify the checkbox field data after migration", () => {
-        cy.get("[value='1']").should("be.checked");
-      });
-
-      it("Verify form info should have migrated form 'FM-00002'", () => {
-        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00002");
-      });
-    });
 
     context("Approve and released", () => {
       it("Approve and Release", () => {
@@ -1011,6 +1043,14 @@ context("Layout Verification of EQ", () => {
         cy.cmpTurnOffAutosave();
       });
 
+      it("Verify tabs", () => {
+        cy.verifyTabs("overview", "details");
+      });
+
+      it("Verify revision is Alfa", () => {
+        cy.get("[data-cy='HeaderInfo-Rev']").should("have.text", "Rev A");
+      });
+
       it("Enter title 'Calibration document'", () => {
         cy.drEnterDocumentTitle({ name: "Calibration document" });
       });
@@ -1053,14 +1093,6 @@ context("Layout Verification of EQ", () => {
 
       it("Add an Approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
-
-      it("Verify tabs", () => {
-        cy.verifyTabs("overview", "details");
-      });
-
-      it("Verify revision is Alfa", () => {
-        cy.get("[data-cy='HeaderInfo-Rev']").should("have.text", "Rev A");
       });
 
       it("Submit for approval", () => {
@@ -1173,7 +1205,7 @@ context("Layout Verification of EQ", () => {
       });
     });
 
-    context("Navigate to EQ and Verify", () => {
+    context("Navigate back to EQ to specification tab and Verify", () => {
       it("Navigate back to EQ", () => {
         cy.navigToEquipment();
       });
@@ -1195,7 +1227,7 @@ context("Layout Verification of EQ", () => {
         cy.drSelectSpecificationTab();
       });
 
-      it("Verify that Specification tab displays History", () => {
+      it("Verify that Specification tab displays maintainance History", () => {
         cy.get("[data-cy='document.revision.history']").eq(0).scrollIntoView();
         cy.get("[data-cy='maintenanceHistory']").eq(0).should("exist");
         cy.get("[data-cy='maintenanceHistory'] a").eq(0).contains("MR-00002").should("exist");
@@ -1219,6 +1251,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Verify link open", () => {
+        cy.get("[data-cy='maintenanceHistory'] a").eq(0).should("be.visible");
         cy.get("[data-cy='maintenanceHistory'] a").eq(0).invoke("removeAttr", "target").click();
         cy.listLoadingElementShouldNotExist();
         cy.verifyHeaderInfoContent({
@@ -1246,16 +1279,28 @@ context("Layout Verification of EQ", () => {
         cy.get("[data-cy='generalInfo']").should("be.visible");
       });
 
-      it("Verify Reference tab Info", () => {
-        cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
-      });
-
       it("Verify Right side pannel Expand and collapse", () => {
         cy.verifyExpandCollpase();
       });
 
+      // it("Verify it is fixed as the user scrolls up or down", () => {
+      //   cy.pause();
+      // });
+
       it("Verify Eye Icon", () => {
         cy.get("[data-cy='references-icon']").should("exist");
+      });
+
+      it("Verify Reference tab Info (Avatar, username and owner)", () => {
+        cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
+      });
+
+      it("Verify Add/Remove References", () => {
+        cy.get(`[data-cy="referenceTo"]`).arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.get(`[data-cy="referenceTo"]`).arrowType("FM-00001");
+        cy.wait(2000).type(`{downarrow}{enter}`);
+        cy.drRemoveReferences({ reference: "FM-00001" });
       });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
@@ -1264,6 +1309,18 @@ context("Layout Verification of EQ", () => {
         cy.get("[data-cy='common.revision']").parent().should("contain.text",
           moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
+
+      // it("Referenced By- Verify if the EQ is Referenced by", () => {
+      //   cy.pause();
+      // });
+
+      // it("Verify form info", () => {
+      //   cy.pause();
+      // });
+
+      // it("Verify training info", () => {
+      //   cy.pause();
+      // });
 
       context("Verify Revision", () => {
         it("Revise Record", () => {
@@ -1364,6 +1421,17 @@ context("Layout Verification of EQ", () => {
         });
       });
 
+      context("Verify Revison history", () => {
+        it("Verify revision icon ", () => {
+          cy.get("[data-cy='cr-icon']").should("be.visible");
+        });
+
+        it("Click on revision icon history tab should open", () => {
+          cy.drSelectRevisionHistoryTab();
+          cy.get("[data-cy='Revision History-detail']").should("be.visible");
+        });
+      });
+
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
           cy.get("[data-cy='timeline-icon']").arrowClick();
@@ -1413,7 +1481,7 @@ context("Layout Verification of EQ", () => {
         cy.drEnterDocumentDescription({ description: "EQ description 2" });
       });
 
-      it("Select 'Numeric' revision stage", () => {
+      it("Select 'Alpha' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Alpha" });
       });
 
@@ -1436,6 +1504,30 @@ context("Layout Verification of EQ", () => {
 
       it("Navigate to specification tab", () => {
         cy.drSelectSpecificationTab();
+      });
+
+      it("Add EQUIPMENT SECTIONS FOR PM", () => {
+        fbclickOnAddCalPM();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+        cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
+        cy.get("input[value='preventativeMaintenance']").arrowClick();
+        cy.fbAddField();
+      });
+
+      it("Add EQUIPMENT SECTIONS FOR CAL", () => {
+        fbclickOnAddCalPM();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+        cy.fbEnterNameValue({ name: "label", value: "Calibration" });
+        cy.get("input[value='calibration']").arrowClick();
+        cy.fbAddField();
+      });
+
+      it("Verify PM section exist or not", () => {
+        cy.get("[class*='fb-field-wrapper-preventative-maintenance']").should("exist");
+      });
+
+      it("Verify Cal section exist or not", () => {
+        cy.get("[class*='fb-field-wrapper-calibration']").should("exist");
       });
 
       it(`Enter text field value`, () => {
@@ -1839,6 +1931,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Verify it displays Cal/PM Due Date, link for Cal/PM is created and displayed", () => {
+        cy.get("[data-cy='maintenanceHistory'] a").should("be.visible");
         cy.get("[data-cy='maintenance.status']").should("be.visible");
         cy.get("[data-cy='form.builder.cal']").should("be.visible");
         cy.get("[data-cy='common.due.date']").should("be.visible");
