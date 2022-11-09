@@ -360,11 +360,15 @@ context("Receiving landing page test", () => {
 
   context("Create receiving  form", () => {
     it("Navigate to document list", () => {
-      cy.navigToDocumentList();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+        cy.navigToDocumentList();
+      });
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Filter document by ID", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00004", status: "Draft" });
     });
 
@@ -522,8 +526,11 @@ context("Receiving landing page test", () => {
 
   context("Create Another receiving  form", () => {
     it("Navigate to document list", () => {
-      cy.navigToDocumentList();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
+        cy.navigToDocumentList();
+      });
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Filter document by ID", () => {
@@ -1884,7 +1891,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Save the form", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click on create lot", () => {
