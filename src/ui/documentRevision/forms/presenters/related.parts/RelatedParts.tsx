@@ -168,7 +168,7 @@ const RelatedPartGrid: React.FunctionComponent<{
   return useObserver(() => (
     <div className={classes.partsGrid}>
       <div>
-        <Grid style={{ justifyContent: "space-between", alignItems: "center" }} container>
+        <Grid className={classes.gridCenterAlign} container>
           <Grid item>
             <Typography variant="h6" id="tableTitle" component="div">
               <Text translation="relatedParts.grid.title"/>
@@ -323,14 +323,17 @@ const RelatedPartEditRow: React.FunctionComponent<{
     cancelEdit();
   };
 
+  const confirmEdit = () => {
+    createNewDocument(relatedPartDetails);
+  };
+
   const checkForDuplicateDocIds = () => {
     relatedPartsStore.checkForDuplicateDocIds(`${documentRevision?.document?.docId}-${relatedPartDetails.docId}`);
   };
 
   return useObserver(() => (
     <>
-      <div className={cx({
-        [classes.editRowParentDiv]: true,
+      <div className={cx(classes.editRowParentDiv, {
         [classes.editRowParentNormal]: !relatedPartsStore.docIdExists,
         [classes.editRowParentError]: relatedPartsStore.docIdExists,
       })}>
@@ -364,7 +367,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
               <ClearIcon className={classes.iconButton}/>
             </Button>
-            <Button className={classes.actionButton} onClick = {(e) => createNewDocument(relatedPartDetails)}>
+            <Button className={classes.actionButton} onClick = {confirmEdit}>
               <DoneIcon className={classes.iconButton} />
             </Button>
           </div>

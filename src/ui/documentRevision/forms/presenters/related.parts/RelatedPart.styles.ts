@@ -96,7 +96,10 @@ export default makeStyles((theme) =>
       padding: theme.spacing(0, 1.5),
       alignItems: "center",
     },
-
+    gridCenterAlign: {
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
     actionButtonParentDiv: {
       width: "100%",
       position: "relative",
