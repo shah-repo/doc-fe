@@ -656,7 +656,7 @@ context("records_data_with_correct_font", () => {
         cy.get(`[data-cy="releasedDate"]`)
           .checkStylePropExists({
             content: receivingReleasedDate,
-            props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
+            props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20, "font-weight": FONT_WT_400 },
           });
       });
     });
