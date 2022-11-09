@@ -30,7 +30,9 @@ let partDocumentType;
 let createdLotsFormDocument;
 let formDocumentType;
 let paperLhrDocumentType;
-
+let thirdEmployee;
+let allGroups;
+let caGroup;
 
 context("Change Ownership of Paper LHR", () => {
   before(() => {
@@ -69,6 +71,7 @@ context("Change Ownership of Paper LHR", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
@@ -308,26 +311,44 @@ context("Change Ownership of Paper LHR", () => {
     });
 
     it("[API]Get group", (done: any) => {
-      cy.grpGetGroupByName({
-        groupName: "Developers",
+      cy.grpGetGroups({
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
       }).then((response) => {
-        developersGroup = response;
+        allGroups = response;
+        cy.log(response);
+        developersGroup = allGroups.find((group) => group.name === "Developers");
+        caGroup = allGroups.find((group) => group.name === "Company Admin");
         done();
+      });
+    });
+
+    it("[API]Patch 'Company Admin' group", () => {
+      cy.grpPatchGroup({
+        groupId: caGroup.id,
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        payload: {
+          employees: [{ id: adminEmployee.id }, { id: thirdEmployee.id }],
+          tags: [
+            GroupTag.DASHBOARD_ADMIN,
+            GroupTag.OWNERSHIP_CHANGE,
+          ],
+        },
       });
     });
 
     it("[API]Patch group", () => {
       cy.grpPatchGroup({
-        groupId: developersGroup.body[0].id,
+        groupId: developersGroup.id,
         sessionId: loginResponse.sessionId,
         employeeId: adminEmployee.id,
         payload: {
-          employees: [{ id: secondEmployee.id }],
-          tags: [...developersGroup.body[0].tags,
+          employees: [{ id: adminEmployee.id }, { id: secondEmployee.id }, { id: thirdEmployee.id }],
+          tags: [...developersGroup.tags,
             GroupTag.CREATE_DOCS_OF_RESTRICTED_DOC_TYPES,
             GroupTag.NAVIGATION_WITH_RESTRICTED_DOC_TYPES,
+            GroupTag.OWNERSHIP_CHANGE,
           ],
         },
       });
@@ -572,10 +593,6 @@ context("Change Ownership of Paper LHR", () => {
         cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
           .should("contain.text", "Approver Added").and("contain.text", USERS[2].name);
       });
-
-      it("Change ownership of LHR", () => {
-        cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
-      });
     });
   });
 
@@ -605,6 +622,10 @@ context("Change Ownership of Paper LHR", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Change ownership of LHR", () => {
+      cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
+    });
+
     it("Verify 2 approvers should exist", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
         .find(".MuiChip-deletable").should("have.length", 2);
@@ -626,8 +647,10 @@ context("Change Ownership of Paper LHR", () => {
     });
 
     it(`Add ${USERS[1].name} approver`, () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.unClick();
+      });
     });
 
     it("Check history - added and removed approvers should be displayed", () => {
@@ -675,8 +698,10 @@ context("Change Ownership of Paper LHR", () => {
     });
 
     it(`Operator can add ${USERS[4].name} approver`, () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[4].name);
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[4].name);
+        cy.unClick();
+      });
     });
 
     it("visit the LHR", () => {
