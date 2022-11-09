@@ -152,14 +152,13 @@ const RelatedPartGrid: React.FunctionComponent<{
   }, [fetchRelatedParts, documentRevision.document.id]);
 
 
-  useEffect(() => {
-    reaction(
-      () => relatedPartsStore.relatedPartsList.length,
-      (length) => {
-        setIsEditRowVisible(false);
-        setShowButton(true);
-      });
-  }, [relatedPartsStore.relatedPartsList.length]);
+  useEffect(() => reaction(
+    () => relatedPartsStore.relatedPartsList.length,
+    () => {
+      setIsEditRowVisible(false);
+      setShowButton(true);
+    }
+  ), [relatedPartsStore.relatedPartsList.length]);
 
   const cancelEdit = () => {
     setIsEditRowVisible(false);
