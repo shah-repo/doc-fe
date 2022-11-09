@@ -1685,10 +1685,10 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     // eslint-disable-next-line max-len
-    it(`Verify Purchase Order 'IN REVIEW' font-size ${FONT_SIZE_12} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_700}`, () => {
+    it(`Verify Purchase Order 'IN REVIEW' font-size ${FONT_SIZE_12} form-family ${soraSansserif} line-height ${LINE_HT_3} font-weight ${FONT_WT_700}`, () => {
       cy.contains("IN REVIEW").first().should("have.css", "font-size", FONT_SIZE_12);
       cy.contains("IN REVIEW").first().should("have.css", "font-family", soraSansserif);
-      cy.contains("IN REVIEW").first().should("have.css", "line-height", LINE_HT_2);
+      cy.contains("IN REVIEW").first().should("have.css", "line-height", LINE_HT_3);
       cy.contains("IN REVIEW").first().should("have.css", "font-weight", FONT_WT_700);
     });
   });
