@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/quotes */
 import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { authActions, authSelectors } from "../../../state/ducks/auth";

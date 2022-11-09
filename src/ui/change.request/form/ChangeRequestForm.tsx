@@ -62,8 +62,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     changeOpenStatus(status);
   };
 
-  // eslint-disable-next-line dot-notation
-  const docTypeGroup = (changeRequest as ChangeRequest)["documentType"].group ?? "OTHER";
+  const docTypeGroup = changeRequest?.documentType.group ?? "OTHER";
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
