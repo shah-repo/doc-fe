@@ -4,7 +4,7 @@ import Colors from "../../../../layout/theme/utils/colors";
 export default makeStyles((theme) =>
   createStyles({
     mainDiv: {
-      marginBottom: "2rem",
+      marginBottom: theme.spacing(2),
     },
     title: {
       display: "flex",
@@ -33,7 +33,7 @@ export default makeStyles((theme) =>
       "borderColor": Colors.blue,
       "width": "100%",
       "margin": 0,
-      "borderRadius": "0 0 5px 5px",
+      "borderRadius": theme.spacing(0, 0, .5, .5),
       "color": Colors.navy,
       "&:hover": {
         backgroundColor: "transparent",
@@ -49,12 +49,12 @@ export default makeStyles((theme) =>
       color: Colors.black,
     },
     titleHeading: {
-      marginRight: "10px",
+      marginRight: theme.spacing(1.25),
       display: "inline-block",
     },
     partsGrid: {
-      paddingLeft: "12px",
-      marginBottom: "1rem",
+      paddingLeft: theme.spacing(1.5),
+      marginBottom: theme.spacing(1.5),
     },
     btnMargin: {
       marginRight: 0,
@@ -86,7 +86,7 @@ export default makeStyles((theme) =>
       justifyContent: "space-evenly",
       padding: theme.spacing(0, 1.5),
       alignItems: "center",
-      columnGap: "4px",
+      columnGap: theme.spacing(.5),
     },
     editRowChildDivTwo: {
       width: "50%",
@@ -100,7 +100,7 @@ export default makeStyles((theme) =>
     actionButtonParentDiv: {
       width: "100%",
       position: "relative",
-      marginBottom: "20px",
+      marginBottom: theme.spacing(2.5),
     },
     actionButtonChildDiv: {
       width: "100px",
@@ -115,7 +115,7 @@ export default makeStyles((theme) =>
       backgroundColor: Colors.white,
       padding: theme.spacing(.5),
       minWidth: "auto",
-      border: "8px",
+      border: theme.spacing(1),
     },
     iconButton: {
       "fontSize": "16px",
@@ -126,7 +126,7 @@ export default makeStyles((theme) =>
     },
     viewIcon: {
       fill: Colors.cerulean,
-      marginTop: "5px",
+      marginTop: theme.spacing(.5),
       fontSize: "1.2rem",
       cursor: "pointer",
     },
@@ -134,13 +134,13 @@ export default makeStyles((theme) =>
       height: "40px",
     },
     tableCell: {
-      backgroundColor: "#e2e8f0",
+      backgroundColor: Colors.alice_blue,
       color: "rgb(8, 11, 17)",
     },
     tableCellOne: {
       width: "30%",
-      borderRadius: "5px 0 0 0",
-      paddingLeft: "15px",
+      borderRadius: theme.spacing(.5, 0, 0, 0),
+      paddingLeft: theme.spacing(2),
     },
     tableCellTwo: {
       width: "45%",
@@ -150,11 +150,11 @@ export default makeStyles((theme) =>
     },
     tableCellFour: {
       width: "10%",
-      borderRadius: "0 5px 0 0",
+      borderRadius: theme.spacing(0, .5, 0, 0),
     },
     verticalDivider: {
       borderLeft: "2px solid white",
-      paddingLeft: "10px",
+      paddingLeft: theme.spacing(1.25),
     },
     successMessage: {
       width: "380",

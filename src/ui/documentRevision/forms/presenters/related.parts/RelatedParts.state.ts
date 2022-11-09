@@ -38,10 +38,8 @@ class RelatedPartsStore {
   }
 
   @action checkForDuplicateDocIds(docId) {
-    const idExists = this.relatedPartsList.filter(
+    this.docIdExists = this.relatedPartsList.filter(
       (listItem: RelatedPartsListItem) => listItem.rootDocId === docId).length > 0;
-
-    this.docIdExists = idExists;
   }
 }
 
