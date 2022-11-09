@@ -12,7 +12,6 @@ import useGetHasTag from "../../hooks/useGetHasTag";
 import useStyles from "./Tabs.styles";
 import StyledTabs from "./common/StyledTabs";
 import StyledTab from "./common/StyledTab";
-import TabContent from "./common/TabContent";
 import { DashboardTabValues } from "./Tabs.types";
 import MyFeeds from "../my.feeds/MyFeeds.container";
 import Recents from "../recents/Recents.container";
@@ -109,32 +108,16 @@ const Tabs: FC = () => {
         />
       </StyledTabs>
       <Box className={cx(classes.tabs, "containing-box-scrollbar")}>
-        <TabContent
-          tabsValue={value}
-          name={DashboardTabValues.Todo}
+        <div
+          role="tabpanel"
+          id={`scrollable-auto-tabpanel-${value}`}
+          aria-labelledby={`scrollable-auto-tab-${value}`}
         >
-          Todo
-        </TabContent>
-        <TabContent
-          tabsValue={value}
-          name={DashboardTabValues.MyFeed}
-        >
-          <MyFeeds />
-        </TabContent>
-        {isDashboardAdmin && (
-          <TabContent
-            tabsValue={value}
-            name={DashboardTabValues.Training}
-          >
-            <Trainings />
-          </TabContent>
-        )}
-        <TabContent
-          tabsValue={value}
-          name={DashboardTabValues.Recent}
-        >
-          <Recents />
-        </TabContent>
+          {value === DashboardTabValues.Todo && <MyFeeds />}
+          {value === DashboardTabValues.MyFeed && <MyFeeds />}
+          {value === DashboardTabValues.Training && <Trainings />}
+          {value === DashboardTabValues.Recent && <Recents />}
+        </div>
       </Box>
     </Box>
   );
