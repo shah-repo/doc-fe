@@ -100,6 +100,9 @@ export default makeStyles((theme) =>
       justifyContent: "space-between",
       alignItems: "center",
     },
+    normalFontWeight: {
+      fontWeight: "normal",
+    },
     actionButtonParentDiv: {
       width: "100%",
       position: "relative",

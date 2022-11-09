@@ -9,6 +9,7 @@ import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/t
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
 import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { toastSuccess } from "../../../../components/notifications";
+import Text from "../../../../components/Text";
 import { documentPreviewPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -33,19 +34,23 @@ const SuccessMsg: React.FunctionComponent<{
   viewRelatedPart,
 }) => {
   const classes = useStyles();
+
+  const viewFromModal = () => viewRelatedPart(documentRevisionId, documentId);
+
   return (
     <>
       <Typography variant="body1">
-          Related Part created successfully
+        <Text translation="relatedParts.created.modal.success.msg"/>
       </Typography>
       <div className={classes.successMessage}>
         <Typography variant="subtitle1">
-            Part <b>{docId}</b> has been created
+          <Text translation="relatedParts.created.modal.msg.part.before"/> <b>{docId}</b>
+          <Text translation="relatedParts.created.modal.msg.part.after"/>
         </Typography>
-        <Link onClick={(event) => viewRelatedPart(documentRevisionId, documentId)}
-          tabIndex={0} style={{ fontWeight: "normal" }}
+        <Link onClick={viewFromModal}
+          tabIndex={0} className={classes.normalFontWeight}
           variant="subtitle1" color="textSecondary">
-              View
+          <Text translation="relatedParts.created.modal.view"/>
         </Link>
       </div>
     </>
