@@ -3,6 +3,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -16,6 +17,9 @@ let formDocumentType;
 let createdPOFormDocument;
 let purchaseOrderDocumentType;
 let createdPODocument;
+let createdSupplierFormDocument;
+let createdSupplierDocument;
+let supplierDocumentType;
 let approvalRequestDocumentType;
 
 const PURCHASE_ORDER = "Purchase Order";
@@ -33,6 +37,7 @@ const COLUMN_HEADERS = [
   "REQUESTOR",
   "ORDER DATE",
 ];
+const supplierDocName = "SUP-00001 - rev 1 - API Supplier Document";
 
 context(
   `As a user, if I revise a PO and select Admin change (dot release), then the system should not automatically
@@ -71,6 +76,7 @@ add the requestor to the approvals field`,
             adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
             formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
             purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PURCHASE_ORDER);
+            supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
             approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
             done();
           });
@@ -162,6 +168,115 @@ add the requestor to the approvals field`,
           },
         }).then(() => {
           done();
+        });
+      });
+    });
+    context("[API]create supplier", () => {
+      it("[API]Create Supplier form", (done: any) => {
+        cy.grpGetGroupByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          groupName: "Everyone",
+        }).then((response) => {
+          group = response;
+          cy.arGetArDocumentByName({
+            sessionId: loginResponse.sessionId,
+            employeeId: adminEmployee.id,
+            name: "AR Form",
+          }).then((response) => {
+            initialArDocument = response;
+            cy.drCreateDocumentRevision({
+              payload: {
+                attachments: [],
+                description: "<p>Supplier Form document</p>",
+                document: {
+                  docId: "FM-00010",
+                  documentType: {
+                    id: formDocumentType[0].id,
+                  },
+                  securityList: {
+                    operators: [],
+                    securityEmployees: [],
+                    securityGroups: [
+                      {
+                        id: group.body[0].id,
+                      },
+                    ],
+                  },
+                },
+                name: "supplier form",
+                referenceTo: [],
+                retrain: false,
+                revisionChangeType: RevisionChangeType.NextRevision,
+                revisionStage: 1,
+                formTemplate: {
+                  outputDocumentTypes: [{
+                    id: supplierDocumentType[0].id,
+                  }],
+                  schema: [],
+                },
+
+              },
+              employeeId: adminEmployee.id as unknown as string,
+              sessionId: loginResponse.sessionId as unknown as string,
+            }).then((response) => {
+              createdSupplierFormDocument = response;
+              cy.drAPIApproveAndRelease({
+                documentId: createdSupplierFormDocument.id,
+                payload: {
+                  effectiveDate: (new Date()).toISOString(),
+                  documentType: { id: approvalRequestDocumentType[0].id },
+                  formDocument: { id: initialArDocument[0].id },
+                  approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                },
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then(() => {
+                cy.poAPICreatePO({
+                  payload: {
+                    name: "API Supplier Document",
+                    attachments: [],
+                    referenceTo: [],
+                    formDocument: { id: createdSupplierFormDocument.id },
+                    description: "API Supplier document",
+                    revisionChangeType: RevisionChangeType.NextRevision,
+                    document: {
+                      docId: "SUP-00001",
+                      documentType: {
+                        id: supplierDocumentType[0].id,
+                      },
+                      securityList: {
+                        operators: [],
+                        securityEmployees: [],
+                        securityGroups: [
+                          {
+                            id: group.body[0].id,
+                          },
+                        ],
+                      },
+                    },
+                  },
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                }).then((response) => {
+                  createdSupplierDocument = response;
+                  cy.drAPIApproveAndRelease({
+                    documentId: createdSupplierDocument.id,
+                    payload: {
+                      effectiveDate: (new Date()).toISOString(),
+                      documentType: { id: approvalRequestDocumentType[0].id },
+                      formDocument: { id: initialArDocument[0].id },
+                      approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                    },
+                    employeeId: adminEmployee.id,
+                    sessionId: loginResponse.sessionId,
+                  }).then(() => {
+                    done();
+                  });
+                });
+              });
+            });
+          });
         });
       });
     });
@@ -528,10 +643,18 @@ add the requestor to the approvals field`,
 
     context("Fill in Fields including field Requestor", () => {
       it(`Select '${USERS[2].name}' for Requestor`, () => {
-        cy.get(`div[name^="po-requestor-autocomplete"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
-        cy.get("[data-cy^=po-requestor-autocomplete]").arrowClick();
-        cy.wait(3000);
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get(`div[name^="po-requestor-autocomplete"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
+          cy.get("[data-cy^=po-requestor-autocomplete]").arrowClick();
+          cy.wait(3000);
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        });
+      });
+      it("Select Supplier", () => {
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy='po-supplier-built-in']").autocompleteSelect(supplierDocName);
+          cy.unClick();
+        });
       });
     });
 
@@ -573,6 +696,10 @@ add the requestor to the approvals field`,
           revision: "Rev A.1",
         });
       });
+
+      it("Approve PO", () => {
+        cy.ebApprove();
+      });
     });
 
     context("Verify that data is saved", () => {
@@ -590,6 +717,10 @@ add the requestor to the approvals field`,
 
       it(`Check the Approval field contain ${USERS[1].name} - ${USERS[1].email}`, () => {
         cy.get("div.Mui-disabled.MuiChip-deletable").should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      });
+
+      it(`Check the supplier field contains ${supplierDocName}`, () => {
+        cy.get("[data-cy='po-supplier-built-in']").should("have.value", supplierDocName);
       });
     });
   }
