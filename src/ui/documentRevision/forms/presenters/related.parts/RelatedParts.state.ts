@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { get } from "lodash";
 import { action, observable } from "mobx";
 import { createContext, useContext } from "react";

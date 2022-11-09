@@ -1,4 +1,5 @@
 import { createStyles, makeStyles } from "@material-ui/core";
+import Colors from "../../../../layout/theme/utils/colors";
 
 export default makeStyles((theme) =>
   createStyles({
@@ -19,7 +20,7 @@ export default makeStyles((theme) =>
     },
     btn: {
       "&:hover": {
-        background: `linear-gradient(262.45deg, #01A6C7 0.28%, #4C69FF 16.91%, #011FBB 85.48%)`,
+        background: `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 16.91%, ${Colors.navy} 85.48%)`,
       },
     },
     disableRipple: {
@@ -29,23 +30,23 @@ export default makeStyles((theme) =>
     },
     fullLengthButton: {
       "borderStyle": "dashed",
-      "borderColor": "blue",
+      "borderColor": Colors.blue,
       "width": "100%",
       "margin": 0,
       "borderRadius": "0 0 5px 5px",
-      "color": "#011FBB",
+      "color": Colors.navy,
       "&:hover": {
         backgroundColor: "transparent",
         borderStyle: "solid",
-        borderColor: "blue",
-        color: "#011FBB",
+        borderColor: Colors.blue,
+        color: Colors.navy,
       },
     },
     customTooltip: {
-      backgroundColor: "black",
+      backgroundColor: Colors.black,
     },
     customArrow: {
-      color: "black",
+      color: Colors.black,
     },
     titleHeading: {
       marginRight: "10px",
@@ -68,13 +69,15 @@ export default makeStyles((theme) =>
       borderRadius: theme.spacing(0, 0, .5, .5),
     },
     editRowParentNormal: {
-      border: "1px solid #01A6C7",
+      border: "1px solid",
+      borderColor: Colors.cerulean,
     },
     editRowParentError: {
-      border: "1px solid red",
+      border: "1px solid",
+      borderColor: Colors.red,
     },
     labelError: {
-      color: "red",
+      color: Colors.red,
     },
     editRowChildDivOne: {
       width: "30%",
@@ -101,7 +104,7 @@ export default makeStyles((theme) =>
     },
     actionButtonChildDiv: {
       width: "100px",
-      backgroundColor: "#01A6C7",
+      backgroundColor: Colors.cerulean,
       position: "absolute",
       right: 0,
       borderRadius: theme.spacing(0, 0, .5, .5),
@@ -109,7 +112,7 @@ export default makeStyles((theme) =>
       justifyContent: "center",
     },
     actionButton: {
-      backgroundColor: "white",
+      backgroundColor: Colors.white,
       padding: theme.spacing(.5),
       minWidth: "auto",
       border: "8px",
@@ -118,11 +121,11 @@ export default makeStyles((theme) =>
       "fontSize": "16px",
       "fill": "#000",
       "&:hover": {
-        color: "blue",
+        color: Colors.blue,
       },
     },
     viewIcon: {
-      fill: "#01A6C7",
+      fill: Colors.cerulean,
       marginTop: "5px",
       fontSize: "1.2rem",
       cursor: "pointer",
@@ -130,7 +133,7 @@ export default makeStyles((theme) =>
     tableHeadHeight: {
       height: "40px",
     },
-    tabelCell: {
+    tableCell: {
       backgroundColor: "#e2e8f0",
       color: "rgb(8, 11, 17)",
     },
@@ -164,7 +167,6 @@ export default makeStyles((theme) =>
       "& .MuiInputBase-root": {
         marginTop: 0,
         padding: 0,
-        // width: "150px",
       },
       "& .MuiOutlinedInput-input": {
         padding: theme.spacing(1.25),

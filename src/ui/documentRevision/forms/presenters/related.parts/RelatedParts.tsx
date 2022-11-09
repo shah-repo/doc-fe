@@ -231,14 +231,14 @@ const RelatedPartList: React.FunctionComponent<{
       <Table stickyHeader aria-label="related parts table">
         <TableHead className={classes.tableHeadHeight}>
           <TableRow>
-            <TableCell className={cx(classes.tabelCell, classes.tableCellOne)} align="left">DOC ID</TableCell>
-            <TableCell className={classes.tabelCell} align="left">
+            <TableCell className={cx(classes.tableCell, classes.tableCellOne)} align="left">DOC ID</TableCell>
+            <TableCell className={classes.tableCell} align="left">
               <span className={classes.verticalDivider}>TITLE</span>
             </TableCell>
-            <TableCell className={cx(classes.tabelCell, classes.tableCellThree)} align="center">
+            <TableCell className={cx(classes.tableCell, classes.tableCellThree)} align="center">
               <span className={classes.verticalDivider}>OBSOLETE</span>
             </TableCell>
-            <TableCell className={cx(classes.tabelCell, classes.tableCellFour)} align="center"></TableCell>
+            <TableCell className={cx(classes.tableCell, classes.tableCellFour)} align="center"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
