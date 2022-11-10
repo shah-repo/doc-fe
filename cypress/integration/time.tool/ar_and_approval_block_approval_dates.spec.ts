@@ -2,16 +2,13 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-// eslint-disable-next-line spaced-comment
-/// <reference types="cypress-grep" />
-
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { momentInPST } from "../../utils/constants/dateHandler";
+import { emailDateOffset, momentInPST } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { LegalRecord } from "../../utils/constants/documentTypes/record";
@@ -970,7 +967,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Click on 'EMAIL ALL'", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime());
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         cy.get("button").contains("EMAIL ALL").arrowClick();
       });
 
@@ -1111,6 +1108,8 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
     context("Ask for approvals on TC", () => {
       it("Navigate to Training Curriculums'", () => {
         cy.navigToTrainingCurriculums();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select first TC'", () => {
@@ -1122,7 +1121,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Save TC'", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Verify no PENDING FOR APPROVAL text is present on approval block", () => {
@@ -1174,7 +1173,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
-      cy.wait(20000);
+      cy.wait(10000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
@@ -1211,6 +1210,8 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
 
   context("Time travel one day back to the future", () => {
     it("Navigate to async tasks", () => {
+      // this delay is required to assured that previous emails are not pulled
+      cy.wait(60000);
       cy.navigToAsyncTasks();
     });
 
@@ -1250,7 +1251,6 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
 
       it("Click on 'EMAIL ALL'", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime());
         cy.get("button").contains("EMAIL ALL").arrowClick();
       });
 
@@ -1324,6 +1324,8 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
 
       it("Click on 'EMAIL ALL'", () => {
         cy.get("button").contains("EMAIL ALL").arrowClick();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
@@ -1354,19 +1356,19 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationYesterday, "LR-00002"],
+          contains: [approvalNotificationToday, "LR-00002"],
         },
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationYesterday, "TCT-00001"],
+          contains: [approvalNotificationToday, "TCT-00001"],
         },
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationYesterday, "POT-00001"],
+          contains: [approvalNotificationToday, "POT-00001"],
         },
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationYesterday, "AR-00004"],
+          contains: [approvalNotificationToday, "AR-00004"],
         },
       ];
 
