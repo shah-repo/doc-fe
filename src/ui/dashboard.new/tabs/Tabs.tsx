@@ -6,6 +6,7 @@ import { ReactComponent as MyFeedIcon } from "../../../assets/images/my_feed.svg
 import { ReactComponent as TrainingIcon } from "../../../assets/images/training_tab.svg";
 import { ReactComponent as RecentIcon } from "../../../assets/images/recent.svg";
 import { GroupTag } from "../../../state/ducks/auth/types";
+import { dashboardMyFeedsSelectors as dashboardTodoSelectors } from "../../../state/ducks/dashboard.new/todo";
 import { dashboardMyFeedsSelectors } from "../../../state/ducks/dashboard.new/my.feeds";
 import Text from "../../components/Text";
 import useGetHasTag from "../../hooks/useGetHasTag";
@@ -68,6 +69,7 @@ const Tabs: FC = () => {
   const classes = useStyles();
 
   const isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
+  const todoItems: any = useSelector(dashboardTodoSelectors.myFeedsList);
   const feedItems: any = useSelector(dashboardMyFeedsSelectors.myFeedsList);
 
   const [value, setValue] = useState<DashboardTabValues>(DashboardTabValues.Todo);
@@ -88,6 +90,7 @@ const Tabs: FC = () => {
           value={DashboardTabValues.Todo}
           icon={<MyFeedIcon />}
           title="common.todo"
+          count={todoItems.total ?? 0}
         />
         <Tab
           value={DashboardTabValues.MyFeed}
