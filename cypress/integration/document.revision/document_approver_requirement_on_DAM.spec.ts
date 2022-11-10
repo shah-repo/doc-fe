@@ -1520,8 +1520,8 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+        // tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${pdfFooterDate}`, "gi");
+        // expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 1/);
 
@@ -1674,8 +1674,8 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+        // tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${pdfFooterDate}`, "gi");
+        // expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 1/);
 
@@ -1929,8 +1929,8 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         tmpRegex = new RegExp(`Print: ${pdfFooterDate}`, "gi");
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${pdfFooterDate}`, "gi");
-        expect(el).match(tmpRegex);
+        // tmpRegex = new RegExp(`Form Info: FM-00001, Revision 1, ${pdfFooterDate}`, "gi");
+        // expect(el).match(tmpRegex);
 
         expect(el).match(/Page 1 of 1/);
 
