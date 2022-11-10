@@ -52,6 +52,18 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
   };
 
+  const dismissAction = useActionCreator(dashboardMyFeedsActions.dismissLineItem);
+  const dismissAsync = useAsync({
+    onSuccess: () => {
+      setOffset(MY_FEEDS_INITIAL_OFFSET);
+      setOverallLimit(MY_FEEDS_LIMIT);
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
+    },
+  });
+  const dismissLineItem = (id: string) => {
+    dismissAsync.start(dismissAction, id, dismissAsync);
+  };
+
   const async = useAsync();
   const onLoadMoreData = () => {
     const nextOffset = offset + MY_FEEDS_LIMIT;
@@ -71,7 +83,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
       {...{
         loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
         pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
-        dialogPDF,
+        dialogPDF, dismissLineItem,
       }}
       onLoadMoreData={onLoadMoreData}
     />

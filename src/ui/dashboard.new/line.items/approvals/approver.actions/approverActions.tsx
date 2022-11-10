@@ -21,6 +21,7 @@ import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalS
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import useStyles from "./approverActions.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -40,6 +41,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 const ApproverActionItemPresenter: React.FC<Props> = ({
   id,
@@ -58,10 +60,14 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
   unPinLineItem,
   pinLineItem,
   pinned,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -267,6 +273,9 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
               />
             </StyleTooltip>
           )}
+          {dismissLineItem && (
+            <DismissAction classes={classes} onClick={handleDismiss} />
+          )}
         </div>
       )}
       {pinned && (
@@ -279,6 +288,9 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
             <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer}/>
           </StyleTooltip>
         </span>
+      )}
+      {hoverItem && dismissLineItem && (
+        <DismissAction classes={classes} onClick={handleDismiss} />
       )}
     </StyledListItem>
   );

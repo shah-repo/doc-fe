@@ -34,6 +34,7 @@ import { StyleTooltip } from "../../common/StyleTooltip";
 import { formatCurrency, getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import useStyles from "./purchaseOrder.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -80,6 +81,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
   dialogPDF: DialogHandler;
+  dismissLineItem?: (id: string) => void;
 }
 const PurchaseOrderItemPresenter: React.FC<Props> = ({
   id,
@@ -109,6 +111,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   unPinLineItem,
   pendingEmailSentAt,
   dialogPDF,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
 
@@ -158,6 +161,9 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
     getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
   const handleClick = () => {
     setOpen(!open);
+  };
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
   };
   const handlePinClick = () => {
     pinLineItem(id);
@@ -420,6 +426,9 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 </StyleTooltip>
               )}
             </span>
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
         {pinned && (
@@ -432,6 +441,9 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

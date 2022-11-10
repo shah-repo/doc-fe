@@ -28,6 +28,7 @@ import { DocTypeGroups } from "../../common/types";
 import { getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import useStyles from "./pendingReview.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -67,6 +68,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
   pendingEmailSentAt: Nullable<string>;
+  dismissLineItem?: (id: string) => void;
 }
 const PendingReviewPresenter: React.FC<Props> = ({
   id,
@@ -84,6 +86,7 @@ const PendingReviewPresenter: React.FC<Props> = ({
   pinLineItem,
   unPinLineItem,
   pendingEmailSentAt,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -96,6 +99,9 @@ const PendingReviewPresenter: React.FC<Props> = ({
     getPendingTooltipText(pendingApprovers, approvedApprovers);
   const handleClick = () => {
     setOpen(!open);
+  };
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
   };
   const handlePinClick = () => {
     pinLineItem(id);
@@ -296,6 +302,9 @@ const PendingReviewPresenter: React.FC<Props> = ({
                 />
               </StyleTooltip>
             )}
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
         {pinned && (
@@ -308,6 +317,9 @@ const PendingReviewPresenter: React.FC<Props> = ({
               <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

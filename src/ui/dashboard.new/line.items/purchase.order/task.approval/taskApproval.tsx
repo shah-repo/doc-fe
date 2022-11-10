@@ -25,6 +25,7 @@ import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
 import useStyles from "./taskApproval.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -44,6 +45,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (pinnedItemId: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -62,6 +64,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -70,6 +73,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const [rejectHover, setRejectHover] = React.useState(false);
   const [approved, setApproved] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -317,6 +323,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </StyleTooltip>
               </span>
             )}
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
         {pinned && (
@@ -333,6 +342,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               />
             </StyleTooltip>
           </span>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <ApproveDialogueContainer

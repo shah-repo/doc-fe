@@ -20,6 +20,7 @@ import { StyleTooltip } from "../../common/StyleTooltip";
 import { HoverStyleChip } from "./DefaultHoverStyleChip";
 import { NormalStyleChip } from "./DefaultNormalStyleChip";
 import useStyles from "./DefaultTraining.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -37,6 +38,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 
 const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
@@ -54,6 +56,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -63,6 +66,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   };
   const onMouseLeavePinIcon = () => {
     setPinHover(false);
+  };
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
   };
   const handlePinClick = () => {
     pinLineItem(id);
@@ -269,6 +275,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
               />
             </StyleTooltip>
           )}
+          {dismissLineItem && (
+            <DismissAction classes={classes} onClick={handleDismiss} />
+          )}
         </Box>
       )}
       {pinned && (
@@ -281,6 +290,9 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
             <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
           </StyleTooltip>
         </Box>
+      )}
+      {hoverItem && dismissLineItem && (
+        <DismissAction classes={classes} onClick={handleDismiss} />
       )}
     </StyledListItem>
   );

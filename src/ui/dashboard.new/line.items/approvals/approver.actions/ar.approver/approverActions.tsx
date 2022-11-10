@@ -27,6 +27,7 @@ import { StyledListItem } from "../../../common/StyledListItem";
 import { StyleTooltip } from "../../../common/StyleTooltip";
 import { DocTypeGroups } from "../../../common/types";
 import useStyles from "./approverActions.styles";
+import DismissAction from "../../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -54,6 +55,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 const ARApproverActionItemPresenter: React.FC<Props> = ({
   id,
@@ -71,12 +73,16 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const hoverItem = hoverItemId === id;
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -294,6 +300,9 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
                 />
               </StyleTooltip>
             )}
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
         {pinned && (
@@ -306,6 +315,9 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
               <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </Box>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

@@ -45,9 +45,17 @@ const unPinnedLineItem = (
     handlers,
   });
 
+const dismissLineItem = (id: string, handlers: Handlers) => apiActionWithCallbacks({
+  url: `/dashboard_feed/${id}`,
+  method: "patch",
+  data: { active: false },
+  handlers,
+});
+
 export default {
   myFeedsList,
   loadMyFeedsList,
   pinnedLineItem,
   unPinnedLineItem,
+  dismissLineItem,
 };

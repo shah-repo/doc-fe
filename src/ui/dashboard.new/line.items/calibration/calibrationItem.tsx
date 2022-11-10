@@ -11,6 +11,7 @@ import DocTitle from "../common/DocTitle/presenter";
 import { StyledListItem } from "../common/StyledListItem";
 import { StyleTooltip } from "../common/StyleTooltip";
 import useStyles from "./calibrationItem.styles";
+import DismissAction from "../common/DismissAction";
 
 interface Props {
   id: string;
@@ -29,6 +30,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -46,6 +48,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -55,6 +58,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   };
   const handleUnPinClick = () => {
     unPinLineItem(id);
+  };
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
   };
   const onMouseLeaveActionIcons = () => {
     setPinHover(false);
@@ -178,6 +184,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               </StyleTooltip>
             )}
           </span>
+          {dismissLineItem && (
+            <DismissAction classes={classes} onClick={handleDismiss} />
+          )}
         </Box>
       )}
       {pinned && (
@@ -190,6 +199,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
           </StyleTooltip>
         </span>
+      )}
+      {hoverItem && dismissLineItem && (
+        <DismissAction classes={classes} onClick={handleDismiss} />
       )}
     </StyledListItem>
   );

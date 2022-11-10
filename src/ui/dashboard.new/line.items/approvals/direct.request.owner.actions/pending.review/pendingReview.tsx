@@ -22,6 +22,7 @@ import { DocTypeGroups } from "../../../common/types";
 import { getPendingTooltipText } from "../../../common/Utils";
 import EmailModal from "../../../dialogs/email/EmailDialog";
 import useStyles from "./pendingReview.styles";
+import DismissAction from "../../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -43,6 +44,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 const PendingReviewItemPresenter: React.FC<Props> = ({
   id,
@@ -63,6 +65,7 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
   pinLineItem,
   unPinLineItem,
   pendingEmailSentAt,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -72,6 +75,9 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
   const hoverItem = hoverItemId === id;
   const { count, pending, approved, primaryText, secondaryText } =
     getPendingTooltipText(docRevPendingApprovals, docRevApprovedApprovals);
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -262,6 +268,9 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
                 />
               </StyleTooltip>
             )}
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </div>
         )}
         {pinned && (
@@ -274,6 +283,9 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
               <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </div>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Modal

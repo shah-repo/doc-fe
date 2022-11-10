@@ -17,6 +17,7 @@ import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
 import useStyles from "./default.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -35,6 +36,7 @@ interface Props {
   pinned: boolean;
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
   id,
@@ -52,10 +54,14 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
     pinLineItem(id);
   };
@@ -199,6 +205,9 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
               />
             </StyleTooltip>
           )}
+          {dismissLineItem && (
+            <DismissAction classes={classes} onClick={handleDismiss} />
+          )}
         </Box>
       )}
       {pinned && (
@@ -211,6 +220,9 @@ const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
             <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
           </StyleTooltip>
         </span>
+      )}
+      {hoverItem && dismissLineItem && (
+        <DismissAction classes={classes} onClick={handleDismiss} />
       )}
     </StyledListItem>
   );
