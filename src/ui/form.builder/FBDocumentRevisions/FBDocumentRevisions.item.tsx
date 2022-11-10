@@ -47,7 +47,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
           optionId={FBAutocompleteAsyncOption.documentRevisions}
           label="form.builder.document"
           gutter={false}
-          disabled={true}
+          disabled={false}
           freeSolo={true}
           shouldReloadOnInit
         />
@@ -69,7 +69,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
       name={`${name}.${index}.descriptionOfChange`}
       label="form.builder.description.of.change"
       dataCy="common.description"
-      disabled={true}
+      disabled={false}
       rules="required"
       rows={3}
     />
@@ -77,7 +77,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
       name={`${name}.${index}.justificationOfChange`}
       label="form.builder.justification.of.change"
       dataCy="cr.justification"
-      disabled={true}
+      disabled={false}
       rules="required"
       rows={3}
     />
