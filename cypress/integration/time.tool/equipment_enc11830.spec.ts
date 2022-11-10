@@ -1,10 +1,6 @@
 /* eslint-disable max-len */
-
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
-// eslint-disable-next-line spaced-comment
-/// <reference types="cypress-grep" />
 
 import "moment-timezone";
 import moment from "moment-timezone";
@@ -34,8 +30,6 @@ let group;
 let dateAfterEmailShouldArrive;
 let emailsFromInbox;
 let equipmentURL;
-let calDocId;
-let calId;
 let asyncTasksGroup;
 let dueDateInEmail;
 let multipleCompanies;
@@ -45,7 +39,7 @@ const ADMIN_USER = USERS[1];
 const equipmentTitleForm = "Equipment-Form";
 const equipmentDocId = "EQ-00001";
 
-context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
+context("Autocomplete 'Equipment' test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -663,6 +657,8 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
   context("Navig to released 'Equipment maintenance document'", () => {
     it("Navig to equipment", () => {
       cy.navigToEquipment();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Equipment maintenance document'", () => {
@@ -685,8 +681,8 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.wait("@response").then((res) => {
         if (res.response) {
           const response = res.response.body;
-          calDocId = response.documentId;
-          calId = response.id;
+          const calDocId = response.documentId;
+          const calId = response.id;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
           cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
             CyRoutes.GetAvailableApprovers], () => {
@@ -701,6 +697,11 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
 
     it("Enter title 'Calibration document'", () => {
       cy.drEnterDocumentTitle({ name: "Calibration document" });
+    });
+
+    it("Click Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
@@ -772,7 +773,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.wait("@response").then((res) => {
         if (res.response) {
           const response = res.response.body;
-          calDocId = response.documentId;
+          const calDocId = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
           cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
             CyRoutes.GetAvailableApprovers], () => {
@@ -819,6 +820,11 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
 
     it("Create 'Preventative Maintenance' and approve it", () => {
       cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+    });
+
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
