@@ -1354,19 +1354,19 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationToday, "LR-00002"],
+          contains: [approvalNotificationYesterday, "LR-00002"],
         },
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationToday, "TCT-00001"],
+          contains: [approvalNotificationYesterday, "TCT-00001"],
         },
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationToday, "POT-00001"],
+          contains: [approvalNotificationYesterday, "POT-00001"],
         },
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationToday, "AR-00004"],
+          contains: [approvalNotificationYesterday, "AR-00004"],
         },
       ];
 
