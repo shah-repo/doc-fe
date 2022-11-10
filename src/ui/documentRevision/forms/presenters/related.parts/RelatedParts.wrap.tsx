@@ -1,7 +1,7 @@
 import { Link, Typography } from "@material-ui/core";
 import { get } from "lodash";
 import { useObserver } from "mobx-react";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
@@ -44,7 +44,7 @@ const SuccessMsg: React.FunctionComponent<{
       </Typography>
       <div className={classes.successMessage}>
         <Typography variant="subtitle1">
-          <Text translation="relatedParts.created.modal.msg.part.before"/> <b>{docId}</b>
+          <Text translation="relatedParts.created.modal.msg.part.before"/> <b>{docId}</b> &nbsp;
           <Text translation="relatedParts.created.modal.msg.part.after"/>
         </Typography>
         <Link onClick={viewFromModal}
@@ -120,9 +120,9 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     },
   });
 
-  const fetchRelatedParts = (documentId) => {
+  const fetchRelatedParts = useCallback((documentId) => {
     fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentId, fetchRelatedPartsAsync);
-  };
+  }, [fetchAllRelatedPartsAction, fetchRelatedPartsAsync]);
 
   const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
   const voidRelatedPartAsync = useAsync({

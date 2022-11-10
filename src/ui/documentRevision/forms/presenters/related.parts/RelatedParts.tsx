@@ -398,8 +398,8 @@ const RelatedParts = ({
         <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && (
           <Grid item xs={12}>
-            <FBButton label={<Text translation="relatedParts.button.addText"/>}
-              onClick = {createNewDocument}></FBButton>
+            <FBButton label="relatedParts.button.addText"
+              onClick = {createNewDocument} />
           </Grid>
         )}
         {parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER && (
