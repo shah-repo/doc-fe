@@ -600,6 +600,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
       asyncAction={loadMyFeeds}
       asyncState={loadMyFeedsListAsyncState}
       startActionOnMount={!!currentEmployeeId}
+      passive
     >
       {feedItems.total === 0 ? <NoPendingActions /> : PendingActions() }
     </AsyncGate>
