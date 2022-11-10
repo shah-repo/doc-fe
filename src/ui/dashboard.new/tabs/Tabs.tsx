@@ -13,6 +13,7 @@ import useStyles from "./Tabs.styles";
 import StyledTabs from "./common/StyledTabs";
 import StyledTab from "./common/StyledTab";
 import { DashboardTabValues } from "./Tabs.types";
+import Todo from "../my.feeds/Todo.container";
 import MyFeeds from "../my.feeds/MyFeeds.container";
 import Recents from "../recents/Recents.container";
 import Trainings from "../trainings/Trainings.container";
@@ -113,7 +114,7 @@ const Tabs: FC = () => {
           id={`scrollable-auto-tabpanel-${value}`}
           aria-labelledby={`scrollable-auto-tab-${value}`}
         >
-          {value === DashboardTabValues.Todo && <MyFeeds />}
+          {value === DashboardTabValues.Todo && <Todo />}
           {value === DashboardTabValues.MyFeed && <MyFeeds />}
           {value === DashboardTabValues.Training && <Trainings />}
           {value === DashboardTabValues.Recent && <Recents />}
