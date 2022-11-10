@@ -39,7 +39,7 @@ const ADMIN_USER = USERS[1];
 const equipmentTitleForm = "Equipment-Form";
 const equipmentDocId = "EQ-00001";
 
-context("Autocomplete 'Equipment' test", () => {
+context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
