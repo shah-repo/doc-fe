@@ -359,7 +359,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         message: "File will be sent to your email shortly.",
       });
     });
+  });
 
+  context("There is no info on whom and when were the last edits made", () => {
     it(`Verify 'Last saved' does not exist in statusbar`, () => {
       cy.verifyLastSavedNotExists();
     });
@@ -594,10 +596,6 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
     });
 
-    it(`Verify 'Last saved' does not exist in statusbar`, () => {
-      cy.verifyLastSavedNotExists();
-    });
-
     it(`Verify the statusbar background-color as ORANGE(${Colors.school_bus_yellow})`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(239, 162, 11)" });
     });
@@ -608,6 +606,12 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     it(`Verify statusbar conataining IN REVIEW is still visible`, () => {
       cy.get("div[data-cy=\"HeaderInfo-status\"]").contains("APPROVED").should("be.visible");
+    });
+  });
+
+  context("There is no info on whom and when were the last edits made", () => {
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
     });
   });
 
@@ -708,10 +712,6 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
     });
 
-    it(`Verify 'Last saved' does not exist in statusbar`, () => {
-      cy.verifyLastSavedNotExists();
-    });
-
     it(`Verify the statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
@@ -722,6 +722,12 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     it(`Verify statusbar conataining RELEASED is still visible`, () => {
       cy.get("[data-cy=\"HeaderInfo-status\"]").contains("RELEASED").should("be.visible");
+    });
+  });
+
+  context("There is no info on whom and when were the last edits made", () => {
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
     });
   });
 
@@ -929,12 +935,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 
-    it(`Verify 'Last saved' does not exist in statusbar`, () => {
-      cy.verifyLastSavedNotExists();
-    });
-
     it(`Verify the statusbar background-color as RED(#EC2B00)`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(236, 43, 0)" });
+    });
+  });
+
+  context("There is no info on whom and when were the last edits made", () => {
+    it(`Verify 'Last saved' does not exist in statusbar`, () => {
+      cy.verifyLastSavedNotExists();
     });
   });
 });
