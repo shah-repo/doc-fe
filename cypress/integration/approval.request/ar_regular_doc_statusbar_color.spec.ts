@@ -604,7 +604,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.contains("No attachments").scrollIntoView();
     });
 
-    it(`Verify statusbar conataining IN REVIEW is still visible`, () => {
+    it(`Verify statusbar conataining APPROVED is still visible`, () => {
       cy.get("div[data-cy=\"HeaderInfo-status\"]").contains("APPROVED").should("be.visible");
     });
   });
