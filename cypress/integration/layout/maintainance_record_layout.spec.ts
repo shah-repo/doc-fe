@@ -21,10 +21,6 @@ let formDocumentType;
 let initialArDocument;
 let group;
 let createdEquipmentFormDocument;
-let createdCalibrationForm;
-let createdEquipmentNumericRevision;
-let createdPMForm;
-let maintenanceRecordDocumentType;
 
 context("Layout Verification of maintainance records", () => {
   before(() => {
@@ -61,7 +57,6 @@ context("Layout Verification of maintainance records", () => {
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
           done();
         });
       });
@@ -173,38 +168,6 @@ context("Layout Verification of maintainance records", () => {
                     deleteInFormDisabled: true,
                     applicableValidationSchema: true,
                   },
-                  {
-                    index: 3,
-                    type: "eqmaintenance",
-                    name: "pm-ki5wtk5l",
-                    editorConfig: {
-                      type: "preventativeMaintenance",
-                    },
-                    editorProperties: [],
-                    label: "Preventative Maintenance",
-                    tabId: "specification",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    applicableValidationSchema: true,
-                    validationAttribute: "PM",
-                  },
-                  {
-                    index: 4,
-                    type: "eqmaintenance",
-                    name: "calibration-ki5wtyj0",
-                    editorConfig: {
-                      type: "calibration",
-                    },
-                    editorProperties: [],
-                    label: "Calibration",
-                    tabId: "specification",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    applicableValidationSchema: true,
-                    validationAttribute: "Calibration",
-                  },
                 ],
               },
 
@@ -228,339 +191,6 @@ context("Layout Verification of maintainance records", () => {
         });
       });
     });
-
-    it("[API]Create PM form", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>PM form</p>",
-          document: {
-            docId: "FM-00004",
-            documentType: {
-              id: formDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Preventative Maintenance form",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [{
-              id: maintenanceRecordDocumentType[0].id,
-            }],
-            schema: [
-              {
-                name: "fb-maintenance-details-section",
-                type: "section",
-                index: 0,
-                label: "Maintenance Details",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "equipment_id",
-                type: "autocomplete",
-                index: 1,
-                label: "Equipment",
-                tabId: "details",
-                rules: "required",
-                optionId: "20",
-                placeholder: "[Select revision here]",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "equipment_maintainer",
-                type: "autocomplete",
-                index: 2,
-                label: "Maintainer",
-                tabId: "details",
-                rules: "required",
-                optionId: "13",
-                placeholder: "[Select name here]",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "fb-equipment_due_date",
-                type: "datepicker",
-                index: 3,
-                label: "Completion Date",
-                tabId: "details",
-                rules: "required",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "fb-requipment-maintenance-section",
-                type: "textfield",
-                index: 4,
-                label: "Equipment Maintenance Section",
-                tabId: "details",
-                rules: "required",
-                hidden: true,
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                label: "form.builder.approvals",
-                tabId: "overview",
-                type: "approvals",
-                deleteDisabled: true,
-                name: "fb-approvals-kybkhbpt",
-                uniqueSchemaItem: true,
-                index: 5,
-              },
-            ],
-          },
-
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdPMForm = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdPMForm.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
-      });
-    });
-
-    it("[API]Create Calibration form", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Calibration form</p>",
-          document: {
-            docId: "FM-00005",
-            documentType: {
-              id: formDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Calibration form",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [{
-              id: maintenanceRecordDocumentType[0].id,
-            }],
-            schema: [
-              {
-                name: "fb-maintenance-details-section",
-                type: "section",
-                index: 0,
-                label: "Maintenance Details",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "equipment_id",
-                type: "autocomplete",
-                index: 1,
-                label: "Equipment",
-                tabId: "details",
-                rules: "required",
-                optionId: "20",
-                placeholder: "[Select revision here]",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "equipment_maintainer",
-                type: "autocomplete",
-                index: 2,
-                label: "Maintainer",
-                tabId: "details",
-                rules: "required",
-                optionId: "13",
-                placeholder: "[Select name here]",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "fb-equipment_due_date",
-                type: "datepicker",
-                index: 3,
-                label: "Completion Date",
-                tabId: "details",
-                rules: "required",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "fb-requipment-maintenance-section",
-                type: "textfield",
-                index: 4,
-                label: "Equipment Maintenance Section",
-                tabId: "details",
-                rules: "required",
-                hidden: true,
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                deleteInFormDisabled: true,
-              },
-              {
-                label: "form.builder.approvals",
-                tabId: "overview",
-                type: "approvals",
-                deleteDisabled: true,
-                name: "fb-approvals-kybkhbpt",
-                uniqueSchemaItem: true,
-                index: 5,
-              },
-            ],
-          },
-
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdCalibrationForm = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdCalibrationForm.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
-      });
-    });
-
-    it("[API]Create Equipment document with Numeric revision", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Equipment document</p>",
-          document: {
-            docId: "EQ-00001",
-            documentType: {
-              id: equipmentDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Equipment document",
-          formDocument: {
-            id: createdEquipmentFormDocument.id,
-          },
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formInput: {
-            "fb-default-eq-status": "Active",
-            "fb-primary-owner-eq": adminEmployee.id,
-            "fb-coordinator-eq": adminEmployee.id,
-            "pm-ki5wtk5l": {
-              requirements: "Yes",
-              preventativeForm: createdPMForm.documentId,
-              frequency: 10,
-              instructions: "<p>Instructions for preventative maintenance</p>",
-            },
-            "calibration-ki5wtyj0": {
-              requirements: "Yes",
-              preventativeForm: createdCalibrationForm.documentId,
-              frequency: 5,
-              instructions: "<p>Instructions for calibration</p>",
-            },
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdEquipmentNumericRevision = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdEquipmentNumericRevision.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
-      });
-    });
-
   });
 
   context("Login user", () => {
@@ -611,7 +241,7 @@ context("Layout Verification of maintainance records", () => {
     });
   });
 
-  context("Add FB Fields", () => {
+  context("Add FB Fields and released form for migration", () => {
     it("Navigate to details tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -643,7 +273,7 @@ context("Layout Verification of maintainance records", () => {
 
   });
 
-  context("Create MR document", () => {
+  context("Create MR form", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
         cy.unClick();
@@ -655,6 +285,7 @@ context("Layout Verification of maintainance records", () => {
       });
     });
   });
+
   context("Fill MR document attributes", () => {
     it("Verify predefiend fields title description doc id revision output type", () => {
       cy.verifyPredefiendFields();
@@ -685,13 +316,12 @@ context("Layout Verification of maintainance records", () => {
     });
   });
 
-
   context("Verify Layout of document and Tabs", () => {
     it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Draft)", () => {
       cy.verifyHeaderInfoContent({
         status: STATUS_TYPES_LABEL.DRAFT,
         title: "Document List",
-        docId: "FM-00006",
+        docId: "FM-00004",
         revision: "Rev 1",
       });
     });
@@ -724,7 +354,6 @@ context("Layout Verification of maintainance records", () => {
     it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
-
   });
 
   context("Add FB Fields", () => {
@@ -801,11 +430,137 @@ context("Layout Verification of maintainance records", () => {
     });
   });
 
-  context("Create a required document from release form Verify the layout and Release It", () => {
+  context("Navigate to EQ landing page and initiate new EQ", () => {
+    it("Navigate to Equipment tab", () => {
+      cy.navigToEquipment();
+    });
 
-    context("Create New Document from Release form", () => {
-      it("Click 'Create New'", () => {
-        cy.drCreateNewDocumentFromForm();
+    it("Click on Add New Equipment button", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+        cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
+      });
+    });
+
+    it("Verify equipment is created", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Equipment",
+        docId: "EQ-00001",
+        revision: "Rev 1",
+      });
+    });
+  });
+
+  context("Fill the equipent document", () => {
+    it("Navigate to overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Fill the record details'", () => {
+      cy.drEnterDocumentTitle({ name: "New Equipment Title" });
+    });
+
+    it("Fill the Description details'", () => {
+      cy.drEnterDocumentDescription({ description: "Equipment description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Fill the Eq status'", () => {
+      cy.get("[name='fb-default-eq-status']").eq(0).arrowClick().wait(2000);
+    });
+
+    it("Upload attachement picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Click on Save", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
+    it("Add Cal", () => {
+      cy.get("button[data-cy='form.builder.add.field']").eq(-1).arrowClick({ force: true });
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+      cy.fbEnterNameValue({ name: "label", value: "Calibration" });
+      cy.get("input[value='calibration']").arrowClick();
+      cy.fbAddField();
+    });
+
+    it(`Select '${USERS[1].name}' for Primary Owner`, () => {
+      cy.get("input[data-cy='fb-primary-owner-eq']").autocompleteSelect(USERS[1].name);
+    });
+
+    it(`Select '${USERS[2].name}' for Coordinator`, () => {
+      cy.get("input[data-cy='fb-coordinator-eq']").autocompleteSelect(USERS[2].name);
+    });
+
+    it("Select document 'Yes' for calibration required", () => {
+      cy.get("[value='Yes']").eq(0).arrowClick({ force: true }).wait(2000);
+    });
+
+    it("Select 'Maintenance Record' for calibration required", () => {
+      cy.get("[data-cy*='preventativeForm']").autocompleteSelect("FM-00004");
+    });
+
+    it("Select calibration frequency", () => {
+      cy.get("[name*='frequency']").eq(0).arrowType(`5`);
+    });
+
+    it("Type calibration maintenance instruction", () => {
+      cy.get("[data-cy^='calibration']>div>div>div>div>div[contenteditable]")
+        .click({ force: true }).clear().arrowType("Instructions for calibration");
+      cy.unClick();
+    });
+
+    it("Click on Save", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Approve and released", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
+    it("Verify Button 'New Cal' should be visible", () => {
+      cy.get("[data-cy='form.builder.new.calibration']").should("be.visible");
+    });
+  });
+
+  context("Create a required document from release form Verify the layout and Release It", () => {
+    context("Click on new Cal", () => {
+      it("Click on New CAL", () => {
+        cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+        cy.get("[data-cy='form.builder.new.calibration']").arrowClick();
+        cy.wait("@response").then((res) => {
+          if (res.response) {
+            const response = res.response.body;
+            const calDocId = response.documentId;
+            const calId = response.id;
+            const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
+            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+              CyRoutes.GetAvailableApprovers], () => {
+              cy.visit(newUrl);
+            });
+          }
+        });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Verify Cal is created in Alfa revision", () => {
+        cy.get("[data-cy='HeaderInfo-Rev']").should("have.text", "Rev A");
       });
     });
 
@@ -819,7 +574,7 @@ context("Layout Verification of maintainance records", () => {
         });
       });
 
-      it("Verify that it contains Overview, details", () => {
+      it("Verify that it contains Overview, details tab", () => {
         cy.verifyTabs("overview", "details");
       });
 
@@ -834,6 +589,11 @@ context("Layout Verification of maintainance records", () => {
       it("Verify overview tab predefiend fields up to attachment", () => {
         cy.get("[data-cy='field-name']").should("exist");
         cy.get("[data-cy='select.document.documentType.id']").should("exist");
+        cy.get("#AttachmentFieldPresenter-field").should("exist");
+      });
+
+      it("Verify that Form Options should  appear for this tab ", () => {
+        cy.get(".formOptionsBox").should("exist");
       });
     });
 
@@ -848,7 +608,7 @@ context("Layout Verification of maintainance records", () => {
         cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       });
 
-      it("Verify EQ,Maintainer,completion date fields", () => {
+      it("Verify schema field EQ,Maintainer,completion date fields", () => {
         cy.get("[data-cy='equipment_id']").should("exist");
         cy.get("[data-cy='equipment_maintainer']").should("exist");
         cy.get("[name='fb-equipment_due_date']").should("exist");
@@ -870,7 +630,6 @@ context("Layout Verification of maintainance records", () => {
         cy.get("[data-cy='References']").should("exist");
         cy.get("[data-cy='generalInfo']").should("be.visible");
       });
-
     });
 
     context("Fill the form", () => {
@@ -947,14 +706,9 @@ context("Layout Verification of maintainance records", () => {
 
 
     context("Validate Right Side Panel", () => {
-
       it("Verify that right side panel opens by default to the References tab", () => {
         cy.get("[data-cy='References']").should("exist");
         cy.get("[data-cy='generalInfo']").should("be.visible");
-      });
-
-      it("Verify Reference tab Info", () => {
-        cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
       });
 
       it("Verify it is fixed when user scroll", () => {
@@ -970,6 +724,10 @@ context("Layout Verification of maintainance records", () => {
         cy.get("[data-cy='references-icon']").should("exist");
       });
 
+      it("Verify Reference tab Info", () => {
+        cy.verifyReferenceTab({ user: USERS[1], formId: "", shortName: "GR" });
+      });
+
       it("Verify References selection Add Remove", () => {
         const docId = "FM-00001";
         cy.get("[data-cy=\"referenceTo\"]").arrowClick();
@@ -983,6 +741,31 @@ context("Layout Verification of maintainance records", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
           cy.drRemoveReferences({ reference: docId });
         });
+      });
+
+      it("Verify if the MR is Referenced by", () => {
+        cy.get("[data-cy='generalInfo']").should("contain.text", "Referenced By");
+        cy.contains("None").eq(0).should("exist");
+      });
+
+      it("Verify training info should be visible", () => {
+        cy.get("[data-cy='training']").should("be.visible");
+        cy.contains("None").should("exist");
+      });
+
+      it("Verify released date is None", () => {
+        cy.get("[data-cy='releaseDate']").should("be.visible");
+        cy.get("[data-cy='releaseDate']").parent().parent().should("contain.text", "None");
+      });
+
+      it("Verify form info formId,Revision, Release date", () => {
+        cy.get("[data-cy='output.info']").should("be.visible");
+        cy.contains("Form Info").should("be.visible");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00004");
+        cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "1");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text",
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
@@ -1049,6 +832,17 @@ context("Layout Verification of maintainance records", () => {
         it("Verify navigation on click of 'Approvals' book mark", () => {
           cy.get("[data-cy='Bookmarks-detail']").contains("Approvals").arrowClick();
           cy.get("[data-cy='form.builder.approvals']").should("be.visible");
+        });
+      });
+
+      context("Verify Revison history", () => {
+        it("Verify revision icon ", () => {
+          cy.get("[data-cy='cr-icon']").should("be.visible");
+        });
+
+        it("Click on revision icon history tab should open", () => {
+          cy.drSelectRevisionHistoryTab();
+          cy.get("[data-cy='Revision History-detail']").should("be.visible");
         });
       });
 
@@ -1135,6 +929,48 @@ context("Layout Verification of maintainance records", () => {
       });
     });
 
+    context("Verify all the fields is displayed in overview and detail tab", () => {
+      it("Navigate to overview tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Verify overview tab predefiend fields up to attachment", () => {
+        cy.get("[data-cy='field-name']").should("exist");
+        cy.get("[data-cy='select.document.documentType.id']").should("exist");
+        cy.get("#AttachmentFieldPresenter-field").should("exist");
+      });
+
+      it("Verify approval", () => {
+        cy.get("[data-cy='form.builder.approvals']").should("exist");
+      });
+
+      it("Verify that Form Options should  appear for this tab ", () => {
+        cy.get(".formOptionsBox").should("exist");
+      });
+
+      it("Navigate to detail tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
+      it("Verify detail tab  EQ Id ,Maintainer,completion date fields", () => {
+        cy.get("[data-cy='equipment_id']").should("exist");
+        cy.get("[data-cy='equipment_maintainer']").should("exist");
+        cy.get("[name='fb-equipment_due_date']").should("exist");
+      });
+
+      it("Verify added FB Field Checked chebox", () => {
+        cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+      });
+
+      it("Verify added FB Field  textfield", () => {
+        cy.get("[name^='maintainance-record-textfield']").should("exist");
+      });
+
+      it("Verify that Form Options should  appear for this tab ", () => {
+        cy.get(".formOptionsBox").should("exist");
+      });
+    });
+
     context("Verify Scroll", () => {
       it("Navigate to history tab", () => {
         cy.get("[data-cy='timeline-icon']").arrowClick();
@@ -1149,8 +985,41 @@ context("Layout Verification of maintainance records", () => {
       it("click for approval", () => {
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick({ force: true });
       });
+
+      it("Approve first Inline Approval", () => {
+        cy.get("[data-cy='form.builder.request.approve']").contains("Approve").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([
+          CyRoutes.PostApprovalsApprove,
+          CyRoutes.SessionDetails,
+          CyRoutes.GetRequiredApproversDocRev,
+        ], () => {
+          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy='common.confirm']").arrowClick();
+        });
+        cy.checkToastMessage({ exists: false });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Verify document is released The top left of the page displays: status(Released)", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.RELEASED,
+          title: "Records",
+          docId: "MR-00001",
+          revision: "Rev A",
+        });
+      });
+
+      it("Verify released date from right side references tab", () => {
+        cy.get("[data-cy='references-icon']").arrowClick();
+        cy.get("[data-cy='releaseDate']").should("be.visible");
+        cy.get("[data-cy='releaseDate']").parent().parent().should("contain.text",
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
+      });
     });
   });
 });
 
 export { };
+
