@@ -440,7 +440,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         .contains(tmpRegex);
     });
 
-    it(`Click on 3 dots and verify 'Save' option exists`, () => {
+    it(`Verify 'Save' option exists`, () => {
       SystemRequirement("REQ-2800");
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible");
       cy.recClickSaveBtn();
