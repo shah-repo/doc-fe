@@ -86,7 +86,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
           }] as Id[] : undefined,
       });
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
-      dispatch(documentRevisionsActions.reload(workspaceState?.document?.id as string));
+      dispatch(documentRevisionsActions.load(workspaceState?.document?.id as string));
     }
 
     return Component({

@@ -148,7 +148,7 @@ export const withFBInput = <T extends FBInputProps>(
 
     if (
       (isOutput || formState?.workspaceMode !== FBWorkspaceModeOptions.DESIGN) &&
-      ![FBWorkspaceModeOptions.FORMPREVIEW, FBWorkspaceModeOptions.PREVIEW].includes(
+      [FBWorkspaceModeOptions.FORM, FBWorkspaceModeOptions.FORMPREVIEW, FBWorkspaceModeOptions.PREVIEW].includes(
         formState?.workspaceMode as FBWorkspaceModeOptions
       )
     ) {
