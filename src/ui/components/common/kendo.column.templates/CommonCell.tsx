@@ -23,6 +23,15 @@ export const CommonCell = ({
   if (field === "precalc.lhr_end_accepted_quantity" && value === -1) {
     formattedValue = "N/A";
   }
+  if (field === "precalc.po_amount") {
+    if (/N\/A/g.test(formattedValue)) {
+      formattedValue = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(0);
+    }
+    style = {...style, textAlign: "right" }
+  }
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
