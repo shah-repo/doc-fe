@@ -684,7 +684,7 @@ context("po withdraw submission", () => {
 
     it("Verify Approver Added as User 1 ", () => {
       cy.get("[data-cy='change-key-2-0']").should("have.text", "Approver Added");
-      cy.get("[data-cy='change-key-2-0']").parent().next().should("have.text", "Giovanni Reynolds");
+      cy.get("[data-cy='change-key-2-0']").parent().next().should("have.text", USERS[1].name);
     });
   });
 
