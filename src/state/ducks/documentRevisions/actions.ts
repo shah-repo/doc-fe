@@ -345,7 +345,7 @@ const getDocRevStatuses = (
     notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
       `${categoryUrl}`) : categoryUrl;
   const url = notIncategory === undefined ?
-    notInGroupcheckURL : `${notInGroupcheckURL}` + `notIncategory=${notIncategory}&`;
+    notInGroupcheckURL : `${notInGroupcheckURL}notIncategory=${notIncategory}&`;
   return apiActionWithCallbacks({
     url,
     method: "get",

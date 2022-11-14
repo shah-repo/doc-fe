@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-key */
 import { Box } from "@material-ui/core";
 import { filter, get, includes, map, size } from "lodash";
 import { Observer } from "mobx-react";
