@@ -440,7 +440,6 @@ context("po withdraw submission", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      // cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
       cy.poClickCreatePO();
     });
 
@@ -498,7 +497,6 @@ context("po withdraw submission", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      // cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
       cy.poClickCreatePO();
     });
 
@@ -686,15 +684,12 @@ context("po withdraw submission", () => {
 
     it("Verify Approver Added as User 1 ", () => {
       cy.get("[data-cy='change-key-2-0']").should("have.text", "Approver Added");
-      // cy.get("[data-cy='change-key-2-0']").contains("Approver Added")
-      //   .should("exist");
       cy.get("[data-cy='change-key-2-0']").parent().next().should("have.text", "Giovanni Reynolds");
     });
   });
 
   context("Approve PO", () => {
     it("Submit for approval", () => {
-      cy.pause();
       cy.pmSubmitForApproval();
     });
 
