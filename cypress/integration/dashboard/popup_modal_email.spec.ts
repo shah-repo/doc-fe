@@ -15,9 +15,9 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[29];
-const FIRST_USER = USERS[30];
-const SECOND_USER = USERS[31];
-const THIRD_USER = USERS[32];
+const FIRST_USER = USERS[11];
+const SECOND_USER = USERS[12];
+const THIRD_USER = USERS[13];
 const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
 
@@ -209,16 +209,22 @@ context("Approval request email popup modal", () => {
 
     it("Click Create Approval Request", () => {
       cy.arSaveApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.wait(2000);
       cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
       cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
       cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
+      cy.wait(2000);
     });
 
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
