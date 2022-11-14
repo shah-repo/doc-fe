@@ -28,7 +28,7 @@ export const CommonCell = ({
     if (/N\/A/g.test(formattedValue)) {
       formattedValue = formatNumberToCurrency(0);
     }
-    style = {...style, textAlign: "right" }
+    style = { ...style, textAlign: "right" };
   }
   const cellClickEvent = () => {
     if (!cellRowClick) { return; }
