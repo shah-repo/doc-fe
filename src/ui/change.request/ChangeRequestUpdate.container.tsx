@@ -12,9 +12,11 @@ import { ChangeRequestFormValues } from "../change.request/form/types";
 import { changeRequestPreviewPath } from "../change.request/utils/paths";
 import { FormContext } from "../components/forms/FormContext";
 import { compareValuesToSubmit } from "../components/forms/helpers";
+import ChangeOrderDialog from "../documentRevision/forms/presenters/change.order.dialog/ChangeOrderDialog";
 import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
 import useAsync from "../hooks/useAsync";
 import { canEditChangeRequest } from "./helpers";
+
 
 interface StateProps {
   currentUserEmail: string;
@@ -87,6 +89,19 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         changeRequest={changeRequest}
         doNotPrompt={doNotPrompt}
       />
+      <ChangeOrderDialog
+        opened={true}
+        handleCloseDialog={() => console.log("----close-----")}
+        handleOpenNewTab={() => window.open(changeRequestPreviewPath(changeRequest.id))}>
+        <ChangeRequestFormContainer
+          asyncState={async.asyncState}
+          onSubmit={debouncedSubmit}
+          initialValues={initialValues}
+          changeRequest={changeRequest}
+          doNotPrompt={doNotPrompt}
+          hideSideBar={true}
+        />
+      </ChangeOrderDialog>
     </FormContext.Provider>
   );
 };

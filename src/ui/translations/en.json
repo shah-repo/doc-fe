@@ -611,7 +611,7 @@
   "document.revision.bulkCreate.download.excelTemplate": "Excel Template Successfully Downloaded. Please open downloaded Excel Template and populate data. Then Upload to Import Data",
   "page.title.changeRequest": "Approval Request List",
   "page.title.documentList": "Document List",
-  "page.table.title.changeRequest": "Approval Requests",
+  "page.table.title.changeRequest": "Change Order",
   "page.title.training": "Training Records",
   "page.title.documentCreate": "Create New Document",
   "page.title.changeRequestCreate": "Create New Approval Request",
@@ -1345,5 +1345,6 @@
   "help.didnt.find.what.you.need": "Didn’t find exactly what you needed?",
   "help.view.full.guide": "View full guide",
   "help.view.all.guides": "View All Guides",
-  "form.purchare.order.table.headline": "Receiving Details"
+  "form.purchare.order.table.headline": "Receiving Details",
+  "changeorder.dialog.title": "Quick Edit"
 }

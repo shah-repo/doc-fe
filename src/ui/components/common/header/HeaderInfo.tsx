@@ -95,7 +95,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   }
   if (SM.isNewCRLayout) {
     url = `${CHANGE_REQUEST_LIST_URL}`;
-    iconLink = "/navigation_icons/cr.svg";
+    iconLink = "/navigation_icons/change-order.svg";
   } else if (isTypeMpiOutput) {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${DocCategories.LHR}`;
     iconLink = "/navigation_icons/lhr_icon.svg";
@@ -194,7 +194,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     <Grid item={true} data-cy="Header-listTitle" className={classes.title}>
                       {title}
                     </Grid>
-                  </Link>
+                  </Link>   // need to remove this link for change order modal
                 }
                 {
                   isTypeMpiOutput &&
