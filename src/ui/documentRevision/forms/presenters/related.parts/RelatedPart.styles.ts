@@ -9,11 +9,7 @@ export default makeStyles((theme) =>
     title: {
       display: "flex",
       padding: theme.spacing(.5),
-      paddingLeft: theme.spacing(2),
       alignItems: "center",
-    },
-    formControlPad: {
-      paddingLeft: theme.spacing(2),
     },
     fullWidth: {
       width: "100%",
@@ -163,7 +159,7 @@ export default makeStyles((theme) =>
       paddingLeft: theme.spacing(1.25),
     },
     successMessage: {
-      width: "380",
+      width: "380px",
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",

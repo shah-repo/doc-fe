@@ -95,7 +95,7 @@ const ParentPartSelector: React.FunctionComponent<{
           <InfoIcon color="primary" />
         </Tooltip>
       </div>
-      <FormControl className={classes.formControlPad}>
+      <FormControl>
         <RadioGroup row value={status} onChange={(e) => parentStatusHandler(e.target.value)}>
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_NO}
@@ -378,7 +378,15 @@ const RelatedPartEditRow: React.FunctionComponent<{
 };
 
 
-const RelatedParts = ({
+const RelatedParts: React.FunctionComponent<{
+  documentRevision: DocumentRevision;
+  parentStatus: RELATED_PARTS_STATUS | undefined;
+  parentStatusChanged: (value: any) => void;
+  createNewDocument: (relatedPartDetails?: any) => void;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
+  fetchRelatedParts: (documentId: any) => void;
+  voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+}> = ({
   documentRevision,
   parentStatus,
   parentStatusChanged,
@@ -392,8 +400,8 @@ const RelatedParts = ({
 
   return (
     <>
-      {documentRevision.relatedStatus !== RELATED_PARTS_STATUS.RELATED_SEPARATE &&
-      documentRevision.relatedStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER &&
+      {documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_SEPARATE &&
+      documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER &&
       <div className={classes.mainDiv}>
         <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && (
