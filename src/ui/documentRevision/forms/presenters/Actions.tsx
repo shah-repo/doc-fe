@@ -77,7 +77,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     documentRevision?.formDocument?.status,
     documentRevision?.formDocument?.document?.id
   );
-
   const [isInlineApproval, setInlineApproval] = React.useState(false);
   const [isApproved, setIsApproved] = React.useState(false);
 
@@ -112,7 +111,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
   const isLHRProductionBuild =  _formState?.isLHRProductionBuild || workspaceState?.isLHRProductionBuild  || false;
 
   const shouldShowUpgrade =
-   ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
+   ((isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isLHR && !isMPIOutput;
   const showVoidButton = isStatusInDraft && documentRevision?.version === 1;
   const showVoidButtonOnInlineRecords = isStatusInDraft && isDocumentNumericRelease(documentRevision?.revisionStage);
