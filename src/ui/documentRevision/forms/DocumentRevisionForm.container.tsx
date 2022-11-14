@@ -238,7 +238,7 @@ DocumentRevisionFormContainerProps
   );
 
   const shouldShowUpgrade =
-    ((!isRecord && shouldShowUpgradeForDocs) || ( shouldShowUpgradeForDocs))
+    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeForDocs))
     && !isMPIOutput && !isLHR;
   const isDAM = checkIsDocumentDAM(formGroupOptions);
 
