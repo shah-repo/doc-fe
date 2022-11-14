@@ -1,6 +1,6 @@
 import { get } from "lodash";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { RELATED_STATUS } from "../../../state/ducks/relatedParts/types";
+import { RELATED_PARTS_STATUS } from "../../../state/ducks/relatedParts/types";
 import { checkIsDocumentForm } from "./checkDocumentGroup";
 import { isDocumentRevisionInStatus, isDocumentRevisionReleased } from "./documentRevisionStatus";
 
@@ -46,14 +46,14 @@ export const canChangeDocumentOwner = (
   currentEmployeeId: string,
   ownerId: string,
   hasChangeOwnershipPermission: boolean,
-  relatedStatus: RELATED_STATUS | undefined,
+  relatedStatus: RELATED_PARTS_STATUS | undefined,
 ) =>
   ((isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],
     status
   ) && ownerId === currentEmployeeId)
-    || hasChangeOwnershipPermission) && relatedStatus !== RELATED_STATUS.RELATED_TOGETHER;
+    || hasChangeOwnershipPermission) && relatedStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;
 
 
-const isDocumentRelatedPartTogether = (documentRevision) =>
-  documentRevision.relatedStatus === RELATED_STATUS.RELATED_TOGETHER;
+const isDocumentRelatedPartTogether = (documentRevision: DocumentRevision) =>
+  documentRevision.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;

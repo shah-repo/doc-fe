@@ -19,7 +19,7 @@ import {
 import cx from "classnames";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
-import { RelatedPartsListItem, RELATED_STATUS } from "../../../../../state/ducks/relatedParts/types";
+import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { FBButton } from "../../../../form.builder";
 
 
@@ -32,11 +32,12 @@ import RemoveRedEyeIcon from "@material-ui/icons/RemoveRedEye";
 
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
+import Text from "../../../../components/Text";
 import useStyles from "./RelatedPart.styles";
 import { useRelatedPartsStore } from "./RelatedParts.state";
 
 const ParentPartSelector: React.FunctionComponent<{
-  status: RELATED_STATUS | undefined;
+  status: RELATED_PARTS_STATUS | undefined;
   parentStatusChanged: (value: string) => void;
 }> = ({
   status,
@@ -57,13 +58,13 @@ const ParentPartSelector: React.FunctionComponent<{
 
   const disableOptions = (value: string) => {
     switch (value) {
-      case RELATED_STATUS.PARENT_NO:
+      case RELATED_PARTS_STATUS.PARENT_NO:
         setDisable({ disable1: false, disable2: true, disable3: true });
         break;
-      case RELATED_STATUS.PARENT_TOGETHER:
+      case RELATED_PARTS_STATUS.PARENT_TOGETHER:
         setDisable({ disable1: true, disable2: false, disable3: true });
         break;
-      case RELATED_STATUS.PARENT_SEPARATE:
+      case RELATED_PARTS_STATUS.PARENT_SEPARATE:
         setDisable({ disable1: true, disable2: true, disable3: false });
         break;
       default:
@@ -86,7 +87,7 @@ const ParentPartSelector: React.FunctionComponent<{
           variant="h6"
           id="tableTitle"
         >
-          Is this a parent part?
+          <Text translation="relatedParts.parentPart.question"/>
         </Typography>
         <Tooltip title="Parent part info" placement="right"
           classes={{ tooltip: classes.customTooltip, arrow: classes.customArrow }}
@@ -94,24 +95,24 @@ const ParentPartSelector: React.FunctionComponent<{
           <InfoIcon color="primary" />
         </Tooltip>
       </div>
-      <FormControl className={classes.formControlPad}>
+      <FormControl>
         <RadioGroup row value={status} onChange={(e) => parentStatusHandler(e.target.value)}>
           <FormControlLabel
-            value={RELATED_STATUS.PARENT_NO}
+            value={RELATED_PARTS_STATUS.PARENT_NO}
             control={<Radio color="primary" disableRipple={true} />}
-            label="No"
+            label={<Text translation="relatedParts.parentPart.answer.no"/>}
             disabled={disable.disable1}
           />
           <FormControlLabel
-            value={RELATED_STATUS.PARENT_TOGETHER}
+            value={RELATED_PARTS_STATUS.PARENT_TOGETHER}
             control={<Radio color="primary" disableRipple={true} />}
-            label="Yes, Child Released Together"
+            label={<Text translation="relatedParts.parentPart.answer.yes.together"/>}
             disabled={disable.disable2}
           />
           <FormControlLabel
-            value={RELATED_STATUS.PARENT_SEPARATE}
+            value={RELATED_PARTS_STATUS.PARENT_SEPARATE}
             control={<Radio color="primary" disableRipple={true} />}
-            label="Yes, Child Released Separately"
+            label={<Text translation="relatedParts.parentPart.answer.yes.separate"/>}
             disabled={disable.disable3}
           />
         </RadioGroup>
@@ -148,17 +149,17 @@ const RelatedPartGrid: React.FunctionComponent<{
 
   useEffect(() => {
     fetchRelatedParts(documentRevision.document.id);
-  }, [fetchRelatedParts, documentRevision.document.id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentRevision.document.id]);
 
 
-  useEffect(() => {
-    reaction(
-      () => relatedPartsStore.relatedPartsList.length,
-      (length) => {
-        setIsEditRowVisible(false);
-        setShowButton(true);
-      });
-  }, [relatedPartsStore.relatedPartsList.length]);
+  useEffect(() => reaction(
+    () => relatedPartsStore.relatedPartsList.length,
+    () => {
+      setIsEditRowVisible(false);
+      setShowButton(true);
+    }
+  ), [relatedPartsStore.relatedPartsList.length]);
 
   const cancelEdit = () => {
     setIsEditRowVisible(false);
@@ -168,10 +169,10 @@ const RelatedPartGrid: React.FunctionComponent<{
   return useObserver(() => (
     <div className={classes.partsGrid}>
       <div>
-        <Grid style={{ justifyContent: "space-between", alignItems: "center" }} container>
+        <Grid className={classes.gridCenterAlign} container>
           <Grid item>
             <Typography variant="h6" id="tableTitle" component="div">
-                Related Parts
+              <Text translation="relatedParts.grid.title"/>
             </Typography>
           </Grid>
 
@@ -184,7 +185,7 @@ const RelatedPartGrid: React.FunctionComponent<{
                     startIcon={<AddCircleIcon color="primary" />}
                     onClick={showEditRow}
                   >
-                    Add Related part
+                    <Text translation="relatedParts.button.addText"/>
                   </Button>
                 </Typography>
               </Grid>
@@ -206,7 +207,7 @@ const RelatedPartGrid: React.FunctionComponent<{
             startIcon={<AddOutlinedIcon />}
             onClick={showEditRow}
           >
-              ADD RELATED PART
+            <Text translation="relatedParts.button.addText"/>
           </Button>
         }
       </div>
@@ -231,14 +232,20 @@ const RelatedPartList: React.FunctionComponent<{
       <Table stickyHeader aria-label="related parts table">
         <TableHead className={classes.tableHeadHeight}>
           <TableRow>
-            <TableCell className={cx(classes.tabelCell, classes.tableCellOne)} align="left">DOC ID</TableCell>
-            <TableCell className={classes.tabelCell} align="left">
-              <span className={classes.verticalDivider}>TITLE</span>
+            <TableCell className={cx(classes.tableCell, classes.tableCellOne)} align="left">
+              <Text translation="relatedParts.grid.heading.docId"/>
             </TableCell>
-            <TableCell className={cx(classes.tabelCell, classes.tableCellThree)} align="center">
-              <span className={classes.verticalDivider}>OBSOLETE</span>
+            <TableCell className={classes.tableCell} align="left">
+              <span className={classes.verticalDivider}>
+                <Text translation="relatedParts.grid.heading.title"/>
+              </span>
             </TableCell>
-            <TableCell className={cx(classes.tabelCell, classes.tableCellFour)} align="center"></TableCell>
+            <TableCell className={cx(classes.tableCell, classes.tableCellThree)} align="center">
+              <span className={classes.verticalDivider}>
+                <Text translation="relatedParts.grid.heading.obsolete"/>
+              </span>
+            </TableCell>
+            <TableCell className={cx(classes.tableCell, classes.tableCellFour)} align="center"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -317,14 +324,17 @@ const RelatedPartEditRow: React.FunctionComponent<{
     cancelEdit();
   };
 
+  const confirmEdit = () => {
+    createNewDocument(relatedPartDetails);
+  };
+
   const checkForDuplicateDocIds = () => {
     relatedPartsStore.checkForDuplicateDocIds(`${documentRevision?.document?.docId}-${relatedPartDetails.docId}`);
   };
 
   return useObserver(() => (
     <>
-      <div className={cx({
-        [classes.editRowParentDiv]: true,
+      <div className={cx(classes.editRowParentDiv, {
         [classes.editRowParentNormal]: !relatedPartsStore.docIdExists,
         [classes.editRowParentError]: relatedPartsStore.docIdExists,
       })}>
@@ -338,7 +348,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             onBlur = {checkForDuplicateDocIds}
             value={relatedPartDetails.docId}
             error = {relatedPartsStore.docIdExists}
-            helperText={relatedPartsStore.docIdExists ? "Duplicate Entry" : ""}
+            helperText={relatedPartsStore.docIdExists ? <Text translation="relatedParts.docId.exists.msg"/> : ""}
           />
         </div>
         <div
@@ -358,7 +368,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
               <ClearIcon className={classes.iconButton}/>
             </Button>
-            <Button className={classes.actionButton} onClick = {(e) => createNewDocument(relatedPartDetails)}>
+            <Button className={classes.actionButton} onClick = {confirmEdit}>
               <DoneIcon className={classes.iconButton} />
             </Button>
           </div>
@@ -369,7 +379,15 @@ const RelatedPartEditRow: React.FunctionComponent<{
 };
 
 
-const RelatedParts = ({
+const RelatedParts: React.FunctionComponent<{
+  documentRevision: DocumentRevision;
+  parentStatus: RELATED_PARTS_STATUS | undefined;
+  parentStatusChanged: (value: any) => void;
+  createNewDocument: (relatedPartDetails?: any) => void;
+  viewRelatedPart: (docRevId: string, documentId: string) => void;
+  fetchRelatedParts: (documentId: any) => void;
+  voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+}> = ({
   documentRevision,
   parentStatus,
   parentStatusChanged,
@@ -383,16 +401,17 @@ const RelatedParts = ({
 
   return (
     <>
-      {documentRevision.relatedStatus !== RELATED_STATUS.RELATED_SEPARATE &&
-      documentRevision.relatedStatus !== RELATED_STATUS.RELATED_TOGETHER &&
+      {documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_SEPARATE &&
+      documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER &&
       <div className={classes.mainDiv}>
         <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
-        {parentStatus === RELATED_STATUS.PARENT_SEPARATE && (
+        {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && (
           <Grid item xs={12}>
-            <FBButton label="Add Related Part" onClick = {createNewDocument}></FBButton>
+            <FBButton label="relatedParts.button.addText"
+              onClick = {createNewDocument} />
           </Grid>
         )}
-        {parentStatus === RELATED_STATUS.PARENT_TOGETHER && (
+        {parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER && (
           <RelatedPartGrid documentRevision={documentRevision} createNewDocument={createNewDocument}
             viewRelatedPart={viewRelatedPart} fetchRelatedParts = {fetchRelatedParts}
             voidRelatedPart = {voidRelatedPart}

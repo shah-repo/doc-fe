@@ -1,14 +1,15 @@
 import { Link, Typography } from "@material-ui/core";
 import { get } from "lodash";
 import { useObserver } from "mobx-react";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { documentRevisionsActions } from "../../../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../../../state/ducks/documentRevisions/types";
 import { relatedPartsActions } from "../../../../../state/ducks/relatedParts";
-import { RelatedPartsListItem, RELATED_STATUS } from "../../../../../state/ducks/relatedParts/types";
+import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state/ducks/relatedParts/types";
 import { toastSuccess } from "../../../../components/notifications";
+import Text from "../../../../components/Text";
 import { documentPreviewPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
@@ -18,7 +19,7 @@ import { relatedPartsStore, RelatedPartsStoreContext, useRelatedPartsStore } fro
 
 interface Props {
   documentRevision: DocumentRevision;
-  parentPartStatus: RELATED_STATUS | undefined;
+  parentPartStatus: RELATED_PARTS_STATUS | undefined;
 }
 
 const SuccessMsg: React.FunctionComponent<{
@@ -33,19 +34,23 @@ const SuccessMsg: React.FunctionComponent<{
   viewRelatedPart,
 }) => {
   const classes = useStyles();
+
+  const viewFromModal = () => viewRelatedPart(documentRevisionId, documentId);
+
   return (
     <>
       <Typography variant="body1">
-          Related Part created successfully
+        <Text translation="relatedParts.created.modal.success.msg"/>
       </Typography>
       <div className={classes.successMessage}>
         <Typography variant="subtitle1">
-            Part <b>{docId}</b> has been created
+          <Text translation="relatedParts.created.modal.msg.part.before"/> <b>{docId}</b> &nbsp;
+          <Text translation="relatedParts.created.modal.msg.part.after"/>
         </Typography>
-        <Link onClick={(event) => viewRelatedPart(documentRevisionId, documentId)}
-          tabIndex={0} style={{ fontWeight: "normal" }}
+        <Link onClick={viewFromModal}
+          tabIndex={0} className={classes.normalFontWeight}
           variant="subtitle1" color="textSecondary">
-              View
+          <Text translation="relatedParts.created.modal.view"/>
         </Link>
       </div>
     </>
@@ -68,15 +73,17 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const createPartAsync = useAsync({
     onSuccess: ({ createdDocumentRevision, suffixName }: any) => {
-      if (createdDocumentRevision) {
-        if (parentStatus === RELATED_STATUS.PARENT_SEPARATE) {
-          // Show a toast
-          showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
+      if (!createdDocumentRevision) {
+        return;
+      }
 
-        } else if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
-          // populate the list with the new added part
-          relatedPartsStore.addNewRelatedPart(createdDocumentRevision, suffixName);
-        }
+      if (parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
+        // Show a toast
+        showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
+
+      } else if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
+        // populate the list with the new added part
+        relatedPartsStore.addNewRelatedPart(createdDocumentRevision, suffixName);
       }
     },
   });
@@ -113,9 +120,9 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     },
   });
 
-  const fetchRelatedParts = (documentId) => {
+  const fetchRelatedParts = useCallback((documentId) => {
     fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentId, fetchRelatedPartsAsync);
-  };
+  }, [fetchAllRelatedPartsAction, fetchRelatedPartsAsync]);
 
   const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
   const voidRelatedPartAsync = useAsync({
@@ -155,7 +162,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       },
     };
 
-    if (parentStatus === RELATED_STATUS.PARENT_TOGETHER) {
+    if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
       docDto = {
         ...docDto,
         name: `${documentRevision.name}-${relatedPartDetails?.name}`,

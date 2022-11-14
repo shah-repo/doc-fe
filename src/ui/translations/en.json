@@ -1345,5 +1345,19 @@
   "help.didnt.find.what.you.need": "Didn’t find exactly what you needed?",
   "help.view.full.guide": "View full guide",
   "help.view.all.guides": "View All Guides",
-  "form.purchare.order.table.headline": "Receiving Details"
+  "form.purchare.order.table.headline": "Receiving Details",
+  "relatedParts.parentPart.question": "Is this a parent part?",
+  "relatedParts.parentPart.answer.no": "No",
+  "relatedParts.parentPart.answer.yes.together": "Yes, Child Released Together",
+  "relatedParts.parentPart.answer.yes.separate": "Yes, Child Released Separately",
+  "relatedParts.grid.title": "Related Parts",
+  "relatedParts.button.addText": "Add Related part",
+  "relatedParts.grid.heading.docId": "DOC ID",
+  "relatedParts.grid.heading.title": "TITLE",
+  "relatedParts.grid.heading.obsolete": "OBSOLETE",
+  "relatedParts.docId.exists.msg": "Duplicate Entry",
+  "relatedParts.created.modal.success.msg": "Related Part created successfully",
+  "relatedParts.created.modal.view": "View",
+  "relatedParts.created.modal.msg.part.before": "Part",
+  "relatedParts.created.modal.msg.part.after": "has been created"
 }

@@ -320,8 +320,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
             <Grid item xs={12}>
               <RelatedPartsWrapper
                 documentRevision={documentRevision}
-                parentPartStatus= {documentRevision?.relatedStatus}
-              ></RelatedPartsWrapper>
+                parentPartStatus= {documentRevision?.relatedPartsStatus} />
             </Grid>
           }
           {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft && (
