@@ -574,57 +574,80 @@ context("All regular users on new dashboard", () => {
 
     context("Fill form fields", () => {
       it("Enter description 'New Purchase Order'", () => {
-        cy.drEnterDocumentDescription({ description: "New Purchase Order" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drEnterDocumentDescription({ description: "New Purchase Order" });
+        });
       });
 
       it("Select 'Open' for PO status", () => {
-        cy.poSelectPOStatus({ status: "Open" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.poSelectPOStatus({ status: "Open" });
+        });
       });
 
       it(`Select '${USERS[1].name}' for Requestor`, () => {
-        cy.get("[data-cy^=po-requestor]").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy^=po-requestor]").arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        });
       });
 
       it(`Select 'Quality' for Department`, () => {
-        cy.get("div[id*=department]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Quality").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("div[id*=department]").arrowClick();
+          cy.get("ul>li[role=option]").contains("Quality").arrowClick();
+        });
       });
 
       it("Select 'SUP-00003' Supplier ", () => {
-        cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00003");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00003");
+        });
       });
 
       it("Select 'Third party Company' for Ship To", () => {
-        cy.get("[name^=\"ship-to\"]").eq(1).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name^=\"ship-to\"]").eq(1).arrowClick();
+        });
       });
 
       it("Select Third party Company Address", () => {
-        cy.get("input[data-cy^=third-party-company]").arrowClick();
-        cy.get("ul>li[role=option]").contains("API supplier").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("input[data-cy^=third-party-company]").arrowClick();
+          cy.get("ul>li[role=option]").contains("API supplier").arrowClick();
+        });
       });
 
       it("Select 'FedEx 449260805' for Shipping Information", () => {
-        cy.get("div[id*=select-shipping]").arrowClick();
-        cy.get("ul>li[role=option]").contains("FedEx 449260805").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("div[id*=select-shipping]").arrowClick();
+          cy.get("ul>li[role=option]").contains("FedEx 449260805").arrowClick();
+        });
       });
 
       it("Select 'Credit Card' for Terms", () => {
-        cy.get("div[id*=terms]").arrowClick();
-        cy.get("ul>li[role=option]").contains("Credit Card").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("div[id*=terms]").arrowClick();
+          cy.get("ul>li[role=option]").contains("Credit Card").arrowClick();
+        });
       });
 
       it("Enter '1' for Quotation Number", () => {
-        cy.get("input[name^=quotation-number]").arrowType("1");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("input[name^=quotation-number]").arrowType("1");
+          cy.unClick();
+        });
       });
 
       it("Select Order Date", () => {
-        cy.get("input[name^=ordered]").parent().find("button").arrowClick();
-
-        cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("input[name^=ordered]").parent().find("button").arrowClick();
+          cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+        });
       });
 
       it("Save PO", () => {
+        cy.wait(2000);
         cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -638,7 +661,11 @@ context("All regular users on new dashboard", () => {
 
       it("Upload attachments", () => {
         cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Click on 'Add item' button to add item without Part Number", () => {
@@ -687,14 +714,21 @@ context("All regular users on new dashboard", () => {
       });
 
       it("Enter 'Nothing to comment' inside PO dialog box", () => {
-        cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
-        cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
-        cy.get("[data-cy=Comments]").arrowClick();
-        cy.unClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
+          cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
+          cy.get("[data-cy=Comments]").arrowClick();
+          cy.unClick();
+        });
+        cy.progressBarShouldNotExist();
       });
 
       it("Enter 'contact.us@gmail.com' inside Contact Email", () => {
-        cy.get("[name^=contact-email]").arrowType("contact.us@gmail.com");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name^=contact-email]").arrowType("contact.us@gmail.com");
+          cy.unClick();
+        });
+        cy.progressBarShouldNotExist();
       });
 
       it("Add an Approval", () => {
@@ -855,6 +889,7 @@ context("All regular users on new dashboard", () => {
         [CyRoutes.PatchDocRev], () => {
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         });
+      cy.progressBarShouldNotExist();
       cy.checkToastMessage({ exists: false });
 
     });
@@ -863,6 +898,8 @@ context("All regular users on new dashboard", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify updated info on PO notification", () => {
