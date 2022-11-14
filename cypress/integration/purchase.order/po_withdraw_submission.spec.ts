@@ -8,7 +8,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { Part } from "../../utils/constants/documentTypes/part";
-import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -65,7 +64,6 @@ context("po withdraw submission", () => {
             users: [],
             documentTypes: [
               Part,
-              PurchaseOrderTest,
               ReceivableTest,
             ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
@@ -442,7 +440,8 @@ context("po withdraw submission", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      // cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      cy.poClickCreatePO();
     });
 
     it("Verify Requestor", () => {
@@ -499,7 +498,8 @@ context("po withdraw submission", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      // cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      cy.poClickCreatePO();
     });
 
     it("Verify Requestor", () => {
@@ -685,15 +685,16 @@ context("po withdraw submission", () => {
     });
 
     it("Verify Approver Added as User 1 ", () => {
-      cy.get("[data-cy='change-key-2-0']").contains("Approver Added")
-        .should("exist");
-      cy.get("[data-cy='change-key-2-0']").parent().next().contains("Giovanni Reynolds")
-        .should("exist");
+      cy.get("[data-cy='change-key-2-0']").should("have.text", "Approver Added");
+      // cy.get("[data-cy='change-key-2-0']").contains("Approver Added")
+      //   .should("exist");
+      cy.get("[data-cy='change-key-2-0']").parent().next().should("have.text", "Giovanni Reynolds");
     });
   });
 
   context("Approve PO", () => {
     it("Submit for approval", () => {
+      cy.pause();
       cy.pmSubmitForApproval();
     });
 
