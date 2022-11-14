@@ -125,15 +125,15 @@ export const USERS = [
     email: "enlil.testmail+cy29@gmail.com",
   },
   {
-    name: "Rachel Nitzsche",
+    name: "Enlil TestUser 30",
     email: "enlil.testmail+cy30@gmail.com",
   },
   {
-    name: "William Ritchie",
+    name: "Enlil TestUser 31",
     email: "enlil.testmail+cy31@gmail.com",
   },
   {
-    name: "Elwin Langosh",
+    name: "Enlil TestUser 32",
     email: "enlil.testmail+cy32@gmail.com",
   },
   {
