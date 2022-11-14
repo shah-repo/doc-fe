@@ -80,8 +80,6 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   const [isInlineApproval, setInlineApproval] = React.useState(false);
   const [isApproved, setIsApproved] = React.useState(false);
-
-
   React.useEffect(() => {
     _formState?.validate((_valid) => {
       const validSchema = schema?.filter((schemaItem) => {
