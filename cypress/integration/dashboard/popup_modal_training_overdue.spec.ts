@@ -7,6 +7,7 @@
 
 import "moment-timezone";
 import moment from "moment-timezone";
+import { TIME_ZONE } from "../../../src/common/utils/date";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -716,6 +717,8 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
@@ -783,14 +786,14 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
     });
-
-    it("Select 'Trainings' tab", () => {
+    it("Verify training notification", { retries: 5 }, () => {
+      cy.wait(8000);
+      cy.get("[id='scrollable-auto-tab-0'").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.contains("Trainings").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Verify training notification", () => {
       cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", "OVERDUE");
     });
   });
@@ -818,7 +821,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
       cy.contains("EMAIL SENT TO ALL").should("exist");
       cy.get("button[aria-label=close]").eq(1).arrowClick();
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(emailDateOffset, "milliseconds");
     });
 
     it("There should be 3 columns", () => {
@@ -842,7 +845,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
 
     it("Verify the emails that should be received", () => {
-      const dueDate = moment().tz("America/Los_Angeles")
+      const dueDate = moment().tz(TIME_ZONE)
         .subtract(1, "days")
         .format("MMM D, YYYY");
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
@@ -910,7 +913,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
       cy.contains("EMAIL SENT TO ALL").should("exist");
       cy.get("button[aria-label=close]").eq(1).arrowClick();
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(emailDateOffset, "milliseconds");
     });
   });
 
@@ -936,7 +939,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
 
     it("Verify the emails that should be received", () => {
-      const dueDate = moment().tz("America/Los_Angeles")
+      const dueDate = moment().tz(TIME_ZONE)
         .subtract(1, "days")
         .format("MMM D, YYYY");
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
