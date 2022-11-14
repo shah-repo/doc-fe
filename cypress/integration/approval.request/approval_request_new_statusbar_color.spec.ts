@@ -497,6 +497,7 @@ context("Status Bar of newly created ARs", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
+      cy.wait(3000);
     });
   });
 
