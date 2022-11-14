@@ -227,6 +227,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.get("[data-cy='fb-approvers-approvers']").arrowClick();
       cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].name);
     });
   });
@@ -253,11 +254,11 @@ context("Status Bar of newly created ARs", () => {
 
     it("Enter new title", () => {
       cy.arEnterApprovalRequestTitle({ title: "New Ar title2" });
+      cy.wait(2000);
     });
 
-    it("Verify 'Last saved a few seconds ago' text should exist", () => {
-      cy.get("header").contains("Last saved a few seconds ago").should("exist");
-      cy.get("header").contains("Last saved a few seconds ago").should("be.visible");
+    it("Verify 'Last saved a few seconds ago' text should visible", () => {
+      cy.get(`[data-cy="header-section"]`).contains("Last saved a few seconds ago").should("be.visible");
     });
 
     it("Turn off 'auto save'", () => {
@@ -371,7 +372,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
 
     it("Verify 'Send to review' in status bar", () => {
@@ -482,7 +483,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
 
@@ -531,7 +532,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
 
@@ -592,7 +593,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
 });
