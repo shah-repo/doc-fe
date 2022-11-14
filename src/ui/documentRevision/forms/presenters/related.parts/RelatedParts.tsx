@@ -149,7 +149,8 @@ const RelatedPartGrid: React.FunctionComponent<{
 
   useEffect(() => {
     fetchRelatedParts(documentRevision.document.id);
-  }, [fetchRelatedParts, documentRevision.document.id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentRevision.document.id]);
 
 
   useEffect(() => reaction(

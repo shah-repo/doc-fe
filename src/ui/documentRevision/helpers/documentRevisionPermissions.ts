@@ -55,5 +55,5 @@ export const canChangeDocumentOwner = (
     || hasChangeOwnershipPermission) && relatedStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER;
 
 
-const isDocumentRelatedPartTogether = (documentRevision) =>
-  documentRevision.relatedStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
+const isDocumentRelatedPartTogether = (documentRevision: DocumentRevision) =>
+  documentRevision.relatedPartsStatus === RELATED_PARTS_STATUS.RELATED_TOGETHER;
