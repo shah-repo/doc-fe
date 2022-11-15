@@ -1894,10 +1894,6 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
 
-      it("Save LHRs", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-
       it("Complete step", () => {
         cy.pmSubmitForApproval();
       });
@@ -2123,10 +2119,6 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
       it("Add approver", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
-      });
-
-      it("Save LHRs", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Complete step", () => {

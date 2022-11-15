@@ -1882,6 +1882,7 @@ context("Receiving landing page test", () => {
       ], () => {
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to detail tab", () => {
