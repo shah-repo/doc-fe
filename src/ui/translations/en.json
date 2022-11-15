@@ -115,6 +115,8 @@
   "document.revision.withdraw.alert": "Are you sure you want to withdraw this Record?",
   "change.request.select.reasoning": "Select reasoning",
   "change.request.select.template": "Select an Approval Request template to continue",
+  "change.request.select.existing.title": "Select One",
+  "change.request.select.existing.content": "Select an Existing Change Order to continue",
   "changeRequest.transition.submitted": "Submit approval request",
   "changeRequest.transition.approve": "Approve submission",
   "changeRequest.transition.reject": "Reject submission",

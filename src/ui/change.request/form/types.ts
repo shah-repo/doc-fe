@@ -44,6 +44,12 @@ export interface TemplateOption {
   formInput?: Record<string, any>;
 }
 
+export interface ExistingInDraftCOOption {
+  label: string;
+  value: string;
+  crId: string;
+}
+
 export interface ApproverPayload {
   approver: {
     id: Nullable<string>;

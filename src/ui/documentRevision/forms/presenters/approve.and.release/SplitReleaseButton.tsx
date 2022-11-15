@@ -5,8 +5,15 @@ import React from "react";
 import { StyledButtonGroup } from "../../../../../App/Shifamed/Components/forms/presenters/StyledButtonGroup";
 import Text from "../../../../components/Text";
 
+export enum COActions {
+  NEW = "new",
+  EXISTING = "existing"
+}
 
-const options = ["New CO", "Existing CO"];
+
+// TODO: move to translations
+const options = [{ label: "New CO", value: COActions.NEW },
+  { label: "Existing CO", value: COActions.EXISTING }];
 
 const SplitReleaseButton: React.FunctionComponent<{
   onClick: (value?: string) => void;
@@ -20,13 +27,11 @@ const SplitReleaseButton: React.FunctionComponent<{
   const anchorRef = React.useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
-    console.info("Selected Express Option");
     onClick();
   };
 
   const handleMenuItemClick = (event, index) => {
-    console.info("Selected Option", options[index]);
-    onClick(options[index]);
+    onClick(options[index].value);
     setOpen(false);
   };
 
@@ -78,10 +83,10 @@ const SplitReleaseButton: React.FunctionComponent<{
                   <MenuList id="split-button-menu">
                     {options.map((option, index) => (
                       <MenuItem
-                        key={option}
+                        key={option.value}
                         onClick={(event) => handleMenuItemClick(event, index)}
                       >
-                        {option}
+                        {option.label}
                       </MenuItem>
                     ))}
                   </MenuList>

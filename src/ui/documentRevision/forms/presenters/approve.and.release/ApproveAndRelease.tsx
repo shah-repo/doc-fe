@@ -3,7 +3,7 @@ import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } 
 import { Formik, FormikProps } from "formik";
 import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash";
 import moment from "moment";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -27,7 +27,7 @@ import ChangeRequestUpdateContainer from "../../../../change.request/ChangeReque
 import FormListContent from "../../../../change.request/form.list/dialog/FormListContent";
 import FormListHeader from "../../../../change.request/form.list/dialog/FormListHeader";
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
-import { ApproverPayload, TemplateOption } from "../../../../change.request/form/types";
+import { ApproverPayload, ExistingInDraftCOOption, TemplateOption } from "../../../../change.request/form/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import { FormContext } from "../../../../components/forms/FormContext";
 import { toastError } from "../../../../components/notifications";
@@ -41,7 +41,7 @@ import useDialog from "../../../../hooks/useDialog";
 import { checkIsDocumentPO } from "../../../helpers/checkDocumentGroup";
 import { ApproveAndReleaseFormValues } from "../../types";
 import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
-import SplitReleaseButton from "./SplitReleaseButton";
+import SplitReleaseButton, { COActions } from "./SplitReleaseButton";
 
 interface Props {
   id?: string;
@@ -92,11 +92,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // MARK: @state
   const [documentTypeGroups, setDocTypeGroups] = useState<Group[]>([]);
   const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
+  const [existingInDraftCOOptions, setExistingInDraftCOOptions] = useState<ExistingInDraftCOOption[]>([]);
   const [formDocument, setFormDocument] = useState<string>("");
   const [documentType, setDocumentType] = useState<string>("");
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
   const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
-  const [optionSelected, setOptionSelected] = useState<string>("");
   const [changeRequestDetails, setChangeRequestDetails] = useState<ChangeRequest>();
 
   // MARK: @config
@@ -111,6 +111,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const expressApprovalDialog = useDialog();
   const templateSelectionDialog = useDialog();
+  const existingDraftCOSelectionDialog = useDialog();
   const changeOrderDialog = useDialog();
 
   const alertDialog = useDialog();
@@ -130,7 +131,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const releaseAction = useActionCreator(documentRevisionsActions.approveAndRelease);
   const finalizeAction = useActionCreator(documentRevisionsActions.finalizeAndRelease);
   const releaseNonQmsAction = useActionCreator(documentRevisionsActions.approveAndReleaseNonQms);
-  const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
   const create = useActionCreator(changeRequestsActions.create);
   const getGroupsByStage = useActionCreator(documentRevisionsActions.loadGroupsByStage);
 
@@ -163,6 +163,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     },
   });
 
+  // Templates Call
+  const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
   const asyncGetDocTypeByGroup = useAsync({
     onSuccess: (data: DocumentTypeById[] = []) => {
       const options = flatten(
@@ -177,6 +179,31 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         )
       );
       setTemplateOptions(options);
+      if (templateOptions.length > 0) {
+        if (templateOptions.length === 1) {
+          processCreatingRevision(templateOptions[0]);
+        } else {
+          templateSelectionDialog.open();
+        }
+      }
+    },
+  });
+
+  // Existing Draft CO calls
+  const getDraftChangeOrdersAction = useActionCreator(changeRequestsActions.draftChangeOrdersList);
+  const asyncGetDraftChangeOrders = useAsync({
+    onSuccess: (data: Pick<ChangeRequest, "crId" | "title" | "id">[] = []) => {
+      const options = data.map((option) => ({
+        label: `${option.crId} - ${option.title}`,
+        value: option.id,
+        crId: option.crId,
+      }));
+      if (options.length === 0) {
+        toastError("No Change Orders in Draft");
+        return;
+      }
+
+      setExistingInDraftCOOptions(options);
     },
   });
 
@@ -186,18 +213,29 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       console.log(createdChangeRequest?.id);
       setChangeRequestDetails(createdChangeRequest);
       changeOrderDialog.open();
-      // createdChangeRequest && history.push(changeRequestEditPath(createdChangeRequest.id));
     },
     onError: (err) => {
       toastError(err as string);
     },
   });
 
-  const processCreatingRevision = useCallback((templateChosen) => {
+  const processCreatingRevision = (templateChosen) => {
+    if (!templateChosen) {
+      return;
+    }
     const data = templateOptionToChangeRequestCreateBody(templateChosen);
     console.log(data);
     createCRAsync.start(createCRAction, data, createCRAsync);
-  }, [createCRAction, createCRAsync]);
+  };
+
+  const processChosenChangeOrder = (changeOrderChosen: ExistingInDraftCOOption) => {
+    if (!changeOrderChosen) {
+      return;
+    }
+
+    console.log(changeOrderChosen);
+    existingDraftCOSelectionDialog.close();
+  };
 
 
   useEffect(() => {
@@ -208,8 +246,20 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         templateSelectionDialog.open();
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [templateOptions]);
 
-  }, [templateOptions, templateSelectionDialog, processCreatingRevision]);
+
+  useEffect(() => {
+    if (existingInDraftCOOptions.length > 0) {
+      if (existingInDraftCOOptions.length === 1) {
+        processChosenChangeOrder(existingInDraftCOOptions[0]);
+      } else {
+        existingDraftCOSelectionDialog.open();
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [existingInDraftCOOptions]);
 
 
   const asyncAR = useAsync<ChangeRequest>({
@@ -271,21 +321,28 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   // MARK: @methods
   const openDialog = (option?: any) => {
-    console.log(option);
-    setOptionSelected(option);
     async.reset();
-    if (option) {
-      asyncGetDocTypeByGroup.start(
-        getDocTypeByGroupAction,
-        { docTypeGroupOption: "CHANGE_REQUEST" },
-        asyncGetDocTypeByGroup);
-    } else if (showApprovers && docRevId) {
+
+    if (!option && showApprovers && docRevId) {
       asyncGroups.start(
         getGroupsByStage,
         docRevId,
         asyncGroups,
       );
       expressApprovalDialog.open();
+    }
+
+    if (option === COActions.NEW) {
+      asyncGetDocTypeByGroup.start(
+        getDocTypeByGroupAction,
+        { docTypeGroupOption: "CHANGE_REQUEST" },
+        asyncGetDocTypeByGroup);
+    }
+
+    if (option === COActions.EXISTING) {
+      asyncGetDraftChangeOrders.start(
+        getDraftChangeOrdersAction,
+        asyncGetDraftChangeOrders);
     }
   };
 
@@ -403,7 +460,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         <SplitReleaseButton onClick = {openDialog}></SplitReleaseButton>
       </CustomLabelTooltip>
       {
-        templateSelectionDialog.isOpen && optionSelected &&
+        templateSelectionDialog.isOpen &&
         <Dialog
           open={templateSelectionDialog.isOpen}
           onClose={templateSelectionDialog.close}
@@ -411,8 +468,29 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         >
           <FormListHeader {...{ dialog: templateSelectionDialog }} />
           <FormListContent {...{
-            dialog: templateSelectionDialog, templateOptions,
+            dialog: templateSelectionDialog,
+            templateOptions,
             handleTemplateSelection: processCreatingRevision,
+          }} />
+        </Dialog>
+      }
+      {
+        existingDraftCOSelectionDialog.isOpen &&
+        <Dialog
+          open={existingDraftCOSelectionDialog.isOpen}
+          onClose={existingDraftCOSelectionDialog.close}
+          classes={{ paper: classes.dialogPaper }}
+        >
+          <FormListHeader {...{
+            dialog: existingDraftCOSelectionDialog,
+            subtitle1Translation: "change.request.select.existing.title",
+            subtitle2Translation: "change.request.select.existing.content",
+          }} />
+          <FormListContent {...{
+            dialog: existingDraftCOSelectionDialog,
+            existingInDraftCOOptions,
+            labelTranslation: "change.request.select.existing.title",
+            handleExistingCOSelection: processChosenChangeOrder,
           }} />
         </Dialog>
       }
