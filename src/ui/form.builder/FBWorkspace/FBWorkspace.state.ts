@@ -103,6 +103,10 @@ class FBWorkspaceState extends FBSchemaState {
       toDocRev?.formInput?.["lhr-build-type"] === FBLHRBuildOptions.Production;
   }
 
+  public get isChangeRequest(): boolean {
+    return !isEmpty(this.changeRequest);
+  }
+
   public get isOutputSchema(): boolean {
     const { documentType: { groupOptions = [] } = {} } = this.document?.document ?? {};
     return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);

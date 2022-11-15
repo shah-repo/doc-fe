@@ -271,6 +271,12 @@ export const withFBInput = <T extends FBInputProps>(
               });
               return;
             }
+
+            if (workspaceState.isChangeRequest) {
+              submitForm();
+              return;
+            }
+
             if (type && FBAutosave.includes(type)) {
               workspaceState.saveDocRev(formState?.getValues());
             } else {
