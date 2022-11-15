@@ -305,7 +305,10 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Add inline approver for first section", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${FIRST_USER.name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).arrowClick();
+      cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Request Approval button", () => {
