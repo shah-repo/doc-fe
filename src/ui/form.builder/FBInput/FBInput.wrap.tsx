@@ -76,7 +76,7 @@ export const withFBInput = <T extends FBInputProps>(
     ...props
   }: T) => {
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
-    const { isOutput } = workspaceState || {};
+    const { isOutput, isChangeRequest } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
@@ -146,12 +146,13 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    if (
-      (isOutput || formState?.workspaceMode !== FBWorkspaceModeOptions.DESIGN) &&
-      ![FBWorkspaceModeOptions.FORMPREVIEW, FBWorkspaceModeOptions.PREVIEW].includes(
-        formState?.workspaceMode as FBWorkspaceModeOptions
-      )
-    ) {
+    const modesSkipsValidation = [
+      FBWorkspaceModeOptions.FORMPREVIEW,
+      FBWorkspaceModeOptions.PREVIEW,
+      FBWorkspaceModeOptions.DESIGN,
+    ];
+
+    if (isChangeRequest || isOutput || !modesSkipsValidation.some((mode) => formState?.workspaceMode === mode)) {
       const isUnderMode = (
         !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
