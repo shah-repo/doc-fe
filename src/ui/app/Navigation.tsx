@@ -80,7 +80,7 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
       classes={{ paper: classes.drawerPaper }}
       anchor="left"
     >
-      <Box flexGrow="1">
+      <Box>
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6" className={classes.toolbarTitle}>
             <Link to={HOME_URL} className={classes.headerLink}>
