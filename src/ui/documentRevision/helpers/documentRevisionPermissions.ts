@@ -46,7 +46,7 @@ export const canChangeDocumentOwner = (
   currentEmployeeId: string,
   ownerId: string,
   hasChangeOwnershipPermission: boolean,
-  relatedStatus: RELATED_PARTS_STATUS | undefined,
+  relatedStatus?: RELATED_PARTS_STATUS,
 ) =>
   ((isDocumentRevisionInStatus(
     [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange],

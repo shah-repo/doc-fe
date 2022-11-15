@@ -165,8 +165,12 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   };
 
   const viewDocument = () => {
+    if (!relatedParentPartDetails?.docRevId || !relatedParentPartDetails?.documentId) {
+      return;
+    }
+
     const urlPath = documentPreviewPath(
-      relatedParentPartDetails?.docRevId as string, relatedParentPartDetails?.documentId as string);
+      relatedParentPartDetails?.docRevId, relatedParentPartDetails?.documentId);
     history.push(urlPath);
   };
 
