@@ -88,28 +88,28 @@ const Navigation: React.FunctionComponent<NavigationProps> = ({
             </Link>
           </Typography>
         </Toolbar>
-        {
-          isLoading
-            ? (
-              <Box display="flex" justifyContent="center" mt={2}>
-                <CircularProgress size={20} />
-              </Box>
-            )
-            : (
-              <List className={cx(classes.list, "containing-box-scrollbar")}>
-                {
-                  navigationItems.map((link: NavigationItem) => (
-                    <NavigationLinkContainer
-                      key={link.label}
-                      currentPath={location.pathname}
-                      {...link}
-                    />
-                  ))
-                }
-              </List>
-            )
-        }
       </Box>
+      {
+        isLoading
+          ? (
+            <Box display="flex" justifyContent="center" mt={2}>
+              <CircularProgress size={20} />
+            </Box>
+          )
+          : (
+            <List className={cx(classes.list, "containing-box-scrollbar")}>
+              {
+                navigationItems.map((link: NavigationItem) => (
+                  <NavigationLinkContainer
+                    key={link.label}
+                    currentPath={location.pathname}
+                    {...link}
+                  />
+                ))
+              }
+            </List>
+          )
+      }
       <NavigationProfileContainer />
       <Box paddingBottom="20px">
         <BottomLogo />
