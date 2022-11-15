@@ -49,7 +49,7 @@ interface Props {
   dismissLineItem?: (id: string) => void;
 }
 
-const MyFeedsLineItemPresenter: React.FC<Props> = ({
+const LineItemsPresenter: React.FC<Props> = ({
   loadMyFeeds,
   loadMyFeedsListAsyncState,
   feedItems,
@@ -607,4 +607,4 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
   );
 };
 
-export default MyFeedsLineItemPresenter;
+export default LineItemsPresenter;

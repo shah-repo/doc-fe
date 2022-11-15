@@ -1,6 +1,6 @@
-import { default as dashboardMyFeedsReducer } from "./reducers";
+import { default as dashboardTodoReducer } from "./reducers";
 
-export { default as dashboardMyFeedsActions } from "./actions";
-export { default as dashboardMyFeedsSelectors } from "./selectors";
+export { default as dashboardTodoActions } from "./actions";
+export { default as dashboardTodoSelectors } from "./selectors";
 
-export default dashboardMyFeedsReducer;
+export default dashboardTodoReducer;

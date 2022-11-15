@@ -6,7 +6,7 @@ import { ReactComponent as MyFeedIcon } from "../../../assets/images/my_feed.svg
 import { ReactComponent as TrainingIcon } from "../../../assets/images/training_tab.svg";
 import { ReactComponent as RecentIcon } from "../../../assets/images/recent.svg";
 import { GroupTag } from "../../../state/ducks/auth/types";
-import { dashboardMyFeedsSelectors as dashboardTodoSelectors } from "../../../state/ducks/dashboard.new/todo";
+import { dashboardTodoSelectors } from "../../../state/ducks/dashboard.new/todo";
 import { dashboardMyFeedsSelectors } from "../../../state/ducks/dashboard.new/my.feeds";
 import Text from "../../components/Text";
 import useGetHasTag from "../../hooks/useGetHasTag";
