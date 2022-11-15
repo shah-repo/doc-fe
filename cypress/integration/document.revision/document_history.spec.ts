@@ -372,7 +372,9 @@ context("Check Document History", () => {
   context("Check document history", () => {
     it("Open history drawer and compare history values", () => {
       SystemRequirement("REQ-0360", "REQ-2670", "REQ-4000", "REQ-4250");
-      cy.drSelectHistoryTab();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+        cy.drSelectHistoryTab();
+      });
     });
 
     history.forEach((element, groupIndex) => {
