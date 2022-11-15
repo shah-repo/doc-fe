@@ -4,7 +4,7 @@ import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -146,13 +146,7 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    const modesSkipsValidation = [
-      FBWorkspaceModeOptions.FORMPREVIEW,
-      FBWorkspaceModeOptions.PREVIEW,
-      FBWorkspaceModeOptions.DESIGN,
-    ];
-
-    if (isChangeRequest || isOutput || !modesSkipsValidation.some((mode) => formState?.workspaceMode === mode)) {
+    if (isChangeRequest || isOutput || formState?.shouldValidate) {
       const isUnderMode = (
         !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
