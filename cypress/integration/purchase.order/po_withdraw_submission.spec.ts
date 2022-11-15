@@ -487,7 +487,9 @@ context("po withdraw submission", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
   });
 
@@ -542,7 +544,9 @@ context("po withdraw submission", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
   });
 
