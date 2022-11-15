@@ -23,7 +23,7 @@ import { DocumentTypeById } from "../../../../../state/ducks/documentRevisions/d
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../state/reducers";
 import AlertDialog from "../../../../app/alert.dialog/AlertDialog";
-import ChangeRequestUpdateContainer from "../../../../change.request/ChangeRequestUpdate.container";
+import ChangeRequestEditDialog from "../../../../change.request/dialogs/ChangeRequestEditDialog";
 import FormListContent from "../../../../change.request/form.list/dialog/FormListContent";
 import FormListHeader from "../../../../change.request/form.list/dialog/FormListHeader";
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
@@ -97,7 +97,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [documentType, setDocumentType] = useState<string>("");
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
   const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
-  const [changeRequestDetails, setChangeRequestDetails] = useState<ChangeRequest>();
+  const [changeRequestId, setChangeRequestId] = useState<string>("");
 
   // MARK: @config
   const isNewLayout = SM.isNewLayout;
@@ -210,9 +210,12 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const createCRAction = useActionCreator(changeRequestsActions.create);
   const createCRAsync = useAsync<ChangeRequest>({
     onSuccess: (createdChangeRequest?) => {
-      console.log(createdChangeRequest?.id);
-      setChangeRequestDetails(createdChangeRequest);
-      changeOrderDialog.open();
+      if (createdChangeRequest) {
+        setChangeRequestId(createdChangeRequest.id);
+
+        templateSelectionDialog.close();
+        changeOrderDialog.open();
+      }
     },
     onError: (err) => {
       toastError(err as string);
@@ -233,8 +236,10 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       return;
     }
 
-    console.log(changeOrderChosen);
+    setChangeRequestId(changeOrderChosen.value);
+
     existingDraftCOSelectionDialog.close();
+    changeOrderDialog.open();
   };
 
 
@@ -529,27 +534,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       }
       {
         changeOrderDialog.isOpen &&
-        <Dialog
-          disableEscapeKeyDown={true}
-          disableBackdropClick={true}
-          fullWidth={true}
-          maxWidth="lg"
-          open={changeOrderDialog.isOpen}
-          onSubmit={(event: React.FormEvent) => event.stopPropagation()}
-          classes={{ paper: classes.dialogContent }}
-          id="ChangeOrder-dialog"
-        >
-          <DialogTitle>
-            This is a Dialog - Yay
-          </DialogTitle>
-          <DialogContent
-            classes={{ root: classes.dialogContent }}
-            id="ChangeOrder-content"
-          >
-            <ChangeRequestUpdateContainer
-              changeRequest={changeRequestDetails as ChangeRequest}></ChangeRequestUpdateContainer>
-          </DialogContent>
-        </Dialog>
+        <ChangeRequestEditDialog
+          changeRequestId={changeRequestId} changeOrderDialog={changeOrderDialog}
+        />
       }
       <AlertDialog
         message="record.release.alert"
