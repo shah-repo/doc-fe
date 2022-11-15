@@ -34,6 +34,7 @@ type ChangeRequestFormProps =
   withoutBottomBar: boolean;
   autosave: boolean;
   formInput?: Record<string, any>;
+  hideSideBar: boolean;
 };
 
 const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -49,6 +50,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   _formState,
   formInput,
   _documentRevisionFormState,
+  hideSideBar = false,
 }) => {
   const { _tabsState } = SM.useStores();
 
@@ -80,7 +82,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {...changeRequest && changeRequest.crId && {
+        {...changeRequest && changeRequest.crId && !hideSideBar && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}

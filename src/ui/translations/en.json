@@ -613,7 +613,7 @@
   "document.revision.bulkCreate.download.excelTemplate": "Excel Template Successfully Downloaded. Please open downloaded Excel Template and populate data. Then Upload to Import Data",
   "page.title.changeRequest": "Approval Request List",
   "page.title.documentList": "Document List",
-  "page.table.title.changeRequest": "Approval Requests",
+  "page.table.title.changeRequest": "Change Order",
   "page.title.training": "Training Records",
   "page.title.documentCreate": "Create New Document",
   "page.title.changeRequestCreate": "Create New Approval Request",
@@ -1361,5 +1361,6 @@
   "relatedParts.created.modal.success.msg": "Related Part created successfully",
   "relatedParts.created.modal.view": "View",
   "relatedParts.created.modal.msg.part.before": "Part",
-  "relatedParts.created.modal.msg.part.after": "has been created"
+  "relatedParts.created.modal.msg.part.after": "has been created",
+  "changeorder.dialog.title": "Quick Edit"
 }
