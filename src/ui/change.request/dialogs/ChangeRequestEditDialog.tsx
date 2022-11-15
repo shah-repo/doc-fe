@@ -1,36 +1,30 @@
 /* eslint-disable arrow-body-style */
-import { createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
+import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import { useSelector } from "react-redux";
+import { ReactComponent as NewTabIcon } from "../../../assets/images/new_tab.svg";
 import { changeRequestsActions, changeRequestsSelectors } from "../../../state/ducks/changeRequest";
 import { ApplicationState } from "../../../state/reducers";
 import AsyncGate from "../../components/AsyncGate";
+import Text from "../../components/Text";
 import useActionCreator from "../../hooks/useActionCreator";
 import { DialogHandler } from "../../hooks/useDialog";
 import ChangeRequestUpdateContainer from "../ChangeRequestUpdate.container";
+import { changeRequestPreviewPath } from "../utils/paths";
+import useStyles from "./ChangeRequestEditDialog.styles";
 
 interface Props {
   changeRequestId: string;
   changeOrderDialog: DialogHandler;
 }
 
-const styles = makeStyles(() =>
-  createStyles({
-    dialogPaper: {
-      overflowY: "unset",
-    },
-    dialogContent: {
-      overflowY: "unset",
-    },
-  })
-);
-
 const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   changeRequestId,
   changeOrderDialog,
 }) => {
 
-  const classes = styles();
+  const classes = useStyles();
 
   const loadAsyncState =  useSelector(changeRequestsSelectors.getLoadAsyncState);
   const changeRequestDetails = useSelector((state: ApplicationState) =>
@@ -39,27 +33,52 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   const load = useActionCreator(changeRequestsActions.load);
   const loadAction = () => load(changeRequestId);
 
+  const handleOpenNewTab = () => {
+    window.open(changeRequestPreviewPath(changeRequestId));
+  };
+
   return (
     <AsyncGate asyncAction={loadAction} asyncState={loadAsyncState} startActionOnMount={true}>
       <Dialog
+        hideBackdrop
+        disableEnforceFocus
+        classes={{
+          root: classes.root,
+          paper: classes.paper,
+        }}
+        scroll="paper"
         disableEscapeKeyDown={true}
-        disableBackdropClick={true}
         fullWidth={true}
         maxWidth="lg"
         open={changeOrderDialog.isOpen}
         onSubmit={(event: React.FormEvent) => event.stopPropagation()}
-        classes={{ paper: classes.dialogContent }}
         id="ChangeOrder-dialog"
       >
-        <DialogTitle>
-          This is a Dialog - Yay
+        <DialogTitle style={{ display: "flex" }} disableTypography>
+          <Typography className={classes.heading}>
+            <Text translation="changeorder.dialog.title" />
+          </Typography>
+          <IconButton
+            className={classes.close}
+            size="small"
+            onClick={handleOpenNewTab}
+          >
+            <NewTabIcon />
+          </IconButton>
+          <IconButton
+            className={classes.close}
+            size="small"
+            onClick={changeOrderDialog.close}
+          >
+            <CloseIcon />
+          </IconButton>
         </DialogTitle>
-        <DialogContent
-          classes={{ root: classes.dialogContent }}
+        <DialogContent dividers
+          // classes={{ root: classes.dialogContent }}
           id="ChangeOrder-content"
         >
           <ChangeRequestUpdateContainer
-            changeRequest={changeRequestDetails}></ChangeRequestUpdateContainer>
+            changeRequest={changeRequestDetails} hideSideBar></ChangeRequestUpdateContainer>
         </DialogContent>
       </Dialog>
     </AsyncGate>

@@ -16,6 +16,7 @@ import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
 import useAsync from "../hooks/useAsync";
 import { canEditChangeRequest } from "./helpers";
 
+
 interface StateProps {
   currentUserEmail: string;
 }
@@ -27,6 +28,7 @@ interface DispatchProps {
 
 interface OwnProps {
   changeRequest: ChangeRequest;
+  hideSideBar?: boolean;
 }
 
 type ChangeRequestUpdateContainerProps = OwnProps &
@@ -38,7 +40,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 });
 
 const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
-  { save, changeRequest, currentUserEmail, loadAudit }) => {
+  { save, changeRequest, currentUserEmail, loadAudit, hideSideBar = false }) => {
 
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
@@ -86,6 +88,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         initialValues={initialValues}
         changeRequest={changeRequest}
         doNotPrompt={doNotPrompt}
+        hideSideBar={hideSideBar}
       />
     </FormContext.Provider>
   );
