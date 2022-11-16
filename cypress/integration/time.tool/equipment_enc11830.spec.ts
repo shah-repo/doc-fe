@@ -597,7 +597,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
     });
 
     it("Type preventative maintenance instruction", () => {
-      cy.get("[data-cy^=\"preventative-maintenance\"]>div>div>div>div>div[contenteditable]")
+      cy.get("[data-cy^=\"preventative-maintenance\"] div[contenteditable]").last()
         .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
       cy.unClick();
     });
@@ -619,7 +619,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
     });
 
     it("Type calibration maintenance instruction", () => {
-      cy.get("[data-cy^=\"calibration\"]>div>div>div>div>div[contenteditable]").click({ force: true })
+      cy.get("[data-cy^=\"calibration\"] div[contenteditable]").last().click({ force: true })
         .clear().arrowType("Instructions for calibration");
       cy.unClick();
     });
