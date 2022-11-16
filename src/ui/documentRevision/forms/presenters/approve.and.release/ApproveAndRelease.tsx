@@ -222,27 +222,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     },
   });
 
-  const processCreatingRevision = (templateChosen) => {
-    if (!templateChosen) {
-      return;
-    }
-    const data = templateOptionToChangeRequestCreateBody(templateChosen);
-    console.log(data);
-    createCRAsync.start(createCRAction, data, createCRAsync);
-  };
-
-  const processChosenChangeOrder = (changeOrderChosen: ExistingInDraftCOOption) => {
-    if (!changeOrderChosen) {
-      return;
-    }
-
-    setChangeRequestId(changeOrderChosen.value);
-
-    existingDraftCOSelectionDialog.close();
-    changeOrderDialog.open();
-  };
-
-
   useEffect(() => {
     if (templateOptions.length > 0) {
       if (templateOptions.length === 1) {
@@ -266,6 +245,34 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingInDraftCOOptions]);
 
+
+  const processCreatingRevision = (templateChosen) => {
+    if (!templateChosen) {
+      return;
+    }
+    const data = templateOptionToChangeRequestCreateBody(templateChosen);
+    // By default when creating a new CO, the current document revision should be auto linked
+    data.formInput = {
+      documentRevisions: [{
+        descriptionOfChange: intl.formatMessage({ id: "common.numeric.release" }),
+        id: FB.uniqid,
+        justificationOfChange: intl.formatMessage({ id: "common.numeric.release" }),
+        proposedDocumentRevision: { id: docRevId },
+      }],
+    };
+    createCRAsync.start(createCRAction, data, createCRAsync);
+  };
+
+  const processChosenChangeOrder = (changeOrderChosen: ExistingInDraftCOOption) => {
+    if (!changeOrderChosen) {
+      return;
+    }
+
+    setChangeRequestId(changeOrderChosen.value);
+
+    existingDraftCOSelectionDialog.close();
+    changeOrderDialog.open();
+  };
 
   const asyncAR = useAsync<ChangeRequest>({
     onSuccess: (createdChangeRequest?) => {

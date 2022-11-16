@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable arrow-body-style */
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
@@ -29,6 +30,7 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   const loadAsyncState =  useSelector(changeRequestsSelectors.getLoadAsyncState);
   const changeRequestDetails = useSelector((state: ApplicationState) =>
     changeRequestsSelectors.getChangeRequest(state, changeRequestId));
+  // console.log(changeRequestDetails);
 
   const load = useActionCreator(changeRequestsActions.load);
   const loadAction = () => load(changeRequestId);
@@ -40,7 +42,7 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   return (
     <AsyncGate asyncAction={loadAction} asyncState={loadAsyncState} startActionOnMount={true}>
       <Dialog
-        hideBackdrop
+        disableBackdropClick={true}
         disableEnforceFocus
         classes={{
           root: classes.root,
@@ -48,8 +50,10 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
         }}
         scroll="paper"
         disableEscapeKeyDown={true}
-        fullWidth={true}
-        maxWidth="lg"
+        style={{ maxWidth: "none" }}
+        maxWidth={false}
+        // fullWidth={true}
+        // maxWidth="lg"
         open={changeOrderDialog.isOpen}
         onSubmit={(event: React.FormEvent) => event.stopPropagation()}
         id="ChangeOrder-dialog"
