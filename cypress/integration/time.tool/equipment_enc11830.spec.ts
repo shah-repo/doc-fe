@@ -1315,7 +1315,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(1).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`CALDone - Due date: ${calibrationComplianceDate}`);
+          expect(text).to.contain(`CALDue - Due date: ${calibrationComplianceDate}`);
         });
     });
   });
@@ -1504,7 +1504,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.get("[data-cy=\"maintenance.status\"]")
         .eq(0).then(($el) => {
           const text = $el.text().replace(/\u00a0/g, "");
-          expect(text).to.contain(`PMDone - Due date: ${prevMaintenanceComplianceDate}`);
+          expect(text).to.contain(`PMDue - Due date: ${prevMaintenanceComplianceDate}`);
         });
     });
   });
