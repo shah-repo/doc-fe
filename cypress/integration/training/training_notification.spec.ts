@@ -475,6 +475,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
+      cy.wait(10000);
     });
 
     it("Navigate to Overview tab", () => {
@@ -487,6 +488,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("Save training", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(10000);
     });
 
     it("Click Submit for Approval", () => {
@@ -499,6 +501,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("Click Approve", () => {
       cy.trApproveTraining();
+      cy.wait(10000);
     });
   });
 
@@ -794,6 +797,9 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   context("Check the completed training notification", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
@@ -803,6 +809,9 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`${USERS[1].name} with timestamp on 'COMPLETED ON' column should be present`, () => {
@@ -1079,7 +1088,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
-      cy.wait(5000);
+      cy.wait(20000);
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
           CyRoutes.GetAvailableApprovers], () => {
@@ -1137,6 +1146,9 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   context(`Check training notifications as ${TrainingStatus.DUE_IN_7_DAYS}`, () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
