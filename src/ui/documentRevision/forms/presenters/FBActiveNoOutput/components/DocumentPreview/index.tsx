@@ -18,7 +18,7 @@ import { DocTypeGroups } from "../../../../../../dashboard.new/line.items/common
 import AttachmentsField from "../../../../../../document.revision/form/attachments";
 import {
   FB, FBEditorState, FBSchemaProps, FBWorkspace,
-  FBWorkspaceModeOptions,
+  FBWorkspaceModeOptions
 } from "../../../../../../form.builder";
 import FBMaterialEqInfoContainer from "../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import { DocumentCloneTypeOptions } from "../../../../../Clone.container";
@@ -226,6 +226,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
                         <FBTrainingInfoContainer
                           documentRevisionId={documentRevision?.id}
+                          docRevStatus={documentRevision?.status}
                         />
                       )}
                     </SMBox>
