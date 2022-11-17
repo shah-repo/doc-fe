@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import moment from "moment";
 import React, { useEffect } from "react";
@@ -26,7 +27,7 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     datePickerState = FB.useRef(FBDatePickerState, initialValue);
     const defaultCurrentDate = editorProperties?.includes("defaultCurrentDate") || false;
     const disablePastDates = editorProperties?.includes("disablePastDates") || false;
-    const { id } = workspaceState || {};
+    const { id, isOutput } = workspaceState || {};
 
     function save(date?: string) {
       if (!date) { return; }
@@ -38,7 +39,9 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     }
 
     useEffect(() => {
-      const isUnderDefault = !defaultValue && !initialValue && defaultCurrentDate;
+      // Populate with a default value if there is no default value, no initialValue, the editorProperties has
+      //  defaultCurrentDate & the documentRevision is an output
+      const isUnderDefault = !defaultValue && !initialValue && defaultCurrentDate && isOutput;
       if (isUnderDefault) {
         const nowDate = (new Date()).toISOString();
         datePickerState?.setValue(nowDate);
