@@ -48,7 +48,6 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
           label="form.builder.document"
           gutter={false}
           disabled={false}
-          freeSolo={true}
           shouldReloadOnInit
         />
       </Box>
