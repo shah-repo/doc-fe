@@ -14,6 +14,7 @@ let adminSessionId;
 let adminEmployee;
 let employeeToDevs;
 let RDdocumentType;
+let dateAfterEmailShouldArrive;
 
 const reference = {
   value: "FM-00001",
@@ -21,6 +22,7 @@ const reference = {
 };
 
 const owner = USERS[1].name;
+const dateOffset = (5 * 1000);
 
 context(
   `Scenario 2.1 Status bar design of new items approved via approval block (Regular Record).`,
@@ -265,19 +267,25 @@ context(
             cy.cmpTurnOffAutosave();
           });
 
-          it("Enter title", () => {
+          it("Make a change to title", () => {
             cy.drEnterDocumentTitle({ name: "Regular Record" });
           });
 
-          it(`Save → Verify it is functional and the Check Auto-saving, please wait… is present)`, () => {
-            cy.wrapWithWaitOnApiCalls([], () => {
-              cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-              cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
-            });
+          it("Verify Status bar displays “Last saved a few seconds ago", () => {
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
           });
 
-          it("Last save should be present", () => {
-            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+          it("Turn on autosave", () => {
+            cy.cmpTurnOnAutosave();
+          });
+
+          it("Make a change to title", () => {
+            cy.drClearDocumentTitle();
+            cy.drEnterDocumentTitle({ name: "Regular Record title" });
+          });
+
+          it(`Verify auto save is functional and the Check Auto-saving, please wait… is present)`, () => {
+            cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
           });
 
           it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
@@ -285,13 +293,72 @@ context(
             cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
           });
 
+          context("Edit all the fields, and make sure the “last saved” data is updated each time", () => {
+            it("Enters title 'Regular Record '", () => {
+              cy.drEnterDocumentTitle({ name: "Regular Record " });
+              cy.progressBarShouldNotExist();
+            });
+
+            it("Check Last save should be present in autosave", () => {
+              cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+            });
+
+            it("Add Approver to approvals list", () => {
+              cy.wait(3000);
+              cy.pmAddApproverOnApproverList({ approver: owner });
+              cy.progressBarShouldNotExist();
+            });
+
+            it("Check Last save should be present in autosave", () => {
+              cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+            });
+
+            it("remove Approver to approvals list", () => {
+              cy.wait(3000);
+              cy.get(`[class*="MuiChip-root MuiAutocomplete-tag MuiChip-deletable"] div`).contains(owner)
+                .parent().parent().find("svg").arrowClick({ force: true });
+            });
+
+            it("Check Last save should be present in autosave", () => {
+              cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+            });
+          });
+        });
+
+        context("Verify three dot and send to Email option", () => {
+          it("check three dots are visible", () => {
+            cy.get(`[data-cy="HeaderMenuButton"]`).should("be.visible");
+          });
+
+          it("Verify on click of three dots menu should open", () => {
+            cy.get(`[data-cy="HeaderMenuButton"]`).arrowClick();
+            cy.get("[data-cy='exportToEmail']").contains("Send To Email").should("be.visible");
+          });
+
+          it("Verify Send To Email option should be visible", () => {
+            cy.get("[data-cy='exportToEmail']").contains("Send To Email").should("be.visible");
+            dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+          });
+
           it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
-            cy.sendToEmail();
+            cy.sendToEmailFromHeader();
             cy.checkToastMessageContains({
               message: "File will be sent to your email shortly.",
             });
             cy.closeAllAlertMessages();
+          });
+
+          it("Get sent email", () => {
+            const getEmailSetting =  {
+              to: CONFIG.TEST_EMAIL,
+              after: dateAfterEmailShouldArrive,
+              subject: `Export for document RD-00003`,
+            };
+            cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+              expect(emails[0].subject).match(/Export for document RD-00003/);
+              expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+            });
           });
         });
 
@@ -309,7 +376,23 @@ context(
             it("Check if 'Change Owner' button header menu and is functional", () => {
               cy.get("#HeaderMenuButton").arrowClick();
               cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+              cy.get("#OwnerChangerPresenter-selectField").autocompleteSelect(USERS[2].name);
               cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+            });
+
+            it(`Verify changed ${USERS[2].name}`, () => {
+              cy.get("[data-cy='user-name']").should("have.text", USERS[2].name);
+            });
+
+            it("change owner back to company Admin", () => {
+              cy.get("#HeaderMenuButton").arrowClick();
+              cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+              cy.get("#OwnerChangerPresenter-selectField").autocompleteSelect(owner);
+              cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+            });
+
+            it(`Verify changed onwer ${owner}`, () => {
+              cy.get("[data-cy='user-name']").should("have.text", owner);
             });
           }
         );
@@ -360,7 +443,6 @@ context(
 
         context("Right side:", () => {
           it("Last save should not be present", () => {
-            // cy.contains("Last saved:").should("not.exist");
             cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
           });
 
@@ -442,20 +524,66 @@ context(
             cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
           });
 
-          it("Check if 'Change Owner' button header menu and is functional", () => {
-            cy.get("#HeaderMenuButton").arrowClick();
-            cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-            cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+          context("Verify three dot and send to Email option and functionality", () => {
+            it("check three dots are visible", () => {
+              cy.get(`[data-cy="HeaderMenuButton"]`).should("be.visible");
+            });
+
+            it("Verify on click of three dots menu should open", () => {
+              cy.get(`[data-cy="HeaderMenuButton"]`).arrowClick();
+              cy.get("[data-cy='exportToEmail']").contains("Send To Email").should("be.visible");
+            });
+
+            it("Verify Send To Email option should be visible", () => {
+              cy.get("[data-cy='exportToEmail']").contains("Send To Email").should("be.visible");
+              dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+            });
+
+            it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+            email shortly`, () => {
+              cy.sendToEmailFromHeader();
+              cy.checkToastMessageContains({
+                message: "File will be sent to your email shortly.",
+              });
+              cy.closeAllAlertMessages();
+            });
+
+            it("Get sent email", () => {
+              const getEmailSetting =  {
+                to: CONFIG.TEST_EMAIL,
+                after: dateAfterEmailShouldArrive,
+                subject: `Export for document RD-00003`,
+              };
+              cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+                expect(emails[0].subject).match(/Export for document RD-00003/);
+                expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+              });
+            });
           });
 
-          it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
-          email shortly`, () => {
-            cy.get("#HeaderMenuButton").arrowClick();
-            cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
-            cy.checkToastMessageContains({
-              message: "File will be sent to your email shortly.",
+          context("Verify three dots change owner option and functionality", () => {
+
+            it("Check if 'Change Owner' button header menu and is functional", () => {
+              cy.get("#HeaderMenuButton").arrowClick();
+              cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+              cy.get("#OwnerChangerPresenter-selectField").autocompleteSelect(USERS[2].name);
+              cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
             });
-            cy.closeAllAlertMessages();
+
+            it(`Verify changed ${USERS[2].name}`, () => {
+              cy.get("[data-cy='user-name']").should("have.text", USERS[2].name);
+            });
+
+            it("change owner back to company Admin", () => {
+              cy.get("#HeaderMenuButton").arrowClick();
+              cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+              cy.get("#OwnerChangerPresenter-selectField").autocompleteSelect(owner);
+              cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+            });
+
+            it(`Verify changed onwer ${owner}`, () => {
+              cy.get("[data-cy='user-name']").should("have.text", owner);
+            });
           });
 
           context(`Update the record and release the new revision`, () => {
@@ -537,10 +665,125 @@ context(
         });
       });
 
+      context("Open the Archive revision and verify", () => {
+
+        it("Click on revision tab", () => {
+          cy.get("[data-cy='note-icon']").arrowClick();
+        });
+
+        it("Open archive revision", () => {
+          cy.get("[data-cy='DocumentRevisionList-item']").contains("Archive").arrowClick();
+        });
+
+
+        context("Check the content of the status bar", () => {
+          it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+            cy.verifyHeaderInfoContent({
+              status: STATUS_TYPES_LABEL.ARCHIVE,
+              title: "Records",
+              docId: "RD-00003",
+              revision: "Rev A.1",
+            });
+          });
+
+          context("Right side:", () => {
+            it("Last save should not be present", () => {
+              cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
+            });
+
+            context("Verify three dot and send to Email option and functionality", () => {
+              it("check three dots are visible", () => {
+                cy.get(`[data-cy="HeaderMenuButton"]`).should("be.visible");
+              });
+
+              it("Verify on click of three dots menu should open", () => {
+                cy.get(`[data-cy="HeaderMenuButton"]`).arrowClick();
+                cy.get("[data-cy='exportToEmail']").contains("Send To Email").should("be.visible");
+              });
+
+              it("Verify Send To Email option should be visible", () => {
+                cy.get("[data-cy='exportToEmail']").contains("Send To Email").should("be.visible");
+                dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+              });
+
+              it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+              email shortly`, () => {
+                cy.sendToEmailFromHeader();
+                cy.checkToastMessageContains({
+                  message: "File will be sent to your email shortly.",
+                });
+                cy.closeAllAlertMessages();
+              });
+
+              it("Get sent email", () => {
+                const getEmailSetting =  {
+                  to: CONFIG.TEST_EMAIL,
+                  after: dateAfterEmailShouldArrive,
+                  subject: `Export for document RD-00003`,
+                };
+                cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+                  expect(emails[0].subject).match(/Export for document RD-00003/);
+                  expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
+                });
+              });
+            });
+
+            context("Verify three dots change owner option and functionality", () => {
+
+              it("Check if 'Change Owner' button header menu and is functional", () => {
+                cy.get("[data-cy='references-icon']").arrowClick();
+                cy.get("#HeaderMenuButton").arrowClick();
+                cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+                cy.get("#OwnerChangerPresenter-selectField").autocompleteSelect(USERS[2].name);
+                cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+              });
+
+              it(`Verify changed ${USERS[2].name}`, () => {
+                cy.get("[data-cy='user-name']").should("have.text", USERS[2].name);
+              });
+
+              it("change owner back to company Admin", () => {
+                cy.get("#HeaderMenuButton").arrowClick();
+                cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+                cy.get("#OwnerChangerPresenter-selectField").autocompleteSelect(owner);
+                cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+              });
+
+              it(`Verify changed onwer ${owner}`, () => {
+                cy.get("[data-cy='user-name']").should("have.text", owner);
+              });
+            });
+          });
+
+          context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
+            it(`Color of Header status bar is GREEN(${Colors.latest_green_varient})`, () => {
+              cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+            });
+          });
+
+        });
+
+        context("Scroll down the page → The status bar should be fixed", () => {
+          it("Scroll down to the bottom of the page", () => {
+            cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+            cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+          });
+        });
+      });
+
       context(
         `Update the record and select revision stage “Void” → Complete the voiding process until 
       the item goes to ${STATUS_TYPES_LABEL.VOIDED} state`,
         () => {
+
+          it("Click on revision tab", () => {
+            cy.get("[data-cy='note-icon']").arrowClick();
+          });
+
+          it("Open archive revision", () => {
+            cy.get("[data-cy='DocumentRevisionList-item']").contains("Released").arrowClick();
+          });
+
           it("Revise document with 'Void' option", () => {
             cy.drClickReviseDocument();
             cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
