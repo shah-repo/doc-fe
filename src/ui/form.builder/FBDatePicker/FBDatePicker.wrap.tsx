@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import moment from "moment";
 import React, { useEffect } from "react";
