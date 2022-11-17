@@ -28,7 +28,7 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
     <FBProvider {...{ fieldWrapperState }}>
       <Box {...{ onMouseOver, onMouseLeave }} className={cx(`fb-field-wrapper-${inputProps?.name}`, classes.root)}>
         {!isEquipmentDoc && <Box className={classes.tools} visibility={toolsVisible}>
-          <FBFieldTopBar visibility={toolsVisible} {...{ inputProps }} />
+          <FBFieldTopBar {...{ inputProps }} />
           <FBFieldBottomBar visibility={addToolVisible} {...{ index }} />
         </Box>}
         <Box className={classes.field}>
