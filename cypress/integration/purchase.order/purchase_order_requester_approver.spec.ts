@@ -8,7 +8,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { Part } from "../../utils/constants/documentTypes/part";
-import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -68,7 +67,6 @@ context("po_requestor_as_an_approver", () => {
             users: [FIRST_USER, SECOND_USER, THIRD_USER],
             documentTypes: [
               Part,
-              PurchaseOrderTest,
               ReceivableTest,
             ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
@@ -274,83 +272,108 @@ context("po_requestor_as_an_approver", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
     });
+
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
     });
+
     it("Enters title 'POAM Form'", () => {
       cy.drEnterDocumentTitle({ name: "POAM Form" });
     });
+
     it("Enters description 'POAM Form description'", () => {
       cy.drEnterDocumentDescription({ description: "POAM Form description" });
     });
+
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
+
     it("Selects 'Form' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
+
     it("Selects 'PO Approval Matrix' document type from dropdown", () => {
       cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
     });
+
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
+
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
+
   context("Create POAM document for PO", () => {
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromForm();
       cy.listLoadingElementShouldNotExist();
     });
+
     it("Enters title 'POAM Document'", () => {
       cy.drEnterDocumentTitle({ name: "POAM Document" });
     });
+
     it("Enters description 'POAM Doc description'", () => {
       cy.drEnterDocumentDescription({ description: "POAM Doc description" });
     });
+
     it("Navigate to MatrixDetails tab", () => {
       cy.drSelectMatrixDetailsTab();
     });
+
     it("Click 'Save' document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
+
     it("Click on 'Add Item'", () => {
       cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
     });
+
     it("Enter Level Name value to be '1'", () => {
       cy.poAMEnterLevelName({ name: "1" });
     });
+
     it("Enter Limit value to be '5000'", () => {
       cy.poAMEnterLimit({ limit: "5000" });
     });
+
     it(`Select Users '${USERS[1].name}'`, () => {
       cy.poAMSelectUsers(USERS[1].name);
       cy.wait(1000);
       cy.poAMSelectUsers(USERS[3].name);
     });
+
     it("Add first POAM level", () => {
       cy.poAddPOButtonClick();
     });
+
     it("Click on 'Add Item'", () => {
       cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
     });
+
     it("Enter Level Name value to be '2'", () => {
       cy.poAMEnterLevelName({ name: "2" });
     });
+
     it("Enter Limit value to be '25000'", () => {
       cy.poAMEnterLimit({ limit: "25000" });
     });
+
     it(`Select Users '${USERS[2].name}'`, () => {
       cy.poAMSelectUsers(USERS[2].name);
     });
+
     it("Add second POAM level", () => {
       cy.poAddPOButtonClick();
     });
+
     it("Click 'Save' document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
+
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
@@ -1050,7 +1073,7 @@ context("po_requestor_as_an_approver", () => {
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order" });
+      cy.poClickCreatePO();
     });
 
     it("Enter description 'New Purchase Order'", () => {
@@ -1188,11 +1211,17 @@ context("po_requestor_as_an_approver", () => {
         cy.get("ul>li[role=option]").contains(USERS[4].name).arrowClick();
       });
     });
+
     it("Check if selected approver has approval signature right by his name", () => {
       cy.contains("PO Approval sig").should("exist");
     });
+
     it("Check requestor should not be fulfilling PO level signature", () => {
       cy.poAMCheckApprovalIconIfItsGray();
+    });
+
+    it("Save PO", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
   });
 
@@ -1236,21 +1265,26 @@ context("po_requestor_as_an_approver", () => {
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
     });
+
     context("Requestor should be added in the Approval block and it should not be fulfilling PO level signature", () => {
       it("verify Requestor should be added in the Approval block", () => {
         cy.get(".MuiAutocomplete-tag span div").should("exist");
       });
+
       it("Check if selected approver has approval signature right by his name", () => {
         cy.contains("PO Approval sig").should("exist");
       });
+
       it("Check requestor should not be fulfilling PO level signature", () => {
         cy.poAMCheckApprovalIconIfItsGray();
       });
     });
+
     context("Verify that history tab is capturing the changes - Adding requestor to the approval field", () => {
       it("Open History drawer and compare history values", () => {
         cy.drSelectHistoryTab();
       });
+
       it("Verify Added Requestor captured on history", () => {
         cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
           .should("exist");
@@ -1258,16 +1292,19 @@ context("po_requestor_as_an_approver", () => {
           .should("exist");
       });
     });
+
     context("Click to remove Approver and verify that Approver can not be removed", () => {
       it("Navigate to Approval block and try to remove Added requestor as an approver", () => {
         cy.get(".MuiAutocomplete-tag").should("have.class", "Mui-disabled");
         cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
         cy.unClick();
       });
+
       it("Verify Approver can't be removed", () => {
         cy.get(".MuiAutocomplete-tag span div").should("exist");
       });
     });
+
     it("User should not able to release PO, error message should appear", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
       cy.checkToastMessage({ exists: true });
@@ -1283,12 +1320,15 @@ context("po_requestor_as_an_approver", () => {
         cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
     });
+
     it("Verify that previous Requestor is removed", () => {
       cy.get("[data-cy='po-requestor-autocomplete']").should("not.have.value", `${USERS[2].name} - ${USERS[2].email}`);
     });
+
     it("New Requestor should be added in the Approval block and it should be fulfilling PO level signature", () => {
       cy.get("[data-cy='po-requestor-autocomplete']").should("have.value", `${USERS[1].name} - ${USERS[1].email}`);
     });
+
     context("Verify that history tab is capturing the changes - New requestor to the approval field", () => {
       it("Open History drawer and compare history values", () => {
         cy.drSelectHistoryTab();
@@ -1308,23 +1348,28 @@ context("po_requestor_as_an_approver", () => {
         cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
         cy.unClick();
       });
+
       it("Verify Approver can't be removed", () => {
         cy.get(".MuiAutocomplete-tag span div").should("exist");
       });
     });
   });
+
   context("Remove line item with Enlil Product", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
     });
+
     it("Remove enlil product", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get(":nth-child(2) > :nth-child(1) > .MuiBox-root > .MuiSvgIcon-root").arrowClick();
       });
     });
+
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
     });
+
     it("Check the Approval block - Requestor should be removed from the Approval block", () => {
       cy.get(".MuiAutocomplete-tag span div").should("not.exist");
     });
@@ -1339,6 +1384,7 @@ context("po_requestor_as_an_approver", () => {
           .should("not.exist");
       });
     });
+
     context("Verify that Approver can be added manually and add Approver that fulfills PO level signature", () => {
       it("navigate to Details tab", () => {
         cy.drSelectDetailsTab();
@@ -1349,19 +1395,23 @@ context("po_requestor_as_an_approver", () => {
         cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[3].name);
         cy.wait(1000);
       });
+
       it("Check if selected approver has approval signature right by his name", () => {
         cy.contains("PO Approval sig").should("exist");
       });
+
       it("Check requestor should be fulfilling PO level signature", () => {
         cy.poAMCheckApprovalIconIfItsRed();
       });
     });
   });
+
   context("Add Service 'line item'", () => {
     it("Navigate to Lineitem tab", () => {
       cy.drSelectLineItems();
       cy.wait(100);
     });
+
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
       cy.get("[data-cy=\"form.builder.add.line.item\"]").click();
     });
@@ -1409,17 +1459,21 @@ context("po_requestor_as_an_approver", () => {
       cy.listLoadingElementShouldNotExist();
     });
   });
+
   context("Check the Approval block - Requestor should be added in the Approval block next to Requestor added manually", () => {
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
     });
+
     it("Check the Approval block - Requestor should be added in the Approval block next to Requestor added manually", () => {
       cy.get(".MuiBox-root").contains(`${USERS[1].name} - ${USERS[1].email}`);
     });
+
     context("Verify that history tab is capturing the changes - Added requestor to the approval field", () => {
       it("Open History drawer and compare history values", () => {
         cy.drSelectHistoryTab();
       });
+
       it("Verify Added Requestor captured on history", () => {
         cy.get("[data-cy^='change-key-0-0']").contains("Approver Added")
           .should("exist");
@@ -1427,23 +1481,28 @@ context("po_requestor_as_an_approver", () => {
           .should("exist");
       });
     });
+
     it("Check if selected approver has approval signature right by his name", () => {
       cy.contains("PO Approval sig").should("exist");
     });
+
     it("Check requestor should be fulfilling PO level signature", () => {
       cy.poAMCheckApprovalIconIfItsRed();
     });
   });
+
   context("Navigate to Requestor field and remove Requestor", () => {
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
     });
+
     it("Check the Approval block - Requestor should be removed from the Approval block", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
         cy.unClick();
       });
     });
+
     it("Verify that history tab is capturing the changes - Removing requestor to the approval field", () => {
       cy.get("[data-cy^='form.builder.audit.STRING_DELETED']").contains("Requestor Deleted")
         .should("exist");
@@ -1451,6 +1510,7 @@ context("po_requestor_as_an_approver", () => {
         .should("exist");
     });
   });
+
   context("Navigate to Requestor field and add Requestor that fulfills PO level signature", () => {
     it(`Select '${USERS[1].name}' for Requestor`, () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
@@ -1458,21 +1518,26 @@ context("po_requestor_as_an_approver", () => {
         cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       });
     });
+
     context("New Requestor should be added in the Approval block and it should be fulfilling PO level signature", () => {
       it("Check if New Requestor should be added in the Approval block", () => {
         cy.get(".MuiBox-root").contains(`${USERS[1].name} - ${USERS[1].email}`);
       });
+
       it("Check if selected approver has approval signature right by his name", () => {
         cy.contains("PO Approval sig").should("exist");
       });
+
       it("Check requestos should be fulfilling PO level signature", () => {
         cy.poAMCheckApprovalIconIfItsRed();
       });
     });
+
     context("Verify that history tab is capturing the changes - added requestor to the approval field", () => {
       it("Open History drawer and compare history values", () => {
         cy.drSelectHistoryTab();
       });
+
       it("Verify Added Requestor captured on history", () => {
         cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
           .should("exist");
@@ -1481,15 +1546,18 @@ context("po_requestor_as_an_approver", () => {
       });
     });
   });
+
   context("Remove line item with Service", () => {
     it("Navigate to Lineitem tab", () => {
       cy.drSelectLineItems();
     });
+
     it("Check the Approval block - Requestor should be removed from the Approval block", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.get(":nth-child(2) > :nth-child(1) > .MuiBox-root > .MuiSvgIcon-root").arrowClick();
       });
     });
+
     it("Verify that history tab is capturing the changes - Removing requestor to the approval field", () => {
       cy.drSelectHistoryTab();
       cy.wait(1000);
@@ -1502,28 +1570,34 @@ context("po_requestor_as_an_approver", () => {
       cy.get("[data-cy^='change-key-']").parent().contains(USERS[1].name)
         .should("exist");
     });
+
     context("Verify that Approver can be added manually and add Approver that fulfills PO level signature", () => {
       it("navigate to Details tab", () => {
         cy.drSelectDetailsTab();
       });
+
       it("add Approver that fulfills PO level signature", () => {
         it("Add an Approval", () => {
           cy.wait(1000);
           cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[2].name);
           cy.wait(1000);
         });
+
         it("Check if New Requestor should be added in the Approval block", () => {
           cy.get(".MuiBox-root").contains(`${USERS[2].name} - ${USERS[2].email}`);
         });
+
         it("Check if selected approver has approval signature right by his name", () => {
           cy.contains("PO Approval sig").should("exist");
         });
+
         it("Check requestos should be fulfilling PO level signature", () => {
           cy.poAMCheckApprovalIconIfItsRed();
         });
       });
     });
   });
+
   context("Add line item with Enlil Product", () => {
     context("Add line item Enlil Product", () => {
       it("Navigate to Lineitem tab", () => {
@@ -1565,21 +1639,26 @@ context("po_requestor_as_an_approver", () => {
       it("navigate to Details tab", () => {
         cy.drSelectDetailsTab();
       });
+
       it("Requestor should be added in the Approval block and it should not be fulfilling PO level signature", () => {
         it("Check if Requestor should be added in the Approval block", () => {
           cy.get(".MuiBox-root").contains(`${USERS[1].name} - ${USERS[1].email}`);
         });
+
         it("Check if selected approver has approval signature right by his name", () => {
           cy.contains("PO Approval sig").should("exist");
         });
+
         it("Check requestor should not be fulfilling PO level signature", () => {
           cy.poAMCheckApprovalIconIfItsGray();
         });
       });
+
       context("Verify that history tab is capturing the changes - Adding requestor to the approval field", () => {
         it("Open History drawer and compare history values", () => {
           cy.drSelectHistoryTab();
         });
+
         it("Verify Added Requestor captured on history", () => {
           cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
             .should("exist");
@@ -1589,12 +1668,14 @@ context("po_requestor_as_an_approver", () => {
       });
     });
   });
+
   context("Add line item with Service", () => {
     context("Add Service 'line item'", () => {
       it("Navigate to Lineitem tab", () => {
         cy.drSelectLineItems();
         cy.wait(100);
       });
+
       it("Click on 'Add' inside PO dialog box and check for required fields", () => {
         cy.get("[data-cy=\"form.builder.add.line.item\"]").click();
       });
@@ -1642,30 +1723,37 @@ context("po_requestor_as_an_approver", () => {
         cy.listLoadingElementShouldNotExist();
       });
     });
+
     context("Check the Approval block, and Requestor should be added only once", () => {
       it("navigate to Details tab", () => {
         cy.drSelectDetailsTab();
       });
+
       it("Requestor should added only once", () => {
         cy.get(".MuiBox-root").contains(`${USERS[1].name} - ${USERS[1].email}`).should("have.length", 1);
       });
     });
   });
+
   context("Remove Service", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
     });
+
     it("Remove service", () => {
       cy.get(".MuiTableBody-root > :nth-child(3) > :nth-child(1) > .MuiBox-root").arrowClick();
     });
+
     context("Check the Approval block, Requestor should be still present in the Approval block next to Approver added manually", () => {
       it("navigate to Details tab", () => {
         cy.drSelectDetailsTab();
       });
+
       it("Requestor should be present in approval block", () => {
         cy.get(".MuiBox-root").contains(`${USERS[1].name} - ${USERS[1].email}`).should("have.length", 1);
       });
     });
+
     context("Verify that history tab is capturing the changes - Removing requestor to the approval field", () => {
       it("Open History drawer and compare history values", () => {
         cy.drSelectHistoryTab();
@@ -1677,12 +1765,14 @@ context("po_requestor_as_an_approver", () => {
       });
     });
   });
+
   context("Add service line item again", () => {
     context("Add Service 'line item'", () => {
       it("Navigate to Lineitem tab", () => {
         cy.drSelectLineItems();
         cy.wait(100);
       });
+
       it("Click on 'Add' inside PO dialog box and check for required fields", () => {
         cy.get("[data-cy=\"form.builder.add.line.item\"]").click();
       });
@@ -1730,9 +1820,11 @@ context("po_requestor_as_an_approver", () => {
         cy.listLoadingElementShouldNotExist();
       });
     });
+
     it("Check the Approval block, and Requestor should be added only once", () => {
       cy.get(".MuiBox-root").contains(`${USERS[1].name} - ${USERS[1].email}`).should("have.length", 1);
     });
+
     context("Verify that history tab is capturing the changes - Added requestor to the approval field", () => {
       it("Open History drawer and compare history values", () => {
         cy.drSelectHistoryTab();
@@ -1745,81 +1837,99 @@ context("po_requestor_as_an_approver", () => {
       });
     });
   });
+
   context("Remove Enlil Product", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
     });
+
     it("remove enlil product", () => {
       cy.get(":nth-child(2) > :nth-child(1) > .MuiBox-root > .MuiSvgIcon-root").arrowClick();
     });
+
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
       cy.wait(100);
     });
+
     it("Check the Approval block, Requestor should be still present in the Approval block next to Approver added manually", () => {
       cy.get(".MuiBox-root").contains(`${USERS[1].name} - ${USERS[1].email}`).should("have.length", 1);
     });
   });
+
   context("Remove line item with Non-Enlil Product ", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
       cy.wait(100);
     });
+
     it("remove non enlil product", () => {
       cy.get(":nth-child(1) > :nth-child(1) > .MuiBox-root > .MuiSvgIcon-root").arrowClick();
     });
+
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
       cy.wait(100);
     });
+
     it("Check the Approval block, Requestor should be still present in the Approval block next to Approver added manually", () => {
       cy.get(".MuiBox-root").contains(`${USERS[1].name} - ${USERS[1].email}`).should("have.length", 1);
     });
+
     it("remove Approver added manually", () => {
       cy.contains(`${USERS[3].name} - ${USERS[3].email}`).parent().next().arrowClick();
-
     });
+
     it("Verify that Approver can be removed", () => {
       cy.get(".MuiBox-root").contains(`${USERS[3].name} - ${USERS[3].email}`).should("not.exist");
-
     });
+
     context("Click to remove Approver and verify that Approver can not be removed", () => {
       it("Navigate to Approval block and try to remove Added requestor as an approver", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get(".MuiAutocomplete-tag").should("have.class", "Mui-disabled");
         cy.get(`[name^="fb-po-approvals-"]`).eq(1).arrowClick({ force: true }).arrowType(`{backspace}`);
         cy.unClick();
       });
+
       it("Verify Approver can't be removed", () => {
         cy.get(".MuiAutocomplete-tag span div").should("exist");
       });
     });
+
     context("Add Approver manually, Verify it can be added.", () => {
       it("navigate to Details tab", () => {
         cy.drSelectDetailsTab();
       });
+
       it("Add an Approval", () => {
         cy.wait(1000);
         cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[3].name);
         cy.wait(1000);
       });
+
       it("verify approver added", () => {
         cy.get(".MuiBox-root").contains(`${USERS[3].name} - ${USERS[3].email}`).should("exist");
       });
     });
-
   });
+
   context("Verify that Approvers fulfill PO level signature", () => {
     it("Check if selected approver has approval signature right by his name", () => {
       cy.contains("PO Approval sig").should("exist");
     });
+
     it("Check approval icon if it's colored", () => {
       cy.poAMCheckApprovalIconIfItsRed();
     });
+
     context("Check “Backspace” and “Clear all” option will not be available in the PO approval field", () => {
       it(`Verify that “Backspace” and “Clear all” option will not be available in the PO approval field`, () => {
         cy.get("[data-cy^=fb-po-approvals]").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
       });
     });
+
     context("Approve PO", () => {
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
@@ -1830,14 +1940,17 @@ context("po_requestor_as_an_approver", () => {
       });
     });
   });
+
   context("Verify that downloaded PDF display Requestor information", () => {
     it("Navigate to Purchase Order list", () => {
       cy.navigToPurchaseOrder();
       cy.dlClearFilters();
     });
+
     it("Select created PO", () => {
       cy.dlSelectFirstDocument();
     });
+
     it("[API]Get html document and verify PO number and Requestor information", () => {
       cy.url().then((url: any) => {
         poHTMLDocRevId = url.split("/").pop();
@@ -1857,16 +1970,19 @@ context("po_requestor_as_an_approver", () => {
       });
     });
   });
+
   context("Navigate to dashboard Verify that notification is present for All approvers (Requestor and added Manually)", () => {
     it("Navigate to Dashboard", () => {
       cy.navigToDashboard();
     });
+
     it(`verify PO Notification for ${USERS[1].name}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
         `${USERS[1].name}APPROVEDPO-00001`,
       });
     });
+
     it(`verify PO Notification from ${USERS[2].name}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
@@ -1874,5 +1990,4 @@ context("po_requestor_as_an_approver", () => {
       });
     });
   });
-
 });
