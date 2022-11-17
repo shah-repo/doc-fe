@@ -529,7 +529,8 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
     });
 
     it("Type preventative maintenance instruction", () => {
-      cy.get("[data-cy^=\"preventative-maintenance\"]>div>div>div>div>div[contenteditable]")
+      cy.get(`[data-cy="form.builder.pm.instructions"]`).eq(0).contains("Instructions").scrollIntoView();
+      cy.get("[data-cy^='preventative-maintenance'] div[contenteditable]").last()
         .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
       cy.unClick();
     });
@@ -551,7 +552,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
     });
 
     it("Type calibration maintenance instruction", () => {
-      cy.get("[data-cy^=\"calibration\"]>div>div>div>div>div[contenteditable]")
+      cy.get(`[data-cy^="calibration"] div[contenteditable]`).last()
         .click({ force: true }).clear().arrowType("Instructions for calibration");
       cy.unClick();
     });
@@ -768,12 +769,8 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify Dashboard list", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-        .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days`)
-        .should("exist");
-      cy.get("[data-cy=dashboardFeedList]>div").eq(1)
-        .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
-        .should("not.exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days` });
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days` });
     });
 
     it("Logout", () => {
@@ -812,7 +809,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
 
         it("Submit async task", () => {
           cy.asyncTaskClickSubmit();
-          cy.wait(2000);
+          cy.wait(30000);
         });
       });
 
@@ -834,6 +831,8 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
         it("Verify Dashboard list", () => {
           cy.get("[data-cy=dashboardFeedList]>div").then(($dayToTest) => {
             if (i === 0) {
+              // cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days` });
+              // cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days` });
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
                 .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
                 .should("exist");
