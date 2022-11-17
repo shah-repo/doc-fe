@@ -621,7 +621,7 @@ context("All regular users on new dashboard", () => {
       it("Select 'FedEx 449260805' for Shipping Information", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
           cy.get("div[id*=select-shipping]").arrowClick();
-          cy.get("ul>li[role=option]").contains("FedEx 449260805").arrowClick();
+          cy.get("ul>li[role=option]").contains("FedEx").arrowClick();
         });
       });
 
