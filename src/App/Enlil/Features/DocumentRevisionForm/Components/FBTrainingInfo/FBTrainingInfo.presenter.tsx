@@ -33,7 +33,8 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
           <NoTrainingIcon />
           <Box display="flex" justifyContent="center">
             <Typography className={classes.noTrainingMessage}>
-              <Text translation={isReleased ? "common.training.released.state.doc.not.found" : "common.training.not.found"} />
+              <Text translation={isReleased ? "common.training.released.state.doc.not.found"
+                : "common.training.not.found"} />
             </Typography>
           </Box>
         </Box>
