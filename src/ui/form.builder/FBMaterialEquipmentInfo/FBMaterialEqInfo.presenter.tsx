@@ -20,8 +20,7 @@ const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => {
   const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter( (ref) => ref.active
         && ref.type === SmartReferenceType.HiddenPiInstance);
   const highestReference = getLatesReferenceVersion(smartReferencesFrom);
-  const multiplier = highestReference?.fromDocRev?.formInput?.["lhrs-start-quantity"];
-
+  const multiplier = highestReference?.fromDocRev?.formInput?.["lhrs-start-quantity"] || 1;
 
   return (<>
     <ListItemText>
