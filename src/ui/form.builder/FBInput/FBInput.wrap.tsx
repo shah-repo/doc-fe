@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { Dictionary, each, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union, uniqWith } from "lodash";
 import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
@@ -80,6 +80,8 @@ export const withFBInput = <T extends FBInputProps>(
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
+    let showValidationField;
+    let isFieldUnderValidation;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
 
     const feedbackDetails = useLocalStore(() => ({
@@ -142,12 +144,35 @@ export const withFBInput = <T extends FBInputProps>(
         const fieldName: string = first(value.split(",")) || "";
         const fieldValue = last(value.split(","));
         const validationRules = formState.validationRelatedRules[fieldName] || [];
-        formState.validationRelatedRules[fieldName] = union([{ name, value: fieldValue }], validationRules);
+
+        formState.validationRelatedRules[fieldName] =
+        uniqWith(union([{ name, value: fieldValue }], validationRules), isEqual);
+
+        isFieldUnderValidation = formState.validationRelatedRules[fieldName]?.filter(
+          (data) => data.name === name)?.length > 0;
+
+        let fVal;
+        try {
+          fVal = JSON.parse(fieldValue as any);
+        } catch (err) {
+          fVal = fieldValue;
+        }
+
+        if (typeof fVal === "string") {
+          showValidationField = formState?.getFieldValue(fieldName) === fieldValue;
+        } else if (typeof fVal === "object") {
+          each(fVal, (v, k) => {
+            if (isArray(formState?.getFieldValue(fieldName)) &&
+            formState?.getFieldValue(fieldName).includes(v)) {
+              showValidationField = true;
+            }
+          });
+        }
       });
     }
 
     if (isChangeRequest || isOutput || formState?.shouldValidate) {
-      const isUnderMode = (
+      let isUnderMode = (
         !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
           validationValue === "" ||
@@ -156,6 +181,10 @@ export const withFBInput = <T extends FBInputProps>(
       );
 
       if (validationMode === "visibility") {
+        if (isFieldUnderValidation ) {
+          hidden = !showValidationField;
+          isUnderMode = !showValidationField;
+        }
         hidden = isUnderMode;
 
         if (isUnderMode) {
