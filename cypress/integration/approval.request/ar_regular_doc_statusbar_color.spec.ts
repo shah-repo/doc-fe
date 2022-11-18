@@ -17,6 +17,7 @@ let asyncTasksGroup;
 const otherFormDocId1 = "CP-00002";
 const otherFormName = "form title";
 const otherFormDesc = "form description";
+const arId1 = "AR-00001";
 const otherArName = "Approval request document title";
 const otherArDesc = "Approval request document description";
 const otherFormDocId2 = "CP-00003";
@@ -24,12 +25,13 @@ const otherFormName2 = "other title";
 const otherFormDesc2 = "other description";
 const otherArName2 = "Approval request document two title";
 const otherArDesc2 = "Approval request document two description";
-const bulkId1 = "FM-00002";
+const bulkId1 = "FM-00004";
 const bulkName = "third title";
 const bulkDesc = "third description";
+const arId2 = "AR-00004";
 const bulkArName = "Bulk AR title";
 const bulkArDesc = "Bulk AR description";
-const bulkId2 = "FM-00003";
+const bulkId2 = "FM-00005";
 const bulkName2 = "third two title";
 const bulkDesc2 = "third two description";
 const bulkArName2 = "Bulk two AR title";
@@ -321,7 +323,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       it("Verify AR state as 'IN REVIEW'", () => {
         cy.verifyListItemExistsOnHeader({
           listItem:
-            `Approval RequestsAR-00001 Rev`,
+            `Approval Requests${arId1} Rev`,
           breadcrump: true,
         });
       });
@@ -1259,7 +1261,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       it("Verify AR state as 'IN REVIEW'", () => {
         cy.verifyListItemExistsOnHeader({
           listItem:
-              `Approval RequestsAR-00001 Rev`,
+              `Approval Requests${arId2} Rev`,
           breadcrump: true,
         });
       });
