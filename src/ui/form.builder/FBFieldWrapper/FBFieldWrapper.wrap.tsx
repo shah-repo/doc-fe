@@ -1,6 +1,7 @@
 import { useObserver } from "mobx-react";
 import React from "react";
 import { BlockTypeField, FB, FBFieldWrapperProps, FBFieldWrapperState } from "..";
+import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
 
 export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
   Component: React.FunctionComponent<T>,
@@ -15,18 +16,31 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     position,
     ...props
   }: T) => {
-
     const { workspaceState, sortableState } = FB.useStores();
     const { designDisabled = false, index, type } = inputProps || {};
     const reviseDisabled = inputProps?.editorProperties?.includes("reviseDisabled");
     fieldWrapperState = FB.useRef<FBFieldWrapperState>(FBFieldWrapperState);
+    const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
+
+    const isInputFromDefaultSchema = workspaceState?.document?.formDocument?.formTemplate?.schema.find(
+      (schemaElement) => schemaElement.name === inputProps?.name
+    );
+
+    const shouldHideTools =
+      sortableState?.isDragPerfomed
+      || designDisabled
+      || (isEquipmentDoc && isInputFromDefaultSchema) // TODO Should we scale it for all document types?
+      || (workspaceState?.isRevised && reviseDisabled);
+
+    const shouldHideAddButton = isEquipmentDoc;
 
     const onMouseOver = () => {
-      if (sortableState?.isDragPerfomed) {
+      if (shouldHideTools) {
         return;
       }
-      fieldWrapperState?.setAddToolActive(true);
-      if (designDisabled || (reviseDisabled && workspaceState?.isRevised)) { return; }
+      if (!shouldHideAddButton) {
+        fieldWrapperState?.setAddToolActive(true);
+      }
       fieldWrapperState?.setToolsActive(true);
     };
     const onMouseLeave = () => {
