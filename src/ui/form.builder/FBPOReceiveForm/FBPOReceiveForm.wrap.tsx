@@ -79,7 +79,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
         });
 
       dialogState?.closeDialog();
-      poReceiveState?.setPOId(poReceiveState?.data?.id);
+      await poReceiveState?.setPOId(poReceiveState?.data?.id);
       dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     };
 
