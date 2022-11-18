@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import { TIME_ZONE } from "../../../src/common/utils/date";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
@@ -241,7 +243,7 @@ context("Records email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(dateOffset, "milliseconds");
       });
     });
   });
@@ -347,7 +349,7 @@ context("Records email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
+        dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(dateOffset, "milliseconds");
       });
     });
   });

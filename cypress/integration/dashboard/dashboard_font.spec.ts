@@ -1346,7 +1346,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Open details tab", () => {
@@ -1527,11 +1527,14 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
       cy.drSaveDocumentWithoutaudit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Complete step", () => {
       cy.lhrSubmitForApproval();
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("visit the LHR", () => {
@@ -1555,6 +1558,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
       cy.wait(2000);
       cy.lhrApprove();
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.COMPLETED });
+      cy.wait(5000);
     });
 
     it("visit the LHR", () => {
@@ -1574,6 +1578,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
     it("Click Approve button", () => {
       cy.lhrApprove();
+      cy.wait(5000);
     });
   });
 
@@ -1615,6 +1620,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
         `${trainingFormId}Rev 1 released doc1A training is assigned to you`,
       });
       cy.trCompleteTraining();
+      cy.wait(5000);
     });
   });
 
@@ -1720,7 +1726,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     // eslint-disable-next-line max-len
-    it(`Verify LHR step ID ${lhrsid} has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+    it(`Verify LHR step ID ${lhrid} has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
       cy.wait(2000);
       cy.contains(lhrid).first().should("have.css", "font-size", FONT_SIZE_14_4);
       cy.contains(lhrid).first().should("have.css", "font-family", soraSansserif);
@@ -1796,6 +1802,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
     it("Approve and Release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
@@ -1881,9 +1888,8 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
 
     it("Approve and Release button click'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Get the document Id`, () => {
@@ -2017,11 +2023,15 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
         days: "24 days",
         status: "COMPLETE",
       });
-      cy.wait(10000);
+      cy.wait(50000);
     });
 
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Select 'Trainings' tab", () => {
@@ -2055,11 +2065,14 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
         days: "a month",
         status: "COMPLETE",
       });
-      cy.wait(10000);
+      cy.wait(50000);
     });
 
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Trainings' tab", () => {

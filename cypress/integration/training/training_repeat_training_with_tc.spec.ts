@@ -1151,6 +1151,9 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
   context("Complete Training for first user and verify expire on 40 days", () => {
     it("Navigate to Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Open assigned Training", () => {
@@ -1159,6 +1162,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it("Click complete training button", () => {
       cy.trCompleteTraining();
+      cy.wait(10000);
     });
 
     it("Verify training expires on 40 days", () => {
@@ -1173,6 +1177,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
           }
         });
       }).as("response");
+      cy.wait(2000);
       cy.reload();
       cy.wait("@response");
     });
@@ -1500,10 +1505,14 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it("Click complete training button", () => {
       cy.trCompleteTraining();
+      cy.wait(10000);
     });
 
     it("Navigate to Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify that the notification as ${TrainingStatus.COMPLETED}`, () => {
