@@ -38,7 +38,7 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
     autocompleteState?.optionConfig || {};
     if (!multiple) {
       const record = data.get(auditValue);
-      label = get(record, labelPrefixRoot, "") + " " + get(record, labelKey, "");
+      label = get(record, labelPrefixRoot, "") + " " + FB.stripTags(get(record, labelKey, ""));
     } else {
       let arrayValue: string[] = [];
       try {
@@ -48,7 +48,7 @@ const AuditAutocomplete: React.FunctionComponent<Props> = ({
       }
       label = arrayValue.reduce((label, value) => {
         const record = data.get(value);
-        label += get(record, labelPrefixRoot, "") + " " + get(record, labelKey, "");
+        label += get(record, labelPrefixRoot, "") + " " + FB.stripTags(get(record, labelKey, ""));
         return label;
       }, "");
     }

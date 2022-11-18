@@ -4,7 +4,7 @@ import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -76,7 +76,7 @@ export const withFBInput = <T extends FBInputProps>(
     ...props
   }: T) => {
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
-    const { isOutput } = workspaceState || {};
+    const { isOutput, isChangeRequest } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
@@ -146,12 +146,7 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }
 
-    if (
-      (isOutput || formState?.workspaceMode !== FBWorkspaceModeOptions.DESIGN) &&
-      ![FBWorkspaceModeOptions.FORMPREVIEW, FBWorkspaceModeOptions.PREVIEW].includes(
-        formState?.workspaceMode as FBWorkspaceModeOptions
-      )
-    ) {
+    if (isChangeRequest || isOutput || formState?.shouldValidate) {
       const isUnderMode = (
         !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
@@ -271,6 +266,12 @@ export const withFBInput = <T extends FBInputProps>(
               });
               return;
             }
+
+            if (workspaceState.isChangeRequest) {
+              submitForm();
+              return;
+            }
+
             if (type && FBAutosave.includes(type)) {
               workspaceState.saveDocRev(formState?.getValues());
             } else {

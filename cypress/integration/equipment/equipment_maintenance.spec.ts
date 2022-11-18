@@ -547,7 +547,7 @@ context("Equipment maintenance test", () => {
 
     it("Create 'Preventative maintenance document'", () => {
       SystemRequirement("REQ-2890");
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
       cy.url().then((url: any) => {
         pmURL = url;
       });
@@ -636,7 +636,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Create 'Calibration document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
       cy.url().then((url: any) => {
         calibrationURL = url;
       });
@@ -1072,7 +1072,7 @@ context("Equipment maintenance test", () => {
 
         it("Create 'Preventative maintenance document'", () => {
           SystemRequirement("REQ-2890");
-          cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+          cy.drClickCreateDocumentWithApiCall();
           cy.url().then((url: any) => {
             pmURL = url;
           });
@@ -1162,7 +1162,7 @@ context("Equipment maintenance test", () => {
         });
 
         it("Create 'Calibration document'", () => {
-          cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+          cy.drClickCreateDocumentWithApiCall();
           cy.url().then((url: any) => {
             calibrationURL = url;
           });

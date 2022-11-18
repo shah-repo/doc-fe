@@ -636,14 +636,14 @@ context("records_data_with_correct_font", () => {
     });
 
     context("Verify The details of each inline", () => {
-      it(`Verify the side bar 'Release Details' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_15_12} font-weight ${FONT_WT_600}`, () => {
+      it(`Verify the side bar 'Release Details' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_25_6} font-weight ${FONT_WT_600}`, () => {
         cy.checkStylePropExists({
           content: "Release Details",
-          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_25_6, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_25_6,   "font-weight": FONT_WT_600 },
         });
       });
 
-      it(`Verify the side bar 'Released by' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_400}`, () => {
+      it(`Verify the side bar 'Released by' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
         cy.get(`[data-cy="releasedBy"]`)
           .checkStylePropExists({
             content: "Released by: Giovanni Reynolds",
@@ -651,7 +651,7 @@ context("records_data_with_correct_font", () => {
           });
       });
 
-      it(`Verify the side bar 'Released Date' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_400}`, () => {
+      it(`Verify the side bar 'Released Date' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
         const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
         cy.get(`[data-cy="releasedDate"]`)
           .checkStylePropExists({

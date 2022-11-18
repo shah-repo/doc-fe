@@ -1066,7 +1066,7 @@ context("Equipment due date calculation while changing frequency", () => {
         });
 
         it("Create 'Preventative maintenance document'", () => {
-          cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+          cy.drClickCreateDocumentWithApiCall();
         });
 
         it("navigate to overview tab", () => {
@@ -1322,7 +1322,7 @@ context("Equipment due date calculation while changing frequency", () => {
           });
 
           it("Create 'Preventative maintenance document'", () => {
-            cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+            cy.drClickCreateDocumentWithApiCall();
           });
 
           it("navigate to overview tab", () => {

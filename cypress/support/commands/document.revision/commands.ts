@@ -203,7 +203,9 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
 
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(item);
+    cy.get(`[data-cy="referenceTo"]`).arrowClick().wait(500);
+    cy.get(`[data-cy="referenceTo"]`).autocompleteSelect(item);
+    cy.unClick();
   });
 });
 
@@ -672,7 +674,7 @@ Cypress.Commands.add("drChangeOwner", (params: { employee: string }) => {
 });
 
 Cypress.Commands.add("drClickReviseDocument", () => {
-  cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+  cy.get("[data-cy=\"updateRecord\"]").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });

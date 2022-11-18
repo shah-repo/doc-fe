@@ -678,8 +678,8 @@ context("Equipment maintenance and calibration", () => {
       cy.drEnterDocumentTitle({ name: "Calibration form" });
     });
 
-    it("Enter description 'Calibration form description'", () => {
-      cy.drEnterDocumentDescription({ description: "Calibration form description" });
+    it("Enter description 'Calibration description'", () => {
+      cy.drEnterDocumentDescription({ description: "Calibration description" });
     });
 
     it("Select 'Form' document type from dropdown", () => {
@@ -863,7 +863,7 @@ context("Equipment maintenance and calibration", () => {
         tmpRegex = new RegExp( `AR ID\\nNone`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Description\nCalibration form description/);
+        expect(el).match(/Description\nCalibration description/);
 
         expect(el).match(/Output Document Type\nMaintenance Record/);
 
@@ -1067,7 +1067,7 @@ context("Equipment maintenance and calibration", () => {
         tmpRegex = new RegExp( `AR ID\\n${arId}`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Description\nCalibration form description/);
+        expect(el).match(/Description\nCalibration description/);
 
         expect(el).match(/Output Document Type\nMaintenance Record/);
 
@@ -1292,7 +1292,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("navigate to overview tab", () => {
@@ -1337,6 +1337,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Login as first Approver", () => {
+      cy.wait(2000);
       cy.authLogin({
         email: FIRST_USER.email,
       });
@@ -1546,6 +1547,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Login as first approver", () => {
+      cy.wait(2000);
       cy.authLogin({
         email: FIRST_USER.email,
       });
@@ -1828,7 +1830,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Create 'Calibration document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("navigate to overview tab", () => {
