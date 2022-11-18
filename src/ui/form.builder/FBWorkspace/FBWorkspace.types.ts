@@ -22,6 +22,12 @@ export enum FBWorkspaceModeOptions {
   FORMDESIGN = "formDesign"
 }
 
+export const FBWorkspaceSkipValidationModes = [
+  FBWorkspaceModeOptions.FORMPREVIEW,
+  FBWorkspaceModeOptions.PREVIEW,
+  FBWorkspaceModeOptions.DESIGN,
+];
+
 export type FBWorkspaceProps =
 & Pick<FBFormProps, "initialValues" | "children">
 & Pick<SMProviderProps, "_tabsState">

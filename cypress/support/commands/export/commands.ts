@@ -91,10 +91,11 @@ Cypress.Commands.add("inlineApproval", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
   cy.listLoadingElementShouldNotExist();
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.wait(1000);
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.PostApprovalsApprove,
     CyRoutes.SessionDetails], () => {
-    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick({ force: true });
   });
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();

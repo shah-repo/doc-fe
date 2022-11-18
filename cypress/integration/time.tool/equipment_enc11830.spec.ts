@@ -591,7 +591,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
     });
 
     it("Type preventative maintenance instruction", () => {
-      cy.get("[data-cy^=\"preventative-maintenance\"]>div>div>div>div>div[contenteditable]")
+      cy.get("[data-cy^=\"preventative-maintenance\"] div[contenteditable]").last()
         .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
       cy.unClick();
     });
@@ -613,7 +613,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
     });
 
     it("Type calibration maintenance instruction", () => {
-      cy.get("[data-cy^=\"calibration\"]>div>div>div>div>div[contenteditable]").click({ force: true })
+      cy.get("[data-cy^=\"calibration\"] div[contenteditable]").last().click({ force: true })
         .clear().arrowType("Instructions for calibration");
       cy.unClick();
     });
@@ -677,6 +677,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
 
     it("Click 'NEW CAL' on calibration section", () => {
       cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.get("[data-cy='form.builder.new.calibration']").scrollIntoView();
       cy.get("[data-cy='form.builder.new.calibration']").arrowClick();
       cy.wait("@response").then((res) => {
         if (res.response) {
@@ -735,6 +736,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.wait(3000);
     });
 
     it("Navigate to Overview tab", () => {
@@ -752,6 +754,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
     it("Approve record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
+        cy.wait(3000);
       });
     });
   });
@@ -842,6 +845,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
     it("Approve record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
         cy.ebApprove();
+        cy.wait(5000);
       });
     });
   });
@@ -864,6 +868,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days")
         .subtract(1, "days").format("MM/DD/YYYY");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.wait(15000);
     });
   });
 
@@ -1007,6 +1012,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       dueDateInEmail = momentInPST().add(`${equimentPMDueDays}`, "days")
         .subtract(11, "days").format("MM/DD/YYYY");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.wait(15000);
     });
   });
 
@@ -1148,6 +1154,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
       dueDateInEmail = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MM/DD/YYYY");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.wait(15000);
     });
   });
 
@@ -1288,6 +1295,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(15000);
     });
   });
 
@@ -1335,6 +1343,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
       dueDateInEmail = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(34, "days").format("MM/DD/YYYY");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.wait(15000);
     });
   });
 
@@ -1474,6 +1483,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(10000);
     });
   });
 

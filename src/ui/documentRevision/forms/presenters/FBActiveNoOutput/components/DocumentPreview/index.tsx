@@ -226,6 +226,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                       {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
                         <FBTrainingInfoContainer
                           documentRevisionId={documentRevision?.id}
+                          docRevStatus={documentRevision?.status}
                         />
                       )}
                     </SMBox>

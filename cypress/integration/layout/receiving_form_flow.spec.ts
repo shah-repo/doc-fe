@@ -368,8 +368,10 @@ context("Receiving landing page test", () => {
     });
 
     it("Filter document by ID", () => {
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="1"] input`).arrowType("FM-00004");
       cy.listLoadingElementShouldNotExist();
-      cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00004", status: "Draft" });
+      cy.dlSelectFirstDocument();
     });
 
     it("Verify that Approvals field is automatically added", () => {
@@ -534,8 +536,10 @@ context("Receiving landing page test", () => {
     });
 
     it("Filter document by ID", () => {
-      cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00005", status: "Draft" });
+      cy.dlClearFilters();
+      cy.get(`[aria-colindex="1"] input`).arrowType("FM-00005");
       cy.listLoadingElementShouldNotExist();
+      cy.dlSelectFirstDocument();
     });
 
     it("Verify that Approvals field is automatically added", () => {
@@ -1860,17 +1864,8 @@ context("Receiving landing page test", () => {
         .autocompleteSelect("PO-00001 - rev A - New Purchase Order");
     });
 
-    it("Navigate to overview tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it("Navigate to detail tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it("Select Purchase order", () => {
-      cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
-        .autocompleteSelect("PO-00001 - rev A - New Purchase Order");
+    it("Save the form", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("click on 1st part record", () => {
@@ -1882,25 +1877,37 @@ context("Receiving landing page test", () => {
     });
 
     it("Save", () => {
-      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PatchDocRev,
+      ], () => {
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      });
+      cy.listLoadingElementShouldNotExist();
     });
+
+    it("Navigate to detail tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
 
     it("Select Receive All", () => {
       cy.get("[data-cy=\"form.builder.receive\"]").contains("Receive All")
         .should("exist");
     });
 
-    it("Save the form", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+    it("Click on create lot", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
+        cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
+      });
     });
 
-    it("Click on create lot", () => {
-      cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
+    it("Fill the lot form", () => {
       cy.get("[name^='received']").arrowType("100");
       cy.listLoadingElementShouldNotExist();
       cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
-        cy.get("[data-cy='lotType']").arrowClick({ force: true }).autocompleteSelect("Lots");
+        cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
       });
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='lotForm']").arrowClick({ force: true })
         .autocompleteSelect("New Lot from Purchase Order Form");
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();

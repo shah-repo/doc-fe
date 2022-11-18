@@ -159,7 +159,7 @@ Cypress.Commands.add("ebApprove", () => {
 });
 
 Cypress.Commands.add("lhrApprove", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick({ force: true });
+  cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
@@ -178,6 +178,7 @@ Cypress.Commands.add("ebTryToApprove", () => {
 
 Cypress.Commands.add("ebWithdrawSubmisison", () => {
   cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+  cy.wait(2000);
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("#AlertDialog-continueButton").arrowClick();
   });
