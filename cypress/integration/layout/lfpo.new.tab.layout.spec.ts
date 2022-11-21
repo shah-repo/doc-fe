@@ -1163,7 +1163,8 @@ context("LFPO new layout verification", () => {
       });
       cy.drClickCreateDocumentWithApiCall();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-        cy.drRemoveReferences({ reference: docId });
+        cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
+          .parent().parent().find("svg").arrowClick({ force: true });
       });
     });
 
