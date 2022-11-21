@@ -156,6 +156,12 @@ export const withFBOnChange = <T extends FBInputProps>(
         const { type } = ev.target;
         let { value } = ev.target;
         if (type === "number" && value !== "") {
+          if (ev.target.name === "lhrs-start-quantity"
+          || ev.target.name === "lhrs-accepted-quantity"
+          || ev.target.name === "lhrs-rejected-quantity") {
+            value = (value?.split(".").length > 1 && value.split(".")[1]?.length > 10) ? toNumber(value).toFixed(10)
+              : toNumber(value);
+          }
           value = toNumber(value);
         }
         if (type === "number" && value === "") {
