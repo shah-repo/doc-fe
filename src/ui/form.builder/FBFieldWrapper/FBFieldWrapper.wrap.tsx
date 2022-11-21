@@ -30,8 +30,8 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     const shouldHideTools =
       sortableState?.isDragPerfomed
       || designDisabled
-      || (isEquipmentDoc && isInputFromDefaultSchema) // TODO Should we scale it for all document types?
-      || (workspaceState?.isRevised && reviseDisabled);
+      || (!showSchemaFields && isInputFromDefaultSchema)
+      || (reviseDisabled && workspaceState?.isRevised);
 
     const shouldHideAddButton = isEquipmentDoc;
 
