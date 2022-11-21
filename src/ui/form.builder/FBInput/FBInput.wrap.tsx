@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, each, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union, uniqWith } from "lodash";
+import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union, uniqWith } from "lodash";
 import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
@@ -149,17 +149,21 @@ export const withFBInput = <T extends FBInputProps>(
         uniqWith(union([{ name, value: fieldValue }], validationRules), isEqual);
         isFieldUnderValidation = formState.validationRelatedRules[fieldName]?.filter(
           (data) => data.name === name)?.length > 0;
-        let fVal;
-        try { fVal = JSON.parse(fieldValue as any); } catch (err) { fVal = fieldValue; }
-        if (typeof fVal === "string") {
+        let convertedFieldValue;
+        try {
+          convertedFieldValue = JSON.parse(fieldValue as string);
+        } catch (error) {
+          convertedFieldValue = fieldValue;
+        }
+        if (typeof convertedFieldValue === "string") {
           showValidationField = formState?.getFieldValue(fieldName) === fieldValue;
-        } else if (typeof fVal === "object") {
-          each(fVal, (v, k) => {
-            if (isArray(formState?.getFieldValue(fieldName)) &&
-            formState?.getFieldValue(fieldName).includes(v)) {
+        } else if (typeof convertedFieldValue === "object") {
+          for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
+            if (Array.isArray(formState?.getFieldValue(fieldName)) &&
+            formState?.getFieldValue(fieldName).includes(fieldValueEntry)) {
               showValidationField = true;
             }
-          });
+          }
         }
       });
     }
