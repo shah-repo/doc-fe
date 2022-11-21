@@ -147,7 +147,7 @@ export const withFBInput = <T extends FBInputProps>(
 
         formState.validationRelatedRules[fieldName] =
         uniqWith(union([{ name, value: fieldValue }], validationRules), isEqual);
-        isFieldUnderValidation = formState.validationRelatedRules[fieldName]?.filter(
+        isFieldUnderValidation = fieldName && formState.validationRelatedRules[fieldName]?.filter(
           (data) => data.name === name)?.length > 0;
         let convertedFieldValue;
         try {
@@ -178,7 +178,7 @@ export const withFBInput = <T extends FBInputProps>(
       );
 
       if (validationMode === "visibility") {
-        if (isFieldUnderValidation ) {
+        if (isFieldUnderValidation && showValidationField) {
           isUnderMode = !showValidationField;
         }
         hidden = isUnderMode;
