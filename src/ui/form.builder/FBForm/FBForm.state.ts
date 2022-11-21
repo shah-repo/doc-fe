@@ -55,7 +55,7 @@ class FBFormState extends FBSchemaState {
     return lodashGet(window, "EnlilRemoteValidators.validator");
   }
 
-  @computed public get shouldValidate(): boolean {
+  public get shouldValidate(): boolean {
     return !FBWorkspaceSkipValidationModes.some((mode) => this.workspaceMode === mode);
   }
 
