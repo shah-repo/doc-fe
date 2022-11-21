@@ -31,10 +31,10 @@ let dateAfterEmailShouldArrive;
 let fileId;
 let arId;
 
-const ADMIN_USER = USERS[1];
-const FIRST_USER = USERS[2];
-const SECOND_USER = USERS[3];
-const THIRD_USER = USERS[4];
+const ADMIN_USER = USERS[11];
+const FIRST_USER = USERS[12];
+const SECOND_USER = USERS[13];
+const THIRD_USER = USERS[14];
 
 const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
@@ -1158,14 +1158,14 @@ context("Equipment maintenance and calibration", () => {
       cy.drSelectSpecificationTab();
     });
 
-    it(`Select '${USERS[1].name}' for Primary Owner`, () => {
+    it(`Select '${ADMIN_USER.name}' for Primary Owner`, () => {
       cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
-      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
     });
 
-    it(`Select '${USERS[1].name}' for Coordinator`, () => {
+    it(`Select '${ADMIN_USER.name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
-      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
     });
 
     it("Save document", () => {
@@ -2404,7 +2404,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.email });
     });
 
     it("Save document", () => {
@@ -2477,7 +2477,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.email });
     });
 
     it("Save document", () => {
