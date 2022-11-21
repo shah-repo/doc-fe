@@ -11,7 +11,7 @@
   },
   {
     "id": "2",
-    "label": "Approval requests",
+    "label": "Change orders",
     "valueKey": "id",
     "labelKey": "title",
     "labelPrefixRoot": "crId",

@@ -18,17 +18,17 @@ const helpData: Partial<Record<HelpModule, HelpCenterModuleData>> = {
     ],
   },
   [HelpModule.ApprovalRequests]: {
-    title: "Approval Request Help",
+    title: "Change Order Help",
     url: "//help.{env}enlil.io/approval_request_help.html",
     items: [
       {
         type: HelpCenterItemType.HowTo,
-        title: "How to create an Approval Request?",
+        title: "How to create an Change Order?",
         url: "//help.{env}enlil.io/approval_request_how_to.html",
       },
       {
         type: HelpCenterItemType.Workflow,
-        title: "Approval Request Workflow",
+        title: "Change Order Workflow",
         url: "//help.{env}enlil.io/approval_request_workflow.html",
       },
     ],
