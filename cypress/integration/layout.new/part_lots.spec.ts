@@ -1045,7 +1045,16 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           });
 
           it("Verify Add/Remove References", () => {
-            cy.verifyAddRemoveReference({ formId: "FM-00001" });
+            const docId = "FM-00001";
+            cy.get("[data-cy='references-icon']").arrowClick().wait(1000);
+            cy.get("[data-cy='referenceTo']").arrowClick();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+              cy.get("[data-cy='referenceTo']").autocompleteSelect(docId);
+            });
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+              cy.get(`[data-cy="field-referenceTo"]`).contains(docId)
+                .parent().parent().find("svg").arrowClick({ force: true });
+            });
           });
 
           it("Verify Referenced By, Training, Release Date and Form Info", () => {
