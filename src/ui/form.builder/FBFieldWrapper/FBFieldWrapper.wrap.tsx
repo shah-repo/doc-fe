@@ -14,6 +14,7 @@ export const withFBFieldWrapper = <T extends FBFieldWrapperProps>(
     isDragged,
     inputProps,
     position,
+    showSchemaFields = true,
     ...props
   }: T) => {
     const { workspaceState, sortableState } = FB.useStores();
