@@ -1065,7 +1065,6 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
         context("Verify Revisions tab", () => {
           it("Open revisions tab, click and verify current revision", () => {
             cy.openRevisionsTabAndVerifyCurrentRevision("A");
-            cy.pause();
           });
         });
 
