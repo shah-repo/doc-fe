@@ -178,6 +178,7 @@ Cypress.Commands.add("ebTryToApprove", () => {
 
 Cypress.Commands.add("ebWithdrawSubmisison", () => {
   cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+  cy.wait(2000);
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("#AlertDialog-continueButton").arrowClick();
   });
