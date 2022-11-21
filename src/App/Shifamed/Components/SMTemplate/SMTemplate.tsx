@@ -40,7 +40,7 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
           )}
           <SMBox display="flex"  overflow={!_documentRevisionFormState?.expanded ? "auto" : ""}
             flex={1} {...contentBoxProps} >
-            <SMBox flex={1}>
+            <SMBox width="0px" flex={1}>
               {children}
             </SMBox>
           </SMBox>

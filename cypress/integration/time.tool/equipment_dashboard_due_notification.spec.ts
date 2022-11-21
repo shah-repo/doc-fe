@@ -35,7 +35,7 @@ let adminSessionId;
 let asyncTasksGroup;
 
 const equimentDueDays = (31);
-const ADMIN_USER = USERS[1];
+const ADMIN_USER = USERS[11];
 const equipmentTitleForm = `Equipment-Form`;
 const equipmentDocId = "EQ-00001";
 
@@ -62,9 +62,9 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[3], USERS[4]],
             documentTypes: [
               ClinicalProtocolDocType,
             ],
@@ -72,7 +72,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
-          coordinatorUser = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          coordinatorUser = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
@@ -83,7 +83,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         adminSessionId = loginResponse.sessionId;
@@ -493,14 +493,14 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
       cy.drSelectSpecificationTab();
     });
 
-    it(`Select '${USERS[1].name}' for Primary Owner`, () => {
+    it(`Select '${USERS[11].name}' for Primary Owner`, () => {
       cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
-      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(USERS[11].name).arrowClick();
     });
 
-    it(`Select '${USERS[2].name}' for Coordinator`, () => {
+    it(`Select '${USERS[12].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
-      cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(USERS[12].name).arrowClick();
     });
 
     it("Click create document after filling document", () => {
@@ -765,7 +765,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
     });
 
     it("Log user in", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: coordinatorUser.id });
+      cy.authLoginToDashboard({ USER: USERS[12], employeeId: coordinatorUser.id });
     });
 
     it("Verify Dashboard list", () => {
@@ -809,7 +809,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
 
         it("Submit async task", () => {
           cy.asyncTaskClickSubmit();
-          cy.wait(30000);
+          cy.wait(60000);
         });
       });
 
@@ -819,7 +819,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
         });
 
         it("Log user in", () => {
-          cy.authLoginToDashboard({ USER: USERS[2], employeeId: coordinatorUser.id });
+          cy.authLoginToDashboard({ USER: USERS[12], employeeId: coordinatorUser.id });
         });
 
         it("Verify user is loged in", () => {
@@ -831,8 +831,6 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
         it("Verify Dashboard list", () => {
           cy.get("[data-cy=dashboardFeedList]>div").then(($dayToTest) => {
             if (i === 0) {
-              // cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days` });
-              // cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days` });
               cy.get("[data-cy=dashboardFeedList]>div").eq(0)
                 .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
                 .should("exist");

@@ -2,13 +2,13 @@
 import { Box, Chip, CircularProgress, TextField, Typography } from "@material-ui/core";
 import Autocomplete, { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { Field as FormikField, FieldConfig, FieldProps as FormikFieldProps } from "formik";
-import { debounce, isArray, map, some, truncate } from "lodash";
+import { debounce, isArray, map, some } from "lodash";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as RemoveReference } from "../../../../assets/images/trash.svg";
+import { ReactComponent as DeleteIcon } from "../../../../assets/images/delete_icon.svg";
 import { TypographyProps } from "../../../../state/ducks/common/types";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../../../state/ducks/documentRevisions";
 import { DocRevQueryParam, DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
@@ -17,7 +17,6 @@ import { AsyncStatus } from "../../../../state/types";
 import Field, { FieldOwnProps } from "../../../components/forms/fields/Field";
 import { useFormContext } from "../../../components/forms/FormContext";
 import Text from "../../../components/Text";
-import { FBTooltip } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
 import { isTranslation } from "../../../translations/types";
 import { checkCanTypeCreateInspection, checkIsDocumentPart, checkIsTypeFaiInspection } from "../../helpers/checkDocumentGroup";
@@ -67,7 +66,6 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
-  const truncateLable = (label) => truncate(label, { length: 20, omission: " ..." });
 
   const onChange = (e, val) => {
     const newValue = isArray(val) ? val : [...value, val];
@@ -255,19 +253,22 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
         }}
         loading={loading}
       />
-      <Box>
+      <Box mt={1}>
         {value?.map((option, index) => (
           <Chip
             key={option.value}
-            className={classes.chipRoot}
+            classes={{
+              root: classes.chipRoot,
+              label: classes.chipLabel,
+            }}
             label={
               <Typography className={classes.chip}>
-                <FBTooltip title={option.label}>
-                  <>{truncateLable(option.label)}</>
-                </FBTooltip>
-              </Typography>}
+                {option.label}
+              </Typography>
+            }
+            clickable={false}
             disabled={option.deleteDisabled}
-            deleteIcon={<RemoveReference className={classes.deleteIcon}/>}
+            deleteIcon={<DeleteIcon className={classes.deleteIcon}/>}
             onDelete={(e) => {
               onChange(e, value.filter((obj) => obj.value !== option.value));
             }}
