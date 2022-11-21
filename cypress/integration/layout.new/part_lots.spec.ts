@@ -1065,12 +1065,14 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
         context("Verify Revisions tab", () => {
           it("Open revisions tab, click and verify current revision", () => {
             cy.openRevisionsTabAndVerifyCurrentRevision("A");
+            cy.pause();
           });
         });
 
         context("Verify Access Permissions tab", () => {
           it("Open access permissions tab", () => {
-            cy.drSelectPermissionTab();
+            cy.drSelectPermissionTab().wait(2000);
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Add another user permission", () => {
