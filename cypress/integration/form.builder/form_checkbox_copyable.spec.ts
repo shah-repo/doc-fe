@@ -461,7 +461,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Enter Justification of with copyableValue checkbox Equipment Maintenance", () => {
-      cy.get("div[data-cy^=\"eq-wi-ch-\"]:eq(-2)").find("div[contenteditable]")
+      cy.get("div[data-cy^=\"eq-wi-ch-\"]:eq(-1)").find("div[contenteditable]")
         .click({ force: true }).clear().arrowType("Justification1");
     });
 
@@ -470,7 +470,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Enter Justification of without copyableValue checkbox Equipment Maintenance", () => {
-      cy.get("div[data-cy^=\"eq-wo-ch-\"]:eq(-2)").find("div[contenteditable]")
+      cy.get("div[data-cy^=\"eq-wo-ch-\"]:eq(-1)").find("div[contenteditable]")
         .click({ force: true }).clear().arrowType("Justification2");
     });
 
@@ -558,7 +558,7 @@ context("Copyable Checkbox test", () => {
     });
 
     it("Verify Equipment Maintenance", () => {
-      cy.get("div[data-cy^=\"eq-wi-ch-\"]:eq(-2)").invoke("text").should("not.be.empty");
+      cy.get("div[data-cy^=\"eq-wi-ch-\"]:eq(-1)").invoke("text").should("not.be.empty");
       cy.get("input[name^=\"eq-wo-ch-\"]").eq(-1).should("not.be.checked");
     });
   });
