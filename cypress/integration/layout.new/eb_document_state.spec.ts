@@ -255,7 +255,8 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       context(
-        `Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” and "Send to Email" options are displayed → 
+        `Three dots: Clicking on it opens a menu where the “Void” and “Change Owner” and 
+        "Send to Email" options are displayed → 
         Verify they’re functional`,
         () => {
           it("check three dots are visible", () => {
@@ -514,10 +515,111 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
     });
 
+    context("Open the Archive revision and verify", () => {
+
+      it("Click on revision tab", () => {
+        cy.get("[data-cy='note-icon']").arrowClick();
+      });
+
+      it("Open archive revision", () => {
+        cy.get("[data-cy='DocumentRevisionList-item']").contains("Archive").first().arrowClick();
+      });
+
+      context("Check the content of the status bar", () => {
+        it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+          cy.verifyHeaderInfoContent({
+            status: STATUS_TYPES_LABEL.ARCHIVE,
+            title: "Records",
+            docId: "EB-00001",
+            revision: "Rev A.1",
+          });
+        });
+
+        context("Right side:", () => {
+          it("Last save should not be present", () => {
+            cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
+          });
+
+          context("Verify three dot and send to Email option and functionality", () => {
+            it("check three dots are visible", () => {
+              cy.get(`[data-cy="HeaderMenuButton"]`).should("be.visible");
+            });
+
+            it("Verify on click of three dots menu should open", () => {
+              cy.get(`[data-cy="HeaderMenuButton"]`).arrowClick();
+              cy.get("[data-cy='exportToEmail']").contains("Send To Email").should("be.visible");
+            });
+
+            it("Verify Send To Email option should be visible", () => {
+              cy.get("[data-cy='exportToEmail']").contains("Send To Email").should("be.visible");
+            });
+
+            it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
+            email shortly`, () => {
+              cy.sendToEmailFromHeader();
+              cy.checkToastMessageContains({
+                message: "File will be sent to your email shortly.",
+              });
+              cy.closeAllAlertMessages();
+            });
+          });
+
+          context("Verify three dots change owner option and functionality", () => {
+
+            it("Check if 'Change Owner' button header menu and is functional", () => {
+              cy.get("[data-cy='references-icon']").arrowClick();
+              cy.get("#HeaderMenuButton").arrowClick();
+              cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+              cy.get("#OwnerChangerPresenter-selectField").autocompleteSelect(USERS[2].name);
+              cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+            });
+
+            it(`Verify changed ${USERS[2].name}`, () => {
+              cy.get("[data-cy='user-name']").should("have.text", USERS[2].name);
+            });
+
+            it("change owner back to company Admin", () => {
+              cy.get("#HeaderMenuButton").arrowClick();
+              cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+              cy.get("#OwnerChangerPresenter-selectField").autocompleteSelect(owner);
+              cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+            });
+
+            it(`Verify changed onwer ${owner}`, () => {
+              cy.get("[data-cy='user-name']").should("have.text", owner);
+            });
+          });
+        });
+
+        context(`The status bar is GREEN(${Colors.latest_green_varient})`, () => {
+          it(`Color of Header status bar is GREEN(${Colors.latest_green_varient})`, () => {
+            cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+          });
+        });
+
+      });
+
+      context("Scroll down the page → The status bar should be fixed", () => {
+        it("Scroll down to the bottom of the page", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").scrollIntoView();
+          cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
+        });
+      });
+    });
+
     context(
       `Update the Engineering Build and select revision stage “Void” → Complete the voiding process until 
       the item goes to ${STATUS_TYPES_LABEL.VOIDED} state`,
       () => {
+
+        it("Click on revision tab", () => {
+          cy.get("[data-cy='note-icon']").arrowClick();
+        });
+
+        it("Open archive revision", () => {
+          cy.get("[data-cy='DocumentRevisionList-item']").contains("Released").arrowClick();
+        });
+
         it("Revise document with 'Void' option", () => {
           cy.drClickReviseDocument();
           cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
