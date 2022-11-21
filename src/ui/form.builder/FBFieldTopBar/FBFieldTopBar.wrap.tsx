@@ -20,7 +20,7 @@ export const withFBFieldTopBar = <T extends FBFieldTopBarProps>(
     const { documentType } = document?.document || {};
     const isDocumentForm = checkIsDocumentForm(documentType?.groupOptions);
     const { deleteInFormDisabled } = inputProps || {};
-    const deleteDisabled = inputProps?.editorProperties?.includes("deleteDisabled") || inputProps?.deleteDisabled;
+    const deleteDisabled = inputProps?.editorProperties?.includes("deleteDisabled");
 
     inputProps = {
       ...inputProps,
