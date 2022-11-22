@@ -478,11 +478,16 @@ context("Intermediate page validation", () => {
       cy.get(`[data-cy="description"] [contenteditable]`).first()
         .scrollIntoView({ ensureScrollable: false });
     });
-    // TODO: this is failing
-    // it("Scroll page to bottom and check editor bar is fixed at the top of the field", () => {
-    //   cy.get("#sm-tabpanel-0").scrollTo("bottom");
-    //   cy.get(".rdw-editor-toolbar").should("be.visible");
-    // });
+
+    it("Scroll page to bottom and check editor bar is fixed at the top of the field", () => {
+      cy.get(`[data-cy="field-securityGroups"]`).scrollIntoView();
+      cy.get(`[data-cy="field-securityEmployees"]`).should("be.visible");
+      cy.get("#attachmentHeader").should("be.visible");
+      cy.get(`[data-cy="field-revisionStage"]`).should("be.visible");
+      cy.get(`[data-cy="field-retrain"]`).should("be.visible");
+      cy.get(`[data-cy="field-document.documentType.id"]`).should("be.visible");
+      cy.get(`[data-cy="field-document.docId"]`).should("be.visible");
+    });
 
     it("Verify 'Create Document' button is visible", () => {
       cy.get("#DocumentRevisionForm-submit").should("be.visible");

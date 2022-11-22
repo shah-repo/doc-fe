@@ -10,6 +10,7 @@ export type FBFieldWrapperProps =
     addToolVisible?: FBVisibilityType;
     markDownVisible?: boolean;
     inputProps?: Partial<FBInputProps>;
+    showSchemaFields?: boolean;
     isDragged?: boolean;
     position: number;
   };

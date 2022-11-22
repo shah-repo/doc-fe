@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union, uniqWith } from "lodash";
 import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -76,10 +76,12 @@ export const withFBInput = <T extends FBInputProps>(
     ...props
   }: T) => {
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
-    const { isOutput } = workspaceState || {};
+    const { isOutput, isChangeRequest } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
+    let showValidationField;
+    let isFieldUnderValidation;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
 
     const feedbackDetails = useLocalStore(() => ({
@@ -142,17 +144,32 @@ export const withFBInput = <T extends FBInputProps>(
         const fieldName: string = first(value.split(",")) || "";
         const fieldValue = last(value.split(","));
         const validationRules = formState.validationRelatedRules[fieldName] || [];
-        formState.validationRelatedRules[fieldName] = union([{ name, value: fieldValue }], validationRules);
+
+        formState.validationRelatedRules[fieldName] =
+        uniqWith(union([{ name, value: fieldValue }], validationRules), isEqual);
+        isFieldUnderValidation = fieldName && formState.validationRelatedRules[fieldName]?.filter(
+          (data) => data.name === name)?.length > 0;
+        let convertedFieldValue;
+        try {
+          convertedFieldValue = JSON.parse(fieldValue as string);
+        } catch (error) {
+          convertedFieldValue = fieldValue;
+        }
+        if (typeof convertedFieldValue === "string") {
+          showValidationField = formState?.getFieldValue(fieldName) === fieldValue;
+        } else if (typeof convertedFieldValue === "object") {
+          for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
+            if (Array.isArray(formState?.getFieldValue(fieldName)) &&
+            formState?.getFieldValue(fieldName).includes(fieldValueEntry)) {
+              showValidationField = true;
+            }
+          }
+        }
       });
     }
 
-    if (
-      (isOutput || formState?.workspaceMode !== FBWorkspaceModeOptions.DESIGN) &&
-      [FBWorkspaceModeOptions.FORM, FBWorkspaceModeOptions.FORMPREVIEW, FBWorkspaceModeOptions.PREVIEW].includes(
-        formState?.workspaceMode as FBWorkspaceModeOptions
-      )
-    ) {
-      const isUnderMode = (
+    if (isChangeRequest || isOutput || formState?.shouldValidate) {
+      let isUnderMode = (
         !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
           validationValue === "" ||
@@ -161,6 +178,9 @@ export const withFBInput = <T extends FBInputProps>(
       );
 
       if (validationMode === "visibility") {
+        if (isFieldUnderValidation && showValidationField) {
+          isUnderMode = !showValidationField;
+        }
         hidden = isUnderMode;
 
         if (isUnderMode) {
@@ -271,6 +291,12 @@ export const withFBInput = <T extends FBInputProps>(
               });
               return;
             }
+
+            if (workspaceState.isChangeRequest) {
+              submitForm();
+              return;
+            }
+
             if (type && FBAutosave.includes(type)) {
               workspaceState.saveDocRev(formState?.getValues());
             } else {
