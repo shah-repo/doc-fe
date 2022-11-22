@@ -10,13 +10,12 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
 ) => {
   const Comp = ({
     onUploadClick,
-    onClick,
     onChange,
     fileFieldState,
     name = "",
     ...props
   }: T) => {
-    const { fileUploadState, workspaceState, formState, dialogState } = FB.useStores();
+    const { fileUploadState, workspaceState, formState } = FB.useStores();
     const { id } = workspaceState || {};
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
 
@@ -69,24 +68,14 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
       if (!isEmpty(invalidFiles)) {
         toastError(`.doc files are not accepted. Please use .docx. Invalid documents: ${join(invalidFiles, ", ")}`);
       }
-      if (!dialogState?.open) {
-        fileFieldState?.upload(validFiles);
-      }
-    };
 
-    onClick = (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-      const element = event.target as HTMLInputElement;
-      element.value = "";
+      fileFieldState?.upload(validFiles);
     };
 
     React.useEffect(() => {
       reaction(
         () => fileFieldState?.data,
-        (data) => {
-          if (!dialogState?.open) {
-            fileUploadState?.addFile(data);
-          }
-        }
+        (data) => fileUploadState?.addFile(data)
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -94,7 +83,6 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     return useObserver(() => Component({
       ...(props as T),
       onUploadClick,
-      onClick,
       onChange,
       formState,
       loading: fileFieldState?.loading,

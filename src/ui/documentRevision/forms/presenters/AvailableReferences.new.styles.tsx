@@ -20,45 +20,38 @@ export const styles = makeStyles(() =>
       },
     },
     chipRoot: {
-      "backgroundColor": "transparent",
       "whiteSpace": "normal",
-      "borderRadius": 4,
-      "margin": "4px 0",
-      "height": "auto",
+      "background": Colors.light_blue,
+      "borderRadius": "2px",
+      "height": "30px",
+      "margin": "10px 0",
       "display": "flex",
-      "padding": 10,
       "justifyContent": "space-between",
+      "& .MuiChip-label": {
+        paddingLeft: "6px",
+      },
       "&:hover": {
-        "backgroundColor": Colors.light_blue,
         "& $deleteIcon": {
           visibility: "visible",
         },
       },
-      "&:focus": {
-        "backgroundColor": Colors.light_blue,
-        "& $deleteIcon": {
-          visibility: "visible",
-        },
-      },
-    },
-    chipLabel: {
-      paddingLeft: 0,
     },
     chip: {
       whiteSpace: "normal",
-      fontSize: 14,
+      fontSize: "14px",
       color: Colors.navy,
       fontFamily: "Sora",
       fontStyle: "normal",
       fontWeight: 400,
-      lineHeight: 1.28,
+      lineHeight: "18px",
     },
     deleteIcon: {
-      visibility: "hidden",
-      height: 16,
-      width: 16,
-      flexShrink: 0,
-      marginRight: -4,
+      "visibility": "hidden",
+      "height": "14px",
+      "width": "13px",
+      "&:hover": {
+        color: Colors.latest_red_varient,
+      },
     },
     option: {
       fontSize: "14px",

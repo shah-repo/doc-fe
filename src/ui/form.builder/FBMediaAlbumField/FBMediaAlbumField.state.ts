@@ -22,8 +22,6 @@ class FBMediaAlbumFieldState {
   public fromUpload = false;
   public filesApi: FBRequest<FBAttachment[], null> = new FBRequest();
 
-  public previewOnlyIds: string[] = [];
-
   constructor(files: Id[] | undefined = []) {
     this.files = files;
   }
@@ -123,7 +121,7 @@ class FBMediaAlbumFieldState {
     this.uploadFile(files);
   };
 
-  public download = (file: FBAttachment, isPreviewMode = false) => {
+  public download = (file: FBAttachment) => {
     if (isUndefined(file)) { return; }
     const queryParams = `?type=${this.attachmentType(file)}`;
     this.attachmentDownloadApi.set({
@@ -137,9 +135,6 @@ class FBMediaAlbumFieldState {
           url: data.url,
         });
         this.addFileId(file.id);
-        if (isPreviewMode) {
-          this.previewOnlyIds.push(file.id);
-        }
         this.attachmentDownloadApi.onSuccess();
       }
       if (error) {

@@ -8,7 +8,6 @@ import { withFBAttachmentField } from "./FBFileField.wrap";
 
 const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
   onUploadClick,
-  onClick,
   onChange,
   formState,
   name,
@@ -33,7 +32,7 @@ const FBFileField: React.FunctionComponent<FBFileFieldProps> = ({
           type="file"
           id={`fb-attachment-field-${name}`}
           style={{ display: "none" }}
-          {...{ onChange, onClick, multiple }}
+          {...{ onChange, multiple }}
         />
         <label htmlFor={`fb-attachment-field-${name}`}>
           <Link
