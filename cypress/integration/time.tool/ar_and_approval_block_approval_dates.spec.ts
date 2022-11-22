@@ -1346,10 +1346,6 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       cy.wait(20000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
-        cy.log(emails[0].body.text);
-        cy.log(emails[1].body.text);
-        cy.log(emails[2].body.text);
-        cy.log(emails[3].body.text);
       });
     });
 

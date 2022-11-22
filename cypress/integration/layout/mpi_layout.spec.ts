@@ -736,7 +736,6 @@ context("Mpi Layout", () => {
         });
 
         it("Verify training tab is empty", () => {
-          cy.pause();
           cy.contains("No training records exist").should("be.visible");
           cy.get("#Presenter-FBWorkspace ul").should("not.be.visible");
         });
