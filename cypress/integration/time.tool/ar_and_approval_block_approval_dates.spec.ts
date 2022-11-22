@@ -1329,7 +1329,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
         cy.cmpExitDropdown();
-        cy.wait(5000);
+        cy.wait(10000);
       });
     });
   });
@@ -1343,7 +1343,6 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
-      cy.wait(20000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
