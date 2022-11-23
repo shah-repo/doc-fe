@@ -829,7 +829,6 @@ context("Training notifications for documents with approved and released revisio
 
     it(`Training record for ${USERS[11].name} Rev1`, () => {
       cy.trClearFilters();
-      cy.pause();
       cy.trLandingPageOwner({ owner: "1" });
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.contains("COMPLETED ON").arrowClick().wait(500);
