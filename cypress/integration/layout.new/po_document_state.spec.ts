@@ -212,7 +212,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
         });
 
-        xit("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+        it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
           cy.wait(120000);
           cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
         });
@@ -302,13 +302,14 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
     });
 
     context("Add Required Fields", () => {
-      it(`Select '${USERS[1].name}' for Requestor`, () => {
-        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
-      });
+      // xit(`Select '${USERS[1].name}' for Requestor`, () => {
+      //   cy.pause();
+      //   cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true });
+      //   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+      //     cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      //   });
+      //   cy.listLoadingElementShouldNotExist();
+      // });
 
       it("Add Required Date", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
