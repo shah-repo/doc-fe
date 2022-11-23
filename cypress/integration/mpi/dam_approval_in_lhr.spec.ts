@@ -1939,7 +1939,6 @@ context("DAM approvals in LHR", () => {
           });
         cy.checkToastMessage({ exists: false });
         cy.saveBarShouldNotExist();
-        //  cy.pause();
       });
 
       it("Submit for approval", () => {
