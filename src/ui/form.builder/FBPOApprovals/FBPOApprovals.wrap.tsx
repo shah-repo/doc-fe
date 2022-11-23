@@ -275,7 +275,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }));
     };
 
-    const removeApprover = (ids?: string[]) => {
+    const removeApprover = (ids?: string[], callback?: () => void) => {
       if (!ids) { return; }
       if (formState?.workspaceMode === "preview") { return; }
       availableApprovers = difference(availableApprovers, ids);
@@ -285,6 +285,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
           const id  = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+          callback?.();
         });
       });
     };
