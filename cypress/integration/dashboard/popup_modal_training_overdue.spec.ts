@@ -592,10 +592,6 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
-
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
   });
 
   context("Create a document", () => {
