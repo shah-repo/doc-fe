@@ -501,11 +501,10 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
@@ -1128,7 +1127,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
   context("Verify ASSIGN DATE and Due Date are adjusted accordingly", () => {
     it("Navigate to Training Records", () => {
-      cy.wait(40000);
+      cy.wait(60000);
       cy.navigToTrainingRecords();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
