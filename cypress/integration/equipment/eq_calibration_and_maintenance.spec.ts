@@ -1558,6 +1558,9 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Accept Approval Request with password prompt", () => {
+      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       SystemRequirement("REQ-0920");
       cy.wrapWithWaitOnApiCall(
         CyRoutes.ChangeRequestApprove, () => {
@@ -2093,6 +2096,9 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Accept Approval Request with password prompt", () => {
+      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       SystemRequirement("REQ-0920");
       cy.wrapWithWaitOnApiCall(
         CyRoutes.ChangeRequestApprove, () => {
