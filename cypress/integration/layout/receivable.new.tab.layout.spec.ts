@@ -1081,7 +1081,10 @@ context("Receiving landing page test", () => {
       cy.listLoadingElementShouldNotExist();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
         cy.get("[data-cy='referenceTo']").autocompleteSelect(docId);
+        cy.unClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithApiCall();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
         cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)

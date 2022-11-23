@@ -478,6 +478,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("Save training", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(10000);
     });
 
     it("Navigate to Overview tab", () => {
@@ -491,13 +492,24 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(10000);
+    });
+
+    it("Click Submit for Approval", () => {
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
+        cy.contains("Submit for approval").arrowClick({ force: true });
+      });
     });
 
     it("Click Approve", () => {
       cy.trApproveTraining();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -670,6 +682,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.wait(5000);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.get("[data-grid-row-index]").should("have.length", 1);
       cy.get(`[data-grid-row-index]`).should("contain", releasedFormId)
@@ -823,6 +836,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.wait(5000);
       cy.trLandingPageCompletedOn({ completed: "Last 7 days" });
       cy.get("[data-grid-row-index]").should("have.length", 1);
       cy.get(`[data-grid-row-index]`).should("contain", releasedFormId)
@@ -1084,6 +1098,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(10000);
     });
 
     it("Verify the time travel will appear in History list as 'Requested'", () => {
@@ -1113,7 +1128,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
   context("Verify ASSIGN DATE and Due Date are adjusted accordingly", () => {
     it("Navigate to Training Records", () => {
-      cy.wait(10000);
+      cy.wait(40000);
       cy.navigToTrainingRecords();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

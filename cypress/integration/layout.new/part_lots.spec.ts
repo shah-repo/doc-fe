@@ -1050,7 +1050,10 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
             cy.get("[data-cy='referenceTo']").arrowClick();
             cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
               cy.get("[data-cy='referenceTo']").autocompleteSelect(docId);
+              cy.unClick();
             });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
               cy.get(`[data-cy="field-referenceTo"]`).contains(docId)
                 .parent().parent().find("svg").arrowClick({ force: true });

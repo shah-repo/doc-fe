@@ -64,9 +64,9 @@ context("DAM approvals in LHR", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               NCORecord,
             ],
@@ -80,7 +80,7 @@ context("DAM approvals in LHR", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -92,7 +92,7 @@ context("DAM approvals in LHR", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       });
     });
 
@@ -177,8 +177,8 @@ context("DAM approvals in LHR", () => {
         cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
       });
 
-      it(`Enters company email '${USERS[1].email}'`, () => {
-        cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
+      it(`Enters company email '${USERS[11].email}'`, () => {
+        cy.get("[name^=company-admin-email-]").arrowType(USERS[11].email);
       });
 
       it("Select 'Yes' for 'Approved DAM json is used'", () => {
@@ -237,7 +237,7 @@ context("DAM approvals in LHR", () => {
   context("Add new User, Part doc, MPI doc, LHRt doc", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       });
     });
 
@@ -247,8 +247,8 @@ context("DAM approvals in LHR", () => {
           if (res.body !== "") {
             const response = res.body;
             apiCreatedCompany.employees = response.employees;
-            adminEmployee = apiCreatedCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-            thirdEmployee = apiCreatedCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+            adminEmployee = apiCreatedCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+            thirdEmployee = apiCreatedCompany.employees.find((employee) => employee.user.email === USERS[13].email);
           }
         });
       }).as("response");
@@ -803,9 +803,9 @@ context("DAM approvals in LHR", () => {
         cy.get("[data-cy='permission-icon']").arrowClick();
       });
 
-      it(`Assign operator '${USERS[3].name}'`, () => {
+      it(`Assign operator '${USERS[13].name}'`, () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-          cy.drAssignDocumentTo({ username: USERS[3].name });
+          cy.drAssignDocumentTo({ username: USERS[13].name });
         });
         cy.listLoadingElementShouldNotExist();
       });
@@ -838,9 +838,9 @@ context("DAM approvals in LHR", () => {
       it("Verify 3 approvers should be present", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
         cy.get(".MuiAutocomplete-popper ul li").should("have.length", 3);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[11].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[12].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[13].name);
         cy.unClick();
       });
     });
@@ -852,7 +852,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs operator in", () => {
         cy.authLogin({
-          email: USERS[3].email,
+          email: USERS[13].email,
         });
       });
 
@@ -894,9 +894,9 @@ context("DAM approvals in LHR", () => {
       it("Verify 3 approvers should be present", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
         cy.get(".MuiAutocomplete-popper ul li").should("have.length", 3);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[11].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[12].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[13].name);
         cy.unClick();
       });
 
@@ -911,7 +911,7 @@ context("DAM approvals in LHR", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[13].name).arrowClick();
         });
       });
 
@@ -943,21 +943,21 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add operator and verify checkmark should not be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[3].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[13].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
       });
 
       it("Add owner and verify checkmark should not be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[11].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
       });
 
       it("Add DAM role user and verify checkmark should be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[2].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[12].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
@@ -971,7 +971,7 @@ context("DAM approvals in LHR", () => {
     context("LHR should submit for approval by owner", () => {
       it("Logs user in", () => {
         cy.authLogin({
-          email: USERS[1].email,
+          email: USERS[11].email,
         });
       });
 
@@ -1026,11 +1026,11 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Enters e-mail", () => {
-        cy.usrEnterEmail({ email: USERS[4].email });
+        cy.usrEnterEmail({ email: USERS[14].email });
       });
 
       it("Enters name", () => {
-        cy.usrEnterName({ name: USERS[4].name });
+        cy.usrEnterName({ name: USERS[14].name });
       });
 
       it("Clicks the save button", () => {
@@ -1046,7 +1046,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Assigns user to the group", () => {
-        cy.grpAssignUserDialog({ name: USERS[4].name });
+        cy.grpAssignUserDialog({ name: USERS[14].name });
       });
 
       it("Saves the group", () => {
@@ -1072,9 +1072,9 @@ context("DAM approvals in LHR", () => {
         cy.progressBarShouldNotExist();
       });
 
-      it(`Add ${USERS[4].name} in approving users`, () => {
+      it(`Add ${USERS[14].name} in approving users`, () => {
         cy.contains("Approving Users").eq(0).parent().parent().parent().parent().parent()
-          .find("input").arrowClick({ force: true }).autocompleteSelect(`${USERS[4].name}`);
+          .find("input").arrowClick({ force: true }).autocompleteSelect(`${USERS[14].name}`);
       });
 
       it("Click the save button", () => {
@@ -1128,16 +1128,16 @@ context("DAM approvals in LHR", () => {
         cy.wait(2000);
       });
 
-      it(`Assign operator ${USERS[3].name}`, () => {
+      it(`Assign operator ${USERS[13].name}`, () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-          cy.drAssignDocumentTo({ username: USERS[3].name });
+          cy.drAssignDocumentTo({ username: USERS[13].name });
         });
         cy.listLoadingElementShouldNotExist();
       });
 
-      it(`Assign operator ${USERS[4].name}`, () => {
+      it(`Assign operator ${USERS[14].name}`, () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-          cy.drAssignDocumentTo({ username: USERS[4].name });
+          cy.drAssignDocumentTo({ username: USERS[14].name });
         });
       });
     });
@@ -1149,7 +1149,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in with operator which is part of DAM", () => {
         cy.authLogin({
-          email: USERS[4].email,
+          email: USERS[14].email,
         });
       });
 
@@ -1176,7 +1176,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add operator which is not part of DAM and verify checkmark should not be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[3].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[13].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
@@ -1188,7 +1188,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in with operator not part of DAM", () => {
         cy.authLogin({
-          email: USERS[3].email,
+          email: USERS[13].email,
         });
       });
 
@@ -1210,7 +1210,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add operator which is part of DAM and verify checkmark should be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[4].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[14].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
@@ -1226,7 +1226,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in with owner", () => {
         cy.authLogin({
-          email: USERS[1].email,
+          email: USERS[11].email,
         });
       });
 
@@ -1249,13 +1249,13 @@ context("DAM approvals in LHR", () => {
         cy.drSelectApprovalRolesTab();
       });
 
-      it(`Remove ${USERS[4].name} in approving users`, () => {
-        cy.contains(USERS[4].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+      it(`Remove ${USERS[14].name} in approving users`, () => {
+        cy.contains(USERS[14].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
       });
 
-      it(`Add owner ${USERS[1].name} in approving users`, () => {
+      it(`Add owner ${USERS[11].name} in approving users`, () => {
         cy.contains("Approving Users").eq(0).parent().parent().parent().parent().parent()
-          .find("input").arrowClick({ force: true }).autocompleteSelect(`${USERS[1].name}`);
+          .find("input").arrowClick({ force: true }).autocompleteSelect(`${USERS[11].name}`);
       });
 
       it("Click the save button", () => {
@@ -1307,16 +1307,16 @@ context("DAM approvals in LHR", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it(`Assign operator ${USERS[3].name}`, () => {
+      it(`Assign operator ${USERS[13].name}`, () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-          cy.drAssignDocumentTo({ username: USERS[3].name });
+          cy.drAssignDocumentTo({ username: USERS[13].name });
         });
         cy.listLoadingElementShouldNotExist();
       });
 
-      it(`Assign operator ${USERS[4].name}`, () => {
+      it(`Assign operator ${USERS[14].name}`, () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-          cy.drAssignDocumentTo({ username: USERS[4].name });
+          cy.drAssignDocumentTo({ username: USERS[14].name });
         });
       });
     });
@@ -1328,7 +1328,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in with operator not part of DAM", () => {
         cy.authLogin({
-          email: USERS[3].email,
+          email: USERS[13].email,
         });
       });
 
@@ -1355,7 +1355,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add operator1 which is not part of DAM and verify checkmark should not be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[4].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[14].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
@@ -1367,7 +1367,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in with operator which is part of DAM", () => {
         cy.authLogin({
-          email: USERS[4].email,
+          email: USERS[14].email,
         });
       });
 
@@ -1389,14 +1389,14 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add operator2 which is not part of DAM and verify checkmark should not be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[3].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[13].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
       });
 
       it("Add owner which is part of DAM and verify checkmark should be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[11].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
@@ -1412,7 +1412,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in with owner", () => {
         cy.authLogin({
-          email: USERS[1].email,
+          email: USERS[11].email,
         });
       });
 
@@ -1459,7 +1459,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add owner which is part of DAM and verify checkmark should be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[11].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
@@ -1467,7 +1467,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Change owner of document", () => {
-        cy.drChangeOwnerFromMenu({ employee: USERS[4].name });
+        cy.drChangeOwnerFromMenu({ employee: USERS[14].name });
       });
     });
 
@@ -1478,7 +1478,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in with operator not part of DAM", () => {
         cy.authLogin({
-          email: USERS[4].email,
+          email: USERS[14].email,
         });
       });
 
@@ -1500,7 +1500,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add new owner which is not part of DAM and verify checkmark should not be ticked", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[4].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[14].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
@@ -1516,7 +1516,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in", () => {
         cy.authLogin({
-          email: USERS[2].email,
+          email: USERS[12].email,
         });
       });
 
@@ -1577,7 +1577,7 @@ context("DAM approvals in LHR", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[12].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
       });
@@ -1627,7 +1627,7 @@ context("DAM approvals in LHR", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[12].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1684,15 +1684,15 @@ context("DAM approvals in LHR", () => {
       it("Verify 4 approvers should be present", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
         cy.get(".MuiAutocomplete-popper ul li").should("have.length", 4);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[1].name);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[2].name);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[3].name);
-        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[4].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[11].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[12].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[13].name);
+        cy.get(".MuiAutocomplete-popper ul li").should("contain.text", USERS[14].name);
       });
 
       it("Add approver and verify checkmark should be ticked", () => {
         cy.unClick();
-        cy.lhrAddApproverOnApproverList({ approver: USERS[2].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[12].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
@@ -1763,7 +1763,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in with owner", () => {
         cy.authLogin({
-          email: USERS[1].email,
+          email: USERS[11].email,
         });
       });
 
@@ -1806,7 +1806,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Change owner of document", () => {
-        cy.drChangeOwnerFromMenu({ employee: USERS[2].name });
+        cy.drChangeOwnerFromMenu({ employee: USERS[12].name });
         cy.listLoadingElementShouldNotExist();
       });
     });
@@ -1818,7 +1818,7 @@ context("DAM approvals in LHR", () => {
 
       it("Logs in with new ownership", () => {
         cy.authLogin({
-          email: USERS[2].email,
+          email: USERS[12].email,
         });
       });
 
@@ -1872,7 +1872,7 @@ context("DAM approvals in LHR", () => {
       it("Add an Approval", () => {
         cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+          cy.get("ul>li[role=option]").contains(USERS[12].name).arrowClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1926,7 +1926,7 @@ context("DAM approvals in LHR", () => {
 
       it("New owner can add approver and verify checkmark should be ticked", () => {
         cy.unClick();
-        cy.lhrAddApproverOnApproverList({ approver: USERS[2].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[12].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
@@ -1994,7 +1994,7 @@ context("DAM approvals in LHR", () => {
       it("Add approver and verify checkmark should be ticked", () => {
         SystemRequirement("REQ-4710");
         cy.unClick();
-        cy.lhrAddApproverOnApproverList({ approver: USERS[2].name });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[12].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='QA team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
