@@ -63,9 +63,9 @@ context("Test training records after refresh period passes", { tags: ["@timetool
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolNotRedline,
               { ...TrainingCurriculum, documentTypeName: "Training Curriculum Test" },
@@ -73,8 +73,8 @@ context("Test training records after refresh period passes", { tags: ["@timetool
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           trainingCurriculumDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Training Curriculum Test");
@@ -86,7 +86,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -581,7 +581,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -592,10 +592,15 @@ context("Test training records after refresh period passes", { tags: ["@timetool
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
@@ -605,6 +610,9 @@ context("Test training records after refresh period passes", { tags: ["@timetool
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .autocompleteSelect("Training Curriculum test");
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'training title'", () => {
@@ -644,7 +652,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
     });
 
     it("Save training", () => {
@@ -658,7 +666,9 @@ context("Test training records after refresh period passes", { tags: ["@timetool
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -673,6 +683,8 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
     it("Click Submit for Approval", () => {
       cy.pmSubmitForApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -681,12 +693,17 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
     it("Click Approve", () => {
       cy.trApproveTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
@@ -713,20 +730,25 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
     it("click complete training button", () => {
       cy.trCompleteTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Verify Training Records with timestamp on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
+    it(`${USERS[11].name} with timestamp on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
     });
@@ -757,6 +779,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(15000);
     });
 
     it("Verify the time travel will appear in History list as 'Requested'", () => {
@@ -786,6 +809,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
+      cy.wait(50000);
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.reload();
       cy.progressBarShouldNotExist();
@@ -803,12 +827,15 @@ context("Test training records after refresh period passes", { tags: ["@timetool
   context("Verify Training Records with pending on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`${USERS[1].name} with pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[11].name} with pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
-        .and("contain", USERS[1].name).and("contain", "Pending");
+        .and("contain", USERS[11].name).and("contain", "Pending");
     });
   });
 

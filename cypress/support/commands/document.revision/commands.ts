@@ -685,7 +685,8 @@ Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOpti
 Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input").should("exist");
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
-    .autocompleteSelect(`${params.username}`, { force: true });
+    .autocompleteSelect(`${params.username}`, { force: true }).wait(2000);
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy='add-user'").eq(2).arrowClick({ force: true });
   cy.unClick();
   cy.progressBarShouldNotExist();
