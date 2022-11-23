@@ -809,7 +809,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.wait(50000);
+      cy.wait(60000);
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
       cy.reload();
       cy.progressBarShouldNotExist();
