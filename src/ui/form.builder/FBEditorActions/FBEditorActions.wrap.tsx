@@ -97,6 +97,9 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       if (type === "blanktplform" && !defaultValue) {
         formValues.defaultValue = [];
       }
+      if (type === "procedure" && workspaceState?.isOutput) {
+        formValues.editorProperties = ["copyableValue"];
+      }
       if (type === "mpiprocedure"  && (!editorConfig || isEmpty(editorConfig))) {
         formValues.editorConfig = {
           attachments: [],
