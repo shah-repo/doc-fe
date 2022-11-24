@@ -1478,10 +1478,11 @@ context("Receivable test with Page Details", () => {
           // eslint-disable-next-line max-len
           expect(el).match(/ITEM\nPART\nNUMBER\nSUPPLIER\nPART\nNUMBER\nDESCRIPTIONORDERED\nRECEIPT\nQTY\nUNITS\nDATE\nREQUIRED\nUNIT\nPRICE\nLOTS/);
 
+          // eslint-disable-next-line max-len
           // tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document2000each${receivingReleasedDate}\\$5.00`, "gi" );
           // expect(el).match(tmpRegex);
 
-          // // eslint-disable-next-line max-len
+          // eslint-disable-next-line max-len
           // tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n1000each${receivingReleasedDate}\\$11.00`, "gi" );
           // expect(el).match(tmpRegex);
 
@@ -1860,7 +1861,7 @@ context("Receivable test with Page Details", () => {
           // tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00\n${lotId[0]}\n${lotId[1]}`, "gi" );
           // expect(el).match(tmpRegex);
 
-          // // eslint-disable-next-line max-len
+          // eslint-disable-next-line max-len
           // tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n100100each${receivingReleasedDate}\\$11.00`, "gi" );
           // expect(el).match(tmpRegex);
 
@@ -2040,7 +2041,7 @@ context("Receivable test with Page Details", () => {
           // tmpRegex = new RegExp( `1\nPRT-\n00005 - 1\nN/APart document200200each${receivingReleasedDate}\\$5.00\n${lotId[0]}\n${lotId[1]}`, "gi" );
           // expect(el).match(tmpRegex);
 
-          // // eslint-disable-next-line max-len
+          // eslint-disable-next-line max-len
           // tmpRegex = new RegExp( `2\nPRT-\n00006 - 1\nN/A\nPart second\ndocument\n100100each${receivingReleasedDate}\\$11.00`, "gi" );
           // expect(el).match(tmpRegex);
 
