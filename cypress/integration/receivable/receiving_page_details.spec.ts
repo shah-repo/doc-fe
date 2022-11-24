@@ -42,7 +42,7 @@ let downloadFile;
 let tmpRegex;
 let CSLDocumentType;
 let createdLotsFormDocument;
-let lotId;
+// let lotId;
 
 const pages = ["", "", "", ""];
 const PART_DOCUMENT_TYPE_NAME = "Part";
@@ -1548,11 +1548,11 @@ context("Receivable test with Page Details", () => {
       cy.unClick();
     });
 
-    it("Extract the lot id created", () => {
-      cy.get("[data-cy=\"lots\"]").then((el) => {
-        lotId = el.text().split(" ");
-      });
-    });
+    // it("Extract the lot id created", () => {
+    //   cy.get("[data-cy=\"lots\"]").then((el) => {
+    //     lotId = el.text().split(" ");
+    //   });
+    // });
   });
 
   context("Patch page details and verify receiving landing page", () => {
