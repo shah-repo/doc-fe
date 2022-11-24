@@ -19,7 +19,7 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
     !schemaState && (schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema));
     const { workspaceState, formState } = FB.useStores();
     const { isOutput, id, document: { outputRevision = false } = {} } = workspaceState || {};
-    const { _tabsState } = SM.useStores();
+    const { _tabsState, _documentRevisionFormState } = SM.useStores();
 
     React.useEffect(() => {
       FormBuilderDynamicValidatorStore.registerValidators(schema, formState?.Validator);
@@ -77,7 +77,9 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         const { disabled, outputDisabled } = schemaItem || {};
         const reviseDisabled = schemaItem.editorProperties?.includes("reviseDisabled");
         if (schemaItem.deleted || schemaItem.hidden ||
-          (_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId))) { return; }
+        ((_tabsState && schemaItem.tabId && !_tabsState?.isTabActive(schemaItem.tabId)
+        && !_documentRevisionFormState?.leftPanelOpen))
+        ) { return; }
 
         position++;
         return (

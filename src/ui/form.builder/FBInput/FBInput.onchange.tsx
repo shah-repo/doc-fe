@@ -48,7 +48,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       }
     };
 
-    function setValue(formValue: any, state = false, forceDefault = false) {
+    function setValue(formValue: any, state = false) {
       if (!name) { return; }
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
@@ -125,7 +125,7 @@ export const withFBOnChange = <T extends FBInputProps>(
           ? map(value, (v) => ({ [optionValueKey]: v[optionValueKey] }))
           : { [optionValueKey]: value[optionValueKey] },
       };
-      setValue(simpleValue[optionValueType](), false, forceDefault);
+      setValue(simpleValue[optionValueType](), false);
     }
 
     function stringValue(value: string) {
