@@ -12,8 +12,6 @@ import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
-let adminEmployee;
-let secondEmployee;
 
 const intDocType = "Clinical Protocol";
 const otherFormDocId1 = "CP-00002";
@@ -64,8 +62,6 @@ context("Status Bar of New Enlil items approved via express AR", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -95,7 +91,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
   });
 
   context(`Form Internal type as Other('${intDocType}')`, () => {
-    context(`Create a document with internal type Other(${intDocType}) and 'Alpha' revision stage`, () => {
+    context(`Create a document with internal type Other(${intDocType})`, () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
       });
@@ -115,7 +111,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.drEnterDocumentDescription({ description: otherFormDesc });
       });
 
-      it("Select 'intDocType' document type", () => {
+      it(`Select ${intDocType} document type`, () => {
         cy.drSelectDocumentType({ documentType: intDocType });
         cy.unClick();
       });
@@ -191,7 +187,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.get(".MuiButton-label").contains("Save").arrowClick();
       });
 
-      it(`Verify 'Auto-saving, please wait' exist in statusbar`, () => {
+      it(`Verify 'Auto-saving, please wait' exists in statusbar`, () => {
         cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
           .contains("Auto-saving, please wait");
       });
@@ -202,7 +198,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     context(`Wait for 2 min. It should display 'Last saved 2 minutes ago'`, () => {
-      it(`Verify 'Last saved a few seconds ago' exist in statusbar`, () => {
+      it(`Verify 'Last saved a few seconds ago' exists in statusbar`, () => {
         const tmpRegex = new RegExp(`Last saved a few seconds ago`, "gi");
         cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
           .contains(tmpRegex);
@@ -223,13 +219,13 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context(`Verify 'Approve and Release' and 'Save' exists and they are funcational`, () => {
+    context(`Verify 'Approve and Release' and 'Save' buttons exists and they are funcational`, () => {
       it("Verify Save button in status bar and click on it", () => {
         cy.get(".MuiButton-label").contains("Save");
         cy.get(".MuiButton-label").contains("Save").arrowClick();
       });
 
-      it("Verify 'Approve and Release' button exists and click on it and select Cancel", () => {
+      it("Verify 'Approve and Release' button and click on it and select Cancel", () => {
         cy.get("#ApproveAndRelease-button").contains("Approve and Release").should("exist");
         cy.pmSubmitForApprovalWithoutAPI();
         cy.progressBarShouldNotExist();
@@ -360,7 +356,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it("Verify DRAFT Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      it("Verify DRAFT in Statusbar and verify Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
         cy.verifyListItemExistsOnHeader({
           listItem:
           `Document List${otherFormDocId1} Rev 1DRAFT`,
@@ -397,8 +393,8 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Release the item by clicking “Approve And Release", () => {
-      it("Approve and release the document", () => {
+    context(`Release the item by clicking 'Approve And Release'`, () => {
+      it("Approve And Release the document", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
@@ -421,7 +417,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Right side: Three dots: “Send to Email” and “Change Owner” buttons", () => {
+    context(`Right side: Three dots: 'Send to Email' and 'Change Owner' buttons`, () => {
       it("Verify the 'Change Owner' button exists", () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
@@ -435,7 +431,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
       });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      it(`Verify popup message 'File will be sent to your email shortly.'`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
@@ -464,7 +460,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context(`Revise the item → A new revision is created in “DRAFT”`, () => {
+    context(`Revise the item → A new revision is created in 'DRAFT'`, () => {
       it("Click on 'Revise document'", () => {
         cy.drClickReviseDocument();
       });
@@ -516,7 +512,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Right side: Three dots: “Send to Email” and “Change Owner” buttons", () => {
+    context(`Right side: Three dots: 'Send to Email' and 'Change Owner' buttons`, () => {
       it("Verify the 'Change Owner' button exists", () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
@@ -530,7 +526,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
       });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      it(`Verify popup message 'File will be sent to your email shortly.'`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
@@ -566,7 +562,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Revise the item and select the 'Obsolete' revision stage", () => {
+    context(`Revise the item and select the 'Obsolete' revision stage`, () => {
       it("Click on 'Revise document'", () => {
         cy.drClickReviseDocument();
       });
@@ -596,7 +592,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Verify Three dots: “Send to Email” and “Change Owner” buttons", () => {
+    context(`Verify Three dots: 'Send to Email' and 'Change Owner' buttons`, () => {
       it(`Verify 'Change Owner' exists in statusbar`, () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
@@ -670,7 +666,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context(`Click on 3 dots and Click “Void” and “Yes, I’m sure” and verify Item goes to a “Voided” state`, () => {
+    context(`Click on 3 dots and Click Void and Yes, Im sure and verify Item goes to a Voided state`, () => {
       it(`Click on 3 dots and verify 'Void' option exists`, () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("[data-cy='void-button']").should("be.visible");
@@ -693,7 +689,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context(`Right side: Click on 3 dots and verify “Send to Email” and “Change Owner” buttons`, () => {
+    context(`Right side: Click on 3 dots and verify 'Send to Email' and 'Change Owner' buttons`, () => {
       it("Verify the 'Change Owner' button exists", () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
@@ -707,7 +703,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
       });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      it(`Verify popup message "File will be sent to your email shortly."`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
@@ -775,6 +771,12 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: eqFormName });
+      });
+    });
+
+    context("Right side: 'Create New' exists", () => {
+      it(`Verify 'Create New' exists in statusbar`, () => {
+        cy.get("#PreviewControlsContainer-createNew").contains("Create new").should("exist");
       });
     });
 
@@ -863,7 +865,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
       });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      it(`Verify popup message "File will be sent to your email shortly."`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
@@ -958,7 +960,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Login back to user1 ", () => {
+    context("Login back to user1", () => {
       it("Logs user in", () => {
         cy.authLogout();
         cy.authLogin({
@@ -980,7 +982,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Release the item by clicking “Approve And Release", () => {
+    context(`Release the item by clicking 'Approve And Release'`, () => {
       it("Approve and release the document", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -1004,7 +1006,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Right side: Three dots: “Send to Email” and “Change Owner” buttons", () => {
+    context(`Right side: Three dots: 'Send to Email' and 'Change Owner' buttons`, () => {
       it("Verify the 'Change Owner' button exists", () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
@@ -1018,7 +1020,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
       });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      it(`Verify popup message "File will be sent to your email shortly."`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
@@ -1047,7 +1049,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context(`Revise the item → A new revision is created in “DRAFT”`, () => {
+    context(`Revise the item → A new revision is created in 'DRAFT'`, () => {
       it("Click on 'Revise document'", () => {
         cy.drClickReviseDocument();
       });
@@ -1099,7 +1101,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Right side: Three dots: “Send to Email” and “Change Owner” buttons", () => {
+    context(`Right side: Three dots: 'Send to Email' and 'Change Owner' buttons`, () => {
       it("Verify the 'Change Owner' button exists", () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
@@ -1113,7 +1115,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
       });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      it(`Verify popup message "File will be sent to your email shortly."`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
@@ -1179,7 +1181,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context("Verify Three dots: “Send to Email” and “Change Owner” buttons", () => {
+    context(`Verify Three dots: 'Send to Email' and 'Change Owner' buttons`, () => {
       it(`Verify 'Change Owner' exists in statusbar`, () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
@@ -1250,7 +1252,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context(`Click on 3 dots and Click “Void” and “Yes, I’m sure” and verify Item goes to a “Voided” state`, () => {
+    context(`Click on 3 dots and Click 'Void' and 'Yes, Im sure' and verify Item goes to a 'Voided' state`, () => {
       it(`Click on 3 dots and verify 'Void' option exists`, () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("[data-cy='void-button']").should("be.visible");
@@ -1273,7 +1275,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
     });
 
-    context(`Right side: Click on 3 dots and verify “Send to Email” and “Change Owner” buttons`, () => {
+    context(`Right side: Click on 3 dots and verify 'Send to Email' and “Change Owner” buttons`, () => {
       it("Verify the 'Change Owner' button exists", () => {
         cy.get("#HeaderMenuButton").arrowClick();
         cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
@@ -1287,7 +1289,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
       });
 
-      it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      it(`Verify popup message "File will be sent to your email shortly."`, () => {
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
