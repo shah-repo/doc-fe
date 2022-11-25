@@ -26,7 +26,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
     const { _tabsState, _documentRevisionFormState } = SM.useStores();
     const { isOutput } = workspaceState || {};
 
-    const getSelectedTabName = _documentRevisionFormState?.selectedTabNameForSchemaAddition
+    const tabId = _documentRevisionFormState?.selectedTabIdForSchemaAddition
       || _tabsState?.activeTabId;
 
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
@@ -48,7 +48,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       });
 
       if ((!workspaceState?.getSchemaItemAt(index) || index === 0) && additionalSchema) {
-        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES, tabId: getSelectedTabName }));
+        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES, tabId }));
         workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchemaWithInitialValues as FBSchemaProps[]));
         index = index + size(additionalSchema);
       }
@@ -134,7 +134,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder || validationAttribute,
-        tabId: getSelectedTabName,
+        tabId,
       }, index);
       leftPanelState?.setIndex(index + 1 || 0);
 

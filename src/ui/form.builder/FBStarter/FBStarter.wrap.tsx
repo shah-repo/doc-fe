@@ -16,7 +16,7 @@ export const withFBStarter = <T extends FBStarterProps>(
 
     onClick = (index?: number) => {
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
-      _documentRevisionFormState?.setTabNameForSchemaAddition(_tabsState?.activeTabId || "");
+      _documentRevisionFormState?.setTabIdForSchemaAddition(_tabsState?.activeTabId || "");
       if (leftPanelState) {
         leftPanelState.setIndex(index || 0);
         leftPanelState.config({
