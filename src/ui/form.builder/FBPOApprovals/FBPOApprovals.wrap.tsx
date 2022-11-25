@@ -128,7 +128,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         ?.map((item) => item?.approver?.id);
       const hasRequesterInAllApprovers = allApprovers?.includes(requester);
 
-      if (requester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
+      if (requester && !prevRequesterValue && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
         return addApprover([requester], { manually: false });
       }
 
@@ -143,8 +143,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         return removeApprover([requester]);
       }
 
-      if (!requester && prevRequesterValue && hasPrevRequesterInAutoApprovers) {
-        return removeApprover([prevRequesterValue]);
+      if (prevRequesterValue && requester !== prevRequesterValue && hasPrevRequesterInAutoApprovers) {
+        return removeApprover([prevRequesterValue], () => requester && addApprover([requester], { manually: false }));
       }
     }
 
@@ -275,7 +275,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }));
     };
 
-    const removeApprover = (ids?: string[]) => {
+    const removeApprover = (ids?: string[], callback?: () => void) => {
       if (!ids) { return; }
       if (formState?.workspaceMode === "preview") { return; }
       availableApprovers = difference(availableApprovers, ids);
@@ -285,6 +285,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
           const id  = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+          callback?.();
         });
       });
     };
