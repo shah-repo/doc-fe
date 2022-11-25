@@ -1,6 +1,6 @@
+import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import useStyles from "./FBMaterialEqInfo.styles";
-import React from "react";
 
 export enum FBMEQItemStatus {
   Removed = "removed",
@@ -44,6 +44,7 @@ export interface MaterialEqProps {
   includeDiff: boolean;
   showDiff: boolean;
   loading?: boolean;
+  isObsolete?: boolean;
   handleShowDiffChange: (value: boolean) => void;
 }
 

@@ -136,6 +136,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
   includeDiff,
   handleShowDiffChange,
   loading,
+  isObsolete,
 }) => {
   const [expandedPanels, setExpanedPanels] = useState<string[]>([]);
   const allPanelsExpaned = expandedPanels.length === panels.length;
@@ -151,7 +152,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
 
   return (
     <Box className={classes.root}>
-      {includeDiff && (
+      {includeDiff && !isObsolete && (
         <Box className={classes.diffSwitch}>
           <FormControlLabel
             className={classes.switchLabel}
@@ -172,41 +173,43 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
           />
         </Box>
       )}
-      <Grid container spacing={3}>
-        <Grid item xs={9}>
-          <Box mb={1}>
-            <Button variant="text" disableRipple className={classes.expandButton} onClick={toggleAllPanels}>
-              <SMText label={allPanelsExpaned ? "common.collapse.all" : "common.expand.all"} />
-            </Button>
-          </Box>
-          {panels.map((panel) => (
-            <Panel
-              key={panel.dataKey}
-              panel={panel}
-              data={data?.[panel.dataKey]}
-              expanded={expandedPanels.includes(panel.dataKey)}
-              togglePanel={togglePanel(panel.dataKey)}
-              loading={loading}
-              classes={classes}
-            />
-          ))}
-        </Grid>
-        <Grid item xs={3}>
-          <SMText label={"common.jump.to"} boxProps={{ className: classes.navTitle }} />
-          <MenuList>
+      {!isObsolete && (
+        <Grid container spacing={3}>
+          <Grid item xs={9}>
+            <Box mb={1}>
+              <Button variant="text" disableRipple className={classes.expandButton} onClick={toggleAllPanels}>
+                <SMText label={allPanelsExpaned ? "common.collapse.all" : "common.expand.all"} />
+              </Button>
+            </Box>
             {panels.map((panel) => (
-              <MenuItem
+              <Panel
                 key={panel.dataKey}
-                onClick={jumpToPanel(panel.dataKey)}
-                selected={expandedPanels.includes(panel.dataKey)}
-                className={classes.navItem}
-              >
-                <SMText label={panel.title} />
-              </MenuItem>
+                panel={panel}
+                data={data?.[panel.dataKey]}
+                expanded={expandedPanels.includes(panel.dataKey)}
+                togglePanel={togglePanel(panel.dataKey)}
+                loading={loading}
+                classes={classes}
+              />
             ))}
-          </MenuList>
+          </Grid>
+          <Grid item xs={3}>
+            <SMText label={"common.jump.to"} boxProps={{ className: classes.navTitle }} />
+            <MenuList>
+              {panels.map((panel) => (
+                <MenuItem
+                  key={panel.dataKey}
+                  onClick={jumpToPanel(panel.dataKey)}
+                  selected={expandedPanels.includes(panel.dataKey)}
+                  className={classes.navItem}
+                >
+                  <SMText label={panel.title} />
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </Box>
   );
 };
