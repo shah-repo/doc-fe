@@ -164,7 +164,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
     handleAdd = (isClone?: boolean, isFromKeys?: boolean) => {
       if (!workspaceState) { return; }
       const newName = FB.uniqid;
-      workspaceState?.removeAutoState();
       const newItem = {
         ...workspaceState.getSchemaItemAt(index),
         autoScrollTo: isFromKeys,
@@ -175,7 +174,6 @@ export const withFBProcedure = <T extends FBProcedureProps>(
         formState?.setFieldValue(newName, formState.getFieldValue(name));
       }
       workspaceState?.setSchemaItemAt(newItem, index + 1);
-      workspaceState.saveDocRev(formState?.getValues());
     };
 
     onKeyDown = (e: KeyboardEvent) => {
