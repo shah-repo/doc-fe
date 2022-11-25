@@ -47,7 +47,7 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public leftPanelOpen = false;
 
   /**
-   * @cfg {string} Selected Tab Name at the time of opening form builder Library
+   * @cfg {string} Selected Tab Id at the time of opening form builder Library
    */
   public selectedTabIdForSchemaAddition = "";
 
