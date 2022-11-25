@@ -54,7 +54,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const updateApprovers = isDocumentRevisionInDraft(document?.status) && !isAdministrativeChange;
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
-      { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
+      {
+        id: outputId,
+        approvals: FBDataStore?.refreshData?.approvals || document?.approvals || changeRequest?.approvals,
+      },
     );
     let availableApprovers: string[] = [];
     const hasPOItems = useRef(false);
