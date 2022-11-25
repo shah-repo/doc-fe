@@ -25,8 +25,9 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   shouldShowApprovals,
   shouldShowRequestAllApprovals,
   disabled,
-}) =>
-  <>
+}) => {
+  const isApproverExist = approvals.length > 0 && isApproved;
+  return (<>
     <Box
       py={1}
       mb={4}
@@ -36,23 +37,33 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       borderLeft={0}
       borderRight={0}
       borderTop={0}
-      borderColor={isApproved ? Colors.light_green : Colors.latest_red_varient}
+      borderColor={isApproverExist ? Colors.light_green : Colors.latest_red_varient}
     >
-      {isApproved && <CheckCircleIcon style={{ color: Colors.light_green }} />}
-      {!isApproved && <ErrorIcon style={{ color: Colors.latest_red_varient }} />}
-      <Box ml={1} width="100%" display="flex" mt={0.3}>
-        {isApproved && <FBText locale="form.builder.approved" />}
-        {!isApproved && (
-          <>
-            <FBText boxProps={{
-              flexGrow: 1, fontSize: "14px", fontWeight: "600", color: Colors.latest_red_varient, lineHeight: "15px",
-            }} locale="form.builder.approval.pending" />
-            <FBText boxProps={{
-              fontSize: "12px", fontWeight: "400", color: Colors.almost_black, lineHeight: "15px",
-            }} locale="form.builder.approval.instruction" />
-          </>
-        )}
-      </Box>
+      {isApproverExist ?
+        (<>
+          <CheckCircleIcon style={{ color: Colors.light_green }} />
+          <FBText locale="form.builder.approved" />
+        </>)
+        :
+        (<>
+          <ErrorIcon style={{ color: Colors.latest_red_varient }} />
+          <Box ml={1} width="100%" display="flex" mt={0.3}>
+            <FBText
+              boxProps={{
+                flexGrow: 1, fontSize: "14px", fontWeight: "600", color: Colors.latest_red_varient, lineHeight: "15px",
+              }}
+              locale="form.builder.approval.pending"
+            />
+            <FBText
+              boxProps={{
+                fontSize: "12px", fontWeight: "400", color: Colors.almost_black, lineHeight: "15px",
+              }}
+              locale="form.builder.approval.instruction"
+            />
+          </Box>
+        </>)
+      }
+
     </Box>
     {options && !isPreview && (
       <FBAutocomplete
@@ -126,7 +137,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
           }}
         </FBMapWrapper>
       </Box>
-    )}</>;
+    )}</>); };
 
 
 const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
