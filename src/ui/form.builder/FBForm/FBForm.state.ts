@@ -322,7 +322,7 @@ class FBFormState extends FBSchemaState {
     const inputState = this.inputState.get(name);
     if (!inputState) { return; }
     const formValue = cloneDeep(this.getFieldValue(name));
-    inputState.setAutosaveValue(cloneDeep(formValue));
+    inputState.setAutosaveValue(formValue);
   };
 
   public lockField = (

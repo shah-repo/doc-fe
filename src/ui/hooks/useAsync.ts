@@ -37,9 +37,6 @@ const useAsync = <T>({
   const errorHandler = useCallbackHandler((message: string) => {
     setAsyncState({ status: AsyncStatus.Error, message });
     onError(message);
-    setTimeout(() => {
-      setAsyncState(ASYNC_DEFAULT_STATE);
-    }, 100);
   });
 
   const reset = () => {

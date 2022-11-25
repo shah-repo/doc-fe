@@ -23,8 +23,11 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
   }: T) => {
 
     const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
-    const { _tabsState } = SM.useStores();
+    const { _tabsState, _documentRevisionFormState } = SM.useStores();
     const { isOutput } = workspaceState || {};
+
+    const tabId = _documentRevisionFormState?.selectedTabIdForSchemaAddition
+      || _tabsState?.activeTabId;
 
     if (workspaceState?.getSchemaItemAt(index)?.deleted) {
       index = size(workspaceState?.getSchema());
@@ -45,7 +48,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       });
 
       if ((!workspaceState?.getSchemaItemAt(index) || index === 0) && additionalSchema) {
-        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES, tabId: _tabsState?.activeTabId }));
+        const additionalSchemaWithInitialValues = additionalSchema.map((item) => ({ ...item, ...COMMON_INITIAL_VALUES, tabId }));
         workspaceState?.setSchema(union(workspaceState.getSchema(), additionalSchemaWithInitialValues as FBSchemaProps[]));
         index = index + size(additionalSchema);
       }
@@ -97,6 +100,9 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
       if (type === "blanktplform" && !defaultValue) {
         formValues.defaultValue = [];
       }
+      if (type === "procedure" && workspaceState?.isOutput) {
+        formValues.editorProperties = ["copyableValue"];
+      }
       if (type === "mpiprocedure"  && (!editorConfig || isEmpty(editorConfig))) {
         formValues.editorConfig = {
           attachments: [],
@@ -128,7 +134,7 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
         applicableValidationSchema: true,
         validationAttribute: (label as string) || placeholder || validationAttribute,
-        tabId: _tabsState?.activeTabId,
+        tabId,
       }, index);
       leftPanelState?.setIndex(index + 1 || 0);
 

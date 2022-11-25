@@ -604,7 +604,7 @@ context("Receiving landing page test", () => {
     });
 
 
-    it("[API]Create Receiving form", (done: any) => {
+    it("[API]Create migration Receiving form", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -1076,7 +1076,20 @@ context("Receiving landing page test", () => {
 
     it("Verify References selection Add Remove", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.verifyAddRemoveReference({ formId: "FM-00001" });
+      const docId = "FM-00001";
+      cy.get("[data-cy='referenceTo']").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.get("[data-cy='referenceTo']").autocompleteSelect(docId);
+        cy.unClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
+          .parent().parent().find("svg").arrowClick({ force: true });
+      });
     });
 
     it("Verify Referenced By, Training ,and Release date Item exist or not", () => {

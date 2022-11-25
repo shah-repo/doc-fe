@@ -1045,7 +1045,19 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           });
 
           it("Verify Add/Remove References", () => {
-            cy.verifyAddRemoveReference({ formId: "FM-00001" });
+            const docId = "FM-00001";
+            cy.get("[data-cy='references-icon']").arrowClick().wait(1000);
+            cy.get("[data-cy='referenceTo']").arrowClick();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+              cy.get("[data-cy='referenceTo']").autocompleteSelect(docId);
+              cy.unClick();
+            });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+              cy.get(`[data-cy="field-referenceTo"]`).contains(docId)
+                .parent().parent().find("svg").arrowClick({ force: true });
+            });
           });
 
           it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -1061,7 +1073,8 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
 
         context("Verify Access Permissions tab", () => {
           it("Open access permissions tab", () => {
-            cy.drSelectPermissionTab();
+            cy.drSelectPermissionTab().wait(2000);
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Add another user permission", () => {
