@@ -2,7 +2,7 @@ import { cloneDeep, compact, difference, find, first, isEmpty, map, minBy, omit 
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBInlineApprovalBody, FBPurchaseOrderItemType, FBPurchaseOrderValue } from "..";
+import { FB, FBInlineApprovalBody, FBPurchaseOrderValue } from "..";
 import { RevisionChangeType, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
@@ -16,6 +16,7 @@ import FBPOApprovalsState from "../FBPOApprovals/FBPOApprovals.state";
 import { useDispatch } from "react-redux";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import FBDataStore from "../FBStore/FBDataStore";
+import { checkServiceOrProductPartExists } from "../FBPOApprovals/helpers";
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -85,11 +86,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       || workspaceState?.document?.approvals
       || workspaceState?.changeRequest?.approvals) as FBInlineApprovalBody[];
     const poApprovalsState = new FBPOApprovalsState({ approvals: approvers });
-
-    const checkServiceOrProductPartExists = (poItems: FBPurchaseOrderValue) => poItems?.items?.some((item) =>
-      item.type === FBPurchaseOrderItemType.SERVICE
-      || (item.type === FBPurchaseOrderItemType.PRODUCT && item.partNumberDocId)
-    );
 
     function checkLineItems(poItems: FBPurchaseOrderValue) {
       const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
