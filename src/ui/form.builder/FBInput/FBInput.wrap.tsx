@@ -143,7 +143,9 @@ export const withFBInput = <T extends FBInputProps>(
         const fieldName: string = first(value.split(",")) || "";
         const fieldValue = last(value.split(","));
 
-        if (!fieldName || !formState) { return; }
+        if (!fieldName || !formState) {
+          return;
+        }
 
         const validationRules = formState.validationRelatedRules[fieldName] || [];
 
