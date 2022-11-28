@@ -6,7 +6,7 @@ import {
   IconButton,
   Radio,
   RadioGroup,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router-dom";
