@@ -17,6 +17,8 @@ export type FBDocumentRevisionsItemProps =
 & Pick<FBDocumentRevisionsProps, "handleOpen" | "remove">
 & {
   id: string;
+  justificationOfChange: string;
+  descriptionOfChange: string;
 };
 
 export interface FBDocumentRevisionsValue {

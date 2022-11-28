@@ -1,0 +1,181 @@
+import { createStyles, makeStyles } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
+
+export default makeStyles((theme) =>
+  createStyles({
+    mainDiv: {
+      marginBottom: theme.spacing(2),
+    },
+    title: {
+      display: "flex",
+      padding: theme.spacing(.5),
+      alignItems: "center",
+    },
+    fullWidth: {
+      width: "100%",
+    },
+    btn: {
+      "&:hover": {
+        background: `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 16.91%, ${Colors.navy} 85.48%)`,
+      },
+    },
+    disableRipple: {
+      "&:hover": {
+        backgroundColor: "transparent",
+      },
+    },
+    fullLengthButton: {
+      "borderStyle": "dashed",
+      "borderColor": Colors.blue,
+      "width": "100%",
+      "margin": 0,
+      "borderRadius": theme.spacing(0, 0, .5, .5),
+      "color": Colors.navy,
+      "&:hover": {
+        backgroundColor: "transparent",
+        borderStyle: "solid",
+        borderColor: Colors.blue,
+        color: Colors.navy,
+      },
+    },
+    customTooltip: {
+      backgroundColor: Colors.black,
+    },
+    customArrow: {
+      color: Colors.black,
+    },
+    titleHeading: {
+      marginRight: theme.spacing(1.25),
+      display: "inline-block",
+    },
+    partsGrid: {
+      paddingLeft: theme.spacing(1.5),
+      marginBottom: theme.spacing(1.5),
+    },
+    btnMargin: {
+      marginRight: 0,
+    },
+    dividerStyle: {
+      margin: theme.spacing(0, 0, 1.5, 0),
+    },
+    editRowParentDiv: {
+      display: "flex",
+      width: "100%",
+      alignItems: "flex-start",
+      borderRadius: theme.spacing(0, 0, .5, .5),
+    },
+    editRowParentNormal: {
+      border: "1px solid",
+      borderColor: Colors.cerulean,
+    },
+    editRowParentError: {
+      border: "1px solid",
+      borderColor: Colors.red,
+    },
+    labelError: {
+      color: Colors.red,
+    },
+    editRowChildDivOne: {
+      width: "30%",
+      display: "grid",
+      gridTemplateColumns: "1fr 2fr",
+      justifyContent: "space-evenly",
+      padding: theme.spacing(0, 1.5),
+      alignItems: "center",
+      columnGap: theme.spacing(.5),
+    },
+    editRowChildDivTwo: {
+      width: "50%",
+      display: "grid",
+      gridTemplateColumns: "1fr 2fr",
+      justifyContent: "space-evenly",
+      padding: theme.spacing(0, 1.5),
+      alignItems: "center",
+    },
+    gridCenterAlign: {
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    normalFontWeight: {
+      fontWeight: "normal",
+    },
+    actionButtonParentDiv: {
+      width: "100%",
+      position: "relative",
+      marginBottom: theme.spacing(2.5),
+    },
+    actionButtonChildDiv: {
+      width: "100px",
+      backgroundColor: Colors.dodger_blue,
+      position: "absolute",
+      right: 0,
+      borderRadius: theme.spacing(0, 0, .5, .5),
+      display: "flex",
+      justifyContent: "center",
+    },
+    actionButton: {
+      backgroundColor: Colors.white,
+      padding: theme.spacing(.5),
+      minWidth: "auto",
+      border: theme.spacing(1),
+    },
+    iconButton: {
+      "fontSize": "16px",
+      "fill": "#000",
+      "&:hover": {
+        color: Colors.blue,
+      },
+    },
+    viewIcon: {
+      fill: Colors.cerulean,
+      marginTop: theme.spacing(.5),
+      fontSize: "1.2rem",
+      cursor: "pointer",
+    },
+    tableHeadHeight: {
+      height: "40px",
+    },
+    tableCell: {
+      backgroundColor: Colors.alice_blue,
+      color: "rgb(8, 11, 17)",
+    },
+    tableCellOne: {
+      width: "40%",
+      borderRadius: theme.spacing(.5, 0, 0, 0),
+      paddingLeft: theme.spacing(2),
+    },
+    tableCellTwo: {
+      width: "30%",
+    },
+    tableCellThree: {
+      width: "30%",
+    },
+    verticalDivider: {
+      borderLeft: "2px solid white",
+      paddingLeft: theme.spacing(1.25),
+    },
+    successMessage: {
+      width: "380px",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    textField: {
+      "padding": theme.spacing(1, .75),
+      "& .MuiInputBase-root": {
+        marginTop: 0,
+        padding: 0,
+      },
+      "& .MuiOutlinedInput-input": {
+        padding: theme.spacing(1.25),
+        fontSize: 14,
+        fontWeight: "bold",
+      },
+      "& .MuiFormHelperText-root": {
+        lineHeight: "1.15rem",
+        margin: theme.spacing(1, 0, 0, .5),
+      },
+    },
+  })
+);
+

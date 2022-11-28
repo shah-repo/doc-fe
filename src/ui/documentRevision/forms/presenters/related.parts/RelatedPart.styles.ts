@@ -106,7 +106,7 @@ export default makeStyles((theme) =>
     },
     actionButtonChildDiv: {
       width: "100px",
-      backgroundColor: Colors.cerulean,
+      backgroundColor: Colors.dodger_blue,
       position: "absolute",
       right: 0,
       borderRadius: theme.spacing(0, 0, .5, .5),
