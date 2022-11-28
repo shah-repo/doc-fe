@@ -1,22 +1,19 @@
-import { cloneDeep, compact, difference, find, first, isEmpty, map, minBy, omit } from "lodash";
+import { cloneDeep, find, first, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBInlineApprovalBody, FBPurchaseOrderValue } from "..";
-import { RevisionChangeType, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
+import { FB, FBInlineApprovalBody } from "..";
+import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBStore from "../FBStore/FBStore";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
-import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
-import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
-import { GroupType } from "../../../state/ducks/auth/types";
 import FBPOApprovalsState from "../FBPOApprovals/FBPOApprovals.state";
 import { useDispatch } from "react-redux";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import FBDataStore from "../FBStore/FBDataStore";
-import { checkServiceOrProductPartExists } from "../FBPOApprovals/helpers";
+import { checkGroups, checkLineItems } from "../FBPOApprovals/helpers";
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -87,67 +84,13 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       || workspaceState?.changeRequest?.approvals) as FBInlineApprovalBody[];
     const poApprovalsState = new FBPOApprovalsState({ approvals: approvers });
 
-    function checkLineItems(poItems: FBPurchaseOrderValue) {
-      const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
-      const updateApprovers = isDocumentRevisionInDraft(workspaceState?.document?.status) && !isAdministrativeChange;
-
-      if (!updateApprovers) {
+    const addApprover = (ids: string[], { manually = true } = {}) => {
+      if (!ids.length) {
         return;
       }
 
-      const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-      const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
-
-      const allApprovers = poApprovalsState.getApprovals
-        ?.map((item) => item?.approver?.id);
-      const hasRequesterInAllApprovers = allApprovers?.includes(requester);
-
-      if (requester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
-        return addApprover(requester, { manually: false });
-      }
-
-      // We can remove only automatically added approvers.
-      const autoApprovers = poApprovalsState.getApprovals
-        ?.filter((item) => !item.manually)
-        ?.map((item) => item?.approver?.id);
-      const hasRequesterInAutoApprovers = autoApprovers?.includes(requester);
-
-      if (requester && hasRequesterInAutoApprovers && !hasServiceOrProductPart) {
-        return removeApprover(requester);
-      }
-    }
-
-    const checkGroups = (id: string) => {
-      const approversGroups = compact(map(poApprovalsState.groups, (group) =>
-        (group.joinedEmployees as string[]).includes(id) ? group : ""));
-      const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
-      const damGroups = approversGroups.filter((group) => group.type === GroupType.REVISION_APPROVAL);
-
-      if (isEmpty(poApprovalsState.checkedGroups)) {
-        const groupToSign = minBy(poamGroups, "documentStage");
-        poApprovalsState.setCheckedGroups(groupToSign);
-        if (damGroups) {
-          const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
-          damsToSign.map((dam) => poApprovalsState.setCheckedGroups((dam)));
-        }
-        return groupToSign?.name;
-      } else {
-        const sign = minBy(difference(poamGroups, poApprovalsState.checkedGroups || []), "documentStage");
-        poApprovalsState.setCheckedGroups(sign);
-        if (damGroups) {
-          const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
-          damsToSign.map((dam) => poApprovalsState.setCheckedGroups((dam)));
-        }
-        return sign?.name;
-      }
-    };
-
-    const addApprover = (id: string, { manually = true } = {}) => {
-      if (!id) {
-        return;
-      }
-
-      const groupName = checkGroups(id);
+      const id = ids[0];
+      const groupName = checkGroups({ id, poApprovalsState });
       const poApprovalField = workspaceState?.schema?.find((item) => item.type === "poapprovals");
 
       poApprovalsState.addApproval({
@@ -162,11 +105,12 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       });
     };
 
-    const removeApprover = (id: string) => {
-      if (!id) {
+    const removeApprover = (ids: string[]) => {
+      if (!ids.length) {
         return;
       }
 
+      const id = ids[0];
       const approval = find(poApprovalsState.getApprovals, (a) => a.approver?.id === id);
       poApprovalsState.removeCheckedGroups(approval?.signatureGroupName);
       poApprovalsState.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
@@ -180,10 +124,18 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         formState?.setFieldValue(name, value);
         FBStore?.setPurchaseOrderValue(value);
         workspaceState?.saveDocRev(formState?.getValues());
-        checkLineItems(value as FBPurchaseOrderValue);
+        if (workspaceState) {
+          checkLineItems({
+            poItems: value,
+            workspaceState,
+            poApprovalsState,
+            addApprover,
+            removeApprover,
+          });
+        }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), [checkLineItems]);
+    ), []);
 
     useEffect(() => {
       if (isReceivable)  { purchaseOrderState?.getPartsVersion(); }

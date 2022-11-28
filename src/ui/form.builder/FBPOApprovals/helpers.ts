@@ -1,4 +1,5 @@
-// Todo: Business logic from this file should be moved to BE side.
+// Todo: ENC-13302 Business logic from this file should be moved to BE side.
+
 import { compact, difference, isEmpty, map, minBy } from "lodash";
 import { FBPurchaseOrderItemType, FBPurchaseOrderValue } from "../FBPurchaseOrder/FBPurchaseOrder.types";
 import { GroupType } from "../../../state/ducks/auth/types";
@@ -49,6 +50,7 @@ interface CheckLineItemsOptions {
   workspaceState: FBWorkspaceState;
   poApprovalsState: FBPOApprovalsState;
   prevRequesterValue?: string;
+  poItems?: FBPurchaseOrderValue;
   addApprover: (ids: string[], options?: { manually?: boolean }) => void;
   removeApprover: (ids: string[]) => void;
 }
@@ -65,7 +67,7 @@ export const checkLineItems = (options: CheckLineItemsOptions) => {
     return;
   }
 
-  const poItems = formInputSync.get(PO_ITEMS_COMPONENT_NAME);
+  const poItems = options.poItems ?? formInputSync.get(PO_ITEMS_COMPONENT_NAME);
   const requester = formInputSync.get(PO_REQUESTOR_COMPONENT_NAME);
   const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
 
