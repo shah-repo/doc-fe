@@ -269,10 +269,6 @@ export const withFBInput = <T extends FBInputProps>(
       // Input states
       formState?.inputState.set(name, inputState!);
 
-      // Validation settings
-      let attr = validationAttribute || (label as string) || placeholder || name;
-      isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
-      formState?.setValidationAttributeName(name, attr);
       if (!rules) { return; }
       formState!.setFieldRules(name, rules);
       if (!omitFinalValidation) {
