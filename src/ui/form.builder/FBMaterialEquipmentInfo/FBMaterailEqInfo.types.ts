@@ -44,7 +44,7 @@ export interface MaterialEqProps {
   includeDiff: boolean;
   showDiff: boolean;
   loading?: boolean;
-  isObsolete?: boolean;
+  isObsolete: boolean;
   handleShowDiffChange: (value: boolean) => void;
 }
 
