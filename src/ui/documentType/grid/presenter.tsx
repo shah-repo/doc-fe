@@ -79,12 +79,15 @@ export function DocumentTypePresenter({
     });
     setDataToBeExported(copyDate);
   };
+  // Doc Type change here
+  const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
+  console.log("tableCriteria Doc type:", isGrouped);
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
         <CreateDocumentByType
           {...createDocumentProps}
-          {...{ isByCategory, headers, tableData: dataToBeExported }}
+          {...{ isByCategory, headers, tableData: dataToBeExported, isGrouped }}
           labelName={
             isByCategory
               ? documentCategory.addNewBtnLabel

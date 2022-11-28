@@ -19,6 +19,7 @@ interface Props {
   headers: HeaderTableType[];
   data: any[];
   exportDialog: DialogHandler;
+  isGrouped: boolean;
 }
 
 const FormListPresenter: React.FunctionComponent<Props> = ({
@@ -29,6 +30,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
   handleTemplateSelection,
   headers,
   data,
+  isGrouped,
 }) => {
   const classes = styles();
   return (
@@ -38,7 +40,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
           <GridTitle translation="page.table.title.changeRequest" />
         </Grid>
         <Grid item>
-          <Button
+          {!isGrouped && <Button
             variant="outlined"
             className={classes.exportListbutton}
             id="ListPresenter-export-list"
@@ -49,7 +51,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
               <ExportIcon className={classes.iconSvg} height={14} width={14} />
             </Box>
             <Text translation="document.revision.export.list" />
-          </Button>
+          </Button>}
           <ExportListDialog
             {...{ headers, data }}
             dialog={exportDialog}

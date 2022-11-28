@@ -25,6 +25,7 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns }) => 
   }));
   const renderTableData = () => {
     if (!isEmpty(gridData)) {
+      // modify here
       return gridData.map((e) => ({
         trId: e.trId,
         docId: e.trainingPlan.document.docId,

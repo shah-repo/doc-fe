@@ -7,6 +7,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { ReactComponent as DisabledExportIcon } from "../../../assets/images/disabled_export_data.svg";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
@@ -22,8 +23,8 @@ import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import Text from "../../components/Text";
 import { toastError } from "../../components/notifications";
+import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
@@ -48,6 +49,7 @@ interface Props {
   categoryName?: string;
   headers: HeaderTableType[];
   tableData: any[];
+  isGrouped: boolean;
 }
 
 let selectedTypeLabel = "";
@@ -126,6 +128,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   categoryName = "",
   isByCategory,
   headers,
+  isGrouped,
   tableData,
 }) => {
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
@@ -311,13 +314,15 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           <Button
             variant="outlined"
             color="primary"
-            className={classes.exportListbutton}
+            className={isGrouped ? classes.disabledExportListbutton : classes.exportListbutton}
             id="ListPresenter-export-list"
             data-cy="document.revision.export.list"
             onClick={exportDialog.open}
+            disabled ={isGrouped}
           >
             <Box display="flex">
-              <ExportIcon className={classes.iconSvg} height={14} width={14}/>
+              {isGrouped ? <DisabledExportIcon className={classes.disabledIconSvg} height={14} width={14}/> :
+                <ExportIcon className={classes.iconSvg} height={14} width={14}/>}
             </Box>
             <Text translation="document.revision.export.list" />
           </Button>

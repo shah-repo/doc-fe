@@ -43,8 +43,21 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: Colors.white,
       color: Colors.navy,
     },
+    disabledExportListbutton: {
+      ...commonButtonStyles,
+      marginRight: theme.spacing(1.875),
+      paddingRight: theme.spacing(2.5),
+      paddingLeft: theme.spacing(2.5),
+      border: `1px solid ${Colors.almost_black}`,
+      backgroundColor: Colors.white,
+      color: Colors.almost_black,
+    },
     iconSvg: {
       fill: Colors.navy,
+      marginRight: theme.spacing(0.625),
+    },
+    disabledIconSvg: {
+      fill: Colors.white,
       marginRight: theme.spacing(0.625),
     },
   }),

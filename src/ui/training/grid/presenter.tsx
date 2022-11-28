@@ -22,6 +22,8 @@ export function TrainingListPresenter({
   const handleExportData = (dataToBeExported: TrainingListData[]) => {
     setDataToBeExported(dataToBeExported);
   };
+  const isGrouped = tableCriteria?.queryDict?.dataState?.group || [];
+  console.log("tableCriteria :", isGrouped);
 
   return (
     <Grid container>
