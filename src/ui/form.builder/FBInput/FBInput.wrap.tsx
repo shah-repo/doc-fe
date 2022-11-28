@@ -145,6 +145,8 @@ export const withFBInput = <T extends FBInputProps>(
         const fieldValue = last(value.split(","));
         const validationRules = formState.validationRelatedRules[fieldName] || [];
 
+        if (!fieldName) { return; }
+
         formState.validationRelatedRules[fieldName] =
         uniqWith(union([{ name, value: fieldValue }], validationRules), isEqual);
         isFieldUnderValidation = fieldName && formState.validationRelatedRules[fieldName]?.filter(
