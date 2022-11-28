@@ -6,7 +6,7 @@ import {
   IconButton,
   Radio,
   RadioGroup,
-  Typography,
+  Typography
 } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -17,6 +17,7 @@ import { documentRevisionsActions } from "../../../../state/ducks/documentRevisi
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../components/Text";
 import { documentVersionPath } from "../../../document.revision/utils/paths";
+import FBStore from "../../../form.builder/FBStore/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import { styles } from "./CloneModal.styles";
@@ -55,6 +56,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
   };
 
   const cloneAction = () => {
+    FBStore.selectedApprover = [];
     asyncClone.start(cloneEB, documentRevision.id, { ...payload }, asyncClone);
   };
 
