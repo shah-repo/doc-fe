@@ -149,8 +149,7 @@ export const withFBInput = <T extends FBInputProps>(
 
         formState.validationRelatedRules[fieldName] =
         uniqWith(union([{ name, value: fieldValue }], validationRules), isEqual);
-        isFieldUnderValidation = formState.validationRelatedRules[fieldName]?.filter(
-          (data) => data.name === name)?.length > 0;
+        isFieldUnderValidation = formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
         let convertedFieldValue;
         try {
           convertedFieldValue = JSON.parse(fieldValue as string);
