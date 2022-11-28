@@ -227,7 +227,7 @@
   "common.version": "Version",
   "common.revision": "Revision",
   "common.created": "Created",
-  "common.crid": "AR ID",
+  "common.crid": "CO ID",
   "common.id": "ID",
   "common.owner": "Owner",
   "common.archived": "Archived",
