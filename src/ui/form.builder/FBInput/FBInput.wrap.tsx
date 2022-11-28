@@ -139,13 +139,13 @@ export const withFBInput = <T extends FBInputProps>(
 
     if (validationMode === "visibility" || validationMode === "disabled") {
       map(get(formState?.validatorRules, name), (rule) => {
-        if (!formState) { return; }
         const { value = "" } = rule || {};
         const fieldName: string = first(value.split(",")) || "";
         const fieldValue = last(value.split(","));
-        const validationRules = formState.validationRelatedRules[fieldName] || [];
 
-        if (!fieldName) { return; }
+        if (!fieldName || !formState) { return; }
+
+        const validationRules = formState.validationRelatedRules[fieldName] || [];
 
         formState.validationRelatedRules[fieldName] =
         uniqWith(union([{ name, value: fieldValue }], validationRules), isEqual);
