@@ -40,7 +40,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
           <GridTitle translation="page.table.title.changeRequest" />
         </Grid>
         <Grid item>
-          {<Button
+          <Button
             variant="outlined"
             className={classes.exportListbutton}
             id="ListPresenter-export-list"
@@ -50,7 +50,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
           >
             <ExportListIcon isGrouped={isGrouped} />
             <Text translation="document.revision.export.list" />
-          </Button>}
+          </Button>
           <ExportListDialog
             {...{ headers, data }}
             dialog={exportDialog}
