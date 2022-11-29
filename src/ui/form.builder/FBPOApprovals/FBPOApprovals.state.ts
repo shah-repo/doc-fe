@@ -59,13 +59,20 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   public onSuccess() {
     this.setGroups(this.data);
-    const filteredCheckedGroups = map(this.approvals, (approval) => values(this.groups)?.find((group) =>
-      group.name === approval.signatureGroupName));
+
+    const filteredCheckedGroups = map(this.approvals, (approval) =>
+      values(this.groups)?.find(
+        (group) => group.name === approval.signatureGroupName
+      )
+    );
 
     map(this.approvals, (approval) => {
       map(this.groups, (group) => {
-        if ((group.joinedEmployees as string[]).includes(approval.approverId || "")
-          && (group.type === GroupType.REVISION_APPROVAL)) {
+        if (
+          approval.approverId
+          && (group.joinedEmployees as string[]).includes(approval.approverId)
+          && (group.type === GroupType.REVISION_APPROVAL)
+        ) {
           filteredCheckedGroups.push(group);
         }
       });
