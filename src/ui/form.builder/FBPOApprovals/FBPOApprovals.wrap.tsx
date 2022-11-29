@@ -1,23 +1,21 @@
 import { Box } from "@material-ui/core";
 import { useFormikContext } from "formik";
-import { compact, concat, difference, filter, find, includes, isEmpty, map, minBy, unionBy } from "lodash";
+import { compact, concat, difference, filter, find, includes, isEmpty, map, unionBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBPurchaseOrderItemType, FBPurchaseOrderValue, FBRequiredApprover } from "..";
-import { GroupType } from "../../../state/ducks/auth/types";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
 import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
-import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBDataStore from "../FBStore/FBDataStore";
 import FBPOApprovalsState from "./FBPOApprovals.state";
-
+import { checkServiceOrProductPartExists, checkGroups, checkLineItems } from "./helpers";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -51,10 +49,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
     const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
-    const updateApprovers = isDocumentRevisionInDraft(document?.status) && !isAdministrativeChange;
     const poApprovalsState = FB.useRef(
       FBPOApprovalsState,
-      { id: outputId, approvals: document?.approvals || changeRequest?.approvals },
+      {
+        id: outputId,
+        approvals: FBDataStore?.refreshData?.approvals || document?.approvals || changeRequest?.approvals,
+      },
     );
     let availableApprovers: string[] = [];
     const hasPOItems = useRef(false);
@@ -97,11 +97,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
-    const checkServiceOrProductPartExists = (poItems: FBPurchaseOrderValue) => poItems?.items?.some((item) =>
-      item.type === FBPurchaseOrderItemType.SERVICE
-      || (item.type === FBPurchaseOrderItemType.PRODUCT && item.partNumberDocId)
-    );
-
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(poName),
       (poItems) => {
@@ -113,40 +108,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
-
-    function checkLineItems() {
-      if (!updateApprovers) {
-        return;
-      }
-
-      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
-      const requester = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-      const prevRequesterValue = prevRequester.current;
-      const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
-
-      const allApprovers = poApprovalsState?.getApprovals
-        ?.map((item) => item?.approver?.id);
-      const hasRequesterInAllApprovers = allApprovers?.includes(requester);
-
-      if (requester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
-        return addApprover([requester], { manually: false });
-      }
-
-      // We can remove only automatically added approvers.
-      const autoApprovers = poApprovalsState?.getApprovals
-        ?.filter((item) => !item.manually)
-        ?.map((item) => item?.approver?.id);
-      const hasRequesterInAutoApprovers = autoApprovers?.includes(requester);
-      const hasPrevRequesterInAutoApprovers = autoApprovers?.includes(prevRequesterValue as string);
-
-      if (requester && hasRequesterInAutoApprovers && !hasServiceOrProductPart) {
-        return removeApprover([requester]);
-      }
-
-      if (!requester && prevRequesterValue && hasPrevRequesterInAutoApprovers) {
-        return removeApprover([prevRequesterValue]);
-      }
-    }
 
     // On add approver
     useEffect(() => reaction(
@@ -200,7 +161,15 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requester) => {
-        checkLineItems();
+        if (workspaceState) {
+          checkLineItems({
+            workspaceState,
+            poApprovalsState,
+            prevRequesterValue: prevRequester.current,
+            addApprover,
+            removeApprover,
+          });
+        }
         prevRequester.current = requester;
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,51 +179,29 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     useEffect(() => {
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       poApprovalsState.setPrevPOItems(poItems);
-
-      // checkLineItems();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => reaction(
       () => Object.values((poApprovalsState?.groups as {})).slice(),
       (groups) => {
-        if (groups) {
-          checkLineItems();
+        if (groups && workspaceState) {
+          checkLineItems({
+            workspaceState,
+            poApprovalsState,
+            prevRequesterValue: prevRequester.current,
+            addApprover,
+            removeApprover,
+          });
         }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    const checkGroups = (id: string) => {
-
-      const approversGroups = compact(map(poApprovalsState.groups, (group) =>
-        (group.joinedEmployees as string[]).includes(id) ? group : ""));
-      const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
-      const damGroups = approversGroups.filter((group) => group.type === GroupType.REVISION_APPROVAL);
-
-      if (isEmpty(poApprovalsState.checkedGroups)) {
-        const groupToSign = minBy(poamGroups, "documentStage");
-        poApprovalsState.setCheckedGroups(groupToSign);
-        if (damGroups) {
-          const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
-          damsToSign.map((dam) => poApprovalsState.setCheckedGroups((dam)));
-        }
-        return groupToSign?.name;
-      } else {
-        const sign = minBy(difference(poamGroups, poApprovalsState.checkedGroups || []), "documentStage");
-        poApprovalsState.setCheckedGroups(sign);
-        if (damGroups) {
-          const damsToSign = difference(damGroups, poApprovalsState.checkedGroups || []);
-          damsToSign.map((dam) => poApprovalsState.setCheckedGroups((dam)));
-        }
-        return sign?.name;
-      }
-    };
-
     const addApprover = (ids: string[], { manually = true } = {}) => {
       if (!id) { return; }
       if (!ids) { return; }
-      const groupName = checkGroups(ids[0]);
+      const groupName = checkGroups({ id: ids[0], poApprovalsState });
       if (
         poApprovalsState.getDidMountPhase &&
         ( difference(ids, availableApprovers).length === 0 )

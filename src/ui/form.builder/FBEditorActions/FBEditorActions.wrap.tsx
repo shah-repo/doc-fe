@@ -3,6 +3,7 @@ import { compact, Dictionary, filter, isEmpty, isString, kebabCase, omit, size, 
 import React from "react";
 import { editorPropertiesFlags, FB, FBData, FBEditorActionsProps, FBSchemaProps } from "..";
 import { SM } from "../../../App";
+import { TabTypeOptions } from "../../../state/ducks/documentRevisions/documentType/types";
 import { withFBEditorOptions } from "../FBEditorOptions/FBEditorOptions.wrap";
 import { COMMON_INITIAL_VALUES } from "../FBInput/FBInput.wrap";
 import { withFBValidation } from "../FBValidation/FBValidation.wrap";
@@ -140,6 +141,13 @@ export const withFBEditorActions = <T extends FBEditorActionsProps>(
 
       dialogState?.closeDialog();
       leftPanelState?.HideLeftPanel();
+      if (
+        _tabsState?.isTabActive(TabTypeOptions.TABS_MEQ) &&
+        workspaceState?.autosave &&
+        tabId !== _tabsState?.activeTabId
+      ) {
+        workspaceState?.saveDocRev(formState?.getValues());
+      }
     };
 
     handleCancel = () => {

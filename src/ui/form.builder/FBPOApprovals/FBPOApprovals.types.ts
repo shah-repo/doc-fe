@@ -21,5 +21,5 @@ export type FBPOApprovalsProps =
 };
 
 export type FBPOApprovalsConstructor = FBInlineApprovalConstructor & {
-  id: string[];
+  id?: string[];
 };
