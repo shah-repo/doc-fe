@@ -1,5 +1,5 @@
 import { Approval } from "aws-sdk/clients/codecommit";
-import { compact, filter, isEmpty, map, values } from "lodash";
+import { compact, each, filter, isEmpty, map, values } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
@@ -66,8 +66,8 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
       )
     );
 
-    map(this.approvals, (approval) => {
-      map(this.groups, (group) => {
+    each(this.approvals, (approval) => {
+      each(this.groups, (group) => {
         if (
           approval.approverId
           && (group.joinedEmployees as string[]).includes(approval.approverId)
