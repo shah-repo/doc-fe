@@ -136,6 +136,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
   includeDiff,
   handleShowDiffChange,
   loading,
+  isObsolete,
 }) => {
   const [expandedPanels, setExpanedPanels] = useState<string[]>([]);
   const allPanelsExpaned = expandedPanels.length === panels.length;
@@ -148,6 +149,10 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
     state.includes(key) ? remove(state, key) : [...state, key]
   ));
   const jumpToPanel = (key: string) => () => setExpanedPanels([key]);
+
+  if (isObsolete) {
+    return null;
+  }
 
   return (
     <Box className={classes.root}>
