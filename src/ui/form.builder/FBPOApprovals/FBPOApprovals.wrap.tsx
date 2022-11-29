@@ -157,6 +157,23 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       []
     );
 
+    // On revisionChangeType change.
+    useEffect(() => reaction(
+      () => workspaceState?.revisionChangeType,
+      () => {
+        if (workspaceState) {
+          checkLineItems({
+            workspaceState,
+            poApprovalsState,
+            prevRequesterValue: prevRequester.current,
+            addApprover,
+            removeApprover,
+          });
+        }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // On requester change.
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),

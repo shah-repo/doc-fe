@@ -25,9 +25,8 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
   shouldShowApprovals,
   shouldShowRequestAllApprovals,
   disabled,
-}) => {
-  const isApproverExist = approvals.length > 0 && isApproved;
-  return (<>
+}) =>
+  <>
     <Box
       py={1}
       mb={4}
@@ -37,9 +36,9 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       borderLeft={0}
       borderRight={0}
       borderTop={0}
-      borderColor={isApproverExist ? Colors.light_green : Colors.latest_red_varient}
+      borderColor={isApproved ? Colors.light_green : Colors.latest_red_varient}
     >
-      {isApproverExist ?
+      {isApproved ?
         (<>
           <CheckCircleIcon style={{ color: Colors.light_green }} />
           <FBText locale="form.builder.approved" />
@@ -137,7 +136,7 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
           }}
         </FBMapWrapper>
       </Box>
-    )}</>); };
+    )}</>;
 
 
 const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
