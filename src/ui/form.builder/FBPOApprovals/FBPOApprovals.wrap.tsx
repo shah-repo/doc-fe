@@ -15,7 +15,7 @@ import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
 import Colors from "../../layout/theme/utils/colors";
 import FBDataStore from "../FBStore/FBDataStore";
 import FBPOApprovalsState from "./FBPOApprovals.state";
-import { checkServiceOrProductPartExists, checkGroups, checkLineItems } from "./helpers";
+import { checkGroups, checkLineItems, checkServiceOrProductPartExists } from "./helpers";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   Component: React.FunctionComponent<T>,
@@ -157,6 +157,23 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       []
     );
 
+    // On revisionChangeType change.
+    useEffect(() => reaction(
+      () => workspaceState?.revisionChangeType,
+      () => {
+        if (workspaceState) {
+          checkLineItems({
+            workspaceState,
+            poApprovalsState,
+            prevRequesterValue: prevRequester.current,
+            addApprover,
+            removeApprover,
+          });
+        }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
     // On requester change.
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
@@ -222,7 +239,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       }));
     };
 
-    const removeApprover = (ids?: string[]) => {
+    const removeApprover = (ids?: string[], callback?: () => void) => {
       if (!ids) { return; }
       if (formState?.workspaceMode === "preview") { return; }
       availableApprovers = difference(availableApprovers, ids);
@@ -232,6 +249,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         poApprovalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
           const id  = workspaceState?.id;
           if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+          callback?.();
         });
       });
     };

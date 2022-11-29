@@ -3,42 +3,30 @@ import cx from "classnames";
 import { remove } from "lodash";
 import React, { useState } from "react";
 import { useIntl } from "react-intl";
-import { FB } from "..";
 import { SMText } from "../../../App";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/tabExpand.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
-import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
-import { getLatesReferenceVersion } from "../../documentRevision/forms/transform";
 import { Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from "./FBMaterailEqInfo.types";
 import useStyles, { useItemStatusStyles } from "./FBMaterialEqInfo.styles";
 
 const DATE_FORMAT = MomentFormats.BriefDate;
 
-const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => {
+const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (<>
+  <ListItemText>
+    {item.docId && `${item.docId} -`} {item.title} | {item.unit} : {item.quantity}
 
-  const { workspaceState } = FB.useStores();
-  const smartReferencesFrom = workspaceState?.document?.smartReferencesFrom?.filter( (ref) => ref.active
-        && ref.type === SmartReferenceType.HiddenPiInstance);
-  const highestReference = getLatesReferenceVersion(smartReferencesFrom);
-  const multiplier = highestReference?.fromDocRev?.formInput?.["lhrs-start-quantity"] || 1;
-
-  return (<>
-    <ListItemText>
-      {item.docId && `${item.docId} -`} {item.title} | {item.unit} : {item.quantity * multiplier}
-
-    </ListItemText>
-    <ListItemText>
-      {item.lots && item.lots.map((lot: LotItem) => (
-        <Chip
-          className={classes.chip}
-          key={lot.lotId}
-          size="small"
-          label={`Lot ${lot.lotId ?? ""} | ${lot.partId ?? "N/A"} | ${lot.quantity ?? ""} ${lot.unit ?? ""}`}
-        />
-      ))}
-    </ListItemText>
-  </>);
-};
+  </ListItemText>
+  <ListItemText>
+    {item.lots && item.lots.map((lot: LotItem) => (
+      <Chip
+        className={classes.chip}
+        key={lot.lotId}
+        size="small"
+        label={`Lot ${lot.lotId ?? ""} | ${lot.partId ?? "N/A"} | ${lot.quantity ?? ""} ${lot.unit ?? ""}`}
+      />
+    ))}
+  </ListItemText>
+</>);
 
 const EquipmentItem: React.FC<ItemProps<Equipment>> = ({ item, classes }) => {
   const intl = useIntl();

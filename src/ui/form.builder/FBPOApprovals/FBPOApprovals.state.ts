@@ -1,5 +1,5 @@
 import { Approval } from "aws-sdk/clients/codecommit";
-import { compact, filter, isEmpty, map, values } from "lodash";
+import { compact, each, filter, isEmpty, map, values } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPurchaseOrderValue, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
@@ -59,13 +59,20 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   public onSuccess() {
     this.setGroups(this.data);
-    const filteredCheckedGroups = map(this.approvals, (approval) => values(this.groups)?.find((group) =>
-      group.name === approval.signatureGroupName));
 
-    map(this.approvals, (approval) => {
-      map(this.groups, (group) => {
-        if ((group.joinedEmployees as string[]).includes(approval.approverId || "")
-          && ( group.type === GroupType.REVISION_APPROVAL || group.type === GroupType.PURCHASE_APPROVAL )) {
+    const filteredCheckedGroups = map(this.approvals, (approval) =>
+      values(this.groups)?.find(
+        (group) => group.name === approval.signatureGroupName
+      )
+    );
+
+    each(this.approvals, (approval) => {
+      each(this.groups, (group) => {
+        if (
+          approval.approverId
+          && (group.joinedEmployees as string[]).includes(approval.approverId)
+          && (group.type === GroupType.REVISION_APPROVAL)
+        ) {
           filteredCheckedGroups.push(group);
         }
       });
