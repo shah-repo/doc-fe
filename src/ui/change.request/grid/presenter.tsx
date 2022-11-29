@@ -29,9 +29,7 @@ export function DocumentListPresenter({
     label: startCase(getTranslatedText(column.title)),
     key: column.field,
   }));
-  // CR
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
-  console.log("tableCriteria CR:", isGrouped);
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>

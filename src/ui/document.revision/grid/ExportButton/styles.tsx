@@ -16,14 +16,6 @@ const styles = makeStyles((theme) => ({
     border: `1px solid ${Colors.navy}`,
     backgroundColor: Colors.white,
   },
-  disabledIconSvg: {
-    fill: Colors.white,
-    marginRight: theme.spacing(0.625),
-  },
-  iconSvg: {
-    fill: Colors.navy,
-    marginRight: theme.spacing(0.625),
-  },
 }
 ));
 export default styles;
