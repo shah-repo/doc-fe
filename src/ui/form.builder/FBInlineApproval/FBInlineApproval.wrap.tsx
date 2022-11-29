@@ -42,7 +42,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       isOutput,
       document: { version: docVersion = 1 } = {},
     } = workspaceState || {};
-    const docApprovals = document?.approvals || changeRequest?.approvals;
+    const docApprovals = FBDataStore?.refreshData?.approvals || document?.approvals || changeRequest?.approvals;
     const userId = (
       document?.owner?.user?.id ||
       changeRequest?.owner?.user?.id

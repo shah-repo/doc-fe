@@ -61,9 +61,9 @@ export const checkLineItems = (options: CheckLineItemsOptions) => {
   const { getApprovals } = poApprovalsState;
 
   const isAdministrativeChange = revisionChangeType === RevisionChangeType.AdministrativeChange;
-  const updateApprovers = isDocumentRevisionInDraft(document?.status) && !isAdministrativeChange;
+  const shouldUpdateApprovers = isDocumentRevisionInDraft(document?.status) && !isAdministrativeChange;
 
-  if (!updateApprovers) {
+  if (!shouldUpdateApprovers) {
     return;
   }
 
