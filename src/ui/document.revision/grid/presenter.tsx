@@ -25,7 +25,6 @@ export function DocumentListPresenter({
     setDataToBeExported(dataToBeExported);
   };
   const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
-  console.log("isGrouped Doc Rev:", isGrouped);
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>

@@ -59,5 +59,9 @@ export const styles = makeStyles((theme: Theme) =>
       fill: Colors.navy,
       marginRight: theme.spacing(0.625),
     },
+    disabledIconSvg: {
+      fill: Colors.white,
+      marginRight: theme.spacing(0.625),
+    },
   }),
 );

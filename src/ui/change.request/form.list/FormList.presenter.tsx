@@ -1,5 +1,6 @@
 import { Box, Button, Dialog, Grid } from "@material-ui/core";
 import React from "react";
+import { ReactComponent as DisabledExportIcon } from "../../../assets/images/disabled_export_data.svg";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
@@ -40,15 +41,28 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
           <GridTitle translation="page.table.title.changeRequest" />
         </Grid>
         <Grid item>
-          {!isGrouped && <Button
+          {<Button
             variant="outlined"
             className={classes.exportListbutton}
             id="ListPresenter-export-list"
             data-cy="document.revision.export.list"
             onClick={exportDialog.open}
+            disabled={isGrouped}
           >
             <Box display="flex">
-              <ExportIcon className={classes.iconSvg} height={14} width={14} />
+              {isGrouped ? (
+                <DisabledExportIcon
+                  className={classes.disabledIconSvg}
+                  height={14}
+                  width={14}
+                />
+              ) : (
+                <ExportIcon
+                  className={classes.iconSvg}
+                  height={14}
+                  width={14}
+                />
+              )}
             </Box>
             <Text translation="document.revision.export.list" />
           </Button>}
