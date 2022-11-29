@@ -32,17 +32,13 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   const isNewLayout = SM.isNewCRLayout;
   const formik = useFormikContext();
 
-  const onFormClick = () => {
-    formik.submitForm();
-  };
-
   const submitButtonRenderer = canEdit && (
     <SubmitButton
       asyncState={asyncState}
       label="document.save"
       errors={errors}
       showNewButton={isNewLayout}
-      onClick={onFormClick}
+      onClick={() => formik.submitForm()}
     />
   );
   return (
