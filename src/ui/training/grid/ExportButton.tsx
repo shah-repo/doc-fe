@@ -2,6 +2,7 @@ import { Box, Button } from "@material-ui/core";
 import { isEmpty, map, startCase } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
+import { ReactComponent as DisabledExportIcon } from "../../../assets/images/disabled_export_data.svg";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { TrainingListData } from "../../../state/ducks/training/types";
@@ -13,8 +14,9 @@ import useDialog from "../../hooks/useDialog";
 interface Props {
   gridData: TrainingListData[];
   columns: any[];
+  isGrouped: boolean;
 }
-const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns }) => {
+const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGrouped }) => {
   const classes = styles();
   const dialog = useDialog();
   const intl = useIntl();
@@ -25,7 +27,6 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns }) => 
   }));
   const renderTableData = () => {
     if (!isEmpty(gridData)) {
-      // modify here
       return gridData.map((e) => ({
         trId: e.trId,
         docId: e.trainingPlan.document.docId,
@@ -56,9 +57,22 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns }) => 
         id="ListPresenter-export-list"
         data-cy="document.revision.export.list"
         onClick={dialog.open}
+        disabled={isGrouped}
       >
         <Box display="flex">
-          <ExportIcon className={classes.iconSvg} height={14} width={14} />
+          {isGrouped ? (
+            <DisabledExportIcon
+              className={classes.disabledIconSvg}
+              height={14}
+              width={14}
+            />
+          ) : (
+            <ExportIcon
+              className={classes.iconSvg}
+              height={14}
+              width={14}
+            />
+          )}
         </Box>
         <Text translation="document.revision.export.list" />
       </Button>

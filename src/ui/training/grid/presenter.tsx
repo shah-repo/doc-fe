@@ -22,8 +22,7 @@ export function TrainingListPresenter({
   const handleExportData = (dataToBeExported: TrainingListData[]) => {
     setDataToBeExported(dataToBeExported);
   };
-  const isGrouped = tableCriteria?.queryDict?.dataState?.group || [];
-  console.log("tableCriteria :", isGrouped);
+  const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
 
   return (
     <Grid container>
@@ -33,7 +32,7 @@ export function TrainingListPresenter({
             <GridTitle translation="page.title.training" />
           </Grid>
           <Grid item>
-            <ExportButton columns={columns} gridData={dataToBeExported} />
+            <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped}/>
           </Grid>
         </Grid>
       </Grid>

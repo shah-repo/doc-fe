@@ -2,6 +2,7 @@ import { Box, Button } from "@material-ui/core";
 import { isEmpty, map, startCase } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
+import { ReactComponent as DisabledExportIcon } from "../../../assets/images/disabled_export_data.svg";
 import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { UMExportDataProp } from "../../../state/ducks/userManagement/types";
 import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
@@ -14,8 +15,9 @@ import useDialog from "../../hooks/useDialog";
 interface Props {
   gridData: Partial<UMExportDataProp>[];
   columns: KendoColumn[];
+  isGrouped: boolean;
 }
-const UMExport: React.FunctionComponent<Props> = ({ gridData, columns }) => {
+const UMExport: React.FunctionComponent<Props> = ({ gridData, columns, isGrouped }) => {
   const classes = styles();
   const dialog = useDialog();
   const intl = useIntl();
@@ -25,7 +27,6 @@ const UMExport: React.FunctionComponent<Props> = ({ gridData, columns }) => {
     key: column.field,
   }));
   const renderTableData = () => {
-    // modify here
     if (!isEmpty(gridData)) {
       return gridData.map((e) => ({
         status: e.status,
@@ -50,11 +51,22 @@ const UMExport: React.FunctionComponent<Props> = ({ gridData, columns }) => {
         id="ListPresenter-export-list"
         data-cy="um-open-export-dialog"
         onClick={dialog.open}
+        disabled={isGrouped}
       >
         <Box display="flex">
-          <ExportIcon
-            className={classes.iconSvg}
-            height={14} width={14} />
+          {isGrouped ? (
+            <DisabledExportIcon
+              className={classes.disabledIconSvg}
+              height={14}
+              width={14}
+            />
+          ) : (
+            <ExportIcon
+              className={classes.iconSvg}
+              height={14}
+              width={14}
+            />
+          )}
         </Box>
         <Text translation="document.revision.export.list" />
       </Button>
