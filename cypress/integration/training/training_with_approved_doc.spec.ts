@@ -574,18 +574,24 @@ context("Training notifications for documents with approved and released revisio
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Edit document description", () => {
-      cy.drEnterDocumentDescription({ description: "Edit description" });
-    });
-
     it("Save document", () => {
       cy.drClickCreateDocumentWithApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Edit document description", () => {
+      cy.drEnterDocumentDescription({ description: "Edit description" });
+    });
+
     it("Approve and release FORM document", () => {
       cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[12].name}`]);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

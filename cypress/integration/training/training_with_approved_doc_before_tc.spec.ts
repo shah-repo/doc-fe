@@ -373,9 +373,14 @@ context("Training notifications for documents with approved and released revisio
       cy.navigToDocumentList();
       cy.drFilterDocListByNameAndStatus({ title: "released form", status: "Released" });
       cy.drClickReviseDocument();
-      cy.drEnterDocumentDescription({ description: "Edit description" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithApiCall();
+      cy.drEnterDocumentDescription({ description: "Edit description" });
       cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.authLogout();

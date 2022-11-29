@@ -770,6 +770,12 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
     });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+    });
   });
 
   context("Verify email for draft training notification", () => {
@@ -956,6 +962,12 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
     });
   });
 
