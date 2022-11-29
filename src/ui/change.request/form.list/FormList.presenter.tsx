@@ -1,8 +1,7 @@
-import { Box, Button, Dialog, Grid } from "@material-ui/core";
+import { Button, Dialog, Grid } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as DisabledExportIcon } from "../../../assets/images/disabled_export_data.svg";
-import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
+import ExportListIcon from "../../components/common/kendo/ExportListIcon";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
@@ -49,21 +48,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
             onClick={exportDialog.open}
             disabled={isGrouped}
           >
-            <Box display="flex">
-              {isGrouped ? (
-                <DisabledExportIcon
-                  className={classes.disabledIconSvg}
-                  height={14}
-                  width={14}
-                />
-              ) : (
-                <ExportIcon
-                  className={classes.iconSvg}
-                  height={14}
-                  width={14}
-                />
-              )}
-            </Box>
+            <ExportListIcon isGrouped={isGrouped} />
             <Text translation="document.revision.export.list" />
           </Button>}
           <ExportListDialog

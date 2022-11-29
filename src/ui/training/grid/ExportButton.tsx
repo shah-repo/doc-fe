@@ -1,11 +1,10 @@
-import { Box, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { isEmpty, map, startCase } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { ReactComponent as DisabledExportIcon } from "../../../assets/images/disabled_export_data.svg";
-import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { TrainingListData } from "../../../state/ducks/training/types";
+import ExportListIcon from "../../components/common/kendo/ExportListIcon";
 import Text from "../../components/Text";
 import styles from "../../document.revision/grid/ExportButton/styles";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
@@ -59,21 +58,7 @@ const ExportButton: React.FunctionComponent<Props> = ({ gridData, columns, isGro
         onClick={dialog.open}
         disabled={isGrouped}
       >
-        <Box display="flex">
-          {isGrouped ? (
-            <DisabledExportIcon
-              className={classes.disabledIconSvg}
-              height={14}
-              width={14}
-            />
-          ) : (
-            <ExportIcon
-              className={classes.iconSvg}
-              height={14}
-              width={14}
-            />
-          )}
-        </Box>
+        <ExportListIcon isGrouped={isGrouped} />
         <Text translation="document.revision.export.list" />
       </Button>
       <ExportListDialog
