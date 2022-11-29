@@ -314,15 +314,26 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
           <Button
             variant="outlined"
             color="primary"
-            className={isGrouped ? classes.disabledExportListbutton : classes.exportListbutton}
+            className={classes.exportListbutton}
             id="ListPresenter-export-list"
             data-cy="document.revision.export.list"
             onClick={exportDialog.open}
             disabled ={isGrouped}
           >
             <Box display="flex">
-              {isGrouped ? <DisabledExportIcon className={classes.disabledIconSvg} height={14} width={14}/> :
-                <ExportIcon className={classes.iconSvg} height={14} width={14}/>}
+              {isGrouped ? (
+                <DisabledExportIcon
+                  className={classes.disabledIconSvg}
+                  height={14}
+                  width={14}
+                />
+              ) : (
+                <ExportIcon
+                  className={classes.iconSvg}
+                  height={14}
+                  width={14}
+                />
+              )}
             </Box>
             <Text translation="document.revision.export.list" />
           </Button>
