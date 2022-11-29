@@ -139,22 +139,30 @@ export const withFBInput = <T extends FBInputProps>(
 
     if (validationMode === "visibility" || validationMode === "disabled") {
       map(get(formState?.validatorRules, name), (rule) => {
-        if (!formState) { return; }
         const { value = "" } = rule || {};
         const fieldName: string = first(value.split(",")) || "";
         const fieldValue = last(value.split(","));
+
+        if (!fieldName || !formState) {
+          return;
+        }
+
         const validationRules = formState.validationRelatedRules[fieldName] || [];
 
-        formState.validationRelatedRules[fieldName] =
-        uniqWith(union([{ name, value: fieldValue }], validationRules), isEqual);
-        isFieldUnderValidation = fieldName && formState.validationRelatedRules[fieldName]?.filter(
-          (data) => data.name === name)?.length > 0;
+        formState.validationRelatedRules[fieldName] = uniqWith(
+          union([{ name, value: fieldValue }], validationRules),
+          isEqual
+        );
+
+        isFieldUnderValidation = formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
+
         let convertedFieldValue;
         try {
           convertedFieldValue = JSON.parse(fieldValue as string);
         } catch (error) {
           convertedFieldValue = fieldValue;
         }
+
         if (typeof convertedFieldValue === "string") {
           showValidationField = formState?.getFieldValue(fieldName) === fieldValue;
         } else if (typeof convertedFieldValue === "object") {
@@ -263,10 +271,6 @@ export const withFBInput = <T extends FBInputProps>(
       // Input states
       formState?.inputState.set(name, inputState!);
 
-      // Validation settings
-      let attr = validationAttribute || (label as string) || placeholder || name;
-      isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
-      formState?.setValidationAttributeName(name, attr);
       if (!rules) { return; }
       formState!.setFieldRules(name, rules);
       if (!omitFinalValidation) {

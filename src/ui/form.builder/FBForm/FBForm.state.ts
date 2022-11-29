@@ -254,6 +254,9 @@ class FBFormState extends FBSchemaState {
       const rulesArray = value?.split("|");
       const valuesArray: any = [];
       map(rulesArray, (val) => {
+        if (!val) {
+          return;
+        }
         const splitVal = val.split(":");
         if (splitVal.length === 1) {
           parsedRules[key] = val;
