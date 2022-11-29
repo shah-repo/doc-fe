@@ -8,7 +8,7 @@ interface Props {
   isGrouped: boolean;
 }
 
-const ExportListButton: React.FunctionComponent<Props> = ({ isGrouped }) => {
+const ExportListIcon: React.FunctionComponent<Props> = ({ isGrouped }) => {
   const classes = styles();
 
   return (
@@ -26,4 +26,4 @@ const ExportListButton: React.FunctionComponent<Props> = ({ isGrouped }) => {
   );
 };
 
-export default ExportListButton;
+export default ExportListIcon;
