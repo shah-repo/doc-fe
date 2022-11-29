@@ -1,6 +1,6 @@
-import { Table } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
-import { FBButton, FBDialog, FBDocumentRevisionsProps, FBDocumentRevisionsValue, FBInput, FBMapWrapper, FBProvider } from "..";
+import { FBDialog, FBDocumentRevisionsProps, FBDocumentRevisionsValue, FBInput, FBMapWrapper, FBProvider } from "..";
 import useStyles from "./ChangeOrderGrid.styles";
 import ChangeOrderGridHeader from "./ChangeOrderGridHeader";
 import ChangeOrderGridItem from "./ChangeOrderGridItem";
@@ -22,28 +22,26 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
     <FBProvider {...{ dialogState }}>
       <FBDialog />
       <FBInput {...{ name, gutter, index }} type="documentRevisions">
-        <div className={classes.fullWidth}>
-          <Table aria-label="document list table">
-            <ChangeOrderGridHeader />
-            <FBMapWrapper<FBDocumentRevisionsValue[]> {...{ collection }}>
-              {(value: FBDocumentRevisionsValue, index) => (
-                // <FBDocumentRevisionsItem
-                //   key={`fb-document-revision-${value.id}-${index}`}
-                //   {...{ name, disabled, index, handleOpen, remove }}
-                //   id={value.proposedDocumentRevision.id}
-                // />
-                <ChangeOrderGridItem
-                  key={`fb-document-revision-${value.id}-${index}`}
-                  {...{ name, disabled, index, handleOpen, remove }}
-                  justificationOfChange={value.justificationOfChange}
-                  descriptionOfChange={value.descriptionOfChange}
-                  id={value.proposedDocumentRevision.id}
-                />
-              )}
-            </FBMapWrapper>
-          </Table>
+        <div className={cx(classes.fullWidth, classes.enclosingDiv)}>
+          <ChangeOrderGridHeader />
+          <FBMapWrapper<FBDocumentRevisionsValue[]> {...{ collection }}>
+            {(value: FBDocumentRevisionsValue, index) => (
+              // <FBDocumentRevisionsItem
+              //   key={`fb-document-revision-${value.id}-${index}`}
+              //   {...{ name, disabled, index, handleOpen, remove }}
+              //   id={value.proposedDocumentRevision.id}
+              // />
+              <ChangeOrderGridItem
+                key={`fb-document-revision-${value.id}-${index}`}
+                {...{ name, disabled, index, handleOpen, remove }}
+                justificationOfChange={value.justificationOfChange}
+                descriptionOfChange={value.descriptionOfChange}
+                id={value.proposedDocumentRevision.id}
+              />
+            )}
+          </FBMapWrapper>
         </div>
-        <FBButton
+        {/* <FBButton
           {...{ disabled }}
           fullWidth={true}
           label="form.builder.add.document"
@@ -51,7 +49,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
           style={{ margin: 0 }}
           onClick={handleForm}
           dataCy={"fb.add.document"}
-        />
+        /> */}
       </FBInput>
     </ FBProvider>
   );

@@ -132,23 +132,43 @@ export default makeStyles((theme) =>
       fontSize: "1.2rem",
       cursor: "pointer",
     },
-    tableHeadHeight: {
+    enclosingDiv: {
+      borderRadius: theme.spacing(.5, .5, 0, 0),
+      border: `1px solid ${Colors.alice_blue}`,
+    },
+    header: {
       height: "40px",
-    },
-    tableCell: {
+      display: "flex",
+      alignItems: "center",
+
       backgroundColor: Colors.alice_blue,
-      color: "rgb(8, 11, 17)",
+      color: Colors.almost_black,
+      textTransform: "uppercase",
+      fontSize: "12px",
+
+      fontWeight: 600,
+
+      borderRadius: theme.spacing(.5, .5, 0, 0),
     },
-    tableCellOne: {
-      width: "40%",
-      borderRadius: theme.spacing(.5, 0, 0, 0),
+    cellOne: {
+      width: "30%",
+    },
+    cellTwo: {
+      width: "35%",
+    },
+    cellThree: {
+      width: "35%",
+    },
+    itemLeftPadding: {
       paddingLeft: theme.spacing(2),
     },
-    tableCellTwo: {
-      width: "30%",
+    itemRightPadding: {
+      paddingRight: theme.spacing(1),
     },
-    tableCellThree: {
-      width: "30%",
+    itemRow: {
+      display: "flex",
+      alignItems: "center",
+      padding: theme.spacing(1),
     },
     verticalDivider: {
       borderLeft: "2px solid white",
@@ -161,7 +181,7 @@ export default makeStyles((theme) =>
       alignItems: "center",
     },
     textField: {
-      "padding": theme.spacing(1, .75),
+      "width": "100%",
       "& .MuiInputBase-root": {
         marginTop: 0,
         padding: 0,

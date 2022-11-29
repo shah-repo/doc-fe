@@ -1,4 +1,5 @@
-import { TableCell, TableRow, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBDocumentRevisionsItemProps } from "..";
 import useStyles from "./ChangeOrderGrid.styles";
@@ -15,8 +16,8 @@ const ChangeOrderGridItem: React.FunctionComponent<FBDocumentRevisionsItemProps>
 }) => {
   const classes = useStyles();
   return (
-    <TableRow hover>
-      <TableCell align="left">
+    <div className={classes.itemRow}>
+      <div className={cx(classes.cellOne, classes.itemRightPadding)}>
         <FBAutocompleteAsync
           name={`${name}.${index}.proposedDocumentRevision.id`}
           optionId={FBAutocompleteAsyncOption.documentRevisions}
@@ -25,22 +26,22 @@ const ChangeOrderGridItem: React.FunctionComponent<FBDocumentRevisionsItemProps>
           freeSolo={true}
           shouldReloadOnInit
         />
-      </TableCell>
-      <TableCell align="left">
+      </div>
+      <div className={cx(classes.cellTwo, classes.itemRightPadding)}>
         <TextField
           className={classes.textField}
           variant="outlined"
           value={descriptionOfChange}
         />
-      </TableCell>
-      <TableCell align="left">
+      </div>
+      <div className={classes.cellThree}>
         <TextField
           className={classes.textField}
           variant="outlined"
           value={justificationOfChange}
         />
-      </TableCell>
-    </TableRow>
+      </div>
+    </div>
   );
 };
 
