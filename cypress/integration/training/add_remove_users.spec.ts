@@ -363,6 +363,9 @@ context("Add/Remove users from Training Curriculum", () => {
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
@@ -476,6 +479,8 @@ context("Add/Remove users from Training Curriculum", () => {
     it(`Open and complete training for ${USERS[12].name}`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Login as ${USERS[11].name}`, () => {
@@ -485,12 +490,18 @@ context("Add/Remove users from Training Curriculum", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Revise training", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -508,6 +519,8 @@ context("Add/Remove users from Training Curriculum", () => {
         CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {

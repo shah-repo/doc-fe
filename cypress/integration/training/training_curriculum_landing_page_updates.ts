@@ -772,6 +772,8 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
   context("Check  the name of the group in TC Landing page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the changed Group name", () => {
@@ -905,6 +907,8 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
   context("Check  the name of the group in TC Landing page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the changed group names", () => {
@@ -982,6 +986,9 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
 
     it("Click Submit for Approval", () => {
       cy.pmSubmitForApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training status should be 'In Review'", () => {
@@ -1073,6 +1080,8 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
   context("Check  the name of the group in TC Landing page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the changed group names", () => {
@@ -1380,6 +1389,8 @@ context("Test training curriculum landing page updates", { tags: ["@timetool"] }
   context("Check  the name of the group in TC Landing page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the changed group names", () => {

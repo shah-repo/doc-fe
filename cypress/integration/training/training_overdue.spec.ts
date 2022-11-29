@@ -692,6 +692,8 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
@@ -700,6 +702,8 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
 
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -710,10 +714,14 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.drClickCreateDocumentWithoutApiCall();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
       cy.pmSubmitForApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -722,6 +730,8 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
 
     it("Click Approve", () => {
       cy.trApproveTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -785,7 +795,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
-      cy.wait(2000);
+      cy.wait(15000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -871,6 +881,8 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
           expect(res.body.DUE).to.equal(3);
         });
       }).as("response");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.reload();
       cy.wait("@response");
       cy.progressBarShouldNotExist();
@@ -901,7 +913,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
-      cy.wait(2000);
+      cy.wait(15000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -987,6 +999,8 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
           expect(res.body.OVERDUE).to.equal(3);
         });
       }).as("response");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.reload();
       cy.wait("@response");
       cy.progressBarShouldNotExist();
@@ -1068,6 +1082,9 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
           expect(res.body.OVERDUE).to.equal(2);
         });
       }).as("response");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.reload();
       cy.wait("@response");
       cy.progressBarShouldNotExist();
@@ -1149,6 +1166,9 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
           expect(res.body.OVERDUE).to.equal(0);
         });
       }).as("response");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.reload();
       cy.wait("@response");
       cy.progressBarShouldNotExist();

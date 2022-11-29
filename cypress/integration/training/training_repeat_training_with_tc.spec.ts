@@ -740,6 +740,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
@@ -756,6 +757,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
@@ -1192,6 +1194,8 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it("Click complete training button", () => {
       cy.trCompleteTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
