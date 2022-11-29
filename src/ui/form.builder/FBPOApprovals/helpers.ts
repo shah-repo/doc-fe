@@ -1,13 +1,13 @@
 // Todo: ENC-13302 Business logic from this file should be moved to BE side.
 
 import { compact, difference, isEmpty, map, minBy } from "lodash";
-import { FBPurchaseOrderItemType, FBPurchaseOrderValue } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import { FBWorkspaceState } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
-import FBPOApprovalsState from "./FBPOApprovals.state";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
-import { FBWorkspaceState } from "..";
+import { FBPurchaseOrderItemType, FBPurchaseOrderValue } from "../FBPurchaseOrder/FBPurchaseOrder.types";
+import FBPOApprovalsState from "./FBPOApprovals.state";
 
 export const checkServiceOrProductPartExists = (poItems: FBPurchaseOrderValue) => poItems?.items?.some((item) =>
   item.type === FBPurchaseOrderItemType.SERVICE
@@ -52,7 +52,7 @@ interface CheckLineItemsOptions {
   prevRequesterValue?: string;
   poItems?: FBPurchaseOrderValue;
   addApprover: (ids: string[], options?: { manually?: boolean }) => void;
-  removeApprover: (ids: string[]) => void;
+  removeApprover: (ids: string[], callback?: () => void) => void;
 }
 
 export const checkLineItems = (options: CheckLineItemsOptions) => {
@@ -74,12 +74,13 @@ export const checkLineItems = (options: CheckLineItemsOptions) => {
   const allApprovers = getApprovals?.map((item) => item?.approver?.id);
   const hasRequesterInAllApprovers = allApprovers?.includes(requester);
 
-  if (requester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
+  if (requester && !prevRequesterValue && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
     return addApprover([requester], { manually: false });
   }
 
   // We can remove only automatically added approvers.
-  const autoApprovers = getApprovals?.filter((item) => !item.manually)
+  const autoApprovers = getApprovals
+    ?.filter((item) => !item.manually)
     ?.map((item) => item?.approver?.id);
   const hasRequesterInAutoApprovers = autoApprovers?.includes(requester);
   const hasPrevRequesterInAutoApprovers = autoApprovers?.includes(prevRequesterValue as string);
@@ -88,7 +89,7 @@ export const checkLineItems = (options: CheckLineItemsOptions) => {
     return removeApprover([requester]);
   }
 
-  if (!requester && prevRequesterValue && hasPrevRequesterInAutoApprovers) {
-    return removeApprover([prevRequesterValue]);
+  if (prevRequesterValue && requester !== prevRequesterValue && hasPrevRequesterInAutoApprovers) {
+    return removeApprover([prevRequesterValue], () => requester && addApprover([requester], { manually: false }));
   }
 };
