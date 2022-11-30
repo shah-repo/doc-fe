@@ -1223,7 +1223,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
           }
         });
       }).as("response");
-      cy.wait(10000);
+      cy.wait(15000);
       cy.reload();
       cy.wait("@response");
     });
@@ -1256,6 +1256,8 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     it(`Verify ${USERS[11].name} with 'Completed on' column should have date as ${trCompleteDate}`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name);
       cy.get(`[data-grid-row-index="0"]`).find(`[data-grid-col-index="7"]`).should("contain", trCompleteDate);
     });
@@ -1273,7 +1275,11 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     // eslint-disable-next-line max-len
     it(`Verify ${USERS[11].name} with 'Completed on' column should have date as ${trCompleteDate}`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name }).wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageCompletedOn({ completed: "Last 30 days" });
       cy.get(`tr[data-grid-row-index="0"]`).should("contain", trainingFormId);
       cy.get(`[data-grid-row-index="0"]`).find(`[data-grid-col-index="7"]`).should("contain", trCompleteDate);
@@ -1281,7 +1287,11 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it(` Verify ${USERS[12].name} with'Completed on' column should have Pending item`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[12].name }).wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.get(`tr[data-grid-row-index="0"]`).should("contain", trainingFormId)
         .and("contain", USERS[12].name).and("contain", "Pending");
@@ -1289,8 +1299,14 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it(`Verify ${USERS[13].name} with 'Completed on' column should have Pending item`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[13].name }).wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageCompletedOn({ completed: "Pending" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`tr[data-grid-row-index="0"]`).should("contain", trainingFormId)
         .and("contain", USERS[13].name).and("contain", "Pending");
     });
@@ -1422,6 +1438,8 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       it(`Verify ${USERS[12].name} with 'Completed on' column should show Pending item`, () => {
         cy.trLandingPageDocRevTitle({ title: "AR Form" });
         cy.trLandingPageUsername({ username: USERS[12].name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[12].name).and("contain", "Pending");
       });
     });
@@ -1572,6 +1590,8 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it("Click complete training button", () => {
       cy.trCompleteTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 

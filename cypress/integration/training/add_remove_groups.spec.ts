@@ -643,6 +643,8 @@ context("Add/Remove groups from Training Curriculum", () => {
 
     it(`Training record for ${USERS[11].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
@@ -654,7 +656,11 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it(`Training record for ${USERS[12].name} should not be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[12].name });
+      cy.get("[class=\"k-textbox\"]").eq(4).arrowType(`{backspace}`);
+      cy.get("[class=\"k-textbox\"]").eq(4).arrowType(USERS[12].name).wait(1000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
@@ -665,6 +671,8 @@ context("Add/Remove groups from Training Curriculum", () => {
 
     it(`Training record for ${USERS[13].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[13].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
@@ -677,6 +685,8 @@ context("Add/Remove groups from Training Curriculum", () => {
 
     it(`Training record for ${USERS[14].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[14].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();
@@ -689,6 +699,8 @@ context("Add/Remove groups from Training Curriculum", () => {
 
     it(`Training record for ${USERS[7].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[7].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.progressBarShouldNotExist();

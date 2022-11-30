@@ -380,9 +380,6 @@ context("Training notifications for documents with approved and released revisio
       cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.authLogout();
       cy.authLogin({ email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
