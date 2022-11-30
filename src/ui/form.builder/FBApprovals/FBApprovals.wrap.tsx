@@ -5,6 +5,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from "..";
+import { SM } from "../../../App";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Approval } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -43,6 +44,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     let isComponentVisible = false;
     let inlineApprovalExists = false;
 
+    const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState } = FB.useStores();
     const {
       document,
@@ -229,7 +231,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     // MARK: @observer
     useObserver(() => {
-      inlineApprovalExists = Boolean(document?.formDocument?.formTemplate?.schema
+      inlineApprovalExists = Boolean(_documentRevisionFormState?.documentRevision?.formDocument?.formTemplate?.schema
       .some((e) => (!e.deleted && e.type === "inlineapproval" as string)));
 
       groups = approvalsState?.groups;

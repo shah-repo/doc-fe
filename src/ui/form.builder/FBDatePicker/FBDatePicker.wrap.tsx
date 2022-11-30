@@ -5,7 +5,7 @@ import { FB } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import FBDatePickerState from "./FBDatePicker.state";
 import { FBDatePickerProps } from "./FBDatePicker.types";
-
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withDatePicker = <T extends FBDatePickerProps>(
   Component: React.FunctionComponent<T>,
@@ -20,8 +20,8 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     defaultValue,
     ...props
   }: T) => {
-
     const { formState, workspaceState } = FB.useStores();
+    const { submitForm } = useFormContext();
     const initialValue = formState?.getFieldValue(name);
     datePickerState = FB.useRef(FBDatePickerState, initialValue);
     const defaultCurrentDate = editorProperties?.includes("defaultCurrentDate") || false;
@@ -34,6 +34,12 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       formState?.validate();
       const isUnderWorkspace = workspaceState?.getSchemaItem(name);
       if (!isUnderWorkspace) { return; }
+
+      if (workspaceState?.isChangeRequest) {
+        submitForm();
+        return;
+      }
+
       workspaceState?.saveDocRev(formState?.getValues());
     }
 
