@@ -66,7 +66,7 @@ context("Help Center behaviour", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           recordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
@@ -196,7 +196,7 @@ context("Help Center behaviour", () => {
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",
@@ -1289,7 +1289,7 @@ context("Help Center behaviour", () => {
     });
   });
 
-  context("Scenario 3 - Approval Request", () => {
+  context("Scenario 3 - Change Order", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToApprovalRequestList();
     });

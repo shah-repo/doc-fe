@@ -78,7 +78,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           done();
         });
       });
@@ -145,7 +145,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",

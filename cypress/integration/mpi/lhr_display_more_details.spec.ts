@@ -63,7 +63,7 @@ context("LHR Display More Details", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
@@ -412,7 +412,7 @@ context("LHR Display More Details", () => {
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",

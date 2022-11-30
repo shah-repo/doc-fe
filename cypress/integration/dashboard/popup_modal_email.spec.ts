@@ -17,7 +17,7 @@ const FIRST_USER = USERS[30];
 const SECOND_USER = USERS[31];
 const THIRD_USER = USERS[32];
 const documentRevisionName = "New document for testing AR";
-const approvalRequestTitle = "Approval request from newly created form";
+const approvalRequestTitle = "Change order from newly created form";
 
 let createdCompany;
 let loginResponse;
@@ -30,7 +30,7 @@ let group;
 let dateAfterEmailShouldArrive;
 let getEmailSetting;
 
-context("Approval request email popup modal", () => {
+context("Change order email popup modal", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -172,12 +172,12 @@ context("Approval request email popup modal", () => {
     });
   });
 
-  context("Create approval request from existing form", () => {
-    it("Navigate to approval request list", () => {
+  context("Create change order from existing form", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -185,8 +185,8 @@ context("Approval request email popup modal", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    it("Enter description 'AR from New form template for change order'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for change order" });
     });
 
     it("Add first created document revision", () => {
@@ -205,11 +205,11 @@ context("Approval request email popup modal", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
+    it("Click Create Change Order", () => {
       cy.arSaveApiCall();
     });
 
-    it("Add approvers to approval request on approver list", () => {
+    it("Add approvers to change order on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
       cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
       cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
@@ -229,11 +229,11 @@ context("Approval request email popup modal", () => {
       cy.navigToDashboard();
     });
 
-    it("Check if approval request is 'In Review'", () => {
+    it("Check if change order is 'In Review'", () => {
       cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
     });
 
-    context("Click on approval request status and check the pop-up content", () => {
+    context("Click on change order status and check the pop-up content", () => {
       it("Check if headline says 'Approval Status'", () => {
         cy.get("[id='simple-modal-title']").should("contain.text", "Approval Status");
       });
@@ -292,7 +292,7 @@ context("Approval request email popup modal", () => {
           contains: ["Can you please approve my\r\n                                      request:)",
             `Hi ${SECOND_USER.name}`,
             "I sent a request for approval on",
-            "AR-00001 Approval request from newly created form",
+            "AR-00001 Change order from newly created form",
             "Thank you,",
           ],
         }];
@@ -330,11 +330,11 @@ context("Approval request email popup modal", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
     });
 
-    it("Check if approval request is 'In Review'", () => {
+    it("Check if change order is 'In Review'", () => {
       cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
     });
 
-    context("Click on approval request status and check the pop-up content", () => {
+    context("Click on change order status and check the pop-up content", () => {
       it("Check if headline says 'Approval Status'", () => {
         cy.get("[id='simple-modal-title']").should("contain.text", "Approval Status");
       });

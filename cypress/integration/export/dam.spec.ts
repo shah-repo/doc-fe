@@ -197,11 +197,11 @@ context("Export DAM", () => {
       });
     });
 
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -221,7 +221,7 @@ context("Export DAM", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
+    it("Click Create Change Order", () => {
       cy.arSaveApiCall();
     });
 

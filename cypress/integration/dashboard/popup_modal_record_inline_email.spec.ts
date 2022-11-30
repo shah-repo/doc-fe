@@ -70,7 +70,7 @@ context("Records Inline approval email popup modal", () => {
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === FIRST_USER.email);
           thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === SECOND_USER.email);
           recordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record Document");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
         });

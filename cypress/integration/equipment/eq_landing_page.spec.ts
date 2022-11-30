@@ -64,7 +64,7 @@ context("NCO document type management", () => {
         }).then((response) => {
           createdCompany = response;
           loggedInEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
@@ -227,7 +227,7 @@ context("NCO document type management", () => {
       }).then((res) => {
         if (res.body.length > 0 ) {
           approvalRequestDocumentType = res.body.find(
-            (docType: any) => docType.documentTypeName === "Approval Request"
+            (docType: any) => docType.documentTypeName === "Change Order"
           );
           equipmentDocumentType = res.body.find((docType: any) => docType.documentTypeName === "Equipment or Fixture");
           formDocumentType = res.body.find((docType: any) => docType.documentTypeName === "Form");

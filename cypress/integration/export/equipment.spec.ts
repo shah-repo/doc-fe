@@ -53,7 +53,7 @@ context("Export Equipment doc", () => {
           employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           recordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
         });
@@ -318,11 +318,11 @@ context("Export Equipment doc", () => {
       });
     });
 
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -342,7 +342,7 @@ context("Export Equipment doc", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
+    it("Click Create Change Order", () => {
       cy.arSaveApiCall();
     });
 

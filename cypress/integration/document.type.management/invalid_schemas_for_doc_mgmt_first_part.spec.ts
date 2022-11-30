@@ -110,7 +110,7 @@ context("document type management error validations", () => {
 
   context("Error Validation for approve request", () => {
     it("Filter Document Type", () => {
-      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("Approval Request").wait(1000);
+      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("Change Order").wait(1000);
       cy.listLoadingElementShouldNotExist();
     });
 

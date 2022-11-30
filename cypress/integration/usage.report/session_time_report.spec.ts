@@ -158,7 +158,7 @@ const numberOfCreatedDocsForComany1: StructureFromPerCompanyReport[] = [
     draftPending: 8,
   },
   {
-    name: "Approval Requests",
+    name: "Change Orders",
     releasedCompleted: 28,
     draftPending: 0,
   },
@@ -221,7 +221,7 @@ const numberOfCreatedDocsForComany2: StructureFromPerCompanyReport[] = [
     draftPending: 0,
   },
   {
-    name: "Approval Requests",
+    name: "Change Orders",
     releasedCompleted: 1,
     draftPending: 0,
   },
@@ -275,7 +275,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
           thirdEmplyee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           fourthEmplyee = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
           fifthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[5].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           legalRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, LegalRecord.documentTypeName);
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
@@ -379,7 +379,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",
@@ -1127,11 +1127,11 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
           });
         });
 
-        it("[API] Create Approval Request form", () => {
+        it("[API] Create Change Order form", () => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Approval Request form</p>",
+              description: "<p>Change Order form</p>",
               document: {
                 docId: "FM-00008",
                 documentType: {
@@ -1153,7 +1153,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
                 ],
                 schema: [],
               },
-              name: "Approval Request form",
+              name: "Change Order form",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -1620,12 +1620,12 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
         });
       });
 
-      context("[API]Create Approval Request document", () => {
-        it("[API]Create Released Approval Request document", (done: any) => {
+      context("[API]Create Change Order document", () => {
+        it("[API]Create Released Change Order document", (done: any) => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Approval Request</p>",
+              description: "<p>Change Order</p>",
               document: {
                 docId: "AR-00005",
                 documentType: {
@@ -1644,7 +1644,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
               formDocument: {
                 id: createdARForm.id,
               },
-              name: "Released Approval Request",
+              name: "Released Change Order",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -3113,8 +3113,8 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       });
     });
 
-    context("[API]Create Approval Request document", () => {
-      it("[API]Create Released Approval Request document", (done: any) => {
+    context("[API]Create Change Order document", () => {
+      it("[API]Create Released Change Order document", (done: any) => {
         cy.grpGetGroupByName({
           sessionId: loginResponse.sessionId,
           employeeId: adminEmployee.id,
@@ -3130,7 +3130,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
             cy.drCreateDocumentRevision({
               payload: {
                 attachments: [],
-                description: "<p>Approval Request</p>",
+                description: "<p>Change Order</p>",
                 document: {
                   docId: "AR-00006",
                   documentType: {
@@ -3149,7 +3149,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
                 formDocument: {
                   id: createdARForm.id,
                 },
-                name: "Released Approval Request",
+                name: "Released Change Order",
                 referenceTo: [],
                 retrain: false,
                 revisionChangeType: RevisionChangeType.NextRevision,

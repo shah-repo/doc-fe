@@ -48,7 +48,7 @@ context("Autosave EB test", () => {
           createdCompany = response;
           employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           done();
         });
       });

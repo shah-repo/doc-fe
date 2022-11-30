@@ -68,7 +68,7 @@ context("LHRt using regular AR test", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
@@ -464,11 +464,11 @@ context("LHRt using regular AR test", () => {
   });
 
   context("Create AR", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -477,7 +477,7 @@ context("LHRt using regular AR test", () => {
       cy.unClick();
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
+    it("Enter description 'AR from New form template for change order'", () => {
       cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 
@@ -687,11 +687,11 @@ context("LHRt using regular AR test", () => {
   });
 
   context("Create new AR", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -699,7 +699,7 @@ context("LHRt using regular AR test", () => {
       cy.arEnterApprovalRequestTitle({ title: "LHRT AR 2" });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
+    it("Enter description 'AR from New form template for change order'", () => {
       cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 

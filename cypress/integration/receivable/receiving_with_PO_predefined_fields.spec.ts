@@ -135,7 +135,7 @@ context("Receivable test with Page Details", () => {
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",
@@ -472,7 +472,7 @@ context("Receivable test with Page Details", () => {
       cy.get(`[data-cy="Receive PO"]`).should("exist");
     });
 
-    it("Verify Approval Request Details disabled", () => {
+    it("Verify Change Order Details disabled", () => {
       cy.fbVerifyElementClassByLabel({
         label: "Receive PO", el: "remove-schema-item",
         class: "schema-delete-disabled",

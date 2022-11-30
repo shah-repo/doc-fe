@@ -307,11 +307,11 @@ Cypress.Commands.add("intPageVerifyPreviewLayoutButtonEnabled", () => {
 });
 
 Cypress.Commands.add("intPageVerifyApprovalRequestDetailsExist", () => {
-  cy.get(`[data-cy="Approval Request Details"]`).should("exist");
+  cy.get(`[data-cy="Change Order Details"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifyApprovalRequestDetailsNotExist", () => {
-  cy.get(`[data-cy="Approval Request Details"]`).should("not.exist");
+  cy.get(`[data-cy="Change Order Details"]`).should("not.exist");
 });
 
 Cypress.Commands.add("intPageVerifyApproversExist", () => {

@@ -66,7 +66,7 @@ context("Receivable list test", () => {
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
         });

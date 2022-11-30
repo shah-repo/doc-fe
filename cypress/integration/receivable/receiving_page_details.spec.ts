@@ -93,7 +93,7 @@ context("Receivable test with Page Details", () => {
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
           receivingDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
           receivingDocumentTypeNew = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable test");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
           CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots test");
@@ -1175,7 +1175,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval request form", () => {
+      it("Download zip file containing Change order form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1383,7 +1383,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval request form", () => {
+      it("Download zip file containing Change order form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1759,7 +1759,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval request form", () => {
+      it("Download zip file containing Change order form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1939,7 +1939,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval request form", () => {
+      it("Download zip file containing Change order form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

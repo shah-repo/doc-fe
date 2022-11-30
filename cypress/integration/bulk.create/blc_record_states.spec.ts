@@ -55,7 +55,7 @@ context("Bulk create record headers", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           testDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Document Type");
           additionalDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Additional Document Type");
@@ -741,7 +741,7 @@ context("Bulk create record headers", () => {
           "Component Specification Lot",
           "Lots",
           "Receivable",
-          "Approval Request",
+          "Change Order",
           "Test Document Type",
           "Additional Document Type",
           "Paper Lot History Record",

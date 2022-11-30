@@ -3,7 +3,7 @@
         
         "type": "section",
         "index": 0,
-        "label": "Approval Request Details",
+        "label": "Change Order Details",
         "tabId": "documents",
         "applicableOn": [
             "ON_STATE_TO_IN_REVIEW"

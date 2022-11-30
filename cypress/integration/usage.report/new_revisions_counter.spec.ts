@@ -110,7 +110,7 @@ const numberOfCreatedDocs: StructureFromPerCompanyReport[] = [
     draftPending: 1,
   },
   {
-    name: "Approval Requests",
+    name: "Change Orders",
     releasedCompleted: 11,
     draftPending: 0,
   },
@@ -158,7 +158,7 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           generalDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, GeneralDocumentDocType.documentTypeName);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PurchaseOrderTest.documentTypeName);
@@ -263,7 +263,7 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",

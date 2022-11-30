@@ -17,15 +17,15 @@ let companyId: string;
 let emailsFromInbox: IMAPEmail[];
 let employeeLogin;
 
-const approvalRequestFormName = "Approval request form template";
-const approvalRequestDocumentTitle = "Approval request from newly created form";
+const approvalRequestFormName = "Change order form template";
+const approvalRequestDocumentTitle = "Change order from newly created form";
 const sampleDocOneTitle = "Sample Document One";
 
 const dateOffset = (5 * 1000);
 const dateAfterEmailShouldArrive = new Date();
 dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
-context("Approval request form scenario", () => {
+context("Change order form scenario", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -92,7 +92,7 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Create new Approval Request form", () => {
+  context("Create new Change Order form", () => {
     it("Enter title ", () => {
       cy.drEnterDocumentTitle({ name: approvalRequestFormName });
     });
@@ -109,8 +109,8 @@ context("Approval request form scenario", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Click on 'Approval request' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+    it("Click on 'Change order' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Change Order" });
     });
 
     it("Click create document", () => {
@@ -159,12 +159,12 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Create approval request with newly created form", () => {
-    it("Navigate to approval request list", () => {
+  context("Create change order with newly created form", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -172,7 +172,7 @@ context("Approval request form scenario", () => {
       cy.arSelectARForm({ formTitle: approvalRequestFormName });
     });
 
-    it("Enter Approval Request title", () => {
+    it("Enter Change Order title", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestDocumentTitle });
     });
 
@@ -192,11 +192,11 @@ context("Approval request form scenario", () => {
 
     // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
-    it("Click Create Approval Request", () => {
+    it("Click Create Change Order", () => {
       cy.arSaveApiCall();
     });
 
-    it("Add approvers to approval request on approver list", () => {
+    it("Add approvers to change order on approver list", () => {
       SystemRequirement("REQ-0940");
       cy.arSelectChangeDetailsTab();
       cy.wait(1000);
@@ -252,7 +252,7 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Verify owner can withdraw approval request and that dashboard notifications are not shown", () => {
+  context("Verify owner can withdraw change order and that dashboard notifications are not shown", () => {
     context("Withdraw AR", () => {
       it("Withdraw Submission", () => {
         SystemRequirement("REQ-0890");
@@ -310,13 +310,13 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Prevent the addition of documents that are already included on another approval request", () => {
-    it("Navigate to approval request list", () => {
+  context("Prevent the addition of documents that are already included on another change order", () => {
+    it("Navigate to change order list", () => {
       SystemRequirement("REQ-0860");
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       SystemRequirement("REQ-0860");
       cy.arClickCreateAnAR();
     });
@@ -402,7 +402,7 @@ context("Approval request form scenario", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -432,7 +432,7 @@ context("Approval request form scenario", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       });
 
-      it("Accept Approval Request with password prompt", () => {
+      it("Accept Change Order with password prompt", () => {
         SystemRequirement("REQ-0920");
         cy.arApproveARFromDashboard();
       });
@@ -453,7 +453,7 @@ context("Approval request form scenario", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       });
 
-      it("Accept Approval Request with password prompt", () => {
+      it("Accept Change Order with password prompt", () => {
         SystemRequirement("REQ-0920");
         cy.arApproveARFromDashboard();
       });
@@ -461,7 +461,7 @@ context("Approval request form scenario", () => {
   });
 
   context("Record the date and time stamp for approval and rejections", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -517,11 +517,11 @@ context("Approval request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[20].email,
-          contains: ["Your approval request <b>ARID: AR-00002</b> is in review.", companyId],
+          contains: ["Your change order <b>ARID: AR-00002</b> is in review.", companyId],
         },
         {
           sentToUser: USERS[22].email,
-          contains: ["Your approval request <b>ARID: AR-00002</b> is in review.", companyId],
+          contains: ["Your change order <b>ARID: AR-00002</b> is in review.", companyId],
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -538,7 +538,7 @@ context("Approval request form scenario", () => {
           sentToUser: USERS[21].email,
           contains: [
             "Your request has been approved!",
-            `AR-00002\r\n                                          Approval request from newly created form`,
+            `AR-00002\r\n                                          Change order from newly created form`,
             companyId,
           ],
         },
@@ -557,7 +557,7 @@ context("Approval request form scenario", () => {
           sentToUser: USERS[21].email,
           contains: [
             "Your request has been rejected!",
-            `AR-00002\r\n                                          Approval request from newly created form`,
+            `AR-00002\r\n                                          Change order from newly created form`,
             companyId,
           ],
         },

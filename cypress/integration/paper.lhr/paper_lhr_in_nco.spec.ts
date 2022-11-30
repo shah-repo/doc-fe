@@ -272,7 +272,7 @@ context("Verify Paper LHR", () => {
             if (res.body !== "") {
               apiCreatedCompany.documentTypes = res.body;
               partDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Component Specification");
-              approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Approval Request");
+              approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Change Order");
             }
           });
         }).as("response1");
@@ -376,7 +376,7 @@ context("Verify Paper LHR", () => {
                     icon: "/navigation_icons/cr.svg",
                     path: "/change_request",
                     type: "LINK",
-                    label: "Approval Requests",
+                    label: "Change Orders",
                   },
                   {
                     icon: "/navigation_icons/text-paper.svg",

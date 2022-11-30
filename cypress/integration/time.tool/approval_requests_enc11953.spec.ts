@@ -26,11 +26,11 @@ let formDocumentType;
 let maintenanceRecordDocumentType;
 let approvalRequestDocumentType;
 
-const approvalRequestName = "Approval request form";
+const approvalRequestName = "Change order form";
 const aRID = "AR-00001";
 const documentRevisionName = "New document for testing AR";
 
-context("Approval request form", { tags: ["@timetool"] }, () => {
+context("Change order form", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -69,7 +69,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
@@ -166,21 +166,21 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context("Create approval request", () => {
-    it("Navigate to approval request list", () => {
+  context("Create change order", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
     it("Enter title AR title", () => {
-      cy.arEnterApprovalRequestTitle({ title: "Approval request form" });
+      cy.arEnterApprovalRequestTitle({ title: "Change order form" });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    it("Enter description 'AR from New form template for change order'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for change order" });
     });
 
     it("Add document revision", () => {
@@ -192,11 +192,11 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
+    it("Click Create Change Order", () => {
       cy.arSaveApiCall();
     });
 
-    it("Add approvers to approval request on approver list", () => {
+    it("Add approvers to change order on approver list", () => {
       cy.drSelectChangeDetailsTab();
       cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
       cy.arAddApproverOnApproverList({ approver: USERS[2].email, noWait: true });
@@ -222,14 +222,14 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} notification as 'needs your approval for'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[1].name}needs your approval for${aRID}Approval request form`,
+        `${USERS[1].name}needs your approval for${aRID}Change order form`,
       });
     });
 
     it(`Verify 'IN REVIEW' notification received for all 3 users`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${aRID}Approval request formIN REVIEWpending approvals from`,
+          `${aRID}Change order formIN REVIEWpending approvals from`,
       });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[1].name}` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[2].name}` });
@@ -238,7 +238,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
   });
 
   context(`Verify ${USERS[1].name} AR list for status as 'IN_REVIEW'`, () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -246,8 +246,8 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.alClearFilters();
     });
 
-    it("Filter AR by title as 'Approval request form'", () => {
-      cy.alFilterByTitle({ title: "Approval request form" });
+    it("Filter AR by title as 'Change order form'", () => {
+      cy.alFilterByTitle({ title: "Change order form" });
     });
 
     it(`Filter list by OWNER as ${USERS[1].name}`, () => {
@@ -276,13 +276,13 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[2].name} notification as '${USERS[1].name} needs your approval for'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[1].name}needs your approval for${aRID}Approval request form`,
+        `${USERS[1].name}needs your approval for${aRID}Change order form`,
       });
     });
   });
 
   context(`Verify ${USERS[2].name} AR list for status as 'IN_REVIEW'`, () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -290,8 +290,8 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.alClearFilters();
     });
 
-    it("Filter AR by title as 'Approval request form'", () => {
-      cy.alFilterByTitle({ title: "Approval request form" });
+    it("Filter AR by title as 'Change order form'", () => {
+      cy.alFilterByTitle({ title: "Change order form" });
     });
 
     it(`Filter list by OWNER as ${USERS[1].name}`, () => {
@@ -320,13 +320,13 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[3].name} notification as '${USERS[1].name} needs your approval for'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[1].name}needs your approval for${aRID}Approval request form`,
+        `${USERS[1].name}needs your approval for${aRID}Change order form`,
       });
     });
   });
 
   context(`Verify ${USERS[3].name} AR list for status as 'IN_REVIEW'`, () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -334,8 +334,8 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.alClearFilters();
     });
 
-    it("Filter AR by title as 'Approval request form'", () => {
-      cy.alFilterByTitle({ title: "Approval request form" });
+    it("Filter AR by title as 'Change order form'", () => {
+      cy.alFilterByTitle({ title: "Change order form" });
     });
 
     it(`Filter list by OWNER as ${USERS[1].name}`, () => {
@@ -381,14 +381,14 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it("Verify AR notification status as 'APPROVED'", () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[1].name}APPROVED${aRID}Approval request form`,
+          `${USERS[1].name}APPROVED${aRID}Change order form`,
       });
     });
 
     it(`Verify for ${USERS[2].name} and ${USERS[3].name} notifications as 'pending approvals from'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${aRID}Approval request formIN REVIEWpending approvals from`,
+        `${aRID}Change order formIN REVIEWpending approvals from`,
       });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[2].name}` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[3].name}` });
@@ -428,21 +428,21 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[1].name}APPROVED${aRID}Approval request form`,
+          `${USERS[1].name}APPROVED${aRID}Change order form`,
       });
     });
 
     it(`Verify for ${USERS[2].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[2].name}APPROVED${aRID}Approval request form`,
+          `${USERS[2].name}APPROVED${aRID}Change order form`,
       });
     });
 
     it(`Verify for ${USERS[3].name} notifications as 'pending approvals from'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${aRID}Approval request formIN REVIEWpending approvals from${USERS[3].name}`,
+        `${aRID}Change order formIN REVIEWpending approvals from${USERS[3].name}`,
       });
     });
   });
@@ -489,27 +489,27 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[1].name}APPROVED${aRID}Approval request form`,
+          `${USERS[1].name}APPROVED${aRID}Change order form`,
       });
     });
 
     it(`Verify for ${USERS[2].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[2].name}APPROVED${aRID}Approval request form`,
+          `${USERS[2].name}APPROVED${aRID}Change order form`,
       });
     });
 
     it(`Verify for ${USERS[3].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[3].name}APPROVED${aRID}Approval request form`,
+          `${USERS[3].name}APPROVED${aRID}Change order form`,
       });
     });
   });
 
   context("close AR and set effective date to 40 days", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -592,28 +592,28 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${USERS[1].name}APPROVED${aRID}Approval request form`,
+            `${USERS[1].name}APPROVED${aRID}Change order form`,
       });
     });
 
     it(`Verify for ${USERS[2].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${USERS[2].name}APPROVED${aRID}Approval request form`,
+            `${USERS[2].name}APPROVED${aRID}Change order form`,
       });
     });
 
     it(`Verify for ${USERS[3].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${USERS[3].name}APPROVED${aRID}Approval request form`,
+            `${USERS[3].name}APPROVED${aRID}Change order form`,
       });
     });
 
     it(`Verify for notification for 'APPROVED' AR will appear`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${aRID}Approval request formisAPPROVED`,
+            `${aRID}Change order formisAPPROVED`,
       });
     });
   });
@@ -644,7 +644,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.navigToApprovalRequestList();
       cy.arClearFilters();
       cy.alFilterByArId({ arId: `${aRID}` });
-      cy.alFilterByTitle({ title: "Approval request form" });
+      cy.alFilterByTitle({ title: "Change order form" });
       cy.alVerifyFilterByStatus({ status: "CLOSED" });
     });
 
@@ -662,7 +662,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${aRID}Approval request formisCLOSED`,
+            `${aRID}Change order formisCLOSED`,
       });
     });
   });
@@ -698,7 +698,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} AR notification status as 'CLOSED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${aRID}Approval request formisCLOSED`,
+            `${aRID}Change order formisCLOSED`,
       });
     });
   });

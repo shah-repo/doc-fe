@@ -99,7 +99,7 @@ context("Test Supplier Landing Page for Supira", () => {
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable test");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
         });

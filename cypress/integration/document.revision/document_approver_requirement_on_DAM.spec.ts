@@ -1329,12 +1329,12 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  context(`Create approval request: ${ARDocument}`, () => {
-    it("Navigate to approval request list", () => {
+  context(`Create change order: ${ARDocument}`, () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.cmpClickCreateApprovalRequest();
     });
 
@@ -1386,21 +1386,21 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.arApproverRoleStatus({ roleName: roleThree, enabled: true });
     });
 
-    it("Click Create Approval Request", () => {
+    it("Click Create Change Order", () => {
       cy.arSaveApiCall();
     });
 
-    it("Add first approver to approval request on approver list", () => {
+    it("Add first approver to change order on approver list", () => {
       SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: FIRST_USER.email });
     });
 
-    it("Add second approver to approval request on approver list", () => {
+    it("Add second approver to change order on approver list", () => {
       SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: SECOND_USER.email });
     });
 
-    it("Add third approver to approval request on approver list", () => {
+    it("Add third approver to change order on approver list", () => {
       SystemRequirement("REQ-4270");
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: THIRD_USER.email });
     });
@@ -1412,7 +1412,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Send email, verify email and verify PDF file content", () => {
     context("Verify `Draft DAM document` title", () => {
-      it("Check approval request document draft status and click on Send To Email", () => {
+      it("Check change order document draft status and click on Send To Email", () => {
         cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("AR-").then((x) => {
           releasedFormId = x.text();
@@ -1422,12 +1422,12 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       });
     });
 
-    context("Verify email for approval request document notification", () => {
+    context("Verify email for change order document notification", () => {
       it("Get emails", () => {
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           after: dateAfterEmailShouldArrive,
-          subject: `Export for approval request ${releasedFormId}`,
+          subject: `Export for change order ${releasedFormId}`,
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -1507,11 +1507,11 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         });
       });
 
-      it("Verify page 1 for approval request document", () => {
+      it("Verify page 1 for change order document", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new
-          RegExp( `Approval Request\n${releasedFormId}\n${ARDocument}`, "gi" );
+          RegExp( `Change Order\n${releasedFormId}\n${ARDocument}`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new
@@ -1579,12 +1579,12 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       });
     });
 
-    context("Verify email for In Review approval request document notification", () => {
+    context("Verify email for In Review change order document notification", () => {
       it("Get emails", () => {
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           after: dateAfterEmailShouldArrive,
-          subject: `Export for approval request ${releasedFormId}`,
+          subject: `Export for change order ${releasedFormId}`,
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -1664,11 +1664,11 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
         });
       });
 
-      it("Verify page 1 for In Review approval request document", () => {
+      it("Verify page 1 for In Review change order document", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new
-          RegExp( `Approval Request\n${releasedFormId}\n${ARDocument}`, "gi" );
+          RegExp( `Change Order\n${releasedFormId}\n${ARDocument}`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new
@@ -1810,7 +1810,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context(`Open AR Doc: ${ARDocument}`, () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -1819,14 +1819,14 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.get("#root").contains(ARDocument).arrowClick();
     });
 
-    it("Close Approval Request", () => {
+    it("Close Change Order", () => {
       cy.arCloseAR();
     });
   });
 
   context("Send email, verify email and verify PDF file content", () => {
     context("Verify `Closed DAM document` title", () => {
-      it("Check Approval Request closed status and click on Send To Email", () => {
+      it("Check Change Order closed status and click on Send To Email", () => {
         cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.CLOSED });
         cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("AR-").then((x) => {
           releasedFormId = x.text();
@@ -1836,12 +1836,12 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       });
     });
 
-    context("Verify email for approval request document notification", () => {
+    context("Verify email for change order document notification", () => {
       it("Get emails", () => {
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           after: dateAfterEmailShouldArrive,
-          subject: `Export for approval request ${releasedFormId}`,
+          subject: `Export for change order ${releasedFormId}`,
         };
 
         cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -1926,7 +1926,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new
-          RegExp( `Approval Request\n${releasedFormId}\n${ARDocument}`, "gi" );
+          RegExp( `Change Order\n${releasedFormId}\n${ARDocument}`, "gi" );
           expect(el).match(tmpRegex);
 
           tmpRegex = new

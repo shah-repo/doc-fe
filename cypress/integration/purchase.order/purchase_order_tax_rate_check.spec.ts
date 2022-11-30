@@ -75,7 +75,7 @@ context("Search PO item with correct order date format", () => {
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           done();
         }); ``;
       });

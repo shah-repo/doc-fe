@@ -515,7 +515,7 @@ context("Inspection flow", () => {
           createdCompany = response;
           subassemblyDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Subassembly");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
@@ -558,7 +558,7 @@ context("Inspection flow", () => {
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",

@@ -123,7 +123,7 @@ context("Training for same document that was first released and then revised and
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",
@@ -525,7 +525,7 @@ context("Training for same document that was first released and then revised and
   });
 
   context("Approve document", () => {
-    it("Navigate to Approval request landing page", () => {
+    it("Navigate to Change order landing page", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -538,7 +538,7 @@ context("Training for same document that was first released and then revised and
       cy.arApproveAR();
     });
 
-    it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+    it(`Check change order status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });

@@ -1015,7 +1015,7 @@ context("Add Requestor as an approver of the PO", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("Accept Approval Request with password prompt", () => {
+    it("Accept Change Order with password prompt", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PostDashboardFeedSearch], () => {
           cy.contains("needs your approval for").trigger("mouseover").wait(500);
@@ -1450,7 +1450,7 @@ context("Add Requestor as an approver of the PO", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("Accept Approval Request with password prompt", () => {
+    it("Accept Change Order with password prompt", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PostDashboardFeedSearch], () => {
           cy.contains("needs your approval for").trigger("mouseover").wait(1000);

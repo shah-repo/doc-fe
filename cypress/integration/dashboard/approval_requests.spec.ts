@@ -22,7 +22,7 @@ let group;
 let asyncTasksGroup;
 const documentRevisionName = "New document for testing AR";
 
-context("Approval request form", { tags: ["@timetool"] },  () => {
+context("Change order form", { tags: ["@timetool"] },  () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -277,21 +277,21 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
   });
 
-  context("Create approval request", () => {
-    it("Navigate to approval request list", () => {
+  context("Create change order", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
     it("Enter title AR title", () => {
-      cy.arEnterApprovalRequestTitle({ title: "Approval request form" });
+      cy.arEnterApprovalRequestTitle({ title: "Change order form" });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    it("Enter description 'AR from New form template for change order'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for change order" });
     });
 
     it("Add first document revision", () => {
@@ -310,11 +310,11 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
+    it("Click Create Change Order", () => {
       cy.arSaveApiCall();
     });
 
-    it("Add approvers to approval request on approver list", () => {
+    it("Add approvers to change order on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[11].email, noWait: true });
       cy.arAddApproverOnApproverList({ approver: USERS[2].email, noWait: true });
       cy.arAddApproverOnApproverList({ approver: USERS[3].email, noWait: true });
@@ -335,16 +335,16 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.get("#scrollable-auto-tab-1").arrowClick();
       cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
+        .and("contain.text", "Change order form");
     });
   });
 
   context("Create another AR and check dashboard", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -378,7 +378,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
 
       cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(1)
         .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
+        .and("contain.text", "Change order form");
     });
   });
 
@@ -400,7 +400,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     it("AR in review present on dashboard", () => {
       cy.contains("IN REVIEW").parent().parent().parent().parent()
         .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
+        .and("contain.text", "Change order form")
         .and("contain.text", "IN REVIEW")
         .and("contain.text", "pending approvals from");
       cy.contains("IN REVIEW").parent().parent().parent().parent().next()
@@ -470,7 +470,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
         .should("contain.text", USERS[11].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
+        .and("contain.text", "Change order form");
     });
 
     it("Hovering AR line item should display buttons", () => {
@@ -513,7 +513,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.get("#scrollable-auto-tab-1").arrowClick();
       cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
+        .and("contain.text", "Change order form");
     });
   });
 
@@ -530,7 +530,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     it("AR in review present on dashboard with 2 approvers", () => {
       cy.contains("IN REVIEW").parent().parent().parent().parent()
         .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
+        .and("contain.text", "Change order form")
         .and("contain.text", "IN REVIEW")
         .and("contain.text", "pending approvals from");
       cy.contains("IN REVIEW").parent().parent().parent().parent().next()
@@ -555,7 +555,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
         .should("contain.text", USERS[11].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form");
+        .and("contain.text", "Change order form");
     });
 
     it("Hovering AR line item should display buttons", () => {
@@ -607,7 +607,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       SystemRequirement("REQ-4980");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
+        .and("contain.text", "Change order form")
         .and("contain.text", "REJECTED")
         .and("contain.text", USERS[3].name);
     });
@@ -705,14 +705,14 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     it("there should be a notification that AR has been approved", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
+        .and("contain.text", "Change order form")
         .and("contain.text", "APPROVED");
     });
 
     it("Hovering AR line item should display buttons", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Approval request formisAPPROVED")
+      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Change order formisAPPROVED")
         .trigger("mouseover");
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Approval request formisAPPROVED")
+      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Change order formisAPPROVED")
         .parent()
         .parent()
         .parent()
@@ -721,14 +721,14 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     });
 
     it("Close popup should open on click close button", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Approval request formisAPPROVED")
+      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00001Change order formisAPPROVED")
         .parent()
         .parent()
         .parent()
         .find(".MuiBox-root").eq(0)
         .find("svg").eq(0).arrowClick();
 
-      cy.get("#simple-modal-title").should("exist").and("have.text", "Close Approval Request");
+      cy.get("#simple-modal-title").should("exist").and("have.text", "Close Change Order");
     });
 
     it("Close AR and verify notification on dashboard should be closed", () => {
@@ -742,22 +742,22 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
-        .and("contain.text", "Approval request form")
+        .and("contain.text", "Change order form")
         .and("contain.text", "CLOSED");
     });
   });
 
   context("Create a document and express release it with additional approvers and check AR process", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Approval Request button", () => {
+    it("Click Create a Change Order button", () => {
       cy.arClickCreateAnAR();
     });
 
     it("Enter title AR title", () => {
-      cy.arEnterApprovalRequestTitle({ title: "Approval request form1" });
+      cy.arEnterApprovalRequestTitle({ title: "Change order form1" });
     });
 
     it("Enter description", () => {
@@ -772,11 +772,11 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
+    it("Click Create Change Order", () => {
       cy.arSaveApiCall();
     });
 
-    it("Add approvers to approval request on approver list", () => {
+    it("Add approvers to change order on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email, noWait: true });
     });
 
@@ -799,7 +799,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     it("AR in review present on dashboard", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1")
+        .and("contain.text", "Change order form1")
         .and("contain.text", "IN REVIEW")
         .and("contain.text", "pending approvals from");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(1)
@@ -821,7 +821,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
         .should("contain.text", USERS[11].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1");
+        .and("contain.text", "Change order form1");
     });
 
     it("Hovering AR line item should display buttons", () => {
@@ -864,7 +864,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.get("#scrollable-auto-tab-1").arrowClick();
       cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1");
+        .and("contain.text", "Change order form1");
     });
 
     it(`Login as ${USERS[11].name}`, () => {
@@ -879,12 +879,12 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
     it("there should be a notification that AR has been approved", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1")
+        .and("contain.text", "Change order form1")
         .and("contain.text", "APPROVED");
     });
 
     it("Close popup should open on click close button", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00003Approval request form1isAPPROVED")
+      cy.get("[data-cy=dashboardFeedList]>div").contains("AR-00003Change order form1isAPPROVED")
         .trigger("mouseover")
         .parent()
         .parent()
@@ -892,7 +892,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
         .find(".MuiBox-root").eq(0)
         .find("svg").eq(0).arrowClick();
 
-      cy.get("#simple-modal-title").should("exist").and("have.text", "Close Approval Request");
+      cy.get("#simple-modal-title").should("exist").and("have.text", "Close Change Order");
     });
 
     it("Close AR and verify notification on dashboard should be closed", () => {
@@ -906,13 +906,13 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00003")
-        .and("contain.text", "Approval request form1")
+        .and("contain.text", "Change order form1")
         .and("contain.text", "CLOSED");
     });
   });
 
-  context("Navigate to DRAFT approval request and approve request", () => {
-    it("Navigate to approval request list", () => {
+  context("Navigate to DRAFT change order and approve request", () => {
+    it("Navigate to change order list", () => {
       cy.navigToApprovalRequestList();
     });
 

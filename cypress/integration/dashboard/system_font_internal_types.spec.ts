@@ -133,7 +133,7 @@ context("User Creation Flow", () => {
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",
@@ -372,15 +372,15 @@ context("User Creation Flow", () => {
   });
 
 
-  context("Approval Requests", () => {
-    context("Navigate to Approval Requests", () => {
-      it("Navigate to Approval Requests", () => {
+  context("Change Orders", () => {
+    context("Navigate to Change Orders", () => {
+      it("Navigate to Change Orders", () => {
         cy.navigToApprovalRequestList();
       });
     });
 
-    context("Verify font for nagigation bar 'Approval Requests'", () => {
-      it(`Verify 'Approval Requests' font-size ${FONT_SIZE_13} and font-family ${soraSansserif} line-height ${LINE_HT_19_5} font-weight ${FONT_WT_400}`, () => {
+    context("Verify font for nagigation bar 'Change Orders'", () => {
+      it(`Verify 'Change Orders' font-size ${FONT_SIZE_13} and font-family ${soraSansserif} line-height ${LINE_HT_19_5} font-weight ${FONT_WT_400}`, () => {
         cy.get(`[data-cy="navigation.approvalRequests"]>span>span`).should("have.css", "font-size", "13px")
           .and("have.css", "font-family", "Sora, sans-serif")
           .and("have.css", "font-weight", "700")
@@ -388,11 +388,11 @@ context("User Creation Flow", () => {
       });
     });
 
-    context("Verify font for 'Create an approval request' button", () => {
-      it(`Verify 'Create an approval request' button font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight  ${FONT_WT_600}`, () => {
+    context("Verify font for 'Create an change order' button", () => {
+      it(`Verify 'Create an change order' button font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight  ${FONT_WT_600}`, () => {
         cy.get("[data-cy=\"change.request.create\"]")
           .checkStylePropExists({
-            content: "Create an approval request",
+            content: "Create an change order",
             props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
           });
       });

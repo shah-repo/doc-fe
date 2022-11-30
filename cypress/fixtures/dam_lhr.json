@@ -612,7 +612,7 @@
       "id": "09054ac0-b1ae-445d-9e28-8c25f7e9088f",
       "docType": {
         "acronym": "AR-",
-        "name": "Approval Request",
+        "name": "Change Order",
         "defaultTraining": false,
         "group": "CHANGE_REQUEST",
         "needsSignature": true,
@@ -626,7 +626,7 @@
             "name": "change-request-details",
             "type": "section",
             "index": 0,
-            "label": "Approval Request Details",
+            "label": "Change Order Details",
             "applicableOn": [
               "ON_STATE_TO_IN_REVIEW"
             ],
@@ -3587,26 +3587,22 @@
           }
         }
       },
-      "approvalRoles":
-      {
+      "approvalRoles": {
         "stage1": [
           true,
           true,
           true
         ],
-
         "stage2": [
           true,
           true,
           true
         ],
-
         "stage3": [
           true,
           true,
           true
         ],
-
         "admStage": [
           true,
           true,

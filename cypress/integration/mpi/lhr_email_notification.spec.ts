@@ -91,7 +91,7 @@ context("LHRs email notifications", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondApprover = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           thirdApprover = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           done();
         });

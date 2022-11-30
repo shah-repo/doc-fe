@@ -1555,7 +1555,7 @@ context("Equipment maintenance and calibration", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Accept Approval Request with password prompt", () => {
+    it("Accept Change Order with password prompt", () => {
       SystemRequirement("REQ-0920");
       cy.wrapWithWaitOnApiCall(
         CyRoutes.ChangeRequestApprove, () => {
@@ -1663,7 +1663,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify zip file downloaded", () => {
-    it("Download zip file containing approval request notification", () => {
+    it("Download zip file containing change order notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -2090,7 +2090,7 @@ context("Equipment maintenance and calibration", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Accept Approval Request with password prompt", () => {
+    it("Accept Change Order with password prompt", () => {
       SystemRequirement("REQ-0920");
       cy.wrapWithWaitOnApiCall(
         CyRoutes.ChangeRequestApprove, () => {

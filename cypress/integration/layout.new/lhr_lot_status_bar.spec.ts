@@ -74,14 +74,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
           MPIDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
           LHRtDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "LHR template");
           LHRDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lot History Record Test");
           CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           done();
         });
       });
@@ -148,7 +148,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Approval Requests",
+                  label: "Change Orders",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",

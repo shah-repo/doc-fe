@@ -19,7 +19,7 @@ let poamDocumentType;
 let createdPOAMform;
 let createdPOAMdoc;
 
-context("Approval request landing page test", () => {
+context("Change order landing page test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -55,7 +55,7 @@ context("Approval request landing page test", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           poamDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "PO Approval Matrix");
           done();
@@ -407,7 +407,7 @@ context("Approval request landing page test", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
 
-    it("Navigates to Approval Requests", () => {
+    it("Navigates to Change Orders", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -433,7 +433,7 @@ context("Approval request landing page test", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
-    it("Navigates to Approval Requests", () => {
+    it("Navigates to Change Orders", () => {
       cy.navigToApprovalRequestList();
     });
 

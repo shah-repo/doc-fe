@@ -275,7 +275,7 @@ context("Document list test", () => {
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
+      cy.drSelectOutputDocumentType({ documentType: "Change Order" });
     });
 
     it("clicks on 'Create Document", () => {
@@ -444,8 +444,8 @@ context("Document list test", () => {
     });
   });
 
-  context("Approval Requests", () => {
-    it("Navigate to Approval Requests Landing page", () => {
+  context("Change Orders", () => {
+    it("Navigate to Change Orders Landing page", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -453,7 +453,7 @@ context("Document list test", () => {
       cy.get(`div[role="grid"]`).should("have.class", "k-grid");
     });
 
-    it("Verify approval request landing page default column headers", () => {
+    it("Verify change order landing page default column headers", () => {
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${arId}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${arTitle}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${owner}`);
@@ -490,14 +490,14 @@ context("Document list test", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Verify when navigating away from and back to the approval request list", () => {
+    it("Verify when navigating away from and back to the change order list", () => {
       cy.dlClearFilters();
       cy.alVerifyFilterByArId({ arId: "AR-00001" });
       cy.navigToDocumentList();
       cy.navigToApprovalRequestList();
     });
 
-    it("Verify that Button 'Clear Filter', 'Export List' and 'Create an Approval Request' are present", () => {
+    it("Verify that Button 'Clear Filter', 'Export List' and 'Create an Change Order' are present", () => {
       cy.get(`button[data-cy="clearFilter"]`).should("exist");
       cy.get(`button[data-cy="document.revision.export.list"]`).should("exist");
       cy.get(`button[data-cy="change.request.create"]`).should("exist");

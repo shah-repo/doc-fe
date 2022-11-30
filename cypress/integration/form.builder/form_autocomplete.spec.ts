@@ -92,7 +92,7 @@ context("Autocomplete test", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Material");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
@@ -1008,8 +1008,8 @@ context("Autocomplete test", () => {
         cy.fbAddAutocompleteElement({ name: "Document Revision", label: "doc-revision", addBtnVisible: true });
       });
 
-      it("Select 'Approval requests'", () => {
-        cy.fbAddAutocompleteElement({ name: "Approval requests", label: "approval-request" });
+      it("Select 'Change orders'", () => {
+        cy.fbAddAutocompleteElement({ name: "Change orders", label: "approval-request" });
       });
 
       it("Select 'Approvers'", () => {
@@ -1130,7 +1130,7 @@ context("Autocomplete test", () => {
       cy.fbVerifyAutocompleteElementLength({ el: "doc-revision", length: 14 });
     });
 
-    it("Verify count of 'Approval requests' in the list", () => {
+    it("Verify count of 'Change orders' in the list", () => {
       cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 11 });
     });
 

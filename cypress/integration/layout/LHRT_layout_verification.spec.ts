@@ -54,7 +54,7 @@ context("Create new LHRT Layout Verification", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           done();
         });
