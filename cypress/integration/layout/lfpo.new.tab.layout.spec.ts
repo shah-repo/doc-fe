@@ -747,10 +747,6 @@ context("LFPO new layout verification", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Migration FORM document creation flow", () => {
@@ -981,10 +977,6 @@ context("LFPO new layout verification", () => {
 
 
   context("Receving flow", () => {
-    it("toggle off auto save", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to Receiving landing page", () => {
       cy.navigToReceivableList();
     });
@@ -1321,7 +1313,6 @@ context("LFPO new layout verification", () => {
   context("Fill in the fields and Release", () => {
 
     it("Checked chebox value", () => {
-      cy.cmpTurnOffAutosave();
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
