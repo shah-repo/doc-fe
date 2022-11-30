@@ -27,7 +27,7 @@ export interface Material extends GenericItem {
   quantity: number;
   unit: string;
   lots: LotItem[];
-  totalquantity: number;
+  totalQuantity: number;
 }
 
 export interface Equipment extends GenericItem {
