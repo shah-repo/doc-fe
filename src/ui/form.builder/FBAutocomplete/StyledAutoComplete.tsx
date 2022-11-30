@@ -3,7 +3,10 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 
 export const StyledAutoComplete = withStyles((theme) => ({
   endAdornment: {
-    paddingRight: "28px",
+    "paddingRight": "28px",
+    "& .MuiAutocomplete-popupIndicator.Mui-disabled": {
+      display: "none",
+    },
   },
 }))(Autocomplete);
 

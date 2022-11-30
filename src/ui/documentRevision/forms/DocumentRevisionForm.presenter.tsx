@@ -171,6 +171,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   useEffect(() => {
     if (revisionChangeType) {
       _documentRevisionFormState?.setDocumentRevisionChangeType(revisionChangeType);
+      workspaceState?.setDocumentRevisionChangeType(revisionChangeType);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revisionChangeType]);

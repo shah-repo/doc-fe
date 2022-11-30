@@ -3,6 +3,8 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorState, FBFieldName, FBInputProps, FBSchemaComponentProps, FBSchemaProps, FBSchemaState, FBSortable, FBWorkspaceModeOptions } from "..";
 import SM from "../../../App/Shifamed/Utils/SM/SM";
+import { intl } from "../../../common/intl";
+import { isTranslation } from "../../translations/types";
 import FBFieldOutputWrapper from "../FBFieldOutputWrapper/FBFieldOutputWrapper";
 import FormBuilderDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 
@@ -66,6 +68,16 @@ export const withFBSchema = <T extends FBSchemaComponentProps>(
         FBWorkspaceModeOptions.PREVIEW,
         FBWorkspaceModeOptions.FORMPREVIEW,
       ].includes(workspaceMode as FBWorkspaceModeOptions);
+
+      schema?.forEach(({ name, validationAttribute, label, placeholder }) => {
+        let attr = validationAttribute || (label as string) || placeholder || name;
+        if (attr && isTranslation(attr)) {
+          attr = intl.formatMessage({ id: attr });
+        }
+        if (name && attr) {
+          formState?.setValidationAttributeName(name, attr);
+        }
+      });
 
       if (isDesignOrFormDesign) {
         return <FBSortable />;
