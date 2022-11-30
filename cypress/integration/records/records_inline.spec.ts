@@ -751,15 +751,16 @@ context("Record inline Flow", () => {
 
       it("Upload attachment 'image.jpg'", () => {
         cy.get("input[id=\"attachments-button-file\"]").attachFile("image.jpg");
-        cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click().wait(500);
+        cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").click().wait(1000);
         cy.progressBarShouldNotExist();
-        cy.landingPageLoadingElementShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on Save", () => {
         cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Navigate to Details tab", () => {
@@ -767,18 +768,24 @@ context("Record inline Flow", () => {
       });
 
       it("Checkbox option 1 checked", () => {
-        cy.get(`input[type="checkbox"][value="1"]`).last().check();
+        cy.get(`input[type="checkbox"][value="1"]`).last().check().wait(1000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter text 'First entry' in textfield for inline", () => {
-        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry");
+        cy.get("[data-cy^=\"textfield-for-inline\"] input").arrowType("First entry").wait(1000);
         cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter text 'First entry' in second textfield for inline", () => {
         cy.get("[data-cy^=\"second-textfield-for-inline\"] input")
           .type("First entry");
         cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select approver for first inline", () => {
@@ -788,6 +795,7 @@ context("Record inline Flow", () => {
             cy.get("[name*=\"fb-ia-inline-field\"] input")
               .autocompleteSelect(`${USERS[2].name}`, { force: true });
           });
+        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -796,10 +804,11 @@ context("Record inline Flow", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
             cy.listLoadingElementShouldNotExist();
-            cy.get("[name^=\"fb-ia-inline-field\"] input").arrowClick();
+            cy.get("[name^=\"fb-ia-inline-field\"] input").arrowClick().wait(1000);
             cy.get("[name^=\"fb-ia-inline-field\"] input")
               .autocompleteSelect(`${USERS[3].name}`, { force: true });
           });
+        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -818,6 +827,7 @@ context("Record inline Flow", () => {
           });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Select second approver for second inline", () => {
@@ -828,6 +838,7 @@ context("Record inline Flow", () => {
           });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Remove second approver for second inline", () => {
@@ -847,6 +858,8 @@ context("Record inline Flow", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.recCheckRevisionStage({ stage: "Revision 1" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check approve button is not disabled", () => {
@@ -857,6 +870,7 @@ context("Record inline Flow", () => {
         cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it(`Check doc status for ${STATUS_TYPES_LABEL.WIP} and click on Send To Email`, () => {
@@ -1018,8 +1032,10 @@ context("Record inline Flow", () => {
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
+        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.get("button[data-cy=\"fb-control-btn\"]").first().contains("Approve").first().arrowClick();
+        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.wrapWithWaitOnApiCalls([
