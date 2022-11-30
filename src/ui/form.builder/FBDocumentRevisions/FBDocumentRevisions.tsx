@@ -1,9 +1,8 @@
-import cx from "classnames";
 import React from "react";
 import { FBDialog, FBDocumentRevisionsProps, FBDocumentRevisionsValue, FBInput, FBMapWrapper, FBProvider } from "..";
 import useStyles from "./ChangeOrderGrid.styles";
 import ChangeOrderGridHeader from "./ChangeOrderGridHeader";
-import ChangeOrderGridItem from "./ChangeOrderGridItem";
+import ChangeOrderGridItem from "./ChangeOrderViewGridItem";
 import { withFBDocumentRevisions } from "./FBDocumentRevisions.wrap";
 
 const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = ({
@@ -22,7 +21,7 @@ const FBDocumentRevisions: React.FunctionComponent<FBDocumentRevisionsProps> = (
     <FBProvider {...{ dialogState }}>
       <FBDialog />
       <FBInput {...{ name, gutter, index }} type="documentRevisions">
-        <div className={cx(classes.fullWidth, classes.enclosingDiv)}>
+        <div className={classes.fullWidth}>
           <ChangeOrderGridHeader />
           <FBMapWrapper<FBDocumentRevisionsValue[]> {...{ collection }}>
             {(value: FBDocumentRevisionsValue, index) => (

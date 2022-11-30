@@ -36,3 +36,17 @@ export type FBDocumentRevisionsFormProps =
 
 export type FBDocumentRevisionsActionsProps =
 & Pick<FBDocumentRevisionsProps, "handleAdd" | "handleCancel">;
+
+
+export interface FBDocumentRevisionResponse {
+  companyId: string;
+  createdAt: string;
+  displayRevision: string;
+  document: {
+    docId:  string;
+    id: string;
+  };
+  id: string;
+  name: string;
+  updatedAt: string;
+}

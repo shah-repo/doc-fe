@@ -132,10 +132,6 @@ export default makeStyles((theme) =>
       fontSize: "1.2rem",
       cursor: "pointer",
     },
-    enclosingDiv: {
-      borderRadius: theme.spacing(.5, .5, 0, 0),
-      border: `1px solid ${Colors.alice_blue}`,
-    },
     header: {
       height: "40px",
       display: "flex",
@@ -145,6 +141,8 @@ export default makeStyles((theme) =>
       color: Colors.almost_black,
       textTransform: "uppercase",
       fontSize: "12px",
+
+      padding: theme.spacing(1.5),
 
       fontWeight: 600,
 
@@ -160,7 +158,7 @@ export default makeStyles((theme) =>
       width: "35%",
     },
     itemLeftPadding: {
-      paddingLeft: theme.spacing(2),
+      paddingLeft: `calc(${theme.spacing(1.25)}px + 1px)`,
     },
     itemRightPadding: {
       paddingRight: theme.spacing(1),
@@ -168,7 +166,9 @@ export default makeStyles((theme) =>
     itemRow: {
       display: "flex",
       alignItems: "center",
-      padding: theme.spacing(1),
+      padding: theme.spacing(1.5),
+
+      border: `1px solid ${Colors.alice_blue}`,
     },
     verticalDivider: {
       borderLeft: "2px solid white",
