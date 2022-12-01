@@ -1088,7 +1088,7 @@ context("Receiving landing page test", () => {
       cy.drClickCreateDocumentWithApiCall();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
         cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
-          .parent().parent().find("svg").arrowClick({ force: true });
+          .parent().parent().parent().find("svg").arrowClick({ force: true });
       });
     });
 
@@ -1345,7 +1345,6 @@ context("Receiving landing page test", () => {
     });
   });
 
-  // verify Draft state
   context("Open Receivable Draft state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
