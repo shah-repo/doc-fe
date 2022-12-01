@@ -384,10 +384,12 @@ context("Intermediate page validation", () => {
   context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      cy.get(`[data-cy="fb-checkbox-group"]`).eq(1).scrollIntoView();
     });
 
     it("Make sure Field1 is displayed as 'Required' → As the user, enter a value that is different than 'X'", () => {
-      cy.get(".MuiFormHelperText-root.Mui-error").eq(0).contains("The fb-checkbox-group is a required field.");
+      cy.get(`[name^="fb-checkbox-group"]`).eq(1).parent().parent().find("p")
+        .should("have.text", "The fb-checkbox-group is a required field.");
     });
 
     it("Make sure Field 2 remains Hidden", () => {
@@ -463,7 +465,8 @@ context("Intermediate page validation", () => {
     });
 
     it("Make sure Field1 is displayed as 'Required' → As the user, enter a value that is different than 'X'", () => {
-      cy.get(".MuiFormHelperText-root.Mui-error").eq(0).contains("The fb-checkbox-group is a required field.");
+      cy.get(`[name^="fb-checkbox-group"]`).eq(1).parent().parent().find("p")
+        .should("have.text", "The fb-checkbox-group is a required field.");
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
         .find("[value='option3']").eq(0).should("exist");
     });
