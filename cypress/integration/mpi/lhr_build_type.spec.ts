@@ -839,6 +839,7 @@ context("LHR Build type flow", () => {
     it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       cy.unClick();
+      cy.wait(5000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -902,7 +903,8 @@ context("LHR Build type flow", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.wait(3000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -958,7 +960,8 @@ context("LHR Build type flow", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.wait(3000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1011,6 +1014,7 @@ context("LHR Build type flow", () => {
         it("Select MPI document for step #1 in LHRt", () => {
           cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
           cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document", { force: true });
+          cy.unClick();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -1025,6 +1029,7 @@ context("LHR Build type flow", () => {
             () => {
               cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
             });
+          cy.wait(5000);
         });
 
         it("Goto LHRt", () => {
@@ -1033,6 +1038,7 @@ context("LHR Build type flow", () => {
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
+          cy.wait(5000);
         });
       });
     });
@@ -1046,6 +1052,10 @@ context("LHR Build type flow", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Enter initial quantity", () => {
@@ -1074,14 +1084,20 @@ context("LHR Build type flow", () => {
 
     it("Add 'Due Date'", () => {
       cy.poAddDateRequired();
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
 
     it("Select Details tab", () => {
@@ -1092,6 +1108,7 @@ context("LHR Build type flow", () => {
 
     it("Click 'LHR Step'", () => {
       cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1100,7 +1117,7 @@ context("LHR Build type flow", () => {
       cy.mpiStartStep({ stepNumber: 1 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-
+      cy.wait(3000);
       cy.url().then((url: any) => {
         startMpiUrl = url;
       });
@@ -1180,6 +1197,10 @@ context("LHR Build type flow", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Enter initial quantity", () => {
       cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
       cy.progressBarShouldNotExist();
@@ -1201,8 +1222,13 @@ context("LHR Build type flow", () => {
 
     it("Click save document", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
 
     it("Select Details tab", () => {
@@ -1262,6 +1288,7 @@ context("LHR Build type flow", () => {
 
     it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.wait(5000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1293,14 +1320,16 @@ context("LHR Build type flow", () => {
       ], () => {
         cy.visit(lhrDocUrl1);
       });
+      cy.wait(5000);
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(USERS[1].name);
+      cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView().wait(500);
+      cy.get(`[data-cy^="fb-approvals-fb-approvals-"]`).autocompleteSelect(`${USERS[1].name}`);
       cy.unClick();
-      cy.wait(5000);
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click save document", () => {
@@ -1354,8 +1383,8 @@ context("LHR Build type flow", () => {
     });
 
     it("Select 'R&D' build type", () => {
-      cy.unClick();
       cy.get("[value=\"R&D\"]").check();
+      cy.wait(3000);
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1385,10 +1414,6 @@ context("LHR Build type flow", () => {
       cy.url().then((url: any) => {
         startMpiUrl2 = url;
       });
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
     });
 
     it("Select Procedure tab", () => {
@@ -1422,13 +1447,15 @@ context("LHR Build type flow", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      cy.wait(3000);
+      cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView().wait(500);
+      cy.get(`[data-cy^="fb-approvals-approvals-built-in"]`).autocompleteSelect(`${USERS[1].name}`);
+      cy.unClick();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1449,16 +1476,17 @@ context("LHR Build type flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.visit(lhrDocUrl2);
       });
-      cy.wait(3000);
+      cy.wait(5000);
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(USERS[1].name);
+      cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView().wait(500);
+      cy.get(`[data-cy^="fb-approvals-fb-approvals-"]`).autocompleteSelect(`${USERS[1].name}`);
       cy.unClick();
-      cy.wait(3000);
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Click save document", () => {
@@ -1476,11 +1504,7 @@ context("LHR Build type flow", () => {
     it("Approve record", () => {
       cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-      cy.unClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
+      cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1492,17 +1516,21 @@ context("LHR Build type flow", () => {
 
   context("Verify notes should not present on revise LHR of 'Production' build type", () => {
     it("Revise LHR of 'Production' build type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.visit(lhrDocUrl1);
-      });
+      cy.visit(lhrDocUrl1);
+      cy.wait(5000);
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Revise document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+      cy.wait(5000);
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.checkToastMessage({ exists: false });
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1537,19 +1565,20 @@ context("LHR Build type flow", () => {
 
   context("Verify notes should be present on revise LHR of 'R&D' build type", () => {
     it("Revise LHR of 'R&D' build type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType,
-      ], () => {
-        cy.visit(lhrDocUrl2);
-      });
-      cy.wait(3000);
+      cy.visit(lhrDocUrl2);
+      cy.wait(5000);
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Revise document", () => {
       cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       cy.wait(3000);
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.checkToastMessage({ exists: false });
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1583,19 +1612,14 @@ context("LHR Build type flow", () => {
 
   context("Verify notes should not present on revise LHR step of 'Production' build type LHR", () => {
     it("Revise LHRs of 'Production' build type LHR", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType,
-      ], () => {
-        cy.visit(startMpiUrl1);
-      });
+      cy.visit(startMpiUrl1);
+      cy.wait(5000);
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Revise document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+      cy.wait(5000);
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1606,19 +1630,20 @@ context("LHR Build type flow", () => {
 
   context("Verify notes should present on revise LHR step of 'R&D' build type LHR", () => {
     it("Revise LHRs of 'R&D' build type LHR", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType,
-      ], () => {
-        cy.visit(startMpiUrl2);
-      });
+      cy.visit(startMpiUrl2);
       cy.wait(5000);
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Revise document", () => {
       cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-      cy.wait(2000);
+      cy.wait(3000);
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.checkToastMessage({ exists: false });
       cy.listLoadingElementShouldNotExist();
     });
 
