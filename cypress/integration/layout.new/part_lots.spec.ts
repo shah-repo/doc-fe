@@ -1056,7 +1056,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
             cy.listLoadingElementShouldNotExist();
             cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
               cy.get(`[data-cy="field-referenceTo"]`).contains(docId)
-                .parent().parent().find("svg").arrowClick({ force: true });
+                .parent().parent().parent().find("svg").arrowClick({ force: true });
             });
           });
 

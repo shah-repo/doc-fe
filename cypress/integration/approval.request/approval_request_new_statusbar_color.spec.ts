@@ -344,7 +344,7 @@ context("Status Bar of newly created ARs", () => {
   context("Verify Save button in status bar", () => {
     it("Verify Save button in status bar", () => {
       cy.get("button[data-cy='common.save']").should("be.visible");
-      cy.arSaveApiCall();
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
   });
 
@@ -533,6 +533,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
+      cy.closeAllAlertMessages();
       cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
@@ -594,6 +595,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
+      cy.closeAllAlertMessages();
       cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
