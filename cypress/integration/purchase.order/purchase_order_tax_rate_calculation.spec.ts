@@ -325,14 +325,20 @@ context("Search PO item with correct order date format", () => {
     context("Create Form Part document to create Part", () => {
       it("Login user to dashboard", () => {
         cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigates to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enters title 'New Part Form'", () => {
@@ -353,28 +359,40 @@ context("Search PO item with correct order date format", () => {
 
       it("Selects 'PO Part' document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "PO Part" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("Create Part document for PO", () => {
       it("Navigates to parts list", () => {
         cy.navigToParts();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'Add new part' button", () => {
         cy.ptClickCreateNewPart();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'PO Part' Form", () => {
         cy.ptSelectPartFormFromMultiSelect({ partForm: "PO Part" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enters title 'New Part'", () => {
@@ -391,16 +409,22 @@ context("Search PO item with correct order date format", () => {
 
       it("Click create document after filling document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("Create Supplier form for PO", () => {
       it("Navigates to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enters title 'New Supplier Form'", () => {
@@ -421,14 +445,20 @@ context("Search PO item with correct order date format", () => {
 
       it("Click on 'Suppliers' outputdocument type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Suppliers" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve and release document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -438,28 +468,32 @@ context("Search PO item with correct order date format", () => {
           cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
         });
 
-        it("Turn off autosave", () => {
-          cy.cmpTurnOffAutosave();
-          cy.unClick();
-        });
-
         it("Navigate to document list", () => {
           cy.navigToDocumentList();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
 
         it("Filter DocType name", () => {
           cy.dlClearFilters();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
           cy.get(".k-textbox").eq(2).arrowType("Purchase Order form").wait(500);
+          cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Search PO form", () => {
           cy.dlSelectFirstDocument();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Navigate to line items", () => {
           cy.drSelectLineItems();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify % symbol next to tax rate", () => {
@@ -470,21 +504,22 @@ context("Search PO item with correct order date format", () => {
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
           cy.navigToPurchaseOrder();
-        });
-
-        it("Turn off autosave", () => {
-          cy.cmpTurnOffAutosave();
-          cy.unClick();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click on 'Create PO' button", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
             cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Navigate to line items", () => {
           cy.drSelectLineItems();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify % symbol next to tax rate", () => {
@@ -506,34 +541,46 @@ context("Search PO item with correct order date format", () => {
 
           it("Select 'Open' for PO status", () => {
             cy.poSelectPOStatus({ status: "Open" });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it(`Select '${USERS[1].name}' for Requestor`, () => {
             cy.get("[data-cy^=po-requestor]").arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Select Order Date", () => {
             cy.get("input[name^=ordered]").parent().find("button").arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").eq(-1).arrowClick();
-          });
-
-          it("Click on Save", () => {
-            cy.drClickCreateDocumentWithApiCall();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Navigate to line items", () => {
             cy.drSelectLineItems();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Click on 'Add item' button", () => {
             cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
               cy.poAddNewFieldItem();
             });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Click on 'Add' inside PO dialog box and check for required fields", () => {
             cy.get("[data-cy=\"common.add\"]").click();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.get("p[class*='MuiFormHelperText-root']>span")
               .contains("The Part Number field is required when Supplier Part Number is empty.");
             cy.get("p[class*='MuiFormHelperText-root']>span")
@@ -542,64 +589,96 @@ context("Search PO item with correct order date format", () => {
 
           it("Select Part Number", () => {
             cy.poSelectPartNumber({ partNo: "PRT-00003 - 1" });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Enter Quantity Ordered", () => {
             cy.poEnterQuantityOrdered({ quantity: "5" });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Select Units", () => {
             cy.poSelectUnits();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Select GL code", () => {
             cy.poSelectGLCode();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Enter Supplier Part Number", () => {
             cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Enter number of Units", () => {
             cy.poNumberOfUnits({ number: "2" });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Add Required Date", () => {
             cy.get("[name=\"date\"]").next().find("button").arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.get(".MuiPickersDay-daySelected").arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Check Tax box", () => {
             cy.poSelectTaxCheckbox();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Click on 'Add' inside PO dialog box", () => {
             cy.poAddPOButtonClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Save PO", () => {
-            cy.drClickCreateDocumentWithApiCall();
+            cy.drClickCreateDocumentWithoutApiCall();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("check PO sum", () => {
             cy.get(`[data-cy="poSum"]`).should("contain", "$10.00");
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Verify Tax", () => {
             cy.poCheckTax({ number: "0.925000" });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Change Tax", () => {
             cy.get(`[name="po-items-built-in.taxRate"]`).clear()
               .arrowClick().arrowType("2");
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Clicks Save button", () => {
-            cy.drClickCreateDocumentWithApiCall();
+            cy.drClickCreateDocumentWithoutApiCall();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Verify revised Tax", () => {
             cy.poCheckTax({ number: "0.200000" });
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("navigate to Details tab", () => {
@@ -608,11 +687,18 @@ context("Search PO item with correct order date format", () => {
           });
 
           it("Click 'Submit for Approval' button", () => {
-            cy.pmSubmitForApproval();
+            cy.pmSubmitForApprovalWithoutAPI();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+            cy.landingPageLoadingElementShouldNotExist();
           });
 
           it("Approve", () => {
             cy.ebApprove();
+
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+            cy.landingPageLoadingElementShouldNotExist();
           });
         });
 
@@ -632,10 +718,13 @@ context("Search PO item with correct order date format", () => {
             });
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
+            cy.landingPageLoadingElementShouldNotExist();
           });
 
           it("Navigate to line items tab", () => {
             cy.drSelectLineItems();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Verify % symbol next to tax rate", () => {
