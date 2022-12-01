@@ -1760,7 +1760,8 @@ context("Receiving landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.recClickSaveBtn();
+      cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1809,7 +1810,8 @@ context("Receiving landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.recClickSaveBtn();
+      cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
