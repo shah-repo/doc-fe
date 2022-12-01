@@ -14,7 +14,7 @@ const DATE_FORMAT = MomentFormats.BriefDate;
 const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (<>
   <ListItemText>
     {item.docId && `${item.docId} -`} {item.title} | {item.unit} :
-    {item?.totalQuantity ? item?.totalQuantity : item?.quantity || 'None'}
+    {(item?.totalQuantity ?? item?.quantity) || "None"}
   </ListItemText>
   <ListItemText>
     {item.lots && item.lots.map((lot: LotItem) => (
