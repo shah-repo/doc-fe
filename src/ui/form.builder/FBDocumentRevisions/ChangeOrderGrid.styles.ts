@@ -169,7 +169,6 @@ export default makeStyles((theme) =>
     enclosingDiv: {
       border: `1px solid ${Colors.alice_blue}`,
       color: Colors.almost_black,
-      transition: "height 0.4s",
     },
     enclosingDivColor: {
       "backgroundColor": Colors.white,
@@ -188,7 +187,7 @@ export default makeStyles((theme) =>
     itemRow: {
       display: "flex",
       alignItems: "center",
-      minHeight: "48px",
+      minHeight: "60px",
       padding: theme.spacing(1.5),
     },
     moreDetails: {
