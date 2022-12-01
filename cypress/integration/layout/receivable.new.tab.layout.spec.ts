@@ -1002,7 +1002,7 @@ context("Receiving landing page test", () => {
     it("Save the  form", () => {
       cy.wrapWithWaitOnApiCalls(
         [], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
+          cy.drClickCreateDocumentWithApiCall();
           cy.listLoadingElementShouldNotExist();
         });
     });
