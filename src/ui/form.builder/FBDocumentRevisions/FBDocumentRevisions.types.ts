@@ -45,6 +45,9 @@ export interface FBDocumentRevisionResponse {
   document: {
     docId:  string;
     id: string;
+    documentType: {
+      group: string;
+    };
   };
   id: string;
   name: string;

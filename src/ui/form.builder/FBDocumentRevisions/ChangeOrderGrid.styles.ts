@@ -150,6 +150,9 @@ export default makeStyles((theme) =>
     },
     cellOne: {
       width: "30%",
+      display: "flex",
+      alignItems: "center",
+      columnGap: theme.spacing(1.25),
     },
     cellTwo: {
       width: "35%",
@@ -163,12 +166,64 @@ export default makeStyles((theme) =>
     itemRightPadding: {
       paddingRight: theme.spacing(1),
     },
+    enclosingDiv: {
+      border: `1px solid ${Colors.alice_blue}`,
+      color: Colors.almost_black,
+      transition: "height 0.4s",
+    },
+    enclosingDivColor: {
+      "backgroundColor": Colors.white,
+      "&:hover": {
+        "backgroundColor": Colors.whitest_grey,
+        "& .iconClass": {
+          backgroundColor: Colors.white,
+        },
+      },
+    },
+    enclosingDivOpened: {
+      "& svg": {
+        transform: "rotate(90deg)",
+      },
+    },
     itemRow: {
       display: "flex",
       alignItems: "center",
+      minHeight: "48px",
       padding: theme.spacing(1.5),
-
-      border: `1px solid ${Colors.alice_blue}`,
+    },
+    moreDetails: {
+      padding: theme.spacing(0, 1.5, 0, 5.5),
+    },
+    separator: {
+      height: "1px",
+      backgroundColor: Colors.gray_goose,
+      border: "none",
+      marginTop: 0,
+    },
+    moreDetailsHeader: {
+      color: Colors.font_gray,
+      fontSize: "12px",
+      fontWeight: 500,
+    },
+    iconClass: {
+      width: "1.4rem",
+      height: "1.4rem",
+      border: `1px solid ${Colors.whitest_grey}`,
+      backgroundColor: Colors.whitest_grey,
+      borderRadius: "50%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+    },
+    showMoreIcon: {
+      fill: Colors.font_gray,
+      transform: "rotate(0)",
+      transition: "transform 0.2s",
+    },
+    docList: {
+      listStyle: "none",
+      paddingLeft: 0,
     },
     verticalDivider: {
       borderLeft: "2px solid white",
