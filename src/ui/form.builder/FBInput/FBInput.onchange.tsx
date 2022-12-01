@@ -66,6 +66,7 @@ export const withFBOnChange = <T extends FBInputProps>(
           }
         });
       }
+      workspaceState?.saveDocRev(formState?.getValues());
     }
 
     function checkboxGroupValue(ev: React.ChangeEvent<HTMLInputElement>) {
