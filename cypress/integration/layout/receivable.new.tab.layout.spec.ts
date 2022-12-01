@@ -1345,7 +1345,6 @@ context("Receiving landing page test", () => {
     });
   });
 
-  // verify Draft state
   context("Open Receivable Draft state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
