@@ -101,7 +101,7 @@ const ChangeOrderViewGridItem: React.FunctionComponent<FBDocumentRevisionsItemPr
           <ul className={classes.docList}>
             {
               docRelatedParts.map((part) => (
-                <li key={part.revId}>{part.titleText}</li>
+                <li key={part.revId} className={classes.docListItem}>{part.titleText}</li>
               ))
             }
           </ul>
