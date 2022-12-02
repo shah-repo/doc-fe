@@ -1,4 +1,4 @@
-import { debounce, isEmpty } from "lodash";
+import { debounce, get, has, isEmpty, set } from "lodash";
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -66,6 +66,15 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
       return;
     }
 
+    // Update form input with the hiden field data
+    const currentFormInputData = get(dataToSubmit, "formInput") || {};
+    if (!isEmpty(currentFormInputData) && get(dataToSubmit, "formInput")) {
+      for (const [key, value] of Object.entries(initialValues?.formInput || {})) {
+        if (!has(currentFormInputData || {}, key)) {
+          set(dataToSubmit, `formInput.${key}`, value);
+        }
+      }
+    }
     async.reset();
 
     async.start(
