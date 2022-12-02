@@ -17,8 +17,6 @@ export type FBDocumentRevisionsItemProps =
 & Pick<FBDocumentRevisionsProps, "handleOpen" | "remove">
 & {
   id: string;
-  justificationOfChange: string;
-  descriptionOfChange: string;
 };
 
 export interface FBDocumentRevisionsValue {
@@ -36,20 +34,3 @@ export type FBDocumentRevisionsFormProps =
 
 export type FBDocumentRevisionsActionsProps =
 & Pick<FBDocumentRevisionsProps, "handleAdd" | "handleCancel">;
-
-
-export interface FBDocumentRevisionResponse {
-  companyId: string;
-  createdAt: string;
-  displayRevision: string;
-  document: {
-    docId:  string;
-    id: string;
-    documentType: {
-      group: string;
-    };
-  };
-  id: string;
-  name: string;
-  updatedAt: string;
-}

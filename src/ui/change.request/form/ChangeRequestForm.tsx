@@ -14,6 +14,7 @@ import { AsyncState } from "../../../state/types";
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../form.builder";
 import { FBWorkspaceMode } from "../../form.builder/types/workspace";
 import Colors from "../../layout/theme/utils/colors";
+import ItemsAndDetailsWrapper from "../items.and.details/itemsAndDetails.wrap";
 import FormHeader from "./assessmentForm/FormHeader";
 import ChangeRequestSidebar from "./ChangeRequest.sidebar";
 import ChangeRequestFormHeader from "./ChangeRequestFormHeader";
@@ -65,8 +66,14 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   };
 
   const docTypeGroup = changeRequest?.documentType.group ?? "OTHER";
-  const tabConfig = useSelector((state: ApplicationState) =>
+  let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
+
+  tabConfig = tabConfig && [...tabConfig, {
+    labelId: "tabId.itemsAndDetails",
+    tabId: TabTypeOptions.ITEMS.toLowerCase(),
+    type: TabTypeOptions.ITEMS,
+  } ];
 
   return (
     <SMForm
@@ -139,6 +146,13 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               mode={mode}
                             />
                           }
+                          {tabType === TabTypeOptions.ITEMS &&
+                            _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
+                            changeRequest && (
+                            <ItemsAndDetailsWrapper
+                              changeRequest={cloneDeep(changeRequest)}
+                            />
+                          )}
                         </SMBox>
                       );
                     })}

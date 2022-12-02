@@ -53,7 +53,7 @@ export default makeStyles((theme) =>
       marginBottom: theme.spacing(1.5),
     },
     btnMargin: {
-      marginRight: 0,
+      margin: 0,
     },
     dividerStyle: {
       margin: theme.spacing(0, 0, 1.5, 0),

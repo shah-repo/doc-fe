@@ -1333,6 +1333,7 @@
   "tabId.general": "General",
   "tabId.training": "Training",
   "tabId.calpmhistory": "Cal/PM History",
+  "tabId.itemsAndDetails": "Items",
   "documentRevision.form.PO.matrix.duplicate": "PO matrix can't have duplicate limits or level names",
   "meq.chip.nextCalDate": "Next Callibration Due:",
   "meq.chip.prevMaintance": "Preventive Maintenance Due:",
@@ -1362,5 +1363,10 @@
   "relatedParts.created.modal.view": "View",
   "relatedParts.created.modal.msg.part.before": "Part",
   "relatedParts.created.modal.msg.part.after": "has been created",
-  "changeorder.dialog.title": "Quick Edit"
+  "changeorder.dialog.title": "Quick Edit",
+  "changeorder.items.section.heading": "Items and Details",
+  "changeorder.items.button.addText": "Add Item",
+  "changeorder.grid.heading.item": "Item",
+  "changeorder.grid.heading.description.of.change": "Description of change",
+  "changeorder.grid.heading.justification.of.change": "Justification of change"
 }
