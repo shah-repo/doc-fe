@@ -420,9 +420,9 @@ context("PO and parts ", () => {
       cy.get("[data-cy='Section']").eq(1).arrowClick();
       cy.get(`[data-cy="fb-editor-mode-config-0"]`).should("exist");
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).should("exist");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetUserFavourites, () => {
-        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-      });
+      cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy="Section-btn"]`).arrowClick();
     });
 
@@ -742,9 +742,9 @@ context("PO and parts ", () => {
     });
 
     it("click on Add New Purchase order", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
-        cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
-      });
+      cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("type a description", () => {
@@ -1337,9 +1337,9 @@ context("PO and parts ", () => {
 
   context("Add and remove Attachement", () => {
     it("navigate to Line Items", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetReceivableQuantity, CyRoutes.GetFieldLocks], () => {
-        cy.drSelectLineItems();
-      });
+      cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
@@ -1533,9 +1533,9 @@ context("PO and parts ", () => {
     });
 
     it("click on Add New Purchase order", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
-        cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
-      });
+      cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("type a description", () => {
