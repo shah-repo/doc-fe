@@ -4,7 +4,7 @@ import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -163,13 +163,12 @@ export const withFBInput = <T extends FBInputProps>(
           convertedFieldValue = fieldValue;
         }
 
-        if (typeof convertedFieldValue === "string") {
+        if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
           showValidationField = formState?.getFieldValue(fieldName) === fieldValue;
         } else if (typeof convertedFieldValue === "object") {
           for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
-            if (Array.isArray(formState?.getFieldValue(fieldName)) &&
-            formState?.getFieldValue(fieldName).includes(fieldValueEntry)) {
-              showValidationField = true;
+            if (Array.isArray(formState?.getFieldValue(fieldName))) {
+              showValidationField = formState?.getFieldValue(fieldName).includes(fieldValueEntry);
             }
           }
         }
@@ -186,7 +185,7 @@ export const withFBInput = <T extends FBInputProps>(
       );
 
       if (validationMode === "visibility") {
-        if (isFieldUnderValidation) {
+        if (isFieldUnderValidation && workspaceState?.mode !== FBWorkspaceModeOptions.DESIGN) {
           isUnderMode = !showValidationField;
         }
         hidden = isUnderMode;
