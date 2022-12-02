@@ -471,6 +471,11 @@ context("Intermediate page validation", () => {
         cy.get(`[data-cy="fb-control-required"]`).arrowClick();
         cy.fbAddNewFieldButton();
       });
+
+      it("Save form", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.reload();
+      });
     });
 
     context("verify in preview mode", () => {
