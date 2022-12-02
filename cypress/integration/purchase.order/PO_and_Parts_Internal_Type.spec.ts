@@ -261,6 +261,10 @@ context("PO and parts ", () => {
       cy.navigToDocumentList();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click on 'Create a document'", () => {
       cy.cmpClickCreateNewDocument();
     });
@@ -382,8 +386,8 @@ context("PO and parts ", () => {
     });
 
     it("Button should have text Supplier ", () => {
-      cy.get("[data-cy=\"Supplier \"]")
-        .should("have.text", "Supplier ");
+      cy.get("[data-cy^=\"Supplier\"]")
+        .should("contain.text", "Supplier");
     });
 
     it("Button should have text Order Date", () => {
@@ -409,16 +413,17 @@ context("PO and parts ", () => {
       cy.fbVerifySectionsOnAddField("Section", "Inputs", "Approvals", "Custom Controls",
         "Instructions", "Buttons", "Actions");
     });
+
     it("Verify Section  from Add field field", () => {
       cy.get(`[data-cy="Section-btn"]`).arrowClick();
       cy.get("[data-cy='Section']").eq(0).should("exist");
       cy.get("[data-cy='Section']").eq(1).arrowClick();
       cy.get(`[data-cy="fb-editor-mode-config-0"]`).should("exist");
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).should("exist");
-      cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-      cy.wait(2000);
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetUserFavourites, () => {
+        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      });
       cy.get(`[data-cy="Section-btn"]`).arrowClick();
-      cy.wait(1000);
     });
 
     it("Verify 'Input' from Add Field section", () => {
@@ -434,6 +439,7 @@ context("PO and parts ", () => {
       cy.fbCheckFieldsExistActionsList("Action Button");
       cy.contains("Form Builder Library").parent().find("button").arrowClick({ force: true });
     });
+
     it("Verify Search Field for `text`", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.get(`input[placeholder^="Search"]`).clear().arrowType("text").arrowClick();
@@ -442,6 +448,7 @@ context("PO and parts ", () => {
       cy.get(`[data-cy="Text Editor"]`).should("exist");
       cy.get(`[data-cy="Text field with range"]`).should("exist");
     });
+
     it("Verify Search Field for `upload`", () => {
       cy.get(`input[placeholder^="Search"]`).clear().arrowType("upload").arrowClick();
       cy.unClick();
@@ -449,6 +456,7 @@ context("PO and parts ", () => {
       cy.get(`[data-cy="Instructions Media upload"]`).should("exist");
       cy.get(`[data-cy="Evidence Media upload"]`).should("exist");
     });
+
     it("Verify Search Field for `inline`", () => {
       cy.get(`input[placeholder^="Search"]`).clear().arrowType("inline").arrowClick();
       cy.unClick();
@@ -457,6 +465,7 @@ context("PO and parts ", () => {
         .find(`[class="MuiButtonBase-root MuiIconButton-root"]`).eq(0).click();
       cy.get(`input[placeholder^="Search"]`).clear();
     });
+
     it("Verify Favorites", () => {
       cy.fbVerifySectionsOnAddField("Favorites");
       cy.fbCheckFieldsExistFavoritesList("Inline Approval");
@@ -479,9 +488,7 @@ context("PO and parts ", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.fbAddNewFieldButton();
-      });
+      cy.fbAddNewFieldButton();
     });
 
     it("Add Autocomplete", () => {
@@ -489,9 +496,7 @@ context("PO and parts ", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       cy.fbEnterNameValue({ name: "label", value: "fb-autocomplete" });
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.fbAddNewFieldButton();
-      });
+      cy.fbAddNewFieldButton();
     });
 
     it("Save document", () => {
@@ -551,6 +556,10 @@ context("PO and parts ", () => {
       cy.get("[data-cy=\"remove-schema-item\"]").eq(0).arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
   });
 
@@ -655,7 +664,7 @@ context("PO and parts ", () => {
     });
 
     it("Verify Supplier ", () => {
-      cy.get("[data-cy=\"Supplier \"]").contains("Supplier ")
+      cy.get("[data-cy^=\"Supplier\"]").contains("Supplier")
         .should("exist");
     });
 
@@ -691,10 +700,6 @@ context("PO and parts ", () => {
   });
 
   context("Approve and Release", () => {
-    it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("Approve and Release", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
@@ -710,30 +715,24 @@ context("PO and parts ", () => {
     });
 
     it("Select 'Open' for PO status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poSelectPOStatus({ status: "Open" });
-      });
+      cy.poSelectPOStatus({ status: "Open" });
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
 
     it("Add Required Date", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-        cy.get(".MuiPickersDay-daySelected").arrowClick();
-        cy.unClick();
-      });
+      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Save PO", () => {
-      cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.poSaveDocument();
     });
   });
 
@@ -743,7 +742,9 @@ context("PO and parts ", () => {
     });
 
     it("click on Add New Purchase order", () => {
-      cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+      });
     });
 
     it("type a description", () => {
@@ -827,7 +828,7 @@ context("PO and parts ", () => {
     });
 
     it("Verify Supplier ", () => {
-      cy.get("[data-cy=\"Supplier \"]").contains("Supplier ")
+      cy.get("[data-cy^=\"Supplier\"]").contains("Supplier")
         .should("exist");
     });
 
@@ -882,6 +883,10 @@ context("PO and parts ", () => {
     it("Remove reference for document", () => {
       cy.drRemoveReferences({ reference: "FM-00002" });
       cy.progressBarShouldNotExist();
+    });
+
+    it("Save PO", () => {
+      cy.poSaveDocument();
     });
   });
 
@@ -953,36 +958,28 @@ context("PO and parts ", () => {
 
   context("Fill all fields", () => {
     it("Select 'Open' for PO status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poSelectPOStatus({ status: "Open" });
-      });
+      cy.poSelectPOStatus({ status: "Open" });
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
 
     it("Select Supplier", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001 - rev 1 - API Supplier Document");
-        cy.unClick();
-      });
+      cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001 - rev 1 - API Supplier Document");
+      cy.unClick();
     });
 
     it("Add Required Date", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-        cy.get(".MuiPickersDay-daySelected").arrowClick();
-      });
+      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Save PO", () => {
-      cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.poSaveDocument();
     });
   });
 
@@ -1087,6 +1084,10 @@ context("PO and parts ", () => {
   });
 
   context("Click 'Add line item' and fill the data", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
+    });
+
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").click();
     });
@@ -1129,19 +1130,16 @@ context("PO and parts ", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Save PO", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-    });
-
     it("Enter Shipping Cost", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.poShippingCost({ number: "2" });
+        cy.unClick();
       });
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check Subtotal value", () => {
-      cy.wait(1000);
       cy.poCheckAmount({ number: "$10.00" });
     });
 
@@ -1150,12 +1148,10 @@ context("PO and parts ", () => {
     });
 
     it("Check Total value", () => {
-      cy.unClick();
       cy.get("[data-cy=\"poTotal\"]").should("have.text", "$30.93");
     });
 
     it("navigate to Details tab and verify the Summary of totals", () => {
-      cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
@@ -1180,7 +1176,6 @@ context("PO and parts ", () => {
 
     it("delete line item", () => {
       cy.get("[class=\"MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(0).click();
-      cy.wait(2000);
     });
 
     it("navigate to Details tab", () => {
@@ -1232,7 +1227,9 @@ context("PO and parts ", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.poAddPOButtonClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poAddPOButtonClick();
+      });
     });
 
     it("Check Subtotal value", () => {
@@ -1240,12 +1237,10 @@ context("PO and parts ", () => {
     });
 
     it("Check Total value", () => {
-      cy.unClick();
       cy.get("[data-cy=\"poTotal\"]").should("have.text", "$40.00");
     });
 
     it("navigate to Details tab and verify the Summary of totals", () => {
-      cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
@@ -1300,24 +1295,17 @@ context("PO and parts ", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poAddPOButtonClick();
-      });
+      cy.poAddPOButtonClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Save PO", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-    });
-
     it("Enter Shipping Cost", () => {
       cy.progressBarShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poShippingCost({ number: "2" });
-        cy.unClick();
-      });
+      cy.poShippingCost({ number: "2" });
+      cy.unClick();
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check Subtotal value", () => {
@@ -1329,12 +1317,10 @@ context("PO and parts ", () => {
     });
 
     it("Check Total value", () => {
-      cy.unClick();
       cy.get("[data-cy=\"poTotal\"]").should("have.text", "$250.93");
     });
 
     it("navigate to Details tab and verify the Summary of totals", () => {
-      cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
@@ -1351,17 +1337,17 @@ context("PO and parts ", () => {
 
   context("Add and remove Attachement", () => {
     it("navigate to Line Items", () => {
-      cy.drSelectLineItems();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetReceivableQuantity, CyRoutes.GetFieldLocks], () => {
+        cy.drSelectLineItems();
+      });
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
-      cy.wait(2000);
       cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
     });
 
     it("navigate to Details tab ", () => {
-      cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
@@ -1391,7 +1377,6 @@ context("PO and parts ", () => {
     });
 
     it("navigate to Details tab ", () => {
-      cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
@@ -1484,7 +1469,6 @@ context("PO and parts ", () => {
     });
 
     it("Add approver", () => {
-      cy.wait(2000);
       cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       cy.progressBarShouldNotExist();
@@ -1531,7 +1515,6 @@ context("PO and parts ", () => {
     });
 
     it("navigate to Line Items", () => {
-      cy.wait(2000);
       cy.drSelectLineItems();
     });
 
@@ -1545,35 +1528,35 @@ context("PO and parts ", () => {
       cy.navigToPurchaseOrder();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("click on Add New Purchase order", () => {
-      cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+      });
     });
 
     it("type a description", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drEnterDocumentDescription({ description: "Another new purchase order description" });
-      });
+      cy.drEnterDocumentDescription({ description: "Another new purchase order description" });
       cy.progressBarShouldNotExist();
     });
 
     it(`Select Requestor`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
       cy.progressBarShouldNotExist();
     });
 
     it("Add Required Date", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-        cy.get(".MuiPickersDay-daySelected").arrowClick();
-      });
+      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
       cy.progressBarShouldNotExist();
     });
 
     it("Save PO", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.poSaveDocument();
     });
 
     it("navigate to Line Items", () => {
@@ -1601,15 +1584,17 @@ context("PO and parts ", () => {
       cy.get("[data-cy=\"attachment.title\"]").contains("image.jpg").should("exist");
     });
 
+    it("Save PO", () => {
+      cy.poSaveDocument();
+    });
+
     it("navigate to Details tab ", () => {
-      cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
     it("Add approver", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
       cy.get("[data-cy^='fb-po-approvals-']").arrowClick({ force: true });
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
     });
@@ -1619,7 +1604,6 @@ context("PO and parts ", () => {
     });
 
     it("navigate to Line Items", () => {
-      cy.wait(2000);
       cy.drSelectLineItems();
     });
 
@@ -1628,7 +1612,6 @@ context("PO and parts ", () => {
     });
 
     it("navigate to Details tab ", () => {
-      cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
