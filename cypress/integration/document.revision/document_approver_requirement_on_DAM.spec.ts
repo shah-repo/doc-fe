@@ -566,9 +566,8 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Checkbox option 2 checked", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`input[type="checkbox"][value="2"]`).last().check();
-      });
+      cy.get(`input[type="checkbox"][value="2"]`).last().check();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
