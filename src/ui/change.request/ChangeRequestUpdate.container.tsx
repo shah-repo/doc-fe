@@ -68,7 +68,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
 
     // Update form input with the hidden field data
     const currentFormInputData = get(dataToSubmit, "formInput") || {};
-    if (!isEmpty(currentFormInputData) && get(dataToSubmit, "formInput")) {
+    if (!isEmpty(currentFormInputData)) {
       for (const [key, value] of Object.entries(initialValues?.formInput || {})) {
         if (!has(currentFormInputData || {}, key)) {
           set(dataToSubmit, `formInput.${key}`, value);
