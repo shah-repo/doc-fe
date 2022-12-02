@@ -120,9 +120,7 @@ context("Document Attachment Flow", () => {
 
     context("Test download of uploaded attachments", () => {
       context("Test redline", () => {
-        // ToDo: this context is skipped due to ENC-13323
         it("Upload redline and verify cleanCopyStatus is created", () => {
-          cy.pause();
           cy.atchUploadRedlineVerifyCleanCopyStatus({ fileName: "redline.docx" });
         });
 
