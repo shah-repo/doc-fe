@@ -87,10 +87,14 @@ context(testName, () => {
   context("Create document", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'create a document'", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Type a title", () => {
@@ -111,10 +115,12 @@ context(testName, () => {
 
     it(`Select '${outputDocumentType}' output document type`, () => {
       cy.drSelectOutputDocumentType({ documentType: outputDocumentType });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify revision", () => {
@@ -128,6 +134,8 @@ context(testName, () => {
       cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
       cy.fbEnterNameValue({ name: "label", value: "Inline Approval 1" });
       cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Owner as approver");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbAddNewFieldButton();
     });
 
@@ -143,11 +151,12 @@ context(testName, () => {
       cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
       cy.fbEnterNameValue({ name: "label", value: "Inline Approval 2" });
       cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+      cy.unClick();
       cy.fbAddNewFieldButton();
     });
 
     it("Save document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -175,10 +184,15 @@ context(testName, () => {
 
     it("Add inline approver 1", () => {
       cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Request Approval button", () => {
       cy.contains("Request approval").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve inline approval", () => {
@@ -187,52 +201,81 @@ context(testName, () => {
 
     it("Verify Revision 1", () => {
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=revision]").eq(1).click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: "LAST SIGNED" });
       cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=revision]").eq(0).click();
     });
 
     it("Add inline approver 2", () => {
       cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).autocompleteSelect(`${ADMIN_USER.email}`);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Request Approval button", () => {
       cy.contains("Request approval").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve inline approval", () => {
       cy.inlineApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Revision 2", () => {
       cy.drClickRevisionsSidePanel();
       cy.get("[data-cy=revision]").eq(1).click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: "LAST SIGNED" });
       cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 2");
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=revision]").eq(0).click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Revision 1", () => {
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=revision]").eq(2).click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: "SUPERSEDED" });
       cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=revision]").eq(0).click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
       cy.url().then((url: string) => { record1Url = url; });
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
   context(`Create ${record2Name}`, () => {
     it("Go to document", () => {
       cy.visit(documentUrl);
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Create new", () => {
@@ -249,26 +292,38 @@ context(testName, () => {
 
     it("Save document", () => {
       cy.url().then((url) => record2Url = url);
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
   context("Revise and remove approvals", () => {
     it("Go to document", () => {
       cy.visit(documentUrl);
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Revise document", () => {
       cy.lhrClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove approvals", () => {
       cy.get(`[data-cy="remove-schema-item"]`).eq(1).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy="remove-schema-item"]`).eq(2).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
       cy.get(`[data-cy=DocumentRevisionForm-submit]`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
@@ -277,11 +332,19 @@ context(testName, () => {
 
     it("Verify Revision 1", () => {
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=revision]").eq(1).click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: "RELEASED" });
       cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev 1");
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=revision]").eq(0).click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
@@ -292,6 +355,8 @@ context(testName, () => {
   context(`Verify ${record1Name}`, () => {
     it("Go to the record", () => {
       cy.visit(record1Url);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
@@ -301,18 +366,27 @@ context(testName, () => {
     it("Upgrade to Latest ",  () => {
       cy.get("[data-cy=HeaderMenuButton]").arrowClick();
       cy.get("#UpgradeToLatest-upgrade").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("#UpgradeToLatest-proceed").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.wait(1000);
     });
 
     it("Select approvals", () => {
       cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
+      cy.unClick();
       cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Approve And Release", () => {
       cy.drApproveAndReleaseDialog();
       cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
@@ -332,6 +406,8 @@ context(testName, () => {
   context(`Verify ${record2Name}`, () => {
     it("Go to the record", () => {
       cy.visit(record2Url);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
@@ -340,19 +416,30 @@ context(testName, () => {
 
     it("Upgrade to Latest ",  () => {
       cy.get("[data-cy=HeaderMenuButton]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("#UpgradeToLatest-upgrade").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("#UpgradeToLatest-proceed").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.wait(1000);
     });
 
     it("Select approvals", () => {
       cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
     });
 
     it("Click Approve And Release", () => {
       cy.drApproveAndReleaseDialog();
       cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
