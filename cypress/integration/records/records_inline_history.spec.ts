@@ -72,10 +72,14 @@ context("Record inline history Flow", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -94,6 +98,8 @@ context("Record inline history Flow", () => {
 
       it("Select 'Record Document' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "History Test Record" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -103,7 +109,7 @@ context("Record inline history Flow", () => {
 
     context("Create document and release it", () => {
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Verify approvals field is automatically added", () => {
@@ -147,14 +153,15 @@ context("Record inline history Flow", () => {
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
         cy.fbEnterNameValue({ name: "label", value: "Inline field" });
         cy.fbAddApproverToInlineDialog({ approverName: USERS[2].name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.fbAddField();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release document", () => {
@@ -166,10 +173,14 @@ context("Record inline history Flow", () => {
   context("Create record", () => {
     it("Navigate to records", () => {
       cy.navigToRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on create new", () => {
       cy.poClickCreatePO();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'History Test Record' on dropdown", () => {
@@ -177,6 +188,8 @@ context("Record inline history Flow", () => {
       cy.recSelectRecordFormFromMultiSelect({
         recordType: "History Test Record",
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -231,28 +244,20 @@ context("Record inline history Flow", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
           cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
           cy.get("[name*=\"fb-ia-inline-field\"] input").autocompleteSelect(USERS[2].email);
+          cy.unClick();
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Save record", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-        cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.inlineApproval();
       });
 
       context("Change textfield and approve again", () => {
@@ -283,16 +288,7 @@ context("Record inline history Flow", () => {
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4400");
           cy.wait(3000);
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-          cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostApprovalsApprove,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-          });
-          cy.checkToastMessage({ exists: false });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.inlineApproval();
         });
 
         it("Uncheck 'Red' and 'Green' value on checkbox", () => {
@@ -323,7 +319,7 @@ context("Record inline history Flow", () => {
         });
 
         it("Save record", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Count number of elements in approval history", () => {
@@ -351,22 +347,17 @@ context("Record inline history Flow", () => {
         it("Approve first Inline Approval", () => {
           SystemRequirement("REQ-4350");
           cy.wait(3000);
-          cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
-          cy.get("input[name=\"password\"]").clear().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.PostApprovalsApprove,
-            CyRoutes.SessionDetails], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-          });
-          cy.checkToastMessage({ exists: false });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.inlineApproval();
         });
 
         it("Navigate to released document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
             cy.drClickRevisionsSidePanel();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
         });
 
@@ -396,7 +387,11 @@ context("Record inline history Flow", () => {
         it("Navigate to Superseded document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetDocAggregatedAudit], () => {
             cy.drClickRevisionsSidePanel();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
         });
 
