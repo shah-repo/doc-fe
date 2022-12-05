@@ -140,13 +140,17 @@ export const withFBInput = <T extends FBInputProps>(
     if (validationMode === "visibility" || validationMode === "disabled") {
       map(get(formState?.validatorRules, name), (rule) => {
         const { value = "" } = rule || {};
+        const isValueObj = value?.indexOf("{") !== -1 || value?.indexOf("}") !== -1;
         const fieldName: string = first(value.split(",")) || "";
-        const fieldValue = last(value.split(","));
+        let fieldValue = value?.substring(value?.indexOf(",") + 1, value?.length) || last(value.split(","));
 
         if (!fieldName || !formState) {
           return;
         }
 
+        if (fieldValue.indexOf(",") !== -1 && !isValueObj) {
+          fieldValue = fieldValue.split(",");
+        }
         const validationRules = formState.validationRelatedRules[fieldName] || [];
 
         formState.validationRelatedRules[fieldName] = uniqWith(
@@ -162,16 +166,31 @@ export const withFBInput = <T extends FBInputProps>(
         } catch (error) {
           convertedFieldValue = fieldValue;
         }
+        const formStateFieldValue = formState?.getFieldValue(fieldName);
 
         if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
-          showValidationField = !isUndefined(fieldValue) && formState?.getFieldValue(fieldName) === fieldValue;
+          if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue)) {
+            showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue) :
+              formStateFieldValue === fieldValue;
+          }
         } else if (typeof convertedFieldValue === "object") {
+          let intermediateFlag;
           for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
             if (Array.isArray(formState?.getFieldValue(fieldName))) {
-              showValidationField = !isUndefined(fieldValueEntry) &&
+              if (isUndefined(intermediateFlag)) {
+                intermediateFlag = false;
+              }
+              const flag = !isUndefined(fieldValueEntry) &&
               formState?.getFieldValue(fieldName).includes(fieldValueEntry);
+              if (flag) {
+                intermediateFlag = flag;
+              }
             }
           }
+          if (!isUndefined(intermediateFlag)) {
+            showValidationField = intermediateFlag;
+          }
+
         }
       });
     }
