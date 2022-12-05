@@ -163,13 +163,13 @@ export const withFBInput = <T extends FBInputProps>(
           convertedFieldValue = fieldValue;
         }
 
-        if (typeof convertedFieldValue === "string") {
-          showValidationField = formState?.getFieldValue(fieldName) === fieldValue;
+        if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
+          showValidationField = !isUndefined(fieldValue) && formState?.getFieldValue(fieldName) === fieldValue;
         } else if (typeof convertedFieldValue === "object") {
           for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
-            if (Array.isArray(formState?.getFieldValue(fieldName)) &&
-            formState?.getFieldValue(fieldName).includes(fieldValueEntry)) {
-              showValidationField = true;
+            if (Array.isArray(formState?.getFieldValue(fieldName))) {
+              showValidationField = !isUndefined(fieldValueEntry) &&
+              formState?.getFieldValue(fieldName).includes(fieldValueEntry);
             }
           }
         }
@@ -186,7 +186,7 @@ export const withFBInput = <T extends FBInputProps>(
       );
 
       if (validationMode === "visibility") {
-        if (isFieldUnderValidation && showValidationField) {
+        if (isFieldUnderValidation && !isUndefined(showValidationField)) {
           isUnderMode = !showValidationField;
         }
         hidden = isUnderMode;
