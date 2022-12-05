@@ -52,6 +52,7 @@ export enum CyRoutes {
   PatchAR = "PatchAR",
   GetDocAggregatedAudit = "GetDocAggregatedAudit",
   PostApprovalsApprove = "PostApprovalsApprove",
+  OptionsApprovalsApprove = "OptionsApprovalsApprove",
   GetGroupsApprovalRoles = "GetGroupsApprovalRoles",
   GroupsGetClearFilter = "GroupsGetClearFilter",
   PostChangeRequests = "PostChangeRequests",
@@ -820,6 +821,16 @@ export const routes: ICyRoutes =   {
   PostApprovalsApprove: {
     requestConfig: {
       method: "POST",
+      url: "/api/v1/approvals/*/approve",
+    },
+    callConfig: {
+      responseTimeout: 45 * 1000,
+      requestTimeout: 40 * 1000,
+    },
+  },
+  OptionsApprovalsApprove: {
+    requestConfig: {
+      method: "OPTIONS",
       url: "/api/v1/approvals/*/approve",
     },
     callConfig: {

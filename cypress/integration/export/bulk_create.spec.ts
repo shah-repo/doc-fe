@@ -518,16 +518,21 @@ context("Export Bulk", () => {
 
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select the Bulk Import inline form", () => {
       cy.dlFilterByDocTitle({ docTitle: "Bulk Import inline form" });
-
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter title 'Bulk Creation document", () => {
@@ -544,28 +549,37 @@ context("Export Bulk", () => {
 
     it("Select document type to be used for bulk creation", () => {
       cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Bulk Import");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'yes' to have Document id column", () => {
       cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload csv file", () => {
       cy.atchUploadTemplateForBLC({ fileName: "test_template.xlsx" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter text in textfield", () => {
       cy.get("[name^=\"textfield1\"]").arrowType("Test one");
+      cy.unClick();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -580,18 +594,26 @@ context("Export Bulk", () => {
     context("Add Bulk Import Last Signed", () => {
       it("Add inline approver", () => {
         cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].email }`);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click Request Approval button", () => {
         cy.contains("Request approval").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve inline approval", () => {
         cy.inlineApproval();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on revisions tab on side panel", () => {
         cy.drClickRevisionsSidePanel();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Last Signed", () => {
@@ -613,6 +635,8 @@ context("Export Bulk", () => {
     context("Add Bulk Import Archive", () => {
       it("Click on revisions tab on side panel", () => {
         cy.drClickRevisionsSidePanel();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click WIP status record", () => {
@@ -635,22 +659,32 @@ context("Export Bulk", () => {
 
       it("Select 'Details' tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click Request Approval button", () => {
         cy.contains("Request approval").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Details' tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve inline approval", () => {
         cy.inlineApproval();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on revisions tab on side panel", () => {
         cy.drClickRevisionsSidePanel();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Archive", () => {
@@ -682,7 +716,12 @@ context("Export Bulk", () => {
 
       it("Finalize and release button click'", () => {
         cy.reload();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.recFinalizeAndReleaseRecord();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify export", () => {
@@ -698,10 +737,14 @@ context("Export Bulk", () => {
     context("Add Bulk Import Canceled", () => {
       it("Click Update record", () => {
         cy.drClickReviseDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click Cancel draft", () => {
@@ -725,16 +768,22 @@ context("Export Bulk", () => {
 
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select the Bulk Import form", () => {
         cy.dlClearFilters();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.dlFilterByDocTitle({ docTitle: "Bulk Import form" });
         cy.dlSelectFirstDocument();
       });
 
       it("Click on Create New button", () => {
         cy.drCreateNewDocumentFromForm();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter title", () => {
@@ -743,6 +792,8 @@ context("Export Bulk", () => {
 
       it("Navigate to Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -751,36 +802,47 @@ context("Export Bulk", () => {
 
       it("Select document type to be used for bulk creation", () => {
         cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Bulk Import");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'yes' to have Document id column", () => {
         cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Upload csv file", () => {
         cy.atchUploadTemplateForBLC({ fileName: "test_template1.xlsx" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context(`Add Bulk Import with ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
       it("Add inline approver", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email }`);
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Save and submit for Approval", () => {
         cy.pmSubmitForApproval();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify export", () => {
