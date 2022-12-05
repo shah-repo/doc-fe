@@ -72,7 +72,7 @@ export const usePoApprovals = (
     const shouldUpdate =
       isDocumentRevisionInDraft(workspaceState?.document?.status)
       && !isAdministrativeChange
-      && poApprovalsState?.requireApprovals;
+      && poApprovalsState?.requireAdditionalApprovers;
 
     if (!shouldUpdate) {
       return;

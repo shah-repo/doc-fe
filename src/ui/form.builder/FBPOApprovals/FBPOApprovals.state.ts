@@ -32,7 +32,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
     return filter(this.approvals, (a) => a.status !== "ABANDONED" && a.type === "MASTER");
   }
 
-  @computed public get requireApprovals() {
+  @computed public get requireAdditionalApprovers() {
     return values(this.groups).length > 0 && values(this.groups).length !== this.checkedGroups?.length;
   }
 
