@@ -18,6 +18,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
   public approvalApi = new FBRequest<FBInlineApprovalBody, Partial<FBInlineApprovalBody>>(FBEndpoint.Approvals);
   public transitionApi =
   new FBRequest<FBInlineApprovalBody, FBInlineApprovalTransitionBody | null>(FBEndpoint.ApprovalsTransition);
+  public updateApi = new FBRequest<FBInlineApprovalBody, FBPOInlineApprovalUpdateBody>(FBEndpoint.ApprovalsUpdate);
 
   public constructor({ id, approvals }: FBPOApprovalsConstructor) {
     super();
@@ -154,6 +155,27 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
       }
       this.transitionApi.data = data;
       this.transitionApi.onSuccess();
+      callback?.();
+    });
+  };
+  public updateSignatureGroupName = (
+    id: string,
+    signatureGroupName: string,
+    callback?: () => void
+  ) => {
+    this.updateApi.set({
+      url: FBEndpoint.ApprovalsUpdate,
+      urlValues: { id },
+      body: {
+        signatureGroupName,
+      },
+      method: "post",
+    }, (data, error) => {
+      if (error) {
+        return this.updateApi.onError(error);
+      }
+      this.updateApi.data = data;
+      this.updateApi.onSuccess();
       callback?.();
     });
   };

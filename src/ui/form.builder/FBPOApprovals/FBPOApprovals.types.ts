@@ -23,3 +23,7 @@ export type FBPOApprovalsProps =
 export type FBPOApprovalsConstructor = FBInlineApprovalConstructor & {
   id?: string[];
 };
+
+export interface FBPOInlineApprovalUpdateBody {
+  signatureGroupName: string;
+}
