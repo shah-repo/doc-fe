@@ -493,8 +493,7 @@ context("LHRt using regular AR test", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].name });
     });
 
-    it("Click on Save", () => {
-      cy.arSaveApiCall();
+    it("Capture current url", () => {
       cy.url().then((url: any) => { arUrl = url; });
     });
 
@@ -716,7 +715,6 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
       cy.url().then((url: any) => { arUrl = url; });
     });
 
