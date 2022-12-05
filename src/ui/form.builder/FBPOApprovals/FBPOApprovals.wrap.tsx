@@ -3,13 +3,12 @@ import { compact, difference, isEmpty, map, some } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
-import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBInlineApprovalBody, FBPOApprovalsProps, FBRequiredApprover } from "..";
+import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from "..";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
-import FBDataStore from "../FBStore/FBDataStore";
 import { usePoApprovals } from "./hooks";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
@@ -35,18 +34,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
-    const { document, changeRequest, id, isOutput } = workspaceState || {};
+    const { document, id, isOutput } = workspaceState || {};
     const outputId = isOutput ? id : undefined;
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
     const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
-
-    const existingApprovals = useObserver(() =>
-      FBDataStore?.poApprovals
-      || document?.approvals
-      || changeRequest?.approvals
-    ) as FBInlineApprovalBody[];
 
     const {
       poApprovalsState,
@@ -56,7 +49,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     } = usePoApprovals(
       name,
       outputId,
-      existingApprovals,
     );
 
     const prevRequester = useRef<string>();
@@ -90,7 +82,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
       (fieldValue: string[]) => {
-        const formValue: string[] = map(poApprovalsState.activeApprovals, "approver.id");
+        const formValue: string[] = map(poApprovalsState?.activeApprovals, "approver.id");
 
         const employeesToBeAdded = difference(fieldValue, formValue);
         if (employeesToBeAdded.length > 0) {
@@ -154,8 +146,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     // MARK: @observer
     useObserver(() => {
-      groups = poApprovalsState.groups;
-      approvals = poApprovalsState.activeApprovals;
+      groups = poApprovalsState?.groups;
+      approvals = poApprovalsState?.activeApprovals;
       checkedGroups = poApprovalsState?.checkedGroups;
 
       loading = (
@@ -165,7 +157,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     });
 
-    const fieldValue = map(poApprovalsState.activeApprovals, "approver.id");
+    const fieldValue = map(poApprovalsState?.activeApprovals, "approver.id");
 
     formState?.setFieldValue(`${name}`, fieldValue, true);
     documentStatus = document?.status;

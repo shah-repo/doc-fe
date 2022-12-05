@@ -1,6 +1,8 @@
 import { get, isUndefined } from "lodash";
 import React, { useEffect } from "react";
 import { DocumentRevisionFormState, DocumentRevisionSummaryProps, SM, SMProvider } from "../../..";
+import { checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { FB, FBPOApprovalsState, FBProvider } from "../../../../ui/form.builder";
 
 export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummaryProps>(
   Component: React.FunctionComponent<T>,
@@ -23,6 +25,14 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     const formFB = formInput || formTemplate || formDocument;
     isFB = !isUndefined(formFB);
 
+    const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
+    const poApprovalsState = isPO ? FB.useRef(
+      FBPOApprovalsState,
+      {
+        id: documentRevision.id,
+        approvals: documentRevision?.approvals,
+      },
+    ) : undefined;
 
     // MARK: @state
     useEffect(() => {
@@ -41,17 +51,19 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
 
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
-        <Component
-          {...props as T}
-          {...{
-            onScroll,
-            _documentRevisionFormState,
-            _tabsState,
-            documentRevision,
-            schema,
-            isFB,
-          }}
-        />
+        <FBProvider {...{ poApprovalsState }}>
+          <Component
+            {...props as T}
+            {...{
+              onScroll,
+              _documentRevisionFormState,
+              _tabsState,
+              documentRevision,
+              schema,
+              isFB,
+            }}
+          />
+        </FBProvider>
       </SMProvider>
     );
   };

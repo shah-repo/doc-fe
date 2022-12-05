@@ -4,12 +4,11 @@ import { compact, difference, find, isEmpty, map, minBy, some, sortBy } from "lo
 import { reaction } from "mobx";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { FB, FBInlineApprovalBody, FBPOApprovalsState, FBPurchaseOrderValue } from "..";
+import { FB, FBInlineApprovalBody, FBPurchaseOrderValue } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
-import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
@@ -23,43 +22,34 @@ interface CheckApprovalsArguments {
 export const usePoApprovals = (
   fieldName: string,
   id?: string,
-  approvals?: FBInlineApprovalBody[],
 ) => {
   const dispatch = useDispatch();
-  const { workspaceState, formState } = FB.useStores();
-
-  const poApprovalsState = FB.useRef(
-    FBPOApprovalsState,
-    {
-      id,
-      approvals,
-    },
-  );
+  const { workspaceState, formState, poApprovalsState } = FB.useStores();
 
   const getSignatureGroupName = (id: string) => {
-    const approversGroups = compact(map(poApprovalsState.groups, (group) =>
+    const approversGroups = compact(map(poApprovalsState?.groups, (group) =>
       (group.joinedEmployees as string[]).includes(id) ? group : ""));
     const poamGroups = approversGroups.filter((group) => group.type === GroupType.PURCHASE_APPROVAL);
 
-    if (isEmpty(poApprovalsState.checkedGroups)) {
+    if (isEmpty(poApprovalsState?.checkedGroups)) {
       const groupToSign = minBy(poamGroups, "documentStage");
       return groupToSign?.name;
     } else {
-      const sign = minBy(difference(poamGroups, poApprovalsState.checkedGroups), "documentStage");
+      const sign = minBy(difference(poamGroups, poApprovalsState?.checkedGroups ?? []), "documentStage");
       return sign?.name;
     }
   };
 
   const updateApprovalSignatureGroupName = (approval: FBInlineApprovalBody) =>
     new Promise((resolve) => {
-      if (some(poApprovalsState.checkedGroups, { name: approval.signatureGroupName }) || !approval.approverId) {
+      if (some(poApprovalsState?.checkedGroups, { name: approval.signatureGroupName }) || !approval.approverId) {
         return resolve(approval);
       }
 
       const updatedSignatureGroupName = getSignatureGroupName(approval.approverId);
 
       if (updatedSignatureGroupName) {
-        poApprovalsState.updateSignatureGroupName(
+        poApprovalsState?.updateSignatureGroupName(
           approval.id,
           updatedSignatureGroupName,
           () => resolve(approval),
@@ -69,7 +59,7 @@ export const usePoApprovals = (
 
   const updateSignaturesQueue = async (approvals: string[]) => {
     for (const approvalId of approvals) {
-      const currentApproval = poApprovalsState.activeApprovals.find((approval) => approval.id === approvalId);
+      const currentApproval = poApprovalsState?.activeApprovals.find((approval) => approval.id === approvalId);
       if (currentApproval) {
         await updateApprovalSignatureGroupName(currentApproval);
       }
@@ -82,19 +72,19 @@ export const usePoApprovals = (
     const shouldUpdate =
       isDocumentRevisionInDraft(workspaceState?.document?.status)
       && !isAdministrativeChange
-      && poApprovalsState.requireApprovals;
+      && poApprovalsState?.requireApprovals;
 
     if (!shouldUpdate) {
       return;
     }
 
     updateSignaturesQueue(
-      sortBy(poApprovalsState.activeApprovals, "signatureGroupName").map((approval) => approval.id)
+      sortBy(poApprovalsState?.activeApprovals, "signatureGroupName").map((approval) => approval.id)
     );
   };
 
   const hasUserInApprovers = (approverId: string, approversList?: FBInlineApprovalBody[]) =>
-    some(approversList ?? poApprovalsState.activeApprovals, { approverId });
+    some(approversList ?? poApprovalsState?.activeApprovals, { approverId });
 
   const updateApprovals = ({ prevRequester, ...args }: CheckApprovalsArguments) => {
     const { revisionChangeType, document, formInputSync } = workspaceState ?? {};
@@ -116,7 +106,7 @@ export const usePoApprovals = (
     }
 
     // We can remove only automatically added approvers.
-    const autoApprovers = poApprovalsState.activeApprovals.filter((item) => !item.manually);
+    const autoApprovers = poApprovalsState?.activeApprovals.filter((item) => !item.manually);
     const hasRequesterInAutoApprovers = hasUserInApprovers(requester, autoApprovers);
     const hasPrevRequesterInAutoApprovers = prevRequester && hasUserInApprovers(prevRequester, autoApprovers);
 
@@ -130,7 +120,7 @@ export const usePoApprovals = (
   };
 
   const addApprover = (ids: string[], { manually = true } = {}, callback?: () => void) => {
-    if (!id || !ids || !poApprovalsState.isMounted) {
+    if (!id || !ids || !poApprovalsState?.isMounted) {
       return;
     }
     ids
@@ -159,7 +149,7 @@ export const usePoApprovals = (
       return;
     }
     map(ids, (approver) => {
-      const approval = find(poApprovalsState.activeApprovals, (a) => a.approver?.id === approver);
+      const approval = find(poApprovalsState?.activeApprovals, (a) => a.approver?.id === approver);
       poApprovalsState?.applyTransition(
         "abandon",
         approval?.id,
@@ -177,7 +167,7 @@ export const usePoApprovals = (
 
   const fetchRequiredGroups = () => {
     if (id) {
-      return poApprovalsState.fetchRequiredApprovals([id]);
+      return poApprovalsState?.fetchRequiredApprovals([id]);
     }
   };
 
