@@ -1,8 +1,9 @@
 import { Approval } from "aws-sdk/clients/codecommit";
-import { filter, isEmpty, map, unionBy, values } from "lodash";
+import { every, filter, isEmpty, map, unionBy, values } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBPOApprovalsConstructor, FBPOInlineApprovalUpdateBody, FBRequiredApprover } from "..";
 import { GroupType } from "../../../state/ducks/auth/types";
+import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
@@ -34,6 +35,10 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
 
   @computed public get requireAdditionalApprovers() {
     return values(this.groups).length > 0 && values(this.groups).length !== this.checkedGroups?.length;
+  }
+
+  @computed public get haveAllApprovals() {
+    return every(this.activeApprovals, { status: ApprovalStatus.Approved });
   }
 
   @computed public get checkedGroups() {
@@ -98,12 +103,11 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
       if (error) {
         return this.approvalApi.onError(error);
       }
-      this.approvalApi.data = data;
-      this.onSuccess();
       if (data) {
         this.upsertApproval(data);
       }
-      this.approvalApi.onSuccess(); // removes the loader
+      this.approvalApi.data = data;
+      this.approvalApi.onSuccess();
       callback?.();
     });
   };
@@ -124,10 +128,10 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
       if (error) {
         return this.transitionApi.onError(error);
       }
-      this.transitionApi.data = data;
       if (data) {
         this.upsertApproval(data);
       }
+      this.transitionApi.data = data;
       this.transitionApi.onSuccess();
       callback?.();
     });
@@ -149,10 +153,10 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
       if (error) {
         return this.updateApi.onError(error);
       }
-      this.updateApi.data = data;
       if (data) {
         this.upsertApproval(data);
       }
+      this.updateApi.data = data;
       this.updateApi.onSuccess();
       callback?.();
     });

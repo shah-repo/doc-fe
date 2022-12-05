@@ -204,8 +204,8 @@ export const usePoApprovals = (
     (data) => {
       FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
       updateSignatureGroupNames();
-      if (data?.status === ApprovalStatus.Approved || data?.status === DocumentStatus.Draft) {
-        window.location.reload();
+      if (id && poApprovalsState?.haveAllApprovals) {
+        dispatch(documentRevisionsActions.reload(id));
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
