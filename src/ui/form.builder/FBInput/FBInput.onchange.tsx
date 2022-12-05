@@ -181,7 +181,8 @@ export const withFBOnChange = <T extends FBInputProps>(
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
 
-      if (type === "autocomplete" && schemaState?.getSchemaItem(name?.replace("fb-ia-", ""))?.type) {
+      if (type === "autocomplete" &&
+      schemaState?.getSchemaItem(name?.replace("fb-ia-", ""))?.type === "inlineapproval") {
         workspaceState?.saveDocRev(formState.getValues());
       }
     });
