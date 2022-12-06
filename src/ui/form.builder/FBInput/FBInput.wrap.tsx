@@ -158,7 +158,8 @@ export const withFBInput = <T extends FBInputProps>(
           isEqual
         );
 
-        isFieldUnderValidation = formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
+        isFieldUnderValidation = ["required_if_in", "required_if"].includes(rule?.name) &&
+          formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
 
         let convertedFieldValue;
         try {
