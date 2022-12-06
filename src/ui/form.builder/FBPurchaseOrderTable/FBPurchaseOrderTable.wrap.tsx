@@ -1,19 +1,16 @@
-import { cloneDeep, find, first, omit } from "lodash";
+import { cloneDeep, first, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB, FBInlineApprovalBody } from "..";
+import { FB, FBPurchaseOrderValue } from "..";
+import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
+import { usePoApprovals } from "../FBPOApprovals/hooks";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBStore from "../FBStore/FBStore";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
-import FBPOApprovalsState from "../FBPOApprovals/FBPOApprovals.state";
-import { useDispatch } from "react-redux";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
-import FBDataStore from "../FBStore/FBDataStore";
-import { checkGroups, checkLineItems } from "../FBPOApprovals/helpers";
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -33,10 +30,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     name,
     ...props
   }: T) => {
-
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
-    const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
-    const smartReferencesFrom = workspaceState?.document?.document?.smartReferencesFrom?.filter(
+    const { document, id, isOutput } = workspaceState || {};
+    const outputId = isOutput ? id : undefined;
+    const isReceivable = checkIsDocumentReceivable(document?.document.documentType.groupOptions);
+    const smartReferencesFrom = document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
     classes = FBPurchaseOrderClasses();
 
@@ -78,44 +76,23 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       FBStore?.setPurchaseOrderValue(value);
     });
 
-    const dispatch = useDispatch();
-    const approvers = useObserver(() => FBDataStore?.refreshData?.approvals
-      || workspaceState?.document?.approvals
-      || workspaceState?.changeRequest?.approvals) as FBInlineApprovalBody[];
-    const poApprovalsState = new FBPOApprovalsState({ approvals: approvers });
+    const approvalsFieldName = workspaceState?.schema?.find((item) => item.type === "poapprovals")?.name ?? "";
 
-    const addApprover = (ids: string[], { manually = true } = {}) => {
-      if (!ids.length) {
-        return;
-      }
+    const {
+      poApprovalsState,
+      addApprover,
+      updateApprovals,
+      hasUserInApprovers,
+      fetchRequiredGroups,
+    } = usePoApprovals(
+      approvalsFieldName,
+      outputId,
+    );
 
-      const id = ids[0];
-      const groupName = checkGroups({ id, poApprovalsState });
-      const poApprovalField = workspaceState?.schema?.find((item) => item.type === "poapprovals");
-
-      poApprovalsState.addApproval({
-        assigned: { id },
-        type: "MASTER",
-        fieldId: poApprovalField?.name,
-        partOf: { id: String(workspaceState?.id) },
-        signatureGroupName: groupName,
-        manually,
-      }, () => {
-        dispatch(documentRevisionsActions.loadAudit(String(workspaceState?.id)));
-      });
-    };
-
-    const removeApprover = (ids: string[]) => {
-      if (!ids.length) {
-        return;
-      }
-
-      const id = ids[0];
-      const approval = find(poApprovalsState.getApprovals, (a) => a.approver?.id === id);
-      poApprovalsState.removeCheckedGroups(approval?.signatureGroupName);
-      poApprovalsState.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
-        dispatch(documentRevisionsActions.loadAudit(String(workspaceState?.id)));
-      });
+    const updateWorkspace = (value?: FBPurchaseOrderValue) => {
+      Promise.resolve(workspaceState?.saveDocRev(formState?.getValues()))
+        .then(() => Promise.resolve(fetchRequiredGroups()))
+        .then(() => updateApprovals({ poItems: value }));
     };
 
     useEffect(() => reaction(
@@ -123,22 +100,24 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       (value) => {
         formState?.setFieldValue(name, value);
         FBStore?.setPurchaseOrderValue(value);
-        workspaceState?.saveDocRev(formState?.getValues());
-        if (workspaceState) {
-          checkLineItems({
-            poItems: value,
-            workspaceState,
-            poApprovalsState,
-            addApprover,
-            removeApprover,
-          });
+
+        const requester = formState?.getFieldValue(PO_REQUESTOR_COMPONENT_NAME);
+        if (requester && !hasUserInApprovers(requester, poApprovalsState?.activeApprovals) && value?.items.length) {
+          return addApprover(
+            [requester],
+            { manually: false },
+            () => {
+              updateWorkspace(value);
+            }
+          );
         }
+        updateWorkspace(value);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => {
-      if (isReceivable)  { purchaseOrderState?.getPartsVersion(); }
+      if (isReceivable) { purchaseOrderState?.getPartsVersion(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
