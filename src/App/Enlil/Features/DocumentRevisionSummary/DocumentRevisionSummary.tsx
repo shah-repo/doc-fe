@@ -13,6 +13,7 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
+import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
@@ -115,6 +116,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           ),
         }}
       >
+        {documentRevision && <LHRBanner documentRevision={documentRevision}/>}
         <Observer>
           {() => (
             <SMTemplate
