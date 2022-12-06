@@ -52,6 +52,7 @@ export enum CyRoutes {
   PatchAR = "PatchAR",
   GetDocAggregatedAudit = "GetDocAggregatedAudit",
   PostApprovalsApprove = "PostApprovalsApprove",
+  OptionsApprovalsApprove = "OptionsApprovalsApprove",
   GetGroupsApprovalRoles = "GetGroupsApprovalRoles",
   GroupsGetClearFilter = "GroupsGetClearFilter",
   PostChangeRequests = "PostChangeRequests",

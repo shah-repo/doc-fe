@@ -1,5 +1,5 @@
 import { FBAutocompleteAsyncProps, FBDialogState, FBInlineApprovalBody, FBInlineApprovalConstructor, FBInlineApprovalTransition, FBInputProps, FBPOApprovalsState, FBRequiredApprover, Owner } from "..";
-import { DocumentStatus } from "../../../state/ducks/documents/types";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 
 export type FBPOApprovalsProps =
 & Pick<FBInputProps, "name" | "label" | "disabled" | "value">
@@ -15,7 +15,7 @@ export type FBPOApprovalsProps =
   checkedGroups?: any[];
   owners?: Owner[];
   currentUser?: string;
-  documentStatus: DocumentStatus;
+  documentStatus?: DocumentRevisionStatus;
   dialogState?: FBDialogState;
   disableChipDelete?: boolean;
 };
@@ -23,3 +23,7 @@ export type FBPOApprovalsProps =
 export type FBPOApprovalsConstructor = FBInlineApprovalConstructor & {
   id?: string[];
 };
+
+export interface FBPOInlineApprovalUpdateBody {
+  signatureGroupName: string;
+}
