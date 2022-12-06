@@ -491,6 +491,8 @@ context("LHRt using regular AR test", () => {
 
     it("Add first Approver'", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Capture current url", () => {
@@ -712,6 +714,8 @@ context("LHRt using regular AR test", () => {
 
     it("Add first Approver'", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {
