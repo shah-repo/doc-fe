@@ -712,10 +712,13 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Enters description 'MPI Description'", () => {
       cy.drEnterDocumentDescription({ description: "MPI Description" });
+      // cy.pause();
     });
 
     it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: MPI });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -723,6 +726,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click create document", () => {
+      // cy.pause();
       cy.drClickCreateDocumentWithApiCall();
     });
 
@@ -782,6 +786,7 @@ context("Released_lots_verify_in_lhr", () => {
 
       it("Fill LHRt document description", () => {
         cy.drEnterDocumentDescription({ description: "LHRt document description" });
+        // cy.pause();
       });
 
       it("Select 'LHRt' document type", () => {
@@ -793,6 +798,7 @@ context("Released_lots_verify_in_lhr", () => {
       });
 
       it("Select 'Lot History Record' output document type", () => {
+        // cy.pause();
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record" });
       });
 
@@ -883,6 +889,7 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Click 'LHR Step'", () => {
       cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      cy.wait(1000);
     });
 
     it("Click 'START MPI'", () => {
@@ -955,9 +962,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Finalize and release button click'", () => {
-      cy.wait(2000);
       cy.recFinalizeAndReleaseRecord();
-      cy.wait(2000);
     });
 
     it("Record is in RELEASED status", () => {
@@ -1083,6 +1088,7 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Click on approve and submit", () => {
       cy.lhrSubmitForApproval();
+      cy.wait(1000);
     });
 
     it("Click on Details", () => {
@@ -1186,6 +1192,7 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Click on approve and submit", () => {
       cy.lhrSubmitForApproval();
+      cy.wait(1000);
     });
 
     it("Click on Details", () => {
