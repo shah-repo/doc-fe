@@ -151,6 +151,8 @@ context(testName, () => {
       cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Inline Approval" });
       cy.fbEnterNameValue({ name: "label", value: "Inline Approval 2" });
       cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.unClick();
       cy.fbAddNewFieldButton();
     });
@@ -196,7 +198,7 @@ context(testName, () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
     });
 
     it("Verify Revision 1", () => {
@@ -228,9 +230,7 @@ context(testName, () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.inlineApprovalWithoutApi();
     });
 
     it("Verify Revision 2", () => {
@@ -275,6 +275,7 @@ context(testName, () => {
     it("Go to document", () => {
       cy.visit(documentUrl);
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -292,8 +293,6 @@ context(testName, () => {
 
     it("Save document", () => {
       cy.url().then((url) => record2Url = url);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
@@ -302,11 +301,18 @@ context(testName, () => {
     it("Go to document", () => {
       cy.visit(documentUrl);
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Revise document", () => {
       cy.lhrClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.get(`[data-cy=DocumentRevisionForm-submit]`).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -357,6 +363,7 @@ context(testName, () => {
       cy.visit(record1Url);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
@@ -365,6 +372,8 @@ context(testName, () => {
 
     it("Upgrade to Latest ",  () => {
       cy.get("[data-cy=HeaderMenuButton]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("#UpgradeToLatest-upgrade").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -394,7 +403,7 @@ context(testName, () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
     });
 
     it("Verify revision", () => {
@@ -408,6 +417,7 @@ context(testName, () => {
       cy.visit(record2Url);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
@@ -447,7 +457,7 @@ context(testName, () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
     });
 
     it("Verify revision", () => {

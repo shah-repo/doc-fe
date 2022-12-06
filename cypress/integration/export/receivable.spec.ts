@@ -682,9 +682,7 @@ context("Export Receivable doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.inlineApproval();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.inlineApprovalWithoutApi();
       });
 
       it("Click on revisions tab on side panel", () => {
@@ -750,9 +748,7 @@ context("Export Receivable doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.inlineApproval();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.inlineApprovalWithoutApi();
       });
 
       it("Click on revisions tab on side panel", () => {
