@@ -33,7 +33,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     ...props
   }: T) => {
 
-    const { workspaceState, formState, mediaAlbumState, dialogState } = FB.useStores();
+    const { workspaceState, formState } = FB.useStores();
     const { document: { id = "" } = {} } = workspaceState || {};
     const formValue = formState?.getFieldValue(name) || editorConfig;
     const ids = map(formValue, "id");
@@ -121,22 +121,14 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
           mediaAlbumFieldState?.getFiles(addedFiles);
         }
       );
-      return () => {
-        map(mediaAlbumFieldState?.previewOnlyIds, (id) => {
-          mediaAlbumFieldState?.removeFile(id);
-          mediaAlbumState?.setActiveMedia(0);
-          if (!workspaceState?.autosave) { return; }
-          workspaceState?.saveDocRev(formState?.getValues());
-        });
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => reaction(
       () => mediaAlbumFieldState?.attachmentApi.data,
       (data) => {
         if (!data) { return; }
-        mediaAlbumFieldState?.download(data, dialogState?.open);
+        mediaAlbumFieldState?.download(data);
         mediaAlbumFieldState!.fromUpload = true;
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps

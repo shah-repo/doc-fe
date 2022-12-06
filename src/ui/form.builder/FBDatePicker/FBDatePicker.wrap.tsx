@@ -5,7 +5,7 @@ import { FB } from "..";
 import { TIME_ZONE } from "../../../common/utils/date";
 import FBDatePickerState from "./FBDatePicker.state";
 import { FBDatePickerProps } from "./FBDatePicker.types";
-
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withDatePicker = <T extends FBDatePickerProps>(
   Component: React.FunctionComponent<T>,
@@ -20,13 +20,13 @@ export const withDatePicker = <T extends FBDatePickerProps>(
     defaultValue,
     ...props
   }: T) => {
-
     const { formState, workspaceState } = FB.useStores();
+    const { submitForm } = useFormContext();
     const initialValue = formState?.getFieldValue(name);
     datePickerState = FB.useRef(FBDatePickerState, initialValue);
     const defaultCurrentDate = editorProperties?.includes("defaultCurrentDate") || false;
     const disablePastDates = editorProperties?.includes("disablePastDates") || false;
-    const { id } = workspaceState || {};
+    const { id, isOutput } = workspaceState || {};
 
     function save(date?: string) {
       if (!date) { return; }
@@ -34,11 +34,19 @@ export const withDatePicker = <T extends FBDatePickerProps>(
       formState?.validate();
       const isUnderWorkspace = workspaceState?.getSchemaItem(name);
       if (!isUnderWorkspace) { return; }
+
+      if (workspaceState?.isChangeRequest) {
+        submitForm();
+        return;
+      }
+
       workspaceState?.saveDocRev(formState?.getValues());
     }
 
     useEffect(() => {
-      const isUnderDefault = !defaultValue && !initialValue && defaultCurrentDate;
+      // Populate with a default value if there is no default value, no initialValue, the editorProperties has
+      //  defaultCurrentDate & the documentRevision is an output
+      const isUnderDefault = !defaultValue && !initialValue && defaultCurrentDate && isOutput;
       if (isUnderDefault) {
         const nowDate = (new Date()).toISOString();
         datePickerState?.setValue(nowDate);

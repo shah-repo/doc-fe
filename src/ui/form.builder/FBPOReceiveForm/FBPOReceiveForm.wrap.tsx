@@ -68,20 +68,19 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
       };
       const hasNoReference = isEmpty(workspaceState.document?.referenceTo.find(
         (e) => e.id === poReceiveState?.data?.document.id));
-      poReceiveState?.addReceiveQuantity(
+      const updatedRevision = await poReceiveState?.addReceiveQuantity(
         workspaceState.id,
         {
           formInput: receivedItemsInput,
           referenceTo: hasNoReference ?
             [{
-              ...workspaceState.document?.referenceTo,
               id: poReceiveState?.data?.document.id,
             }] as Id[] : undefined,
         });
 
       dialogState?.closeDialog();
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
-      dispatch(documentRevisionsActions.reload(workspaceState?.document?.id as string));
+      dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     };
 
 

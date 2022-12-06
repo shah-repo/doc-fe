@@ -14,6 +14,7 @@ declare global {
       ebCheckIfPartIsInSummary(params: { partName: string }): Chainable<Subject>;
       ebVerifyNewRevisionCreated(): Chainable<Subject>;
       ebApprove(): Chainable<Subject>;
+      ebApproveWithoutApi(): Chainable<Subject>;
       lhrApprove(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
       ebClickCloneEB(): Chainable<Subject>;
@@ -103,6 +104,8 @@ Cypress.Commands.add("ebCloneClickContinue", () => {
 
 Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: string; name: string }) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
@@ -156,8 +159,19 @@ Cypress.Commands.add("ebApprove", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("ebApproveWithoutApi", () => {
+  cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
+  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.unClick();
+  cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("lhrApprove", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick({ force: true });
+  cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
@@ -169,13 +183,14 @@ Cypress.Commands.add("lhrApprove", () => {
 });
 
 Cypress.Commands.add("ebTryToApprove", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.get("[data-cy=\"common.confirm\"]").arrowClick();
 });
 
 Cypress.Commands.add("ebWithdrawSubmisison", () => {
   cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+  cy.wait(2000);
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("#AlertDialog-continueButton").arrowClick();
   });

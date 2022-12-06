@@ -605,7 +605,7 @@ context("Export Record doc", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click Cancel draft", () => {

@@ -9,7 +9,6 @@ export type FBFileFieldProps =
 & Pick<FBProviderProps, "formState">
 & {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
-  onClick?: (event: React.MouseEvent<HTMLInputElement>) => any;
   onUploadClick?: () => void;
   fileFieldState?: FBFileFieldState;
   loading?: boolean;

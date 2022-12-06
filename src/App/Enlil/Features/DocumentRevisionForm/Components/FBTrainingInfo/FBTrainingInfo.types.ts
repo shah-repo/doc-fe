@@ -1,3 +1,4 @@
+import { DocumentRevisionStatus } from "../../../../../../state/ducks/documentRevisions/types";
 
 export enum TrainingStatusHeaders {
   Completed="Training Completed",
@@ -30,5 +31,6 @@ export interface GroupByStateProps {
 
 export interface FBTrainingInfoProps {
   trainingData?: GroupByStateProps;
+  docRevStatus: DocumentRevisionStatus;
   isLoading: boolean;
 }

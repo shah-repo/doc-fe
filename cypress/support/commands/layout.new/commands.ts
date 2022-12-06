@@ -64,7 +64,7 @@ Cypress.Commands.add("verifyDocumentHeaderDetails", () => {
 
 Cypress.Commands.add("verifyListItemExistsOnHeader", (params: { listItem: string; breadcrump?: boolean}) => {
   cy.get("div[data-cy=\"Header-listIcon\"]").should("exist");
-  cy.get("[data-cy='header-section']>div").eq(0).contains(params.listItem).should("exist");
+  cy.get("[data-cy='header-section'] div").eq(0).contains(params.listItem).should("exist");
   if (params.breadcrump) {
     cy.get(`li[class*="MuiBreadcrumbs-separator"]>svg`).should("exist");
   }
@@ -156,9 +156,9 @@ Cypress.Commands.add("verifyReferenceTab", ({ user, formId, shortName }) => {
 
 Cypress.Commands.add("verifyAddRemoveReference", ({ formId }) => {
   cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-  cy.listLoadingElementShouldNotExist();
-  cy.drSelectReferences(formId);
-  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"referenceTo\"]").arrowType(formId);
+  cy.wait(2000);
+  cy.contains(formId).arrowClick();
   cy.drRemoveReferences({ reference: formId });
 });
 
