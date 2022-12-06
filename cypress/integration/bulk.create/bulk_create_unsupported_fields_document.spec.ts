@@ -972,7 +972,7 @@ context("Bulk create unsupported fields for documents", () => {
         it("Verify equip", () => {
           // NOTE failed due to ENC-13408, will fix in 22.4
           // cy.get("[id^=\"blc-equip-\"]").parent().parent().parent()
-            // .find("p").should("have.text", "The Preventative Maintenance required? is a required field.");
+          // .find("p").should("have.text", "The Preventative Maintenance required? is a required field.");
         });
 
         it("Verify text with range is empty", () => {
