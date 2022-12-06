@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 import { State } from "@progress/kendo-data-query";
 import { filter, find, map } from "lodash";
 import moment from "moment";
@@ -15,7 +14,7 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
     return filters;
   };
   switch (queryUrl) {
-    case DOCUMENT_REVISION_SEARCH_ROOT_URL:
+    case DOCUMENT_REVISION_SEARCH_ROOT_URL: {
       // Special handling in payload for effectiveDate
       const effectiveDateFiel = find(payload.filters, { field: "effectiveDate" });
       if (effectiveDateFiel && effectiveDateFiel.field === "effectiveDate") {
@@ -31,7 +30,8 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
         payload.filters = removeFieldFromFilters(payload.filters, "releasedAt");
       }
       break;
-    case TRAINING_RECORDS_SEARCH_URL:
+    }
+    case TRAINING_RECORDS_SEARCH_URL: {
       const createdAtField = find(payload.filters, { field: DateFields.CREATED_AT });
       const completedAtField = find(payload.filters, { field: DateFields.COMPLETED_AT });
       const dueOnField = find(payload.filters, { field: DateFields.DUE_ON });
@@ -56,6 +56,7 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
         payload.filters = removeFieldFromFilters(payload.filters, DateFields.DUE_ON);
       }
       break;
+    }
     default:
   }
   return payload;
