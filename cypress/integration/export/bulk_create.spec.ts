@@ -605,9 +605,7 @@ context("Export Bulk", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.inlineApproval();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.inlineApprovalWithoutApi();
       });
 
       it("Click on revisions tab on side panel", () => {
@@ -676,9 +674,7 @@ context("Export Bulk", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.inlineApproval();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.inlineApprovalWithoutApi();
       });
 
       it("Click on revisions tab on side panel", () => {
