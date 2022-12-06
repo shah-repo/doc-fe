@@ -828,16 +828,6 @@ export const routes: ICyRoutes =   {
       requestTimeout: 40 * 1000,
     },
   },
-  OptionsApprovalsApprove: {
-    requestConfig: {
-      method: "OPTIONS",
-      url: "/api/v1/approvals/*/approve",
-    },
-    callConfig: {
-      responseTimeout: 45 * 1000,
-      requestTimeout: 40 * 1000,
-    },
-  },
   PostApprovals: {
     requestConfig: {
       method: "POST",
