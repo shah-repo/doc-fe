@@ -694,7 +694,7 @@ context("Search PO item with correct order date format", () => {
           });
 
           it("Approve", () => {
-            cy.ebApprove();
+            cy.ebTryToApprove();
 
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
@@ -712,10 +712,7 @@ context("Search PO item with correct order date format", () => {
           });
 
           it("Revise record", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev,
-              CyRoutes.GetRequiredApproversDocRev], () => {
-              cy.get("[data-cy=\"updateRecord\"]").click();
-            });
+            cy.get("[data-cy=\"updateRecord\"]").click();
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
             cy.landingPageLoadingElementShouldNotExist();
