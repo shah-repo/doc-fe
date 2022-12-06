@@ -7,7 +7,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { purchaseOrderDefaultSchema } from "../../fixtures/default_po_schema";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { POPart } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -509,9 +508,7 @@ context("Search PO item with correct order date format", () => {
         });
 
         it("Click on 'Create PO' button", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-            cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-          });
+          cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -570,9 +567,7 @@ context("Search PO item with correct order date format", () => {
           });
 
           it("Click on 'Add item' button", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-              cy.poAddNewFieldItem();
-            });
+            cy.poAddNewFieldItem();
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
           });
@@ -644,12 +639,6 @@ context("Search PO item with correct order date format", () => {
             cy.listLoadingElementShouldNotExist();
           });
 
-          it("Save PO", () => {
-            cy.drClickCreateDocumentWithoutApiCall();
-            cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
-          });
-
           it("check PO sum", () => {
             cy.get(`[data-cy="poSum"]`).should("contain", "$10.00");
             cy.progressBarShouldNotExist();
@@ -663,8 +652,9 @@ context("Search PO item with correct order date format", () => {
           });
 
           it("Change Tax", () => {
-            cy.get(`[name="po-items-built-in.taxRate"]`).clear()
-              .arrowClick().arrowType("2");
+            cy.get(`[data-cy="po-items-built-in.taxRate"] input`).arrowClick().wait(1000);
+            cy.get(`[data-cy="po-items-built-in.taxRate"] input`).arrowType(`{selectAll}{backspace}`).unClick();
+            cy.get(`[data-cy="po-items-built-in.taxRate"] input`).arrowType("2").unClick();
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
           });
@@ -676,14 +666,15 @@ context("Search PO item with correct order date format", () => {
           });
 
           it("Verify revised Tax", () => {
-            cy.poCheckTax({ number: "0.200000" });
+            cy.poCheckTax({ number: "0.000200" });
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
           });
 
           it("navigate to Details tab", () => {
             cy.drSelectDetailsTab();
-            cy.wait(2000);
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Click 'Submit for Approval' button", () => {
@@ -694,8 +685,7 @@ context("Search PO item with correct order date format", () => {
           });
 
           it("Approve", () => {
-            cy.ebTryToApprove();
-
+            cy.ebApproveWithoutApi();
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
             cy.landingPageLoadingElementShouldNotExist();
@@ -705,6 +695,8 @@ context("Search PO item with correct order date format", () => {
         context("Verify Tax Rate symbol", () => {
           it("Navigate to line items tab", () => {
             cy.drSelectLineItems();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Verify % symbol next to tax rate", () => {
