@@ -684,10 +684,14 @@ context("Released_lots_verify_in_lhr", () => {
 
         it("Approve inline approval", () => {
           cy.inlineApproval();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist().wait(1000);
         });
 
         it("Finalize and release button click'", () => {
           cy.recFinalizeAndReleaseRecord();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Record is in RELEASED status", () => {
@@ -716,7 +720,8 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: MPI });
-      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -787,10 +792,14 @@ context("Released_lots_verify_in_lhr", () => {
 
       it("Select 'LHRt' document type", () => {
         cy.drSelectDocumentType({ documentType: "LHR Template" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Lot History Record' output document type", () => {
