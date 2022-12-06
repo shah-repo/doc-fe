@@ -140,13 +140,17 @@ export const withFBInput = <T extends FBInputProps>(
     if (validationMode === "visibility" || validationMode === "disabled") {
       map(get(formState?.validatorRules, name), (rule) => {
         const { value = "" } = rule || {};
+        const isValueObj = value?.includes("{") || value?.includes("}");
         const fieldName: string = first(value.split(",")) || "";
-        const fieldValue = last(value.split(","));
+        let fieldValue = value?.substring(value?.indexOf(",") + 1, value?.length) || last(value?.split(","));
 
         if (!fieldName || !formState) {
           return;
         }
 
+        if (!isValueObj && fieldValue.includes(",")) {
+          fieldValue = fieldValue.split(",");
+        }
         const validationRules = formState.validationRelatedRules[fieldName] || [];
 
         formState.validationRelatedRules[fieldName] = uniqWith(
@@ -154,7 +158,8 @@ export const withFBInput = <T extends FBInputProps>(
           isEqual
         );
 
-        isFieldUnderValidation = formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
+        isFieldUnderValidation = ["required_if_in", "required_if"].includes(rule?.name) &&
+          formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
 
         let convertedFieldValue;
         try {
@@ -162,16 +167,31 @@ export const withFBInput = <T extends FBInputProps>(
         } catch (error) {
           convertedFieldValue = fieldValue;
         }
+        const formStateFieldValue = formState?.getFieldValue(fieldName);
 
         if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
-          showValidationField = !isUndefined(fieldValue) && formState?.getFieldValue(fieldName) === fieldValue;
+          if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue)) {
+            showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue) :
+              formStateFieldValue === fieldValue;
+          }
         } else if (typeof convertedFieldValue === "object") {
+          let intermediateFlag;
           for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
             if (Array.isArray(formState?.getFieldValue(fieldName))) {
-              showValidationField = !isUndefined(fieldValueEntry) &&
+              if (isUndefined(intermediateFlag)) {
+                intermediateFlag = false;
+              }
+              const flag = !isUndefined(fieldValueEntry) &&
               formState?.getFieldValue(fieldName).includes(fieldValueEntry);
+              if (flag) {
+                intermediateFlag = flag;
+              }
             }
           }
+          if (!isUndefined(intermediateFlag)) {
+            showValidationField = intermediateFlag;
+          }
+
         }
       });
     }
@@ -270,12 +290,15 @@ export const withFBInput = <T extends FBInputProps>(
       if (!formState && !inputState) { return; }
       // Input states
       formState?.inputState.set(name, inputState!);
-
-      if (!rules) { return; }
-      formState!.setFieldRules(name, rules);
-      if (!omitFinalValidation) {
+      // Validation settings
+      let attr = validationAttribute || (label as string) || placeholder || name;
+      isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
+       formState?.setValidationAttributeName(name, attr);
+       if (!rules) { return; }
+       formState!.setFieldRules(name, rules);
+       if (!omitFinalValidation) {
         formState?.setFieldFinalValidationRules(name, rules);
-      }
+       }
     }, [rules]);
 
     useEffect(() => {
