@@ -721,7 +721,7 @@ context("Released_lots_verify_in_lhr", () => {
     it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: MPI });
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldNotExist().wait(1000);
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -793,7 +793,7 @@ context("Released_lots_verify_in_lhr", () => {
       it("Select 'LHRt' document type", () => {
         cy.drSelectDocumentType({ documentType: "LHR Template" });
         cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.listLoadingElementShouldNotExist().wait(1000);
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -849,6 +849,8 @@ context("Released_lots_verify_in_lhr", () => {
       context("Release LHRt", () => {
         it("Approve and release LHRt document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -856,14 +858,11 @@ context("Released_lots_verify_in_lhr", () => {
 
   context("Create LHR", () => {
     it("Click create new document from LHRt", () => {
-      cy.wait(1000);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.GetAutocompleteOptions], () => {
         cy.drCreateNewDocumentFromForm();
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter initial quantity", () => {
@@ -963,7 +962,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
