@@ -849,7 +849,6 @@ context("Released_lots_verify_in_lhr", () => {
       context("Release LHRt", () => {
         it("Approve and release LHRt document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
       });
@@ -870,6 +869,7 @@ context("Released_lots_verify_in_lhr", () => {
         cy.get("[name=\"lhr_initial_quantity\"]").focus().arrowType("10");
         cy.unClick();
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Production' build type", () => {
@@ -877,6 +877,7 @@ context("Released_lots_verify_in_lhr", () => {
         cy.get("[value=\"Production\"]").check();
         cy.unClick();
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add 'Due Date'", () => {
