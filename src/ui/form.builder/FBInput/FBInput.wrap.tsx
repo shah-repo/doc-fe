@@ -140,15 +140,15 @@ export const withFBInput = <T extends FBInputProps>(
     if (validationMode === "visibility" || validationMode === "disabled") {
       map(get(formState?.validatorRules, name), (rule) => {
         const { value = "" } = rule || {};
-        const isValueObj = value?.indexOf("{") !== -1 || value?.indexOf("}") !== -1;
+        const isValueObj = value?.includes("{") || value?.includes("}");
         const fieldName: string = first(value.split(",")) || "";
-        let fieldValue = value?.substring(value?.indexOf(",") + 1, value?.length) || last(value.split(","));
+        let fieldValue = value?.substring(value?.indexOf(",") + 1, value?.length) || last(value?.split(","));
 
         if (!fieldName || !formState) {
           return;
         }
 
-        if (fieldValue.indexOf(",") !== -1 && !isValueObj) {
+        if (!isValueObj && fieldValue.includes(",")) {
           fieldValue = fieldValue.split(",");
         }
         const validationRules = formState.validationRelatedRules[fieldName] || [];
