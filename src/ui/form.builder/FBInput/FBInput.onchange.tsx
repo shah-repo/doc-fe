@@ -23,8 +23,8 @@ export const withFBOnChange = <T extends FBInputProps>(
 
     const { formState, schemaState, workspaceState } = FB.useStores();
     const inputValue =
-      formState?.getFieldValue(name) ||
-      formState?.getInputState(name || "")?.value;
+    formState?.getFieldValue(name) ||
+    formState?.getInputState(name || "")?.value;
 
     inputState = FB.useRef<FBInputState>(FBInputState, {
       value: cloneDeep(inputValue),
@@ -179,6 +179,11 @@ export const withFBOnChange = <T extends FBInputProps>(
       (changedValue[type || ""] || changedValue.default)();
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
+
+      if (type === "autocomplete" &&
+      schemaState?.getSchemaItem(name?.replace("fb-ia-", ""))?.type === "inlineapproval") {
+        workspaceState?.saveDocRev(formState.getValues());
+      }
     });
 
     const onBlur = (ev) => {
