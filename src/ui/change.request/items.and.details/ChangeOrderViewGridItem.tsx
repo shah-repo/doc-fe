@@ -10,9 +10,10 @@ import { FBAutocompleteAsyncOption } from "../../form.builder";
 import { FBEndpoint } from "../../form.builder/defaults/FBEndpoint";
 import FBRequest from "../../form.builder/FBApi/FBApi.request";
 import useStyles from "./ChangeOrderGrid.styles";
-import { FBDocumentRevisionResponse, FBDocumentRevisionsItemProps } from "./ItemsAndDetails.types";
+import { generateDocTitleText } from "./helpers";
+import { ChangeOrderViewItemProps, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
 
-const ChangeOrderViewGridItem: React.FunctionComponent<FBDocumentRevisionsItemProps> = ({
+const ChangeOrderViewGridItem: React.FunctionComponent<ChangeOrderViewItemProps> = ({
   docRevId,
   documentId,
   titleText,
@@ -21,7 +22,6 @@ const ChangeOrderViewGridItem: React.FunctionComponent<FBDocumentRevisionsItemPr
   isPart,
   justificationOfChange,
   descriptionOfChange,
-  generateDocTitleText,
 }) => {
   const classes = useStyles();
   console.log(docRevId,
@@ -38,7 +38,7 @@ const ChangeOrderViewGridItem: React.FunctionComponent<FBDocumentRevisionsItemPr
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
   documentDetailsApi.setUrl({
     url: FBEndpoint.FetchAutocompleteValue,
-    values: { id, optionId: FBAutocompleteAsyncOption.documentRevisions },
+    values: { id, optionId: FBAutocompleteAsyncOption.DRAFTdocumentRevisions },
   });
 
 

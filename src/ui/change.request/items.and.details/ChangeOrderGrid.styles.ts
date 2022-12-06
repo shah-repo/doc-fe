@@ -99,26 +99,6 @@ export default makeStyles((theme) =>
     normalFontWeight: {
       fontWeight: "normal",
     },
-    actionButtonParentDiv: {
-      width: "100%",
-      position: "relative",
-      marginBottom: theme.spacing(2.5),
-    },
-    actionButtonChildDiv: {
-      width: "100px",
-      backgroundColor: Colors.dodger_blue,
-      position: "absolute",
-      right: 0,
-      borderRadius: theme.spacing(0, 0, .5, .5),
-      display: "flex",
-      justifyContent: "center",
-    },
-    actionButton: {
-      backgroundColor: Colors.white,
-      padding: theme.spacing(.5),
-      minWidth: "auto",
-      border: theme.spacing(1),
-    },
     iconButton: {
       "fontSize": "16px",
       "fill": "#000",
@@ -190,6 +170,34 @@ export default makeStyles((theme) =>
       minHeight: "60px",
       padding: theme.spacing(1.5),
     },
+    editItemRow: {
+      "border": `1px solid ${Colors.dodger_blue}`,
+      "position": "relative",
+      "flexWrap": "wrap",
+      "& div div.MuiBox-root": {
+        marginBottom: 0,
+      },
+    },
+    actionButtonParentDiv: {
+      width: "100%",
+      position: "relative",
+    },
+    actionButtonChildDiv: {
+      width: "100px",
+      backgroundColor: Colors.dodger_blue,
+      position: "absolute",
+      right: `calc(${theme.spacing(-1.5)}px - 1px)`,
+      bottom: `calc(${theme.spacing(-6.5)}px - 1px)`,
+      borderRadius: theme.spacing(0, 0, .5, .5),
+      display: "flex",
+      justifyContent: "center",
+    },
+    actionButton: {
+      backgroundColor: Colors.white,
+      padding: theme.spacing(.5),
+      minWidth: "auto",
+      border: theme.spacing(1),
+    },
     moreDetails: {
       padding: theme.spacing(0, 1.5, 0, 5.5),
     },
@@ -252,6 +260,11 @@ export default makeStyles((theme) =>
         lineHeight: "1.15rem",
         margin: theme.spacing(1, 0, 0, .5),
       },
+    },
+    option: {
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+      display: "block",
     },
   })
 );

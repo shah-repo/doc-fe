@@ -1,11 +1,16 @@
 /* eslint-disable no-console */
 import { Button, Divider, Grid, Typography } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import React from "react";
+import { map } from "lodash";
+import { useObserver } from "mobx-react";
+import React, { useState } from "react";
 import Text from "../../components/Text";
+import { FBFormState } from "../../form.builder";
+import ChangeOrderEditGridItem from "./ChangeOrderEditGridItem";
 import useStyles from "./ChangeOrderGrid.styles";
 import ChangeOrderGridHeader from "./ChangeOrderGridHeader";
 import ChangeOrderViewGridItem from "./ChangeOrderViewGridItem";
+import { useItemsAndDetailsStore } from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
 
 
@@ -48,29 +53,53 @@ const TopSection: React.FunctionComponent<{
 
 
 const ItemsAndDetails: React.FunctionComponent<{
-  entries: ChangeOrderGridItem[];
-  generateDocTitleText: (docId: string, displayRevision: string, name: string) => string;
+  formState: FBFormState;
+  handleAdd: () => void;
 }> = ({
-  entries,
-  generateDocTitleText,
+  formState,
+  handleAdd,
 }) => {
   const classes = useStyles();
+  const { itemsAndDetailsStore } = useItemsAndDetailsStore();
 
-  return (
+  const [isEditRowVisible, setIsEditRowVisible] = useState(false);
+  const [showButton, setShowButton] = useState(true);
+
+  const showEditRow = () => {
+    setIsEditRowVisible(true);
+    setShowButton(false);
+  };
+
+  function disabledOptions(): string[] {
+    return map(itemsAndDetailsStore?.changeOrderItemsList, "proposedDocumentRevision.id");
+  }
+
+  function resetAndCancelEdit() {
+    formState.reset();
+    setIsEditRowVisible(false);
+    setShowButton(true);
+  }
+
+  return useObserver(() => (
     <div className={classes.fullWidth}>
-      <TopSection showEditRow={() => console.log("Clicked")}/>
+      <TopSection showEditRow={showEditRow} showButton={showButton}/>
       <ChangeOrderGridHeader />
+      { isEditRowVisible &&  <ChangeOrderEditGridItem
+        {...{ formState }}
+        disabledOptions={disabledOptions()}
+        addRevisionToChangeRequest={handleAdd}
+        resetAndCancelEdit={resetAndCancelEdit}
+      />}
       {
-        entries.map((entry: ChangeOrderGridItem) => (
+        itemsAndDetailsStore.changeOrderItemsList.map((entry: ChangeOrderGridItem) => (
           <ChangeOrderViewGridItem
             key={`fb-document-revision-${entry.id}`}
             {...entry}
-            generateDocTitleText={generateDocTitleText}
           />
         ))
       }
     </div>
-  );
+  ));
 };
 
 export default ItemsAndDetails;

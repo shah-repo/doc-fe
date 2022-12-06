@@ -1,3 +1,6 @@
+import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { FBFormProps } from "../../form.builder";
+
 export interface FBDocumentRevisionResponse {
   companyId: string;
   createdAt: string;
@@ -34,8 +37,11 @@ export interface ChangeOrderGridItem {
   isPart: boolean;
 }
 
-export type FBDocumentRevisionsItemProps =
-& ChangeOrderGridItem
-& {
-  generateDocTitleText: (docId: string, displayRevision: string, name: string) => string;
-};
+export type ChangeOrderViewItemProps =
+& ChangeOrderGridItem;
+
+export interface ItemsAndDetailsWrapperProps {
+  changeRequest: ChangeRequest;
+  initialValues: Pick<FBFormProps, "initialValues">;
+  autosave: boolean;
+}
