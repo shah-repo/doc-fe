@@ -885,9 +885,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Click 'Approve' button", () => {
-          cy.ebTryToApprove();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.ebApproveWithoutApi();
         });
       });
     });
