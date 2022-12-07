@@ -80,6 +80,13 @@ const ItemsAndDetails: React.FunctionComponent<{
     setShowButton(true);
   }
 
+  function addRevisionToChangeRequest() {
+    setIsEditRowVisible(false);
+    setShowButton(true);
+    handleAdd();
+  }
+
+
   return useObserver(() => (
     <div className={classes.fullWidth}>
       <TopSection showEditRow={showEditRow} showButton={showButton}/>
@@ -87,7 +94,7 @@ const ItemsAndDetails: React.FunctionComponent<{
       { isEditRowVisible &&  <ChangeOrderEditGridItem
         {...{ formState }}
         disabledOptions={disabledOptions()}
-        addRevisionToChangeRequest={handleAdd}
+        addRevisionToChangeRequest={addRevisionToChangeRequest}
         resetAndCancelEdit={resetAndCancelEdit}
       />}
       {

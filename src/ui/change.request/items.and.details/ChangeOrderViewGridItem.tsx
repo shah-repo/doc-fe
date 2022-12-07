@@ -91,9 +91,12 @@ const ChangeOrderViewGridItem: React.FunctionComponent<ChangeOrderViewItemProps>
     })}>
       <div className={classes.itemRow}>
         <div className={classes.cellOne}>
-          <span className={cx(classes.iconClass, "iconClass")} onClick={toggleItem}>
-            <ChevronRightIcon fontSize="small" className={classes.showMoreIcon}/>
-          </span>
+          {
+            docRelatedParts.length > 0 &&
+            <span className={cx(classes.iconClass, "iconClass")} onClick={toggleItem}>
+              <ChevronRightIcon fontSize="small" className={classes.showMoreIcon}/>
+            </span>
+          }
           <span>{docTitle}</span>
         </div>
         <div className={cx(classes.cellTwo, classes.itemLeftPadding)}>

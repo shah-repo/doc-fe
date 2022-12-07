@@ -1,5 +1,5 @@
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
-import { FBFormProps } from "../../form.builder";
+import { FBFormProps, FBWorkspaceMode } from "../../form.builder";
 
 export interface FBDocumentRevisionResponse {
   companyId: string;
@@ -44,4 +44,5 @@ export interface ItemsAndDetailsWrapperProps {
   changeRequest: ChangeRequest;
   initialValues: Pick<FBFormProps, "initialValues">;
   autosave: boolean;
+  mode: FBWorkspaceMode;
 }

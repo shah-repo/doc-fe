@@ -1,15 +1,15 @@
 /* eslint-disable no-console */
-import { map } from "lodash";
+import { cloneDeep, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { useFormContext } from "../../components/forms/FormContext";
-import { FB, FBFormState } from "../../form.builder";
+import { FB, FBForm, FBFormState } from "../../form.builder";
 import { generateDocTitleText } from "./helpers";
 import ItemsAndDetails from "./ItemsAndDetails";
 import { itemsAndDetailsStore, ItemsAndDetailsStoreContext, useItemsAndDetailsStore } from "./ItemsAndDetails.state";
-import { FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
+import { ChangeOrderGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
 
 const ItemsAndDetailsContainer: React.FunctionComponent<
   ItemsAndDetailsWrapperProps & {name: string}
@@ -17,36 +17,39 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   changeRequest,
   name,
   autosave,
+  mode,
 }) => {
 
   const { formState: parentFormState } = FB.useStores();
-  // const parentFormValue = parentFormState?.getFieldValue(name);
+  const parentFormValue = parentFormState?.getFieldValue(name);
 
-  // console.log(parentFormState, parentFormValue, name);
+  console.log(parentFormState, parentFormState?.getValues(), parentFormValue, name, autosave, mode);
 
   const formState = FB.useRef(FBFormState, {});
+  console.log(formState, formState?.getValues());
 
   const { submitForm } = useFormContext();
 
   const { itemsAndDetailsStore } = useItemsAndDetailsStore();
 
-  // React.useEffect(() => reaction( // Form sync
-  //   () => itemsAndDetailsStore?.changeOrderItemsList,
-  //   (data) => {
-  //       parentFormState?.setFieldValue(name, cloneDeep(data), true);
-  //       if (!workspaceState?.autosave) {
-  //         return;
-  //       }
-
-  //       submitForm();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // ), []);
-
   const handleAdd = () => {
     const formValue = formState?.getValues() as FBDocumentRevisionsValue;
-    console.log(formValue);
+    formValue.id = FB.uniqid;
 
+    const dataToSend: FBDocumentRevisionsValue[] =
+      itemsAndDetailsStore.changeOrderItemsList.map((item: ChangeOrderGridItem) => (
+        {
+          justificationOfChange: item.justificationOfChange,
+          descriptionOfChange: item.descriptionOfChange,
+          id: item.id,
+          proposedDocumentRevision: {
+            id: item.docRevId,
+          },
+        }
+      ));
+    dataToSend.push(formValue);
+
+    parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
     // Submit the form - and once that returns, add this item to the store
     // itemsAndDetailsStore.add(formValue);
 
@@ -54,7 +57,9 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       formState?.omitFieldValue(key);
     });
 
-    // submitForm();
+    if (autosave) {
+      submitForm();
+    }
   };
 
   React.useEffect(() => {
@@ -108,15 +113,20 @@ const ItemsAndDetailsWrapper: React.FunctionComponent<ItemsAndDetailsWrapperProp
   changeRequest,
   initialValues,
   autosave,
+  mode,
 }) => (
   <ItemsAndDetailsStoreContext.Provider value={itemsAndDetailsStore}>
-    <ItemsAndDetailsContainer
-      changeRequest={changeRequest}
-      name="documentRevisions"
-      autosave={autosave}
-      initialValues={initialValues}
-    />
+    <FBForm {...{ initialValues }}>
+      <ItemsAndDetailsContainer
+        changeRequest={changeRequest}
+        name="documentRevisions"
+        autosave={autosave}
+        initialValues={initialValues}
+        mode={mode}
+      />
+    </FBForm>
   </ItemsAndDetailsStoreContext.Provider>
+
 );
 
 export default ItemsAndDetailsWrapper;

@@ -153,6 +153,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               changeRequest={cloneDeep(changeRequest)}
                               initialValues={formInput ?? {}}
                               autosave={autosave}
+                              mode={mode}
                             />
                           )}
                         </SMBox>
