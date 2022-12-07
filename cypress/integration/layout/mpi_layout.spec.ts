@@ -223,7 +223,7 @@ context("Mpi Layout", () => {
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions" });
-        cy.listLoadingElementShouldNotExist();
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -547,7 +547,7 @@ context("Mpi Layout", () => {
 
         it("Verify material", () => {
           cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
-            .should("have.text", "MT-00004 - Material one | sets : 9");
+            .should("have.text", "MT-00004 - Material one | sets :9");
         });
         it("Verify equipment", () => {
           cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(0).should("have.text", "ET-00003 - Equipment one");

@@ -1030,12 +1030,12 @@ context("Procedure and parts flow test", () => {
         cy.wait(1000);
         SystemRequirement("REQ-3030");
         cy.get("#sm-tabpanel-2")
-          .contains("MT-00002 - New Material for procedure | each : 3").should("exist");
+          .contains("MT-00002 - New Material for procedure | each :3").should("exist");
       });
 
       it("Verify 'Free text material' has increased number of materials to '5'", () => {
         cy.get("#sm-tabpanel-2")
-          .contains("Free text material | sets : 5").should("exist");
+          .contains("Free text material | sets :5").should("exist");
       });
 
       it("Verify 'New Equipment for procedure' is added to equipments", () => {
@@ -1157,12 +1157,12 @@ context("Procedure and parts flow test", () => {
         cy.get("[data-cy='form.builder.materials']").eq(0).arrowClick();
         cy.wait(1000);
         cy.get("#sm-tabpanel-2")
-          .contains("PRT-00005 - Part document | each : 2").should("exist");
+          .contains("PRT-00005 - Part document | each :2").should("exist");
       });
 
       it("Verify 'Free text material' is removed from materials", () => {
         cy.get("#sm-tabpanel-2")
-          .contains("Free text material | sets : 3").should("exist");
+          .contains("Free text material | sets :3").should("exist");
       });
 
       it("Verify 'Equipment document' is removed from equipment", () => {
