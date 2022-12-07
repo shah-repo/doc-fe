@@ -684,10 +684,14 @@ context("Released_lots_verify_in_lhr", () => {
 
         it("Approve inline approval", () => {
           cy.inlineApproval();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist().wait(1000);
         });
 
         it("Finalize and release button click'", () => {
           cy.recFinalizeAndReleaseRecord();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Record is in RELEASED status", () => {
@@ -716,6 +720,8 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: MPI });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist().wait(1000);
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -786,10 +792,14 @@ context("Released_lots_verify_in_lhr", () => {
 
       it("Select 'LHRt' document type", () => {
         cy.drSelectDocumentType({ documentType: "LHR Template" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist().wait(1000);
       });
 
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Lot History Record' output document type", () => {
@@ -839,6 +849,7 @@ context("Released_lots_verify_in_lhr", () => {
       context("Release LHRt", () => {
         it("Approve and release LHRt document", () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -846,14 +857,11 @@ context("Released_lots_verify_in_lhr", () => {
 
   context("Create LHR", () => {
     it("Click create new document from LHRt", () => {
-      cy.wait(1000);
       cy.wrapWithWaitOnApiCalls([
         CyRoutes.GetRequiredApproversDocRev,
         CyRoutes.GetAutocompleteOptions], () => {
         cy.drCreateNewDocumentFromForm();
       });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter initial quantity", () => {
@@ -861,6 +869,7 @@ context("Released_lots_verify_in_lhr", () => {
         cy.get("[name=\"lhr_initial_quantity\"]").focus().arrowType("10");
         cy.unClick();
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Production' build type", () => {
@@ -868,6 +877,7 @@ context("Released_lots_verify_in_lhr", () => {
         cy.get("[value=\"Production\"]").check();
         cy.unClick();
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add 'Due Date'", () => {
@@ -883,6 +893,8 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Click 'LHR Step'", () => {
       cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'START MPI'", () => {
@@ -951,13 +963,15 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Finalize and release button click'", () => {
-      cy.wait(2000);
       cy.recFinalizeAndReleaseRecord();
-      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Record is in RELEASED status", () => {
@@ -1083,6 +1097,8 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Click on approve and submit", () => {
       cy.lhrSubmitForApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Details", () => {
@@ -1186,6 +1202,8 @@ context("Released_lots_verify_in_lhr", () => {
 
     it("Click on approve and submit", () => {
       cy.lhrSubmitForApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Details", () => {
