@@ -79,6 +79,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
         });
 
       dialogState?.closeDialog();
+      workspaceState.saveDocRev(updatedRevision.formInput);
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
       dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     };

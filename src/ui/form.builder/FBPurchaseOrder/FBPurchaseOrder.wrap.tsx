@@ -85,6 +85,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
             id: poReceiveState?.data?.document.id,
           }] as Id[] : undefined,
       });
+      workspaceState.saveDocRev(updatedRevision.formInput);
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
       dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     }
