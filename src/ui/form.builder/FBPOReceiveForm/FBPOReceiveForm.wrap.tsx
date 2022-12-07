@@ -5,6 +5,7 @@ import { FB, FBPOReceiveFormProps } from "..";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import FBDataStore from "../FBStore/FBDataStore";
 import FBPOReceiveFormState from "./FBPOReceiveForm.state";
 
 
@@ -79,7 +80,8 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
         });
 
       dialogState?.closeDialog();
-      workspaceState.saveDocRev(updatedRevision.formInput);
+      workspaceState.setFormInputData(updatedRevision);
+      FBDataStore.setRefreshData(updatedRevision);
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
       dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     };

@@ -8,6 +8,7 @@ import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentPO, checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
+import FBDataStore from "../FBStore/FBDataStore";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,
@@ -85,7 +86,8 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
             id: poReceiveState?.data?.document.id,
           }] as Id[] : undefined,
       });
-      workspaceState.saveDocRev(updatedRevision.formInput);
+      workspaceState.setFormInputData(updatedRevision);
+      FBDataStore.setRefreshData(updatedRevision);
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
       dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     }
