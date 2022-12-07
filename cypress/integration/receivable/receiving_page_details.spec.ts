@@ -715,21 +715,26 @@ context("Receivable test with Page Details", () => {
         cy.navigToPurchaseOrder();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Click on 'Create PO' button", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
           cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Open' for PO status", () => {
         cy.poSelectPOStatus({ status: "Open" });
         cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Requestor", () => {
-        cy.get("[data-cy^=po-requestor]").arrowClick().wait(500);
+        cy.get("[data-cy^=po-requestor]").scrollIntoView().arrowClick({ force: true }).wait(500);
         cy.get("ul>li[role=option]").contains(USERS[11].name).arrowClick();
         cy.unClick();
       });
@@ -859,19 +864,20 @@ context("Receivable test with Page Details", () => {
 
         it("Click on 'Add' inside PO dialog box", () => {
           cy.poAddPOButtonClick();
+          cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
       });
 
       context("Approve Purchase Order document", () => {
         it("Click on 'Details' tab", () => {
-          cy.wrapWithWaitOnApiCall( CyRoutes.GetRequiredApproversDocRev, () => {
-            cy.drSelectDetailsTab();
-          });
+          cy.drSelectDetailsTab();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click 'Submit for Approval' button", () => {
@@ -879,7 +885,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Click 'Approve' button", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
       });
     });

@@ -1360,6 +1360,8 @@ context("PO and parts ", () => {
 
     it("Remove attachment image.jpg", () => {
       cy.get("[id=\"AttachmentIconPresenter-handleRemove\"]").eq(1).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check one attachment is removed", () => {
@@ -1480,7 +1482,7 @@ context("PO and parts ", () => {
     });
 
     it("Approve PO", () => {
-      cy.ebApprove();
+      cy.ebTryToApprove();
     });
 
     it("Navigate to PO", () => {
@@ -1590,6 +1592,8 @@ context("PO and parts ", () => {
 
     it("navigate to Details tab ", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approver", () => {
@@ -1616,7 +1620,7 @@ context("PO and parts ", () => {
     });
 
     it("Approve PO", () => {
-      cy.ebApprove();
+      cy.ebTryToApprove();
     });
   });
 });
