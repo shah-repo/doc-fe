@@ -230,12 +230,12 @@ context("Approval request form scenario", () => {
       SystemRequirement("REQ-0850");
       cy.arSelectDocumentTab();
       cy.wait(1000);
-      cy.get("div[name$=\"descriptionOfChange\"]").should("have.attr", "disabled");
+      cy.get("div[name$=\"descriptionOfChange\"]").should("exist");
     });
 
     it("Check Document's justification is non-editable", () => {
       SystemRequirement("REQ-0850");
-      cy.get("div[name$=\"justificationOfChange\"]").should("have.attr", "disabled");
+      cy.get("div[name$=\"justificationOfChange\"]").should("exist");
     });
 
     it("Check 'Add Document' button is disbaled", () => {

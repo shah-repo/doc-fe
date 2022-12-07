@@ -78,16 +78,15 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         },
       };
 
-      poReceiveState?.addReceiveQuantity(workspaceState.id, {
+      const updatedRevision = await poReceiveState?.addReceiveQuantity(workspaceState.id, {
         formInput: receivedItemsInput,
         referenceTo: hasNoReference ?
           [{
-            ...workspaceState.document?.referenceTo,
             id: poReceiveState?.data?.document.id,
           }] as Id[] : undefined,
       });
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
-      dispatch(documentRevisionsActions.reload(workspaceState?.document?.id as string));
+      dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     }
 
     return Component({

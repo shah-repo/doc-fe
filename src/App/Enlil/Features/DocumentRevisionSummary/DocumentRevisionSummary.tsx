@@ -194,6 +194,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
+                              docRevStatus={documentRevision.status}
                             />
                           )}
                         </SMBox>

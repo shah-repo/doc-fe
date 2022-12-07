@@ -604,7 +604,7 @@ context("Receiving landing page test", () => {
     });
 
 
-    it("[API]Create Receiving form", (done: any) => {
+    it("[API]Create migration Receiving form", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -927,7 +927,7 @@ context("Receiving landing page test", () => {
       });
     });
 
-    it("Save the  form", () => {
+    it("Save the form", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PatchDocRev], () => {
           cy.drClickCreateDocumentWithoutApiCall();
@@ -953,6 +953,11 @@ context("Receiving landing page test", () => {
       });
     });
 
+    it("Navigate to detail tab", () => {
+      cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Verify that all Parts, non-Enlil parts and PO services should have received quantities", () => {
       cy.get("[data-cy='received']").eq(0).scrollIntoView().wait(2000);
       cy.get("[data-cy='received']").eq(0).should("have.text", "200");
@@ -972,12 +977,9 @@ context("Receiving landing page test", () => {
       });
     });
 
-    it("Save the  form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.listLoadingElementShouldNotExist();
-        });
+    it("Navigate to detail tab", () => {
+      cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify inserted quantity saved and display in the table ", () => {
@@ -1000,7 +1002,7 @@ context("Receiving landing page test", () => {
     it("Save the  form", () => {
       cy.wrapWithWaitOnApiCalls(
         [], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
+          cy.drClickCreateDocumentWithApiCall();
           cy.listLoadingElementShouldNotExist();
         });
     });
@@ -1074,7 +1076,20 @@ context("Receiving landing page test", () => {
 
     it("Verify References selection Add Remove", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.verifyAddRemoveReference({ formId: "FM-00001" });
+      const docId = "FM-00001";
+      cy.get("[data-cy='referenceTo']").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.get("[data-cy='referenceTo']").autocompleteSelect(docId);
+        cy.unClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
+          .parent().parent().parent().find("svg").arrowClick({ force: true });
+      });
     });
 
     it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
@@ -1330,7 +1345,6 @@ context("Receiving landing page test", () => {
     });
   });
 
-  // verify Draft state
   context("Open Receivable Draft state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
@@ -1398,7 +1412,7 @@ context("Receiving landing page test", () => {
 
   // End of draft state verification
   // verify release state
-  context("Open Receivable Draft state document and validate the layout", () => {
+  context("Open Receivable Released state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
       cy.dlClearFilters();
@@ -1410,7 +1424,7 @@ context("Receiving landing page test", () => {
     });
   });
 
-  context("Verify Layout for created receiving record in draft state", () => {
+  context("Verify Layout for created receiving record in Released state", () => {
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
       cy.get("[data-cy='tabId.overview']").should("exist");
       cy.get("[data-cy='tabId.details']").should("exist");

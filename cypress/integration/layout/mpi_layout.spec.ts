@@ -223,6 +223,7 @@ context("Mpi Layout", () => {
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions" });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -432,6 +433,7 @@ context("Mpi Layout", () => {
             cy.pmUploadAttachment({ fileName: "test.docx" });
           });
           cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click 'Clone Step'", () => {
@@ -734,7 +736,7 @@ context("Mpi Layout", () => {
         });
 
         it("Verify training tab is empty", () => {
-          cy.contains("Training can be assigned to this document once it is released").should("be.visible");
+          cy.contains("No training records exist").should("be.visible");
           cy.get("#Presenter-FBWorkspace ul").should("not.be.visible");
         });
       });
