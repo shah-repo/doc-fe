@@ -6,7 +6,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { receivingReleasedDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
@@ -126,10 +125,6 @@ context("Add Requestor as an approver of the PO", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create form for NCO document", () => {
@@ -162,7 +157,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -278,7 +273,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document for create company", () => {
@@ -475,12 +470,6 @@ context("Add Requestor as an approver of the PO", () => {
     });
   });
 
-  context("Turn off autosave", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-  });
-
   context("Check PO exists & verify the official predefined schema", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
@@ -527,10 +516,12 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Selects 'PO Approval Matrix' document type from dropdown", () => {
       cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -555,7 +546,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to MatrixDetails tab", () => {
@@ -597,13 +588,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
-  });
-
-  context("Turn on autosave", () => {
-    it("Turn on autosave", () => {
-      cy.cmpTurnOnAutosave();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -615,6 +600,8 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Switch to matrix details tab", () => {
       cy.drSelectMatrixDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify 'QA' group exists under signature 1", () => {
@@ -625,6 +612,8 @@ context("Add Requestor as an approver of the PO", () => {
   context("Create a Part form for PO and Approve and Release", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'create a document' button", () => {
@@ -653,7 +642,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -664,10 +653,14 @@ context("Add Requestor as an approver of the PO", () => {
   context("Create a Part document for PO with title as 'New Part 1'", () => {
     it("Navigates to parts list", () => {
       cy.navigToParts();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'Add new part' button", () => {
       cy.ptClickCreateNewPart();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'PO Part' Form", () => {
@@ -694,10 +687,14 @@ context("Add Requestor as an approver of the PO", () => {
   context("Create another Part document for PO with title as 'New Part 2'", () => {
     it("Navigates to parts list", () => {
       cy.navigToParts();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'Add new part' button", () => {
       cy.ptClickCreateNewPart();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'PO Part' Form", () => {
@@ -724,6 +721,8 @@ context("Add Requestor as an approver of the PO", () => {
   context("Create a form for PO with outputtype as 'Purchase Order', approve and release it", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Create a document'", () => {
@@ -744,6 +743,8 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Click on 'Purchase Order' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -751,7 +752,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Enter html code into 'Render HTML' field", () => {
@@ -759,10 +760,12 @@ context("Add Requestor as an approver of the PO", () => {
         htmlText: renderHTMLContent,
       });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release the form for PO", () => {
@@ -798,6 +801,8 @@ context("Add Requestor as an approver of the PO", () => {
     it("Select Order Date", () => {
       cy.get(`[class*="MuiOutlinedInput"] > div > button[tabindex="0"]`).arrowClick();
       cy.get("button.MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Open' for PO status", () => {
@@ -817,7 +822,7 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -838,6 +843,8 @@ context("Add Requestor as an approver of the PO", () => {
     it("Remove last Approver added'", () => {
       cy.contains(`${USERS[12].name} - ${USERS[12].email}`).parent().parent()
         .find(".MuiSvgIcon-root.MuiChip-deleteIcon").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select '${USERS[11].name}' for Requestor`, () => {
@@ -856,13 +863,15 @@ context("Add Requestor as an approver of the PO", () => {
   context("Navigate to line items, click on 'Add item' button, select part number and save it", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add item' button", () => {
       SystemRequirement("REQ-1360");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.poAddNewFieldItem();
-      });
+      cy.poAddNewFieldItem();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
@@ -877,26 +886,36 @@ context("Add Requestor as an approver of the PO", () => {
     it("Select Part Number", () => {
       SystemRequirement("REQ-1410");
       cy.poSelectPartNumber({ partNo: "PRT-00001 - 1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Quantity Ordered", () => {
       SystemRequirement("REQ-1410");
       cy.poEnterQuantityOrdered({ quantity: "5" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Units", () => {
       SystemRequirement("REQ-1410");
       cy.poSelectUnits();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Supplier Part Number", () => {
       SystemRequirement("REQ-1410");
       cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter number of Units", () => {
       SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
@@ -908,6 +927,8 @@ context("Add Requestor as an approver of the PO", () => {
     it("Check Tax box", () => {
       SystemRequirement("REQ-1450");
       cy.poSelectTaxCheckbox();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
@@ -952,9 +973,9 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify that history tab is capturing requestor added and approver added", () => {
     it("Check history entry for 'Requestor Added'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-        cy.drSelectHistoryTab();
-      });
+      cy.drSelectHistoryTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='form.builder.audit.STRING_NEW']").contains("Requestor Added")
         .should("exist");
       cy.get("[data-cy='form.builder.audit.STRING_NEW']").next()
@@ -985,15 +1006,17 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it(`Remove requestor as ${USERS[11].name}`, () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
-        cy.unClick();
-      });
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select '${USERS[12].name}' for Requestor`, () => {
       cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[12].name} - ${USERS[12].email}`);
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check requestor is added", () => {
@@ -1024,9 +1047,9 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Check the Approval field automatically Removed when requestor is Deleted", () => {
     it("Remove requestor", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
-      });
+      cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify 'The requestor field is required field' is in RED(#F44336)`, () => {
@@ -1074,19 +1097,25 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Approver Added")
-        .should("contain", USERS[12].name);
+      cy.get(`[data-cy="no-padding-margin"]`).eq(0)
+        .should("contain", "Approver Added").should("contain", USERS[12].name);
     });
   });
 
   context("Confirm the PO entered data is correct", () => {
     it("Navigate to Purchase Order list", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("verify the correct data are displayed in PO table", () => {
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlFilterByDocId({ docId: "PO-00001" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
       cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "1");
       cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
@@ -1100,10 +1129,14 @@ context("Add Requestor as an approver of the PO", () => {
   context("Navigate back to created PO and Approve and Release it", () => {
     it("Select created PO", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve & Release", () => {
       cy.pmSubmitForApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Auth logout", () => {
@@ -1119,13 +1152,10 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Accept Approval Request with password prompt", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostDashboardFeedSearch], () => {
-          cy.contains("needs your approval for").trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
+      cy.contains("needs your approval for").trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -1145,11 +1175,17 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Navigate to Purchase Order list", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select created PO", () => {
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for RELEASED document`, () => {
@@ -1168,14 +1204,17 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Verify Order Date", () => {
       cy.get("[name^='ordered-']").should("have.value", receivingReleasedDate);
+      cy.wait(5000);
     });
 
     it("Verify approvers", () => {
-      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[12].name} - ${USERS[12].email} `);
+      cy.get("[data-tag-index='0']>span>div").should("contain.text", `${USERS[12].name} - ${USERS[12].email} `);
     });
 
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify part number", () => {
@@ -1218,11 +1257,17 @@ context("Add Requestor as an approver of the PO", () => {
   context("Navigate to landing page and verify that correct data are displayed", () => {
     it("Navigate to Purchase Order landing page", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("verify the correct data are displayed in PO fields", () => {
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlFilterByDocId({ docId: "PO-00001" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
       cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "1");
       cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
@@ -1238,6 +1283,8 @@ context("Add Requestor as an approver of the PO", () => {
   context("Verify that downloaded PDF display Requestor information", () => {
     it("Select created PO", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("[API]Login second tester", (done: any) => {
@@ -1246,12 +1293,6 @@ context("Add Requestor as an approver of the PO", () => {
       }).then((response) => {
         loginResponse = response;
         done();
-      });
-    });
-
-    context("Turn off autosave", () => {
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
       });
     });
 
@@ -1276,30 +1317,36 @@ context("Add Requestor as an approver of the PO", () => {
     });
   });
 
-  context("Turn on autosave", () => {
-    it("Turn on autosave", () => {
-      cy.cmpTurnOnAutosave();
-    });
-  });
-
   context("Revise record and check flow", () => {
     it("Navigate to Purchase Order landing page", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
 
     it("Select created PO", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click on revise PO", () => {
       cy.drClickReviseDocument();
-      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Save changes", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1314,14 +1361,17 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Verify Order Date", () => {
       cy.get("[name^='ordered-']").should("have.value", receivingReleasedDate);
+      cy.wait(5000);
     });
 
     it("Verify approvers", () => {
-      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[12].name} - ${USERS[12].email} `);
+      cy.get("[data-tag-index='0']>span>div").should("contain.text", `${USERS[12].name} - ${USERS[12].email} `);
     });
 
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify part number", () => {
@@ -1364,21 +1414,27 @@ context("Add Requestor as an approver of the PO", () => {
   context("Check the Approval field automatically filled as the requestor", () => {
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("open PO revision tab", () => {
       cy.get("[data-cy='note-icon']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Revision 2", () => {
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy="revision"]`).eq(0).contains("Revision 2");
     });
 
     it("Remove requestor", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
-      });
+      cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify 'The requestor field is required field' is appeared`, () => {
@@ -1411,9 +1467,9 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify that history tab is capturing requestor updated and approver added", () => {
     it("Check history entry for 'Requestor Updated'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-        cy.drSelectHistoryTab();
-      });
+      cy.drSelectHistoryTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
         .should("exist");
       cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[11].name)
@@ -1436,9 +1492,9 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Restore previous requestor", () => {
     it("Restore the previous requestor", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
-      });
+      cy.get(`div[name^="po-requestor-"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
@@ -1461,6 +1517,8 @@ context("Add Requestor as an approver of the PO", () => {
   context("Add part from Enlil in the PO line item", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add item' button", () => {
@@ -1482,16 +1540,22 @@ context("Add Requestor as an approver of the PO", () => {
     it("Select Part Number", () => {
       SystemRequirement("REQ-1410");
       cy.poSelectPartNumber({ partNo: "PRT-00002 - 1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Quantity Ordered", () => {
       SystemRequirement("REQ-1410");
       cy.poEnterQuantityOrdered({ quantity: "5" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Units", () => {
       SystemRequirement("REQ-1410");
       cy.poSelectUnits();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select GL code", () => {
@@ -1502,28 +1566,36 @@ context("Add Requestor as an approver of the PO", () => {
     it("Enter Supplier Part Number", () => {
       SystemRequirement("REQ-1410");
       cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter number of Units", () => {
       SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
       SystemRequirement("REQ-1410");
       cy.get("[name='date']").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check Tax box", () => {
       SystemRequirement("REQ-1450");
       cy.poSelectTaxCheckbox();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poAddPOButtonClick();
-      });
+      cy.poAddPOButtonClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1542,13 +1614,10 @@ context("Add Requestor as an approver of the PO", () => {
     });
 
     it("Accept Approval Request with password prompt", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostDashboardFeedSearch], () => {
-          cy.contains("needs your approval for").trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
+      cy.contains("needs your approval for").trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -1568,11 +1637,17 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Navigate to Purchase Order list", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select created PO", () => {
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for RELEASED document`, () => {
@@ -1591,14 +1666,17 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Verify Order Date", () => {
       cy.get("[name^='ordered-']").should("have.value", receivingReleasedDate);
+      cy.wait(5000);
     });
 
     it("Verify approvers", () => {
-      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[12].name} - ${USERS[12].email} `);
+      cy.get("[data-tag-index='0']>span>div").should("contain.text", `${USERS[12].name} - ${USERS[12].email} `);
     });
 
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify part number", () => {
@@ -1641,11 +1719,17 @@ context("Add Requestor as an approver of the PO", () => {
   context("Verify that downloaded PDF display Requestor information", () => {
     it("Navigate to Purchase Order list", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select created PO", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("[API]Login second tester", (done: any) => {
