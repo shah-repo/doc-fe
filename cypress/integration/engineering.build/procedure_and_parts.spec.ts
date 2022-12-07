@@ -1030,7 +1030,7 @@ context("Procedure and parts flow test", () => {
         cy.wait(1000);
         SystemRequirement("REQ-3030");
         cy.get("#sm-tabpanel-2")
-          .contains("New Material for procedure | each : 3").should("exist");
+          .contains("MT-00002 - New Material for procedure | each : 3").should("exist");
       });
 
       it("Verify 'Free text material' has increased number of materials to '5'", () => {

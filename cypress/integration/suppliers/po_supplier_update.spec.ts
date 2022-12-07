@@ -307,8 +307,8 @@ context("Purchase Supplier Update", () => {
           req.reply((res) => {
             if (res.body !== "") {
               const response = res.body;
-              supplierFieldName = response.formTemplate.schema[3].name;
-              poFieldName = response.formTemplate.schema[5].name;
+              supplierFieldName = response.formTemplate.schema[4].name;
+              poFieldName = response.formTemplate.schema[6].name;
             }
           });
         }).as("response");

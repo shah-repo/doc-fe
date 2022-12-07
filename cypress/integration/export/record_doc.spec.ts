@@ -443,6 +443,8 @@ context("Export Record doc", () => {
   context(`Record with ${STATUS_TYPES_LABEL.WIP} status`, () => {
     it("Verify export", () => {
       cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.WIP, filename: "-1-Record-inline-form" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -520,6 +522,12 @@ context("Export Record doc", () => {
 
       it("Select 'Details' tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Click Request Approval button", () => {
+        cy.contains("Request approval").arrowClick();
       });
 
       it("Approve inline approval", () => {
@@ -568,10 +576,11 @@ context("Export Record doc", () => {
       it("Add inline approver", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
           () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(1)
-              .autocompleteSelect("enlil.testmail+cy1");
+            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(1).arrowClick();
+            cy.get(".MuiAutocomplete-listbox li").contains(USERS[1].email).arrowClick();
           });
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Click Request Approval button", () => {
@@ -582,11 +591,15 @@ context("Export Record doc", () => {
 
       it("Approve inline approval", () => {
         cy.inlineApproval();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Finalize and release button click'", () => {
         cy.reload();
         cy.recFinalizeAndReleaseRecord();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
 
       it("Verify export", () => {
@@ -652,6 +665,8 @@ context("Export Record doc", () => {
 
     context("Add Record with In Review", () => {
       it("Add inline approver", () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
       });
 
@@ -663,6 +678,8 @@ context("Export Record doc", () => {
 
       it("Save and submit for Approval", () => {
         cy.pmSubmitForApproval();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
 
       it("Verify export", () => {
