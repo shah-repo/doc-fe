@@ -92,6 +92,12 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     }
 
+    const loading = useObserver(() =>
+      Boolean(workspaceState?.loading
+      || purchaseOrderState?.loading
+      || poReceiveState?.loading)
+    );
+
     return Component({
       ...(props as T),
       handleItem,
@@ -102,6 +108,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       disabled,
       name,
       isReceivable,
+      loading,
       isPO,
     });
   };
