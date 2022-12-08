@@ -849,9 +849,14 @@ context("Create company with JSON's", () => {
     it("Click on 'Add item' button", () => {
       SystemRequirement("REQ-1360");
       cy.drSelectLineItems();
+      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
         cy.poAddNewFieldItem();
       });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
     it("Select Part Number", () => {
       SystemRequirement("REQ-1410");
@@ -925,7 +930,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Approve & Release", () => {
-      cy.poApprove();
+      cy.poApproveWithoutApi();
     });
 
     it("Verify the released document", () => {
