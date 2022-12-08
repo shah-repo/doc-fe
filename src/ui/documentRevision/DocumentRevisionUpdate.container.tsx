@@ -78,6 +78,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
   const handleSave = (data: DocumentRevisionEditRequestBody, helpers) => {
     async.reset();
+
     const promise = async.start(
       saveAction,
       documentRevision.id,

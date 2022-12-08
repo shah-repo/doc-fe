@@ -80,7 +80,6 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         },
       };
 
-
       const updatedRevision = await poReceiveState?.addReceiveQuantity(workspaceState.id, {
         formInput: receivedItemsInput,
         referenceTo: hasNoReference ?
