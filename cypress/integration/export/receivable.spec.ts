@@ -46,7 +46,7 @@ context("Export Receivable doc", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
@@ -56,7 +56,7 @@ context("Export Receivable doc", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable Test");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
@@ -68,7 +68,7 @@ context("Export Receivable doc", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -175,7 +175,7 @@ context("Export Receivable doc", () => {
                   },
                   {
                     label: "form.builder.approvals",
-                    type: "poapprovals",
+                    type: "approvals",
                     deleteDisabled: false,
                     name: "fb-po-approvals-kqqix31p",
                     uniqueSchemaItem: true,
@@ -572,7 +572,7 @@ context("Export Receivable doc", () => {
                 },
                 {
                   label: "form.builder.approvals",
-                  type: "poapprovals",
+                  type: "approvals",
                   deleteDisabled: false,
                   name: "fb-po-approvals-kqqix31p",
                   uniqueSchemaItem: true,
@@ -607,7 +607,7 @@ context("Export Receivable doc", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: employeeLoginFirst.id });
     });
   });
 
@@ -670,7 +670,7 @@ context("Export Receivable doc", () => {
   context(`Receivable with ${STATUS_TYPES_LABEL.LAST_SIGNED} status`, () => {
     context(`Add Receivable with ${STATUS_TYPES_LABEL.LAST_SIGNED}`, () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+        cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${USERS[11].name}`);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -748,7 +748,7 @@ context("Export Receivable doc", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.inlineApprovalWithoutApi();
+        cy.ebApproveWithoutApi();
       });
 
       it("Click on revisions tab on side panel", () => {
@@ -865,7 +865,7 @@ context("Export Receivable doc", () => {
 
     context("Add Receivable with Pending Approval", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-po-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+        cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${USERS[11].name}`);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
