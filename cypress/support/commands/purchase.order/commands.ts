@@ -209,7 +209,9 @@ Cypress.Commands.add("poCheckDateRequired", (params: { dateRequired: string }) =
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
-  cy.get("[name*=\"shippingCost\"]").arrowClick().arrowType("{leftarrow}{leftarrow}{leftarrow}{leftarrow}" + params.number);
+  cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick();
+  cy.get(`[name*="po-items-built-in.shippingCost"]`).arrowType("{leftarrow}{leftarrow}{leftarrow}" + params.number);
+  cy.unClick();
 });
 
 Cypress.Commands.add("poCheckShippingCost", (params: {cost: string}) => {
@@ -227,6 +229,7 @@ Cypress.Commands.add("poCheckCurrency", () => {
 
 Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
   cy.get("ul[role=listbox] > li").contains(params.currencyValue).arrowClick();
+  cy.unClick();
 });
 
 Cypress.Commands.add("poSelectTaxCheckbox", () => {
