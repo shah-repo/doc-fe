@@ -419,7 +419,7 @@ context("Create receivable test", () => {
                             {
                               label: "form.builder.approvals",
                               tabId: "overview",
-                              type: "poapprovals",
+                              type: "approvals",
                               deleteDisabled: false,
                               name: "fb-po-approvals-kqqix31p",
                               uniqueSchemaItem: true,
@@ -573,8 +573,9 @@ context("Create receivable test", () => {
         });
 
         it("Add an Approval", () => {
-          cy.wait(1000);
-          cy.poAddApproverOnApproverList({ approver: USERS[1].name });
+          cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click 'Submit for Approval' button", () => {
@@ -583,7 +584,7 @@ context("Create receivable test", () => {
 
         it("Click 'Approve' button", () => {
           SystemRequirement("REQ-1860");
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
 
         it(`Verify receivable status is ${STATUS_TYPES_LABEL.CURRENT}`, () => {
