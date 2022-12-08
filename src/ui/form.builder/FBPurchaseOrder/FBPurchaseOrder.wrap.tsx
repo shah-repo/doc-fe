@@ -1,4 +1,4 @@
-import { has, isEmpty, map } from "lodash";
+import { isEmpty, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -27,7 +27,6 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
 
     const dispatch = useDispatch();
     const { _documentRevisionFormState } = SM.useStores();
-    let isReceivePurchaseOrderLoaded = false;
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
@@ -93,10 +92,11 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     }
 
-    useObserver(() => {
-      isReceivePurchaseOrderLoaded = !isEmpty(workspaceState?.document?.formInput) ||
-      (!isEmpty(receivableName) && has(workspaceState?.document?.formInput?.[receivableName || ""], "id"));
-    });
+    const loading = useObserver(() =>
+      Boolean(workspaceState?.loading
+      || purchaseOrderState?.loading
+      || poReceiveState?.loading)
+    );
 
     return Component({
       ...(props as T),
@@ -108,7 +108,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       disabled,
       name,
       isReceivable,
-      isReceivePurchaseOrderLoaded,
+      loading,
       isPO,
     });
   };

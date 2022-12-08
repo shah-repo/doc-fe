@@ -15,7 +15,7 @@ export type FBPurchaseOrderProps =
   receivableName?: string;
   lineItem?: string;
   isPO: boolean;
-  isReceivePurchaseOrderLoaded?: boolean;
+  loading?: boolean;
 };
 
 export enum FBPurchaseOrderItemType {
