@@ -129,10 +129,13 @@ export default makeStyles((theme) =>
       borderRadius: theme.spacing(.5, .5, 0, 0),
     },
     cellOne: {
-      width: "30%",
-      display: "flex",
-      alignItems: "center",
-      columnGap: theme.spacing(1.25),
+      "width": "30%",
+      "display": "flex",
+      "alignItems": "center",
+      "columnGap": theme.spacing(1.25),
+      "& > .MuiBox-root": {
+        width: "100%",
+      },
     },
     cellTwo: {
       width: "35%",

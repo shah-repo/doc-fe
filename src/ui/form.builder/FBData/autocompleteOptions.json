@@ -138,7 +138,7 @@
     "label": "Document Revisions In Draft without Records",
     "valueKey": "id",
     "labelKey": "name",
-    "labelPrefixRoot": "document.docId",
+    "labelPrefixRoot": "docId",
     "root": "",
     "includeRevision": "displayRevision",
     "hidden": false

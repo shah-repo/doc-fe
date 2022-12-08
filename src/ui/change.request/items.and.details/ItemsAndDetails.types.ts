@@ -1,20 +1,17 @@
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { FBFormProps, FBWorkspaceMode } from "../../form.builder";
 
 export interface FBDocumentRevisionResponse {
-  companyId: string;
   createdAt: string;
-  displayRevision: string;
-  document: {
-    docId:  string;
-    id: string;
-    documentType: {
-      group: string;
-    };
-  };
   id: string;
   name: string;
   updatedAt: string;
+  displayRevision: string;
+  docId: string;
+  documentId: string;
+  documentTypeId: string;
+  group: DOC_TYPE_GROUP;
 }
 
 export interface FBDocumentRevisionsValue {

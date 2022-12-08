@@ -61,13 +61,12 @@ const ChangeOrderViewGridItem: React.FunctionComponent<ChangeOrderViewItemProps>
 
   const getDocumentDetails = async () => {
     if (!documentId) {
-      const { document, displayRevision, name }: FBDocumentRevisionResponse = await documentDetailsApi.fetch();
-      const documentTitleText = generateDocTitleText(
-        document.docId, displayRevision, name
-      );
+      const { docId, group, documentId, displayRevision, name }:
+      FBDocumentRevisionResponse = await documentDetailsApi.fetch();
+      const documentTitleText = generateDocTitleText(docId, displayRevision, name);
       setDocTitle(documentTitleText);
-      if (document.documentType.group === DOC_TYPE_GROUP.PART) {
-        getRelatedParts(document.id, displayRevision);
+      if (group === DOC_TYPE_GROUP.PART) {
+        getRelatedParts(documentId, displayRevision);
       }
     } else {
       if (isPart) {
