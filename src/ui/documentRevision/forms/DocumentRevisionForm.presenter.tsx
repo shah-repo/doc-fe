@@ -123,6 +123,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
   const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
    || (!isRevisionVisible && defaultRevisionStage));
+  const isDCO = (documentRevision?.document?.documentType?.documentTypeName === "Document Change Order");
 
   useEffect(() => {
     if (!redlineActive) {
@@ -208,7 +209,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const outputIsPO = includes(outputDocumentTypeName, "Purchase Order");
 
   return (
-    <Box mb={6}>
+    <Box mb={isDCO ? 3 : 6}>
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
@@ -225,7 +226,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           onDirtyFlagChange={onDirtyFlagChange}
         />
         <Grid container spacing={3}>
-          {isVisible && <Grid item xs={6}>
+          {!isDCO && (<>{isVisible && <Grid item xs={6}>
             <DocumentTypeSelect
               outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
               isDisabled={isDisabledInputInPreview}
@@ -280,7 +281,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               isDisabled={isDisabledInput}
               {...{ documentTypeId, isRecord }}
             />
-          </Grid>
+          </Grid></>)}
           {isEB && (
             <Grid item xs={12}>
               <FBEBPart name="childrenParts">
@@ -316,7 +317,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft && (
+          {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
             <Grid item xs={12}>
               <RevisionTypeChange
                 isDisabled={isDisabledInput}
@@ -333,7 +334,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           )}
           {showOutputSection ? (
             <>
-              {(isPO || outputIsPO
+              {!isDCO && (isPO || outputIsPO
                 ? !_tabsState?.isTabActive("details") && (
                   <Grid item xs={12}>
                     <AttachmentsField
