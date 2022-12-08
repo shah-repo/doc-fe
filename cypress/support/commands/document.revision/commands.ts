@@ -292,7 +292,7 @@ Cypress.Commands.add("drSelectChangeDetailsTab", () => {
 });
 
 Cypress.Commands.add("drSelectLineItems", () => {
-  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 

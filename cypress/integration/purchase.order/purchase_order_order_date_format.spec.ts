@@ -422,7 +422,7 @@ context("Search PO item with correct order date format", () => {
           });
 
           it("Approve", () => {
-            cy.poApprove();
+            cy.poApproveWithoutApi();
           });
         });
       });
@@ -487,7 +487,7 @@ context("Search PO item with correct order date format", () => {
 
         context("Approve", () => {
           it("Approve", () => {
-            cy.poApprove();
+            cy.poApproveWithoutApi();
           });
         });
       });
@@ -695,7 +695,7 @@ context("Search PO item with correct order date format", () => {
 
     context("Approve", () => {
       it("Approve", () => {
-        cy.poApprove();
+        cy.poApproveWithoutApi();
       });
     });
   });
