@@ -987,7 +987,7 @@ context("LFPO new layout verification", () => {
 
     it("Create Receiving Record", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
+        CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .autocompleteSelect("Receivable test");
