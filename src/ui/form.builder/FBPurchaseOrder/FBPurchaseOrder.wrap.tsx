@@ -1,4 +1,4 @@
-import { isEmpty, map } from "lodash";
+import { has, isEmpty, map } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -79,17 +79,23 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         },
       };
 
-      const updatedRevision = await poReceiveState?.addReceiveQuantity(workspaceState.id, {
-        formInput: receivedItemsInput,
-        referenceTo: hasNoReference ?
-          [{
-            id: poReceiveState?.data?.document.id,
-          }] as Id[] : undefined,
-      });
-      workspaceState.setFormInputData(updatedRevision);
-      FBDataStore.setRefreshData(updatedRevision);
-      await poReceiveState?.setPOId(poReceiveState?.data?.id);
-      dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
+      if (!has(receivedItemsInput[receivableName], "id") && poReceiveState?.data?.id) {
+        // Adding Receive Purchase order ID when Receive Purchase order input modified & Receive All clicked on same time
+        receivedItemsInput[receivableName].id = poReceiveState?.data?.id;
+      }
+      try {
+        const updatedRevision = await poReceiveState?.addReceiveQuantity(workspaceState.id, {
+          formInput: receivedItemsInput,
+          referenceTo: hasNoReference ?
+            [{
+              id: poReceiveState?.data?.document.id,
+            }] as Id[] : undefined,
+        });
+        workspaceState.setFormInputData(updatedRevision);
+        FBDataStore.setRefreshData(updatedRevision);
+        await poReceiveState?.setPOId(poReceiveState?.data?.id);
+        dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
+      } catch (err) {}
     }
 
     return Component({

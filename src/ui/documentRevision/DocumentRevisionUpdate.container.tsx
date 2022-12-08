@@ -78,14 +78,14 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
   const handleSave = (data: DocumentRevisionEditRequestBody, helpers) => {
     async.reset();
-
-    const promise = async.start(
-      saveAction,
-      documentRevision.id,
-      data,
-      async,
-      helpers,
-    );
+    try {
+      const promise = async.start(
+        saveAction,
+        documentRevision.id,
+        data,
+        async,
+        helpers,
+      );
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
     promise?.then(() => {
       if ( FBStore?.isHistoryTabSelected) {
@@ -102,6 +102,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
         formInput: data.formInput ?? FBDataStore?.refreshData?.formInput,
       });
     });
+    } catch (err) {}
   };
 
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
