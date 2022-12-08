@@ -50,7 +50,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[21].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
@@ -63,7 +63,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[21].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
@@ -75,7 +75,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[21].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -215,7 +215,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[21].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -516,7 +516,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        email: USERS[21].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
 
