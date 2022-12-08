@@ -27,6 +27,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
 
     const dispatch = useDispatch();
     const { _documentRevisionFormState } = SM.useStores();
+    let isReceivePurchaseOrderLoaded = false;
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
     const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
@@ -79,24 +80,24 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         },
       };
 
-      if (!has(receivedItemsInput[receivableName], "id") && poReceiveState?.data?.id) {
-        // Adding Receive Purchase order ID when Receive Purchase order input modified & Receive All clicked on same time
-        receivedItemsInput[receivableName].id = poReceiveState?.data?.id;
-      }
-      try {
-        const updatedRevision = await poReceiveState?.addReceiveQuantity(workspaceState.id, {
-          formInput: receivedItemsInput,
-          referenceTo: hasNoReference ?
-            [{
-              id: poReceiveState?.data?.document.id,
-            }] as Id[] : undefined,
-        });
-        workspaceState.setFormInputData(updatedRevision);
-        FBDataStore.setRefreshData(updatedRevision);
-        await poReceiveState?.setPOId(poReceiveState?.data?.id);
-        dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
-      } catch (err) {}
+
+      const updatedRevision = await poReceiveState?.addReceiveQuantity(workspaceState.id, {
+        formInput: receivedItemsInput,
+        referenceTo: hasNoReference ?
+          [{
+            id: poReceiveState?.data?.document.id,
+          }] as Id[] : undefined,
+      });
+      workspaceState.setFormInputData(updatedRevision);
+      FBDataStore.setRefreshData(updatedRevision);
+      await poReceiveState?.setPOId(poReceiveState?.data?.id);
+      dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     }
+
+    useObserver(() => {
+      isReceivePurchaseOrderLoaded = !isEmpty(workspaceState?.document?.formInput) ||
+      (!isEmpty(receivableName) && has(workspaceState?.document?.formInput?.[receivableName || ""], "id"));
+    });
 
     return Component({
       ...(props as T),
@@ -108,6 +109,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       disabled,
       name,
       isReceivable,
+      isReceivePurchaseOrderLoaded,
       isPO,
     });
   };

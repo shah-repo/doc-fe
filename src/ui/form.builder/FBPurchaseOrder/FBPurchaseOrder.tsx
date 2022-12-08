@@ -12,6 +12,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   gutter = true,
   mode = "form",
   label,
+  isReceivePurchaseOrderLoaded,
   disabled,
   isReceivable,
   name,
@@ -23,7 +24,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
       <Box mb={gutter ? 5 : 0}>
         {mode === "form" && !isPO && <FBSection name={`fb-po-section-${name}`} {...{ label }}  />}
         <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
-        {isReceivable && (
+        {isReceivable && isReceivePurchaseOrderLoaded && (
           <FBButton
             variant="outlined"
             color="primary"
