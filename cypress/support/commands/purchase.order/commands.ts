@@ -78,6 +78,7 @@ declare global {
       poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
       poApprove(): Chainable<Subject>;
+      poApproveWithoutApi(): Chainable<Subject>;
       poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
       poCheckOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poBuildInStatus(params: {status: string}): Chainable<Subject>;
@@ -113,7 +114,8 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick().wait(500);
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick({ force: true });
+  cy.wait(500);
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -455,6 +457,17 @@ Cypress.Commands.add("poApprove", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("poApproveWithoutApi", () => {
+  cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
+  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.unClick();
+  cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
