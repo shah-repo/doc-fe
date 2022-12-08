@@ -154,7 +154,7 @@ context("Autocomplete 'Purchase Order' test", () => {
       });
 
       it("Click 'Approve' button", () => {
-        cy.ebApprove();
+        cy.ebTryToApprove();
       });
     });
 
