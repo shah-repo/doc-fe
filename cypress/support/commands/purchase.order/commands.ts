@@ -82,6 +82,8 @@ declare global {
       poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
       poCheckOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poBuildInStatus(params: {status: string}): Chainable<Subject>;
+      verifyPoApprovalSignature(params: {name: string; email: string}): Chainable<Subject>;
+      verifyPoApprovalDisabled(params: {name: string; email: string}): Chainable<Subject>;
     }
   }
 }
@@ -127,6 +129,18 @@ Cypress.Commands.add("poCreateNew", () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("verifyPoApprovalSignature", (params) => {
+  cy.get(`[data-cy*="fb-po-approvals-"]`).parent().parent().should("contain", `${params.name} - ${params.email}`);
+  cy.contains("PO Approval sig");
+  cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(params.name + " | DRAFT" + params.email);
+});
+
+Cypress.Commands.add("verifyPoApprovalDisabled", (params) => {
+  cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${params.name} - ${params.email}`);
+  cy.get(`input[data-cy^="fb-po-approvals-"]`).parent()
+    .find(`[class="MuiChip-root MuiAutocomplete-tag Mui-disabled MuiChip-deletable"]`).should("exist");
 });
 
 Cypress.Commands.add("poClickCreatePO", () => {
