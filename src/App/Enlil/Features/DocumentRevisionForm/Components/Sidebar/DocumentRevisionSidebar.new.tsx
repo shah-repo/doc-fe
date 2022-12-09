@@ -142,8 +142,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                     shouldShow: true,
                     title:
                       intl?.formatMessage({
-                        id: `document.revision.docVersion.${_documentRevisionFormState?.documentTypeAcronym}`,
-                        defaultMessage: "document.revision.docVersion",
+                        id: `document.revision.docVersion`,
                       }) || "",
                     component: (
                       <DocumentRevisionListContainer
