@@ -55,9 +55,13 @@ const TopSection: React.FunctionComponent<{
 const ItemsAndDetails: React.FunctionComponent<{
   formState: FBFormState;
   handleAdd: () => void;
+  handleRemove: (docRevId: string) => void;
+  handleUpdate: () => void;
 }> = ({
   formState,
   handleAdd,
+  handleRemove,
+  handleUpdate,
 }) => {
   const classes = useStyles();
   const { itemsAndDetailsStore } = useItemsAndDetailsStore();
@@ -86,7 +90,6 @@ const ItemsAndDetails: React.FunctionComponent<{
     handleAdd();
   }
 
-
   return useObserver(() => (
     <div className={classes.fullWidth}>
       <TopSection showEditRow={showEditRow} showButton={showButton}/>
@@ -104,6 +107,8 @@ const ItemsAndDetails: React.FunctionComponent<{
             entry={entry}
             {...{ formState }}
             disabledOptions={disabledOptions}
+            handleRemove = {handleRemove}
+            handleUpdate = {handleUpdate}
           />
         ))
       }

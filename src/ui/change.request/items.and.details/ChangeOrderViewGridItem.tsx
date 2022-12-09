@@ -20,9 +20,11 @@ import EditIcon from "@material-ui/icons/Edit";
 const ChangeOrderViewGridItem: React.FunctionComponent<{
   entry: ChangeOrderGridItem;
   editItem: () => void;
+  handleRemove: (docRevId: string) => void;
 }> = ({
   entry,
   editItem,
+  handleRemove,
 }) => {
   const classes = useStyles();
   const {
@@ -127,7 +129,8 @@ const ChangeOrderViewGridItem: React.FunctionComponent<{
       }
       <div className={cx(classes.actionButtonChildDiv, "actionBtnClass")}>
         <Button className={cx(classes.actionButton, classes.actionButtonDelete)}>
-          <DeleteIcon className={classes.iconButton} />
+          <DeleteIcon className={classes.iconButton}
+            onClick={() => handleRemove(docRevId)}/>
         </Button>
         <Button className={classes.actionButton}>
           <EditIcon className={classes.iconButton} onClick={editItem}/>

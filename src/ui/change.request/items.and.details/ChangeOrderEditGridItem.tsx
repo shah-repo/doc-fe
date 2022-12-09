@@ -26,10 +26,6 @@ const ChangeOrderEditGridItem: React.FunctionComponent<{
 }) => {
   const classes = useStyles();
 
-  // console.log(formState.getValues());
-  // formState.errors.clear();
-  // console.log(formState.errors);
-
   return (
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)}>

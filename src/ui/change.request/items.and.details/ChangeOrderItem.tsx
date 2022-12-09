@@ -8,10 +8,14 @@ const ChangeOrderItem: React.FunctionComponent<{
   entry: ChangeOrderGridItem;
   formState: FBFormState;
   disabledOptions: () => string[];
+  handleRemove: (docRevId: string) => void;
+  handleUpdate: () => void;
 }> = ({
   entry,
   formState,
   disabledOptions,
+  handleRemove,
+  handleUpdate,
 }) => {
 
   const [editMode, setEditMode] = useState(false);
@@ -21,7 +25,8 @@ const ChangeOrderItem: React.FunctionComponent<{
   }
 
   function addRevisionToChangeRequest() {
-    // To Implement
+    setEditMode(false);
+    handleUpdate();
   }
 
   function editItem() {
@@ -52,6 +57,7 @@ const ChangeOrderItem: React.FunctionComponent<{
         <ChangeOrderViewGridItem
           entry={entry}
           editItem={editItem}
+          handleRemove={handleRemove}
         /> }
     </>
   );

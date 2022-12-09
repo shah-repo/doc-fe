@@ -6,7 +6,7 @@ import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentT
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { useFormContext } from "../../components/forms/FormContext";
 import { FB, FBForm, FBFormState } from "../../form.builder";
-import { generateDocTitleText } from "./helpers";
+import { generateDocTitleText, storeDataToFormData } from "./helpers";
 import ItemsAndDetails from "./ItemsAndDetails";
 import { itemsAndDetailsStore, ItemsAndDetailsStoreContext, useItemsAndDetailsStore } from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
@@ -36,26 +36,49 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     const formValue = formState?.getValues() as FBDocumentRevisionsValue;
     formValue.id = FB.uniqid;
 
-    const dataToSend: FBDocumentRevisionsValue[] =
-      itemsAndDetailsStore.changeOrderItemsList.map((item: ChangeOrderGridItem) => (
-        {
-          justificationOfChange: item.justificationOfChange,
-          descriptionOfChange: item.descriptionOfChange,
-          id: item.id,
-          proposedDocumentRevision: {
-            id: item.docRevId,
-          },
-        }
-      ));
-    dataToSend.push(formValue);
-
-    parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
-    // Submit the form - and once that returns, add this item to the store
-    // itemsAndDetailsStore.add(formValue);
-
     map(formValue, (value, key) => {
       formState?.omitFieldValue(key);
     });
+
+    const dataToSend: FBDocumentRevisionsValue[] =
+      storeDataToFormData(itemsAndDetailsStore.changeOrderItemsList);
+    dataToSend.push(formValue);
+
+    submitData(dataToSend);
+  };
+
+  const handleRemove = (docRevId: string) => {
+    const orderItemsFiltered = itemsAndDetailsStore.changeOrderItemsList
+      .filter((item: ChangeOrderGridItem) => item.docRevId !== docRevId);
+    const dataToSend: FBDocumentRevisionsValue[] =
+      storeDataToFormData(orderItemsFiltered);
+
+    submitData(dataToSend);
+  };
+
+  const handleUpdate = () => {
+    const { justificationOfChange, descriptionOfChange, proposedDocumentRevision }
+      = formState?.getValues() as FBDocumentRevisionsValue;
+    const orderItemsUpdated = itemsAndDetailsStore.changeOrderItemsList
+      .map((item: ChangeOrderGridItem) => {
+        if (item.docRevId !== proposedDocumentRevision.id) {
+          return item;
+        }
+
+        return { ...item, justificationOfChange, descriptionOfChange };
+      });
+
+    const dataToSend: FBDocumentRevisionsValue[] =
+      storeDataToFormData(orderItemsUpdated);
+    console.log(dataToSend);
+
+    submitData(dataToSend);
+  };
+
+  const submitData = (dataToSend) => {
+    parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
+    // Submit the form - and once that returns, add this item to the store
+    // itemsAndDetailsStore.add(formValue);
 
     if (autosave) {
       submitForm();
@@ -103,6 +126,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     <ItemsAndDetails
       formState = {formState}
       handleAdd = {handleAdd}
+      handleRemove = {handleRemove}
+      handleUpdate = {handleUpdate}
     />
   ));
 
