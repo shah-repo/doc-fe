@@ -14,55 +14,15 @@ export default makeStyles((theme) =>
     fullWidth: {
       width: "100%",
     },
-    btn: {
-      "&:hover": {
-        background: `linear-gradient(262.45deg, ${Colors.cerulean} 0.28%, ${Colors.ultramarine_blue} 16.91%, ${Colors.navy} 85.48%)`,
-      },
-    },
-    disableRipple: {
-      "&:hover": {
-        backgroundColor: "transparent",
-      },
-    },
-    fullLengthButton: {
-      "borderStyle": "dashed",
-      "borderColor": Colors.blue,
-      "width": "100%",
-      "margin": 0,
-      "borderRadius": theme.spacing(0, 0, .5, .5),
-      "color": Colors.navy,
-      "&:hover": {
-        backgroundColor: "transparent",
-        borderStyle: "solid",
-        borderColor: Colors.blue,
-        color: Colors.navy,
-      },
-    },
-    customTooltip: {
-      backgroundColor: Colors.black,
-    },
-    customArrow: {
-      color: Colors.black,
-    },
     titleHeading: {
       marginRight: theme.spacing(1.25),
       display: "inline-block",
-    },
-    partsGrid: {
-      paddingLeft: theme.spacing(1.5),
-      marginBottom: theme.spacing(1.5),
     },
     btnMargin: {
       margin: 0,
     },
     dividerStyle: {
       margin: theme.spacing(0, 0, 1.5, 0),
-    },
-    editRowParentDiv: {
-      display: "flex",
-      width: "100%",
-      alignItems: "flex-start",
-      borderRadius: theme.spacing(0, 0, .5, .5),
     },
     editRowParentNormal: {
       border: "1px solid",
@@ -74,23 +34,6 @@ export default makeStyles((theme) =>
     },
     labelError: {
       color: Colors.red,
-    },
-    editRowChildDivOne: {
-      width: "30%",
-      display: "grid",
-      gridTemplateColumns: "1fr 2fr",
-      justifyContent: "space-evenly",
-      padding: theme.spacing(0, 1.5),
-      alignItems: "center",
-      columnGap: theme.spacing(.5),
-    },
-    editRowChildDivTwo: {
-      width: "50%",
-      display: "grid",
-      gridTemplateColumns: "1fr 2fr",
-      justifyContent: "space-evenly",
-      padding: theme.spacing(0, 1.5),
-      alignItems: "center",
     },
     gridCenterAlign: {
       justifyContent: "space-between",
@@ -150,15 +93,26 @@ export default makeStyles((theme) =>
       paddingRight: theme.spacing(1),
     },
     enclosingDiv: {
-      border: `1px solid ${Colors.alice_blue}`,
       color: Colors.almost_black,
+      position: "relative",
+      flexWrap: "wrap",
     },
-    enclosingDivColor: {
+    enclosingDivEditItem: {
+      border: `1px solid ${Colors.alice_blue}`,
+    },
+    enclosingDivViewItem: {
       "backgroundColor": Colors.white,
+      "& .actionBtnClass": {
+        display: "none",
+      },
       "&:hover": {
         "backgroundColor": Colors.whitest_grey,
         "& .iconClass": {
           backgroundColor: Colors.white,
+        },
+        "& .actionBtnClass": {
+          display: "flex",
+          justifyContent: "center",
         },
       },
     },
@@ -170,10 +124,12 @@ export default makeStyles((theme) =>
     itemRow: {
       display: "flex",
       alignItems: "center",
+      width: "100%",
       minHeight: "60px",
       padding: theme.spacing(1.5),
     },
     editItemRow: {
+      "width": "100%",
       "border": `1px solid ${Colors.dodger_blue}`,
       "position": "relative",
       "flexWrap": "wrap",
@@ -181,17 +137,15 @@ export default makeStyles((theme) =>
         marginBottom: 0,
       },
     },
-    actionButtonParentDiv: {
-      width: "100%",
-      position: "relative",
-    },
     actionButtonChildDiv: {
       width: "100px",
       backgroundColor: Colors.dodger_blue,
       position: "absolute",
-      right: `calc(${theme.spacing(-1.5)}px - 1px)`,
-      bottom: `calc(${theme.spacing(-6.5)}px - 1px)`,
+      right: 0,
+      // right: `calc(${theme.spacing(-1.5)}px - 1px)`,
+      // bottom: `calc(${theme.spacing(-6.5)}px - 1px)`,
       borderRadius: theme.spacing(0, 0, .5, .5),
+      zIndex: 100,
       display: "flex",
       justifyContent: "center",
     },
@@ -200,6 +154,11 @@ export default makeStyles((theme) =>
       padding: theme.spacing(.5),
       minWidth: "auto",
       border: theme.spacing(1),
+    },
+    actionButtonDelete: {
+      "& svg": {
+        fill: Colors.latest_red_varient,
+      },
     },
     moreDetails: {
       padding: theme.spacing(0, 1.5, 0, 5.5),

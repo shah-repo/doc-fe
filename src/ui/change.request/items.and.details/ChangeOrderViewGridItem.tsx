@@ -13,6 +13,10 @@ import useStyles from "./ChangeOrderGrid.styles";
 import { generateDocTitleText } from "./helpers";
 import { ChangeOrderViewItemProps, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
 
+import { Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+
 const ChangeOrderViewGridItem: React.FunctionComponent<ChangeOrderViewItemProps> = ({
   docRevId,
   documentId,
@@ -85,7 +89,7 @@ const ChangeOrderViewGridItem: React.FunctionComponent<ChangeOrderViewItemProps>
   };
 
   return (
-    <div className={cx(classes.enclosingDiv, classes.enclosingDivColor, {
+    <div className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
       [classes.enclosingDivOpened]: expanded,
     })}>
       <div className={classes.itemRow}>
@@ -119,6 +123,14 @@ const ChangeOrderViewGridItem: React.FunctionComponent<ChangeOrderViewItemProps>
           </ul>
         </div>
       }
+      <div className={cx(classes.actionButtonChildDiv, "actionBtnClass")}>
+        <Button className={cx(classes.actionButton, classes.actionButtonDelete)}>
+          <DeleteIcon className={classes.iconButton} />
+        </Button>
+        <Button className={classes.actionButton}>
+          <EditIcon className={classes.iconButton} />
+        </Button>
+      </div>
     </div>
   );
 };

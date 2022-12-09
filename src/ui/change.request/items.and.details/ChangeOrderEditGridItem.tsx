@@ -26,49 +26,49 @@ const ChangeOrderEditGridItem: React.FunctionComponent<{
 
   return (
     <FBForm {...{ formState }} >
-      <div className={cx(classes.itemRow, classes.editItemRow)}>
-        <div className={classes.cellOne}>
-          <FBAutocompleteAsync
-            name="proposedDocumentRevision"
-            label=""
-            placeholder="form.builder.select.document"
-            optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
-            optionValueType="id"
-            rules="required"
-            {...{ disabledOptions }}
-            shouldReloadOnInit
-            autoCompleteClasses={{ option: classes.option }}
-          />
-        </div>
-        <div className={cx(classes.cellTwo, classes.itemLeftPadding)}>
-          <FBTextField
-            name="descriptionOfChange"
-            label=""
-            placeholder="form.builder.enter.text"
-            rules="required"
-            multiline={true}
-            rows={1}
-          />
-        </div>
-        <div className={cx(classes.cellThree, classes.itemLeftPadding)}>
-          <FBTextField
-            name="justificationOfChange"
-            label=""
-            placeholder="form.builder.enter.text"
-            rules="required"
-            multiline={true}
-            rows={1}
-          />
-        </div>
-        <div className={classes.actionButtonParentDiv}>
-          <div className={classes.actionButtonChildDiv}>
-            <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
-              <ClearIcon className={classes.iconButton}/>
-            </Button>
-            <Button className={classes.actionButton} onClick = {addRevisionToChangeRequest}>
-              <DoneIcon className={classes.iconButton} />
-            </Button>
+      <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)}>
+        <div className={cx(classes.itemRow, classes.editItemRow)}>
+          <div className={classes.cellOne}>
+            <FBAutocompleteAsync
+              name="proposedDocumentRevision"
+              label=""
+              placeholder="form.builder.select.document"
+              optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
+              optionValueType="id"
+              rules="required"
+              {...{ disabledOptions }}
+              shouldReloadOnInit
+              autoCompleteClasses={{ option: classes.option }}
+            />
           </div>
+          <div className={cx(classes.cellTwo, classes.itemLeftPadding)}>
+            <FBTextField
+              name="descriptionOfChange"
+              label=""
+              placeholder="form.builder.enter.text"
+              rules="required"
+              multiline={true}
+              rows={1}
+            />
+          </div>
+          <div className={cx(classes.cellThree, classes.itemLeftPadding)}>
+            <FBTextField
+              name="justificationOfChange"
+              label=""
+              placeholder="form.builder.enter.text"
+              rules="required"
+              multiline={true}
+              rows={1}
+            />
+          </div>
+        </div>
+        <div className={classes.actionButtonChildDiv}>
+          <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
+            <ClearIcon className={classes.iconButton}/>
+          </Button>
+          <Button className={classes.actionButton} onClick = {addRevisionToChangeRequest}>
+            <DoneIcon className={classes.iconButton} />
+          </Button>
         </div>
       </div>
     </FBForm>
