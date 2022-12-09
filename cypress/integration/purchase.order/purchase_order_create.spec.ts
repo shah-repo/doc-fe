@@ -1181,6 +1181,7 @@ context("Create company with JSON's", () => {
       cy.get(".MuiPickersDay-daySelected").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Check Tax box", () => {
@@ -1235,14 +1236,6 @@ context("Create company with JSON's", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Add Required Date", () => {
-      SystemRequirement("REQ-1410");
-      cy.get("[name='date']").next().find("button").arrowClick();
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Check Tax box", () => {
       SystemRequirement("REQ-1450");
       cy.poSelectTaxCheckbox();
@@ -1281,12 +1274,16 @@ context("Create company with JSON's", () => {
     it("Check Tax value", () => {
       SystemRequirement("REQ-1450");
       cy.poCheckTax({ number: "2.775000" });
+      cy.unClick();
     });
 
     it("Check Total value", () => {
       SystemRequirement("REQ-1440");
-      cy.unClick();
       cy.get("[data-cy='poTotal']").should("have.text", "$34.77");
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
