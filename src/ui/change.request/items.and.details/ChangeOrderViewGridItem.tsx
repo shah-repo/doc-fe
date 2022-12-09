@@ -11,23 +11,24 @@ import { FBEndpoint } from "../../form.builder/defaults/FBEndpoint";
 import FBRequest from "../../form.builder/FBApi/FBApi.request";
 import useStyles from "./ChangeOrderGrid.styles";
 import { generateDocTitleText } from "./helpers";
-import { ChangeOrderViewItemProps, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
+import { ChangeOrderGridItem, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
 
 import { Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 
-const ChangeOrderViewGridItem: React.FunctionComponent<ChangeOrderViewItemProps> = ({
-  docRevId,
-  documentId,
-  titleText,
-  displayRevision,
-  id,
-  isPart,
-  justificationOfChange,
-  descriptionOfChange,
+const ChangeOrderViewGridItem: React.FunctionComponent<{
+  entry: ChangeOrderGridItem;
+  editItem: () => void;
+}> = ({
+  entry,
+  editItem,
 }) => {
   const classes = useStyles();
+  const {
+    docRevId, documentId, titleText, displayRevision, id, isPart, justificationOfChange, descriptionOfChange,
+  } = entry;
+
   console.log(docRevId,
     titleText,
     id,
@@ -65,8 +66,9 @@ const ChangeOrderViewGridItem: React.FunctionComponent<ChangeOrderViewItemProps>
 
   const getDocumentDetails = async () => {
     if (!documentId) {
-      const { docId, group, documentId, displayRevision, name }:
-      FBDocumentRevisionResponse = await documentDetailsApi.fetch();
+      const {
+        docId, group, documentId, displayRevision, name,
+      }: FBDocumentRevisionResponse = await documentDetailsApi.fetch();
       const documentTitleText = generateDocTitleText(docId, displayRevision, name);
       setDocTitle(documentTitleText);
       if (group === DOC_TYPE_GROUP.PART) {
@@ -128,7 +130,7 @@ const ChangeOrderViewGridItem: React.FunctionComponent<ChangeOrderViewItemProps>
           <DeleteIcon className={classes.iconButton} />
         </Button>
         <Button className={classes.actionButton}>
-          <EditIcon className={classes.iconButton} />
+          <EditIcon className={classes.iconButton} onClick={editItem}/>
         </Button>
       </div>
     </div>

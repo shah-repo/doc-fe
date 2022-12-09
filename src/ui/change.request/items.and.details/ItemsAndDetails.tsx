@@ -9,7 +9,7 @@ import { FBFormState } from "../../form.builder";
 import ChangeOrderEditGridItem from "./ChangeOrderEditGridItem";
 import useStyles from "./ChangeOrderGrid.styles";
 import ChangeOrderGridHeader from "./ChangeOrderGridHeader";
-import ChangeOrderViewGridItem from "./ChangeOrderViewGridItem";
+import ChangeOrderItem from "./ChangeOrderItem";
 import { useItemsAndDetailsStore } from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
 
@@ -99,9 +99,11 @@ const ItemsAndDetails: React.FunctionComponent<{
       />}
       {
         itemsAndDetailsStore.changeOrderItemsList.map((entry: ChangeOrderGridItem) => (
-          <ChangeOrderViewGridItem
+          <ChangeOrderItem
             key={`fb-document-revision-${entry.id}`}
-            {...entry}
+            entry={entry}
+            {...{ formState }}
+            disabledOptions={disabledOptions}
           />
         ))
       }

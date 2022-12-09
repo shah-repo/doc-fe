@@ -14,32 +14,41 @@ const ChangeOrderEditGridItem: React.FunctionComponent<{
   formState: FBFormState;
   addRevisionToChangeRequest: () => void;
   resetAndCancelEdit?: () => void;
+  showAutoComplete? : boolean;
+  titleText?: string;
 }> = ({
   disabledOptions,
   formState,
   addRevisionToChangeRequest,
   resetAndCancelEdit,
+  showAutoComplete = true,
+  titleText,
 }) => {
   const classes = useStyles();
 
-  console.log(formState);
+  // console.log(formState.getValues());
+  // formState.errors.clear();
+  // console.log(formState.errors);
 
   return (
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)}>
         <div className={cx(classes.itemRow, classes.editItemRow)}>
           <div className={classes.cellOne}>
-            <FBAutocompleteAsync
-              name="proposedDocumentRevision"
-              label=""
-              placeholder="form.builder.select.document"
-              optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
-              optionValueType="id"
-              rules="required"
-              {...{ disabledOptions }}
-              shouldReloadOnInit
-              autoCompleteClasses={{ option: classes.option }}
-            />
+            { showAutoComplete &&
+              <FBAutocompleteAsync
+                name="proposedDocumentRevision"
+                label=""
+                placeholder="form.builder.select.document"
+                optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
+                optionValueType="id"
+                rules="required"
+                {...{ disabledOptions }}
+                shouldReloadOnInit
+                autoCompleteClasses={{ option: classes.option }}
+              />
+            }
+            { !showAutoComplete && <span>{titleText}</span>}
           </div>
           <div className={cx(classes.cellTwo, classes.itemLeftPadding)}>
             <FBTextField
