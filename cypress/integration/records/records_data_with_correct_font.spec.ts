@@ -45,16 +45,16 @@ context("records_data_with_correct_font", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[11].email,
+            companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[12], USERS[13], USERS[14]],
+            users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               RecordOne,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           RDdocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record one");
           done();
         });
@@ -63,7 +63,7 @@ context("records_data_with_correct_font", () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[11].email,
+        email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -158,7 +158,7 @@ context("records_data_with_correct_font", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
   });
 
@@ -395,24 +395,14 @@ context("records_data_with_correct_font", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Select approver for first inline", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get("[name*=\"fb-ia-inline-approval-\"] input")
-          .autocompleteSelect(`${USERS[11].name}`, { force: true });
+          .autocompleteSelect(`${USERS[1].name}`, { force: true });
         cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
-      });
-
-      it("Click on Save", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve record button click", () => {
@@ -493,11 +483,11 @@ context("records_data_with_correct_font", () => {
     });
 
     context("Verify The side bar options History's fonts", () => {
-      it(`Verify ${USERS[11].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
         cy.get(`[data-cy="timeline-icon"]`).arrowClick();
         cy.get(`[data-cy="change-key-0"]`)
           .checkStylePropExists({
-            content: USERS[11].name,
+            content: USERS[1].name,
             props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
           });
       });
@@ -510,18 +500,18 @@ context("records_data_with_correct_font", () => {
           });
       });
 
-      it(`Verify 'Set to Released by ${USERS[11].name} font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
+      it(`Verify 'Set to Released by ${USERS[1].name} font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
         cy.get(`[data-cy="change-value-0-0"]`)
           .checkStylePropExists({
-            content: `Set to Released by ${USERS[11].name}`,
+            content: `Set to Released by ${USERS[1].name}`,
             props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
           });
       });
 
-      it(`Verify ${USERS[11].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
+      it(`Verify ${USERS[1].name} font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
         cy.get(`[data-cy="change-key-1"]`)
           .checkStylePropExists({
-            content: USERS[11].name,
+            content: USERS[1].name,
             props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
           });
       });
@@ -622,7 +612,7 @@ context("records_data_with_correct_font", () => {
       it(`Verify the side bar owner font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight ${FONT_WT_600}`, () => {
         cy.get(`[data-cy="user-name"]`)
           .checkStylePropExists({
-            content: USERS[11].name,
+            content: USERS[1].name,
             props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
           });
       });
@@ -677,7 +667,7 @@ context("records_data_with_correct_font", () => {
       it(`Verify the side bar 'Released by' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
         cy.get(`[data-cy="releasedBy"]`)
           .checkStylePropExists({
-            content: `Released by: ${USERS[11].name}`,
+            content: `Released by: ${USERS[1].name}`,
             props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
           });
       });
