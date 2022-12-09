@@ -1032,10 +1032,6 @@ context("Create company with JSON's", () => {
         .contains((poCreationDate1 || poCreationDate2));
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Switch to Details tab", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
@@ -1234,6 +1230,15 @@ context("Create company with JSON's", () => {
       cy.poNumberOfUnits({ number: "2" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add Required Date", () => {
+      SystemRequirement("REQ-1410");
+      cy.get("[name='date']").next().find("button").arrowClick();
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Check Tax box", () => {
