@@ -409,12 +409,14 @@ context("records_data_with_correct_font", () => {
         cy.ebApproveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(5000);
       });
 
       it("Click on ‘Approve & Release’", () => {
         cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(1000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get("[data-cy=\"AlertDialog-continueButton\"]").contains("Yes, I'm sure").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
