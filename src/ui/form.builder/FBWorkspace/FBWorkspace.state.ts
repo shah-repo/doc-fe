@@ -242,7 +242,7 @@ class FBWorkspaceState extends FBSchemaState {
     });
   };
 
-  private setFormInputData = (data?: DocumentRevision) => {
+  public setFormInputData = (data?: DocumentRevision) => {
     const { formInput = {} } = data ?? {};
     this.formInput = formInput;
     map(formInput, (value, key) => {
