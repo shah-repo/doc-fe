@@ -1,9 +1,9 @@
-import { Box } from "@material-ui/core";
 import { find, get, map, unionBy } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
 import { toastError } from "../../components/notifications";
 import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
+import DocumentPreview from "../../documentRevision/forms/presenters/FBActiveNoOutput/components/DocumentPreview";
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   Component: React.FunctionComponent<T>,
@@ -105,9 +105,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
         maxWidth: "md",
         title: "form.builder.form.preview",
         content: (
-          <Box mx={8}>
-            <FBForm schema={workspaceState?.schema} initialValidation={true} workspaceMode="form" />
-          </Box>
+          <DocumentPreview docRevId={workspaceState?.id} />
         ),
       });
     };
