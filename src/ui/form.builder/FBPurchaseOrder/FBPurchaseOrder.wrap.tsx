@@ -28,7 +28,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   }: T) => {
 
     const dispatch = useDispatch();
-    const {  asyncState } = React.useContext(FormHeaderContext)!;
+    const headerContext = React.useContext(FormHeaderContext)!;
     const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
@@ -97,7 +97,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
 
     const loading = useObserver(() =>
       Boolean(
-        asyncState?.status === AsyncStatus.Active
+        headerContext?.asyncState?.status === AsyncStatus.Active
       || workspaceState?.loading
       || purchaseOrderState?.loading
       || poReceiveState?.loading
