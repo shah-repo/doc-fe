@@ -1255,6 +1255,10 @@ context("Create company with JSON's", () => {
       cy.poCheckForLineItemsAndTheirID({ firstId: "1", secondId: "2" });
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Check currency options dropdown", () => {
       SystemRequirement("REQ-1320");
       cy.poCheckCurrency();
@@ -1263,12 +1267,18 @@ context("Create company with JSON's", () => {
     it("Select Currency 'USD'", () => {
       cy.poSelectCurrency({ currencyValue: "USD" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Shipping Cost", () => {
       cy.poShippingCost({ number: "2" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
 
     it("Check Subtotal value", () => {
