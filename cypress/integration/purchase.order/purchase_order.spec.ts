@@ -734,6 +734,8 @@ context("PO test", () => {
     });
 
     it("Click 'Approve' button", () => {
+      // getting into ENC-13421 issue.
+      // note that work-around for ENC-13421 does not work when "Correct PO" option is choosen
       cy.ebApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
