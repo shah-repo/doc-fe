@@ -45,7 +45,7 @@ const COLUMN_HEADERS = [
   "ORDER DATE",
 ];
 
-context("Add Requestor as an approver of the PO", () => {
+context("Add Requestor as an approver of the PO - ENC-12702", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

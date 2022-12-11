@@ -130,9 +130,9 @@ context("PO test", () => {
       cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
+    // it("Turn off autosave", () => {
+    //   cy.cmpTurnOffAutosave();
+    // });
 
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
@@ -327,6 +327,8 @@ context("PO test", () => {
 
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Uploads text.docx", () => {
@@ -339,6 +341,8 @@ context("PO test", () => {
     it("Click on 'Add item' button", () => {
       SystemRequirement("REQ-1360");
       cy.poAddNewFieldItem();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
@@ -385,7 +389,7 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enter number of Units", () => {
+    it("Enter Unit Price", () => {
       SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
       cy.progressBarShouldNotExist();
@@ -452,7 +456,7 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enter number of Units", () => {
+    it("Enter Unit Price", () => {
       SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
       cy.progressBarShouldNotExist();
@@ -480,17 +484,15 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Save PO", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Check line items have unique IDs", () => {
       SystemRequirement("REQ-1380");
       cy.poCheckForLineItemsAndTheirID({ firstId: "1", secondId: "2" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Check currency options dropdown", () => {
@@ -506,6 +508,17 @@ context("PO test", () => {
 
     it("Enter Shipping Cost", () => {
       cy.poShippingCost({ number: "2" });
+      cy.wait(3000);
+    });
+
+    it("Save PO", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
 
     it("Check Subtotal value", () => {
@@ -522,6 +535,7 @@ context("PO test", () => {
       cy.get("[data-cy=\"poTotal\"]").should("have.text", "$34.77");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
   });
 
@@ -539,16 +553,16 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enter Supplier Title 'Supplier'", () => {
+    it("Enter Supplier Name 'Supplier'", () => {
       cy.get("[data-cy=\"name\"]").arrowType("Supplier");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enter Supplier Description 'Supplier Description'", () => {
-      cy.xpath("//div[@data-cy=\"description\"]/../div[2]").eq(1).arrowClick();
-      cy.get("[data-cy=\"description\"]>div>div>div>div>div[contenteditable]").eq(1).clear()
-        .arrowType("Supplier Description").wait(500);
+    it("Enter Supplier Address/Phone as 'Supplier Description'", () => {
+      cy.xpath("//div[@data-cy='description']/../div[2]").eq(1).arrowClick().wait(1000);
+      cy.get("[data-cy='description'] div[contenteditable]").eq(1).clear();
+      cy.get("[data-cy='description'] div[contenteditable]").eq(1).arrowType("Supplier Description");
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -556,7 +570,6 @@ context("PO test", () => {
     });
 
     it("Select Document Type 'Supplier'", () => {
-      cy.listLoadingElementShouldNotExist();
       cy.get("[name=\"document.documentType.id\"]").autocompleteSelect("Supplier");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -578,20 +591,10 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Turn on autosave", () => {
-      cy.cmpTurnOnAutosave();
-    });
-
     it("While autosaving, select requestor", () => {
-      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }, (req) => {
-        req.reply((res) => {
-          res.setDelay(10000);
-          res.setThrottle(10);
-        });
-      }).as("response");
+      cy.get("[data-cy^=\"po-requestor-\"]").autocompleteSelect(`${USERS[11].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy^=\"po-requestor-\"]").autocompleteSelect(`${USERS[11].name}`);
     });
   });
 
@@ -646,6 +649,7 @@ context("PO test", () => {
       cy.drSelectLineItems();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("delete line item and check for autosave", () => {
@@ -690,11 +694,6 @@ context("PO test", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy="revision"]`).eq(0).contains("Revision 1");
-      // cy.get(" [data-cy^=\"revision\"]").eq(0)
-      //   .then(($el) => {
-      //     const text = $el.text();
-      //     expect(text.replace(/\u00a0/g, " ")).to.contain("Revision 1");
-      //   });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -708,12 +707,14 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Select 'Correct PO' revision stage", () => {
       cy.drChooseTypeOfRevisionChangeOption({ option: "Correct PO" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save PO", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -725,35 +726,17 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Save PO", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.pause();
-
-      // cy.url().then((url: any) => {
-      //   createdRevisePoFormDocumentId = url.split("/").pop();
-      // });
-    });
-
-    // it("Reload PO", () => {
-    //   cy.url().then((url: any) => {
-    //     const docIdFromUrl = url.split("/").pop();
-    //     // eslint-disable-next-line max-len
-    //     const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdRevisePoFormDocumentId}/version/${docIdFromUrl}`;
-    //     cy.visit(newPMUrl);
-    //   });
-    //   cy.progressBarShouldNotExist();
-    //   cy.listLoadingElementShouldNotExist();
-    // });
-
     it("Click 'Submit for Approval' button", () => {
       SystemRequirement("REQ-1490");
       cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {
       cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check PO status is 'Closed'", () => {
@@ -1044,10 +1027,6 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
-
     it("Select 'Cancel PO' revision stage", () => {
       cy.drChooseTypeOfRevisionChangeOption({ option: "Cancel PO" });
       cy.progressBarShouldNotExist();
@@ -1071,19 +1050,12 @@ context("PO test", () => {
       });
     });
 
-    it("Reload PO", () => {
-      cy.url().then((url: any) => {
-        const docIdFromUrl = url.split("/").pop();
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdRevisePoFormDocumentId}/version/${docIdFromUrl}`;
-        cy.visit(newPMUrl);
-      });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Click 'Void' button", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+
       cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
       cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
       cy.progressBarShouldNotExist();
@@ -1102,10 +1074,6 @@ context("PO test", () => {
 
 
   context("Creates second PO form document and checks if both documents are available when creating new PO", () => {
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
-
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
