@@ -6,8 +6,6 @@ const styles = () => ({
   root: {
     "backgroundColor": Colors.white,
     "borderRadius": "3px",
-    "fontFamily": "Sora",
-    "fontStyle": "normal",
     "font-weight": "bold",
     "fontSize": "12px",
     "lineHeight": "15px",
@@ -25,7 +23,6 @@ const styles = () => ({
   labelSmall: {
     "fontSize": "12px",
     "fontWeight": 700,
-    "fontFamily": "Sora",
     "text-transform": "uppercase",
   },
 });

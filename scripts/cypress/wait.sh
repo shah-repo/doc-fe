@@ -18,7 +18,6 @@ until [ $(curl -o /dev/null -s -w %{http_code} $CYPRESS_BE_URL/api/v1/healthchec
     printf '.'
     sleep 2
 done
-echo ""
 
 printf 'Waiting for frontend .'
 until $(curl --output /dev/null --silent --head --fail $CYPRESS_FE_URL); do
@@ -27,3 +26,4 @@ until $(curl --output /dev/null --silent --head --fail $CYPRESS_FE_URL); do
 done
 
 echo ""
+

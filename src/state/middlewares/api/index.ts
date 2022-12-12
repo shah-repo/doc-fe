@@ -3,6 +3,7 @@ import { first, get, has, isArray, join } from "lodash";
 import { Action, Dispatch, Middleware, MiddlewareAPI } from "redux";
 import { intl } from "../../../common/intl";
 import { redirectTo } from "../../../common/redirectHandler";
+import { encodeString } from "../../../common/utils/helpers";
 import { EXPORTED_FILE_DOWNLOAD, MAINTENANCE, STATUS, USER_LOCKED } from "../../../ui/constants/urls";
 import apiClient from "../../apiClient";
 import apiXClient from "../../apiXClient";
@@ -75,7 +76,7 @@ const apiMiddleware: Middleware = ({
     if (action.password) {
       const authorization = `bearer_password ${
         getState().auth.user.employeeId
-      }:${getState().auth.user.sessionId}:${action.password}`;
+      }:${getState().auth.user.sessionId}:${encodeString(action.password)}`;
 
       requestConfig.headers.Authorization = authorization;
     }

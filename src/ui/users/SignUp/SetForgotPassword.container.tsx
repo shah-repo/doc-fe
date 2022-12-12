@@ -27,6 +27,10 @@ const SetForgotPasswordContainer: React.FunctionComponent<SetForgotPasswordConta
   });
 
   const onSubmit = (confirmValues: PasswordValues): void => {
+    // Reset async state with previous error messages to allow showing a new one.
+    // @todo: fix showing logic in FormMessage.tsx to avoid this resetting.
+    async.reset();
+
     dispatch(
       authActions.confirmNewPassword(
         {

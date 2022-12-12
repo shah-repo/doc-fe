@@ -1,6 +1,7 @@
 import { first, get, has, isArray, isEmpty, isString, isUndefined, join, template } from "lodash";
 import { action, observable, set } from "mobx";
 import { apiClient, FBRequestSet, FBRequestTemplateUrl } from "..";
+import { encodeString } from "../../../common/utils/helpers";
 import apiXClient from "../../../state/apiXClient";
 import { store } from "../../../state/store";
 import { ApiActionMethod } from "../../../state/types";
@@ -71,7 +72,9 @@ export default class FBRequest<Data, Body> {
     url && this.setUrl(url);
     urlValues && this.setUrl(urlValues);
     body && this.setBody(body);
-    method && this.start(method, callback);
+    if (method) {
+      return this.start(method, callback);
+    }
   };
 
   public onSuccess() {
@@ -96,7 +99,7 @@ export default class FBRequest<Data, Body> {
     const headers = this.body?.password ? {
       Authorization: `bearer_password ${
         store.getState().auth.user.employeeId
-      }:${store.getState().auth.user.sessionId}:${this.body?.password}`,
+      }:${store.getState().auth.user.sessionId}:${encodeString(this.body.password)}`,
     } : undefined;
 
     if (this.publicApi) {

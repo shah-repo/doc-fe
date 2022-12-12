@@ -3,8 +3,11 @@
 /// <reference types="Cypress" />
 
 import { GroupTag } from "../../../src/state/ducks/auth/types";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -40,182 +43,8 @@ context("Export training curriculum", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Training Curriculum test",
-                documentTypeAcronym: "TC-",
-                group: "TRAINING_CURRICULUM",
-                privateNumberPool: true,
-                canRedLine: false,
-                isQms: true,
-                needsSignature: true,
-                defaultTraining: false,
-                startingNumber: 1,
-                hiddenForCreationForUsersWithoutTags: [],
-                fieldsConfig: {
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    label: "Training Required",
-                    visible: false,
-                  },
-                  N: {
-                    label: "Finalize and Release",
-                    visible: false,
-                  },
-                },
-                defaultRevStage: "Alpha",
-                schema: [
-                  {
-                    name: "training-curriculum-details-section",
-                    type: "section",
-                    index: 0,
-                    label: "Periodic Training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Periodic Training",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-document-to-be-trained-on",
-                    type: "autocomplete",
-                    index: 1,
-                    label: "Documents to Train on",
-                    rules: "|required",
-                    multiple: true,
-                    optionId: "36",
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    placeholder: "Select documents for training",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "visibility",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Documents to Train on",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-refresh-training-periodically",
-                    type: "radiogroup",
-                    index: 2,
-                    label: "Refresh/repeat training periodically?",
-                    rules: "required||",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if: false,
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if_in: false,
-                    },
-                    rulesObject: {},
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    validationAttribute: "Refresh/repeat training periodically?",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-validity",
-                    type: "quantity",
-                    index: 3,
-                    label: "Training Frequency (in days)",
-                    rules: "required_if:training-refresh-training-periodically,Yes",
-                    validators: {
-                      // eslint-disable-next-line @typescript-eslint/camelcase
-                      required_if: {
-                        name: "training-refresh-training-periodically",
-                        value: [
-                          "Yes",
-                        ],
-                      },
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "visibility",
-                    validationAttribute: "Training Frequency (in days)",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-details-section",
-                    type: "section",
-                    index: 4,
-                    label: "Trainees Details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Trainees Details",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-groups-to-train",
-                    type: "autocomplete",
-                    index: 5,
-                    label: "Groups to Train",
-                    multiple: true,
-                    optionId: "10",
-                    placeholder: "Select groups",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Groups to Train",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "training-select-users-to-train",
-                    type: "autocomplete",
-                    index: 6,
-                    label: "Users to Train (if applicable)",
-                    multiple: true,
-                    optionId: "13",
-                    placeholder: "Select users",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Users to Train (if applicable)",
-                    applicableValidationSchema: true,
-                  },
-                ],
-                category: "Training Curriculums",
-                active: true,
-              },
+              ClinicalProtocolNotRedline,
+              TrainingCurriculum,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -516,8 +345,24 @@ context("Export training curriculum", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
 
+    it("Save training", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Save training", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Periodic training should be displayed", () => {
@@ -551,24 +396,21 @@ context("Export training curriculum", () => {
         });
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
   context("TC with Draft status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-1-test-training" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Draft", filename: "-1-test-training",
+        status: STATUS_TYPES_LABEL.DRAFT,
+      });
     });
   });
 
@@ -578,7 +420,10 @@ context("Export training curriculum", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-1-test-training" });
+      cy.exportVerifyEmail({
+        pdfStatus: "In Review", filename: "-1-test-training",
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+      });
     });
   });
 
@@ -588,7 +433,10 @@ context("Export training curriculum", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Released", filename: "-1-test-training" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Released", filename: "-1-test-training",
+        status: STATUS_TYPES_LABEL.RELEASED,
+      });
     });
   });
 
@@ -601,7 +449,7 @@ context("Export training curriculum", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       cy.get("[name=\"voidDescription\"]").arrowType("test");
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").arrowClick();
+        cy.get("[data-cy=\"common.true\"]").arrowClick({ multiple: true });
       });
     });
 
@@ -610,11 +458,18 @@ context("Export training curriculum", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Obsolete", filename: "-OBS-test-training" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Obsolete", filename: "-OBS-test-training",
+        status: STATUS_TYPES_LABEL.OBSOLETE,
+      });
     });
   });
 
   context("TC with Superseded status", () => {
+    it("Select Revision", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Superseded' record", () => {
       cy.contains("Superseded").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -622,7 +477,10 @@ context("Export training curriculum", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Superseded", filename: "-1-test-training" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Superseded", filename: "-1-test-training",
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+      });
     });
   });
 
@@ -652,8 +510,24 @@ context("Export training curriculum", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
 
+    it("Save training", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.atchOtherUploadAttachment({ fileName: "image.jpg" });
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Periodic training should be displayed", () => {
@@ -687,22 +561,12 @@ context("Export training curriculum", () => {
         });
     });
 
-    it("Upload logo picture 'image.jpg'", () => {
-      cy.atchOtherUploadAttachment({ fileName: "image.jpg" });
-    });
-
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
-    it("Verify training status should be 'Draft'", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Verify training status should be '${STATUS_TYPES_LABEL.DRAFT}'`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Void button", () => {
@@ -712,7 +576,7 @@ context("Export training curriculum", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-1-Void" });
+      cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-1-Void", status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 
@@ -742,8 +606,20 @@ context("Export training curriculum", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
 
+    it("Save training", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Periodic training should be displayed", () => {
@@ -777,14 +653,8 @@ context("Export training curriculum", () => {
         });
     });
 
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-    });
-
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {
@@ -808,7 +678,10 @@ context("Export training curriculum", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Canceled", filename: "-2-test-training" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Canceled", filename: "-2-test-training",
+        status: STATUS_TYPES_LABEL.CANCELED,
+      });
     });
   });
 

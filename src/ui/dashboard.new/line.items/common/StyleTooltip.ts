@@ -7,7 +7,6 @@ const styles = () => ({
   },
   tooltip: {
     backgroundColor: Colors.black,
-    fontFamily: "Sora",
     fontSize: "12px",
   },
   tooltipPlacementTop: {
@@ -15,8 +14,10 @@ const styles = () => ({
   },
   // Need this because of material ui bug with tooltip zIndex
   // Tooltip displays over every other element on top of it
+  // this changes affect all applications tooltips so removed this
   popper: {
     zIndex: 1,
+  //  display: "none",
   },
 });
 

@@ -4,17 +4,21 @@
 
 import moment from "moment";
 import "moment-timezone";
+import { TIME_ZONE } from "../../../src/common/utils/date";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { emailDateOffset } from "../../utils/constants/dateHandler";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
+const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
 
 let employeeLoginFirst;
 let recordDocumentType;
@@ -28,11 +32,8 @@ let loginResponse;
 let secondEmployee;
 let thirdEmployee;
 let emailsFromInbox: IMAPEmail[];
-
-const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
-const currentDate = moment().tz("America/Los_Angeles").format("MMM D, YYYY");
+let dateAfterEmailShouldArrive;
+let getEmailSetting;
 
 context("Records Inline approval email popup modal", () => {
   before(() => {
@@ -61,13 +62,7 @@ context("Records Inline approval email popup modal", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-              },
+              RecordDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -141,6 +136,7 @@ context("Records Inline approval email popup modal", () => {
                     name: "fb-approvals-l02u8tzp",
                     uniqueSchemaItem: true,
                     index: 0,
+                    tabId: "overview",
                   },
                   {
                     index: 1,
@@ -148,6 +144,7 @@ context("Records Inline approval email popup modal", () => {
                     name: "textfield-kn7fc209",
                     validationMode: "default",
                     label: "Section 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -161,6 +158,7 @@ context("Records Inline approval email popup modal", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 1",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -170,6 +168,7 @@ context("Records Inline approval email popup modal", () => {
                   {
                     index: 3,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "inline-approval-kw6gbxwm",
                     hidden: false,
                     outputDisabled: false,
@@ -195,6 +194,7 @@ context("Records Inline approval email popup modal", () => {
                     name: "textfield-kn7fc208",
                     validationMode: "default",
                     label: "Section 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -208,6 +208,7 @@ context("Records Inline approval email popup modal", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "textfield 2",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -217,6 +218,7 @@ context("Records Inline approval email popup modal", () => {
                   {
                     index: 6,
                     type: "inlineapproval",
+                    tabId: "details",
                     name: "inline-approval-kw6gbxwn",
                     hidden: false,
                     outputDisabled: false,
@@ -283,10 +285,15 @@ context("Records Inline approval email popup modal", () => {
 
     it("Click on Create New button", () => {
       cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.wait(5000);
     });
 
     it("Enter title", () => {
-      cy.drEnterDocumentTitle( { name: "Record inline form" });
+      cy.drEnterDocumentTitle({ name: "Record inline form" });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Enter text in textfield", () => {
@@ -298,7 +305,10 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Add inline approver for first section", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).autocompleteSelect(`${FIRST_USER.name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-]").eq(0).arrowClick();
+      cy.get("ul>li[role=option]").contains(FIRST_USER.name).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Request Approval button", () => {
@@ -338,7 +348,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(10000);
+        dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(emailDateOffset, "milliseconds");
       });
     });
   });
@@ -355,24 +365,16 @@ context("Records Inline approval email popup modal", () => {
 
   context("Verify email for pending notification and approve Record", () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
-        after: dateAfterEmailShouldArrive,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
     });
 
@@ -389,8 +391,6 @@ context("Records Inline approval email popup modal", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log("emailsFromInbox", emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
@@ -400,7 +400,18 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: FIRST_USER.email });
+      getEmailSetting =  {
+        to: FIRST_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: FIRST_USER.email, options: getEmailSetting });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Approve Record", () => {
@@ -418,13 +429,15 @@ context("Records Inline approval email popup modal", () => {
     });
   });
 
-  context("Open record and and second approver", () => {
+  context("Open record and add second approver", () => {
     it("Open record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
         cy.contains("Record inline form").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
+
+      cy.drClickRevisionsSidePanel();
 
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
         cy.contains("Revision 2").arrowClick();
@@ -433,8 +446,15 @@ context("Records Inline approval email popup modal", () => {
       });
     });
 
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Add inline approver for last section", () => {
-      cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).autocompleteSelect(`${SECOND_USER.name}`);
+      cy.get("[data-cy^=fb-ia-inline-approval-]").eq(1).scrollIntoView().arrowClick();
+      cy.get("li[role=option]").contains(SECOND_USER.name).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Request Approval button", () => {
@@ -469,7 +489,7 @@ context("Records Inline approval email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        cy.wait(10000);
+        dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(emailDateOffset, "milliseconds");
       });
     });
   });
@@ -486,24 +506,16 @@ context("Records Inline approval email popup modal", () => {
 
   context("Verify email for pending notification and approve Record", () => {
     it("Verify emails", () => {
-      const getEmailSetting =  {
+      getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
-        after: dateAfterEmailShouldArrive,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
-          emailsFromInbox = emails;
-        }
-        else {
-          assert.fail("No email found");
-        }
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
     });
 
@@ -520,8 +532,6 @@ context("Records Inline approval email popup modal", () => {
           ],
         }];
 
-      // eslint-disable-next-line no-console
-      console.log("emailsFromInbox", emailsFromInbox);
       cy.imapVerifyEmailsInList({
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
@@ -531,7 +541,18 @@ context("Records Inline approval email popup modal", () => {
     });
 
     it("Get emails and visit Record approval url", () => {
-      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email });
+      getEmailSetting =  {
+        to: SECOND_USER.email,
+        after: dateAfterEmailShouldArrive,
+        subject: "Can you please approve my request",
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        include_body: true,
+      };
+      cy.imapGetRecordRequestLink({ userEmail: SECOND_USER.email, options: getEmailSetting });
+    });
+
+    it("Open details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Approve Record", () => {
@@ -564,4 +585,3 @@ context("Records Inline approval email popup modal", () => {
 });
 
 export { };
-

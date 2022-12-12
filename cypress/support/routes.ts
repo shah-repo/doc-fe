@@ -52,6 +52,7 @@ export enum CyRoutes {
   PatchAR = "PatchAR",
   GetDocAggregatedAudit = "GetDocAggregatedAudit",
   PostApprovalsApprove = "PostApprovalsApprove",
+  OptionsApprovalsApprove = "OptionsApprovalsApprove",
   GetGroupsApprovalRoles = "GetGroupsApprovalRoles",
   GroupsGetClearFilter = "GroupsGetClearFilter",
   PostChangeRequests = "PostChangeRequests",
@@ -106,6 +107,13 @@ export enum CyRoutes {
   PatchUsersMe = "PatchUsersMe",
   PostExportRev = "PostExportRev",
   PostChangeRequestsSearch = "PostChangeRequestsSearch",
+  AsyncTasks = "AsyncTasks",
+  PostTrainingDue = "PostTrainingDue",
+  AsyncSessionTasks = "AsyncSessionTasks",
+  PostNewUserSetPassword = "PostNewUserSetPassword",
+  GetUsersAudit = "GetUsersAudit",
+  GetGroupsAudit = "GetGroupsAudit",
+  GetUserFavourites ="GetUserFavourites",
 }
 
 export const routes: ICyRoutes =   {
@@ -159,6 +167,26 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/lhr/lhrs/*/use_override",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  AsyncTasks: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/async_tasks",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+      requestTimeout: 30 * 1000,
+    },
+  },
+  AsyncSessionTasks: {
+    requestConfig: {
+      method: "PATCH",
+      url: "/api/v1/async_tasks/sessionTimeTravel",
     },
     callConfig: {
       responseTimeout: 30 * 1000,
@@ -901,6 +929,51 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "POST",
       url: "/api/v1/export/revision/*/email",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+    },
+  },
+  PostTrainingDue: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/training_record/due/*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+    },
+  },
+  PostNewUserSetPassword: {
+    requestConfig: {
+      method: "POST",
+      url: "/api/v1/auth/new_user_set_password",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+    },
+  },
+  GetUsersAudit: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/employees/audit*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+    },
+  },
+  GetGroupsAudit: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/groups/audit*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+    },
+  },
+  GetUserFavourites: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/user_favourites",
     },
     callConfig: {
       responseTimeout: 30 * 1000,

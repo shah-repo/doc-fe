@@ -26,7 +26,6 @@ export const styles = makeStyles((theme: Theme) =>
     },
     noPendingActions: {
       margin: theme.spacing(2),
-      fontFamily: "Open Sans, sans-serif;",
     },
   })
 );

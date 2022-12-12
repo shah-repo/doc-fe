@@ -86,6 +86,7 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
     transition: FBInlineApprovalTransition,
     id?: string,
     body?: FBInlineApprovalTransitionBody,
+    callback?: () => void
   ) => {
     if (!id) { return; }
     this.transitionApi.set({
@@ -93,6 +94,13 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
       urlValues: { id, transition },
       body,
       method: "post",
+    }, (data, error) => {
+      if (error) {
+        return this.transitionApi.onError(error);
+      }
+      this.transitionApi.data = data;
+      this.transitionApi.onSuccess();
+      callback?.();
     });
   };
 }

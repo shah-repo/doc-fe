@@ -18,7 +18,7 @@ const HeaderTooltip: React.FunctionComponent<GridHeaderCellProps> = ({
         data={title}
         childrenElement={
           <span className="k-link" onClick={onClick}>
-            <span className="k-column-title" style={{ textTransform: "capitalize" }}>{title}</span>
+            <span className="k-column-title">{title.toUpperCase()}</span>
             {children}
           </span>
         }

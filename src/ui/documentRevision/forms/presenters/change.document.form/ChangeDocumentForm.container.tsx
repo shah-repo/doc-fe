@@ -11,6 +11,7 @@ import { FormContext } from "../../../../components/forms/FormContext";
 import { FBSchemaProps } from "../../../../form.builder";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
+import useDialog from "../../../../hooks/useDialog";
 import ChangeDocumentFormPresenter from "./ChangeDocumentForm.presenter";
 import { toFieldInitialValues, toUpdateFormRequestBody } from "./utils/transform";
 
@@ -35,6 +36,8 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
   const updateFormAction = useActionCreator(documentRevisionsActions.updateForm);
   const getFormMappingTemplateAction = useActionCreator(documentRevisionsActions.getFormMappingTemplate);
   const availableForms = useSelector(documentTypeSelectors.docRevTypeForms);
+
+  const dialog = useDialog();
 
   const async = useAsync();
   const updateFormAsync = useAsync({
@@ -110,7 +113,7 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
   }, [documentTypeId]);
 
   return (
-    <Box display="flex">
+    <Box p={2}>
       <FormContext.Provider value={{ submitOnChange: false }}>
         <Formik
           initialValues={generateInitialValues}
@@ -118,6 +121,9 @@ const ChangeDocumentFormContainer: React.FunctionComponent<Props> = ({
           enableReinitialize
         >
           <ChangeDocumentFormPresenter
+            isDialogOpen={dialog.isOpen}
+            openDialog={dialog.open}
+            closeDialog={dialog.close}
             updateFormAsyncState={updateFormAsync.asyncState}
             {...{ availableForms, handleFormChange, availableFields, sourceSchema }}
           />

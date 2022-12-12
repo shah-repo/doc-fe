@@ -23,5 +23,3 @@ export const DocumentInfo: React.FunctionComponent<Props> = ({
     </span>
   </Box>
 );
-
-export default DocumentInfo;

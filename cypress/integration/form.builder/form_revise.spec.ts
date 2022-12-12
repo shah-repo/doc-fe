@@ -1,8 +1,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -38,12 +40,7 @@ context("FORM document revise test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -99,17 +96,21 @@ context("FORM document revise test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Add form fields", () => {
       it("Add section field", () => {
         cy.fbAddNewField();
-        cy.fbSelectItemFromNewFieldList({ field: "Section" });
+        cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
         cy.fbEnterLabel({ label: "Test section" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add Text field", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterLabel({ label: "text field" });
         cy.fbEnterPlaceholder({ placeholder: "test placeholder" });
         cy.fbAddNewFieldButton();
@@ -128,7 +129,7 @@ context("FORM document revise test", () => {
       });
 
       it("Verify revision status is 'Revision 1  - Released'", () => {
-        cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 1  - Released" });
+        cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
   });
@@ -149,7 +150,7 @@ context("FORM document revise test", () => {
     });
 
     it("Verify revision status is 'Revision 2  - Released'", () => {
-      cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2  - Released" });
+      cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -173,7 +174,7 @@ context("FORM document revise test", () => {
     });
 
     it("Verify revision status is 'Revision 2.1  - Released'", () => {
-      cy.drVerifyFirstDocumentRevisionList({ revision: "Revision 2.1  - Released" });
+      cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2.1", status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -197,7 +198,7 @@ context("FORM document revise test", () => {
     });
 
     it("Verify revision status is 'Revision OBS  - Obsolete'", () => {
-      cy.drVerifyFirstDocumentRevisionList({ revision: "Revision OBS  - Obsolete" });
+      cy.drVerifyFirstDocumentRevisionList({ revision: "Rev OBS", status: STATUS_TYPES_LABEL.OBSOLETE });
     });
   });
 });

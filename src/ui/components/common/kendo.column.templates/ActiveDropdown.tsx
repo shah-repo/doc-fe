@@ -30,9 +30,7 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   ];
   const isEdit = dataItem.inEdit;
   const disabled = dataItem.isNewRecord || false;
-  const formattedValue = get(dataItem, field || "")
-    ? intl.formatMessage({ id: TranslatedText[DisplayText.ACTIVE] })
-    : intl.formatMessage({ id: TranslatedText[DisplayText.INACTIVE] });
+  const formattedValue = get(dataItem, field || "");
   if (rowType === "groupHeader") {
     return null;
   }
@@ -51,7 +49,10 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
   };
   field = field || "";
   const dataValue = dataItem[field] === null ? "" : dataItem[field];
-
+  const dropDownValue = intl.formatMessage({
+    id: TranslatedText[dataValue ? DisplayText.ACTIVE
+      : DisplayText.INACTIVE],
+  });
   return (
     <td
       colSpan={colSpan}
@@ -64,12 +65,15 @@ export const ActiveDropdown: React.FunctionComponent<GridCellProps> = ({
         <DropDownList
           disabled={disabled}
           onChange={handleChange}
-          value={dropDownData.find((c) => c.value === dataValue)}
+          value={
+            dropDownData.find((c) => c.value === dataValue) || dropDownData[0]
+          }
           data={dropDownData}
           textField="text"
         />
       ) : (
         <div className={classes.topButton}>
+          {dropDownValue}
           <span className={`${classes.dot} ${classes[formattedValue]}`}></span>
           <Tooltip customClass={classes.value} data={formattedValue} />
         </div>

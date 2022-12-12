@@ -85,17 +85,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       // forceNewRender = formState?.getInputState(name || "")?.forceRender;
     });
 
-    // set missing selected autocomplete value
-    React.useEffect(() => reaction(
-      () => autocompleteAsyncState?.autocompleteValueApi.data,
-      (data) => {
-        const { id } = data || {};
-        FBAutocompleteAsyncStore.add(optionId as string, id, data);
-        formState?.getInputState(name || "")?.setRender();
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
     // Add some static additional data to dynamic store list
     useEffect(() => autocompleteAsyncState?.setAdditionalData(additionalData),
       [additionalData, autocompleteAsyncState]);
@@ -111,6 +100,25 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       (options && formValue && !isEmpty(formValue)) && (defaultValue = getDefault());
       refresh = () => autocompleteAsyncState?.load(true);
     }
+
+    // Fetch missing selected autocomplete value
+    React.useEffect(() => reaction(
+      () => autocompleteAsyncState?.autocompleteValueApi.data,
+      (data) => {
+        const { id } = data || {};
+        FBAutocompleteAsyncStore.add(optionId as string, id, data);
+        formState?.getInputState(name || "")?.setRender();
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+    React.useEffect(
+      () => {
+        if (FB.isUUID(defaultValue) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
+          autocompleteAsyncState?.fetchAutocompleteOption(defaultValue, optionId);
+        }
+      },
+      [autocompleteAsyncState, defaultValue, optionId]
+    );
 
     !getOptionLabel && (getOptionLabel = (option) => {
       if (freeSolo && !isObject(option)) {

@@ -1,20 +1,28 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { momentInPST } from "../../utils/constants/dateHandler";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
 let secondEmployee;
 let clinicalProtocolDocumentType;
 let group;
+let asyncTasksGroup;
 const documentRevisionName = "New document for testing AR";
 
-context("Approval request form", () => {
+context("Approval request form", { tags: ["@timetool"] },  () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -38,23 +46,18 @@ context("Approval request form", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
@@ -63,7 +66,7 @@ context("Approval request form", () => {
 
     it("[API]Login first tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -233,12 +236,34 @@ context("Approval request form", () => {
         });
       });
     });
+
+    it("[API]Get group", (done: any) => {
+      cy.grpGetGroupByName({
+        groupName: "Async Tasks",
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+      }).then((response) => {
+        asyncTasksGroup = response;
+        done();
+      });
+    });
+
+    it("[API]Patch group", () => {
+      cy.grpPatchGroup({
+        groupId: asyncTasksGroup.body[0].id,
+        sessionId: loginResponse.sessionId,
+        employeeId: secondEmployee.id,
+        payload: {
+          employees: [{ id: secondEmployee.id }],
+        },
+      });
+    });
   });
 
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -286,11 +311,11 @@ context("Approval request form", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
+      cy.arAddApproverOnApproverList({ approver: USERS[11].email, noWait: true });
       cy.arAddApproverOnApproverList({ approver: USERS[2].email, noWait: true });
       cy.arAddApproverOnApproverList({ approver: USERS[3].email, noWait: true });
     });
@@ -339,15 +364,12 @@ context("Approval request form", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
-    });
-
     it("Save AR", () => {
       cy.arSaveApiCall();
     });
 
     it("Check that in Recent tab, the latest open should appear on top", () => {
+      SystemRequirement("REQ-4990");
       cy.navigToDashboard();
       cy.get("#scrollable-auto-tab-1").arrowClick();
       cy.get("#scrollable-auto-tabpanel-1").find(".MuiGrid-container").eq(0)
@@ -367,7 +389,8 @@ context("Approval request form", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arClickSendToReview();
-      cy.arVerifyStatus({ status: "In Review" });
+      cy.wait(1000);
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Goto dashboard", () => {
@@ -382,29 +405,23 @@ context("Approval request form", () => {
         .and("contain.text", "pending approvals from");
       cy.contains("IN REVIEW").parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`)
+        .should("contain.text", `${USERS[11].name}`)
         .and("contain.text", `${USERS[2].name}`)
         .and("contain.text", `${USERS[3].name}`);
     });
 
     it("Hovering on the status should highlight it", () => {
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
       cy.contains("IN REVIEW").parent().parent().parent().parent()
         .find(".MuiChip-root").trigger("mouseover");
-
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
       cy.contains("IN REVIEW").parent().parent().parent().parent()
         .find(".MuiChip-root").should("have.css", "background-color", "rgb(48, 128, 234)");
     });
 
     it("click on status or approvers should open the email modal box", () => {
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(1)
       cy.contains("IN REVIEW").parent().parent().parent().parent().next()
         .find("a").arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
       cy.get("button[aria-label=close]").last().arrowClick();
-
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find(".MuiGrid-container").eq(0)
       cy.contains("IN REVIEW").parent().parent().parent().parent()
         .find(".MuiGrid-root").eq(2).arrowClick();
       cy.get("#simple-modal-title").should("exist").and("have.text", "Approval Status");
@@ -414,9 +431,6 @@ context("Approval request form", () => {
     it("Clicking on the arrow should show the AR details", () => {
       cy.contains("IN REVIEW").parent().parent().parent().parent().parent().parent().parent()
         .find("svg").eq(0).arrowClick();
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find("svg").eq(0).arrowClick();
-
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).next()
       cy.contains("IN REVIEW").parent().parent().parent().parent().parent().parent().parent().next()
         .find("ul div").eq(0)
         .should("contain.text", "New document for testing AR");
@@ -425,19 +439,10 @@ context("Approval request form", () => {
     it("Close line item by click arrow", () => {
       cy.contains("IN REVIEW").parent().parent().parent().parent().parent().parent().parent()
         .find("svg").eq(0).arrowClick();
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(1).find("svg").eq(0).arrowClick();
     });
 
     it("Hovering AR line item should display buttons", () => {
       cy.contains("needs your approval for").trigger("mouseover");
-      // cy.get(".MuiListItemText-root.MuiListItemText-dense").first().trigger("mouseover");
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-      //   .find("svg").should("have.length", 3);
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-      //   .find("[data-cy=\"transition-approve\"]").should('exist')
-      // cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiBox-root").eq(0)
-      //   .find("[data-cy=\"transition-reject\"]").should('exist')
-
       cy.contains("needs your approval for").parent().parent().parent().parent().parent()
         .find(".MuiBox-root").eq(0)
         .find("svg").should("have.length", 3);
@@ -462,7 +467,7 @@ context("Approval request form", () => {
 
     it("For User 2 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
+        .should("contain.text", USERS[11].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00001")
         .and("contain.text", "Approval request form");
@@ -512,11 +517,11 @@ context("Approval request form", () => {
     });
   });
 
-  context(`Check ${USERS[1].name} dashboard notifications`, () => {
-    it(`Login as ${USERS[1].name}`, () => {
+  context(`Check ${USERS[11].name} dashboard notifications`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
@@ -530,7 +535,7 @@ context("Approval request form", () => {
         .and("contain.text", "pending approvals from");
       cy.contains("IN REVIEW").parent().parent().parent().parent().next()
         .find("span").eq(0)
-        .should("contain.text", `${USERS[1].name}`)
+        .should("contain.text", `${USERS[11].name}`)
         .and("contain.text", `${USERS[3].name}`);
     });
   });
@@ -547,7 +552,7 @@ context("Approval request form", () => {
 
     it("For User 3 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
+        .should("contain.text", USERS[11].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00001")
         .and("contain.text", "Approval request form");
@@ -564,6 +569,7 @@ context("Approval request form", () => {
     });
 
     it("Clicking on the arrow should show the AR details", () => {
+      SystemRequirement("REQ-4970");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find("svg").eq(0).arrowClick();
 
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).next()
@@ -587,17 +593,18 @@ context("Approval request form", () => {
     });
   });
 
-  context(`Check ${USERS[1].name} dashboard notifications`, () => {
-    it(`Login as ${USERS[1].name}`, () => {
+  context(`Check ${USERS[11].name} dashboard notifications`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
 
-    it("there should be a notification that User 3 has rejected AR", () => {
+    it("There should be a notification that User 3 has rejected AR", () => {
+      SystemRequirement("REQ-4980");
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
         .should("contain.text", "AR-00001")
         .and("contain.text", "Approval request form")
@@ -610,8 +617,8 @@ context("Approval request form", () => {
         .find(".MuiGrid-root").eq(2).find("a").arrowClick();
     });
 
-    it("Status should be 'Draft'", () => {
-      cy.arVerifyStatus({ status: "Draft" });
+    it("Status should be 'DRAFT'", () => {
+      cy.arVerifyStatus({ status: "DRAFT" });
     });
 
     it("Click 'Send To Review'", () => {
@@ -624,7 +631,7 @@ context("Approval request form", () => {
       cy.navigToDashboard();
     });
 
-    it(`Approve the AR by ${USERS[1].name}`, () => {
+    it(`Approve the AR by ${USERS[11].name}`, () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.ChangeRequestApproveNew], () => {
           cy.contains("needs your approval for").trigger("mouseover");
@@ -685,11 +692,11 @@ context("Approval request form", () => {
     });
   });
 
-  context(`Check ${USERS[1].name} notifications on dashboard`, () => {
-    it(`Login as ${USERS[1].name}`, () => {
+  context(`Check ${USERS[11].name} notifications on dashboard`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
@@ -766,7 +773,7 @@ context("Approval request form", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add approvers to approval request on approver list", () => {
@@ -781,8 +788,8 @@ context("Approval request form", () => {
       cy.arClickSendToReview();
     });
 
-    it("Verify AR status is 'In Review'", () => {
-      cy.arVerifyStatus({ status: "In Review" });
+    it("Verify AR status is 'IN_REVIEW'", () => {
+      cy.arVerifyStatus({ status: "IN REVIEW" });
     });
 
     it("Goto dashboard", () => {
@@ -811,7 +818,7 @@ context("Approval request form", () => {
 
     it("For User 2 dashboard, it should appear in their My Feed as 'needs your approval'", () => {
       cy.get("[data-cy=dashboardFeedList] .MuiListItem-root").eq(0).find(".MuiGrid-container").eq(0)
-        .should("contain.text", USERS[1].name)
+        .should("contain.text", USERS[11].name)
         .and("contain.text", "needs your approval for")
         .and("contain.text", "AR-00003")
         .and("contain.text", "Approval request form1");
@@ -860,10 +867,10 @@ context("Approval request form", () => {
         .and("contain.text", "Approval request form1");
     });
 
-    it(`Login as ${USERS[1].name}`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
@@ -904,6 +911,245 @@ context("Approval request form", () => {
     });
   });
 
+  context("Navigate to DRAFT approval request and approve request", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter AR by title as 'Second AR'", () => {
+      cy.alFilterByTitle({ title: "Second AR" });
+    });
+
+    it(`Filter list by OWNER as ${USERS[11].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[11].name });
+    });
+
+    it("Filter list by STATUS as DRAFT", () => {
+      cy.alFilterByStatus({ status: "DRAFT" });
+    });
+
+    it("Verify filter by STATUS as DRAFT", () => {
+      cy.alVerifyFilterByStatus({ status: "DRAFT" });
+    });
+
+    it("Click on DRAFT", () => {
+      cy.get(`td[data-grid-col-index="3"]`).should("contain.text", "DRAFT").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add approver", () => {
+      cy.arAddApproverOnApproverList({ approver: USERS[11].name });
+    });
+
+    it("Send to review", () => {
+      cy.arClickSendToReview();
+    });
+
+    it("Click approve submission", () => {
+      cy.arApproveAR();
+      cy.wait(3000);
+    });
+
+    it("Click Close button", () => {
+      cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+      cy.wait(3000);
+    });
+
+    it("Select option No", () => {
+      cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
+      cy.wait(3000);
+    });
+
+    it("Advance Effective Date to 30 days from now", () => {
+      const effectiveDate = momentInPST().add(30, "days");
+      const month = effectiveDate.format("MMM");
+      const day = effectiveDate.format("D");
+
+      cy.get("[aria-label=\"change date\"]").arrowClick();
+
+      cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
+        const monthYearText = $el.text();
+        if (!monthYearText.includes(month)) {
+          cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(1).arrowClick();
+        }
+
+        cy.wait(500);
+
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            if (day === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+      });
+
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
+          cy.get("#confirmEffectiveDate").arrowClick();
+        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+      cy.wait(3000);
+    });
+  });
+
+  context("Verify the AR in APPROVED State", () => {
+    it("Navigate to ar list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter AR by title as 'Second AR'", () => {
+      cy.alFilterByTitle({ title: "Second AR" });
+    });
+
+    it(`Filter list by OWNER as ${USERS[11].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[11].name });
+    });
+
+    it("Filter list by STATUS as APPROVED", () => {
+      cy.alFilterByStatus({ status: "APPROVED" });
+    });
+
+    it("Verify filter by STATUS as APPROVED", () => {
+      cy.alVerifyFilterByStatus({ status: "APPROVED" });
+    });
+  });
+
+  context("Set time travel to Day 29", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_COMPANY", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 29 days to time travel", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 29 });
+    });
+
+    it("On Next Task, SELECT_ALL", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Verify the AR is still in APPROVED State", () => {
+    it("Navigate to ar list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+    });
+
+    it("Filter AR by title as 'Second AR'", () => {
+      cy.alFilterByTitle({ title: "Second AR" });
+    });
+
+    it(`Filter list by OWNER as ${USERS[11].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[11].name });
+    });
+
+    it("Filter list by STATUS as APPROVED", () => {
+      cy.wait(2000);
+      cy.alFilterByStatus({ status: "APPROVED" });
+    });
+
+    it("Verify filter by STATUS as APPROVED", () => {
+      cy.wait(2000);
+      cy.alVerifyFilterByStatus({ status: "APPROVED" });
+    });
+  });
+
+  context("Set time travel to Day 30", () => {
+    it("Navigate to async tasks", () => {
+      cy.navigToAsyncTasks();
+    });
+
+    it("Select task TIME_TRAVEL_COMPANY", () => {
+      cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+    });
+
+    it("Select 1 day to time travel", () => {
+      cy.asyncSelectBackToTheFutureTime({ day: 1 });
+    });
+
+    it("On Next Task, SELECT_ALL", () => {
+      cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.SELECT_ALL });
+    });
+
+    it("Submit async task", () => {
+      cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify the time travel will appear in History list as 'Requested'", () => {
+      cy.get("tr.k-master-row").should("have.length", 2);
+      cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="0"]`).eq(0)
+        .should("contain.text", "TIME_TRAVEL_COMPANY");
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="3"]`).eq(0)
+        .should("contain.text", "CLOSE_CR_BY_EFFECTIVE_DATE");
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0).contains(/REQUESTED|COMPLETE/g);
+    });
+
+    it("Reload the page and Check status as COMPLETE", { retries: 5 }, () => {
+      cy.wait(8000);
+      cy.reload();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`tr[data-grid-row-index="0"]`).should("have.length", 1);
+      cy.get(`tr[data-grid-row-index="0"]`).find(`td[data-grid-col-index="4"]`).eq(0)
+        .should("contain.text", "COMPLETE");
+    });
+  });
+
+  context("Verify the AR is in auto CLOSED State", () => {
+    it("Navigate to ar list", () => {
+      cy.navigToApprovalRequestList();
+    });
+
+    it("Clear filters", () => {
+      cy.alClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Filter AR by title as 'Second AR'", () => {
+      cy.alFilterByTitle({ title: "Second AR" });
+    });
+
+    it(`Filter list by OWNER as ${USERS[11].name}`, () => {
+      cy.alFilterByOwner({ owner: USERS[11].name });
+    });
+
+    it("Filter list by STATUS as CLOSED", () => {
+      cy.alFilterByStatus({ status: "CLOSED" });
+    });
+
+    it("Verify filter by STATUS as CLOSED", () => {
+      cy.alVerifyFilterByStatus({ status: "CLOSED" });
+    });
+  });
 });
 
 export { };

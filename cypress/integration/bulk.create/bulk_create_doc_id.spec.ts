@@ -3,12 +3,15 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -64,7 +67,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
               {
                 documentTypeName: "Test Private Pool",
                 documentTypeAcronym: "TPP-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
                 canRedLine: true,
                 privateNumberPool: true,
@@ -72,7 +75,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
               {
                 documentTypeName: "Test Public Pool",
                 documentTypeAcronym: "TPUP-",
-                group: "OTHER",
+                group: DOC_TYPE_GROUP.OTHER,
                 isQms: true,
                 canRedLine: true,
                 privateNumberPool: false,
@@ -151,6 +154,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
                   schema: [
                     {
                       name: "blc-text-field-kv6ef2ii",
+                      tabId: "overview",
                       rows: 1,
                       type: "textfield",
                       index: 0,
@@ -488,18 +492,23 @@ context("Bulk create public, private and reserved doc-ids", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Upload logo picture 'image.jpg'", () => {
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
-    });
-
     it("Select output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Bulk Create" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
+    it("Upload logo picture 'image.jpg'", () => {
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+    });
+
     it("Add Checkbox group", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+      cy.drSelectDetailsTab();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
       cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
       cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
       cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
@@ -511,14 +520,14 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "fb-TEXT FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).last().check();
+      cy.get(`input[type="checkbox"][value="3"]`).check({ force: true });
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -537,11 +546,13 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
   context("Verify Bulk Create form title report", () => {
     it("Check doc Released status and click on Send To Email", () => {
-      cy.get("#HeaderInfo-status").should("have.text", "Released");
-      cy.get("#HeaderInfo-name").should("have.text", "Bulk create form");
-      cy.get("#HeaderInfo-docId").then((x) => {
+      cy.drSelectOverviewTab();
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.drVerifyTitle({ title: "Bulk create form" });
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
         releasedFormId = x.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
 
@@ -554,29 +565,18 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
   context("Verify email for bulk create form notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${releasedFormId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+        .then((emails) => {
           emailsFromInbox = emails;
           expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
+        });
     });
 
     it("Verify the emails that should be received", () => {
@@ -713,11 +713,17 @@ context("Bulk create public, private and reserved doc-ids", () => {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/MASS CREATE LOGS/);
+        expect(el).match(/FM-00004, Revision 1/);
+
+        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Logs/);
 
-        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\\n(.*)\\n1 2 3`, "gi" );
+        tmpRegex = new RegExp( `Checkbox\\n(.*)\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/TEXT FIELD/);
@@ -725,12 +731,6 @@ context("Bulk create public, private and reserved doc-ids", () => {
         expect(el).match(/APPROVALS\nApprovers/);
 
         expect(el).match(/Released/);
-
-        tmpRegex = new RegExp(`Print: ${footerDate}`, "gi");
-        expect(el).match(tmpRegex);
-
-        tmpRegex = new RegExp(`Effective Date: ${footerDate}`, "gi");
-        expect(el).match(tmpRegex);
 
         expect(el).match(/Page 2 of 3/);
       }
@@ -770,9 +770,12 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Fill Bulk creation document atributes", () => {
-
       it("Enter title 'Bulk Creation document'", () => {
         cy.drEnterDocumentTitle({ name: "Bulk Creation document{enter}" });
+      });
+
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
@@ -790,16 +793,24 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Private Pool");
       });
 
-      it("Upload logo picture 'image.jpg'", () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
+      it("Select 'yes' to have Document id column", () => {
+        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
       });
 
       it("Checkbox option 1 checked", () => {
         cy.get(`input[type="checkbox"][value="1"]`).last().check();
       });
 
-      it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
+      it("Upload logo picture 'image.jpg'", () => {
+        cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Add first Approver'", () => {
@@ -827,6 +838,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Upload template with existing doc-ids", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Upload template file", () => {
         cy.atchUploadTemplateForBLC({ fileName: "privateBulkExistDocId.xlsx" });
       });
@@ -836,12 +851,13 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Check doc WIP status and click on Send To Email", () => {
-        cy.get("#HeaderInfo-status").should("have.text", "WIP");
-        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document");
-        cy.get("#HeaderInfo-docId").then((x) => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
+        cy.drVerifyTitle({ title: "Bulk Creation document" });
+        cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
           releasedFormId = x.text();
         });
         cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         cy.sendToEmail();
       });
 
@@ -854,29 +870,19 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify email for WIP bulk create notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${releasedFormId}`,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+          .then((emails) => {
             emailsFromInbox = emails;
             expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
             downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
+
+          });
       });
 
       it("Verify the emails that should be received", () => {
@@ -1007,7 +1013,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
           RegExp( `Bulk Create\n${releasedFormId}, Revision A\nBULK CREATION DOCUMENT`, "gi" );
           expect(el).match(tmpRegex);
 
-          tmpRegex = new RegExp(`Checkbox\\nAPPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT\\n1 2 3`);
+          tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| DRAFT\\nCheckbox\\n1 2 3`);
           expect(el).match(tmpRegex);
 
           tmpRegex = new RegExp(`${USERS[2].name} \\- .*@.*`);
@@ -1073,12 +1079,13 @@ context("Bulk create public, private and reserved doc-ids", () => {
       });
 
       it("Check doc Released status and click on Send To Email", () => {
-        cy.get("#HeaderInfo-status").should("have.text", "Released");
-        cy.get("#HeaderInfo-name").should("have.text", "Bulk Creation document");
-        cy.get("#HeaderInfo-docId").then((x) => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+        cy.drVerifyTitle({ title: "Bulk Creation document" });
+        cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
           releasedFormId = x.text();
         });
         cy.get(".MuiBox-root").contains(`${releasedFormId}`);
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         cy.sendToEmail();
       });
 
@@ -1091,29 +1098,18 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
     context("Verify email for bulk create released notification", () => {
       it("Get emails", () => {
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${releasedFormId}`,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+          .then((emails) => {
             emailsFromInbox = emails;
             expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
             downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
+          });
       });
 
       it("Verify the emails that should be received", () => {
@@ -1249,7 +1245,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
           expect(el).match(/BulkProcessLogs.txt/);
 
-          tmpRegex = new RegExp( `Checkbox\\n(.*)\\n(.*)\n(.*)\n1 2 3`, "gi" );
+          tmpRegex = new RegExp( `Checkbox\\n1 2 3`, "gi" );
           expect(el).match(tmpRegex);
 
           // eslint-disable-next-line max-len
@@ -1320,6 +1316,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.drEnterDocumentTitle({ name: "Bulk Creation document" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
           cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
@@ -1343,6 +1343,14 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get(`input[type="checkbox"][value="1"]`).check();
       });
 
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Add approval", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
       });
@@ -1353,6 +1361,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     context("Upload template with existing doc-ids", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Upload template file", () => {
         cy.atchUploadTemplateForBLC({ fileName: "publicBulkExistDocId.xlsx" });
       });
@@ -1392,6 +1404,10 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
       });
 
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
+      });
+
       it("Submit for approval", () => {
         cy.pmSubmitForApproval();
       });
@@ -1420,6 +1436,11 @@ context("Bulk create public, private and reserved doc-ids", () => {
         cy.get(`td[role=gridcell][data-grid-col-index="0"]`).each(($document) => {
           expect($document.text()).to.be.oneOf(documetsWhichShouldBeOnList);
         });
+      });
+
+      it("Verify first item on list is in DRAFT", () => {
+        SystemRequirement("REQ-4730");
+        cy.dlVerifyFilterByStatus({ status: "Draft" });
       });
     });
   });

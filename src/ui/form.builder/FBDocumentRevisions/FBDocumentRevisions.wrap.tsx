@@ -4,6 +4,7 @@ import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteAsyncOption, FBDialogState, FBDocumentRevisionsActions, FBDocumentRevisionsForm, FBDocumentRevisionsProps, FBDocumentRevisionsState, FBDocumentRevisionsValue, FBFormState } from "..";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { useFormContext } from "../../components/forms/FormContext";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
 export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
@@ -33,6 +34,8 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     dialogState = FB.useRef(FBDialogState);
     formState = FB.useRef(FBFormState, {});
 
+    const { submitForm } = useFormContext();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // *Note: Can't remember why is this here. If it pass QA we can delete it.
     // React.useEffect(() => debounce(mapCollection, 600), []);
@@ -42,6 +45,12 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       (data) => {
         parentFormState?.setFieldValue(name, cloneDeep(data), true);
         mapCollection();
+
+        if (!workspaceState?.autosave) {
+          return;
+        }
+
+        submitForm();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -67,7 +76,9 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       // }
       docRevState?.value?.map((value, index) => {
         const { proposedDocumentRevision: { id: docRevId } } = value;
-        setBookmark(docList.get(docRevId), index);
+        if (docList) {
+          setBookmark(docList.get(docRevId), index);
+        }
       });
       bookmarkState?.setLoading(false);
     }
@@ -79,6 +90,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       bookmarkState?.addBookmark({
         name: `fb-docrev-section-${name}-${documentRevision.id}`,
         label: `${docId} - ${docName}`,
+        tabId: "documents",
       }, at);
     }
 
@@ -129,7 +141,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       const value = filter(docRevState?.value, (v) => v.proposedDocumentRevision.id !== id);
       parentFormState?.removeFieldRules(`documentRevisions.${value.length}.descriptionOfChange`);
       parentFormState?.removeFieldRules(`documentRevisions.${value.length}.justificationOfChange`);
-      docRevState?.setDocumentRevisions(value);
+      docRevState?.setDocumentRevisions(value.length === 0 ? undefined : value);
     };
 
     handleCancel = () => dialogState?.closeDialog();

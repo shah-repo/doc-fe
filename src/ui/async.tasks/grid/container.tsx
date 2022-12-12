@@ -151,6 +151,13 @@ const AsyncTasksContainer: React.FunctionComponent<
     }));
     openApproveDialog();
   };
+  const handleEmailFormSubmit = (email: string) => {
+    setPayload(JSON.stringify( {
+      taskType: type,
+      email,
+    }));
+    openApproveDialog();
+  };
   const handleTimeTravelFormSubmit = (values: TimeTravelProps) => {
     if ([SQS_TYPES.TIME_TRAVEL_USER_SESSION].includes(SQS_TYPES[type])) {
       setPayload(JSON.stringify(values));
@@ -209,6 +216,7 @@ const AsyncTasksContainer: React.FunctionComponent<
       handlePasswordExpirationFormSubmit={handlePasswordExpirationFormSubmit}
       handlePasswordExpirationEmailSpecificFormSubmit={handlePasswordExpirationEmailSpecificFormSubmit}
       handleuuidFormSubmit={handleuuidFormSubmit}
+      handleEmailFormSubmit={handleEmailFormSubmit}
       handleTimeTravelFormSubmit={handleTimeTravelFormSubmit}
       handleTimeTravelCompany={handleTimeTravelCompany}
       handleTimeTravelUser={handleTimeTravelUser}

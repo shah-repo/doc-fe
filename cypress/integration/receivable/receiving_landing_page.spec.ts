@@ -6,7 +6,12 @@ import moment from "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { LotsTest } from "../../utils/constants/documentTypes/lot";
+import { Part } from "../../utils/constants/documentTypes/part";
+import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
+import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -77,388 +82,10 @@ context("Receiving landing page test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [FIRST_USER, SECOND_USER, THIRD_USER],
             documentTypes: [
-              {
-                documentTypeName: PART_DOCUMENT_TYPE_NAME,
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-                needsSignature: true,
-                category: "Parts",
-              },
-              {
-                documentTypeName: "Purchase Order test",
-                documentTypeAcronym: "POT-",
-                group: "PO",
-                category: "Purchase Order",
-                isQms: true,
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                    required: false,
-                  },
-                  D: {
-                    label: "Description",
-                    visible: true,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  F: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    label: "Cancel PO",
-                    visible: true,
-                  },
-                  L: {
-                    label: "Correct PO",
-                    visible: true,
-                  },
-                  M: {
-                    label: "Type of Change",
-                    visible: true,
-                    required: true,
-                  },
-                  N: {
-                    label: "Add Approvers",
-                    visible: false,
-                    required: false,
-                  },
-                  O: {
-                    label: "PO History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  S: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  V: {
-                    label: "Create PO",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  A3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  A4: {
-                    visible: false,
-                  },
-                  A5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  A6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  P3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  P4: {
-                    visible: false,
-                  },
-                  P5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  P6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                },
-                schema: [
-                  {
-                    name: "po-status-built-in",
-                    type: "select",
-                    index: 0,
-                    label: "PO Status",
-                    options: [
-                      {
-                        text: "Open",
-                        value: "Open",
-                      },
-                      {
-                        text: "Closed",
-                        value: "Closed",
-                      },
-                      {
-                        text: "Cancelled",
-                        value: "Cancelled",
-                      },
-                    ],
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "PO Status",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-supplier-built-in",
-                    type: "supplier",
-                    index: 1,
-                    label: "Supplier ",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Supplier",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-items-built-in",
-                    type: "purchaseorder",
-                    index: 2,
-                    label: "Purchase Order",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Purchase Order",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
-              {
-                documentTypeName: "Lots test",
-                documentTypeAcronym: "LTT-",
-                group: "LOT",
-                category: "Lot",
-                isQms: true,
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  D: {
-                    label: "Description",
-                    visible: false,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  F: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Update",
-                    visible: true,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    visible: false,
-                  },
-                  L: {
-                    label: "Correction",
-                    visible: true,
-                  },
-                  O: {
-                    label: "Lot History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Rejected",
-                    visible: true,
-                  },
-                  A3: {
-                    visible: false,
-                  },
-                  A4: {
-                    label: "Accepted",
-                    visible: true,
-                  },
-                  A5: {
-                    label: "Quarantine",
-                    visible: true,
-                  },
-                  A6: {
-                    visible: false,
-                  },
-                  P1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Rejected",
-                    visible: true,
-                  },
-                  P3: {
-                    visible: false,
-                  },
-                  P4: {
-                    label: "Accepted",
-                    visible: true,
-                  },
-                  P5: {
-                    label: "Quarantine",
-                    visible: true,
-                  },
-                  P6: {
-                    visible: false,
-                  },
-                },
-              },
-              {
-                documentTypeName: "Receivable test",
-                documentTypeAcronym: "RCT-",
-                group: "RECEIVABLE",
-                category: "Receive",
-                isQms: true,
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                    required: false,
-                  },
-                  D: {
-                    visible: false,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  F: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Update",
-                    visible: false,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  L: {
-                    label: "Correction",
-                    visible: true,
-                  },
-                  M: {
-                    label: "Type of Revision Change",
-                    visible: true,
-                    required: true,
-                  },
-                  N: {
-                    label: "Create Receving Record",
-                    visible: true,
-                  },
-                  O: {
-                    label: "Record History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  S: {
-                    label: "Update Record",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  A3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  A4: {
-                    label: "Released",
-                    visible: true,
-                  },
-                  A5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  P1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  P3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  P4: {
-                    label: "Released",
-                    visible: true,
-                  },
-                  P5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                },
-              },
+              Part,
+              PurchaseOrderTest,
+              LotsTest,
+              ReceivableTest,
             ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -726,6 +353,7 @@ context("Receiving landing page test", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -740,6 +368,7 @@ context("Receiving landing page test", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -754,6 +383,7 @@ context("Receiving landing page test", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -767,6 +397,7 @@ context("Receiving landing page test", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -777,6 +408,7 @@ context("Receiving landing page test", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -851,6 +483,7 @@ context("Receiving landing page test", () => {
                 type: "select",
                 index: 0,
                 label: "PO Status",
+                tabId: "details",
                 options: [
                   {
                     text: "Open",
@@ -878,6 +511,7 @@ context("Receiving landing page test", () => {
                 type: "section",
                 index: 1,
                 label: "General Information",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -887,6 +521,7 @@ context("Receiving landing page test", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Requestor",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -910,6 +545,7 @@ context("Receiving landing page test", () => {
               {
                 name: "po-supplier-built-in",
                 type: "supplier",
+                tabId: "details",
                 index: 3,
                 label: "Supplier ",
                 applicableOn: [
@@ -925,6 +561,7 @@ context("Receiving landing page test", () => {
                 type: "datepicker",
                 index: 4,
                 label: "Order Date",
+                tabId: "details",
                 rules: "required",
                 hidden: false,
                 deleted: false,
@@ -949,6 +586,7 @@ context("Receiving landing page test", () => {
                 type: "purchaseorder",
                 index: 5,
                 label: "Purchase Order",
+                tabId: "lineitems",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -962,6 +600,7 @@ context("Receiving landing page test", () => {
                 type: "approvals",
                 index: 6,
                 label: "Approvals",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -1230,11 +869,13 @@ context("Receiving landing page test", () => {
               index: 0,
               type: "poreceive",
               label: "Receivable",
+              tabId: "details",
               name: "receivable-test",
               applicableOn: ["ON_STATE_TO_IN_REVIEW"],
             },
             {
               label: "form.builder.approvals",
+              tabId: "overview",
               type: "poapprovals",
               deleteDisabled: false,
               name: "fb-po-approvals",
@@ -1394,21 +1035,21 @@ context("Receiving landing page test", () => {
           payload: {
             columns: [
               {
-                label: "Receipt ID",
+                label: "RECEIPT ID",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "document.docId",
                 showOnAndroid: true,
               },
               {
-                label: "Receipt Record State",
+                label: "RECEIPT RECORD STATE",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "displayStatus",
                 showOnAndroid: true,
               },
               {
-                label: "Owner",
+                label: "OWNER",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "owner.user.name",
@@ -1426,7 +1067,7 @@ context("Receiving landing page test", () => {
                 showOnAndroid: true,
               },
               {
-                label: "Released Date",
+                label: "RELEASED DATE",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "releasedAt",
@@ -1445,7 +1086,7 @@ context("Receiving landing page test", () => {
               },
               {
                 fn: "PART_NUMBER_REV_FROM_RECEIVABLE",
-                label: "Part Number/Rev",
+                label: "PART NUMBER/REV",
                 fieldName: "irrelevant",
                 showOnWeb: true,
                 valuePath: "precalc.part_number_rev",
@@ -1472,7 +1113,6 @@ context("Receiving landing page test", () => {
         }).then(() => done());
       });
     });
-
   });
 
   context("Login user", () => {
@@ -1484,6 +1124,8 @@ context("Receiving landing page test", () => {
   context("Verify Receiving landing page", () => {
     it("Navigate to Receivings landing page", () => {
       cy.navigToReceivableList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify landing page table is using Kendo grid", () => {
@@ -1491,14 +1133,15 @@ context("Receiving landing page test", () => {
     });
 
     it("Verify all columns are present", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "Receipt ID");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Receipt Record State");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Owner");
+      SystemRequirement("REQ-1680");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "RECEIPT ID");
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "RECEIPT RECORD STATE");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "OWNER");
       cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "PO #");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Released Date");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Supplier");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "Part Number/Rev");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "PO Status");
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "RELEASED DATE");
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "SUPPLIER");
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "PART NUMBER/REV");
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "PO STATUS");
     });
 
     it(`Verify buttons "Clear Filter", "Export List" and "Add New Receiving" are present`, () => {
@@ -1509,7 +1152,7 @@ context("Receiving landing page test", () => {
         .and("have.text", "Add new Receiving");
     });
 
-    it(`Verify drag and drop Receipt ID header on second slot`, () => {
+    it(`Verify drag and drop RECEIPT ID header on second slot`, () => {
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "RCT-");
       cy.dragAndDrop({
         fromSelector: `th[aria-colindex="1"][role]>span>span`,
@@ -1528,17 +1171,17 @@ context("Receiving landing page test", () => {
       cy.get("tr.k-grouping-row").should("not.exist");
       cy.get(`th[aria-colindex="3"][role]>div.k-grid-column-menu`).arrowClick();
       cy.get("div.k-columnmenu-item").eq(0).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("tr.k-grouping-row").should("have.length", "2");
       cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
-      cy.landingPageLoadingElementShouldAppear();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("tr.k-grouping-row").should("not.exist");
     });
 
     it(`Verify receiving can be opened`, () => {
-      cy.get("#HeaderInfo-docId").should("not.exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("not.exist");
       cy.dlSelectFirstDocument();
-      cy.get("#HeaderInfo-docId").should("exist");
+      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("exist");
       cy.navigToReceivableList();
       cy.get("div[role=dialog]").should("not.exist");
     });
@@ -1549,68 +1192,68 @@ context("Receiving landing page test", () => {
     });
 
     context("Verify filters on each field", () => {
-      it("Verify filter for Receipt Record State", () => {
+      it("Verify filter for RECEIPT RECORD STATE", () => {
         cy.get(`th[aria-colindex="1"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="1"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Released").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] span.k-input`).should("have.text", "Released");
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
       });
 
-      it("Verify filter for Receipt ID", () => {
+      it("Verify filter for RECEIPT ID", () => {
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] input`).arrowType("RCT-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "RCT-00002");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Owner", () => {
+      it("Verify filter for OWNER", () => {
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).arrowType("Athena Block");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "Athena Block");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
       it("Verify filter for PO #", () => {
         cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
-        cy.get(`th[aria-colindex="4"] input`).arrowType("POT-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.get(`th[aria-colindex="4"] input`).arrowType("POT-00002").wait(500);
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "POT-00002");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Released Date", () => {
+      it("Verify filter for RELEASED DATE", () => {
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Last 7 days");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Supplier", () => {
+      it("Verify filter for SUPPLIER", () => {
         cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="6"] input`).arrowType("API Supplier Document");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="6"] input`).should("have.attr", "value", "API Supplier Document");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for Part Number/Rev", () => {
+      it("Verify filter for PART NUMBER/REV", () => {
         cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="7"] input`).arrowType("PRT-00005");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="7"] input`).should("have.attr", "value", "PRT-00005");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
-      it("Verify filter for PO Status", () => {
+      it("Verify filter for PO STATUS", () => {
         cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="8"] input`).arrowType("Closed");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="8"] input`).should("have.attr", "value", "Closed");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
@@ -1630,7 +1273,7 @@ context("Receiving landing page test", () => {
 
       it("Verify clear filters", () => {
         cy.trClearFilters();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="1"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
@@ -1675,105 +1318,105 @@ context("Receiving landing page test", () => {
 
 
     context("Verify dropdown filters", () => {
-      it("Verify Receipt ID dropdown filters", () => {
+      it("Verify RECEIPT ID dropdown filters", () => {
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").should("have.text", "ContainsDoes not containIs equal toIs not equal to" +
         "Starts withEnds withIs nullIs not nullIs emptyIs not empty");
       });
 
-      it(`Verify Receipt ID "Does not contain" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Does not contain" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get("ul>li[role=option]").contains("Does not contain").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it(`Verify Receipt ID "Is equal to" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is equal to").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("RCT-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it(`Verify Receipt ID "Is not equal to" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is not equal to" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("RCT-00002");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it(`Verify Receipt ID "Starts with" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Starts with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Starts with").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("RCT-0000");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it(`Verify Receipt ID "Ends with" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Ends with" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Ends with").arrowClick();
         cy.get(`th[aria-colindex="3"] input`).arrowType("2");
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it(`Verify Receipt ID "Is null" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is null").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it(`Verify Receipt ID "Is not null" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is not null" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not null").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
 
-      it(`Verify Receipt ID "Is empty" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 0 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
-      it(`Verify Receipt ID "Is not empty" dropdown filter`, () => {
+      it(`Verify RECEIPT ID "Is not empty" dropdown filter`, () => {
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not empty").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlVerifyDocumentCount({ numberOfDoc: 2 });
         cy.get(`th[aria-colindex="3"] span.k-i-filter-clear`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 
@@ -1782,11 +1425,11 @@ context("Receiving landing page test", () => {
         cy.get(`th[aria-colindex="5"] button[title="Clear"]`).should("have.attr", "disabled");
         cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Last 7 days");
         cy.get(`th[aria-colindex="5"] button[title="Clear"]`).should("not.have.attr", "disabled");
         cy.get(`th[aria-colindex="5"] button[title="Clear"]`).arrowClick();
-        cy.landingPageLoadingElementShouldAppear();
+        cy.landingPageLoadingElementShouldNotExist();
       });
     });
   });

@@ -64,11 +64,11 @@ context("User management landing page", () => {
       });
 
       it("Verify all columns are present", () => {
-        cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "Signed Up");
-        cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Name");
-        cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "Email");
-        cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Groups");
-        cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "Active");
+        cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "SIGNED UP");
+        cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "NAME");
+        cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "EMAIL");
+        cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "GROUPS");
+        cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "ACTIVE");
       });
 
       it(`Verify buttons "Clear Filter" and "Add Employee" are present`, () => {
@@ -77,12 +77,12 @@ context("User management landing page", () => {
       });
 
       it(`Verify drag and drop Signed Up header on second slot`, () => {
-        cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "Resend signup email");
+        cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "Signed up");
         cy.dragAndDrop({
           fromSelector: `th[aria-colindex="1"][role]>span>span`,
           toSelector: `th[aria-colindex="2"][role]>span>span`,
         });
-        cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "Resend signup email");
+        cy.get(`td[data-grid-col-index="0"]`).eq(0).should("not.contain.text", "Signed up");
       });
 
       it(`Column grouping should be displayed`, () => {
@@ -95,7 +95,7 @@ context("User management landing page", () => {
         cy.get("tr.k-grouping-row").should("not.exist");
         cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
         cy.get("div.k-columnmenu-item").eq(0).arrowClick();
-        cy.get("tr.k-grouping-row").should("have.length", "1");
+        cy.get("tr.k-grouping-row").should("have.length", "2");
         cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
         cy.get("tr.k-grouping-row").should("not.exist");
       });
@@ -126,8 +126,8 @@ context("User management landing page", () => {
       it("Verify filter for Signed Up", () => {
         cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="2"] span.k-input`).arrowClick();
-        cy.get("ul>li[role=option]").contains("Resend signup email").arrowClick();
-        cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "Resend signup email");
+        cy.get("ul>li[role=option]").contains("Signed up").arrowClick();
+        cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "Signed up");
         cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
       });
 
@@ -147,7 +147,7 @@ context("User management landing page", () => {
       });
 
       it("Verify filter for Active", () => {
-        cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Active");
+        cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="5"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Active").arrowClick();
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Active");
@@ -158,7 +158,7 @@ context("User management landing page", () => {
         cy.navigToDashboard();
         cy.usrNavigateToUserManagement();
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", USERS[4].name);
-        cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "Resend signup email");
+        cy.get(`th[aria-colindex="2"] span.k-input`).should("have.text", "Signed up");
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", USERS[4].email);
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "Everyone");
         cy.get(`th[aria-colindex="5"] span.k-input`).should("have.text", "Active");

@@ -1,7 +1,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { LINE_ITEMS_STATUS_TYPES } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -37,12 +40,7 @@ context("File delete in Pending Change", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -99,26 +97,33 @@ context("File delete in Pending Change", () => {
       cy.unClick();
     });
 
-    it("Upload test.docx and image.jpg files", () => {
-      cy.atchUploadAttachment({ fileName: "test.docx" });
-      cy.atchUploadAttachment({ fileName: "image.jpg" });
-    });
-
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Upload test.docx and image.jpg files", () => {
+      cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[3].name}`]);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
+        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[3].name}`]);
+      });
     });
 
     context("Withdraw submission and check attachments on document", () => {
       it("Navigates to Approval Request list", () => {
         cy.navigToApprovalRequestList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Filters document by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatus({ title: "test title", status: "IN_REVIEW" });
+        cy.arFilterARListByNameAndStatus({ title: "test title", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       });
 
       it("Withdraw Submission", () => {

@@ -1,5 +1,6 @@
 import React from "react";
 import { FBApproval, FBButton, FBFieldName, FBLabel, FBRequestApprovalProps } from "..";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBRequestApproval } from "./FBRequestApproval.wrap";
 
 const FBRequestApprovalField: React.FunctionComponent<FBRequestApprovalProps> = ({
@@ -12,7 +13,9 @@ const FBRequestApprovalField: React.FunctionComponent<FBRequestApprovalProps> = 
 }) => (
   <>
     {(!isOutput || (!approvers && !approverGroups)) && (
-      <FBLabel label={label || "form.builder.requestapproval"} />
+      <FBLabel label={label || "form.builder.requestapproval"}
+        labelProps={FBFontStyle.labelProps}
+      />
     )}
     {isOutput && (
       <FBApproval

@@ -11,6 +11,7 @@ export const styles = makeStyles(() =>
       borderLeft: `1px solid ${Colors.light_gray_blue}`,
       maxWidth: "calc( 100% - 40px)",
       paddingLeft: "25px",
+      cursor: "unset",
     },
     link: {
       "color": Colors.black,
@@ -24,7 +25,6 @@ export const styles = makeStyles(() =>
     },
     linkText: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 400,
       color: Colors.navy,
     },
@@ -36,9 +36,11 @@ export const styles = makeStyles(() =>
     },
     icon: {
       width: "15px",
+      cursor: "pointer",
     },
     listItem: {
       paddingLeft: "1px",
+      cursor: "unset",
     },
     actionIcons: {
       /* Action Icons */
@@ -59,37 +61,32 @@ export const styles = makeStyles(() =>
     actionIcon: {
       paddingLeft: "10px",
     },
+    cursorPointer: {
+      cursor: "pointer",
+    },
     viewTooltipText: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "12px",
       lineHeight: "15px",
     },
     typography: {
       "fontSize": "14px",
-      "fontFamily": "Sora",
       "fontWeight": 400,
       "& > p": { margin: "0px" },
       "letterSpacing": 0,
     },
     typographyBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 600,
       letterSpacing: 0,
     },
     typographyStatus: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "15px",
       letterSpacing: 0,
     },
     timestampContainer: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "22px",
@@ -111,7 +108,6 @@ export const styles = makeStyles(() =>
     },
     typographyChildrenBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 700,
     },
     gridContainer: {

@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBFileDescriptionActionsProps, FBSubmitButton } from "..";
+import { FBFileDescriptionActionsProps, FBSubmitButton } from "..";
+import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 
 const FBFileDescriptionActions: React.FunctionComponent<FBFileDescriptionActionsProps> = ({
   handleAdd,
@@ -12,7 +13,7 @@ const FBFileDescriptionActions: React.FunctionComponent<FBFileDescriptionActions
       label={"form.builder.save"}
       onClick={handleAdd}
     />
-    <FBButton
+    <StyledCancelFBButton
       variant="outlined"
       label="form.builder.cancel"
       onClick={handleCancel}

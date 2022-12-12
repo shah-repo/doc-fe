@@ -1,8 +1,7 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
-import { reaction } from "mobx";
+import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union, uniqWith } from "lodash";
+import { autorun, reaction } from "mobx";
+import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
@@ -76,13 +75,18 @@ export const withFBInput = <T extends FBInputProps>(
     includeNotes,
     ...props
   }: T) => {
-
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
-    const { isOutput } = workspaceState || {};
+    const { isOutput, isChangeRequest } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
+    let showValidationField;
+    let isFieldUnderValidation;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
+
+    const feedbackDetails = useLocalStore(() => ({
+      error, helperText,
+    }));
 
     useEffect(() => {
       includeNotes =
@@ -93,9 +97,15 @@ export const withFBInput = <T extends FBInputProps>(
       inputState?.setIncludeNotes(includeNotes || false);
     }, []);
 
+    useEffect(() => {
+      const disposeAutorun = autorun(() => {
+        const errorName = formState?.errors.get(name) || helperText;
+        feedbackDetails.error = formState?.errorValidation && showErrorMsg && !isUndefined(errorName);
+        feedbackDetails.helperText = errorName;
+      });
+      return disposeAutorun;
+    }, []);
 
-    helperText = formState?.errors.get(name) || helperText;
-    error = !isUndefined(formState?.errors.get(name)) && formState?.errorValidation && showErrorMsg;
     value = inputState?.value;
     includeContext = inputState?.includeContext;
     hidden = inputState?.hidden;
@@ -129,25 +139,84 @@ export const withFBInput = <T extends FBInputProps>(
 
     if (validationMode === "visibility" || validationMode === "disabled") {
       map(get(formState?.validatorRules, name), (rule) => {
-        if (!formState) { return; }
         const { value = "" } = rule || {};
+        const isValueObj = value?.includes("{") || value?.includes("}");
         const fieldName: string = first(value.split(",")) || "";
-        const fieldValue = last(value.split(","));
+        let fieldValue = value?.substring(value?.indexOf(",") + 1, value?.length) || last(value?.split(","));
+
+        if (!fieldName || !formState) {
+          return;
+        }
+
+        if (!isValueObj && fieldValue.includes(",")) {
+          fieldValue = fieldValue.split(",");
+        }
         const validationRules = formState.validationRelatedRules[fieldName] || [];
-        formState.validationRelatedRules[fieldName] = union([{ name, value: fieldValue }], validationRules);
+
+        formState.validationRelatedRules[fieldName] = uniqWith(
+          union([{ name, value: fieldValue }], validationRules),
+          isEqual
+        );
+
+        isFieldUnderValidation = ["required_if_in", "required_if"].includes(rule?.name) &&
+          formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
+
+        let convertedFieldValue;
+        try {
+          convertedFieldValue = JSON.parse(fieldValue as string);
+        } catch (error) {
+          convertedFieldValue = fieldValue;
+        }
+        const formStateFieldValue = formState?.getFieldValue(fieldName);
+
+        if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
+          if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue)) {
+            showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue) :
+              formStateFieldValue === fieldValue;
+          }
+        } else if (typeof convertedFieldValue === "object") {
+          let intermediateFlag;
+          for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
+            if (Array.isArray(formState?.getFieldValue(fieldName))) {
+              if (isUndefined(intermediateFlag)) {
+                intermediateFlag = false;
+              }
+              const flag = !isUndefined(fieldValueEntry) &&
+              formState?.getFieldValue(fieldName).includes(fieldValueEntry);
+              if (flag) {
+                intermediateFlag = flag;
+              }
+            }
+          }
+          if (!isUndefined(intermediateFlag)) {
+            showValidationField = intermediateFlag;
+          }
+
+        }
       });
     }
 
-    if ((isOutput || formState?.workspaceMode !== "design") && formState?.workspaceMode !== "formPreview") {
-      const isUnderMode = (
-        !helperText && (
+    if (isChangeRequest || isOutput || formState?.shouldValidate) {
+      let isUnderMode = (
+        !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
           validationValue === "" ||
           (isArray(validationValue) && size(validationValue) === 0)
         )
       );
 
-      (validationMode === "visibility") && (hidden = isUnderMode);
+      if (validationMode === "visibility") {
+        if (isFieldUnderValidation && !isUndefined(showValidationField)) {
+          isUnderMode = !showValidationField;
+        }
+        hidden = isUnderMode;
+
+        if (isUnderMode) {
+          workspaceState?.addHiddenFieldByRules(name);
+        } else {
+          workspaceState?.deleteHiddenFieldByRules(name);
+        }
+      }
       (!disabled && validationMode === "disabled") && (disabled = isUnderMode);
     }
 
@@ -160,7 +229,6 @@ export const withFBInput = <T extends FBInputProps>(
             return;
           }
           const value = optionsToString?.(options);
-          formState?.setFieldValue(name, value, withState, omitFormValue);
           return value;
         },
         autocompleteasync() { return; },
@@ -221,17 +289,16 @@ export const withFBInput = <T extends FBInputProps>(
     useEffect(() => {
       if (!formState && !inputState) { return; }
       // Input states
-      formState!.inputState.set(name, inputState!);
-
+      formState?.inputState.set(name, inputState!);
       // Validation settings
-      let attr = (label as string) || placeholder || validationAttribute || name;
+      let attr = validationAttribute || (label as string) || placeholder || name;
       isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
-      formState?.setValidationAttributeName(name, attr);
-      if (!rules) { return; }
-      formState!.setFieldRules(name, rules);
-      if (!omitFinalValidation) {
+       formState?.setValidationAttributeName(name, attr);
+       if (!rules) { return; }
+       formState!.setFieldRules(name, rules);
+       if (!omitFinalValidation) {
         formState?.setFieldFinalValidationRules(name, rules);
-      }
+       }
     }, [rules]);
 
     useEffect(() => {
@@ -251,6 +318,12 @@ export const withFBInput = <T extends FBInputProps>(
               });
               return;
             }
+
+            if (workspaceState.isChangeRequest) {
+              submitForm();
+              return;
+            }
+
             if (type && FBAutosave.includes(type)) {
               workspaceState.saveDocRev(formState?.getValues());
             } else {
@@ -264,7 +337,14 @@ export const withFBInput = <T extends FBInputProps>(
     useEffect(() => {
       if (!bookmarked) { return; }
       isTranslation(label as string) && (label = intl.formatMessage({ id: label as string }));
-      bookmarkState?.addBookmark({ name, label });
+      const schemaItem = find(
+        workspaceState?.schema,
+        (schemaItem) => !!(schemaItem.name && name?.includes(schemaItem.name))
+      );
+
+      if (schemaItem) {
+        bookmarkState?.addBookmark({ name, label, tabId: schemaItem.tabId });
+      }
     }, [bookmarked]);
 
     useEffect(() => {
@@ -284,6 +364,10 @@ export const withFBInput = <T extends FBInputProps>(
       });
     }, []);
 
+    useEffect(() => {
+      formState?.validate();
+    }, [formState]);
+
     return Component({
       ...(props as T),
       onChange,
@@ -292,13 +376,13 @@ export const withFBInput = <T extends FBInputProps>(
       includeContext,
       isInputOwner,
       validationMode,
-      helperText,
+      helperText: feedbackDetails.helperText,
       children,
       disabled,
       defaultValue,
       type,
       name,
-      error,
+      error: feedbackDetails.error,
       inputState,
       editorProperties,
       hidden,

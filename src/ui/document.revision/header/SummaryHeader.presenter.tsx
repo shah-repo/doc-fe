@@ -3,24 +3,29 @@ import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
+import HeaderLastSaved from "../../components/common/header/HeaderLastSaved";
 import { generateSubtitle } from "../../components/common/header/subtitles";
-import OwnerChangerContainer from "../../components/common/owner.changer/container";
-import { RequestType } from "../../components/common/owner.changer/helpers/types";
 import { isFormWithInlineApproval } from "../../documentRevision/helpers/records";
 import ControlsContainer from "../../documentRevision/PreviewControls.container";
+import { getVersionNumber } from "../utils/helpers";
 
 interface Props {
   documentRevision: DocumentRevision;
   canChangeOwnerShip?: boolean;
   canShowCreateVersionButton?: boolean;
+  displayLastSaved: boolean;
 }
 
 const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
   documentRevision,
   canChangeOwnerShip,
   canShowCreateVersionButton,
+  displayLastSaved,
 }) => (
-  <Header>
+  <Header
+    displayStatus={documentRevision.displayStatus}
+    status={documentRevision.status}
+  >
     <HeaderInfo
       revisionStage={documentRevision.revisionStage}
       groupOptions={documentRevision.document.documentType.groupOptions}
@@ -35,20 +40,21 @@ const SummaryHeaderPresenter: React.FunctionComponent<Props> = ({
       subRevision={documentRevision?.subRevision}
       displayStatus={documentRevision.displayStatus}
       subtitle={generateSubtitle(documentRevision)}
+      displayRevision={getVersionNumber(documentRevision.id)}
     />
     <Grid item={true} xs={6}>
-      <Grid container={true} alignItems="flex-end" justify="flex-end">
+      <Grid container={true} alignItems="center" justify="flex-end">
+        {displayLastSaved && documentRevision.updatedAt && (
+          <HeaderLastSaved
+            timestamp={documentRevision.updatedAt}
+          />
+        )}
         <ControlsContainer
           documentRevision={documentRevision}
           canShowCreateVersionButton={canShowCreateVersionButton}
           hasAccess={documentRevision.document.canAccess}
+          canChangeOwnerShip={canChangeOwnerShip || false}
         />
-        {canChangeOwnerShip && (
-          <OwnerChangerContainer
-            requestId={documentRevision.id}
-            requestType={RequestType.Document}
-          />
-        )}
       </Grid>
     </Grid>
   </Header>

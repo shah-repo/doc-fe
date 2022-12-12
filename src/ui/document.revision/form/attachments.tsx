@@ -6,11 +6,13 @@ import AttachmentField from "../../components/common/attachment.field/container"
 import AttachmentIconField from "../../components/common/attachment.icon/container";
 import Text from "../../components/Text";
 import { useAttachments } from "../../hooks/docCustomization/useCustomization";
+import Colors from "../../layout/theme/utils/colors";
 
 interface Props {
   isDisabled: boolean;
   isNewVersion: boolean;
   isAttachmentEmpty: boolean;
+  labeld?: string;
   docRevId: string;
   containsRedline: boolean;
   docRevStatus: DocumentRevisionStatus;
@@ -26,6 +28,9 @@ const classes = {
     flex: "0 0 50%",
     display: "flex",
     justifyContent: "flex-start",
+    fontSize: "12px",
+    fontWeight: 600,
+    color: Colors.almost_black,
   },
 };
 
@@ -38,6 +43,7 @@ const Attachments: React.FunctionComponent<Props> = ({
   docRevStatus,
   documentRevision,
   documentTypeId,
+  labeld,
 }) => {
   const { isVisible, label } = useAttachments(documentTypeId);
 
@@ -46,10 +52,10 @@ const Attachments: React.FunctionComponent<Props> = ({
   }
 
   return (
-    <Box marginBottom="33px">
+    <Box>
       <Box style = {classes.attachmentHeaderConatainer} id="attachmentHeader">
         <Typography variant="h6" style = {classes.attachmentHeadText}>
-          <Text message={label}/>
+          <Text message={labeld || label}/>
         </Typography>
         <AttachmentDownloadAllButton
           isAttachmentEmpty = {isAttachmentEmpty}

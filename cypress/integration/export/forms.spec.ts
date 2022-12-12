@@ -2,7 +2,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { CPExport } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -37,12 +39,7 @@ context("Export Form doc", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
+              CPExport,
             ],
             users: [USERS[2], USERS[3], USERS[4]],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -106,12 +103,13 @@ context("Export Form doc", () => {
 
     it("Save the document", () => {
       cy.drClickCreateDocumentWithApiCall();
+      cy.wait(2000);
     });
   });
 
   context("Form with Draft status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-1-Form-form" });
+      cy.exportVerifyEmail({ pdfStatus: "Draft", filename: "-1-Form-form", status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 
@@ -119,10 +117,11 @@ context("Export Form doc", () => {
     context("Add Form with Released", () => {
       it("Approve and release the form", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.wait(2000);
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-1-Form-form" });
+        cy.exportVerifyEmail({ pdfStatus: "Released", filename: "-1-Form-form", status: STATUS_TYPES_LABEL.RELEASED });
       });
     });
   });
@@ -136,11 +135,15 @@ context("Export Form doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Obsolete", filename: "-OBS-Form-form" });
+      cy.exportVerifyEmail({ pdfStatus: "Obsolete", filename: "-OBS-Form-form", status: STATUS_TYPES_LABEL.OBSOLETE });
     });
   });
 
   context("Form with Superseded status", () => {
+    it("Click on revisions tab on side panel", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Superseded' record", () => {
       cy.contains("Superseded").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -148,7 +151,10 @@ context("Export Form doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Superseded", filename: "-1-Form-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Superseded", filename: "-1-Form-form",
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+      });
     });
   });
 
@@ -190,14 +196,6 @@ context("Export Form doc", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Upload logo picture 'image.jpg'", () => {
-      cy.atchOtherUploadAttachment({ fileName: "image.jpg" });
-    });
-
-    it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("Click Void button", () => {
       cy.arVoidAR();
       cy.progressBarShouldNotExist();
@@ -205,7 +203,7 @@ context("Export Form doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-1-Void" });
+      cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-1-Void", status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 
@@ -275,7 +273,7 @@ context("Export Form doc", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add Approver'", () => {
@@ -296,7 +294,10 @@ context("Export Form doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Pending Change", filename: "-1-Form-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Pending Change", filename: "-1-Form-form"
+        , status: STATUS_TYPES_LABEL.PENDING_CHANGE,
+      });
     });
   });
 
@@ -318,7 +319,7 @@ context("Export Form doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-1-Form-form" });
+      cy.exportVerifyEmail({ pdfStatus: "In Review", filename: "-1-Form-form", status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 
@@ -340,7 +341,7 @@ context("Export Form doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Approved", filename: "-1-Form-form" });
+      cy.exportVerifyEmail({ pdfStatus: "Approved", filename: "-1-Form-form", status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
 

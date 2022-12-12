@@ -6,9 +6,10 @@ import { AuditActionPayload } from "../audit/types";
 import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest/types";
 import { Approval, Id, Nullable, Owner, User } from "../common/types";
+import { Employee } from "../company/types";
 import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
-import { DocumentGroupOptionsType, DocumentType } from "./documentType/types";
+import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from "./documentType/types";
 
 export enum DocumentRevisionStatus {
   Draft = "DRAFT",
@@ -46,6 +47,7 @@ export interface DocumentRevisionDocument {
   smartReferencesTo?: SmartReference[];
   smartReferencesFrom?: SmartReference[];
   typeSpecificConfig?: TypeSpecificConfig;
+  operators?: Employee[];
 }
 
 export interface SecurityList {
@@ -79,12 +81,35 @@ export interface PDF {
   type: string;
 }
 
+interface LHR{
+  docRevId: string;
+  documentId: string;
+  label: string;
+}
+
+interface LOT{
+  label: string;
+}
+
+interface Part{
+  docRevId: string;
+  documentId: string;
+  label: string;
+}
+
+interface LSHS{
+  lhr: LHR;
+  lot: LOT;
+  part: Part;
+}
+
 interface Precalc {
   formDocId: string;
   revision: number;
   po_amount?: string;
   cali_due_date?: string;
   pm_due_date?: string;
+  lshs_subtitle?: LSHS;
 }
 
 interface DocumentsInLHRS {
@@ -177,6 +202,7 @@ export interface SmartReference {
   toDocumentId?: Nullable<string>;
   type: SmartReferenceType;
   active?: boolean;
+  stepIndex?: Nullable<number>;
 }
 
 export enum SmartReferenceType {
@@ -231,6 +257,7 @@ export interface DocumentRevisionEditRequestBody extends FBDocumentRevisionProps
   parentEquipment?: Id;
   equipmentSection?: string;
   redline?: boolean;
+  tabId?: string;
 }
 
 export interface DocumentRevisionSetAction {
@@ -326,6 +353,8 @@ export interface FBOutputDocumentType {
   documentTypeName?: string;
   groupOptions?: DocumentGroupOptionsType[];
   active?: boolean;
+  group?: DocumentGroupType;
+
 }
 
 export interface HeaderTableType {

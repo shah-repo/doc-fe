@@ -1,4 +1,4 @@
-import { SvgIconProps } from "@material-ui/core";
+import { BoxProps, SvgIconProps } from "@material-ui/core";
 import { FormControlProps } from "@material-ui/core/FormControl";
 import { ReactNode } from "react";
 import { Props } from "react-intl/lib/components/message";
@@ -14,6 +14,7 @@ export type FBLabelProps =
     label?: string | ReactNode | FBLabelLocaleProps;
     fontSize?: string | SvgIconProps["fontSize"] | "sm" | "md" | "lg";
     loading?: boolean;
+    labelProps?: BoxProps;
   };
 
 export enum FBLabelFontSize {

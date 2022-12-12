@@ -1,7 +1,8 @@
+import { get, isEmpty } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { withResizeDetector } from "react-resize-detector";
-import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixTableProps, FBApprovalMatrixTableState } from "..";
+import { FB, FBApprovalMatrixFieldData, FBApprovalMatrixTableProps, FBApprovalMatrixTableState, FBDAMFields } from "..";
 import FBApprovalMatrixTableClasses from "./FBApprovalMatrixTable.styles";
 
 export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
@@ -19,9 +20,12 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
   }: T) => {
 
     // MARK: @config
-    const { approvalMatrixFieldState } = FB.useStores();
-    classes = FBApprovalMatrixTableClasses();
+    const { approvalMatrixFieldState, workspaceState } = FB.useStores();
+    const { formInput } = workspaceState || {};
+    const damRoles = get(formInput, FBDAMFields.DAR, []);
+    const damMatrix = get(formInput, FBDAMFields.DAM, []);
     approvalMatrixTableState = FB.useRef(FBApprovalMatrixTableState);
+    classes = FBApprovalMatrixTableClasses();
 
     // MARK: @reactions
 
@@ -39,10 +43,11 @@ export const withFBApprovalMatrixTable = <T extends FBApprovalMatrixTableProps>(
 
     // MARK: @observer
     useObserver(() => {
-      approvalData = approvalMatrixFieldState?.data as FBApprovalMatrixFieldData;
-      if (!approvalData) {
-        return;
-      }
+      approvalData = {
+        ...approvalMatrixFieldState?.data as FBApprovalMatrixFieldData,
+        approvalMatrix: isEmpty(approvalData?.approvalMatrix) ? damMatrix : approvalData?.approvalMatrix,
+        approvalRoles: isEmpty(approvalData?.approvalRoles) ? damRoles : approvalData?.approvalRoles,
+      };
     });
 
     return Component({

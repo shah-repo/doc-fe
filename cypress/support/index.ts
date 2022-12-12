@@ -24,6 +24,7 @@ import { addScreenshotToContext } from "../utils/context/screenshotsToContext";
 import "./commands";
 import "./commands/approval.request/commands";
 import "./commands/approver.request.list/commands";
+import "./commands/async.tasks/commands";
 import "./commands/attachments/commands";
 import "./commands/auth/commands";
 import "./commands/company.replica/commands";
@@ -37,7 +38,10 @@ import "./commands/export/commands";
 import "./commands/filters/commands";
 import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
+import "./commands/help.center/commands";
 import "./commands/imap/commands";
+import "./commands/intermediate.page/commands";
+import "./commands/layout.new/commands";
 import "./commands/mpi/commands";
 import "./commands/navigation/commands";
 import "./commands/parts.materials/commands";
@@ -51,6 +55,9 @@ import "./commands/user.management/commands";
 import { CONFIG, RUN_ENVIRONMENT_OPTIONS } from "./config";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require("cypress-grep")();
 
 Cypress.on("uncaught:exception", (err, runnable) => {
   const socketIsClosingError =
@@ -171,8 +178,8 @@ function skipTestIfNeeded(this: any, ...args) {
 }
 
 function markFutureTestsForSkippingIfNeeded(this: any) {
-  const { state, DontSkipOnFailure } = this.currentTest;
-  if (!DontSkipOnFailure && state === "failed") {
+  const { state, DontSkipOnFailure, _retries, _currentRetry } = this.currentTest;
+  if (!DontSkipOnFailure && state === "failed" && _retries === _currentRetry) {
     return cy.task("shouldSkip", true);
   }
 }

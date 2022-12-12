@@ -12,6 +12,7 @@ import {
   FBSchemaProps,
 } from "..";
 import FBApprovalMatrixField from "../FBApprovalMatrixField/FBApprovalMatrixField";
+import FBApprovalMatrixFieldRoles from "../FBApprovalMatrixField/FBApprovalMatrixFieldRoles";
 import FBApprovals from "../FBApprovals/FBApprovals";
 import FBApprovers from "../FBApprovers/FBApprovers";
 import FBBlankTplForm from "../FBBlankTplForm/FBBlankTplForm";
@@ -40,6 +41,7 @@ import FBPOReceive from "../FBPOReceive/FBPOReceive";
 import FBProcedure from "../FBProcedure/FBProcedure";
 import FBProcedureDiff from "../FBProcedureDiff/FBProcedureDiff";
 import FBPurchaseOrder from "../FBPurchaseOrder/FBPurchaseOrder";
+import FBPurchaseOrderSummary from "../FBPurchaseOrder/FBPurchaseOrderSummary";
 import FBQuantityField from "../FBQuantityField/FBQuantityField";
 import FBQuantityUnitField from "../FBQuantityUnitField/FBQuantityUnitField";
 import FBRadio from "../FBRadio/FBRadio";
@@ -97,6 +99,7 @@ class FBSchemaState {
     quantity: FBQuantityField,
     timer: FBTimerField,
     purchaseorder: FBPurchaseOrder,
+    purchaseordersummary: FBPurchaseOrderSummary,
     poreceive: FBPOReceive,
     documentRevisions: FBDocumentRevisions,
     instructionsmediaupload: FBMediaAlbumField,
@@ -111,6 +114,7 @@ class FBSchemaState {
     action: FBActionField,
     hellosign: FBHelloSign,
     approvalMatrix: FBApprovalMatrixField,
+    approvalRoles: FBApprovalMatrixFieldRoles,
     poApprovalMatrix: FBPOApprovalMatrix,
     task: FBTask,
     approvers: FBApprovers,
@@ -239,17 +243,6 @@ class FBSchemaState {
     return filter(this.getSchema(), (item) =>
       !item.deleted && item.type === type
     );
-  };
-
-  public getNamesByType = (type?: FBInputType): string[] => {
-    if (!type) { return []; }
-    return this.getSchema().reduce((names: string[], item) => {
-      if (item.deleted || item.type !== type) { return names; }
-      if (item.name) {
-        names.push(item.name);
-      }
-      return names;
-    }, []);
   };
 }
 

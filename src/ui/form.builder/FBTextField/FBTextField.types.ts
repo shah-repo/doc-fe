@@ -23,4 +23,5 @@ export type FBTextFieldProps =
     FBProps?: {
       inputType?: FBInputType;
     };
+    customHeight?: number;
   };

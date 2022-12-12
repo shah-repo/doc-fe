@@ -1,11 +1,13 @@
 import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { statesWithLastSavedEnabled } from "../utils/helpers";
 import SummaryHeaderPresenter from "./SummaryHeader.presenter";
 
 interface Props {
   documentRevision: DocumentRevision;
   canChangeOwnerShip?: boolean;
   canShowCreateVersionButton?: boolean;
+  displayLastSaved?: boolean;
 }
 export interface FormHeaderSummaryContext {
   documentRevisionSummary: DocumentRevision;
@@ -20,15 +22,17 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   FormHeaderSummaryContext = React.createContext<FormHeaderSummaryContext | undefined>({
     documentRevisionSummary: documentRevision,
   });
+  const displayLastSaved = statesWithLastSavedEnabled.includes(documentRevision.status);
+
   return (
     <SummaryHeaderPresenter
       {...{
         documentRevision,
         canChangeOwnerShip,
         canShowCreateVersionButton,
+        displayLastSaved,
       }}
     />
-
   );
 };
 

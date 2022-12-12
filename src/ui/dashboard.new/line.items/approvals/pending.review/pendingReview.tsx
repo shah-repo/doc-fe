@@ -152,11 +152,12 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         button
         onMouseEnter={onMouseHoverListItem}
         className={classes.listItem}
+        disableRipple
       >
         {open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
+          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
+          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemIcon>
           <PendingReviewIcon height={30} width={30} />
@@ -169,6 +170,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 wrap="nowrap"
                 justify="flex-start"
                 alignItems="center"
+                data-cy={arId + "InReview"}
               >
                 <Grid item={true}>
                   <DocId  url={changeRequestEditPath(arChangeRequestId)} docId={arId}/>
@@ -290,7 +292,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
         />
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
             {pinHover && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
@@ -300,6 +302,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
+                  className={classes.cursorPointer}
                 />
               </StyleTooltip>
             )}
@@ -312,7 +315,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} />
+              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
         )}
@@ -320,7 +323,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
           {docRevs.map((prItem, index) => (
-            <StyledListItem button className={classes.nested} key={index}>
+            <StyledListItem button className={classes.nested} key={index} disableRipple>
               <IconButton aria-label="listIcon">
                 {getDocIcon(prItem.docTypeGroup, 20, 20)}
               </IconButton>

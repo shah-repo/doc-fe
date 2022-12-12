@@ -1,37 +1,17 @@
-import React, { useEffect, useMemo } from "react";
-import { useIntl } from "react-intl";
+import React, { useEffect } from "react";
 import { connect, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { ReactComponent as BadgeIcon } from "../../assets/images/badge.svg";
-import { ReactComponent as BookmarkIcon } from "../../assets/images/bookmark.svg";
-import { ReactComponent as CRIcon } from "../../assets/images/cr.svg";
-import { ReactComponent as TimelineIcon } from "../../assets/images/history.svg";
-import { ReactComponent as MigrationIcon } from "../../assets/images/migration.svg";
-import { ReactComponent as NoteIcon } from "../../assets/images/note.svg";
-import { authSelectors } from "../../state/ducks/auth";
-import { ChangeRequest } from "../../state/ducks/changeRequest/types";
+import { SMBox } from "../../App";
 import { documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
 import { DocumentGroupType } from "../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import { FB, FBBookmarkState, FBProvider } from "../form.builder";
+import FBStore from "../form.builder/FBStore/FBStore";
 import useDocumentTitle from "../hooks/useDocumentTitle";
-import AccessPermissionsContainer from "./accessPermissions/AccessPermissions.container";
-import DocumentRevisionAuditContainer from "./audit/Audit.container";
 import DocumentRevisionDisplayContainer from "./DocumentRevisionDisplay.container";
-import DocumentRevisionListContainer from "./DocumentRevisionList.container";
-import ChangeDocumentFormContainer from "./forms/presenters/change.document.form/ChangeDocumentForm.container";
-import { checkIsDocumentRecord, checkIsTypeCanBeOutput, checkIsTypeMustBeOutput } from "./helpers/checkDocumentGroup";
-import { isOwner } from "./helpers/documentRevisionPermissions";
-import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "./helpers/documentRevisionStatus";
-import { isFormWithInlineApproval } from "./helpers/records";
 import { getDocRevIdToRedirect, shouldRedirectToLatestReleased } from "./helpers/redirect";
-import Bookmarks from "./Sidebar/Bookmarks";
-import RevisionHistory from "./Sidebar/RevisionHistory";
-import { SidebarContainer } from "./Sidebar/Sidebar.container";
-import { Sidebar } from "./Sidebar/types";
-import styles from "./styles";
 
 
 interface StateProps {
@@ -74,145 +54,12 @@ DocumentRevisionManagerContainerProps
   docId,
 }) => {
   useDocumentTitle(docId);
-  const [isDrawerOpen, setOpen] = React.useState(true);
-  const classes = styles({ isDrawerOpen });
-  const intl = useIntl();
 
   const bookmarkState = FB.useRef<FBBookmarkState>(FBBookmarkState);
-  const document = useSelector((state: ApplicationState) => documentRevisionsSelectors.getDocument(state, documentId));
   const selectedDocument = useSelector((state: ApplicationState) =>
     documentRevisionsSelectors.getDocumentRevision(state, documentRevisionId as string));
-  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
-  const { formDocument } = selectedDocument || {};
-  const groupOptions = selectedDocument?.document?.documentType?.groupOptions;
-  const docRevsWithoutCanceled = useMemo(() => documentRevisions.filter((docrev) =>
-    docrev.status !== DocumentRevisionStatus.Canceled), [documentRevisions]);
+
   const status = selectedDocument ? selectedDocument.status : undefined;
-  const canAccess = selectedDocument?.document.canAccess;
-  const { documentTypeAcronym: acronym, id: documentTypeId } = document?.documentType || {};
-
-  const isStatusPendingChange = isDocumentRevisionPendingChange(status);
-  const isStatusInDraft = isDocumentRevisionInDraft(status);
-  const isOutput = checkIsTypeMustBeOutput(groupOptions) || checkIsTypeCanBeOutput(groupOptions);
-  const isUserOwner = isOwner(selectedDocument, currentUserEmail);
-  const showFormMigration = (isOutput && isUserOwner && (isStatusInDraft || isStatusPendingChange));
-
-  const isInlineApproval =
-    !!docRevsWithoutCanceled.find(
-      (e) => isFormWithInlineApproval(e.formDocument?.formTemplate?.schema)
-    ) ||
-    !!isFormWithInlineApproval(selectedDocument?.formDocument?.formTemplate?.schema);
-
-  const isRecord =
-    !!docRevsWithoutCanceled.find(
-      (e) => checkIsDocumentRecord(e.document?.documentType?.groupOptions)) ||
-    (!!checkIsDocumentRecord(selectedDocument?.document?.documentType?.groupOptions));
-
-  const sidebarList: Sidebar[] = [
-    {
-      icon: <NoteIcon />,
-      type: "note",
-      details: {
-        shouldShow: true,
-        title: intl.formatMessage({
-          id: `document.revision.docVersion.${acronym}`,
-          defaultMessage: "document.revision.docVersion",
-        }),
-        component: <DocumentRevisionListContainer
-          documentRevisions={docRevsWithoutCanceled}
-          selectedDocumentRevision={documentRevisionId}
-          {
-            ...{
-              isInlineApproval,
-              isRecord,
-              documentId,
-              docId,
-              documentRevisionId,
-              documentTypeId,
-            }
-          }
-        />,
-      },
-    },
-    {
-      icon: <TimelineIcon />,
-      type: "history",
-      details: {
-        shouldShow: Boolean(documentRevisionId),
-        dataCy: "timeline-icon",
-        title: intl.formatMessage({
-          id: "document.revision.history",
-        }),
-        component: documentRevisionId ? <DocumentRevisionAuditContainer
-          {...{
-            documentRevisionId,
-            documentTypeId,
-            selectedDocument,
-          }}
-        /> : null,
-      },
-    },
-    {
-      icon: <BadgeIcon />,
-      type: "permissions",
-      details: {
-        shouldShow: Boolean(documentRevisionId && canAccess && !isNewOutput),
-        dataCy: "permission-icon",
-        title: intl.formatMessage({
-          id: "document.access.permissions",
-        }),
-        component: documentRevisionId && canAccess && !isNewOutput ? <AccessPermissionsContainer
-          documentRevisionId={documentRevisionId}
-          documentId={documentId}
-          canAccess={canAccess}
-          documentTypeId={document.documentType?.id}
-          withoutCurrentUser={true}
-        /> : null,
-      },
-    },
-    {
-      icon: <BookmarkIcon />,
-      type: "bookmarks",
-      details: {
-        shouldShow: true,
-        dataCy: "bookmark-icon",
-        title: intl.formatMessage({
-          id: "document.revision.bookmarks",
-        }),
-        component: <Bookmarks />,
-      },
-    },
-    {
-      icon: <CRIcon />,
-      type: "crHistory",
-      details: {
-        shouldShow: true,
-        dataCy: "cr-icon",
-        title: intl.formatMessage({
-          id: "document.revision.cr.history",
-        }),
-        component: <RevisionHistory changeRequests={documentRevisions.map((e) =>
-          e.changeRequest) as ChangeRequest[]} />,
-      },
-    },
-    {
-      icon: <MigrationIcon />,
-      type: "formMigration",
-      details: {
-        shouldShow: showFormMigration,
-        dataCy: "form-migration-icon",
-        title: intl.formatMessage({
-          id: "common.form.migration",
-        }),
-        component: showFormMigration ? <ChangeDocumentFormContainer
-          docRevId={documentRevisionId || ""}
-          documentTypeId={documentTypeId}
-          sourceSchema={formDocument?.formTemplate?.schema || []}
-          sourceFormId={formDocument?.id || ""}
-        /> : null,
-      },
-    },
-  ];
 
   documentRevisionStatusContextFromDocList = React.createContext(status);
   documentRevisionTypeGroupsFromDocListContext = React.createContext(selectedDocument?.document.documentType.group);
@@ -220,7 +67,7 @@ DocumentRevisionManagerContainerProps
   useEffect(() => () => {
     documentRevisionStatusContextFromDocList = React.createContext<undefined | DocumentRevisionStatus>(undefined);
     documentRevisionTypeGroupsFromDocListContext = React.createContext<undefined | DocumentGroupType>(undefined);
-
+    FBStore.selectedApprover = [];
   }, []);
 
   if (shouldRedirectToLatestReleased(documentRevisions, documentRevisionId)) {
@@ -232,25 +79,22 @@ DocumentRevisionManagerContainerProps
 
   return (
     <FBProvider {...{ bookmarkState }}>
-      <div className={classes.root}>
-        <div className={classes.appFrame}>
-          {documentRevisionId && !isNewOutput && (
-            <DocumentRevisionDisplayContainer
-              documentRevisionId={documentRevisionId}
-              isNewVersion={isNewVersion}
-              documentId={documentId}
-            />
-          )}
-          {documentRevisionId && isNewOutput && (
-            <DocumentRevisionDisplayContainer
-              documentRevisionId={documentRevisionId}
-              isNewOutput={isNewOutput}
-              documentId={documentId}
-            />
-          )}
-        </div>
-        <SidebarContainer {...{ isDrawerOpen, setOpen, sidebarList }} />
-      </div>
+      <SMBox stretchY="100%">
+        {documentRevisionId && !isNewOutput && (
+          <DocumentRevisionDisplayContainer
+            documentRevisionId={documentRevisionId}
+            isNewVersion={isNewVersion}
+            documentId={documentId}
+          />
+        )}
+        {documentRevisionId && isNewOutput && (
+          <DocumentRevisionDisplayContainer
+            documentRevisionId={documentRevisionId}
+            isNewOutput={isNewOutput}
+            documentId={documentId}
+          />
+        )}
+      </SMBox>
     </FBProvider>
   );
 };

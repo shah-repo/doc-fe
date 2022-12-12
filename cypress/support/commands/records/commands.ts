@@ -1,6 +1,9 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { RevisionChangeType } from "../../../../src/state/ducks/documentRevisions/types";
+import { SQS_TYPES } from "../../../../src/ui/async.tasks/types";
+import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
 export { };
@@ -16,6 +19,7 @@ declare global {
       inspecSelectRecordFormFromMultiSelect( params: {recordType: string; recordForm?: string} ): Chainable<Subject>;
       recCheckRevisionStage(params: {stage: string}): Chainable<Subject>;
       recFilterRecordListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
+      recFilterRecordListByIdAndStatus(params: { id: string; status: string }): Chainable<Subject>;
       equipClickCreateNew(): Chainable<Subject>;
       recFilterByTitle(params: {revision: string }): Chainable<Subject>;
       recFilterByStatus(params: {status: string }): Chainable<Subject>;
@@ -24,9 +28,58 @@ declare global {
       recVerifyDescription(params: {description: string }): Chainable<Subject>;
       recVerifyDescriptionWIP(params: {description: string }): Chainable<Subject>;
       equipReloadDocument(): Chainable<Subject>;
+      recAPICreateVoidedDocument(params: {
+        fromDocumentId: string;
+        formInputFieldName: string;
+        formInputApprovalId: string;
+        documentId: string;
+        employeeId: string;
+        sessionId: string;}): Chainable<Subject>;
+      equipSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
+      recFinalizeAndReleaseRecord(): Chainable<Subject>;
     }
   }
 }
+
+Cypress.Commands.add("recAPICreateVoidedDocument", (params: {
+  fromDocumentId: string;
+  formInputFieldName: string;
+  formInputApprovalId: string;
+  documentId: string;
+  employeeId: string;
+  sessionId: string;}) => {
+
+  const requestBody = {
+    formDocument: {
+      id: params.fromDocumentId,
+    },
+    formInput: {
+    },
+    schema: null,
+    parentParts: [],
+    description: "<p>Supplier voided</p>",
+    name: "Supplier voided",
+    attachments: [],
+    referenceTo: [],
+    revisionStage: null,
+    revisionChangeType: RevisionChangeType.Obsolete,
+    retrain: false,
+    renderHTML: null,
+    document: {
+      id: params.documentId,
+    },
+  };
+  requestBody.formInput[params.formInputFieldName] = [params.formInputApprovalId];
+
+  cy.request({
+    method: "POST",
+    url: `${CONFIG.BE_URL}/api/v1/document_revisions`,
+    body: requestBody,
+    headers: {
+      Authorization: `bearer ${params.employeeId}:${params.sessionId}`,
+    },
+  }).then((response) => response.body);
+});
 
 Cypress.Commands.add("recFilterByStatus", (params: {status: string }) => {
   cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
@@ -42,11 +95,25 @@ Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: str
   cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="4"] input`).arrowType(params.title).wait(500);
   cy.unClick();
-  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick({ force: true });
+  cy.get("li").contains(params.status).scrollIntoView().arrowClick({ force: true }).wait(500);
+  cy.unClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get("tr.k-master-row").contains(params.title).arrowClick({ force: true });
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("recFilterRecordListByIdAndStatus", (params: { id: string; status: string }) => {
+  cy.get("#clearFilter").arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="1"] input`).arrowType(params.id).wait(500);
+  cy.unClick();
+  cy.get(`[aria-colindex="3"] [class="k-select"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.unClick();
   cy.landingPageLoadingElementShouldNotExist();
-  cy.get("tr.k-master-row").contains(params.title).arrowClick();
+  cy.get("tr.k-master-row").contains(params.id).arrowClick();
   cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
@@ -58,7 +125,7 @@ Cypress.Commands.add("recCreateRecordFromLandingPage", () => {
 });
 
 Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType: string; recordForms: string[]}) => {
-  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+  cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick().wait(1000);
 
   cy.get("div[id^=react-select]").contains(params.recordType).arrowClick();
   cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").arrowClick();
@@ -70,16 +137,19 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType
 });
 
 Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
+  cy.landingPageLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.DocPreview,
     CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
+    cy.get("[data-cy=\"field-selectType\"]").arrowClick().wait(2000);
+    cy.get("div[id^=react-select]").contains(params.recordType).arrowClick().wait(2000);
 
-    cy.get("div[id^=react-select]").contains(params.recordType).arrowClick();
     if (params.recordForm) {
-      cy.get("[id=\"MultipleFormTemplate-selectDocType\"]").autocompleteSelect(params.recordForm);
+      cy.get("[data-cy=\"field-selectForm\"]").arrowClick().wait(2000);
+      cy.get("div[id^=react-select]").contains(params.recordForm).arrowClick();
     }
   });
+  cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -117,7 +187,6 @@ Cypress.Commands.add("equipClickCreateNew", () => {
 Cypress.Commands.add("equipReloadDocument", () => {
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.DocPreview,
-    CyRoutes.GetAutocompleteOptions,
     CyRoutes.DocPreview], () => {
     cy.reload();
   });
@@ -136,6 +205,17 @@ Cypress.Commands.add("inspecSelectRecordFormFromMultiSelect", (params: {recordTy
     }
     cy.progressBarShouldAppear();
   });
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("equipSetTimeTravelInDays", (params: {days: number}) => {
+  cy.navigToAsyncTasks();
+  cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+  cy.asyncSelectBackToTheFutureTime({ day: params.days });
+  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.RECALC_COMPLIANCE_FOR_EQUIPMENTS });
+  cy.asyncTaskClickSubmit();
+  cy.progressBarShouldNotExist();
+  cy.wait(1000);
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -164,8 +244,17 @@ Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {
 
   cy.wrapWithWaitOnApiCalls([
     CyRoutes.ReleaseDocRevWithoutAr,
-    CyRoutes.GetDocAggregatedAudit],
+    CyRoutes.GetRequiredApproversDocRev],
   () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   });
+});
+
+Cypress.Commands.add("recFinalizeAndReleaseRecord", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+
+  cy.wrapWithWaitOnApiCalls([ CyRoutes.ReleaseDocRevWithoutAr ],
+    () => {
+      cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+    });
 });

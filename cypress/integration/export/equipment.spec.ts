@@ -2,6 +2,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -117,6 +118,7 @@ context("Export Equipment doc", () => {
                     name: "fb-approvals-l02u8tzp",
                     uniqueSchemaItem: true,
                     index: 0,
+                    tabId: "overview",
                   },
                 ],
               },
@@ -182,7 +184,7 @@ context("Export Equipment doc", () => {
 
   context("Equipment with Draft status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-1-Equipment-form" });
+      cy.exportVerifyEmail({ status: STATUS_TYPES_LABEL.DRAFT, filename: "-1-Equipment-form", pdfStatus: "Draft" });
     });
   });
 
@@ -193,7 +195,10 @@ context("Export Equipment doc", () => {
       });
 
       it("Verify export", () => {
-        cy.exportVerifyEmail({ status: "Released", filename: "-1-Equipment-form" });
+        cy.exportVerifyEmail({
+          status: STATUS_TYPES_LABEL.RELEASED, filename: "-1-Equipment-form",
+          pdfStatus: "Released",
+        });
       });
     });
   });
@@ -207,11 +212,18 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Obsolete", filename: "-OBS-Equipment-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Obsolete", filename: "-OBS-Equipment-form",
+        status: STATUS_TYPES_LABEL.OBSOLETE,
+      });
     });
   });
 
   context("Equipment with Superseded status", () => {
+    it("Click on revisions tab on side panel", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Superseded' record", () => {
       cy.contains("Superseded").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -219,7 +231,10 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Superseded", filename: "-1-Equipment-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Superseded", filename: "-1-Equipment-form",
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+      });
     });
   });
 
@@ -252,10 +267,6 @@ context("Export Equipment doc", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
 
-    it("Upload logo picture 'image.jpg'", () => {
-      cy.atchOtherUploadAttachment({ fileName: "image.jpg" });
-    });
-
     it("Save the document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
     });
@@ -267,7 +278,7 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-1-Void" });
+      cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-1-Void", status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 
@@ -332,7 +343,7 @@ context("Export Equipment doc", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add Approver'", () => {
@@ -353,7 +364,10 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Pending Change", filename: "-1-Equipment-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Pending Change", filename: "-1-Equipment-form",
+        status: STATUS_TYPES_LABEL.PENDING_CHANGE,
+      });
     });
   });
 
@@ -375,7 +389,10 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-1-Equipment-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "In Review", filename: "-1-Equipment-form",
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+      });
     });
   });
 
@@ -397,7 +414,10 @@ context("Export Equipment doc", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Approved", filename: "-1-Equipment-form" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Approved", filename: "-1-Equipment-form",
+        status: STATUS_TYPES_LABEL.APPROVED,
+      });
     });
   });
 

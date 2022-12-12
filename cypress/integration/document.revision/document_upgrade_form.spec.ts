@@ -3,10 +3,12 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { RecordDocumentType, TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -50,19 +52,8 @@ context("Document form upgrade", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-              },
+              RecordDocumentType,
+              TestDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -136,6 +127,7 @@ context("Document form upgrade", () => {
                     name: "fb-approvals-kn7fbu5l",
                     uniqueSchemaItem: true,
                     index: 0,
+                    tabId: "overview",
                   },
                   {
                     index: 1,
@@ -143,6 +135,7 @@ context("Document form upgrade", () => {
                     name: "old-textfield-kn7fc209",
                     validationMode: "default",
                     label: "Old section",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -156,6 +149,7 @@ context("Document form upgrade", () => {
                     rows: 1,
                     validationMode: "default",
                     label: "Old textfield",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -221,6 +215,7 @@ context("Document form upgrade", () => {
                 name: "old-section-kn7ffn15",
                 validationMode: "default",
                 label: "Old section",
+                tabId: "overview",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -230,6 +225,7 @@ context("Document form upgrade", () => {
               {
                 index: 1,
                 type: "textfield",
+                tabId: "overview",
                 name: "old-textfield-kn7fg4bj",
                 rows: 1,
                 validationMode: "default",
@@ -287,6 +283,7 @@ context("Document form upgrade", () => {
 
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(2000);
     });
 
     context("Fill out the required fields", () => {
@@ -296,6 +293,10 @@ context("Document form upgrade", () => {
 
       it("Enter description", () => {
         cy.drEnterDocumentDescription( { description: "Test record form upgrade" });
+      });
+
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
       });
 
       it("Enter text in old textfield", () => {
@@ -369,14 +370,14 @@ context("Document form upgrade", () => {
     context("Add a new fields to the form", () => {
       it("Add a new section", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Section" });
+        cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
         cy.fbEnterLabel({ label: "New section" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add a new textfield", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterLabel({ label: "New textfield" });
         cy.fbAddNewFieldButton();
       });
@@ -414,14 +415,14 @@ context("Document form upgrade", () => {
     context("Add a new fields to the form", () => {
       it("Add a new section", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Section" });
+        cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
         cy.fbEnterLabel({ label: "New section" });
         cy.fbAddNewFieldButton();
       });
 
       it("Add a new textfield", () => {
         cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterLabel({ label: "New textfield" });
         cy.fbAddNewFieldButton();
       });
@@ -484,7 +485,7 @@ context("Document form upgrade", () => {
       });
 
       it("Verify released upgraded document", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.get("div[name^=\"new-textfield\"]").should("have.text", "Test two");
       });
     });
@@ -497,9 +498,7 @@ context("Document form upgrade", () => {
 
     it("Select Record", () => {
       cy.dlFilterByDocId({ docId: "RD-00002" });
-
       cy.dlSelectFirstDocument();
-
     });
 
     it("Click on upgrade to new form", () => {
@@ -511,8 +510,16 @@ context("Document form upgrade", () => {
         cy.get("input[data-cy=\"formUpgradeButton\"]").should("not.exist");
       });
 
+      it("Navigate to Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Verify existing fields", () => {
         cy.get("input[name^=\"old-textfield\"]").should("have.value", "Test one");
+      });
+
+      it("Navigate to Overview tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Verify newly added fields", () => {
@@ -544,7 +551,7 @@ context("Document form upgrade", () => {
 
       context("Verify released upgraded record", () => {
         it("Verify status", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         });
 
         it("Verify added textfield", () => {
@@ -561,6 +568,10 @@ context("Document form upgrade", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on revisions tab on side panel", () => {
+      cy.drClickRevisionsSidePanel();
     });
 
     it("Check that A.1 version was created", () => {

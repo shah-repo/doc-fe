@@ -6,6 +6,9 @@ export const styles = makeStyles((theme: Theme) =>
     inline: {
       display: "inline",
     },
+    buttoncursor: {
+      cursor: "unset",
+    },
     listItemIcon: {
       paddingLeft: "10px",
     },
@@ -23,14 +26,15 @@ export const styles = makeStyles((theme: Theme) =>
       right: "0px",
       top: "0px",
       /* Highlight */
-      background: Colors.sky_blue,
+      background: "transparent",
     },
     actionIcon: {
       paddingLeft: theme.spacing(1.25),
     },
+    cursorPointer: {
+      cursor: "pointer",
+    },
     typographyDueInfewDays: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
       color: Colors.latest_yellow_varient,
@@ -40,16 +44,12 @@ export const styles = makeStyles((theme: Theme) =>
       color: Colors.black,
     },
     typographyOverdue: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
       color: Colors.latest_red_varient,
       letterSpacing: 0,
     },
     typographyAssigned: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "13px",
       color: Colors.font_gray,
@@ -57,27 +57,21 @@ export const styles = makeStyles((theme: Theme) =>
     },
     typography: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 400,
       letterSpacing: 0,
     },
     typographyBold: {
       fontSize: "14px",
-      fontFamily: "Sora",
       fontWeight: 600,
       letterSpacing: 0,
     },
     typographyStatus: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "bold",
       fontSize: "14px",
       lineHeight: "15px",
       letterSpacing: 0,
     },
     timestampContainer: {
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: "normal",
       fontSize: "12px",
       lineHeight: "22px",

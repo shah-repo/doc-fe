@@ -7,6 +7,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { TestDocumentTypeRecord } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -47,20 +48,7 @@ context("Test fb fields validation in BLC", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
+              TestDocumentTypeRecord,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -132,6 +120,7 @@ context("Test fb fields validation in BLC", () => {
                       index: 0,
                       type: "textfield",
                       name: "text-field-no-validation-kwg97lhs",
+                      tabId: "overview",
                       hidden: false,
                       outputDisabled: false,
                       deleted: false,
@@ -152,6 +141,7 @@ context("Test fb fields validation in BLC", () => {
                       index: 1,
                       type: "texteditor",
                       name: "text-editor-required-kwg98gul",
+                      tabId: "overview",
                       hidden: false,
                       outputDisabled: false,
                       deleted: false,
@@ -175,6 +165,7 @@ context("Test fb fields validation in BLC", () => {
                       index: 2,
                       type: "datepicker",
                       name: "date-picker-required-if-another-x-kwg9a9v2",
+                      tabId: "overview",
                       hidden: false,
                       outputDisabled: false,
                       deleted: false,
@@ -200,6 +191,7 @@ context("Test fb fields validation in BLC", () => {
                       index: 3,
                       type: "radiogroup",
                       name: "radio-button-group-hidden-kwg9bi00",
+                      tabId: "overview",
                       hidden: false,
                       outputDisabled: false,
                       deleted: false,
@@ -235,6 +227,7 @@ context("Test fb fields validation in BLC", () => {
                       index: 4,
                       type: "select",
                       name: "select-hidden-if-another-x-kwg9cmj2",
+                      tabId: "overview",
                       hidden: false,
                       outputDisabled: false,
                       deleted: false,
@@ -274,6 +267,7 @@ context("Test fb fields validation in BLC", () => {
                       index: 5,
                       type: "checkboxgroup",
                       name: "checkbox-group-disabled-if-another-x-kwg9e3j1",
+                      tabId: "overview",
                       hidden: false,
                       outputDisabled: false,
                       deleted: false,
@@ -310,6 +304,7 @@ context("Test fb fields validation in BLC", () => {
                     },
                     {
                       name: "approvals-built-in",
+                      tabId: "overview",
                       type: "approvals",
                       index: 6,
                       label: "Approvals",
@@ -413,23 +408,38 @@ context("Test fb fields validation in BLC", () => {
         cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)")
+            .arrowClick();
           cy.unClick();
         });
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]")
+          .autocompleteSelect("Document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Document Type");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-output-document-type\"]")
+          .autocompleteSelect("Test Document Type");
       });
 
       it("Select 'no' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(1).check();
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(1).check();
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add approval", () => {
@@ -442,6 +452,10 @@ context("Test fb fields validation in BLC", () => {
     });
 
     context("Test excel download", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Download excel template file", () => {
         cy.excelDownloadTemplate({ saveFileName: excelTemplateSaveName });
       });
@@ -482,7 +496,8 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -513,7 +528,8 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -540,7 +556,8 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -572,7 +589,8 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -588,6 +606,10 @@ context("Test fb fields validation in BLC", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
     });
 
+    it("Click on 'Overview' tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Submit for approval", () => {
       cy.pmSubmitForApproval();
     });
@@ -600,7 +622,7 @@ context("Test fb fields validation in BLC", () => {
   context("Verify created records", () => {
     it("Navigate to records list and verify number of records", () => {
       cy.navigToDashboard();
-      cy.wait(30 * 1000);
+      cy.wait(5 * 1000);
       cy.navigToRecords();
       cy.dlVerifyDocCounter({ docCounterNumber: 9 });
     });
@@ -617,11 +639,11 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitleWIP({ title: "Record title 1" });
+          cy.drVerifyTitle({ title: "Record title 1" });
         });
 
         it("Verify description", () => {
-          cy.recVerifyDescriptionWIP({ description: "Record description 1" });
+          cy.drVerifyDescription({ description: "Record description 1" });
         });
 
         it("Verify owner", () => {
@@ -642,9 +664,9 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify radio button group", () => {
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "value");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "value");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("exist");
         });
 
         it("Verify checkbox group", () => {
@@ -672,11 +694,11 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitleWIP({ title: "Record title 2" });
+          cy.drVerifyTitle({ title: "Record title 2" });
         });
 
         it("Verify description", () => {
-          cy.recVerifyDescriptionWIP({ description: "Record description 2" });
+          cy.drVerifyDescription({ description: "Record description 2" });
         });
 
         it("Verify owner", () => {
@@ -688,7 +710,8 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify text editor value", () => {
-          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
+          cy.get("[id=\"sm-tabpanel-0\"] [id^=\"fb-mpiprocedure-ref-text-editor-required\"]>div>" +
+          "div>div:nth-child(2)>div:nth-child(2)>div")
             .should("have.text", "test");
         });
 
@@ -697,18 +720,18 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify radio button group", () => {
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "value");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "value");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("exist");
         });
 
         it("Verify checkbox group", () => {
           cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option1]")
-            .should("not.have.attr", "disabled");
+            .should("have.attr", "value");
           cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option2]")
-            .should("not.have.attr", "disabled");
+            .should("have.attr", "value");
           cy.get("[name^=\"checkbox-group-disabled-if-another-x\"] input[value=option3]")
-            .should("not.have.attr", "disabled");
+            .should("have.attr", "value");
         });
       });
 
@@ -727,11 +750,11 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitleWIP({ title: "Record title 3" });
+          cy.drVerifyTitle({ title: "Record title 3" });
         });
 
         it("Verify description", () => {
-          cy.recVerifyDescriptionWIP({ description: "Record description 3" });
+          cy.drVerifyDescription({ description: "Record description 3" });
         });
 
         it("Verify owner", () => {
@@ -752,9 +775,9 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify radio button group", () => {
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "value");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "value");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("exist");
         });
 
         it("Verify checkbox group", () => {
@@ -782,11 +805,11 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitleWIP({ title: "Record title 4" });
+          cy.drVerifyTitle({ title: "Record title 4" });
         });
 
         it("Verify description", () => {
-          cy.recVerifyDescriptionWIP({ description: "Record description 4" });
+          cy.drVerifyDescription({ description: "Record description 4" });
         });
 
         it("Verify owner", () => {
@@ -798,7 +821,8 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify text editor value", () => {
-          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor\"]>div>div>div:nth-child(2)>div:nth-child(2)>div")
+          cy.get("[id=\"sm-tabpanel-0\"] [id^=\"fb-mpiprocedure-ref-text-editor-required\"]>div>" +
+          "div>div:nth-child(2)>div:nth-child(2)>div")
             .should("have.text", "test");
         });
 
@@ -841,11 +865,11 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitleWIP({ title: "Record title 7" });
+          cy.drVerifyTitle({ title: "Record title 7" });
         });
 
         it("Verify description", () => {
-          cy.recVerifyDescriptionWIP({ description: "Record description 7" });
+          cy.drVerifyDescription({ description: "Record description 7" });
         });
 
         it("Verify owner", () => {
@@ -866,9 +890,9 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify radio button group", () => {
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("have.attr", "value");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("have.attr", "value");
-          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("have.attr", "value");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option1]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option2]").should("exist");
+          cy.get("input[name^=\"radio-button-group-hidden\"][value=option3]").should("exist");
         });
 
         it("Verify checkbox group", () => {
@@ -898,7 +922,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitle({ title: "Record title 5" });
+          cy.drVerifyTitle({ title: "Record title 5" });
         });
 
         it("Verify description", () => {
@@ -914,7 +938,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify text editor value", () => {
-          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"] p")
+          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"] span[data-text]")
             .should("have.text", "test");
         });
 
@@ -957,7 +981,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitle({ title: "Record title 8" });
+          cy.drVerifyTitle({ title: "Record title 8" });
         });
 
         it("Verify description", () => {
@@ -973,7 +997,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify text editor value", () => {
-          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"] p")
+          cy.get("[id^=\"fb-mpiprocedure-ref-text-editor-required\"] span[data-text]")
             .should("have.text", "test");
         });
 
@@ -1014,7 +1038,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitle({ title: "Void" });
+          cy.drVerifyTitle({ title: "Void" });
         });
 
         it("Verify description", () => {
@@ -1023,6 +1047,10 @@ context("Test fb fields validation in BLC", () => {
 
         it("Verify owner", () => {
           cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+        });
+
+        it("Click on revisions tab on side panel", () => {
+          cy.drClickRevisionsSidePanel();
         });
 
         it("Verify released date", () => {
@@ -1074,7 +1102,7 @@ context("Test fb fields validation in BLC", () => {
         });
 
         it("Verify title", () => {
-          cy.recVerifyTitle({ title: "Void" });
+          cy.drVerifyTitle({ title: "Void" });
         });
 
         it("Verify description", () => {
@@ -1083,6 +1111,10 @@ context("Test fb fields validation in BLC", () => {
 
         it("Verify owner", () => {
           cy.drVerifyDocumentOWner({ owner: USERS[1].name });
+        });
+
+        it("Click on revisions tab on side panel", () => {
+          cy.drClickRevisionsSidePanel();
         });
 
         it("Verify released date", () => {

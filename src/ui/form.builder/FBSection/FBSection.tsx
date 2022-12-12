@@ -10,6 +10,7 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
   showErrorMsg = false,
   omitFinalValidation = true,
   stepIndex,
+  index = 0,
   children,
   loading,
   name,
@@ -21,22 +22,19 @@ const FBSection: React.FunctionComponent<FBSectionProps> = ({
     type="section"
   >
     <Box
-      bgcolor={Colors.medium_blue}
-      color="primary.contrastText"
-      py={1.5}
-      px={2}
-      fontSize="body1.fontSize"
-      fontWeight="fontWeightBold"
-      borderRadius={4}
+      color={Colors.almost_black}
+      fontSize={16}
+      lineHeight={1.5}
+      fontWeight={600}
       id={name}
-      style={{ scrollMarginTop: 50 }}
+      style={{ scrollMarginTop: 50, borderBottom: `1px solid ${Colors.chinese_silver}` }}
     >
       {label && (
         <FBText
           locale={label as string}
           boxProps={{
             component: "span",
-            style: { textTransform: "uppercase", float: "left" },
+            style: { float: "left" },
           }}
           {...{ loading }}
         />

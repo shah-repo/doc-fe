@@ -20,7 +20,7 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
-import { find, isEmpty, map, set, sortBy, startCase } from "lodash";
+import { find, flatMap, isEmpty, map, set, sortBy, startCase } from "lodash";
 import qs from "query-string";
 import React, { useCallback, useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -47,6 +47,7 @@ import NoDataFound from "../../components/common/kendo/NoDataFound";
 import { KendoColumn, KendoPanelProps } from "../../components/common/kendo/types";
 import KendoGlobalization from "../../components/KendoGlobalization";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
+import KendoGridStyles from "../../components/KendoGrid/KendoGrid.styles";
 import { toastError } from "../../components/notifications";
 import ClearFilters from "../../components/table/ClearFilters";
 import {
@@ -64,7 +65,7 @@ import { NameCell } from "./cell.template/NameCell";
 import { ParentsCell } from "./cell.template/ParentsCell";
 import { PermissionsCell } from "./cell.template/PermissionsCell";
 import { TagsCell } from "./cell.template/TagsCell";
-import KendoGridStyles from "./styles";
+import GMExport from "./GMExport";
 
 interface GroupManagementProps {
   onSelect;
@@ -310,10 +311,21 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
       .then((resp) => {
         resp.data = resp.data.map((el) => ({
           ...el,
-          memberNames: el.employees.map((e) => e.user.name.trimLeft().trimEnd()).sort().join(", ") || "",
-          parentName: el.parents.map((e) => e.name.trimLeft().trimEnd()).sort().join(", ") || "",
+          memberNames:
+            el.employees
+              .map((e) => e.user.name.trimLeft().trimEnd())
+              .sort()
+              .join(", ") || "",
+          parentName:
+            el.parents
+              .map((e) => e.name.trimLeft().trimEnd())
+              .sort()
+              .join(", ") || "",
           formattedTags: el?.tags?.sort().join(", ") || "",
           formattedPermissions: el?.permissions?.sort().join(", ") || "",
+          groupType: el?.isOfficial
+            ? getTranslatedText(TranslatedText[DisplayText.OFFICIAL])
+            : getTranslatedText(TranslatedText[DisplayText.UNOFFICIAL]),
         }));
         return resp;
       })
@@ -405,6 +417,9 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     />
   ;
 
+  const nameCell = (props: GridCellProps) =>
+    <NameCell {...props} />;
+
   const employeeCell = (props: GridCellProps) =>
     <EmployeesCell {...props} employees={activeEmployees} />;
 
@@ -420,29 +435,29 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   const permissionCell = (props: GridCellProps) =>
     <PermissionsCell {...props} isOfficial={Official} />;
 
-  const BooleanFilterCell = (props: GridFilterCellProps) => <DropdownFilterTemplate
+  const GroupTypeFilterCell = (props: GridFilterCellProps) => <DropdownFilterTemplate
     {...props}
     data={[{
-      text: getTranslatedText("common.official"),
-      value: true,
+      text: getTranslatedText(TranslatedText[DisplayText.OFFICIAL]),
+      value: getTranslatedText(TranslatedText[DisplayText.OFFICIAL]),
     }, {
-      text: getTranslatedText("common.unofficial"),
-      value: false,
+      text: getTranslatedText(TranslatedText[DisplayText.UNOFFICIAL]),
+      value: getTranslatedText(TranslatedText[DisplayText.UNOFFICIAL]),
     }]}
     defaultItem={{
       text: getTranslatedText(TranslatedText[DisplayText.ALL]),
-      value: "All",
+      value: getTranslatedText(TranslatedText[DisplayText.ALL]),
     }}
   />;
 
   const filterCellMapping = {
-    isOfficial: BooleanFilterCell,
+    groupType: GroupTypeFilterCell,
   };
 
   const fieldToCellMapping = {
     "memberNames": employeeCell,
-    "name": NameCell,
-    "isOfficial": groupCell,
+    "name": nameCell,
+    "groupType": groupCell,
     "formattedPermissions": permissionCell,
     "parentName": parentCell,
     "formattedTags": tagCell,
@@ -528,7 +543,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
     <>
       <KendoGlobalization>
         <KendoGrid
-          className={`${classes.kGrid} no-row-pointer`}
+          className={`${classes.grid} no-row-pointer`}
           style={{ width: `${width}px` }}
           data={result}
           editField={editField}
@@ -569,21 +584,25 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
 
   return (
-    <Box>
-      <Box mb={2}>
-        <Grid container={true} alignItems="center">
-          <Grid item xs>
+    <>
+      <Grid item xs={12} className={classes.headerGridItem}>
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
             <GridTitle translation="navigation.group.management" />
           </Grid>
           <Grid item>
-            {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+            <Box display="flex">
+              <GMExport gridData={dataState.group?.length ? flatMap(map(result, "items")) : result}
+                columns={columnDefinitions} />
+              {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
+            </Box>
           </Grid>
         </Grid>
-      </Box>
-      <Grid item xs>
+      </Grid>
+      <Grid item xs={12} className={classes.kendoGridItem}>
         <div style={{ color: "red" }}>{tableCriteria.apiError}</div>
         {renderBody()}
       </Grid>
-    </Box>
+    </>
   );
 }

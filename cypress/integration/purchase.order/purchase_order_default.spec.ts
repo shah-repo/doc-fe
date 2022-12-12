@@ -9,6 +9,8 @@ import { purchaseOrderDefaultSchema } from "../../fixtures/default_po_schema";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { POPart } from "../../utils/constants/documentTypes/part";
+import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -53,188 +55,8 @@ context("PO test with default enlil form", () => {
           importerEmail: IMPORTER_USER.email,
           users: [USERS[2], USERS[3], USERS[4]],
           documentTypes: [
-            {
-              documentTypeName: "PO Part",
-              documentTypeAcronym: "PRT-",
-              group: "PART",
-              category: "Parts",
-              isQms: true,
-            },
-            {
-              documentTypeName: "Purchase Order test",
-              documentTypeAcronym: "POT-",
-              group: "PO",
-              category: "Purchase Order",
-              isQms: true,
-              privateNumberPool: true,
-              needsSignature: true,
-              fieldsConfig: {
-                C: {
-                  visible: false,
-                  required: false,
-                },
-                D: {
-                  label: "Description",
-                  visible: true,
-                  required: false,
-                },
-                E: {
-                  visible: false,
-                  required: true,
-                },
-                F: {
-                  visible: false,
-                  required: true,
-                },
-                G: {
-                  visible: false,
-                  required: false,
-                },
-                I: {
-                  label: "Revise PO",
-                  visible: true,
-                },
-                J: {
-                  visible: false,
-                },
-                K: {
-                  label: "Cancel PO",
-                  visible: true,
-                },
-                L: {
-                  label: "Correct PO",
-                  visible: true,
-                },
-                M: {
-                  label: "Type of Change",
-                  visible: true,
-                  required: true,
-                },
-                N: {
-                  label: "Add Approvers",
-                  visible: false,
-                  required: false,
-                },
-                O: {
-                  label: "PO History",
-                  visible: true,
-                },
-                R: {
-                  visible: false,
-                },
-                S: {
-                  label: "Revise PO",
-                  visible: true,
-                },
-                V: {
-                  label: "Create PO",
-                  visible: true,
-                },
-                A1: {
-                  label: "Draft",
-                  visible: true,
-                },
-                A2: {
-                  label: "Void",
-                  visible: true,
-                },
-                A3: {
-                  label: "History",
-                  visible: true,
-                },
-                A4: {
-                  visible: false,
-                },
-                A5: {
-                  label: "Pending Approval",
-                  visible: true,
-                },
-                A6: {
-                  label: "Draft",
-                  visible: true,
-                },
-                P1: {
-                  label: "Draft",
-                  visible: true,
-                },
-                P2: {
-                  label: "Void",
-                  visible: true,
-                },
-                P3: {
-                  label: "History",
-                  visible: true,
-                },
-                P4: {
-                  visible: false,
-                },
-                P5: {
-                  label: "Pending Approval",
-                  visible: true,
-                },
-                P6: {
-                  label: "Draft",
-                  visible: true,
-                },
-              },
-              schema: [
-                {
-                  name: "po-status-built-in",
-                  type: "select",
-                  index: 0,
-                  label: "PO Status",
-                  options: [
-                    {
-                      text: "Open",
-                      value: "Open",
-                    },
-                    {
-                      text: "Closed",
-                      value: "Closed",
-                    },
-                    {
-                      text: "Cancelled",
-                      value: "Cancelled",
-                    },
-                  ],
-                  applicableOn: [
-                    "ON_STATE_TO_IN_REVIEW",
-                  ],
-                  deleteDisabled: true,
-                  validationMode: "default",
-                  validationAttribute: "PO Status",
-                  deleteInFormDisabled: true,
-                  applicableValidationSchema: true,
-                },
-                {
-                  name: "po-supplier-built-in",
-                  type: "supplier",
-                  index: 1,
-                  label: "Supplier ",
-                  applicableOn: [
-                    "ON_STATE_TO_IN_REVIEW",
-                  ],
-                  deleteDisabled: true,
-                  validationMode: "default",
-                  validationAttribute: "Supplier",
-                  deleteInFormDisabled: true,
-                  applicableValidationSchema: true,
-                },
-                {
-                  name: "po-items-built-in",
-                  type: "purchaseorder",
-                  index: 2,
-                  label: "Purchase Order",
-                  applicableOn: [
-                    "ON_STATE_TO_IN_REVIEW",
-                  ],
-                  deleteDisabled: true,
-                  validationAttribute: "Purchase Order",
-                  deleteInFormDisabled: true,
-                  applicableValidationSchema: true,
-                },
-              ],
-            },
+            POPart,
+            PurchaseOrderTest,
           ],
           acctCodes: ["code 1", "code 2"],
           addresses: ["Address 1", "Address 2"],
@@ -376,13 +198,14 @@ context("PO test with default enlil form", () => {
 
     context("Create purchase order", () => {
       it("Click on 'Purchase Order' on sidebar", () => {
+        cy.wait(1000);
         cy.navigToPurchaseOrder();
       });
 
       it("Click on 'Create PO' button", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
           cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-          poCreationDate1 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
+          poCreationDate1 = moment().tz("America/Los_Angeles").format("MMM D, YYYY hh:mm A");
           poCreationDate2 = moment().tz("America/Los_Angeles").add(1, "minutes").format("MMMM D, YYYY hh:mm A");
         });
       });
@@ -394,27 +217,29 @@ context("PO test with default enlil form", () => {
 
         it("Check history entry", () => {
           SystemRequirement("REQ-1630");
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
             cy.drSelectHistoryTab();
           });
 
-          cy.get("div[data-cy=\"owner-0\"]").should("have.text", USERS[1].name);
-          cy.get("time[data-cy=\"time-0\"]")
-            .should("have.text", (poCreationDate1 || poCreationDate2));
+          cy.get("[data-cy='change-key-0']").contains(USERS[1].name);
+          cy.get("time[data-cy=\"audit-time-0\"]")
+            .contains((poCreationDate1 || poCreationDate2));
         });
 
         it("Select 'Open' for PO status", () => {
           cy.poSelectPOStatus({ status: "Open" });
+          cy.unClick();
         });
 
         it(`Select '${USERS[1].name}' for Requestor`, () => {
-          SystemRequirement("REQ-1300");
-          cy.get("[data-cy^=requestor]").arrowClick();
+          cy.get("[data-cy^=\"po-requestor-\"]").arrowClick();
           cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         });
 
         it(`Select 'Quality' for Department`, () => {
-          cy.get("div[id*=department]").arrowClick();
+          cy.get("div[id*=mui-component-select-department]").arrowClick();
           cy.get("ul>li[role=option]").contains("Quality").arrowClick();
         });
 
@@ -449,14 +274,21 @@ context("PO test with default enlil form", () => {
 
         it("Select Order Date", () => {
           cy.get("input[name^=ordered]").parent().find("button").arrowClick();
-
           cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+        });
+
+        it("Save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
       });
 
       context("Add purchase order item", () => {
+        it("navigate to Line Items", () => {
+          cy.drSelectLineItems();
+        });
+
         it("Click on 'Add item' button to add item without Part Number", () => {
-          cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+          cy.poAddNewFieldItem();
         });
 
         it("Enter Quantity Ordered", () => {
@@ -483,7 +315,6 @@ context("PO test with default enlil form", () => {
 
         it("Add Required Date", () => {
           cy.get("input[name^=date]").parent().find("button").arrowClick();
-
           cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
         });
 
@@ -522,7 +353,7 @@ context("PO test with default enlil form", () => {
         it("Verify Sub Total, Tax & Total", () => {
           cy.poCheckAmount({ number: "$20.00" });
           cy.poCheckTax({ number: "1.850000" });
-          cy.get("[data-cy=\"poTotal\"]").should("have.text", "$21.85");
+          cy.poCheckTotalAmount({ number: "$21.85" });
         });
       });
 
@@ -576,11 +407,19 @@ context("PO test with default enlil form", () => {
         it("Verify Sub Total, Tax & Total", () => {
           cy.poCheckAmount({ number: "$50.00" });
           cy.poCheckTax({ number: "1.850000" });
-          cy.get("[data-cy=\"poTotal\"]").should("have.text", "$51.85");
+          cy.poCheckTotalAmount({ number: "$51.85" });
+        });
+
+        it("Save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
         });
       });
 
       context("Finish PO", () => {
+        it("navigate to Details tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Enter 'Nothing to comment' inside PO dialog box", () => {
           cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
           cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
@@ -590,13 +429,6 @@ context("PO test with default enlil form", () => {
 
         it("Enter 'contact.us@gmail.com' inside Contact Email", () => {
           cy.get("[name^=contact-email]").arrowType("contact.us@gmail.com");
-        });
-
-        it("Add an Approval", () => {
-          cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-          });
         });
 
         it("Save PO document", () => {
@@ -613,12 +445,9 @@ context("PO test with default enlil form", () => {
         });
 
         it("Click 'Approve' button", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
       });
     });
   });
 });
-
-export { };
-

@@ -25,15 +25,14 @@ const CellStyles = makeStyles((theme) => ({
     boxShadow: "none",
     borderRadius: 200,
     marginRight: theme.spacing(1.875),
-    textTransform: "uppercase",
     paddingRight: theme.spacing(2.5),
     paddingLeft: theme.spacing(2.5),
-    fontFamily: "Sora",
     fontSize: 12,
     fontWeight: 600,
     color: Colors.navy,
     border: `1px solid ${Colors.gray}`,
     backgroundColor: Colors.white,
+    textTransform: "uppercase",
   },
   schemaAddBtn: {
     "fontWeight": 600,
@@ -42,12 +41,15 @@ const CellStyles = makeStyles((theme) => ({
     "borderRadius": 200,
     "background": Colors.navy,
     "color": Colors.white,
-    "fontFamily": "Sora",
     "paddingRight": theme.spacing(2.5),
     "paddingLeft": theme.spacing(2.5),
     "textTransform": "uppercase",
     "&:hover": {
       background: Colors.navy,
+    },
+    "&:disabled": {
+      opacity: .6,
+      backgroundColor: Colors.navy,
     },
   },
   closeButton: {

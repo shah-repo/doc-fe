@@ -8,6 +8,8 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -20,18 +22,22 @@ const documentRevisionName = "AR Form";
 const secondDocumentRevName = "Second document for testing";
 const ddTitle = "DD Test";
 const docTypeOne = "Design Document";
-const docIdStr = "Doc ID";
-const rev = "Revision";
-const docTitle = "Document title";
-const type = "Type";
-const owner = "Owner";
+const docIdStr = "DOC ID";
+const rev = "REVISION";
+const docTitle = "DOCUMENT TITLE";
+const type = "TYPE";
+const owner = "OWNER";
 const arId = "AR ID";
-const status = "Status";
-const effectiveDate = "Effective Date";
+const status = "STATUS";
+const effectiveDate = "EFFECTIVE DATE";
+const state = "STATE";
+const title = "TITLE";
+const relDate = "RELEASED DATE";
+const formId = "FORM ID";
 const currentDate = moment().tz("America/Los_Angeles").format("l");
 const approvalRequestName2 = "AR Form";
 const cpDocId = "CP-00003";
-const arTitle = "AR Title";
+const arTitle = "AR TITLE";
 const rmId = "RD-00007";
 const id = "ID";
 
@@ -63,19 +69,8 @@ context("Document list test", () => {
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-              },
+              ClinicalProtocolNotRedline,
+              RecordDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -204,12 +199,12 @@ context("Document list test", () => {
     it("Verify that the Document List filter to display released documents when starting a new Enlil session", () => {
       cy.dlVerifyFilterByStatus({ status: "Released" });
     });
+  });
 
-    context("Verify most recent edited document is first on list", () => {
-      it("Verify first document is: " + documentRevisionName, () => {
-        cy.dlVerifyFilterByDocTitle({ docTitle: documentRevisionName });
-        cy.dlClearFilters();
-      });
+  context("Verify most recent edited document is first on list", () => {
+    it("Verify first document is: " + documentRevisionName, () => {
+      cy.dlVerifyFilterByDocTitle({ docTitle: documentRevisionName });
+      cy.dlClearFilters();
     });
   });
 
@@ -250,7 +245,7 @@ context("Document list test", () => {
     });
 
     it("Grouping columns should be displayed next to button Clear Filters", () => {
-      cy.get(".k-group-indicator").eq(0).should("have.text", `${type}`);
+      cy.get(".k-group-indicator").eq(0).should("have.text", "Type");
     });
 
     it("User should be able to remove it", () => {
@@ -449,7 +444,6 @@ context("Document list test", () => {
     });
   });
 
-
   context("Approval Requests", () => {
     it("Navigate to Approval Requests Landing page", () => {
       cy.navigToApprovalRequestList();
@@ -643,10 +637,10 @@ context("Document list test", () => {
     it("Verify all the columns are present", () => {
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${id}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${rev}`);
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "State");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Title");
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${state}`);
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${title}`);
       cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${owner}`);
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Released Date");
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", `${relDate}`);
     });
 
     it("Verify that Button 'Clear Filter', 'Export List' and 'Create a Record' are present", () => {
@@ -692,19 +686,19 @@ context("Document list test", () => {
         it("Select 'Numeric' revision stage", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
+      });
 
-        it("Verify approvals field is automatically added", () => {
-          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+      context("Creates document and releases it", () => {
+        it("Click create document after filling document", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
 
-        context("Creates document and releases it", () => {
-          it("Click create document after filling document", () => {
-            cy.drClickCreateDocumentWithApiCall();
-          });
+        it("Verify approvals field is automatically added", () => {
+          cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+        });
 
-          it("Approve and Release document", () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+        it("Approve and Release document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
@@ -740,19 +734,19 @@ context("Document list test", () => {
         it("Select 'Numeric' revision stage", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
+      });
 
-        it("Verify approvals field is automatically added", () => {
-          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+      context("Creates document and releases it", () => {
+        it("Click create document after filling document", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
 
-        context("Creates document and releases it", () => {
-          it("Click create document after filling document", () => {
-            cy.drClickCreateDocumentWithApiCall();
-          });
+        it("Verify approvals field is automatically added", () => {
+          cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
+        });
 
-          it("Approve and Release document", () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+        it("Approve and Release document", () => {
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
         });
       });
     });
@@ -773,6 +767,7 @@ context("Document list test", () => {
       });
 
       it("Check if revision is in alpha revision stage", () => {
+        cy.drClickRevisionsSidePanel();
         cy.recCheckRevisionStage({ stage: "Revision A" });
       });
     });
@@ -787,19 +782,17 @@ context("Document list test", () => {
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
       });
 
-      it("Save Record'", () => {
-        cy.drSaveDocumentWithoutaudit();
-      });
-
       it("release button click'", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("Create second Record with Draft state", () => {
-      it("Navigate to Records", () => {
+      it("Navigate to Document List", () => {
         cy.navigToDocumentList();
       });
 
@@ -813,7 +806,9 @@ context("Document list test", () => {
       });
 
       it("Clicks on 'create New' button", () => {
-        cy.drCreateNewDocumentFromFormRecord();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.GetRequiredApproversDocRev], () => {
+          cy.drCreateNewDocumentFromFormRecord();
+        });
       });
 
       it("Enters title as Approval Record title", () => {
@@ -883,55 +878,55 @@ context("Document list test", () => {
       });
     });
 
-    context("Sort 'Revision'", () => {
-      it("Revision should be in ascending order", () => {
-        cy.contains("Revision").eq(0).click();
+    context(`Sort '${rev}'`, () => {
+      it(`${rev} should be in ascending order`, () => {
+        cy.contains(`${rev}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${rev}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 1, colLength: 7 });
       });
 
-      it("Revision should be in descending order", () => {
-        cy.contains("Revision").eq(0).click();
+      it(`${rev} should be in descending order`, () => {
+        cy.contains(`${rev}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${rev}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 1, colLength: 7 });
       });
     });
 
-    context("Sort 'State'", () => {
-      it("State should be in ascending order", () => {
-        cy.contains("State").eq(0).click();
+    context(`Sort '${state}'`, () => {
+      it(`${state} should be in ascending order`, () => {
+        cy.contains(`${state}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${state}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 2, colLength: 7 });
       });
 
-      it("State should be in descending order", () => {
-        cy.contains("State").eq(0).click();
+      it(`${state} should be in descending order`, () => {
+        cy.contains(`${state}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${state}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 2, colLength: 7 });
       });
     });
 
-    context("Sort 'Title'", () => {
-      it("Title should be in ascending order", () => {
-        cy.contains("Title").eq(0).click();
+    context(`Sort '${title}'`, () => {
+      it(`${title} should be in ascending order`, () => {
+        cy.contains(`${title}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Title").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${title}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
       });
 
-      it("Title should be in descending order", () => {
-        cy.contains("Title").eq(0).click();
+      it(`${title} should be in descending order`, () => {
+        cy.contains(`${title}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Title").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${title}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 3, colLength: 8 });
       });
@@ -955,37 +950,37 @@ context("Document list test", () => {
       });
     });
 
-    context("Sort 'Released Date'", () => {
-      it("Released Date should be in ascending order", () => {
-        cy.contains("Released Date").eq(0).click();
+    context(`Sort '${relDate}'`, () => {
+      it(`${relDate} should be in ascending order`, () => {
+        cy.contains(`${relDate}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Released Date").eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${relDate}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 5, colLength: 7 });
       });
 
-      it("Released Date should be in descending order", () => {
-        cy.contains("Released Date").eq(0).click();
+      it(`${relDate} should be in descending order`, () => {
+        cy.contains(`${relDate}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains("Released Date").eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${relDate}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 5, colLength: 7 });
       });
     });
 
-    context(`Sort Form ${id}`, () => {
-      it(`Form ${id} should be in ascending order`, () => {
-        cy.contains(`Form ${id}`).eq(0).click();
+    context(`Sort ${formId}`, () => {
+      it(`${formId} should be in ascending order`, () => {
+        cy.contains(`${formId}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains(`Form ${id}`).eq(0).parent().find("span.k-i-sort-asc-sm")
+        cy.contains(`${formId}`).eq(0).parent().find("span.k-i-sort-asc-sm")
           .should("be.exist");
         cy.verifyAscSort({ index: 6, colLength: 7 });
       });
 
-      it(`Form ${id} should be in descending order`, () => {
-        cy.contains(`Form ${id}`).eq(0).click();
+      it(`${formId} should be in descending order`, () => {
+        cy.contains(`${formId}`).eq(0).click();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.contains(`Form ${id}`).eq(0).parent().find("span.k-i-sort-desc-sm")
+        cy.contains(`${formId}`).eq(0).parent().find("span.k-i-sort-desc-sm")
           .should("be.exist");
         cy.verifyDesSort({ index: 6, colLength: 7 });
       });

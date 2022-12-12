@@ -44,8 +44,9 @@ export interface Audit {
   owner: Owner;
   ownerUser?: Owner;
   ownerThirdParty?: Owner;
+  ownerName?: string;
   fbSchemaItem?: FBSchemaProps;
-  relatedEntity?: DocumentRevision;
+  relatedEntity?: DocumentRevision | Approval;
 }
 
 export interface AuditActionPayload {

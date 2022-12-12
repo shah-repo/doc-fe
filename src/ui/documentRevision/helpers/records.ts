@@ -1,7 +1,8 @@
 import { find, isEmpty, some } from "lodash";
+import { SMFormState } from "../../../App";
 import { DocumentRevision, RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
-import { FBFormState, FBSchemaProps } from "../../form.builder";
+import { FBSchemaProps } from "../../form.builder";
 import { checkIsDocumentRecord } from "./checkDocumentGroup";
 
 const getInlineApprovalFields = (schema?: FBSchemaProps[]) => {
@@ -31,12 +32,12 @@ const isInlineSectionApproved = (documentRevision, formState, schema?: FBSchemaP
 /** Function that checks if a form section is approved.
    * @param fieldName Unique name of the form field.
   */
-const isSectionApproved = (fieldName: string, documentRevision: DocumentRevision, formState: FBFormState) => {
+const isSectionApproved = (fieldName: string, documentRevision: DocumentRevision, formState: SMFormState) => {
   const fieldApprovals = getFieldApprovals(fieldName, documentRevision);
   if (
     documentRevision?.version > 1 &&
     isEmpty(fieldApprovals) &&
-    Boolean(formState?.getFieldValue(fieldName))
+    Boolean(formState?.getValues()?.formInput?.[fieldName])
   ) {
     return some(fieldApprovals, (approval) => approval.status === ApprovalStatus.Approved)
     || !fieldApprovals?.length;

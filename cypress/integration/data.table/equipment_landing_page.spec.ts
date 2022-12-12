@@ -12,6 +12,14 @@ const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
 const SECOND_USER = USERS[3];
 const THIRD_USER = USERS[4];
+const id = "ID";
+const rev = "REVISION";
+const state = "STATE";
+const title = "TITLE";
+const eftOwner = "EFT OWNER";
+const calDueDate = "CAL DUE DATE";
+const pmDueDate = "PM DUE DATE";
+const eqStatus = "EQ STATUS";
 
 let createdCompany;
 let loginResponse;
@@ -127,6 +135,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "radiogroup",
                     index: 0,
                     label: "EQ Status",
+                    tabId: "overview",
                     rules: "required",
                     options: [
                       {
@@ -149,6 +158,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "autocomplete",
                     index: 1,
                     label: "Primary Owner",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as primary owner",
                     applicableOn: [
@@ -164,6 +174,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     type: "autocomplete",
                     index: 2,
                     label: "Coordinator",
+                    tabId: "specification",
                     optionId: "13",
                     placeholder: "Select employee as coordinator",
                     applicableOn: [
@@ -183,6 +194,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     },
                     editorProperties: [],
                     label: "Preventative Maintenance",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -198,6 +210,7 @@ context("Equipment maintenance for checking History in all states", () => {
                     },
                     editorProperties: [],
                     label: "Calibration",
+                    tabId: "specification",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -263,6 +276,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -274,6 +288,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -289,6 +304,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -304,6 +320,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -317,6 +334,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -328,6 +346,7 @@ context("Equipment maintenance for checking History in all states", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",
@@ -391,6 +410,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -402,6 +422,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -417,6 +438,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -432,6 +454,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "datepicker",
                 index: 3,
                 label: "Completion Date",
+                tabId: "details",
                 rules: "required",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
@@ -445,6 +468,7 @@ context("Equipment maintenance for checking History in all states", () => {
                 type: "textfield",
                 index: 4,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -456,6 +480,7 @@ context("Equipment maintenance for checking History in all states", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-kybkhbpt",
@@ -1035,14 +1060,14 @@ context("Equipment maintenance for checking History in all states", () => {
     });
 
     it("Verify all columns are present", () => {
-      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", "ID");
-      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", "Revision");
-      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", "State");
-      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", "Title");
-      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", "EFT Owner");
-      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", "Cal Due Date");
-      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", "PM Due Date");
-      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", "EQ Status");
+      cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${id}`);
+      cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${rev}`);
+      cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${state}`);
+      cy.get(`th[role="columnheader"]`).eq(3).should("have.text", `${title}`);
+      cy.get(`th[role="columnheader"]`).eq(4).should("have.text", `${eftOwner}`);
+      cy.get(`th[role="columnheader"]`).eq(5).should("have.text", `${calDueDate}`);
+      cy.get(`th[role="columnheader"]`).eq(6).should("have.text", `${pmDueDate}`);
+      cy.get(`th[role="columnheader"]`).eq(7).should("have.text", `${eqStatus}`);
     });
 
     it("Insert filter", () => {
@@ -1114,14 +1139,23 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.get("input[name=fb-default-eq-status][value=Active]").check();
     });
 
+    it("Navigate to specification tab", () => {
+      cy.drSelectSpecificationTab();
+    });
+
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
-      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
     });
 
     it(`Select '${USERS[1].name}' for Coordinator`, () => {
-      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick();
+      cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+    });
+
+    it("Navigate to 'cal/pm history' tab", () => {
+      cy.drSelectCalPmHistoryTab();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
@@ -1149,132 +1183,132 @@ context("Equipment maintenance for checking History in all states", () => {
     });
   });
 
-  context("Sort 'ID'", () => {
+  context(`Sort ${id}`, () => {
     it("ID should be in ascending order", () => {
       cy.navigToEquipment();
-      cy.contains("ID").eq(0).click();
+      cy.contains(`${id}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("ID").eq(0).parent().find("span.k-i-sort-asc-sm")
+      cy.contains(`${id}`).eq(0).parent().find("span.k-i-sort-asc-sm")
         .should("be.exist");
       cy.verifyAscSort({ index: 0, colLength: 8 });
     });
 
     it("ID should be in descending order", () => {
-      cy.contains("ID").eq(0).click();
+      cy.contains(`${id}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("ID").eq(0).parent().find("span.k-i-sort-desc-sm")
+      cy.contains(`${id}`).eq(0).parent().find("span.k-i-sort-desc-sm")
         .should("be.exist");
       cy.verifyDesSort({ index: 0, colLength: 8 });
     });
 
     it("Revision should be in ascending order", () => {
-      cy.contains("Revision").eq(0).click();
+      cy.contains(`${rev}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("Revision").eq(0).parent().find("span.k-i-sort-asc-sm")
+      cy.contains(`${rev}`).eq(0).parent().find("span.k-i-sort-asc-sm")
         .should("be.exist");
       cy.verifyAscSort({ index: 1, colLength: 8 });
     });
 
     it("Revision should be in descending order", () => {
-      cy.contains("Revision").eq(0).click();
+      cy.contains(`${rev}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("Revision").eq(0).parent().find("span.k-i-sort-desc-sm")
+      cy.contains(`${rev}`).eq(0).parent().find("span.k-i-sort-desc-sm")
         .should("be.exist");
       cy.verifyDesSort({ index: 1, colLength: 8 });
     });
 
     it("State should be in ascending order", () => {
-      cy.contains("State").eq(0).click();
+      cy.contains(`${state}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("State").eq(0).parent().find("span.k-i-sort-asc-sm")
+      cy.contains(`${state}`).eq(0).parent().find("span.k-i-sort-asc-sm")
         .should("be.exist");
       cy.verifyAscSort({ index: 2, colLength: 8 });
     });
 
     it("State should be in descending order", () => {
-      cy.contains("State").eq(0).click();
+      cy.contains(`${state}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("State").eq(0).parent().find("span.k-i-sort-desc-sm")
+      cy.contains(`${state}`).eq(0).parent().find("span.k-i-sort-desc-sm")
         .should("be.exist");
       cy.verifyDesSort({ index: 2, colLength: 8 });
     });
 
     it("Title should be in ascending order", () => {
-      cy.contains("Title").eq(0).click();
+      cy.contains(`${title}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("Title").eq(0).parent().find("span.k-i-sort-asc-sm")
+      cy.contains(`${title}`).eq(0).parent().find("span.k-i-sort-asc-sm")
         .should("be.exist");
       cy.verifyAscSort({ index: 3, colLength: 8 });
     });
 
     it("Title should be in descending order", () => {
-      cy.contains("Title").eq(0).click();
+      cy.contains(`${title}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("Title").eq(0).parent().find("span.k-i-sort-desc-sm")
+      cy.contains(`${title}`).eq(0).parent().find("span.k-i-sort-desc-sm")
         .should("be.exist");
       cy.verifyDesSort({ index: 3, colLength: 8 });
     });
 
     it("EFT Owner should be in ascending order", () => {
-      cy.contains("EFT Owner").eq(0).click();
+      cy.contains(`${eftOwner}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-asc-sm")
+      cy.contains(`${eftOwner}`).eq(0).parent().find("span.k-i-sort-asc-sm")
         .should("be.exist");
       cy.verifyAscSort({ index: 4, colLength: 8 });
     });
 
     it("EFT Owner should be in descending order", () => {
-      cy.contains("EFT Owner").eq(0).click();
+      cy.contains(`${eftOwner}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("EFT Owner").eq(0).parent().find("span.k-i-sort-desc-sm")
+      cy.contains(`${eftOwner}`).eq(0).parent().find("span.k-i-sort-desc-sm")
         .should("be.exist");
       cy.verifyDesSort({ index: 4, colLength: 8 });
     });
 
     it("Cal Due Date should be in ascending order", () => {
-      cy.contains("Cal Due Date").eq(0).click();
+      cy.contains(`${calDueDate}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
+      cy.contains(`${calDueDate}`).eq(0).parent().find("span.k-i-sort-asc-sm")
         .should("be.exist");
       cy.verifyAscSort({ index: 5, colLength: 8 });
     });
 
     it("Cal Due Date should be in descending order", () => {
-      cy.contains("Cal Due Date").eq(0).click();
+      cy.contains(`${calDueDate}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("Cal Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
+      cy.contains(`${calDueDate}`).eq(0).parent().find("span.k-i-sort-desc-sm")
         .should("be.exist");
       cy.verifyDesSort({ index: 5, colLength: 8 });
     });
 
     it("PM Due Date should be in ascending order", () => {
-      cy.contains("PM Due Date").eq(0).click();
+      cy.contains(`${pmDueDate}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-asc-sm")
+      cy.contains(`${pmDueDate}`).eq(0).parent().find("span.k-i-sort-asc-sm")
         .should("be.exist");
       cy.verifyAscSort({ index: 6, colLength: 8 });
     });
 
     it("PM Due Date should be in descending order", () => {
-      cy.contains("PM Due Date").eq(0).click();
+      cy.contains(`${pmDueDate}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("PM Due Date").eq(0).parent().find("span.k-i-sort-desc-sm")
+      cy.contains(`${pmDueDate}`).eq(0).parent().find("span.k-i-sort-desc-sm")
         .should("be.exist");
       cy.verifyDesSort({ index: 6, colLength: 8 });
     });
 
     it("EQ Status should be in ascending order", () => {
-      cy.contains("EQ Status").eq(0).click();
+      cy.contains(`${eqStatus}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-asc-sm")
+      cy.contains(`${eqStatus}`).eq(0).parent().find("span.k-i-sort-asc-sm")
         .should("be.exist");
       cy.verifyAscSort({ index: 7, colLength: 8 });
     });
 
     it("EQ Status should be in descending order", () => {
-      cy.contains("EQ Status").eq(0).click();
+      cy.contains(`${eqStatus}`).eq(0).click();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.contains("EQ Status").eq(0).parent().find("span.k-i-sort-desc-sm")
+      cy.contains(`${eqStatus}`).eq(0).parent().find("span.k-i-sort-desc-sm")
         .should("be.exist");
       cy.verifyDesSort({ index: 7, colLength: 8 });
     });
@@ -1296,6 +1330,7 @@ context("Equipment maintenance for checking History in all states", () => {
       cy.dlClearFilters();
       cy.get(`th[aria-colindex="3"] span.k-select`).arrowClick();
       cy.get("ul>li[role=option]").contains("Draft").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       cy.wait(500);
     });
@@ -1316,7 +1351,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
     it("Verify filter for Cal Due Date", () => {
       cy.dlClearFilters();
-      cy.get(`[aria-colindex="6"] input`).arrowType("N/A").wait(500);
+      cy.get(`[aria-colindex="6"] input`).arrowType("N/A").wait(2000);
       cy.dlVerifyDocCounter({ docCounterNumber: 1 });
       cy.wait(500);
     });
@@ -1355,32 +1390,32 @@ context("Equipment maintenance for checking History in all states", () => {
 
   context("Verify hide and freeze", () => {
     it("Verify hide on Document Title", () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Title");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${title}`);
       cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item").contains("Hide Column").arrowClick();
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Title");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${title}`);
     });
 
     it("Verify unhide on Document Title", () => {
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", "Title");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("not.contain.text", `${title}`);
       cy.get(`button[data-cy="manageColumnsBtn"]`).arrowClick();
-      cy.get("ul>li[role=menuitem]").contains("TITLE").parents("li").find("svg").arrowClick();
+      cy.get("ul>li[role=menuitem]").contains(`${title}`).parents("li").find("svg").arrowClick();
       cy.get("body").type("{esc}");
-      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", "Title");
+      cy.get(`th[role="columnheader"] span.k-column-title`).should("contain.text", `${title}`);
     });
 
     it("Verify freeze on Document Title", () => {
-      cy.get(`th[aria-colindex="4"] span.k-column-title`).should("have.text", "Title");
+      cy.get(`th[aria-colindex="4"] span.k-column-title`).should("have.text", `${title}`);
       cy.get(`th[aria-colindex="4"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Freeze Column").arrowClick();
-      cy.get(`th[aria-colindex="4"] span.k-column-title`).should("not.have.text", "Title");
+      cy.get(`th[aria-colindex="4"] span.k-column-title`).should("not.have.text", `${title}`);
     });
 
     it("Verify un-freeze on Document Title", () => {
-      cy.get(`th[aria-colindex="4"] span.k-column-title`).should("not.have.text", "Title");
+      cy.get(`th[aria-colindex="4"] span.k-column-title`).should("not.have.text", `${title}`);
       cy.get(`th[aria-colindex="1"] span.k-icon`).eq(0).arrowClick();
       cy.get("div.k-columnmenu-item ").contains("Unfreeze Column").arrowClick();
-      cy.get(`th[aria-colindex="2"] span.k-column-title`).should("have.text", "Title");
+      cy.get(`th[aria-colindex="2"] span.k-column-title`).should("have.text", `${title}`);
     });
   });
 

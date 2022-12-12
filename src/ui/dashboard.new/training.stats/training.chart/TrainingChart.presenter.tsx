@@ -65,15 +65,11 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
       text: "" + totalCount,
       subtext: TrainingStatusChartLabelTypes.TOTAL_OUTSTANDING,
       textStyle: {
-        fontFamily: "Sora",
-        fontStyle: "normal",
         fontWeight: "bold",
         color: Colors.almost_black,
         fontSize: 40,
       },
       subtextStyle: {
-        fontFamily: "Sora",
-        fontStyle: "normal",
         fontWeight: "bold",
         color: Colors.font_gray,
         fontSize: 12,

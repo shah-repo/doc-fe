@@ -1,10 +1,5 @@
 #!/bin/bash
 
-set -a
-  export ENLIL_COMPOSE_SUITE_NUMBER="13"
-  export FE_REPO=$(pwd)
-set +a
-
 if [[ -z "${ENLIL_COMPOSE_SUITE_NUMBER}" ]]; then
   echo "ENLIL_COMPOSE_SUITE_NUMBER not set, exiting"
   exit
@@ -25,6 +20,26 @@ if [[ -z "${VALIDATORS_GIT_COMMIT_HASH}" ]]; then
   exit
 fi
 
+if [[ -z "${EXPORT_GIT_COMMIT_HASH}" ]]; then
+  echo "EXPORT_GIT_COMMIT_HASH not set, exiting"
+  exit
+fi
+
+if [[ -z "${DOCXTOPDF_GIT_COMMIT_HASH}" ]]; then
+  echo "DOCXTOPDF_GIT_COMMIT_HASH not set, exiting"
+  exit
+fi
+
+if [[ -z "${WORDSERVICE_GIT_COMMIT_HASH}" ]]; then
+  echo "WORDSERVICE_GIT_COMMIT_HASH not set, exiting"
+  exit
+fi
+
+if [[ -z "${AWS_ACCOUNT_ID}" ]]; then
+  echo "AWS_ACCOUNT_ID not set, exiting"
+  exit
+fi
+
 set -a
   export COMPOSE_PROJECT_NAME="enlil_codebuild"
   export ENLIL_CYPRESS_SERVER_SCALE=${ENLIL_CYPRESS_SERVER_SCALE:=2}
@@ -39,8 +54,12 @@ set -a
   export ENLIL_COMPOSE_EXPOSE_SORRY_CY_DIRECTOR_PORT="1234"
   export ENLIL_COMPOSE_EXPOSE_BE_WORKER_PORT="4219"
   export ENLIL_COMPOSE_EXPOSE_HAPROXY_PORT="80"
+  export ENLIL_COMPOSE_EXPOSE_GOTENBERG_PORT="3000"
+  export ENLIL_COMPOSE_EXPOSE_DOCXTOPDF_PORT="4216"
+  export ENLIL_COMPOSE_EXPOSE_WORD_SERVICE_PORT="5000"
 
-  export ENLIL_BE_AWS_SQS_QUEUE_URL=${ENLIL_BE_AWS_SQS_QUEUE_URL:-"https://sqs.us-west-2.amazonaws.com/817083319299/cypress_codebuild_dev.fifo"}
+  export ENLIL_BE_AWS_SQS_QUEUE_URL="https://sqs.us-west-2.amazonaws.com/${AWS_ACCOUNT_ID}/cypress_terraform_test_dev_${ENLIL_COMPOSE_SUITE_NUMBER}.fifo"
+  export ENLIL_EXPORT_AWS_SQS_QUEUE_URL="https://sqs.us-west-2.amazonaws.com/${AWS_ACCOUNT_ID}/cypress_terraform_test_dev_export_${ENLIL_COMPOSE_SUITE_NUMBER}.fifo"
   export ENLIL_BE_ENV_NAME="CYPRESS_TEST_$ENLIL_COMPOSE_SUITE_NUMBER"
   
   export VALIDATORS_CYPRESS_FE_URL="http://validators:$ENLIL_COMPOSE_EXPOSE_VALIDATORS_PORT"
@@ -54,33 +73,54 @@ set -a
   export ECR_REPO="codebuild"
 set +a
 
-echo "--| BE_GIT_COMMIT_HASH: $BE_GIT_COMMIT_HASH"
-echo "--| FE_GIT_COMMIT_HASH: $FE_GIT_COMMIT_HASH"
-echo "--| VALIDATORS_GIT_COMMIT_HASH: $VALIDATORS_GIT_COMMIT_HASH"
-echo "--| ENLIL_COMPOSE_SUITE_NUMBER: $ENLIL_COMPOSE_SUITE_NUMBER"
-
 aws sqs purge-queue --region=us-west-2 --queue-url $ENLIL_BE_AWS_SQS_QUEUE_URL
+aws sqs purge-queue --region=us-west-2 --queue-url $ENLIL_EXPORT_AWS_SQS_QUEUE_URL
 
-check_be_image () {
-  cd $BE_REPO
+check_be_server_image() {
   IMAGE=be_server_${BE_GIT_COMMIT_HASH}
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
   IMAGE_FOUND=$?
 
   if [ $IMAGE_FOUND = 0 ]
   then
-    echo "BE image found"
+    echo "BE server image found"
   else
-    echo "BE image not found"
+    echo "BE server image not found"
     exit
   fi
-  cd $HEAD_PWD
+}
+
+check_be_worker_image() {
+  IMAGE=be_worker_${BE_GIT_COMMIT_HASH}
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
+
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    echo "BE worker image found"
+  else
+    echo "BE worker image not found"
+    exit
+  fi
+}
+
+check_be_migration_image() {
+  IMAGE=be_migration_${BE_GIT_COMMIT_HASH}
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
+
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    echo "BE migration image found"
+  else
+    echo "BE migration image not found"
+    exit
+  fi
 }
 
 check_fe_image () {
-  cd $FE_REPO
   IMAGE=fe_${FE_GIT_COMMIT_HASH}
-  DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+  DOCKER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
   IMAGE_FOUND=$?
 
@@ -91,13 +131,11 @@ check_fe_image () {
     echo "FE image not found"
     exit
   fi
-  cd $HEAD_PWD
 }
 
-check_validators_image () {
-  cd $VALIDATORS_REPO
+check_validators_image() {
   IMAGE=validators_${VALIDATORS_GIT_COMMIT_HASH}
-  DOCKER_IMAGE=817083319299.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+  DOCKER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
   $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
   IMAGE_FOUND=$?
 
@@ -108,11 +146,47 @@ check_validators_image () {
     echo "Validators image not found"
     exit
   fi
-  cd $HEAD_PWD
 }
 
-check_be_image
+
+check_export_image() {
+  IMAGE=doc_export_${EXPORT_GIT_COMMIT_HASH}
+
+  DOCKER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
+  
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    echo "doc-export image found"
+  else
+    echo "doc-export image not found"
+    exit
+  fi
+}
+
+check_docx_to_pdf_image() {
+  IMAGE=docx_to_pdf_${DOCXTOPDF_GIT_COMMIT_HASH}
+
+  DOCKER_IMAGE=${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/$ECR_REPO:$IMAGE
+  $FE_REPO/codebuild/helper/find_ecr_image.sh $ECR_REPO $IMAGE
+  IMAGE_FOUND=$?
+
+  if [ $IMAGE_FOUND = 0 ]
+  then
+    echo "docx-to-pdf image found"
+  else
+    echo "docx-to-pdf image not found"
+    exit
+  fi
+}
+
+check_be_server_image
+check_be_worker_image
+check_be_migration_image
 check_fe_image
 check_validators_image
+check_export_image
+check_docx_to_pdf_image
 
 echo "Done with exporting"

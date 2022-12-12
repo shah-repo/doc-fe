@@ -1,18 +1,20 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, filter, find, get, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
+import { compact, difference, filter, find, findIndex, get, isEmpty, isUndefined, map, unionBy, uniq } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsState, FBApprover, FBDialogState, FBInlineApprovalBody, FBRequiredApprover } from "..";
+import { SM } from "../../../App";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Approval } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { DocumentStatus } from "../../../state/ducks/documents/types";
+import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
+import FBStore from "../FBStore/FBStore";
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
 
 export const withFBApprovals = <T extends FBApprovalsProps>(
@@ -42,6 +44,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     let isComponentVisible = false;
     let inlineApprovalExists = false;
 
+    const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState } = FB.useStores();
     const {
       document,
@@ -78,7 +81,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     const isOwner = authUser.id === userId;
     currentUser = authUser.id;
     const outputId = isOutput ? id : null;
-    const docApprovals = document?.approvals || changeRequest?.approvals;
+    let docApprovals = document?.approvals || changeRequest?.approvals;
+    if (!docApprovals?.length && FBStore.selectedApprover.length) {
+      docApprovals = FBStore.selectedApprover;
+    }
     const approvalsState = FB.useRef(
       FBApprovalsState,
       { id: outputId, approvals: docApprovals, isOwner },
@@ -115,6 +121,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       (data) => {
         if (!data) { return; }
         document?.approvals?.push(data as Approval);
+        FBStore.selectedApprover.push(data as Approval);
         concatApprovals(data);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -168,14 +175,31 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
         const { id } = workspaceState || {};
         if (!id) { return; }
         dispatch(documentRevisionsActions.loadAudit(id));
+        if (!workspaceState?.autosave) { return; }
+        workspaceState?.saveDocRev(formState?.getValues());
       }));
     }
 
     function removeApprover(ids?: string[]) {
       if (!ids) { return; }
       map(ids, (approver) => {
+        const deletedApproverIndex = findIndex(document?.approvals, (a) =>
+          a.approverId === approver && a.status === ChangeRequestStatus.Draft as string);
         const approval = find(approvalsState?.getApprovals, (a) => a.approver?.id === approver);
-        approvalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id);
+        document?.approvals?.splice(deletedApproverIndex, 1);
+        const SelApprover = findIndex(FBStore.selectedApprover, (a) =>
+          a.approverId === approver && a.status === ChangeRequestStatus.Draft as string);
+        FBStore.selectedApprover?.splice(SelApprover, 1);
+
+        if (document?.approvals?.[deletedApproverIndex]) {
+          document.approvals[deletedApproverIndex].status = ApprovalStatus.Abandoned;
+        }
+        approvalsState?.applyTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
+          const id  = workspaceState?.id;
+          if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+          if (!workspaceState?.autosave) { return; }
+          workspaceState?.saveDocRev(formState?.getValues());
+        });
       });
     }
 
@@ -207,7 +231,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
 
     // MARK: @observer
     useObserver(() => {
-      inlineApprovalExists = Boolean(document?.formDocument?.formTemplate?.schema
+      inlineApprovalExists = Boolean(_documentRevisionFormState?.documentRevision?.formDocument?.formTemplate?.schema
       .some((e) => (!e.deleted && e.type === "inlineapproval" as string)));
 
       groups = approvalsState?.groups;

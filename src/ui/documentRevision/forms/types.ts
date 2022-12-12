@@ -37,3 +37,8 @@ export interface ApproveAndReleaseFormValues {
   formDocument: Id;
   documentType: Id;
 }
+
+export enum FBDataStoreApprovalKeys {
+  PO_APPROVALS="poApprovals",
+  INLINE_APPROVALS="inlineApprovals"
+}

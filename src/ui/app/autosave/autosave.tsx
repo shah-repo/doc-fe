@@ -6,6 +6,7 @@ import { companyActions, companySelectors } from "../../../state/ducks/company";
 import useGetHasPermission from "../../hooks/useGetHasPermission";
 import Colors from "../../layout/theme/utils/colors";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const AutosaveToggle: React.FunctionComponent<any> = (location) => {
   const dispatch = useDispatch();
   const isNewDashboard = location.pathname === "/";
@@ -22,16 +23,16 @@ const AutosaveToggle: React.FunctionComponent<any> = (location) => {
 
   return (
     <FormControlLabel
-      control={<Switch
-        name="toggleAutosave"
-        checked={autosaveEnabled}
-        onChange={() => { dispatch(companyActions.autosaveConfig()); }}
-      />}
+      control={
+        <Switch
+          name="toggleAutosave"
+          checked={autosaveEnabled}
+          onChange={() => { dispatch(companyActions.autosaveConfig()); }}
+        />}
       style={isNewDashboard ? style : {}}
       label="Toggle Autosave"
     />
   );
-}
-;
+};
 
 export default AutosaveToggle;

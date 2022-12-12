@@ -1,7 +1,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -42,19 +45,8 @@ context("Document Creation Flow", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-                canRedLine: true,
-              },
+              ClinicalProtocolNotRedline,
+              TestDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -152,6 +144,21 @@ context("Document Creation Flow", () => {
       cy.drSetDocTypeId({ docId: "00999" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Check if Selected Groups are set to 'Everyone' by default", () => {
+      SystemRequirement("REQ-0300");
+      cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
+        .should("have.text", "Enter the name of users to access the document");
+      cy.get("[data-cy=\"field-securityGroups\"]").contains("Everyone");
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Select reference for document", () => {
       SystemRequirement("REQ-0180");
       cy.drSelectReferences( "AR Form");
@@ -159,7 +166,7 @@ context("Document Creation Flow", () => {
 
     it("Remove reference for document", () => {
       SystemRequirement("REQ-0190");
-      cy.drRemoveReferences( 0 );
+      cy.drRemoveReferences({ reference: "FM-00001" });
     });
 
     it("'Training Required' should be unchecked initially", () => {
@@ -170,13 +177,10 @@ context("Document Creation Flow", () => {
       cy.drClickTrainingRequired();
     });
 
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
     context("Uploads attachments", () => {
       it("Uploads redline attachment: test.docx", () => {
         SystemRequirement("REQ-0260");
+        cy.wait(2000);
         cy.atchUploadRedlineAttachment({ fileName: "test.docx" });
       });
 
@@ -228,6 +232,7 @@ context("Document Creation Flow", () => {
 
       it("Upload multiple attachments at once: 'image.jpg' and 'test_image.jpg'", () => {
         SystemRequirement("REQ-0220");
+        cy.wait(2000);
         cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
         cy.get("#attachments-button-file-clean-copy")
           .attachFiles(
@@ -256,29 +261,13 @@ context("Document Creation Flow", () => {
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
     });
-
-    context("Check permission groups", () => {
-      it("Check if Selected Groups are set to 'Everyone' by default", () => {
-        SystemRequirement("REQ-0300");
-        cy.get("div[data-cy=field-securityEmployees]>#securityEmployees")
-          .should("have.text", "Enter the name of users to access the document");
-        cy.get("[data-cy=\"field-securityGroups\"]")
-          .contains("Enter the name of the user groups to access the document");
-      });
-    });
-  });
-
-  context("Creates document", () => {
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
   });
 
   context("Document in Draft", () => {
     it("Check if document status is Draft after creating a document", () => {
       SystemRequirement("REQ-0330");
       SystemRequirement("REQ-0020");
-      cy.drCheckDocumentStatus({ status: "Draft" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
     context("Uploads attachments", () => {
@@ -287,6 +276,8 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads test_image.jpg", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 
@@ -405,7 +396,8 @@ context("Document Creation Flow", () => {
     context("Verify ownership mechanism", () => {
       it("Change owner of document", () => {
         SystemRequirement("REQ-0340");
-        cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
+        cy.get("#HeaderMenuButton").arrowClick();
+        cy.drChangeOwnerByAdmin({ employee: USERS[3].name });
       });
 
       it("Login user to dashboard", () => {
@@ -438,6 +430,7 @@ context("Document Creation Flow", () => {
 
       it("Change owner of document by admin", () => {
         SystemRequirement("REQ-0340");
+        cy.get("#HeaderMenuButton").arrowClick();
         cy.drChangeOwnerByAdmin({ employee: USERS[2].name });
       });
 
@@ -473,7 +466,7 @@ context("Document Creation Flow", () => {
 
       it("Check document status is 'Canceled'", () => {
         SystemRequirement("REQ-0350");
-        cy.drCheckDocumentStatus({ status: "Canceled" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.CANCELED });
       });
     });
   });

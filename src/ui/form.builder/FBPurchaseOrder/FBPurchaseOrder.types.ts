@@ -13,9 +13,15 @@ export type FBPurchaseOrderProps =
   mode?: FBPurchaseOrderMode;
   isReceivable?: boolean;
   receivableName?: string;
+  lineItem?: string;
+  isPO: boolean;
+  loading?: boolean;
 };
 
-type FBPurchaseOrderItemType = "product" | "service";
+export enum FBPurchaseOrderItemType {
+  PRODUCT = "product",
+  SERVICE = "service",
+}
 
 export interface FBPurchaseOrderItem {
   id: string;

@@ -2,10 +2,11 @@ import { useFormikContext } from "formik";
 import { filter, isEmpty, isEqual, map, omit } from "lodash";
 import React, { useContext } from "react";
 import { useSelector } from "react-redux";
+import { SM } from "../../../App";
 import { companySelectors } from "../../../state/ducks/company";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, ReferenceToEditRequest } from "../../../state/ducks/documentRevisions/types";
-import { FB, FBAutocompleteAsyncOption } from "../../form.builder";
+import { FBAutocompleteAsyncOption } from "../../form.builder";
 import FBAutocompleteAsyncStore from "../../form.builder/FBAutocompleteAsync/FBAutocompleteAsync.store";
 import { COMMON_INITIAL_VALUES, INDIVIDUAL_INITIAL_VALUES } from "../../form.builder/FBInput/FBInput.wrap";
 import { SubmitFormRelation } from "./FormContext.types";
@@ -15,21 +16,22 @@ export const FormContext = React.createContext({ submitOnChange: false });
 export const useFormContext = () => {
   const context = useContext(FormContext);
   const formik = useFormikContext();
-  const { workspaceState, formState, schemaState } = FB.useStores();
+  const { _formState, _documentRevisionFormState } = SM.useStores();
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
   function isOutputSchema(): boolean {
     const values = formik.values as any;
     const { schema: documentSchema = [] } = values?.formDocument?.formTemplate || {};
     return (
       (values?.document?.documentType.groupOptions?.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA)) &&
-      !isEqual(JSON.stringify(workspaceState?.schema), JSON.stringify(documentSchema))
+      !isEqual(JSON.stringify(_documentRevisionFormState?.schema), JSON.stringify(documentSchema))
     );
   }
 
   function setFBValue() {
     const values = formik.values as any;
-    const schema = workspaceState?.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
-    switch (workspaceState?.getMode()) {
+    const workspaceSchema = _documentRevisionFormState?.schema;
+    const schema = workspaceSchema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
+    switch (_formState?.mode) {
       case "design":
         formik.setFieldValue("formTemplate", {
           outputDocumentTypes: (values.outputDocumentTypes || [])
@@ -42,9 +44,9 @@ export const useFormContext = () => {
         formik.setFieldValue("formDocument", {
           id: values.formDocument?.id,
         });
-        formik.setFieldValue("formInput", omit(formState?.getValues(),
+        formik.setFieldValue("formInput", omit(_formState.getValues(),
           Object.keys({ ...COMMON_INITIAL_VALUES, ...INDIVIDUAL_INITIAL_VALUES })));
-        if (workspaceState.mode === "formDesign" && isOutputSchema()) {
+        if (_formState.mode === "formDesign" && isOutputSchema()) {
           formik.setFieldValue("schema", schema);
         }
         break;
@@ -54,7 +56,7 @@ export const useFormContext = () => {
   }
 
   function setReferences(relation: SubmitFormRelation) {
-    if (!workspaceState) { return; }
+    if (!_documentRevisionFormState) { return; }
     const { type, name, prevValue, nextValue } = relation;
     let prevDocument: DocumentRevision | undefined;
     let nextDocument: DocumentRevision | undefined;
@@ -70,13 +72,13 @@ export const useFormContext = () => {
     }
     const prevValueId = prevDocument?.document.id;
     const nextValueId = nextDocument?.document.id;
-    let refValues = workspaceState.referenceValue;
+    let refValues = _documentRevisionFormState.referenceValue;
     if (!prevValueId) {
       // special case: when prevValue is undefined and there is a value in formInput,
       // we need to remove it from refereces also,
       // made according to issues with autosave(caused by this to other fields)
-      const currentPoReference = workspaceState?.document?.formInput?.[name];
-      const refWithoutPrevValue = workspaceState?.document?.referenceTo.filter((e) => {
+      const currentPoReference = _documentRevisionFormState?.documentRevision?.formInput?.[name];
+      const refWithoutPrevValue = _documentRevisionFormState?.documentRevision?.referenceTo.filter((e) => {
         const docRevIds = e.documentRevisions?.map((i) => i.id );
         if (docRevIds?.includes(currentPoReference)) {
           return null;
@@ -88,13 +90,13 @@ export const useFormContext = () => {
       }
       formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      workspaceState.referenceValue = [...refValues, { id: nextValueId! }];
+      _documentRevisionFormState.referenceValue = [...refValues, { id: nextValueId! }];
       return;
     }
-    const poNames = schemaState?.getNamesByType(type);
+    const poNames = _documentRevisionFormState.getFBNames(type);
     const values: string[] = [];
     // Check for other poreceive values
-    map(formState?.getValues(), (id: string, key) => {
+    map(_formState?.getValues(), (id: string, key) => {
       if (key === name) { return; }
       if (!poNames?.includes(key)) { return; }
       const docRev: DocumentRevision | undefined =
@@ -108,7 +110,7 @@ export const useFormContext = () => {
     }
     if (nextValueId) {
       formik.setFieldValue("referenceTo", [...refValues, { id: nextValueId }]);
-      workspaceState.referenceValue = [...refValues, { id: nextValueId }];
+      _documentRevisionFormState.referenceValue = [...refValues, { id: nextValueId }];
       return;
     }
     formik.setFieldValue("referenceTo", refValues);
@@ -120,7 +122,7 @@ export const useFormContext = () => {
     }
 
     if (context.submitOnChange) {
-      if (workspaceState) {
+      if (_documentRevisionFormState) {
         setFBValue();
       }
       if (relation) {

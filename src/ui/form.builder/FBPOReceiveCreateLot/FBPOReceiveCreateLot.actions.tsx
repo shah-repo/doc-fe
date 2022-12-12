@@ -1,6 +1,7 @@
 import { Box } from "@material-ui/core";
 import React from "react";
-import { FBButton, FBPOReceiveCreateLotProps, FBSubmitButton } from "..";
+import { FBPOReceiveCreateLotProps, FBSubmitButton } from "..";
+import { StyledCancelFBButton } from "../FBButton/StyledCancelFBButton";
 import { withFBPOReceiveCreateLot } from "./FBPOReceiveCreateLot.wrap";
 
 const FBPOReceiveCreateLotActions: React.FunctionComponent<FBPOReceiveCreateLotProps> = ({
@@ -13,7 +14,7 @@ const FBPOReceiveCreateLotActions: React.FunctionComponent<FBPOReceiveCreateLotP
       label="form.builder.po.create.lot"
       onClick={handleCreateLot}
     />
-    <FBButton
+    <StyledCancelFBButton
       variant="outlined"
       label="common.cancel"
       onClick={handleCancel}

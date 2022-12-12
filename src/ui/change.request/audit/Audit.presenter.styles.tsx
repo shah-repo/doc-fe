@@ -1,9 +1,10 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(0, 0, 0, 2),
+      visibility: "hidden",
     },
     details: {
       overflowY: "auto",
@@ -11,13 +12,29 @@ export const styles = makeStyles((theme: Theme) =>
     },
     changeContainer: {
       borderBottom: "1px solid " + theme.palette.text.hint,
-      padding: theme.spacing(1, 3.5, 1, 0),
-      background: "#fff",
+      padding: 16,
+      background: Colors.white,
     },
     auditValue: {
-      color: theme.palette.primary.main,
+      color: Colors.almost_black,
       fontWeight: 500,
       wordBreak: "break-word",
+      fontSize: "14px",
+      fontFamily: "Sora",
+    },
+    noPaddingMargin: {
+      margin: "0px",
+      padding: "0px",
+    },
+    auditListItem: {
+      margin: "0px",
+      padding: "0px",
+      marginBottom: "15px",
+    },
+    auditKey: {
+      fontSize: "12px",
+      fontFamily: "Sora",
+      color: Colors.font_gray,
     },
     owner: {
       color: theme.palette.text.primary,

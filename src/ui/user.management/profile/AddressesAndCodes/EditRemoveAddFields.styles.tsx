@@ -27,7 +27,6 @@ export default makeStyles((theme: Theme) =>
       paddingLeft: "5px",
       color: theme.palette.text.primary,
       fontSize: "0.885rem",
-      fontFamily: "Open Sans, sans-serif",
       borderRadius: "4px",
       borderStyle: "ridge",
     },

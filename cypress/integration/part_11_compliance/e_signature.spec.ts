@@ -6,7 +6,9 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -61,12 +63,7 @@ context("E-signature test", () => {
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -182,10 +179,10 @@ context("E-signature test", () => {
       cy.usrEnterName({ name: nameOfFirstUserToSignUp });
     });
 
-
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
       cy.checkToastMessage({ exists: false });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Logout user", () => {
@@ -237,7 +234,6 @@ context("E-signature test", () => {
     it("Enters name", () => {
       cy.usrEnterName({ name: nameOfSecondUserToSignUp });
     });
-
 
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
@@ -293,7 +289,6 @@ context("E-signature test", () => {
     it("Enters name", () => {
       cy.usrEnterName({ name: nameOfThirdUserToSignUp });
     });
-
 
     it("Clicks the save button", () => {
       cy.usrClickSaveButton();
@@ -357,8 +352,12 @@ context("E-signature test", () => {
 
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
+      cy.wait(1000);
       cy.arAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
+      cy.wait(1000);
       cy.arAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
+      cy.unClick();
+      cy.wait(5000);
     });
 
     it("Send to review", () => {
@@ -408,26 +407,32 @@ context("E-signature test", () => {
     });
 
     it("Enters title 'EB document'", () => {
-      cy.drEnterDocumentTitle({ name: "EB document" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drEnterDocumentTitle({ name: "EB document" });
+      });
     });
 
     it("Enters description 'EB description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "EB description" });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.drEnterDocumentDescription({ description: "EB description" });
+      });
     });
 
     it("Add first approver to EB document", () => {
       cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
-      cy.wait(500);
+      cy.wait(1000);
       cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
-      cy.wait(500);
+      cy.wait(1000);
       cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
-      cy.wait(500);
+      cy.wait(1000);
     });
+
     it("Submit for Approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
       });
     });
+
     it("Logout user", () => {
       cy.authLogout();
     });
@@ -582,6 +587,7 @@ context("E-signature test", () => {
       });
 
       it("Verify old names of approvers are present", () => {
+        SystemRequirement("REQ-4090");
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfFirstUserToSignUp);
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfSecondUserToSignUp);
       });
@@ -642,6 +648,7 @@ context("E-signature test", () => {
       });
 
       it("Verify correct names and emails of approvers are present", () => {
+        SystemRequirement("REQ-4090");
         cy.get("[data-cy=\"SummaryBaseProps-values\"]").contains(nameOfFirstUserToSignUp);
         cy.get("[data-cy=\"SummaryBaseProps-values\"]").contains(nameOfSecondUserToSignUp);
         cy.get("[data-cy=\"SummaryBaseProps-values\"]").contains(newNameThirdApprover);
@@ -698,7 +705,12 @@ context("E-signature test", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Check user names and emails of approvers on old revision are not changed", () => {
+        SystemRequirement("REQ-4060");
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("Released").arrowClick();
         });
@@ -712,22 +724,30 @@ context("E-signature test", () => {
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(emailOfThirdUserToSignUp);
       });
 
+      it("Click on revisions tab on side panel", () => {
+        cy.drClickRevisionsSidePanel();
+      });
+
       it("Go back to new revision of EB, add approver", () => {
         cy.get("[data-cy=\"DocumentRevisionList-item\"]").contains("WIP").arrowClick();
         cy.pmAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
+        cy.wait(1000);
         cy.pmAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
+        cy.wait(1000);
         cy.pmAddApproverOnApproverList({ approver: emailOfThirdUserToSignUp });
+        cy.wait(1000);
+        cy.unClick();
       });
 
       it("Release EB and check if correct new name is shown", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.progressBarShouldNotExist();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.wait(7000);
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.wait(7000);
         cy.progressBarShouldNotExist();
         cy.get("[id=\"Presenter-FBWorkspace\"]").contains(newNameThirdApproverSecondTime);
       });

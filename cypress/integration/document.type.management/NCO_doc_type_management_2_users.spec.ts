@@ -3,7 +3,9 @@
 
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -40,533 +42,7 @@ context("NCO document type management multiple users", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "New Company Record",
-                documentTypeAcronym: "NCO-",
-                group: "NEW_COMPANY",
-                privateNumberPool: true,
-                canRedLine: true,
-                isQms: true,
-                schema: [
-                  {
-                    name: "company-details-kknucnd4",
-                    type: "section",
-                    index: 0,
-                    label: "Company Details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Company Details",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "company-name-kknuh7mr",
-                    rows: 1,
-                    type: "textfield",
-                    index: 1,
-                    label: "Company Name",
-                    rules: "required",
-                    placeholder: "Select the company name to be used",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Company Name",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "company-abbreviation-kknuhx5k",
-                    rows: 1,
-                    type: "textfield",
-                    index: 2,
-                    label: "Company Abbreviation",
-                    rules: "required",
-                    placeholder: "This has to be unique in the system",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Company Abbreviation",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "company-admin-email-kknuh8mr",
-                    rows: 1,
-                    type: "textfield",
-                    index: 3,
-                    label: "Company Admin Email",
-                    rules: "required",
-                    placeholder: "Select the company admin email to be used",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Company Admin Email",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "companys-logo-avatar-kobccmoe",
-                    type: "section",
-                    index: 4,
-                    label: "Client's Logo & Avatar",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Client's Logo & Avatar",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "use-this-source-to-resize-the-company-logo-and-avatar-if-needed-kobcbize",
-                    type: "hyperlink",
-                    index: 5,
-                    label: "Use this source to resize the company logo and avatar if needed",
-                    linkUrl: "https://www.iloveimg.com/resize-image",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationAttribute: "Use this source to resize the company logo and avatar if needed",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "clients-logo-kknwh2my",
-                    type: "evidencemediaupload",
-                    index: 6,
-                    label: "Client's Logo (max 180px x 75px)",
-                    isTemplate: false,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationAttribute: "Client's Logo (max 180px x 75px)",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-dam-json-kljtd74j",
-                    type: "section",
-                    index: 7,
-                    label: "APPROVED DAM JSON",
-                    deleted: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "APPROVED DAM JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "avatars-logo-ko2ylk33",
-                    type: "evidencemediaupload",
-                    index: 8,
-                    label: "Client's Avatar (58px x 58px)",
-                    isTemplate: false,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationAttribute: "Client's Avatar (58px x 58px)",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "white-labeling-ko2ypvsj",
-                    type: "section",
-                    index: 9,
-                    label: "White-labeling",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "White-labeling",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "-ko2ysl4d",
-                    type: "paragraph",
-                    index: 10,
-                    // eslint-disable-next-line max-len
-                    paragraph: "<p>If the whitelabeling section is empty, the system will use default Enlil colors.</p>",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "instructions-media-upload-ko2yqqry",
-                    type: "instructionsmediaupload",
-                    index: 11,
-                    label: "Instructions Media upload",
-                    isTemplate: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationAttribute: "Instructions Media upload",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "colors-ko2ytbtm",
-                    type: "subsection",
-                    index: 12,
-                    label: "Colors:",
-                    deleted: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "Colors:",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "default-background-ko2yv2ks",
-                    rows: 1,
-                    type: "textfield",
-                    index: 13,
-                    label: "defaultBackground",
-                    placeholder: "#F8921E",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    validationAttribute: "defaultBackground",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "primary-ko2yw85e",
-                    rows: 1,
-                    type: "textfield",
-                    index: 14,
-                    label: "primary",
-                    placeholder: "#401A64",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    validationAttribute: "primary",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "secondary-ko2yxws8",
-                    rows: 1,
-                    type: "textfield",
-                    index: 15,
-                    label: "secondary",
-                    placeholder: "#401A64",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "secondary",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "-kknufjy0",
-                    type: "paragraph",
-                    index: 16,
-                    // eslint-disable-next-line max-len
-                    paragraph: "<p>DAM JSON will include all the following details:</p>\n<ol>\n<li>List of all the documents to be created in the next company</li>\n<li>All the roles necessary as defined in the approval matrix</li>\n</ol>",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-dam-json-kljteki1",
-                    type: "blanktplform",
-                    index: 17,
-                    label: "APPROVED DAM JSON",
-                    gutter: false,
-                    autosave: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "APPROVED DAM JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-dam-json-is-used-kljtf3fy",
-                    type: "radiogroup",
-                    index: 18,
-                    label: "Approved DAM json is used",
-                    rules: "required",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                      {
-                        text: "No",
-                        value: "No",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Approved DAM json is used",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "dom-json-kknwbegh",
-                    type: "fileupload",
-                    index: 19,
-                    label: "DAM JSON ",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "DAM JSON ",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-page-details-json-kljtfrrz",
-                    type: "blanktplform",
-                    index: 20,
-                    label: "APPROVED PAGE DETAILS JSON",
-                    gutter: false,
-                    autosave: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "APPROVED PAGE DETAILS JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-page-details-json-is-used-kljtglop",
-                    type: "radiogroup",
-                    index: 21,
-                    label: "Approved Page Details json is used",
-                    rules: "required",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                      {
-                        text: "No",
-                        value: "No",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Approved Page Details json is used",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "page-details-json-kknzjq6c",
-                    type: "fileupload",
-                    index: 22,
-                    label: "Page Details JSON",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Page Details JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-navigation-json-kljth6ck",
-                    type: "blanktplform",
-                    index: 23,
-                    label: "APPROVED NAVIGATION JSON",
-                    gutter: false,
-                    autosave: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "APPROVED NAVIGATION JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approved-navigation-json-is-used-kljthw2e",
-                    type: "radiogroup",
-                    index: 24,
-                    label: "Approved Navigation json is used",
-                    rules: "required",
-                    options: [
-                      {
-                        text: "Yes",
-                        value: "Yes",
-                      },
-                      {
-                        text: "No",
-                        value: "No",
-                      },
-                    ],
-                    validators: {
-                      required: true,
-                    },
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Approved Navigation json is used",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "navigation-json-kknzjzkx",
-                    type: "fileupload",
-                    index: 25,
-                    label: "Navigation JSON",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Navigation JSON",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "launching-details-kknwbuor",
-                    type: "section",
-                    index: 26,
-                    label: "Launching Details",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Launching Details",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "scheduled-go-live-date-kknwfx7f",
-                    type: "datepicker",
-                    index: 27,
-                    label: "Scheduled Go Live Date",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Scheduled Go Live Date",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "employees-template-list-kljtijb4",
-                    type: "blanktplform",
-                    index: 28,
-                    label: "EMPLOYEES TEMPLATE LIST",
-                    gutter: false,
-                    autosave: true,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "EMPLOYEES TEMPLATE LIST",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "users-list-kknwg5mb",
-                    type: "fileupload",
-                    index: 29,
-                    label: "Users List",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Users List",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "clients-gl-codes-list-kobexykq",
-                    type: "blanktplform",
-                    index: 30,
-                    label: "GL Codes template list",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    validationMode: "default",
-                    omitFinalValidation: true,
-                    validationAttribute: "GL Codes template list",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "clients-gl-codes-list-kobez14x",
-                    type: "fileupload",
-                    index: 31,
-                    label: "Client's GL codes list",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Client's GL codes list",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "seed-documents-to-be-included-kknz6afl",
-                    type: "autocomplete",
-                    index: 32,
-                    label: "Seed documents to be included",
-                    multiple: true,
-                    optionId: "28",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    editorProperties: [
-                      "multiple",
-                    ],
-                    validationAttribute: "Seed documents to be included",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "post-creation-records-kknzl4t6",
-                    type: "section",
-                    index: 33,
-                    label: "Post Creation Records",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Post Creation Records",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "logs-created-kknzkrnl",
-                    type: "fileupload",
-                    index: 34,
-                    label: "Logs Created",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    validationMode: "default",
-                    validationAttribute: "Logs Created",
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "fb-approvals-klmeeadi",
-                    type: "approvals",
-                    index: 35,
-                    label: "form.builder.approvals",
-                    deleted: true,
-                    deleteDisabled: false,
-                    uniqueSchemaItem: true,
-                  },
-                ],
-              },
+              NCORecord,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -662,6 +138,10 @@ context("NCO document type management multiple users", () => {
       cy.drEnterDocumentDescription({ description: "New Company description" });
     });
 
+    it("Select 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it(`Enters company name '${newCompanyName}'`, () => {
       cy.get("[name^=company-name-]").arrowType(newCompanyName);
     });
@@ -707,7 +187,7 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.GetAttachments], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
@@ -783,9 +263,28 @@ context("NCO document type management multiple users", () => {
       cy.dtmSelectGroup({ group: "OTHER" });
     });
 
+    // should be added after DAM.json is updated
+    // it("Enter schema", () => {
+    //   cy.get("[data-grid-col-index='14']>span>svg").eq(0).arrowClick();
+    //   cy.get("#schema").arrowType(`[{
+    //     "name": "fb-attachment-built-in",
+    //     "type": "attachments",
+    //     "index": 0,
+    //     "label": "Attachments",
+    //     "tabId": "overview",
+    //     "applicableOn": [
+    //       "ON_STATE_TO_IN_REVIEW"
+    //     ],
+    //     "deleteDisabled": true,
+    //     "deleteInFormDisabled": true,
+    //     "applicableValidationSchema": true
+    //   }]`, { delay: 0 });
+    //   cy.get(`button[type="submit"]`).arrowClick();
+    // });
+
     it("Create Doc Type", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -833,8 +332,8 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Check if 'Rev 1' revision is displayed", () => {
-      cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-        .contains("Revision 1");
+      cy.get("[data-cy=\"HeaderInfo-Rev\"]")
+        .contains("Rev 1");
     });
 
     it("Uploads redline attachment: test.docx", () => {
@@ -921,7 +420,7 @@ context("NCO document type management multiple users", () => {
       });
 
       it("Click on edit added Doc Type", () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
         cy.wait(1000);
       });
 
@@ -931,7 +430,7 @@ context("NCO document type management multiple users", () => {
 
       it("Confirm Edit added Doc Type", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-          cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+          cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
         });
         cy.landingPageLoadingElementShouldNotExist();
       });
@@ -950,7 +449,7 @@ context("NCO document type management multiple users", () => {
       });
 
       it("Click on edit added Doc Type", () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
         cy.wait(1000);
       });
 
@@ -960,7 +459,7 @@ context("NCO document type management multiple users", () => {
 
       it("Confirm Edit added Doc Type", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-          cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+          cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
         });
         cy.landingPageLoadingElementShouldNotExist();
       });
@@ -981,7 +480,7 @@ context("NCO document type management multiple users", () => {
       });
 
       it("Click on edit added Doc Type", () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
         cy.wait(1000);
       });
 
@@ -1021,8 +520,9 @@ context("NCO document type management multiple users", () => {
       });
 
       it("Confirm Edit added Doc Type", () => {
+        SystemRequirement("REQ-5130");
         cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-          cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+          cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
         });
         cy.landingPageLoadingElementShouldNotExist();
       });
@@ -1071,9 +571,12 @@ context("NCO document type management multiple users", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
+    it("Navigate to Revision tab", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Check if 'Rev A' revision is displayed", () => {
-      cy.get("[data-cy=\"DocumentRevisionList-item\"]:nth-child(1)>a:nth-child(1)>div")
-        .contains("Revision A");
+      cy.get("[data-cy=\"revision\"]").contains("Revision A");
     });
 
     it("Open attachment upload dialog", () => {
@@ -1159,7 +662,7 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Click on edit added Doc Type", () => {
-      cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.wait(1000);
     });
 
@@ -1169,8 +672,8 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("button>span svg[class*='makeStyles-ButtonColor']").eq(0).arrowClick();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -1178,7 +681,7 @@ context("NCO document type management multiple users", () => {
     context("Check that doc type can't be deleted", () => {
       it("Click on delete Doc Type", () => {
         cy.wait(500);
-        cy.get("button>span svg[class*='makeStyles-Remove']").eq(0).arrowClick();
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick({ force: true });
       });
 
       // Currenty there is no error message from system when you try to delete - it should be

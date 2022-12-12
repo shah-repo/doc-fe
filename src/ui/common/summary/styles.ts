@@ -1,20 +1,26 @@
-import { createStyles, Theme } from "@material-ui/core";
+import { createStyles } from "@material-ui/core";
+import Colors from "../../layout/theme/utils/colors";
 
-export default (theme: Theme) =>
+export default () =>
   createStyles({
     descriptionContainer: {
       "border": "0 !important",
-      "maxHeight": "36em",
-      "width": "100%",
-      "overflowY": "auto",
+      "maxHeight": "8em",
+      "width": "calc(95vw - 559px)",
+      "overflow": "auto",
       "fontSize": "16px",
+      "display": "flex",
       "&.ql-container.ql-snow": {
         "border": 0,
         "& .ql-editor": {
           padding: 0,
-          fontFamily: "Open Sans, sans-serif",
           color: "#474747 !important",
         },
       },
+      "whiteSpace": "pre-line",
+    },
+    btnStyle: {
+      fontSize: "14px",
+      color: Colors.navy,
     },
   });

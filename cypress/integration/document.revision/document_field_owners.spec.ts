@@ -1,7 +1,11 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
+import { FormOperatorsType } from "../../utils/constants/documentTypes/form";
+import { LotHistoryRecordOperators } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -44,27 +48,8 @@ context("Document Field Owners Test", () => {
             slackIntegrationEnabled: false,
             users: [USERS[2], USERS[3], USERS[4], USERS[7]],
             documentTypes: [
-              {
-                documentTypeName: "Form Operators",
-                documentTypeAcronym: "FO-",
-                group: "FORM",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Lot Hisotry Record Operators",
-                documentTypeAcronym: "LHRO-",
-                group: "LHR",
-                category: "Record",
-                isQms: true,
-                fieldsConfig:
-                  {
-                    U: {
-                      visible: true,
-                      required: false,
-                      label: "Operators",
-                    },
-                  },
-              },
+              FormOperatorsType,
+              LotHistoryRecordOperators,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -125,12 +110,16 @@ context("Document Field Owners Test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
+    it("Click on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Click on 'Add a field'", () => {
       cy.fbAddNewFieldWhenHidden();
     });
 
     it("Select 'Text Field' field", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field'", () => {
@@ -146,7 +135,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Select 'Text Field' field", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field'", () => {
@@ -157,39 +146,39 @@ context("Document Field Owners Test", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
-    });
-
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
 
-
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.drCreateNewDocumentFromForm();
+      cy.wrapWithWaitOnApiCalls([
+        CyRoutes.GetRequiredApproversDocRev,
+        CyRoutes.GetAutocompleteOptions], () => {
+        cy.drCreateNewDocumentFromForm();
+      });
     });
 
-    it("Enters title 'New Document'", () => {
-      cy.drEnterDocumentTitle({ name: "New Document" });
-    });
-
-    it("Enters description 'New Document description'", () => {
-      cy.drEnterDocumentDescriptionWithWait({ description: "New Document description" });
+    it("Change build type to 'R&D'", () => {
+      cy.unClick();
+      cy.get(`[value="R&D"]`).check();
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
-      cy.get("[data-cy='permission-icon']").arrowClick();
+      cy.drSelectPermissionTab();
     });
 
     it(`Select '${USERS[3].name}' to Assign document to`, () => {
-      cy.drAssignDocumentTo({ username: USERS[3].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.drAssignDocumentTo({ username: USERS[3].name });
+      });
     });
 
     it(`Select '${USERS[4].name}' to Assign document to`, () => {
-      cy.drAssignDocumentTo({ username: USERS[4].name });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.drAssignDocumentTo({ username: USERS[4].name });
+      });
     });
 
     it(`Logout as current user`, () => {
@@ -206,20 +195,10 @@ context("Document Field Owners Test", () => {
   context(`Open created document and check for operators restrictions`, () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
-
     });
 
-    it("Filter document by name and status, and select it", () => {
-      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
-    });
-
-    it("Check if Title input field is disabled", () => {
-      cy.get("[value='New Document']input").should("be.disabled");
-    });
-
-    it("Check if Description input field is disabled", () => {
-      cy.get("[class='public-DraftEditor-content']")
-        .should("have.attr", "contenteditable", "false");
+    it("Filter document by id and status, and select it", () => {
+      cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
     });
 
     it("Check if Document Type input field is disabled", () => {
@@ -230,16 +209,11 @@ context("Document Field Owners Test", () => {
       cy.get("[id='document.docId']input").should("be.disabled");
     });
 
-    it("Check if Reference input field is disabled", () => {
-      cy.get("[data-cy='referenceTo']>div>div>input").should("be.disabled");
-    });
-
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='text-field-for']").arrowType("Test First Field");
-    });
-
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^='text-field-for']").arrowType("Test First Field");
+        cy.unClick();
+      });
     });
 
     it(`Logout as current user`, () => {
@@ -253,23 +227,20 @@ context("Document Field Owners Test", () => {
     });
   });
 
-
   context(`Add new textbox field for operator '${USERS[4].name}'`, () => {
     it("Navigate to records list", () => {
       cy.navigToRecords();
-
     });
 
-    it("Filter document by name and status, and select it", () => {
-      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
+    it("Filter document by id and status, and select it", () => {
+      cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
     });
 
     it("Fill value for FB textbox field", () => {
-      cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
-    });
-
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name^='new-text-field-for']").arrowType("Test First Field");
+        cy.unClick();
+      });
     });
 
     it("Check field from other colaborator is disabled", () => {
@@ -289,12 +260,14 @@ context("Document Field Owners Test", () => {
 
   context("Check fields are disabled for user that is not field owner, and change owner of document", () => {
     it("Navigate to records list", () => {
-      cy.navigToRecords();
-
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostOrPatchDocRev, CyRoutes.GetDocRevStatusesCategory], () => {
+        cy.navigToRecords();
+      });
+      cy.wait(2000);
     });
 
-    it("Filter document by name and status, and select it", () => {
-      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
+    it("Filter document by id and status, and select it", () => {
+      cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
     });
 
     it("Check field from first colaborator is disabled", () => {
@@ -320,12 +293,14 @@ context("Document Field Owners Test", () => {
     });
 
     it("Navigate to records list", () => {
-      cy.navigToRecords();
-
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostOrPatchDocRev, CyRoutes.GetDocRevStatusesCategory], () => {
+        cy.navigToRecords();
+      });
+      cy.wait(2000);
     });
 
-    it("Filter document by name and status, and select it", () => {
-      cy.recFilterRecordListByNameAndStatus({ title: "New Document", status: "Draft" });
+    it("Filter document by id and status, and select it", () => {
+      cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
     });
 
     it("Check field from first colaborator is disabled", () => {
@@ -337,16 +312,17 @@ context("Document Field Owners Test", () => {
     });
 
     it("Add Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.pmAddApproverOnApproverList({ approver: USERS[7].name });
+      });
     });
 
     it("Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Verify status is 'In Review'", () => {
-      cy.drCheckDocumentStatus({ status: "In Review" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
   });
 });

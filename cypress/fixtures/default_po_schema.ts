@@ -7,6 +7,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "select",
     index: 0,
     label: "PO Status",
+    tabId: "details",
     options: [
       {
         text: "Open",
@@ -35,6 +36,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "select",
     index: 1,
     label: "PO Status",
+    tabId: "details",
     deleted: true,
     options: [
       {
@@ -66,15 +68,17 @@ export const purchaseOrderDefaultSchema: any = [
     type: "section",
     index: 2,
     label: "General Information",
+    tabId: "details",
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
   },
   {
-    name: "requestor-k740hxlb",
+    name: "po-requestor-autocomplete",
     type: "autocomplete",
     index: 3,
     label: "Requestor",
+    tabId: "details",
     optionId: "3",
     optionPath: "/change_requests/available_approvers",
     placeholder: "[Select requestor here]",
@@ -94,6 +98,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "select",
     index: 4,
     label: "Department",
+    tabId: "details",
     options: [
       {
         text: "Operations",
@@ -138,6 +143,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "textfield",
     index: 5,
     label: "DHF Code",
+    tabId: "details",
     rules: "",
     deleted: true,
     placeholder: "[Enter the DHF code here] (In the future this will be an autocomplete list)",
@@ -152,6 +158,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "textfield",
     index: 6,
     label: "Project Name",
+    tabId: "details",
     rules: "",
     deleted: true,
     placeholder: "[Enter project name here]",
@@ -166,6 +173,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "section",
     index: 7,
     label: "Supplier & Shipping Information",
+    tabId: "details",
     rules: "",
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
@@ -177,6 +185,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "supplier",
     index: 8,
     label: "Supplier ",
+    tabId: "details",
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
@@ -191,6 +200,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "supplier",
     index: 9,
     label: "Supplier",
+    tabId: "details",
     deleted: true,
     optionId: "5",
     applicableOn: [
@@ -208,6 +218,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "autocomplete",
     index: 10,
     label: "Supplier",
+    tabId: "details",
     deleted: true,
     optionId: "5",
     optionPath: "/document_revisions?documentTypeAcronym=SUP",
@@ -228,6 +239,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "radiogroup",
     index: 11,
     label: "Ship To",
+    tabId: "details",
     options: [
       {
         text: "Customer Company",
@@ -257,6 +269,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "autocomplete",
     index: 12,
     label: "Company Ship To Address",
+    tabId: "details",
     rules: "required_if:ship-to-k7f1t1lw,Customer Company",
     optionId: "8",
     validators: {
@@ -281,6 +294,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "select",
     index: 13,
     label: "Company Ship To Address",
+    tabId: "details",
     rules: "",
     deleted: true,
     options: [
@@ -320,6 +334,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "autocomplete",
     index: 14,
     label: "Third Party Company",
+    tabId: "details",
     rules: "required_if:ship-to-k7f1t1lw,Third Party Company",
     optionId: "5",
     optionPath: "/document_revisions?documentTypeAcronym=SUP",
@@ -354,6 +369,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "textfield",
     index: 15,
     label: "Ship To Address",
+    tabId: "details",
     rules: "required_if:ship-to-k7f1t1lw,Complete Manually",
     validators: {
       required_if: {
@@ -381,6 +397,7 @@ export const purchaseOrderDefaultSchema: any = [
   {
     name: "-kprm6tjt",
     type: "paragraph",
+    tabId: "details",
     index: 16,
     paragraph: "<p><span style=\"font-size: 18px;\"><strong>Bill To: Supira, 590 Division St, Campbell CA 95008</strong></span></p>",
     applicableOn: [
@@ -394,6 +411,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "radiogroup",
     index: 17,
     label: "Bill To",
+    tabId: "details",
     deleted: true,
     options: [
       {
@@ -419,6 +437,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "autocomplete",
     index: 18,
     label: "Company Bill To Address",
+    tabId: "details",
     rules: "",
     deleted: true,
     optionId: "8",
@@ -439,6 +458,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "select",
     index: 19,
     label: "Company Bill To Address",
+    tabId: "details",
     rules: "",
     deleted: true,
     options: [
@@ -476,6 +496,7 @@ export const purchaseOrderDefaultSchema: any = [
   {
     name: "-kpqro6hq",
     type: "paragraph",
+    tabId: "details",
     index: 20,
     deleted: true,
     paragraph: "<p><strong>Supira</strong><br>590 Division St.<br>Campbell, CA 95008</p>",
@@ -491,6 +512,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "textfield",
     index: 21,
     label: "Company Bill To Address",
+    tabId: "details",
     rules: "",
     deleted: true,
     validators: {
@@ -516,6 +538,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "select",
     index: 22,
     label: "Shipping Information",
+    tabId: "details",
     options: [
       {
         text: "FedEx 449260805",
@@ -549,6 +572,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "select",
     index: 23,
     label: "Terms",
+    tabId: "details",
     options: [
       {
         text: "Net 15",
@@ -595,6 +619,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "textfield",
     index: 24,
     label: "Quotation Number",
+    tabId: "details",
     placeholder: "[Enter quotation number here]",
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
@@ -610,6 +635,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "fileupload",
     index: 25,
     label: "Quotation File",
+    tabId: "details",
     rules: "",
     validators: {
       required_with: false,
@@ -635,6 +661,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "datepicker",
     index: 26,
     label: "Order Date",
+    tabId: "details",
     rules: "required",
     validators: {
       required: true,
@@ -653,6 +680,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "purchaseorder",
     index: 27,
     label: "Purchase Order",
+    tabId: "lineitems",
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
@@ -666,6 +694,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "purchaseorder",
     index: 28,
     label: "PO Items",
+    tabId: "lineitems",
     deleted: true,
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
@@ -679,6 +708,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "purchaseorder",
     index: 29,
     label: "PO - Item(s) Information",
+    tabId: "lineitems",
     rules: "",
     deleted: true,
     applicableOn: [
@@ -692,6 +722,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "texteditor",
     index: 30,
     label: "Comments",
+    tabId: "details",
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
@@ -706,6 +737,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "select",
     index: 31,
     label: "Send Invoices To",
+    tabId: "details",
     deleted: true,
     options: [
       {
@@ -728,6 +760,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "textfield",
     index: 32,
     label: "Send Invoices To",
+    tabId: "details",
     deleted: true,
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
@@ -742,6 +775,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "paragraph",
     index: 33,
     rules: "",
+    tabId: "details",
     deleted: true,
     paragraph: "<p>Invoices to: accounting@email.com</p>",
     applicableOn: [
@@ -755,6 +789,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "paragraph",
     index: 34,
     rules: "",
+    tabId: "details",
     deleted: true,
     paragraph: "<p>Contact: purchashing@email.com</p>",
     applicableOn: [
@@ -766,6 +801,7 @@ export const purchaseOrderDefaultSchema: any = [
   {
     name: "-kpqrmbq5",
     type: "paragraph",
+    tabId: "details",
     index: 35,
     paragraph: "<p><span style=\"font-size: 18px;\"><strong>Send invoices to: accounting@shifamed.com</strong></span></p>",
     applicableOn: [
@@ -780,6 +816,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "textfield",
     index: 36,
     label: "Contact Email",
+    tabId: "details",
     applicableOn: [
       "ON_STATE_TO_IN_REVIEW",
     ],
@@ -792,6 +829,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "poapprovals",
     index: 37,
     label: "form.builder.approvals",
+    tabId: "details",
     deleteDisabled: false,
     uniqueSchemaItem: true,
   },
@@ -800,6 +838,7 @@ export const purchaseOrderDefaultSchema: any = [
     type: "poapprovals",
     index: 38,
     label: "form.builder.approvals",
+    tabId: "details",
     deleted: true,
     deleteDisabled: false,
     uniqueSchemaItem: true,

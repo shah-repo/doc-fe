@@ -161,21 +161,25 @@ context("Autosave EB test", () => {
       it("Select 'Engineering Build' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Engineering Build" });
       });
-
-      it("Verify that Approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
-      });
-
-      it("Add EB Procedure", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").arrowClick({ force: true });
-        cy.fbSelectItemFromNewFieldList({ field: "EB Procedure" });
-        cy.fbAddNewFieldButton();
-      });
     });
 
     context("Create the form and release it", () => {
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+      });
+
+      it("Add EB Procedure", () => {
+        cy.drSelectProcedureTab();
+        cy.fbClickAddNewHiddenBtn();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.fbAddNewFieldButton();
+        });
+      });
+
+      it("Verify that Approvals field is automatically added", () => {
+        cy.drSelectOverviewTab();
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and release the form", () => {
@@ -198,6 +202,7 @@ context("Autosave EB test", () => {
     });
 
     it("Fill step #1 description and check autosave", () => {
+      cy.drSelectProcedureTab();
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
       });
@@ -272,31 +277,44 @@ context("Autosave EB test", () => {
 
   context("Add/remove approver and check autosave", () => {
     it("Add first Approver'", () => {
+      cy.drSelectOverviewTab();
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
     it("Add second Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.reload();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("check approvers after reload page", () => {
-      cy.reload();
-      cy.get(".MuiAutocomplete-tag").eq(0)
-        .should("have.text", `${USERS[2].name} - ${USERS[2].email}`);
-      cy.get(".MuiAutocomplete-tag").eq(1)
-        .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+        .should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+        .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.unClick();
     });
 
     it("Remove second Approver'", () => {
-      cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
+      cy.get(`[class*="MuiChip-root MuiAutocomplete-tag MuiChip-deletable"] div`).contains(USERS[2].email)
+        .parent().parent().find("svg").arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.reload();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("check approvers after reload page", () => {
-      cy.reload();
-      cy.get(".MuiAutocomplete-tag").eq(0)
-        .should("have.text", `${USERS[1].name} - ${USERS[1].email}`);
-      cy.get(".MuiAutocomplete-tag").eq(1)
-        .should("not.exist");
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+        .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
+        .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
     });
   });
 

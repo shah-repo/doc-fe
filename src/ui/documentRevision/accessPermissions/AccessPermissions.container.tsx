@@ -7,7 +7,7 @@ import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisio
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { useAssignOperatorsToDocument } from "../../hooks/docCustomization/useCustomization";
-import AccessPermissionsPresenter from "./AccessPermissions.presenter";
+import AccessPermissionsPresenter from "./AccessPermissions.presenter.new";
 
 interface OwnProps {
   canAccess: boolean;

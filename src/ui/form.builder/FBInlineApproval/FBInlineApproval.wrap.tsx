@@ -6,7 +6,9 @@ import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBAutocompleteAsyncOption, FBDialogState, FBEmployee, FBInlineApprovalBody, FBInlineApprovalOptions, FBInlineApprovalProps, FBInlineApprovalState, FBInlineApprovalTransition } from "..";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { store } from "../../../state/store";
+import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
+import FBDataStore from "../FBStore/FBDataStore";
 import { FBRequestApprovalTransitionBody } from "./FBInlineApproval.types";
 
 export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
@@ -40,7 +42,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       isOutput,
       document: { version: docVersion = 1 } = {},
     } = workspaceState || {};
-    const docApprovals = document?.approvals || changeRequest?.approvals;
+    const docApprovals = FBDataStore?.refreshData?.approvals || document?.approvals || changeRequest?.approvals;
     const userId = (
       document?.owner?.user?.id ||
       changeRequest?.owner?.user?.id
@@ -90,14 +92,20 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // On transition
     React.useEffect(() => reaction(
       () => inlineApprovalState?.transitionApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        concatApprovals(data);
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     // On requestApprovalTransition
     React.useEffect(() => reaction(
       () => inlineApprovalState?.requestApprovalApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        concatApprovals(data);
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -119,7 +127,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     // On add approver
     React.useEffect(() => reaction(
       () => inlineApprovalState?.approvalApi.data,
-      (data) => concatApprovals(data)
+      (data) => {
+        concatApprovals(data);
+        FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.INLINE_APPROVALS);
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
@@ -196,7 +207,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       if (!ids) { return; }
       map(ids, (approver) => {
         const approval = find(inlineApprovalState?.getApprovals, (a) => a.approver?.id === approver);
-        inlineApprovalState?.approvalTransition("abandon", (approval as FBInlineApprovalBody)?.id);
+        inlineApprovalState?.approvalTransition("abandon", (approval as FBInlineApprovalBody)?.id, undefined, () => {
+          const id  = workspaceState?.id;
+          if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+        });
       });
     }
 
@@ -205,7 +219,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       const body = {
         docRev: pick(workspaceState?.document, "id"),
       } as FBRequestApprovalTransitionBody;
-      inlineApprovalState?.requestApprovalTransition("pending_by_field", id, body);
+      inlineApprovalState?.requestApprovalTransition("pending_by_field", id, body, () => {
+        const id  = workspaceState?.id;
+        if (id) { dispatch(documentRevisionsActions.loadAudit(id)); }
+      });
     }
 
     // MARK: @methods

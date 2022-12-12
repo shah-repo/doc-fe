@@ -1,9 +1,10 @@
-import { Box, Button, makeStyles, Theme } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import React from "react";
 import Text from "../../components/Text";
-import Colors from "../../layout/theme/utils/colors";
+import AuditItemsContainer from "../audit.panel/container";
 import AddEmployeeDialogPresenter from "./dialog.presenter";
 import AddEmployeeFormContainer from "./form.container";
+import styles from "./styles";
 
 interface Props {
   isOpen: boolean;
@@ -16,25 +17,20 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
   openDialog,
   closeDialog,
 }) => {
-  const styles = makeStyles((theme: Theme) => ({
-    Button: {
-      "margin": "0px",
-      "boxShadow": "none",
-      "borderRadius": 100,
-      "background": Colors.navy,
-      "color": Colors.white,
-      "fontFamily": "Sora",
-      "paddingRight": theme.spacing(2.5),
-      "paddingLeft": theme.spacing(2.5),
-      "textTransform": "none",
-      "&:hover": {
-        background: Colors.navy,
-      },
-    },
-  }));
   const classes = styles();
+  // load history panel
+  const [openHistoryPanel, setHistoryPanel] = React.useState<boolean>(false);
+  const onHistoryPanelClick = () => { setHistoryPanel(!openHistoryPanel); };
   return (
     <Box>
+      <Button
+        variant="contained"
+        onClick={onHistoryPanelClick}
+        className={classes.historyButton}
+        data-cy="um-open-history-panel"
+      >
+        <Text message="user.management.audit" />
+      </Button>
       <Button
         variant="contained"
         onClick={openDialog}
@@ -43,10 +39,13 @@ const AddEmployeePresenter: React.FunctionComponent<Props> = ({
       >
         <Text message="user.management.add.employee" />
       </Button>
-      <AddEmployeeDialogPresenter
-        isOpen={isOpen}
-        closeDialog={closeDialog}
-      >
+      {openHistoryPanel &&
+        <AuditItemsContainer
+          openHistoryPanel={openHistoryPanel}
+          closeHistoryPanel={onHistoryPanelClick}
+        />
+      }
+      <AddEmployeeDialogPresenter isOpen={isOpen} closeDialog={closeDialog}>
         <AddEmployeeFormContainer />
       </AddEmployeeDialogPresenter>
     </Box>

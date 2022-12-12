@@ -31,6 +31,7 @@ declare global {
       recClickCreateDocumentWithApiCall(): Chainable<Subject>;
       recCheckNumberOfAvailablePo(params: {numberOfOpenPOs: integer}): Chainable<Subject>;
       recSelectPo(params: {poTitle: string}): Chainable<Subject>;
+      recSelectReceivable(params: {title: string}): Chainable<Subject>;
       recVerifyPOIsDisplayed(params: {loadedPoItems: PurchaseOrderItem[]}): Chainable<Subject>;
     }
   }
@@ -85,12 +86,10 @@ Cypress.Commands.add("recFilterByReceivableId", (params: {id: string}) => {
 });
 
 Cypress.Commands.add("recClickUpdateRecord", (params: {id: string}) => {
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.DocPreview,
-    CyRoutes.GetRequiredApproversDocRev,
-    CyRoutes.GetAutocompleteOptions], () => {
-    cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-  });
+  cy.wrapWithWaitOnApiCall(
+    CyRoutes.DocPreview, () => {
+      cy.get("[data-cy=\"updateRecord\"]").arrowClick();
+    });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -145,8 +144,14 @@ Cypress.Commands.add("recCheckNumberOfAvailablePo", (params: {numberOfOpenPOs: i
 });
 
 Cypress.Commands.add("recSelectPo", (params: {poTitle: string}) => {
-  cy.get("[data-cy*=receivable]").arrowClick();
+  cy.get(`input[data-cy^="porec-receivable"]`).scrollIntoView().wait(2000);
+  cy.get(`input[data-cy^="porec-receivable"]`).arrowClick();
   cy.get("ul>li[role=option]").contains(params.poTitle).arrowClick();
+});
+
+Cypress.Commands.add("recSelectReceivable", (params: {title: string}) => {
+  cy.get("[name^=porec-receivable-] svg").eq(1).arrowClick();
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
 });
 
 Cypress.Commands.add("recVerifyPOIsDisplayed", (params: {loadedPoItems: PurchaseOrderItem[]}) => {

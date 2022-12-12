@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
+import { integer } from "aws-sdk/clients/cloudfront";
 import * as gmail from "gmail-tester";
 import * as path from "path";
 
@@ -13,81 +14,36 @@ export interface IMAPEmail{
   subject: string;
 }
 
-export async function getEmail(email) {
-  let returnValue = null;
-  const dateOffset = (20 * 1000);
-  const myDate = new Date();
-  myDate.setTime(myDate.getTime() - dateOffset);
-  const mail = await gmail.check_inbox(
-    path.resolve(__dirname, "../../../credentials/credentials.json"),
-    path.resolve(__dirname, "../../../credentials/gmail_token.json"),
-    {
-      to: email,
-      wait_time_sec: 5,
-      max_wait_time_sec: 40,
-      include_body: true,
-      after: myDate,
-    }
-  );
-  if (mail) {
-    returnValue = mail[0].body.html;
-  }
-
-  return returnValue;
+export interface GmailTesterOptions {
+  from?: string;
+  to?: string;
+  subject?: string;
+  include_body?: boolean;
+  include_attachments?: boolean;
+  before?: Date;
+  after?: Date;
+  label?: string;
+  wait_time_sec?: integer;
+  max_wait_time_sec?: integer;
 }
 
-export async function getEmails(email, options?) {
-  let mails = [];
-  let settings;
-
-  if (!options) {
-    const dateOffset = (25 * 1000);
-    const myDate = new Date();
-    myDate.setTime(myDate.getTime() - dateOffset);
-    settings =     {
-      to: email,
-      wait_time_sec: 5,
-      max_wait_time_sec: 50,
-      include_body: true,
-      after: myDate,
-    };
-  }
-  else {
-    settings = options;
-  }
+export async function getEmails(email: string, options: GmailTesterOptions = {}) {
+  const settings: gmail.CheckInboxOptions = {
+    label: "INBOX",
+    to: email,
+    wait_time_sec: 5,
+    max_wait_time_sec: 60,
+    include_body: true,
+    after: new Date(Date.now() - 25 * 1000),
+    ...options,
+  };
 
   const messages = await gmail.check_inbox(
     path.resolve(__dirname, "../../../credentials/credentials.json"),
     path.resolve(__dirname, "../../../credentials/gmail_token.json"),
     settings
   );
-  if (messages) {
-    mails = messages;
-  }
 
-  return mails;
-}
-
-export async function getEmailWithLongerOffset(email) {
-  let returnValue = null;
-  const dateOffset = (300 * 1000);
-  const myDate = new Date();
-  myDate.setTime(myDate.getTime() - dateOffset);
-  const mail = await gmail.check_inbox(
-    path.resolve(__dirname, "../../../credentials/credentials.json"),
-    path.resolve(__dirname, "../../../credentials/gmail_token.json"),
-    {
-      to: email,
-      wait_time_sec: 5,
-      max_wait_time_sec: 40,
-      include_body: true,
-      after: myDate,
-    }
-  );
-  if (mail) {
-    returnValue = mail[0].body.html;
-  }
-
-  return returnValue;
+  return messages;
 }
 

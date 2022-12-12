@@ -16,6 +16,7 @@ export const TableSearchTextField: React.FunctionComponent<Props> = ({
 
   React.useEffect(() => {
     (!value || !defaultValue) && setValue(defaultValue || "");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue]);
 
   const handleChange = (event: React.ChangeEvent<{ value: string }>) => {

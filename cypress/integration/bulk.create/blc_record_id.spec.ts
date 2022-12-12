@@ -6,6 +6,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { PrivatePoolTest, PublicPoolTest } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -51,36 +52,8 @@ context("Bulk create public, private and reserved record-ids", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Test Private Pool",
-                documentTypeAcronym: "TPP-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                privateNumberPool: true,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
-              {
-                documentTypeName: "Test Public Pool",
-                documentTypeAcronym: "TPUP-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
-                canRedLine: true,
-                privateNumberPool: false,
-                fieldsConfig: {
-                  A1: {
-                    label: "WIP",
-                    visible: true,
-                  },
-                },
-              },
+              PrivatePoolTest,
+              PublicPoolTest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -154,6 +127,7 @@ context("Bulk create public, private and reserved record-ids", () => {
                   schema: [
                     {
                       name: "blc-text-field-kv6ef2ii",
+                      tabId: "overview",
                       rows: 1,
                       type: "textfield",
                       index: 0,
@@ -173,6 +147,7 @@ context("Bulk create public, private and reserved record-ids", () => {
                     },
                     {
                       name: "approvals-built-in",
+                      tabId: "overview",
                       type: "approvals",
                       index: 1,
                       label: "Approvals",
@@ -475,23 +450,36 @@ context("Bulk create public, private and reserved record-ids", () => {
         cy.drEnterDocumentDescription({ description: "Bulk Creation document description" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
           cy.unClick();
         });
       });
 
       it("Select form to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]")
+          .autocompleteSelect("Document for bulk creation");
       });
 
       it("Select document type to be used for bulk creation", () => {
-        cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Private Pool");
+        cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Private Pool");
       });
 
       it("Select 'yes' to have Document id column", () => {
-        cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Click on 'Overview' tab", () => {
+        cy.drSelectOverviewTab();
       });
 
       it("Add approval", () => {
@@ -504,6 +492,10 @@ context("Bulk create public, private and reserved record-ids", () => {
     });
 
     context("Download template and verify size", () => {
+      it("Click on 'Details' tab", () => {
+        cy.drSelectDetailsTab();
+      });
+
       it("Download excel template file", () => {
         cy.excelDownloadTemplate({ saveFileName: excelTemplateSaveName });
       });
@@ -545,7 +537,8 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -571,7 +564,8 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -597,7 +591,8 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -623,7 +618,8 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -650,7 +646,8 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -676,7 +673,8 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -702,7 +700,8 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Remove file", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\" ]")
+            .parent().parent()
             .find("button").arrowClick({ force: true });
         });
       });
@@ -751,23 +750,37 @@ context("Bulk create public, private and reserved record-ids", () => {
           cy.drEnterDocumentDescription({ description: "Bulk Creation public records" });
         });
 
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
           cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-            cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+            cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
             cy.unClick();
           });
         });
 
         it("Select form to be used for bulk creation", () => {
-          cy.get("[data-cy=\"fb-form-document-to-be-used\"]").autocompleteSelect("Document for bulk creation");
+          cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-form-document-to-be-used\"]")
+            .autocompleteSelect("Document for bulk creation");
         });
 
         it("Select document type to be used for bulk creation", () => {
-          cy.get("[data-cy=\"fb-output-document-type\"]").autocompleteSelect("Test Public Pool");
+          cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"fb-output-document-type\"]")
+            .autocompleteSelect("Test Public Pool");
         });
 
         it("Select 'yes' to have Document id column", () => {
-          cy.get("[name=\"fb-add-column-document-record-id\"]").eq(0).check();
+          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-add-column-document-record-id\"]").eq(0).check();
+        });
+
+        it("Click save document", () => {
+          cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Click on 'Overview' tab", () => {
+          cy.drSelectOverviewTab();
         });
 
         it("Add approval", () => {
@@ -775,35 +788,11 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
       });
 
-      // context("Test spreadsheet templates", () => {
-      //   context("Test spreadsheet template with taken public number for id", () => {
-      //     it("Upload template file", () => {
-      //       cy.atchUploadTemplateForBLC({ fileName: "recordIDPublicTakenID.xlsx" });
-      //     });
-
-      //     it("Click save document", () => {
-      //       cy.drClickCreateDocumentWithApiCallForForms();
-      //     });
-
-      //     it("Submit for approval", () => {
-      //       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      //     });
-
-      //     it("Verify error message", () => {
-      //       cy.checkToastMessageIsEqual({
-      //         message: "These docIds: TPUP-00002, TPUP-00004 already exists in your Enlil environment.",
-      //       });
-      //       cy.closeAllAlertMessages();
-      //     });
-
-      //     it("Remove file", () => {
-      //       cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
-      //         .find("button").arrowClick({ force: true });
-      //     });
-      //   });
-      // });
-
       context("Send BLC2 document in review", () => {
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Upload template file", () => {
           cy.atchUploadTemplateForBLC({ fileName: "recordIDBLC2.xlsx" });
         });
@@ -836,7 +825,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Verify assigned record ID is one not reserved in BLC", () => {
-          cy.get("[id=\"HeaderInfo-docId\"]").should("have.text", "TPP-00009");
+          cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "TPP-00009");
         });
       });
 
@@ -868,7 +857,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Verify assigned record ID is one released reserved in BLC", () => {
-          cy.get("[id=\"HeaderInfo-docId\"]").should("have.text", "TPP-00002");
+          cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "TPP-00002");
         });
       });
     });
@@ -883,8 +872,12 @@ context("Bulk create public, private and reserved record-ids", () => {
           cy.listLoadingElementShouldNotExist();
         });
 
+        it("Click on 'Details' tab", () => {
+          cy.drSelectDetailsTab();
+        });
+
         it("Remove old spreadsheet", () => {
-          cy.get("#fb-attachment-field-fb-spreadsheet-for-import-file").parent().parent()
+          cy.get("[id=\"sm-tabpanel-1\"] [id=\"fb-attachment-field-fb-spreadsheet-for-import-file\"]").parent().parent()
             .find("button").arrowClick({ force: true });
         });
 
@@ -894,6 +887,10 @@ context("Bulk create public, private and reserved record-ids", () => {
 
         it("Click save document", () => {
           cy.drClickCreateDocumentWithApiCallForForms();
+        });
+
+        it("Click on 'Overview' tab", () => {
+          cy.drSelectOverviewTab();
         });
 
         it("Submit for approval", () => {

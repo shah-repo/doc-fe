@@ -3,9 +3,11 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
 import { CyRoutes } from "../../../support/routes";
+import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
 
@@ -58,12 +60,7 @@ context("Autocomplete 'Parts' test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
+              ClinicalProtocolDocType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -124,34 +121,36 @@ context("Autocomplete 'Parts' test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Parts" });
     });
 
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     it("Upload attachement picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
     });
 
     it("Add Checkbox group", () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-      cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
-      cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
-      cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+      cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
+      cy.fbGroupOptions("1", "2", "3");
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-      cy.get("[data-cy=\"form.builder.add.field\"]").last().arrowClick({ force: true });
-      cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-      cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+      cy.fbAddNewFieldWhenHiddenLastPlace();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+      cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-      cy.get(`input[type="checkbox"][value="3"]`).last().check();
-      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
+      cy.get(`input[type="checkbox"][value="3"]`).first().check();
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -160,12 +159,13 @@ context("Autocomplete 'Parts' test", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Check doc Draft status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Draft" });
+    it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.arCheckTitleInEditableAndMatches({ name: "New Part Form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         partsFormId = $docIdElement.text();
       });
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
 
@@ -178,29 +178,18 @@ context("Autocomplete 'Parts' test", () => {
 
   context("Verify email for Parts form notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${partsFormId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+        .then((emails) => {
           emailsFromInbox = emails;
           expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
+        });
     });
 
     it("Verify the emails that should be received", () => {
@@ -311,8 +300,12 @@ context("Autocomplete 'Parts' test", () => {
         expect(el).match(/Make vs Buy\nPrimary Supplier\nOther Suppliers/);
 
         // eslint-disable-next-line max-len
-        tmpRegex = new RegExp( `Traceability required\nSerialized\n Yes No\nSelect serialization\nTraceability required`, "gi" );
-        expect(el).not.match(tmpRegex);
+        tmpRegex = new RegExp( `Traceability required\nSerialized\n.*Yes.*No\nSelect serialization`, "gi" );
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp( `IQC Required\nTraceability required\nIQC Required`, "gi" );
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Draft/);
 
@@ -335,9 +328,9 @@ context("Autocomplete 'Parts' test", () => {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required/);
+        expect(el).match(/Limited Shelf Life\nFAI Required/);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nIQC Required\nLimited Shelf Life\nFAI Required\n1 2 3/);
+        expect(el).match(/Checkbox\nTEXT FIELD\nLimited Shelf Life\nFAI Required\n1 2 3/);
 
         expect(el).match(/Draft/);
 
@@ -383,8 +376,8 @@ context("Autocomplete 'Parts' test", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it("Check doc Released status and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+    it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.arCheckTitleInEditableAndMatches({ name: "New Part Form" });
       cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
         partsFormId = $docIdElement.text();
@@ -393,6 +386,7 @@ context("Autocomplete 'Parts' test", () => {
         arId = $lnEl.text();
       });
 
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       cy.sendToEmail();
     });
 
@@ -405,29 +399,18 @@ context("Autocomplete 'Parts' test", () => {
 
   context("Verify email for Parts form notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${partsFormId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+        .then((emails) => {
           emailsFromInbox = emails;
           expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
+        });
     });
 
     it("Verify the emails that should be received", () => {
@@ -539,8 +522,12 @@ context("Autocomplete 'Parts' test", () => {
         expect(el).match(/Make vs Buy\nPrimary Supplier\nOther Suppliers/);
 
         // eslint-disable-next-line max-len
-        tmpRegex = new RegExp( `Traceability required\nSerialized\n Yes No\nSelect serialization\nTraceability required`, "gi" );
-        expect(el).not.match(tmpRegex);
+        tmpRegex = new RegExp( `Traceability required\nSerialized\n.*Yes.*No\nSelect serialization`, "gi" );
+        expect(el).match(tmpRegex);
+
+        // eslint-disable-next-line max-len
+        tmpRegex = new RegExp( `IQC Required\nTraceability required\nIQC Required`, "gi" );
+        expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
 
@@ -563,9 +550,9 @@ context("Autocomplete 'Parts' test", () => {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/IQC Required\nLimited Shelf Life\nFAI Required/);
+        expect(el).match(/Limited Shelf Life\nFAI Required/);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nIQC Required\nLimited Shelf Life\nFAI Required\n1 2 3/);
+        expect(el).match(/Checkbox\nTEXT FIELD\nLimited Shelf Life\nFAI Required\n1 2 3/);
 
         expect(el).match(/Released/);
 
@@ -634,30 +621,40 @@ context("Autocomplete 'Parts' test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
-      it("Select make vs buy", () => {
-        cy.get("[id$=\"make-vs-buy\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Make").arrowClick();
-      });
-
-      it("Select traceability required", () => {
-        cy.get("[value=\"Traceability required\"]").check();
-      });
-
-      it("Select 'No' for Serialized option", () => {
-        cy.get("[name=\"serialized\"][value=\"Yes\"]").check();
-      });
-
-      it("Select serialization", () => {
-        cy.get("[id$=\"select-serialization\"]").arrowClick();
-        cy.get("ul[role=listbox]>li").contains("Select Provided Serialization").arrowClick();
-      });
-
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
       it("Checkbox option 1 checked", () => {
-        cy.get(`input[type="checkbox"][value="1"]`).last().check();
+        cy.unClick();
+        cy.get(`input[type="checkbox"][value="1"]`).last().check({ force: true });
+      });
+
+      it("Save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
+      });
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
+      it("Select make vs buy", () => {
+        cy.get("[id$=\"make-vs-buy\"]").arrowClick({ force: true });
+        cy.get("ul[role=listbox]>li").contains("Make").arrowClick({ force: true });
+      });
+
+      it("Select traceability required", () => {
+        cy.get("[value=\"Traceability required\"]").check({ force: true });
+      });
+
+      it("Select 'Yes' for Serialized option", () => {
+        cy.unClick();
+        cy.get("[name=\"serialized\"][value=\"Yes\"]").check({ force: true });
+      });
+
+      it("Select serialization", () => {
+        cy.get("[id$=\"select-serialization\"]").arrowClick({ force: true });
+        cy.get("ul[role=listbox]>li").contains("Select Provided Serialization").arrowClick();
       });
 
       it("Click create document", () => {
@@ -665,7 +662,7 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Extract document Id", () => {
-        cy.drCheckDocumentStatus({ status: "Draft" });
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
         cy.arCheckTitleInEditableAndMatches({ name: "Parts document title" });
         cy.drGetDocIdElementFromUI().should("contain.text", "PRT-").then(($docIdElement: JQuery<HTMLElement>) => {
           partsDocId = $docIdElement.text();
@@ -685,26 +682,16 @@ context("Autocomplete 'Parts' test", () => {
         dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${partsDocId}`,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+          .then((emails) => {
             emailsFromInbox = emails;
             expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
             downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
+          });
       });
 
       it("Verify the emails that should be received", () => {
@@ -871,8 +858,8 @@ context("Autocomplete 'Parts' test", () => {
         cy.drGetDocIdElementFromUI().then(($part) => { partsID = $part.text(); });
       });
 
-      it("Check doc Released status and click on Send To Email", () => {
-        cy.drCheckDocumentStatus({ status: "Released" });
+      it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
+        cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.arCheckTitleInEditableAndMatches({ name: "Parts document title" });
         cy.drGetDocIdElementFromUI().should("contain.text", "PRT-").then(($docIdElement: JQuery<HTMLElement>) => {
           partsDocId = $docIdElement.text();
@@ -880,7 +867,7 @@ context("Autocomplete 'Parts' test", () => {
         cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
           arId = $lnEl.text();
         });
-        cy.sendToEmail();
+        cy.sendToEmailFromHeader();
       });
 
       it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -895,26 +882,16 @@ context("Autocomplete 'Parts' test", () => {
         dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          wait_time_sec: 5,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          max_wait_time_sec: 50,
-          // eslint-disable-next-line @typescript-eslint/camelcase
-          include_body: true,
           after: dateAfterEmailShouldArrive,
           subject: `Export for document ${partsDocId}`,
         };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-          if (emails) {
+        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+          .then((emails) => {
             emailsFromInbox = emails;
             expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
             downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-          }
-          else {
-            assert.fail("No email found");
-          }
-        });
+          });
       });
 
       it("Verify the emails that should be received", () => {
@@ -1098,14 +1075,18 @@ context("Autocomplete 'Parts' test", () => {
           cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
 
-        it("Select 'Component Protocol' output document type", () => {
+        it("Select 'Clinical Protocol' output document type", () => {
           cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
+        });
+
+        it("Click create a document", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
 
         context("Add form fields", () => {
           it("Add Autocomplete", () => {
             cy.fbAddNewField();
-            cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+            cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
           });
         });
 

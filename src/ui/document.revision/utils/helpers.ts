@@ -1,12 +1,12 @@
-import { get, orderBy } from "lodash";
+import { get } from "lodash";
 import moment from "moment";
 import "moment-timezone";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
-import { SelectOption } from "../../components/forms/fields/Select";
+import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
+import { generateRevisionNumber } from "../../documentRevision/helpers/generateRevisionNumber";
 import { CompletedOnDateOptions, ReleasedDateOptions } from "./types";
-
 
 export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
   const owner = get(documentRevision, "owner.user.email");
@@ -15,26 +15,6 @@ export const canEditDocumentRevision = (documentRevision: DocumentRevision) => {
     currentUser === owner &&
     (isDocumentRevisionInDraft(documentRevision) || isDocumentRevisionPendingChange(documentRevision))
   );
-};
-
-export const documentRevisionStatusOption = (statuses?: DocumentRevisionStatus[]) => {
-  const options: SelectOption[] = [];
-  if (statuses) {
-    const obj = statuses.reduce((o, key) => ({ ...o, [key]: key }), {});
-    Object.keys(obj).forEach((key) => {
-      const keyName = obj[key as keyof typeof DocumentRevisionStatus];
-      options.push({ value: keyName, text: keyName });
-    });
-    return orderBy(options, ["text"], ["asc"]);
-  }
-  Object.keys(DocumentRevisionStatus).forEach((key) => {
-    // TODO: Change DocumentRevisionStatus enum into key = value, value = text
-    const keyName = DocumentRevisionStatus[key as keyof typeof DocumentRevisionStatus];
-    if (keyName !== DocumentRevisionStatus.Deprecated && keyName !== DocumentRevisionStatus.Canceled) {
-      options.push({ value: keyName, text: keyName });
-    }
-  });
-  return orderBy(options, ["text"], ["asc"]);
 };
 
 export const documentRevisionQueryStatus = (): DocumentRevisionStatus[] =>
@@ -87,6 +67,23 @@ export const trainingCompletedOnDateOption = () => [
     value: moment().add(7, "d").startOf("day").toISOString(),
   },
 ];
+
+export const getVersionNumber = (documentRevisionId) => {
+  const {
+    document: {
+      documentType: {
+        groupOptions = [],
+      },
+    }, revision, revisionStage, revisionChangeType, subRevision,
+  } = store.getState().documentRevisions.byId[documentRevisionId];
+
+  return generateRevisionNumber( revision, revisionStage, subRevision, revisionChangeType, undefined,
+    checkIsDocumentRecord(groupOptions),
+  );
+};
+
+
+export const statesWithLastSavedEnabled = [DocumentRevisionStatus.Draft, DocumentRevisionStatus.PendingChange];
 
 // Disabled because of ENC-7826
 /* export const shouldHaveNoResponse = (dataToSubmit: any, documentRevision: DocumentRevision) => {

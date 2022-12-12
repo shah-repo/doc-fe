@@ -1,9 +1,8 @@
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { EMPLOYEES_URL } from "../../../state/ducks/userManagement/constants";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { TableDataProps, TablePanelStateProps } from "../../components/table/types";
-import Colors from "../../layout/theme/utils/colors";
 import UserProfileAdminContainer from "../profile/UserProfileAdmin.container";
 import { DEFAULT_SELECTED_EMPLOYEE } from "../utils/types";
 import gridConfiguration from "./column.definition";
@@ -32,26 +31,22 @@ const UserManagementKendoPresenter: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Box p={2} style={{ background: Colors.background_white }}>
-      <Grid container>
-        <Grid item={true} xs>
-          <KendoPanel<GetEmployeeResponse>
-            gridConfiguration={gridConfiguration}
-            queryUrl={EMPLOYEES_URL}
-            rerender={!showUserProfile}
-            gridData={data}
-            tableName={tableName}
-            onSelect={({ dataItem }) => () => handleUserProfileDialog(dataItem as GetEmployeeResponse)}
-            tableCriteria={tableCriteria}
-          />
-        </Grid>
-        <UserProfileAdminContainer
-          closeUserProfile={closeUserProfile}
-          showUserProfile={showUserProfile}
-          selectedEmployee={selectedEmployee}
-        />
-      </Grid>
-    </Box>
+    <Grid container>
+      <KendoPanel<GetEmployeeResponse>
+        gridConfiguration={gridConfiguration}
+        queryUrl={EMPLOYEES_URL}
+        rerender={!showUserProfile}
+        gridData={data}
+        tableName={tableName}
+        onSelect={({ dataItem }) => () => handleUserProfileDialog(dataItem as GetEmployeeResponse)}
+        tableCriteria={tableCriteria}
+      />
+      <UserProfileAdminContainer
+        closeUserProfile={closeUserProfile}
+        showUserProfile={showUserProfile}
+        selectedEmployee={selectedEmployee}
+      />
+    </Grid>
   );
 };
 

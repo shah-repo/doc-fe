@@ -11,6 +11,7 @@ export enum FBEndpoint {
   AttachmentById = "/attachments/${id}",
   AttachmentsByIds ="/attachments?ids=${ids}",
   AllDocRevAttachments ="/document_revisions/all_attachments/${id}",
+  MaterialAndEquipment = "/document_revisions/${id}/materials_and_equipment",
   PostInlineApprove = "/document_revisions/${documentId}/inline_approve",
   DynamicControl = "/document_revisions/dynamic_forms",
   FetchDocumentRevision = "/document_revisions/${documentId}",
@@ -35,6 +36,7 @@ export enum FBEndpoint {
   RequiredApprovers = "/document_revisions/required_approvers",
   Approvals = "/approvals",
   ApprovalsTransition = "/approvals/${id}/${transition}",
+  ApprovalsUpdate = "/approvals/${id}/update",
   SetApprovalStatus = "/approvals/${approvalId}/${status}",
   PatchDocumentRevision = "/document_revisions/${docRevId}",
   HistoryMaintenance = "/document_revisions/history_maintenance/${id}",
@@ -56,6 +58,8 @@ export enum FBEndpoint {
   LockFieldsExpire = "/document_revision_field_locks/${id}/expire",
   CreateLot = "/receivable/${receivableId}/create_lot",
   AttachmentUnzipping = "/attachment_job/start_unzipping",
-  ZIPStatus = "/attachment_job/connected_to/${attachmentId}"
+  ZIPStatus = "/attachment_job/connected_to/${attachmentId}",
+  Favourites = "/user_favourites",
+  ModifyFavourites = "/user_favourites/${id}",
 }
 

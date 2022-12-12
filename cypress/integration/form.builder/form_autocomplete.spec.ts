@@ -5,6 +5,11 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
+import { Material } from "../../utils/constants/documentTypes/material";
+import { Part } from "../../utils/constants/documentTypes/part";
+import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
+import { Supplier } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -76,211 +81,11 @@ context("Autocomplete test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Clinical Protocol",
-                documentTypeAcronym: "CP-",
-                group: "OTHER",
-                isQms: true,
-              },
-              {
-                documentTypeName: "Part",
-                documentTypeAcronym: "PRT-",
-                group: "PART",
-                isQms: true,
-                needsSignature: true,
-                category: "Parts",
-              },
-              {
-                documentTypeName: "Material",
-                documentTypeAcronym: "MT-",
-                group: "MATERIAL",
-                isQms: true,
-                needsSignature: true,
-                category: "Materials",
-              },
-              {
-                documentTypeName: "Supplier",
-                documentTypeAcronym: "SUP-",
-                group: "SUPPLIER",
-                isQms: true,
-                needsSignature: true,
-                category: "Suppliers",
-              },
-              {
-                documentTypeName: "Purchase Order test",
-                documentTypeAcronym: "POT-",
-                group: "PO",
-                category: "Purchase Order",
-                isQms: true,
-                privateNumberPool: true,
-                needsSignature: true,
-                fieldsConfig: {
-                  C: {
-                    visible: false,
-                    required: false,
-                  },
-                  D: {
-                    label: "Description",
-                    visible: true,
-                    required: false,
-                  },
-                  E: {
-                    visible: false,
-                    required: true,
-                  },
-                  F: {
-                    visible: false,
-                    required: true,
-                  },
-                  G: {
-                    visible: false,
-                    required: false,
-                  },
-                  I: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  J: {
-                    visible: false,
-                  },
-                  K: {
-                    label: "Cancel PO",
-                    visible: true,
-                  },
-                  L: {
-                    label: "Correct PO",
-                    visible: true,
-                  },
-                  M: {
-                    label: "Type of Change",
-                    visible: true,
-                    required: true,
-                  },
-                  N: {
-                    label: "Add Approvers",
-                    visible: false,
-                    required: false,
-                  },
-                  O: {
-                    label: "PO History",
-                    visible: true,
-                  },
-                  R: {
-                    visible: false,
-                  },
-                  S: {
-                    label: "Revise PO",
-                    visible: true,
-                  },
-                  V: {
-                    label: "Create PO",
-                    visible: true,
-                  },
-                  A1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  A2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  A3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  A4: {
-                    visible: false,
-                  },
-                  A5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  A6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P1: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                  P2: {
-                    label: "Void",
-                    visible: true,
-                  },
-                  P3: {
-                    label: "History",
-                    visible: true,
-                  },
-                  P4: {
-                    visible: false,
-                  },
-                  P5: {
-                    label: "Pending Approval",
-                    visible: true,
-                  },
-                  P6: {
-                    label: "Draft",
-                    visible: true,
-                  },
-                },
-                schema: [
-                  {
-                    name: "po-status-built-in",
-                    type: "select",
-                    index: 0,
-                    label: "PO Status",
-                    options: [
-                      {
-                        text: "Open",
-                        value: "Open",
-                      },
-                      {
-                        text: "Closed",
-                        value: "Closed",
-                      },
-                      {
-                        text: "Cancelled",
-                        value: "Cancelled",
-                      },
-                    ],
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "PO Status",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-supplier-built-in",
-                    type: "supplier",
-                    index: 1,
-                    label: "Supplier ",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationMode: "default",
-                    validationAttribute: "Supplier",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "po-items-built-in",
-                    type: "purchaseorder",
-                    index: 2,
-                    label: "Purchase Order",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    validationAttribute: "Purchase Order",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
+              ClinicalProtocolDocType,
+              Part,
+              Material,
+              Supplier,
+              PurchaseOrderTest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -504,6 +309,7 @@ context("Autocomplete test", () => {
                     type: "select",
                     index: 0,
                     label: "PO Status",
+                    tabId: "details",
                     options: [
                       {
                         text: "Open",
@@ -531,6 +337,7 @@ context("Autocomplete test", () => {
                     type: "supplier",
                     index: 1,
                     label: "Supplier ",
+                    tabId: "details",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -544,6 +351,7 @@ context("Autocomplete test", () => {
                     type: "purchaseorder",
                     index: 2,
                     label: "Purchase Order",
+                    tabId: "lineitems",
                     applicableOn: [
                       "ON_STATE_TO_IN_REVIEW",
                     ],
@@ -554,6 +362,7 @@ context("Autocomplete test", () => {
                   },
                   {
                     label: "form.builder.approvals",
+                    tabId: "details",
                     type: "poapprovals",
                     deleteDisabled: false,
                     name: "fb-po-approvals-kqqix31p",
@@ -768,6 +577,7 @@ context("Autocomplete test", () => {
                 type: "section",
                 index: 0,
                 label: "Maintenance Details",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -778,6 +588,7 @@ context("Autocomplete test", () => {
                 type: "autocomplete",
                 index: 1,
                 label: "Equipment",
+                tabId: "details",
                 rules: "required",
                 optionId: "20",
                 placeholder: "[Select revision here]",
@@ -791,6 +602,7 @@ context("Autocomplete test", () => {
                 type: "autocomplete",
                 index: 2,
                 label: "Maintainer",
+                tabId: "details",
                 rules: "required",
                 optionId: "13",
                 placeholder: "[Select name here]",
@@ -804,6 +616,7 @@ context("Autocomplete test", () => {
                 type: "textfield",
                 index: 3,
                 label: "Equipment Maintenance Section",
+                tabId: "details",
                 rules: "required",
                 hidden: true,
                 applicableOn: [
@@ -813,6 +626,7 @@ context("Autocomplete test", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "overview",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ki5yh7ba",
@@ -876,6 +690,7 @@ context("Autocomplete test", () => {
                 type: "quantity",
                 index: 0,
                 label: "Initial Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -890,6 +705,7 @@ context("Autocomplete test", () => {
                 type: "quantity",
                 index: 1,
                 label: "Usable Quantity",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -904,6 +720,7 @@ context("Autocomplete test", () => {
                 type: "datepicker",
                 index: 2,
                 label: "Expiration Date",
+                tabId: "details",
                 applicableOn: [
                   "ON_STATE_TO_IN_REVIEW",
                 ],
@@ -917,6 +734,7 @@ context("Autocomplete test", () => {
                 type: "autocomplete",
                 index: 3,
                 label: "Part Selection",
+                tabId: "details",
                 optionId: "21",
                 placeholder: "Select the appropriate part for this lot",
                 deleteDisabled: true,
@@ -927,6 +745,7 @@ context("Autocomplete test", () => {
                 type: "checkboxgroup",
                 index: 4,
                 label: "100% Inspection Override",
+                tabId: "details",
                 options: [
                   {
                     text: "100% Inspection Override",
@@ -945,6 +764,7 @@ context("Autocomplete test", () => {
               },
               {
                 label: "form.builder.approvals",
+                tabId: "details",
                 type: "approvals",
                 deleteDisabled: true,
                 name: "fb-approvals-ksherq6d",
@@ -1006,6 +826,10 @@ context("Autocomplete test", () => {
       cy.drSelectReferences( "Part document" );
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
     });
@@ -1028,8 +852,7 @@ context("Autocomplete test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add an Approval", () => {
@@ -1040,10 +863,14 @@ context("Autocomplete test", () => {
       cy.pmSubmitForApproval();
     });
 
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+    });
+
     it("Approve record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
@@ -1093,7 +920,6 @@ context("Autocomplete test", () => {
     it("Approve and release FORM document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        // cy.fbClickButton({ el: "updateRecord" });
       });
     });
 
@@ -1107,6 +933,11 @@ context("Autocomplete test", () => {
 
     it("Enter description 'test description'", () => {
       cy.drEnterDocumentDescription({ description: "test description" });
+      cy.wait(2000);
+    });
+
+    it("Navigate to Approval roles tab", () => {
+      cy.drSelectApprovalRolesTab();
     });
 
     it("Click on 'Add Another Role' button", () => {
@@ -1114,11 +945,14 @@ context("Autocomplete test", () => {
     });
 
     it("Enter Approval Role " + approvalRoleName, () => {
-      cy.get("[data-cy=\"name\"]").arrowType(approvalRoleName);
+      cy.get("[data-cy=\"name\"]").scrollIntoView().arrowType(approvalRoleName).wait(500);
+      cy.unClick();
     });
 
     it("Click on 'Add' button", () => {
-      cy.get("button[data-cy=\"common.add\"]").arrowClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
+        cy.get("button[data-cy=\"common.add\"]").arrowClick();
+      });
     });
 
     it("Click on 'Create Document' button", () => {
@@ -1160,9 +994,13 @@ context("Autocomplete test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Select 'Component Protocol' output document type", () => {
+    it("Select 'Clinical Protocol' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     context("Add Autocomplete fields", () => {
@@ -1270,13 +1108,14 @@ context("Autocomplete test", () => {
 
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Approve and release FORM document", () => {
         cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
           cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
         });
+        cy.fbClickButton({ el: "updateRecord" });
       });
     });
   });

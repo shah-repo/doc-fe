@@ -3,12 +3,16 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { authSelectors } from "../../../state/ducks/auth";
 import { EmployeeEditRequestBody } from "../../../state/ducks/auth/types";
+import { companyActions } from "../../../state/ducks/company";
 import { GetEmployeeResponse } from "../../../state/ducks/userManagement/types";
 import { AsyncState } from "../../../state/types";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import AvatarContainer from "../../components/icons/avatar/avatar.container";
+import useActionCreator from "../../hooks/useActionCreator";
+import useAsync from "../../hooks/useAsync";
 import DialogContent from "./dialog/DialogContent";
 import DialogTitle from "./dialog/DialogTitle";
+import { Translation } from "../../translations/types";
 
 interface OwnProps {
   isOpen: boolean;
@@ -69,10 +73,12 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   isDeveloper,
   canUpdateCompany,
 }) => {
-  const [isUsernameEmpty, setUsernameError] = useState<boolean>(false);
+  const [usernameError, setUsernameError] = useState<Translation | null>(null);
   const currentUserId = useSelector(authSelectors.currentUserId);
   const isCurrentUser = userId === currentUserId;
-
+  const getCompanyMine = useActionCreator(companyActions.getCompanyMine);
+  const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
+  const async = useAsync();
   const [userInfo, setUserInfo] = useState<EmployeeEditRequestBody>({
     name,
     avatar,
@@ -86,7 +92,8 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
   const handleCloseEdit = () => {
     closeEdit();
     setPreviewAvatar("");
-    setUsernameError(false);
+    setUsernameError(null);
+    async.start(getCompanyMine, currentEmployeeId, async);
   };
   const handleCloseDialog = () => {
     close();
@@ -108,7 +115,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
         userInfo={userInfo}
         setUserInfo={setUserInfo}
         close={handleCloseDialog}
-        isUsernameEmpty={isUsernameEmpty}
+        usernameError={usernameError}
         setUsernameError={setUsernameError}
       />
       <AvatarContainer
@@ -145,7 +152,7 @@ const UserProfilePresenter: React.FunctionComponent<Props> = ({
         setUserInfo={setUserInfo}
         userId={userId}
         isCurrentUser={isCurrentUser}
-        isUsernameEmpty={isUsernameEmpty}
+        usernameError={usernameError}
         isDeveloper={isDeveloper}
         canUpdateCompany={canUpdateCompany}
       />

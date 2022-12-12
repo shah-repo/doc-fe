@@ -118,6 +118,7 @@ export type FBInputProps = Omit<FBFormikFieldProps, "name">
   approved?: boolean;
   designDisabled?: boolean;
   reviseDisabled?: boolean;
+  tabIndex?: number;
 };
 
 export type FBFormDefaultProps = FBInputProps &

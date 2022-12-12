@@ -2,8 +2,8 @@ import { APPROVAL_MATRIX_URL, PO_APPROVAL_MATRIX_URL } from "../../../../ui/form
 import { ApprovalMatrix } from "../../../../ui/form.builder/FBApprovalMatrix/FBApprovalMatrix.types";
 import { apiAction, apiActionWithCallbacks } from "../../../factories";
 import { ApiAction, Handlers } from "../../../types";
-import { DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY } from "./constants";
-import { DocumentType, DocumentTypeByCategoryAction, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction } from "./types";
+import { DOCUMENT_TYPE_BY_CATEGORY_ASYNC, DOCUMENT_TYPE_BY_GROUP_ASYNC, DOCUMENT_TYPE_BY_ID, DOCUMENT_TYPE_BY_ID_ASYNC, DOCUMENT_TYPE_LIST, DOCUMENT_TYPE_LIST_ASYNC, DOCUMENT_TYPE_ROOT_URL, SET_DOCUMENT_TYPES_BY_CATEGORY, TAB_CONFIGURATION_LIST, TAB_CONFIGURATION_LIST_ASYNC, TAB_CONFIGURATION_URL } from "./constants";
+import { DocumentType, DocumentTypeByCategoryAction, DocumentTypeById, DocumentTypeByIdAction, DocumentTypeListAction, TabConfiguration, TabConfigurationListAction } from "./types";
 
 const documentTypesList = (documentTypes: DocumentType[]): DocumentTypeListAction => ({
   type: DOCUMENT_TYPE_LIST,
@@ -15,12 +15,26 @@ const docTypeIds = (docTypeIds: DocumentTypeById): DocumentTypeByIdAction => ({
   payload: docTypeIds,
 });
 
+const tabConfigurationList = (data: TabConfiguration[]): TabConfigurationListAction => ({
+  type: TAB_CONFIGURATION_LIST,
+  payload: data,
+});
+
 const loadList = (): ApiAction<DocumentType[]> => apiAction({
   url: DOCUMENT_TYPE_ROOT_URL,
   method: "get",
   asyncType: DOCUMENT_TYPE_LIST_ASYNC,
   onSuccess: (documentTypes, dispatch) => {
     dispatch(documentTypesList(documentTypes));
+  },
+});
+
+const loadTabConfiguration = (): ApiAction<TabConfiguration[]> => apiAction({
+  url: TAB_CONFIGURATION_URL,
+  method: "get",
+  asyncType: TAB_CONFIGURATION_LIST_ASYNC,
+  onSuccess: (data, dispatch) => {
+    dispatch(tabConfigurationList(data));
   },
 });
 
@@ -141,4 +155,5 @@ export default {
   addDocumentType,
   getApprovalMatrixNco,
   getGroupWithGroupOptions,
+  loadTabConfiguration,
 };

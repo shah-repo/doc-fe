@@ -1,7 +1,8 @@
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Config from "../../../config";
 import { WhiteLabelingColors } from "../../../state/ducks/company/types";
-import ThemeOverrides from "./overrides";
+import themeProps from "./props";
+import themeOverrides from "./overrides";
 import { createAppPalette, muiTheme } from "./palette";
 import { ThemeEnv } from "./utils/types";
 
@@ -15,6 +16,10 @@ export default (customColors: WhiteLabelingColors = {} as WhiteLabelingColors) =
 
   return createMuiTheme({
     ...appTheme,
-    overrides: ThemeOverrides(appTheme, customColors),
+    props: themeProps(),
+    overrides: themeOverrides(appTheme, customColors),
+    typography: {
+      fontFamily: "Sora, sans-serif;",
+    },
   });
 };

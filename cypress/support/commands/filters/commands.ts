@@ -23,6 +23,7 @@ declare global {
       filterEquipmentTitle(params: {name: string}): Chainable<Subject>;
       filterEquip(params: {docId: string; revision: string; eqState: string;
         title: string; owner: string; calDueDate: string; pmDueDate: string; eqStatus: string; }): Chainable<Subject>;
+      filterEquipByOwnerAndLocation(params: { location: string; owner: string }): Chainable<Subject>;
       filterRecordState(params: {state: string}): Chainable<Subject>;
       filterRecordVerifyRevisionFilter(params: {revision: string}): Chainable<Subject>;
     }
@@ -74,15 +75,22 @@ Cypress.Commands.add("filterEquip", (params: {docId: string; revision: string; e
   cy.get(`th[aria-colindex="8"] input`).arrowType(params.eqStatus).wait(500);
 });
 
+Cypress.Commands.add("filterEquipByOwnerAndLocation", (params: { location: string; owner: string }) => {
+  cy.get(`th[aria-colindex="5"] input`).arrowType(params.owner).wait(500);
+  cy.get(`th[aria-colindex="9"] input`).arrowType(params.location).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string; state: string;
   title: string; owner: string; releasedDate: string; formId: string; }) => {
   cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType(params.docId).wait(500);
   cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType(params.revision).wait(500);
-  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] [class="k-input"]`).scrollIntoView().arrowClick();
   cy.get("li").contains(params.state).arrowClick().wait(500);
   cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType(params.title).wait(500);
   cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType(params.owner).wait(500);
-  cy.get(`[aria-colindex="6"] [class="k-input"]`).arrowClick();
+  cy.get(`[aria-colindex="6"] [class="k-input"]`).scrollIntoView().arrowClick();
   cy.get("li").contains(params.releasedDate).arrowClick().wait(500);
   cy.get("[class=\"k-textbox\"]").eq(4).clear().arrowType(params.formId).wait(500);
 });

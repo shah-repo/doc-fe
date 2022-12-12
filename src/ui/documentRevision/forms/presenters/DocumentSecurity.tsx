@@ -5,13 +5,14 @@ import SecurityGroups from "./SecurityGroups";
 
 interface Props {
   documentTypeId: string;
+  isDisabled?: boolean;
 }
 
-const DocumentSecurity: React.FunctionComponent<Props> = ({ documentTypeId }) => (
+const DocumentSecurity: React.FunctionComponent<Props> = ({ documentTypeId, isDisabled }) => (
   <>
-    <SecurityEmployees />
-    <SecurityGroups />
-    <OperatorAccess documentTypeId={documentTypeId} />
+    <SecurityEmployees portal={true} isDisabled={isDisabled} />
+    <SecurityGroups portal={true} isDisabled={isDisabled} />
+    <OperatorAccess documentTypeId={documentTypeId} isDisabled={isDisabled} />
   </>
 );
 

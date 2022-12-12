@@ -1,8 +1,9 @@
 import { Box } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInput, FBProvider, FBSupplierProps } from "..";
+import { FBButtonStyles } from "../styles/FBButton.styles";
 import { withFBSupplier } from "./FBSupplier.wrap";
-
 
 const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
   handleAdd,
@@ -13,33 +14,42 @@ const FBSupplier: React.FunctionComponent<FBSupplierProps> = ({
   supplierState,
   isPreview,
   name,
-}) => (
-  <FBProvider {...{ dialogState, supplierState }}>
-    <FBDialog />
-    <FBInput type="supplier">
-      <Box display="flex" alignItems="flex-end" mt={2.5}>
-        <Box flexGrow={1}>
-          <FBAutocompleteAsync
-            placeholder="common.select"
-            gutter={false}
-            shouldReloadOnInit
-            withState
-            autosave
-            optionId={FBAutocompleteAsyncOption.suppliers}
-            {...{ name, label, disabled, loading }}
-          />
+}) => {
+  const classes = FBButtonStyles();
+
+  return (
+    <FBProvider {...{ dialogState, supplierState }}>
+      <FBDialog />
+      <FBInput type="supplier">
+        <Box display="flex" alignItems="flex-end" >
+          <Box flexGrow={1}>
+            <FBAutocompleteAsync
+              placeholder="common.select"
+              gutter={false}
+              shouldReloadOnInit
+              withState
+              autosave
+              optionId={FBAutocompleteAsyncOption.suppliers}
+              {...{ name, label, disabled, loading }}
+            />
+          </Box>
+          {!isPreview && (
+            <Box ml={1}>
+              <FBButton
+                variant="contained"
+                size="large"
+                label="form.builder.create.new.supplier"
+                onClick={handleAdd}
+                {...{ disabled }}
+                className={cx(classes.button, classes.margin)}
+              />
+            </Box>
+          )}
         </Box>
-        {!isPreview && <Box>
-          <FBButton
-            variant="contained"
-            label="form.builder.create.new.supplier"
-            onClick={handleAdd}
-            {...{ disabled }}
-          />
-        </Box>}
-      </Box>
-    </FBInput>
-  </FBProvider>
-);
+      </FBInput>
+    </FBProvider>
+  );
+};
+
 
 export default withFBSupplier(FBSupplier);

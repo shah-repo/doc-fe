@@ -45,7 +45,7 @@ declare global {
 Cypress.Commands.add("atchUploadJSONFormForSeed", (params: {fileName: string; queue: number }) => {
   cy.fixture(params.fileName).then((fileContent) => {
     cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachments], () => {
-      cy.get("[id^=fb-attachment-field-json-form-]").eq(params.queue).attachFile({
+      cy.get("[id^=fb-attachment-field-json-form-]").eq(params.queue).scrollIntoView().attachFile({
         fileContent,
         fileName: params.fileName,
         mimeType: "*",
@@ -58,7 +58,7 @@ Cypress.Commands.add("atchUploadJSONFormForSeed", (params: {fileName: string; qu
 Cypress.Commands.add("atchUploadDOMJSONForNCO", (params: {fileName: string; queue: number }) => {
   cy.fixture(params.fileName).then((fileContent) => {
     cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachments], () => {
-      cy.get("[id^=fb-attachment-field-dom-json-]").eq(params.queue).attachFile({
+      cy.get("[id^=fb-attachment-field-dom-json-]").eq(params.queue).scrollIntoView().attachFile({
         fileContent,
         fileName: params.fileName,
         mimeType: "*",
@@ -71,7 +71,7 @@ Cypress.Commands.add("atchUploadDOMJSONForNCO", (params: {fileName: string; queu
 Cypress.Commands.add("atchUploadPageDetailsJSONForNCO", (params: {fileName: string; queue: number }) => {
   cy.fixture(params.fileName).then((fileContent) => {
     cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachments], () => {
-      cy.get("[id^=fb-attachment-field-page-details-json-]").eq(params.queue).attachFile({
+      cy.get("[id^=fb-attachment-field-page-details-json-]").eq(params.queue).scrollIntoView().attachFile({
         fileContent,
         fileName: params.fileName,
         mimeType: "*",
@@ -84,7 +84,7 @@ Cypress.Commands.add("atchUploadPageDetailsJSONForNCO", (params: {fileName: stri
 Cypress.Commands.add("atchUploadNavigationJSONForNCO", (params: {fileName: string; queue: number }) => {
   cy.fixture(params.fileName).then((fileContent) => {
     cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachments], () => {
-      cy.get("[id^=fb-attachment-field-navigation-json-]").eq(params.queue).attachFile({
+      cy.get("[id^=fb-attachment-field-navigation-json-]").eq(params.queue).scrollIntoView().attachFile({
         fileContent,
         fileName: params.fileName,
         mimeType: "*",
@@ -97,7 +97,7 @@ Cypress.Commands.add("atchUploadNavigationJSONForNCO", (params: {fileName: strin
 Cypress.Commands.add("atchUploadUserListJSONForNCO", (params: {fileName: string; queue: number }) => {
   cy.fixture(params.fileName).then((fileContent) => {
     cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachments], () => {
-      cy.get("[id^=fb-attachment-field-users-list-]").eq(params.queue).attachFile({
+      cy.get("[id^=fb-attachment-field-users-list-]").eq(params.queue).scrollIntoView().attachFile({
         fileContent,
         fileName: params.fileName,
         mimeType: "*",
@@ -110,7 +110,7 @@ Cypress.Commands.add("atchUploadUserListJSONForNCO", (params: {fileName: string;
 Cypress.Commands.add("atchUploadTemplateForBLC", (params: {fileName: string }) => {
   cy.fixture(`bulk.create/${params.fileName}`, "binary").then((fileContent) => {
     cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachments], () => {
-      cy.get("input[id^=fb-attachment-field-fb-spreadsheet-for-import-file]").attachFile({
+      cy.get("[id=\"sm-tabpanel-1\" ] input[id^=fb-attachment-field-fb-spreadsheet-for-import-file]").attachFile({
         fileContent: Cypress.Blob.binaryStringToBlob(fileContent,
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
         mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -124,8 +124,8 @@ Cypress.Commands.add("atchUploadTemplateForBLC", (params: {fileName: string }) =
 
 Cypress.Commands.add("atchUploadAttachment", (params: {fileName: string }) => {
   cy.fixture(params.fileName).then((fileContent) => {
-    cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-      cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
+    cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment], () => {
+      cy.get("#AttachmentFieldPresenter-linkButton").arrowClick({ force: true });
       cy.get("#attachments-button-file-clean-copy").attachFile({
         fileContent: fileContent.toString(),
         fileName: params.fileName,
@@ -349,7 +349,7 @@ Cypress.Commands.add("atchDownloadAll", () => {
       }
     });
   }).as("attach");
-  cy.get("#AttachmentFieldPresenter-downloadAllButton").arrowClick();
+  cy.get("#AttachmentFieldPresenter-downloadAllButton").arrowClick({ force: true });
   cy.get("body").then(($body) => {
     if ($body.find("[data-cy=\"download.warning\"]").length > 0) {
       cy.get("[id=\"passwordConfirm\"]").arrowClick();
@@ -414,7 +414,7 @@ Cypress.Commands.add("excelDownloadTemplate", (params: {saveFileName: string  })
       }
     });
   }).as("attach");
-  cy.get("[data-cy=\"Download Excel Template\"]").arrowClick();
+  cy.get("[id=\"sm-tabpanel-1\" ] [data-cy=\"Download Excel Template\"]").arrowClick();
   cy.wait("@attach").then((res) => {
     const file = Cypress.Blob.arrayBufferToBinaryString(res.response?.body.file);
     cy.writeFile("cypress/downloads/" + params.saveFileName, file, "binary");

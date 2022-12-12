@@ -1,6 +1,10 @@
+import { has } from "lodash";
 import React, { useEffect } from "react";
 import { FB, FBFormProps, FBFormState } from "..";
+import { SM } from "../../../App";
+import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 
+export let FBFormStateContext = React.createContext<any>({});
 export const withFBForm = <T extends FBFormProps>(
   Component: React.FunctionComponent<T>,
 ) => {
@@ -17,12 +21,20 @@ export const withFBForm = <T extends FBFormProps>(
   }: T) => {
 
     const { workspaceState } = FB.useStores();
+    const { _documentRevisionFormState } = SM.useStores();
     !formState && (formState = FB.useRef<FBFormState>(FBFormState, {
       schema,
-      initialValues,
+      initialValues: initialValues?.formInput || initialValues,
       workspaceMode: workspaceMode || workspaceState?.mode || "form",
       workspaceState,
     }));
+
+    const isReceivableType =
+        checkIsDocumentReceivable(_documentRevisionFormState?.document?.documentType?.groupOptions);
+    if (!(isReceivableType && has(initialValues, "po-items-built-in"))) {
+      FBFormStateContext = React.createContext<any>(formState?.getValues());
+    }
+
     formState.setIncludeLocking(includeLocking);
     initialValidation && workspaceMode !== "design" && formState.validate();
 

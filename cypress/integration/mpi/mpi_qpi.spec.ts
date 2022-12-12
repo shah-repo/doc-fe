@@ -4,11 +4,14 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import path from "path";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { MPITestProcedureDeletable } from "../../utils/constants/documentTypes/mpi";
+import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -65,129 +68,10 @@ context("Mpi/Qpi test", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Manufacturing Process Instructions Test",
+                ...MPITestProcedureDeletable,
                 documentTypeAcronym: "MPI-",
-                group: "PI",
-                schema: [
-                  {
-                    name: "fb-mpi-procedure-section-built-in",
-                    type: "section",
-                    index: 0,
-                    label: "form.builder.mpiprocedure",
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "mpi-procedure-built-in",
-                    type: "mpiprocedure",
-                    index: 1,
-                    stepIndex: 1,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    deleteInFormDisabled: false,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-start-quantity",
-                    type: "quantity",
-                    index: 2,
-                    label: "Start quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Start quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-accepted-quantity",
-                    type: "quantity",
-                    index: 3,
-                    label: "Accepted quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Accepted quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-rejected-quantity",
-                    type: "quantity",
-                    index: 4,
-                    label: "Rejected quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Rejected quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 5,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
               },
-              {
-                documentTypeName: "Quantity Process Instructions Test",
-                documentTypeAcronym: "QPI-",
-                group: "PI",
-                schema: [
-                  {
-                    name: "fb-mpi-procedure-section-built-in",
-                    type: "section",
-                    index: 0,
-                    label: "form.builder.mpiprocedure",
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "mpi-procedure-built-in",
-                    type: "mpiprocedure",
-                    index: 1,
-                    stepIndex: 1,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 5,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
+              QPITest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -353,14 +237,22 @@ context("Mpi/Qpi test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Upload logo picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Add Checkbox group", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
         cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
         cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
         cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
@@ -372,21 +264,21 @@ context("Mpi/Qpi test", () => {
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "fb-TEXT FIELD" });
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("input[value^=\"visibility\"]").check();
         cy.get(`input[name="validators.required_if_in"]`).check();
         cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-        cy.get(`input[type="checkbox"][value="3"]`).last().check();
+        cy.get(`input[type="checkbox"][value="3"]`).check({ force: true });
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Close the sidebar", () => {
+        cy.contains("Form Builder Library").parent().find("button").arrowClick({ force: true });
       });
 
       context("Fill step #1", () => {
@@ -433,41 +325,31 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check doc Draft status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Draft" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
           cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
 
           cy.drGetDocIdElementFromUI().then(($docIdElement: JQuery<HTMLElement>) => {
             MPIDocId = $docIdElement.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           cy.sendToEmail();
         });
       });
 
       context("Verify email for Draft MPI notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
             after: dateAfterEmailShouldArrive,
             subject: `Export for document ${MPIDocId}`,
           };
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+            .then((emails) => {
               emailsFromInbox = emails;
               expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
               downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
+            });
         });
 
         it("Verify the emails that should be received", () => {
@@ -607,11 +489,10 @@ context("Mpi/Qpi test", () => {
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-
             expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
 
-            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
 
             expect(el).match(/Draft/);
 
@@ -648,10 +529,6 @@ context("Mpi/Qpi test", () => {
       });
 
       context("Release MPI", () => {
-        it("Upload attachment 'image.jpg'", () => {
-          cy.atchUploadAttachment({ fileName: "image.jpg" });
-        });
-
         it("Approve and release MPI document", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
             cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -659,7 +536,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check MPI doc released status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           cy.arCheckTitleInEditableAndMatches({ name: "MPI document" });
           cy.drGetDocIdElementFromUI().should("contain.text", "MPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             MPIDocId = $docIdElement.text();
@@ -667,6 +544,7 @@ context("Mpi/Qpi test", () => {
           cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
             arId = $lnEl.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           cy.sendToEmail();
         });
       });
@@ -675,29 +553,18 @@ context("Mpi/Qpi test", () => {
 
   context("Verify email for Released MPI notification", () => {
     it("Get emails", () => {
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        wait_time_sec: 5,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        max_wait_time_sec: 50,
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        include_body: true,
         after: dateAfterEmailShouldArrive,
         subject: `Export for document ${MPIDocId}`,
       };
 
-      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-        if (emails) {
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+        .then((emails) => {
           emailsFromInbox = emails;
           expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
           downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-        }
-        else {
-          assert.fail("No email found");
-        }
-      });
+        });
     });
 
     it("Verify the emails that should be received", () => {
@@ -751,7 +618,7 @@ context("Mpi/Qpi test", () => {
         });
     });
 
-    it("Verify attached file length more than 500 bytes", () => {
+    it("Verify attached image.jpg file length more than 500 bytes", () => {
       const attachedFile = path.join(CONFIG.DOWNLOADS_DIR,
         downloadFile.replace(".zip", ""), "image.jpg");
       cy.readFile(attachedFile).its("length").should("be.gt", 500);
@@ -837,10 +704,9 @@ context("Mpi/Qpi test", () => {
         expect(el).match(tmpRegex);
 
         expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-
         expect(el).match(/Start quantity\nAccepted quantity\nRejected quantity/);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+        expect(el).match(/APPROVALS\nApprovers\nCheckbox\nfb-TEXT FIELD\n1 2 3/);
 
         expect(el).match(/Released/);
 
@@ -908,14 +774,22 @@ context("Mpi/Qpi test", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       });
 
+      it("Click create document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
+
       it("Upload logo picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
+
       it("Add Checkbox group", () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.get("[class=\"MuiButton-label\"]").contains("Checkbox group").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("Checkbox").arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
+        cy.fbEnterNameValue({ name: "label", value: "Checkbox" });
         cy.get("[data-cy=\"options\"]").arrowType("1{enter}" );
         cy.get("[data-cy=\"options\"]").arrowType("2{enter}" );
         cy.get("[data-cy=\"options\"]").arrowType("3{enter}" );
@@ -927,21 +801,21 @@ context("Mpi/Qpi test", () => {
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
-        cy.get("button[data-cy=\"form.builder.textfield\"]").arrowClick();
-        cy.get(`input[name="label"]`).clear().arrowType("TEXT FIELD").arrowClick();
+        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
         cy.get("input[value^=\"visibility\"]").check();
         cy.get(`input[name="validators.required_if_in"]`).check();
         cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
-        cy.get(`input[type="checkbox"][value="3"]`).last().check();
+        cy.get(`input[type="checkbox"][value="3"]`).check({ force: true });
         cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Close the sidebar", () => {
+        cy.contains("Form Builder Library").parent().find("button").arrowClick({ force: true });
       });
 
       context("Fill step #1", () => {
@@ -990,40 +864,30 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check QPI doc Draft status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Draft" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
           cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
           cy.drGetDocIdElementFromUI().should("contain.text", "QPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             QPIDocId = $docIdElement.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           cy.sendToEmail();
         });
       });
 
       context("Verify email for Draft QPI notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
             after: dateAfterEmailShouldArrive,
             subject: `Export for document ${QPIDocId}`,
           };
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+            .then((emails) => {
               emailsFromInbox = emails;
               expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
               downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
+            });
         });
 
         it("Verify the emails that should be received", () => {
@@ -1163,8 +1027,7 @@ context("Mpi/Qpi test", () => {
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-
-            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
 
             expect(el).match(/Draft/);
 
@@ -1206,7 +1069,7 @@ context("Mpi/Qpi test", () => {
         });
 
         it("Check QPI doc released status and click on Send To Email", () => {
-          cy.drCheckDocumentStatus({ status: "Released" });
+          cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
           cy.arCheckTitleInEditableAndMatches({ name: "QPI document" });
           cy.drGetDocIdElementFromUI().should("contain.text", "QPI-").then(($docIdElement: JQuery<HTMLElement>) => {
             QPIDocId = $docIdElement.text();
@@ -1214,35 +1077,25 @@ context("Mpi/Qpi test", () => {
           cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
             arId = $lnEl.text();
           });
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           cy.sendToEmail();
         });
       });
 
       context("Verify email for Released QPI notification", () => {
         it("Get emails", () => {
-          dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
           const getEmailSetting =  {
             to: CONFIG.TEST_EMAIL,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            wait_time_sec: 5,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            max_wait_time_sec: 50,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            include_body: true,
             after: dateAfterEmailShouldArrive,
             subject: `Export for document ${QPIDocId}`,
           };
 
-          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
-            if (emails) {
+          cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting })
+            .then((emails) => {
               emailsFromInbox = emails;
               expect(emails[0].body.text).match(/Download URL:\s+(.*\/exported_file_download\?fileId=.*)\s+/);
               downloadUrl = emails[0].body.text.match(/Download URL:\s+(.*)\s+/)[1];
-            }
-            else {
-              assert.fail("No email found");
-            }
-          });
+            });
         });
 
         it("Verify the emails that should be received", () => {
@@ -1382,8 +1235,7 @@ context("Mpi/Qpi test", () => {
             expect(el).match(tmpRegex);
 
             expect(el).match(/Equipment\nET-00003 - Equipment one\nB: Equipment parameter/);
-
-            expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVALS\nApprovers\n1 2 3/);
+            expect(el).match(/APPROVALS\nApprovers\nCheckbox\nTEXT FIELD\n1 2 3/);
 
             expect(el).match(/Released/);
 

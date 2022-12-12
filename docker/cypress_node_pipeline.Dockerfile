@@ -6,7 +6,7 @@
 #   docker build -t cypress/base:14.7.0 .
 #
 FROM 817083319299.dkr.ecr.us-west-2.amazonaws.com/codebuild:node_14.10.0
-ENV CHROME_VERSION 92.0.4515.159
+ENV CHROME_VERSION 100.0.4896.127
 
 RUN apt-get update && \
   apt-get install --no-install-recommends -y \
@@ -46,9 +46,11 @@ RUN npm --version
 RUN npm install -g yarn@1.22.5 --force
 RUN yarn --version
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-RUN unzip awscliv2.zip
-RUN ./aws/install
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+  unzip awscliv2.zip && \
+  ./aws/install && \
+  rm -rf ./aws && \
+  rm awscliv2.zip
 
 # a few environment variables to make NPM installs easier
 # good colors for most applications
@@ -162,14 +164,15 @@ RUN chmod 755 /root
 
 WORKDIR /opt/app
 
-COPY package*.json ./
-COPY yarn*.lock ./
-RUN yarn install --frozen-lockfile
-
 ENV CYPRESS_CACHE_FOLDER=/opt/app/cypress/cache/cypressLib
-RUN npm install -g "cypress@8.3.1"
-RUN cypress verify
-RUN sed -i -e "s|api_url:.*$|api_url: \"http://localhost:1234\"|g" /opt/app/cypress/cache/cypressLib/*/Cypress/resources/app/packages/server/config/app.yml
+
+# COPY package*.json ./
+# COPY yarn*.lock ./
+# RUN yarn install --frozen-lockfile
+
+# RUN npm install -g "cypress@8.3.1"
+# RUN cypress verify
+# RUN sed -i -e "s|api_url:.*$|api_url: \"http://localhost:1234\"|g" /opt/app/cypress/cache/cypressLib/*/Cypress/resources/app/packages/server/config/app.yml
 
 # COPY package*.json ./
 # COPY yarn*.lock ./

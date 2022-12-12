@@ -91,6 +91,8 @@ const FBProcedureForm: React.FunctionComponent<FBProcedureFormProps> = ({
               optionValueKey="value"
               optionLabelKey="text"
               {...{ disabled }}
+              customStyles = {{ height: 40 }}
+              inputStyle={{ padding: "2px" }}
             />
           </Box>
         </Box>

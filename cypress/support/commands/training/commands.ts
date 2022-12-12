@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable max-classes-per-file */
 
+import { SQS_TYPES } from "../../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../config";
 import { CyRoutes } from "../../routes";
 
@@ -27,6 +28,8 @@ declare global {
       trLandingPageName(params: { name: string }): Chainable<Subject>;
       trLandingPagetrId(params: { trId: string }): Chainable<Subject>;
       trLandingPageDynamicParams(params: { dynamicParams: string }): Chainable<Subject>;
+      trSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
+      setTimeTravelToComplete(params: { tasktype: string; days: string; status: string }): Chainable<Subject>;
     }
   }
 }
@@ -84,21 +87,21 @@ Cypress.Commands.add("trRejectAR", () => {
 Cypress.Commands.add("trCompleteTraining", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostCompleteTraining], () => {
-      cy.get("[data-cy=training-complete]").click();
+      cy.get("button[data-cy=training-complete]").click();
       cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-      cy.progressBarShouldAppear();
+      cy.progressBarShouldNotExist();
     });
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
 
 Cypress.Commands.add("trApproveTraining", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").click();
+  cy.get("[data-cy=\"form.builder.request.approve\"]").click();
   cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").click();
-    cy.progressBarShouldAppear();
+    cy.progressBarShouldNotExist();
   });
   cy.listLoadingElementShouldNotExist();
 });
@@ -119,9 +122,9 @@ Cypress.Commands.add("trLandingPageDocId", (params: {docId}) => {
 });
 
 Cypress.Commands.add("trLandingPageCompletedOn", (params: {completed: string }) => {
-  cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
-  cy.get("li").contains(params.completed).arrowClick().wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick().wait(1000);
+  cy.get("li").contains(params.completed).arrowClick().wait(1000);
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageOwner", (params: {owner}) => {
@@ -150,3 +153,29 @@ Cypress.Commands.add("trLandingPageDynamicParams", (params: {dynamicParams}) => 
   cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType(params.dynamicParams).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
+
+Cypress.Commands.add("trSetTimeTravelInDays", (params: {days: number}) => {
+  cy.navigToAsyncTasks();
+  cy.asyncTaskSelectTaskType({ taskType: SQS_TYPES.TIME_TRAVEL_COMPANY });
+  cy.asyncSelectBackToTheFutureTime({ day: params.days });
+  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_REFRESH });
+  cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_STATUS });
+  cy.asyncTaskClickSubmit();
+  cy.progressBarShouldNotExist();
+  cy.wait(10000);
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add(
+  "setTimeTravelToComplete",
+  (params: { tasktype: string; days: string; status: string }) => {
+    cy.reload();
+    cy.progressBarShouldNotExist();
+    cy.listLoadingElementShouldNotExist();
+    cy.get(`tr[data-grid-row-index="0"]`)
+      .find("td")
+      .should("contain.text", params.tasktype)
+      .and("contain.text", params.days)
+      .and("contain.text", params.status);
+  }
+);

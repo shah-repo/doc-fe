@@ -10,8 +10,6 @@ export const styles = makeStyles((theme: Theme) =>
       borderRadius: 3,
       border: `1px solid ${Colors.steel_blue}`,
       background: Colors.light_cyan,
-      fontFamily: "Sora",
-      fontStyle: "normal",
       fontWeight: 600,
       fontSize: "10px",
       lineHeight: "13px",

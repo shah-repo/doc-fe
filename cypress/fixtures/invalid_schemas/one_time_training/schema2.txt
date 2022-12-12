@@ -1,0 +1,121 @@
+[
+  {
+      "name": "training-curriculum-details-section",
+      "type": "section",
+      "index": 0,
+      "label": "Forced Retraining / One-Time Training",
+      "tabId": "details",
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "validationMode": "default",
+      "omitFinalValidation": true,
+      "validationAttribute": "Forced Retraining / One-Time Training",
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "training-document-to-be-trained-on",
+      : "autocomplete",
+      "index": 1,
+      "label": "Documents to Train on",
+      "rules": "|required",
+      "tabId": "details",
+      "multiple": true,
+      "optionId": "36",
+      "validators": {
+          "required": true,
+          "required_if_in": false
+      },
+      "placeholder": "Select documents for training",
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "deleteDisabled": false,
+      "validationMode": "visibility",
+      "editorProperties": [
+          "multiple"
+      ],
+      "validationAttribute": "Documents to Train on",
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "training-force-retraining-for-everyone",
+      "type": "radiogroup",
+      "index": 2,
+      "label": "Force retraining (everyone will be retrained regardless of their current status)",
+      "rules": "required||",
+      "tabId": "details",
+      "options": [
+          {
+              "text": "Yes",
+              "value": "Yes"
+          }
+      ],
+      "validators": {
+          "required": true,
+          "required_if": false,
+          "required_if_in": false
+      },
+      "rulesObject": {},
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "deleteDisabled": false,
+      "validationMode": "default",
+      "validationAttribute": "Force retraining (everyone will be retrained regardless of their current status)",
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "training-details-section",
+      "type": "section",
+      "index": 3,
+      "label": "Trainees Details",
+      "tabId": "details",
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "validationMode": "default",
+      "omitFinalValidation": true,
+      "validationAttribute": "Trainees Details",
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "training-select-groups-to-train",
+      "type": "autocomplete",
+      "index": 4,
+      "label": "Groups to Train",
+      "tabId": "details",
+      "multiple": true,
+      "optionId": "10",
+      "placeholder": "Select groups",
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "validationMode": "default",
+      "editorProperties": [
+          "multiple"
+      ],
+      "validationAttribute": "Groups to Train",
+      "applicableValidationSchema": true
+  },
+  {
+      "name": "training-select-users-to-train",
+      "type": "autocomplete",
+      "index": 5,
+      "label": "Users to Train (if applicable)",
+      "tabId": "details",
+      "multiple": true,
+      "optionId": "13",
+      "placeholder": "Select users",
+      "applicableOn": [
+          "ON_STATE_TO_IN_REVIEW"
+      ],
+      "deleteDisabled": false,
+      "validationMode": "default",
+      "editorProperties": [
+          "multiple"
+      ],
+      "validationAttribute": "Users to Train (if applicable)",
+      "applicableValidationSchema": true
+  }
+]

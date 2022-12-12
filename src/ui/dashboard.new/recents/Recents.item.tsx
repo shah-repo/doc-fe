@@ -54,7 +54,7 @@ const RecentsLineItem: React.FunctionComponent<RecentItems> = ({
     }
   };
   return (
-    <StyledListItem button>
+    <StyledListItem button className={classes.buttoncursor} disableRipple>
       <ListItemIcon>
         <>{getIcon(docTypeGroup)}</>
       </ListItemIcon>

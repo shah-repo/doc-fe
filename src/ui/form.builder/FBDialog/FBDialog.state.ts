@@ -6,6 +6,7 @@ import { FBDialogProps } from "..";
 class FBDialogState {
   @observable public open = false;
   @observable public maxWidth: FBDialogProps["maxWidth"] = "sm";
+  @observable public classes: FBDialogProps["classes"];
   @observable public content?: React.ReactElement;
   @observable public title?: React.ReactNode | string;
   @observable public actions?: React.ReactNode;
@@ -27,9 +28,10 @@ class FBDialogState {
   @action public config = (config: FBDialogProps) => {
     this.reset();
     this.props = config;
-    const { maxWidth, title, content, actions, open } = config;
+    const { maxWidth, classes, title, content, actions, open } = config;
     !isUndefined(open) && this.setDialog(open);
     this.setMaxWidth(maxWidth || this.maxWidth);
+    this.setClasses(classes);
     this.setTitle(title || this.title);
     this.setActions(actions || this.actions);
     this.setContent(content || this.content);
@@ -37,6 +39,10 @@ class FBDialogState {
 
   @action public setMaxWidth = (maxWidth: FBDialogProps["maxWidth"]) => {
     set(this, "maxWidth", maxWidth);
+  };
+
+  @action public setClasses = (classes: FBDialogProps["classes"]) => {
+    set(this, "classes", classes);
   };
 
   @action public setContent = (content?: React.ReactElement) => {

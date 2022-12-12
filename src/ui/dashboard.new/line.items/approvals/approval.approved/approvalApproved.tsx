@@ -140,11 +140,12 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
         onMouseEnter={onMouseHoverListItem}
         style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         className={classes.listItem}
+        disableRipple
       >
         {open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
+          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
+          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemIcon>
           <PendingReviewIcon height={30} width={30} />
@@ -248,7 +249,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
             </span>
             {!pinned && (
               <span className={classes.actionIcon}>
-                {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+                {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
                 {pinHover && (
                   <StyleTooltip
                     title={<Text translation="common.pin" />}
@@ -258,6 +259,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                     <PinSolidIcon
                       onClick={handlePinClick}
                       onMouseLeave={onMouseLeaveActionIcons}
+                      className={classes.cursorPointer}
                     />
                   </StyleTooltip>
                 )}
@@ -273,6 +275,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
                   <PinSolidIcon
                     onClick={handleUnPinClick}
                     onMouseLeave={onMouseLeaveActionIcons}
+                    className={classes.cursorPointer}
                   />
                 </StyleTooltip>
               </span>
@@ -289,6 +292,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
               <PinSolidIcon
                 onClick={handleUnPinClick}
                 onMouseLeave={onMouseLeaveActionIcons}
+                className={classes.cursorPointer}
               />
             </StyleTooltip>
           </span>
@@ -297,7 +301,7 @@ const approvalApprovedPresenter: React.FunctionComponent<Props> = ({
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List dense disablePadding className={classes.collapsedList}>
           {docRevs.map((prItem, index) => (
-            <StyledListItem button className={classes.nested} key={index}>
+            <StyledListItem button className={classes.nested} key={index} disableRipple>
               <IconButton aria-label="listIcon">
                 {getDocIcon(prItem.docTypeGroup, 20, 20)}
               </IconButton>

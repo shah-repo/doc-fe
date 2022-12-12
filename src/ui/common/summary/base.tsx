@@ -5,22 +5,26 @@ import { SummaryBaseProps } from "./types";
 
 type Props = SummaryBaseProps;
 
-const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-" }) => (
+const Base: React.FunctionComponent<Props> = ({ label, value, noValueOption = "-", labelStyle, valueStyle }) => (
   <Grid item={true} xs={12}>
     <Grid container={true} spacing={1}>
       <Grid item={true} xs={12}>
-        <Typography variant="h6" id="SummaryBaseProps-label">
+        <Typography id="SummaryBaseProps-label" style={labelStyle}>
           {label && <Text message={label} />}
         </Typography>
       </Grid>
       <Grid item={true} xs={12}>
-        {value && <Typography
-          id="SummaryBaseProps-values"
-          data-cy="SummaryBaseProps-values"
-          variant="h5">
-          {value}
-        </Typography>}
-        {!value && <Typography id="SummaryBaseProps-noValues" variant="h5">{noValueOption}</Typography>}
+        {value ? (
+          <Typography
+            id="SummaryBaseProps-values"
+            data-cy="SummaryBaseProps-values"
+            style={valueStyle}
+            variant="h5">
+            {value}
+          </Typography>
+        ) : (
+          <Typography id="SummaryBaseProps-noValues" style={valueStyle}>{noValueOption}</Typography>
+        )}
       </Grid>
     </Grid>
   </Grid>

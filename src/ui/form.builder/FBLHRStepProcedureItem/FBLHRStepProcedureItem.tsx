@@ -27,13 +27,15 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
   isPendingChange,
 }) => (
   <FBProvider {...{ dialogState }}>
-    <Box mt={2}>
+    <Box mt={4} borderRadius="3px 3px 4px 4px" boxShadow={`0px 0px 1px 1px ${Colors.gray_goose}`}>
       <FBDialog />
       <Box
-        bgcolor={Colors.gray}
-        color="white"
-        style={{ borderTopLeftRadius: "4px", borderTopRightRadius: "4px" }}
-        fontWeight="fontWeightBold"
+        bgcolor={Colors.athens_gray}
+        color={Colors.almost_black}
+        height="40px"
+        fontSize="12px"
+        boxShadow={`inset 0px 1px 1px -1px ${Colors.gray_goose}, inset 0px -1px 1px 0px ${Colors.gray_goose}`}
+        fontWeight="600"
         display="flex"
       >
         <FBText
@@ -55,8 +57,9 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
               borderLeft={0}
               borderRight={0}
               borderTop={0}
-              borderColor={item.type ? Colors.medium_red : Colors.hint_gray}
+              borderColor={item.type ? Colors.medium_red : Colors.gray_goose}
               key={`fb-procedure-item-${type}-${index}`}
+              lineHeight="18px"
               className={FBClasses.hoverVisibility}
             >
               <Box
@@ -64,7 +67,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
                 bgcolor={item.type ? Colors.light_red : Colors.white}
                 alignItems="center"
                 p={1.5}
-                minHeight={55}
+                minHeight={42}
               >
                 <Box flexGrow={1}>
                   <FBText
@@ -86,7 +89,7 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
                       }
                     }
                     boxProps={{
-                      color: Colors.black,
+                      color: Colors.almost_black,
                       flexGrow: 1,
                     }}
                   />

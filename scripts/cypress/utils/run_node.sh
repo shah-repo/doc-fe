@@ -37,9 +37,20 @@ export CYPRESS_BROWSER=${CYPRESS_BROWSER:-chrome}
 
 ./scripts/cypress/wait.sh
 
-yarn cypress run \
-  --parallel --record --key 9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76 \
-  --reporter mochawesome --reporter-options "reportDir=$DIR_JSON,overwrite=false,html=false,json=true,reportFilename=$REPORT_TITLE" \
-  --browser $CYPRESS_BROWSER \
-  --headless \
-  --ci-build-id "$CI_BUILD_ID"
+CYPRESSARGS=(
+  --parallel 
+  --record 
+  --key 9e6e4a3d-c43a-4e60-8984-fa2ae0a90a76
+  --reporter mochawesome 
+  --reporter-options reportDir=$DIR_JSON,overwrite=false,html=false,json=true,reportFilename=$REPORT_TITLE
+  --browser $CYPRESS_BROWSER
+  --headless
+  --ci-build-id $CI_BUILD_ID
+  --env grepTags=$CYPRESS_INCLUDE_TAGS
+)
+
+if xvfb-run --help > /dev/null; then
+    xvfb-run -a yarn cypress run "${CYPRESSARGS[@]/#/}"
+else
+    yarn cypress run "${CYPRESSARGS[@]/#/}"
+fi

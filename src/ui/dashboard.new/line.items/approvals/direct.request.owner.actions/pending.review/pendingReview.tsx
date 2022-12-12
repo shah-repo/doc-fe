@@ -114,12 +114,14 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
         onMouseEnter={onMouseHoverListItem}
+        className={classes.buttoncursor}
+        disableRipple
       >
         <ListItemIcon>{getDocIcon(docTypeGroup)}</ListItemIcon>
         <ListItemText
           primary={
             <>
-              <Grid container={true} wrap="nowrap" alignItems="center">
+              <Grid container={true} wrap="nowrap" alignItems="center" data-cy={docId + "InReview"}>
                 <Grid item={true}>
                   <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId={docId}/>
                 </Grid>
@@ -252,7 +254,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
         />
         {hoverItem && !pinned && (
           <div className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} />}
+            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
             {pinHover && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
@@ -262,6 +264,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
                 <PinSolidIcon
                   onClick={handlePinClick}
                   onMouseLeave={onMouseLeavePinIcon}
+                  className={classes.cursorPointer}
                 />
               </StyleTooltip>
             )}
@@ -274,7 +277,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} />
+              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </div>
         )}

@@ -1,12 +1,13 @@
 import Button, { ButtonProps } from "@material-ui/core/Button";
 import React from "react";
+import { SM } from "../../../../App";
+import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../../../state/ducks/changeRequest/types";
 import { AsyncStatus } from "../../../../state/types";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
 import Text from "../../../components/Text";
-import { FB } from "../../../form.builder";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 
@@ -25,10 +26,11 @@ const TransitionButton: React.FunctionComponent<Props> = ({
 }) => {
   const applyTransition = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync<ChangeRequestTransitionResponse>();
+  const isNewLayout = SM.isNewCRLayout;
+  const { _formState } = SM.useStores();
 
-  const { formState } = FB.useStores();
   const onClick = () => {
-    formState?.validate((valid) => {
+    _formState?.validate((valid) => {
       if (valid) {
         async.start(
           applyTransition,
@@ -38,24 +40,37 @@ const TransitionButton: React.FunctionComponent<Props> = ({
           async,
         );
       }
-    }, true);
+    });
   };
 
   return (
     <React.Fragment>
       <FormMessage asyncState={async.asyncState} />
       <FormProgress asyncState={async.asyncState} />
-      <Button
-        id="transitionButton"
-        data-cy="transitionButton"
-        color="secondary"
-        variant="outlined"
-        onClick={onClick}
-        disabled={async.asyncState.status === AsyncStatus.Active}
-        {...buttonProps}
-      >
-        <Text message={label} />
-      </Button>
+      {isNewLayout ? (
+        <StyledButton
+          id="transitionButton"
+          data-cy="transitionButton"
+          color="primary"
+          onClick={onClick}
+          disabled={async.asyncState.status === AsyncStatus.Active}
+          {...buttonProps}
+        >
+          <Text message={label} />
+        </StyledButton>
+      ) : (
+        <Button
+          id="transitionButton"
+          data-cy="transitionButton"
+          color="secondary"
+          variant="outlined"
+          onClick={onClick}
+          disabled={async.asyncState.status === AsyncStatus.Active}
+          {...buttonProps}
+        >
+          <Text message={label} />
+        </Button>
+      )}
     </React.Fragment>
   );
 };

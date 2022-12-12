@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React from "react";
@@ -47,6 +48,12 @@ export const withFBFileUpload = <T extends FBFileUploadProps>(
           formState?.setFieldValue(name, files, withState);
           formState?.setFieldAutosave(name);
           formState?.unlockField(name);
+          if (isEmpty(files)) {
+            formState?.validate();
+            const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+            if (!isUnderWorkspace) { return; }
+            workspaceState?.saveDocRev(formState?.getValues());
+          }
         }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps

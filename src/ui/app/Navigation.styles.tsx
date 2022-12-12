@@ -13,6 +13,8 @@ export default (theme: Theme) =>
       width: DRAWER_WIDTH,
       background: Colors.mirage,
       zIndex: theme.zIndex.drawer + 2,
+      overflow: "hidden",
+      borderRight: "none",
     },
     toolbar: {
       backgroundColor: Colors.mirage,
@@ -27,5 +29,10 @@ export default (theme: Theme) =>
     headerLink: {
       textDecoration: "none",
       color: theme.palette.common.white,
+    },
+    list: {
+      flexGrow: 1,
+      overflow: "hidden",
+      overflowY: "auto",
     },
   });

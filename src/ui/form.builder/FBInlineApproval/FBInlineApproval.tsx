@@ -2,9 +2,10 @@ import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import React from "react";
-import { FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
+import { FB, FBApprovalAudit, FBAutocomplete, FBButton, FBDialog, FBFieldName, FBInlineApprovalBody, FBInlineApprovalProps, FBInlineApprovalSocket, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBText } from "..";
 import { isDocumentRevisionApproved } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
+import { FBFontStyle } from "../styles/FBFont.styles";
 import { withFBInlineApproval } from "./FBInlineApproval.wrap";
 import FBInlinePendingApprovalSocket from "./FBInlinePendingApproval.socket";
 
@@ -35,19 +36,33 @@ const FBInlineApprovalChild: React.FunctionComponent<FBInlineApprovalProps> = ({
       borderLeft={0}
       borderRight={0}
       borderTop={0}
-      borderColor={isApproved ? Colors.light_green : Colors.medium_red}
+      borderColor={isApproved ? Colors.light_green : Colors.latest_red_varient}
     >
-      {isApproved && <CheckCircleIcon style={{ color: Colors.light_green }} />}
-      {!isApproved && <ErrorIcon style={{ color: Colors.medium_red }} />}
-      <Box ml={1} width="100%" display="flex" mt={0.3}>
-        {isApproved && <FBText locale="form.builder.approved" />}
-        {!isApproved && (
-          <>
-            <FBText boxProps={{ flexGrow: 1 }} locale="form.builder.approval.pending" />
-            <FBText boxProps={{ fontSize: "caption.fontSize", mt: 0.2 }} locale="form.builder.approval.instruction" />
-          </>
-        )}
-      </Box>
+      {isApproved ?
+        (<>
+          <CheckCircleIcon style={{ color: Colors.light_green }} />
+          <FBText locale="form.builder.approved" />
+        </>)
+        :
+        (<>
+          <ErrorIcon style={{ color: Colors.latest_red_varient }} />
+          <Box ml={1} width="100%" display="flex" mt={0.3}>
+            <FBText
+              boxProps={{
+                flexGrow: 1, fontSize: "14px", fontWeight: "600", color: Colors.latest_red_varient, lineHeight: "15px",
+              }}
+              locale="form.builder.approval.pending"
+            />
+            <FBText
+              boxProps={{
+                fontSize: "12px", fontWeight: "400", color: Colors.almost_black, lineHeight: "15px",
+              }}
+              locale="form.builder.approval.instruction"
+            />
+          </Box>
+        </>)
+      }
+
     </Box>
     {options && !isPreview && (
       <FBAutocomplete
@@ -130,15 +145,22 @@ const FBInlineApproval: React.FunctionComponent<FBInlineApprovalProps> = ({
   inlineApprovalState,
   rules,
   ...props
-}) => (
-  <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
-    <FBDialog />
-    <FBInlinePendingApprovalSocket/>
-    <FBInlineApprovalSocket {...{ name }} />
-    <FBInput {...props} {...{ name, rules }} type="inlineapproval">
-      <FBInlineApprovalChild {...props} {...{ name }}/>
-    </FBInput>
-  </FBProvider>
-);
+}) => {
+  const  { workspaceState } = FB.useStores();
+  const { document } = workspaceState || {};
+  const EQname = document?.formInput?.["fb-requipment-maintenance-section"];
+  const isPMform = Boolean(document?.["parentEquipment"]?.["formInput"]?.[EQname]?.preventativeForm);
 
+  props.disabled =  props.disabled && !isPMform;
+  return (
+    <FBProvider {...{ dialogState, [`${FBFieldName.ApprovalState}-${name}`]: inlineApprovalState }}>
+      <FBDialog />
+      <FBInlinePendingApprovalSocket/>
+      <FBInlineApprovalSocket {...{ name }} />
+      <FBInput {...props} {...{ name, rules }} type="inlineapproval" labelProps={FBFontStyle.labelProps}>
+        <FBInlineApprovalChild {...props} {...{ name }}/>
+      </FBInput>
+    </FBProvider>
+  );
+};
 export default withFBInlineApproval(FBInlineApproval);

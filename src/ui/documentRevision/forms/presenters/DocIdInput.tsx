@@ -7,9 +7,11 @@ import { DocumentProposedIdSetAction } from "../../../../state/ducks/documents/t
 import { AsyncStatus } from "../../../../state/types";
 import InputField from "../../../components/forms/fields/Input";
 import { toastError } from "../../../components/notifications";
+import { styles as AutoCompleteStyles } from "../../../form.builder/styles/FBAutocomplete.styles";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocId } from "../../../hooks/docCustomization/useCustomization";
 import { DocumentCloneType } from "../../Clone.container";
+import { styles } from "./styles/DocIdInput.styles";
 
 interface Props {
   isDisabled: boolean;
@@ -28,6 +30,7 @@ const DocIdInput: React.FunctionComponent<Props> = ({
   setDocId,
   type,
 }) => {
+  const classes = styles();
   const loadProposedDocIdState = useSelector(documentsSelectors.getLoadProposedDocIdAsyncState);
   React.useEffect(() => {
     if (loadProposedDocIdState.status === AsyncStatus.Error) {
@@ -72,6 +75,8 @@ const DocIdInput: React.FunctionComponent<Props> = ({
           onChange: handleDocIdChange,
         }}
         validate={validators}
+        inputStyleProps={classes.input}
+        labelProps={AutoCompleteStyles.labelStyle}
       />
     </CustomLabelTooltip>
   );

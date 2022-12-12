@@ -2,9 +2,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { MPIExport } from "../../utils/constants/documentTypes/mpi";
+import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let recordUrl;
@@ -48,130 +51,8 @@ context("Export MPI", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Manufacturing Process Instructions Test",
-                documentTypeAcronym: "MPI-",
-                group: "PI",
-                schema: [
-                  {
-                    name: "fb-mpi-procedure-section-built-in",
-                    type: "section",
-                    index: 0,
-                    label: "form.builder.mpiprocedure",
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "mpi-procedure-built-in",
-                    type: "mpiprocedure",
-                    index: 1,
-                    stepIndex: 1,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    deleteInFormDisabled: false,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-start-quantity",
-                    type: "quantity",
-                    index: 2,
-                    label: "Start quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Start quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-accepted-quantity",
-                    type: "quantity",
-                    index: 3,
-                    label: "Accepted quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Accepted quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "lhrs-rejected-quantity",
-                    type: "quantity",
-                    index: 4,
-                    label: "Rejected quantity",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    editorProperties: [],
-                    validationAttribute: "Rejected quantity",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 5,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
-              {
-                documentTypeName: "Quantity Process Instructions Test",
-                documentTypeAcronym: "QPI-",
-                group: "PI",
-                schema: [
-                  {
-                    name: "fb-mpi-procedure-section-built-in",
-                    type: "section",
-                    index: 0,
-                    label: "form.builder.mpiprocedure",
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                  },
-                  {
-                    name: "mpi-procedure-built-in",
-                    type: "mpiprocedure",
-                    index: 1,
-                    stepIndex: 1,
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: false,
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                  {
-                    name: "approvals-built-in",
-                    type: "approvals",
-                    index: 2,
-                    label: "Approvals",
-                    applicableOn: [
-                      "ON_STATE_TO_IN_REVIEW",
-                    ],
-                    deleteDisabled: true,
-                    uniqueSchemaItem: true,
-                    validationAttribute: "Approvals",
-                    deleteInFormDisabled: true,
-                    applicableValidationSchema: true,
-                  },
-                ],
-              },
+              MPIExport,
+              QPITest,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -341,7 +222,7 @@ context("Export MPI", () => {
 
   context("MPI with Draft status", () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({ pdfStatus: "Draft", filename: "-1-MPI-document", status: STATUS_TYPES_LABEL.DRAFT });
     });
   });
 
@@ -351,7 +232,7 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Released", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({ pdfStatus: "Released", filename: "-1-MPI-document", status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 
@@ -364,11 +245,18 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Obsolete", filename: "-OBS-MPI-document" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Obsolete", filename: "-OBS-MPI-document",
+        status: STATUS_TYPES_LABEL.OBSOLETE,
+      });
     });
   });
 
   context("MPI with Superseded status", () => {
+    it("Select Revision", () => {
+      cy.drClickRevisionsSidePanel();
+    });
+
     it("Select 'Superseded' record", () => {
       cy.contains("Superseded").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
@@ -376,7 +264,10 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Superseded", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Superseded", filename: "-1-MPI-document",
+        status: STATUS_TYPES_LABEL.SUPERSEDED,
+      });
     });
   });
 
@@ -401,10 +292,6 @@ context("Export MPI", () => {
       cy.drEnterDocumentDescription({ description: "Description" });
     });
 
-    it("Upload logo picture 'image.jpg'", () => {
-      cy.atchOtherUploadAttachment({ fileName: "image.jpg" });
-    });
-
     it("Select 'Manufacturing Process Instructions Test' document type", () => {
       cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
     });
@@ -424,7 +311,7 @@ context("Export MPI", () => {
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Voided", filename: "-1-Void" });
+      cy.exportVerifyEmail({ pdfStatus: "Voided", filename: "-1-Void", status: STATUS_TYPES_LABEL.VOIDED });
     });
   });
 
@@ -489,7 +376,7 @@ context("Export MPI", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
     });
 
     it("Add Approver'", () => {
@@ -507,10 +394,14 @@ context("Export MPI", () => {
       cy.visit(recordUrl);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Pending Change", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({
+        pdfStatus: "Pending Change", filename: "-1-MPI-document",
+        status: STATUS_TYPES_LABEL.PENDING_CHANGE,
+      });
     });
   });
 
@@ -529,10 +420,14 @@ context("Export MPI", () => {
       cy.visit(recordUrl);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "In Review", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({
+        pdfStatus: "In Review", filename: "-1-MPI-document",
+        status: STATUS_TYPES_LABEL.IN_REVIEW,
+      });
     });
   });
 
@@ -551,10 +446,11 @@ context("Export MPI", () => {
       cy.visit(recordUrl);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Approved", filename: "-1-MPI-document" });
+      cy.exportVerifyEmail({ pdfStatus: "Approved", filename: "-1-MPI-document", status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
 

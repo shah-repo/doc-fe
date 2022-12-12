@@ -5,6 +5,7 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FBConditionalWrapper, FBTextEditorOptions, FBTextEditorProps } from "..";
 import Colors from "../../layout/theme/utils/colors";
+import styles from "./FBTextEditor.styles";
 
 const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   onEditorStateChange,
@@ -21,19 +22,21 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
   disabled,
   masked,
   name,
+  removeBorder = false,
 }) => {
   // hack for adding empty lines in preview mode
   // so there is no additional growing blank space on the bottom of editor
   // eslint-disable-next-line no-useless-escape
   const formattedFormValue = formValue.replace(/<[^\/>]*>([\s]?)*<\/[^>]*>/g, "<p><br></p>" );
+  const classes = styles();
   return (
     <Box
-      bgcolor={isPreview ? "transparent" : "white"}
-      border={isPreview ? 0 : 1}
+      bgcolor={isPreview ? "transparent" : disabled ? Colors.whitest_grey : Colors.white}
+      border={removeBorder ? "none" : isPreview ? 0 : 1}
       borderColor={Colors.hint_gray}
       borderRadius={4}
-      style={{ display: "grid" }}
-      minHeight={isPreview ? "auto" : 140}
+      style={{ display: "grid", borderRadius: 3, borderColor: Colors.gray_goose }}
+      minHeight={removeBorder ? "none" : isPreview ? "auto" : 160}
       onKeyDown={(e) => onKeyDown?.(e as unknown as KeyboardEvent)}
     >
       <Box
@@ -42,7 +45,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
         borderRadius={4}
         data-cy={name}
       >
-        <Editor
+        {!removeBorder && <Editor
           onBlur={(ev) => onBlur?.(ev)}
           {...{ editorRef, editorState, onEditorStateChange, toolbar }}
           {...!isEmpty(options) && {
@@ -66,7 +69,7 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
           }}
           // fix for extra lines when pasting multiline content
           stripPastedStyles={true}
-        />
+        />}
       </Box>
       <FBConditionalWrapper
         condition={!isUndefined(masked)}
@@ -78,21 +81,25 @@ const FBTextEditorChild: React.FunctionComponent<FBTextEditorProps> = ({
       >
         <Box
           {...!disabled && { onClick: () => handleMask?.(false) }}
-          bgcolor={isPreview ? "transparent" : "white"}
+          bgcolor={
+            removeBorder ? Colors.alabaster : isPreview ? "transparent" : disabled ? Colors.whitest_grey : Colors.white
+          }
           borderRadius={4}
-          zIndex={1000}
+          zIndex={3}
           display="flex"
           style={{
             gridArea: "1/1",
             cursor: !disabled ? "text" : "inherit",
+            padding: removeBorder ? "3px 12px" : "",
           }}
           p={isPreview ? 0 : 1.5}
         >
-          <div
+          <div className={classes.marginBStyle}
             style={{ width: "100%", height: "100%" }}
             dangerouslySetInnerHTML={{ __html: formattedFormValue }}
           />
         </Box>
+
       </FBConditionalWrapper>
     </Box>
 

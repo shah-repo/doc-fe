@@ -2,10 +2,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -16,7 +18,7 @@ let recordDocumentType;
 let formDocumentType;
 let group;
 
-context("Export Record doc", () => {
+context("Export for Approval Request", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -44,11 +46,7 @@ context("Export Record doc", () => {
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
               {
-                documentTypeName: "Record Document",
-                documentTypeAcronym: "RD-",
-                category: "Record",
-                group: "RECORD",
-                isQms: true,
+                ...RecordDocumentType,
                 fieldsConfig: {
                   D: {
                     visible: false,
@@ -193,6 +191,7 @@ context("Export Record doc", () => {
                     name: "fb-approvals-l02u8tzp",
                     uniqueSchemaItem: true,
                     index: 0,
+                    tabId: "overview",
                   },
                 ],
               },
@@ -254,6 +253,7 @@ context("Export Record doc", () => {
                     name: "fb-approvals-l02u8tzp",
                     uniqueSchemaItem: true,
                     index: 0,
+                    tabId: "overview",
                   },
                 ],
               },
@@ -309,31 +309,35 @@ context("Export Record doc", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
   });
 
-  context("AR with Draft status", () => {
+  context(`AR with ${STATUS_TYPES_LABEL.DRAFT} status`, () => {
     it("Verify export", () => {
-      cy.exportVerifyEmail({ status: "Draft", filename: "-AR-title", pdfStatus: "DRAFT", type: "approval request" });
+      cy.exportVerifyEmail({
+        status: STATUS_TYPES_LABEL.DRAFT, filename: "-AR-title",
+        pdfStatus: STATUS_TYPES_LABEL.DRAFT, type: "approval request",
+      });
     });
   });
 
-  context("AR with In Review status", () => {
-    context("Check status should be In Review", () => {
+  context(`AR with ${STATUS_TYPES_LABEL.IN_REVIEW} status`, () => {
+    context(`Check status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
       it("Click 'Send To Review'", () => {
         cy.arClickSendToReview();
       });
 
       it("Verify export", () => {
         cy.exportVerifyEmail({
-          status: "In Review", filename: "-AR-title", pdfStatus: "IN_REVIEW", type: "approval request",
+          status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-AR-title",
+          pdfStatus: "In Review", type: "approval request",
         });
       });
     });
   });
 
-  context("AR with Approved status", () => {
+  context(`AR with ${STATUS_TYPES_LABEL.APPROVED} status`, () => {
     context("Approve Submission", () => {
       it("Click Approve Submission button", () => {
         cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
@@ -349,13 +353,14 @@ context("Export Record doc", () => {
 
       it("Verify export", () => {
         cy.exportVerifyEmail({
-          status: "Approved", filename: "-AR-title", pdfStatus: "APPROVED", type: "approval request",
+          status: STATUS_TYPES_LABEL.APPROVED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.APPROVED,
+          type: "approval request",
         });
       });
     });
   });
 
-  context("AR with Closed status", () => {
+  context(`AR with ${STATUS_TYPES_LABEL.CLOSED} status`, () => {
     context("Approve Submission", () => {
       it("Click Close button", () => {
         cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
@@ -370,13 +375,14 @@ context("Export Record doc", () => {
 
       it("Verify export", () => {
         cy.exportVerifyEmail({
-          status: "Closed", filename: "-AR-title", pdfStatus: "CLOSED", type: "approval request",
+          status: STATUS_TYPES_LABEL.CLOSED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.CLOSED,
+          type: "approval request",
         });
       });
     });
   });
 
-  context("AR with Voided status", () => {
+  context(`AR with ${STATUS_TYPES_LABEL.VOIDED} status`, () => {
     context("Create a AR from form", () => {
       it("Navigate to approval request list", () => {
         cy.navigToApprovalRequestList();
@@ -420,7 +426,8 @@ context("Export Record doc", () => {
 
       it("Verify export", () => {
         cy.exportVerifyEmail({
-          status: "Voided", filename: "-AR-title", pdfStatus: "VOIDED", type: "approval request",
+          status: STATUS_TYPES_LABEL.VOIDED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.VOIDED,
+          type: "approval request",
         });
       });
     });

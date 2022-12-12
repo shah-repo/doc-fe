@@ -30,33 +30,52 @@ interface Props {
   isField: boolean;
   isUploading: boolean;
 }
-const styles = makeStyles((theme) => ({
-  dialogPaper: {
-    overflowY: "unset",
-  },
-  dialogContent: {
-    overflowY: "unset",
-    maxWidth: 400,
-  },
-  root: ({ isField }: AttachmentStyleProps) => ({
-    padding: isField ? theme.spacing(2, 1) : 0,
-    backgroundColor: isField ? Colors.white : "transparent",
-    borderRadius: isField ? "4px" : "none",
-    border: isField ? `1px solid ${Colors.medium_gray}` : "none",
-  }),
-  link: ({ isField }: AttachmentStyleProps) => ({
-    display: isField ? "flex" : "block",
-  }),
-  input: {
-    display: "none",
-  },
-  icon: ({ isField }: AttachmentStyleProps) => ({
-    display: isField ? "inherited" : "none",
-    marginRight: theme.spacing(0.5),
-    width: 20,
-    height: 20,
-  }),
-}));
+
+
+const styles = makeStyles((theme) => {
+  const linkStyle = {
+    "padding": 0,
+    "fontSize": theme.typography.fontSize,
+    "color": Colors.navy,
+    "textTransform": "capitalize" as const,
+    "fontWeight": 400,
+    "cursor": "pointer",
+    "&:hover": {
+      backgroundColor: "transparent",
+      textDecoration: "none" as const,
+    },
+  };
+
+  return {
+    dialogPaper: {
+      overflowY: "unset",
+    },
+    dialogContent: {
+      overflowY: "unset",
+      maxWidth: 400,
+    },
+    root: ({ isField }: AttachmentStyleProps) => ({
+      padding: isField ? theme.spacing(1, 0.5) : 0,
+    }),
+    link: ({ isField }: AttachmentStyleProps) => ({
+      display: isField ? "flex" : "block",
+      alignItems: isField ? "center" : "",
+      ...linkStyle,
+    }),
+    input: {
+      display: "none",
+    },
+    icon: ({ isField }: AttachmentStyleProps) => ({
+      display: isField ? "inherited" : "none",
+      marginRight: theme.spacing(1),
+      width: 20,
+      height: 20,
+    }),
+    linkButton: {
+      ...linkStyle,
+    },
+  };
+});
 
 
 const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
@@ -78,7 +97,7 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
   const documentRevisionTypeGroupFromDocList = React.useContext(documentRevisionTypeGroupsFromDocListContext);
   const isRecord = documentRevisionTypeGroupFromDocList === DOC_TYPE_GROUP_OPTION.RECORD;
   const documentTypeCanRedline = Boolean(useSelector((state: ApplicationState) =>
-    documentTypeSelectors.getDocumentTypeById(state, form.values.document.documentType.id))?.canRedLine);
+    documentTypeSelectors.getDocumentTypeById(state, form.values.document?.documentType?.id))?.canRedLine);
 
   const openDialog = () => {
     async.reset();
@@ -100,45 +119,48 @@ const AttachmentLineTypeSelector: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      { (isChangeRequestFormOnScreenContext || isRecord) &&
-         <Box mt={1} className={classes.root} id="AttachmentFieldPresenter-field">
-           <input
-             accept="*"
-             className={classes.input}
-             id={`${name}-button-file`}
-             multiple={multiple}
-             type="file"
-             onChange={onChange(LINE_TYPES.CLEAN_COPY, false)}
-             onBlur={onChange(LINE_TYPES.CLEAN_COPY, false)}
-             disabled={disabled}
-           />
-           <label htmlFor={`${name}-button-file`}>
-             <Link
-               component="span"
-               variant="button"
-               className={classes.link}
-               id="AttachmentFieldPresenter-downloadAllButton"
-             >
-               <AttachFile className={classes.icon} />
-               <Text translation="common.upload.files" />
-             </Link>
-           </label>
-         </Box>
+      {(isChangeRequestFormOnScreenContext || isRecord) &&
+        <Box className={classes.root} id="AttachmentFieldPresenter-field">
+          <input
+            accept="*"
+            className={classes.input}
+            id={`${name}-button-file`}
+            multiple={multiple}
+            type="file"
+            onChange={onChange(LINE_TYPES.CLEAN_COPY, false)}
+            onBlur={onChange(LINE_TYPES.CLEAN_COPY, false)}
+            disabled={disabled}
+          />
+          <label htmlFor={`${name}-button-file`}>
+            <Link
+              component="span"
+              variant="button"
+              className={classes.link}
+              id="AttachmentFieldPresenter-downloadAllButton"
+              color="primary"
+            >
+              <AttachFile className={classes.icon} />
+              <Text translation="common.upload.files" />
+            </Link>
+          </label>
+        </Box>
       }
 
-      { (!isChangeRequestFormOnScreenContext && !isRecord) &&
-      <Button
-        color="primary"
-        startIcon={<AttachFileIcon />}
-        onClick={openDialog}
-        id="AttachmentFieldPresenter-linkButton"
-      >
-        Upload Files
-      </Button>
+      {(!isChangeRequestFormOnScreenContext && !isRecord) &&
+        <Button
+          color="primary"
+          disableRipple
+          startIcon={<AttachFileIcon />}
+          onClick={openDialog}
+          id="AttachmentFieldPresenter-linkButton"
+          className={classes.linkButton}
+          disabled={disabled}
+        >
+          <Text translation="common.upload.files" />
+        </Button>
       }
 
-      {
-        dialog.isOpen &&
+      {dialog.isOpen &&
         <Dialog
           disableEscapeKeyDown={true}
           disableBackdropClick={true}

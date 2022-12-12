@@ -88,6 +88,13 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
+    React.useEffect(() => reaction(
+      () => formState?.approvalMap,
+      (value) => value && (lhrStepState?.setApproval(value)),
+      { fireImmediately: true },
+      /* eslint-disable-next-line react-hooks/exhaustive-deps */
+    ), []);
+
     // on LHRS create
     React.useEffect(() => reaction(
       () => lhrStepState.startMpiApi.data,
@@ -119,15 +126,15 @@ export const withFBLHRStep = <T extends FBLHRStepProps>(
     React.useEffect(() => reaction(
       () => FBAutocompleteAsyncStore.data.get(FBAutocompleteAsyncOption.mpiDocuments),
       (data) => {
-        const parameters = schemaItem?.editorConfig.parameters;
+        const parameters = schemaItem?.editorConfig?.parameters;
         const dataValues = Array.from(data.values());
         const mpiDocument: any = dataValues.find((item: any) => item?.id === schemaItem?.editorConfig.value);
 
-        const editorCfg = mpiDocument?.formTemplate.schema.filter((item) =>
+        const editorCfg = mpiDocument?.formTemplate?.schema.filter((item) =>
           item.type === "mpiprocedure" && !item.deleted) || [];
-        const editorMaterials = editorCfg.filter((item) => item.editorConfig.materials).map(
+        const editorMaterials = editorCfg.filter((item) => item.editorConfig?.materials).map(
           (item) => item.editorConfig.materials);
-        const editorEquipment = editorCfg.filter((item) => item.editorConfig.equipment).map(
+        const editorEquipment = editorCfg.filter((item) => item.editorConfig?.equipment).map(
           (item) => item.editorConfig.equipment );
 
         if (parameters) {

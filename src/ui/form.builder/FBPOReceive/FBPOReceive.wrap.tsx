@@ -6,6 +6,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBDialogState, FBInputType, FBPOReceiveCreateLot, FBPOReceiveCreateLotActions, FBPOReceiveForm, FBPOReceiveFormActions, FBPOReceiveItemProps, FBPOReceiveProps, FBPOReceiveState, FBPurchaseOrderItem, FBSchemaProps } from "..";
 import { stripTags } from "../../../common/utils/helpers";
+import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
 
@@ -32,7 +33,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     const intl = useIntl();
     const { formInput } = workspaceState || {};
     const { receivedItems } = name && (formInput?.[name] || { receivedItems: "" });
-    const { submitForm } = useFormikContext();
+    const formik = useFormikContext();
 
     poReceiveState = FB.useRef<FBPOReceiveState>(FBPOReceiveState, formValue?.id);
     dialogState = FB.useRef<FBDialogState>(FBDialogState);
@@ -86,6 +87,8 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
     }
 
     function setSchemaProps(schema?: FBSchemaProps[]): FBSchemaProps[] | undefined {
+      const id = workspaceState?.schema?.find((item) => item.type === "poreceive")?.tabId;
+
       remove(schema || [], (item) => item?.type === "poapprovals");
       if (!schema) { return; }
       const prior: Partial<Record<FBInputType | "other", number>> = {
@@ -102,13 +105,25 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
           return reduced;
         }
 
+        if (workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.RECEIVABLE) {
+          reduced.push(setSchemaItem(item));
+          return reduced;
+        }
+
         if (last(reduced)?.type === "purchaseorder" && item.type !== "purchaseorder") {
           reduced.push({ type: "section", label: "form.builder.purchaseorder" });
         }
+
         reduced.push(setSchemaItem(item));
         return reduced;
       }, []);
-      return schema;
+
+      const modifiedTabIdSchema = schema.map((item) => ({
+        ...item, tabId: id,
+      })
+
+      );
+      return modifiedTabIdSchema;
     }
 
     onChange = (_ev, value: DocumentRevision) => {
@@ -127,7 +142,7 @@ export const withFBPOReceive = <T extends FBPOReceiveProps>(
       (value) => {
         formState?.setFieldValue(name, { id: value });
         formState?.setFieldAutosave(name);
-        submitForm();
+        formik?.submitForm();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

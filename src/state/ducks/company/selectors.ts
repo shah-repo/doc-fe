@@ -45,12 +45,25 @@ const getNavigationTitle = (state: ApplicationState, category: string) => {
   return menuItem?.label;
 };
 
+const getNavigationDetails = (state: ApplicationState, category: string) => {
+  const mainMenuItems = filter(state.company.companyMine.navigation, { type: "CATEGORY" });
+  const subMenuItems = chain(state.company.companyMine.navigation)
+    .filter({ type: "MENU" })
+    .map("menu")
+    .flatten()
+    .value();
+  const menuItem = find([...mainMenuItems, ...subMenuItems], { type: "CATEGORY", category });
+  return { label: menuItem?.label, icon: menuItem?.icon, path: menuItem?.path, type: menuItem?.type };
+};
+
 const getActiveEmployees = (state: ApplicationState) =>
   chain(state.company.companyMine.employees)
     .filter({ active: true })
     .map((employee) => pick(employee, ["id", "user.name"]))
     .value()
     .sort(sortStringsByKey("user.name"));
+
+const getAllEmployees = (state: ApplicationState) => state.company.companyMine.employees;
 
 export default {
   getWhiteLabeling,
@@ -68,5 +81,7 @@ export default {
   getAutosaveEnabled,
   getRedlineActive,
   getNavigationTitle,
+  getNavigationDetails,
   getActiveEmployees,
+  getAllEmployees,
 };

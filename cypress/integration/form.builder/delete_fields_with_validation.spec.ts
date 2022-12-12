@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -35,12 +36,7 @@ context("Field validations test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Test Document Type",
-                documentTypeAcronym: "TDT-",
-                group: "OTHER",
-                isQms: true,
-              },
+              TestDocumentType,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -91,13 +87,17 @@ context("Field validations test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Test Document Type" });
     });
 
+    it("Click create a document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+
     context("Add Radio Button", () => {
       it("Click Add a Field", () => {
         cy.fbAddNewField();
       });
 
       it("Select Radio Button field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Radio Button group" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       });
 
       it("Add label Radio buttons", () => {
@@ -119,7 +119,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label Text field 1", () => {
@@ -136,10 +136,11 @@ context("Field validations test", () => {
 
       it(`Select required if radio button field`, () => {
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(`Radio buttons`);
+        cy.unClick();
       });
 
       it(`Click value option1`, () => {
-        cy.get("div[role=dialog] [value=option1]").arrowClick();
+        cy.get("input[value=option1]").first().arrowClick();
       });
 
       it("Click add to add text field 1 to form", () => {
@@ -157,7 +158,7 @@ context("Field validations test", () => {
       });
 
       it("Select Checkbox group field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Checkbox group" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       });
 
       it("Add label Checkbox field", () => {
@@ -179,7 +180,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label Text field 2", () => {
@@ -196,10 +197,11 @@ context("Field validations test", () => {
 
       it(`Select required if in Checkbox field`, () => {
         cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect(`Checkbox field`);
+        cy.unClick();
       });
 
       it(`Click value option1`, () => {
-        cy.get("div[role=dialog] [value=option1]").arrowClick();
+        cy.get("input[value=option1]").first().arrowClick();
       });
 
       it("Click add to add text field 2 to form", () => {
@@ -217,7 +219,7 @@ context("Field validations test", () => {
       });
 
       it("Select Select field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Select" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       });
 
       it("Add label Select field", () => {
@@ -239,7 +241,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label Text field 3", () => {
@@ -273,7 +275,7 @@ context("Field validations test", () => {
       });
 
       it("Select Autocomplete field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Autocomplete" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
       });
 
       it("Add label Autocomplete field", () => {
@@ -295,7 +297,7 @@ context("Field validations test", () => {
       });
 
       it("Select Text field", () => {
-        cy.fbSelectItemFromNewFieldList({ field: "Text field" });
+        cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       });
 
       it("Add label Text field 4", () => {

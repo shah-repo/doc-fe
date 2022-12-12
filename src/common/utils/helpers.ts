@@ -1,3 +1,4 @@
+import Base64 from "Base64";
 import DOMPurify from "dompurify";
 import { cloneDeep, get } from "lodash";
 import { useEffect } from "react";
@@ -20,6 +21,10 @@ export const stripTagsFromObject = <T extends ChangeRequest | DocumentRevision>(
 
   return copy;
 };
+
+export function encodeString(stringToEncode: string): string {
+  return Base64.btoa(stringToEncode);
+}
 
 export function downloadURI(uri, name) {
   const link = document.createElement("a");
@@ -67,3 +72,5 @@ export const sortStringsByKey = (key: string) => (a, b) => {
   if ( a === b) { return 0; }
   return a < b ? -1 : 1;
 };
+
+export const emptyFunction = () => undefined;

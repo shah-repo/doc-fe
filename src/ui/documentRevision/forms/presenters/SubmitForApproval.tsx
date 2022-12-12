@@ -1,7 +1,12 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, Typography } from "@material-ui/core";
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import React from "react";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
+import { StyledButton } from "../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListItem } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import SM from "../../../../App/Shifamed/Utils/SM/SM";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { DocumentType } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
@@ -12,7 +17,7 @@ import FBStore from "../../../form.builder/FBStore/FBStore";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
-import { checkIsDocumentMPIOutput } from "../../helpers/checkDocumentGroup";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../helpers/checkDocumentGroup";
 import { styles } from "./FinalizeAndRelease.styles";
 
 interface Props {
@@ -22,6 +27,8 @@ interface Props {
   docRevOwner: string;
   updatedAt?: string;
   currentDocumentType?: DocumentType;
+  renderAsButton?: boolean;
+  hasBuildType?: boolean;
 }
 
 export const SubmitForApproval: React.FunctionComponent<Props> = ({
@@ -31,13 +38,17 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
   docRevOwner,
   updatedAt,
   currentDocumentType,
+  renderAsButton,
+  hasBuildType,
 }) => {
+  const isNewLayout = SM.isNewLayout;
   const classes = styles();
   const dispatch = useDispatch();
   const voidRecordDialog = useDialog();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
   const isObsolete = revisionChangeType === RevisionChangeType.Obsolete;
   const isTypeMpiOutput = checkIsDocumentMPIOutput(currentDocumentType?.groupOptions);
+  const isLhrDoc = checkIsDocumentLHR(currentDocumentType?.groupOptions);
   const label = isTypeMpiOutput ? "record.complete.step" : "record.submit.for.approval";
   const releaseAsync = useAsync({
     onError: (error) => {
@@ -54,10 +65,14 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
     },
   });
 
+  const intl = useIntl();
   const formState = FB.useRef(FBFormState, {});
   const save = useActionCreator(documentRevisionsActions.save);
 
   const releaseRecord = () => {
+    if (!hasBuildType && isLhrDoc) {
+      return toastError(intl.formatMessage({ id: "form.builder.lhr.build.type.error.message" }));
+    }
     releaseAsync.start(
       applyTransition,
       docRevId,
@@ -86,15 +101,33 @@ export const SubmitForApproval: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <Button
-        color="secondary"
-        variant="outlined"
-        onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
-        id="ApproveAndRelease-button"
-        data-cy="ApproveAndRelease-button"
-      >
-        <Text message={isObsolete ? "common.void" : label} />
-      </Button>
+      {isNewLayout ? (
+        renderAsButton ? <StyledButton
+          color="primary"
+          onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
+          id="ApproveAndRelease-button"
+          data-cy="ApproveAndRelease-button"
+        >
+          <Text message={isObsolete ? "common.void" : label} />
+        </StyledButton> : <StyledMenuListItem button alignItems="flex-start">
+          <StyledMenuListItemText
+            onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
+            id="ApproveAndRelease-button"
+            data-cy="ApproveAndRelease-button"
+            primary={ <Text message={isObsolete ? "common.void" : label} />}
+          />
+        </StyledMenuListItem>
+      ) : (
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={isObsolete ? voidRecordDialog.open : releaseRecord}
+          id="ApproveAndRelease-button"
+          data-cy="ApproveAndRelease-button"
+        >
+          <Text message={isObsolete ? "common.void" : label} />
+        </Button>
+      )}
       <Dialog
         open={voidRecordDialog.isOpen}
       >

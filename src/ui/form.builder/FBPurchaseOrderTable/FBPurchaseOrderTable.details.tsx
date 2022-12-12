@@ -1,4 +1,4 @@
-import { Box, TableBody } from "@material-ui/core";
+import { Box, TableBody, Typography } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
@@ -8,6 +8,9 @@ import { keys, truncate, values } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell, FBTooltip } from "..";
+import { ReactComponent as InfoIcon } from "../../../../src/assets/images/information_icon.svg";
+import Text from "../../components/Text";
+import { FBTableCellStyles } from "../styles/FBTableCell.styles";
 import { FBPurchaseOrderDetailsProduct, FBPurchaseOrderTableDetailsProps } from "./FBPurchaseOrderTable.types";
 import { FBPurchaseOrderCollection } from "./helpers";
 
@@ -20,12 +23,25 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
   loading = false,
   mode,
   calculation,
+  isReceivable,
 }) => {
   const intl = useIntl();
+  const cellStyle = FBTableCellStyles();
   return (
-    <Box width="100%" overflow="auto">
+    <Box width="100%" overflow="auto" className={"containing-box-scrollbar"}>
       <Table className={classes?.table}>
         <TableHead>
+          {isReceivable && <TableRow>
+            <FBTableCell />
+            <FBTableCell>
+              <Box display="flex">
+                <InfoIcon />
+                <Typography className={cellStyle.headerCellText}>
+                  <Text translation="receiving.table.header.text" />
+                </Typography>
+              </Box>
+            </FBTableCell>
+          </TableRow>}
           <TableRow>
             <FBTableCell />
             <FBMapWrapper<string[]> collection={values(FBPurchaseOrderDetailsProduct)}>
@@ -34,6 +50,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                   label={head}
                   key={`fb-po-head-${head}-${index}`}
                   align={(index > 2 && head !== "form.builder.field.lots") ? "right" : "left"}
+                  className={`${cellStyle.cellFont} ${cellStyle.cellFontWeightLow}`}
                 />
               )}
             </FBMapWrapper>
@@ -46,6 +63,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 key={`fb-po-item-${item.id}-${index}`}
                 onClick={() => handleItem?.(item)}
                 data-cy="poItems"
+                className={cellStyle.cell}
               >
                 <FBTableCell align="right">
                   {mode === "form" && (
@@ -85,6 +103,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                             align={(index > 2 && key !== "lots") ? "right" : "left"}
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}
+                            className={`${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
                           />
                         )}
                       </React.Fragment>

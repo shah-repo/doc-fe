@@ -1,8 +1,7 @@
 import { isEmpty, pick } from "lodash";
 import { getStartOfDayDateString } from "../../../common/utils/date";
 import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest/types";
-import { reactQuillEmptyString } from "../../components/forms/fields/validators";
-import { ChangeRequestFormValues } from "./types";
+import { ChangeRequestFormValues, TemplateOption } from "./types";
 
 interface OptionApproverType {
   value: string;
@@ -14,7 +13,7 @@ export const toChangeRequestFormValues = (changeRequest: ChangeRequest): ChangeR
   const values: ChangeRequestFormValues = {
     id: changeRequest.id,
     title: changeRequest.title,
-    description: changeRequest.description || reactQuillEmptyString,
+    description: changeRequest.description,
     formInput: changeRequest.formInput,
     formDocument: changeRequest.formDocument,
   };
@@ -38,27 +37,25 @@ export const toUniqGroupOptions = (approvers) => {
   return mergedArray;
 };
 
-export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
-  let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
-    ...pick(values, ["formDocument"]),
-    title: values.title,
-    description: values.description,
-    formInput: {
-      ...values.formInput,
-      effectiveDate: isEmpty(values.formInput?.effectiveDate)
-        ? undefined
-        : getStartOfDayDateString(values.formInput?.effectiveDate),
+export const templateOptionToChangeRequestCreateBody = (option: TemplateOption): ChangeRequestEditRequestBody => {
+  const changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+    formDocument: {
+      id: option.value,
+    },
+    title: "",
+    description: "",
+    formInput: option.formInput ?? {},
+    documentType: {
+      id: option.docTypeId,
     },
   };
-  if (!values.id) {
-    changeRequestEditRequestBody = { ...changeRequestEditRequestBody, documentType: values.documentType };
-  }
+
   return changeRequestEditRequestBody;
 };
 
-
-export const toChangeRequestUpdateRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
+export const toChangeRequestEditRequestBody = (values: ChangeRequestFormValues): ChangeRequestEditRequestBody => {
   let changeRequestEditRequestBody: ChangeRequestEditRequestBody = {
+    ...pick(values, ["formDocument"]),
     title: values.title,
     description: values.description,
     formInput: {

@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { FBDialogState, FBLabelLocaleProps } from "..";
 
 export type FBDialogProps =
-& Pick<Partial<DialogProps>, "open" | "maxWidth">
+& Pick<Partial<DialogProps>, "open" | "maxWidth" | "classes">
 & {
   handleClose?: SvgIconProps["onClick"];
   handleActionsRef?: (instance: any) => any;
@@ -15,4 +15,5 @@ export type FBDialogProps =
   actions?: React.ReactNode;
   portalAction?: Element;
   portalTitle?: Element;
+  showLeftPanelEditor?: boolean;
 };

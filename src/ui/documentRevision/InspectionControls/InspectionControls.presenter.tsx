@@ -1,5 +1,11 @@
 import { Button } from "@material-ui/core";
 import React from "react";
+import { StyledButton } from "../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListIcon } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import SM from "../../../App/Shifamed/Utils/SM/SM";
+import { ReactComponent as FaiIcon } from "../../../assets/images/fai.svg";
 import Text from "../../components/Text";
 import { InspectionControlsPresenterProps } from "./InspectionControls.types";
 import InspectionDialog from "./InspectionDialog/InspectionDialog";
@@ -15,21 +21,49 @@ const InspectionControlsPresenter: React.FunctionComponent<InspectionControlsPre
   canCreateInspection,
   isDocumentDraft,
   disabled,
+  renderAsButton,
   ...props
 }) => {
+  const isNewLayout = SM.isNewLayout;
   if (!isDocumentDraft || !canCreateInspection) { return null; }
+
+  const renderButton = () => {
+    if (!renderAsButton) {
+      return (<StyledMenuListItem disabled={disabled} button alignItems="flex-start">
+        <StyledMenuListIcon><FaiIcon/></StyledMenuListIcon>
+        <StyledMenuListItemText
+          data-cy={`PreviewControlsContainer-inspection-FAI`}
+          primary={<Text translation="document.revision.fai" />}
+          onClick={() => onButtonClick()}
+        />
+      </StyledMenuListItem>
+      );
+    }
+    return (<StyledButton
+      color="primary"
+      data-cy={`PreviewControlsContainer-inspection-FAI`}
+      onClick={() => onButtonClick()}
+      {...{ disabled }}
+    >
+      <Text translation={"document.revision.fai"} />
+    </StyledButton>);
+  };
 
   return (
     <>
-      <Button
-        variant="outlined"
-        color="secondary"
-        data-cy={`PreviewControlsContainer-inspection-FAI`}
-        onClick={() => onButtonClick()}
-        {...{ disabled }}
-      >
-        <Text translation={"document.revision.fai"} />
-      </Button>
+      {isNewLayout ? (
+        renderButton()
+      ) : (
+        <Button
+          variant="outlined"
+          color="secondary"
+          data-cy={`PreviewControlsContainer-inspection-FAI`}
+          onClick={() => onButtonClick()}
+          {...{ disabled }}
+        >
+          <Text translation={"document.revision.fai"} />
+        </Button>
+      )}
       <InspectionDialog { ...(props) } />
     </>
   );

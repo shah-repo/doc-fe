@@ -5,18 +5,19 @@ import React from "react";
 import { EmployeeEditRequestBody } from "../../../../state/ducks/auth/types";
 import Text from "../../../components/Text";
 import styles from "../UserProfile.styles";
+import { Translation } from "../../../translations/types";
 
-interface OwnProps {
+const MAX_NAME_LENGTH = 100;
+
+interface Props {
   close: () => void;
   showEditUser: boolean;
   name: string;
   userInfo: EmployeeEditRequestBody;
   setUserInfo: (values: EmployeeEditRequestBody) => void;
-  setUsernameError: (value: boolean) => void;
-  isUsernameEmpty: boolean;
+  setUsernameError: (value: Translation | null) => void;
+  usernameError: Translation | null;
 }
-
-type Props = OwnProps;
 
 const DialogTitle: React.FunctionComponent<Props> = ({
   close,
@@ -25,17 +26,23 @@ const DialogTitle: React.FunctionComponent<Props> = ({
   userInfo,
   setUserInfo,
   setUsernameError,
-  isUsernameEmpty,
+  usernameError,
 }) => {
   const classes = styles();
 
-  const handleNameChange = (event: React.ChangeEvent<{ value: string }>) => {
-    if (isEmpty(event.target.value)) {
-      setUsernameError(true);
-      return;
+  const handleNameChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const value = event.target.value;
+
+    if (isEmpty(value)) {
+      return setUsernameError("validator.user.name.required");
     }
-    setUserInfo({ ...userInfo, name: event.target.value });
-    setUsernameError(false);
+
+    if (value.length > MAX_NAME_LENGTH) {
+      return setUsernameError("validator.user.name.length");
+    }
+
+    setUserInfo({ ...userInfo, name: value });
+    setUsernameError(null);
   };
 
   const userNameRenderer = (name: string) => (
@@ -46,12 +53,12 @@ const DialogTitle: React.FunctionComponent<Props> = ({
 
   const editUserNameRenderer = (name: string) => (
     <TextField
-      error={isUsernameEmpty}
+      error={Boolean(usernameError)}
       defaultValue={name}
       onChange={handleNameChange}
       className={classes.userNameEdit}
       id="DialogTitle-nameEdit"
-      helperText={isUsernameEmpty ? <Text translation="validator.user.name.required"/> : ""}
+      helperText={usernameError && <Text translation={usernameError} />}
     />
   );
   return (

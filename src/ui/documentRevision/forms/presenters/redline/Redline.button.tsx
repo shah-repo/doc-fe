@@ -1,34 +1,65 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
+import { SM } from "../../../../../App";
+import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
+import { StyledMenuListIcon } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListIcon";
+import { StyledMenuListItem } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
+import { StyledMenuListItemText } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
+import { ReactComponent as RedlineIcon } from "../../../../../assets/images/redline.svg";
 import { companyActions } from "../../../../../state/ducks/company";
 import Text from "../../../../components/Text";
-import { FB } from "../../../../form.builder";
 
 interface Props {
   isUserDocumentOwner: boolean;
   docTypeHasRedline: boolean;
   isLHRProductionBuild: boolean;
+  renderAsButton?: boolean;
 }
 
 const RedlineButton: React.FunctionComponent<Props> = ({
   isUserDocumentOwner,
   docTypeHasRedline,
   isLHRProductionBuild,
+  renderAsButton,
 }) => {
-  const { workspaceState } = FB.useStores();
+  const isNewLayout = SM.isNewLayout;
+  const { _formState } = SM.useStores();
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    workspaceState?.setMode("formDesign");
+    _formState?.setMode("formDesign");
     dispatch(companyActions.redlineConfig(true));
     dispatch(companyActions.autosaveConfig());
+    _formState?.setDirty(true);
   };
 
   if (!isUserDocumentOwner || !docTypeHasRedline || isLHRProductionBuild) {
     return null;
   }
-
+  if (isNewLayout) {
+    if (!renderAsButton) {
+      return <StyledMenuListItem button alignItems="flex-start">
+        <StyledMenuListIcon><RedlineIcon/></StyledMenuListIcon>
+        <StyledMenuListItemText
+          data-cy="redlineButton"
+          onClick={() => handleClick()}
+          id="Redline"
+          primary={ <Text translation="common.redline" />}
+        />
+      </StyledMenuListItem>;
+    }
+    return (
+      <StyledButton
+        color="primary"
+        data-cy="redlineButton"
+        onClick={() => handleClick()}
+        id="Redline"
+      >
+        <Text translation="common.redline" />
+      </StyledButton>
+    );
+  }
   return (
     <>
       <Button

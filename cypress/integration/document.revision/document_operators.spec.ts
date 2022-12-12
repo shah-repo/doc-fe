@@ -1,8 +1,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
+import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../support/config";
 import { CyRoutes } from "../../support/routes";
+import { Categories } from "../../utils/constants/categories";
+import { FormOperatorsType } from "../../utils/constants/documentTypes/form";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -38,17 +42,12 @@ context("Document Operators Access Test", () => {
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
-              {
-                documentTypeName: "Form Operators",
-                documentTypeAcronym: "FO-",
-                group: "FORM",
-                isQms: true,
-              },
+              FormOperatorsType,
               {
                 documentTypeName: "Engineering Build Operators",
                 documentTypeAcronym: "EBO-",
-                group: "ENGINEERING_BUILD",
-                category: "Record",
+                group: DOC_TYPE_GROUP.ENGINEERING_BUILD,
+                category: Categories.Record,
                 isQms: true,
                 fieldsConfig:
                   {
@@ -62,10 +61,10 @@ context("Document Operators Access Test", () => {
               {
                 documentTypeName: "Part Operators",
                 documentTypeAcronym: "PRT-",
-                group: "PART",
+                group: DOC_TYPE_GROUP.PART,
                 isQms: true,
                 needsSignature: true,
-                category: "Parts",
+                category: Categories.Parts,
               },
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
@@ -159,6 +158,7 @@ context("Document Operators Access Test", () => {
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.wait(2000);
     });
   });
 
@@ -195,14 +195,12 @@ context("Document Operators Access Test", () => {
 
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithApiCall();
-
     });
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
   });
-
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
@@ -225,12 +223,16 @@ context("Document Operators Access Test", () => {
       cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Test Part");
     });
 
+    it("clicks on 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Click on 'Add a field'", () => {
       cy.fbAddNewFieldWhenHidden();
     });
 
     it("Select 'Text Field' field", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field'", () => {
@@ -246,7 +248,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Select 'Text Field' field", () => {
-      cy.fbSelectTextField();
+      cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
     });
 
     it("Give label to 'Text Field' as 'New Text Field'", () => {
@@ -270,11 +272,16 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click on sidebar permission icon to add Operators", () => {
-      cy.get("[data-cy='permission-icon']").arrowClick();
+      cy.drSelectPermissionTab();
     });
 
     it(`Select '${USERS[3].name}' to Assign document to`, () => {
       cy.drAssignDocumentTo({ username: USERS[3].name });
+    });
+
+    it("Click on sidebar permission icon to add Operators", () => {
+      cy.wait(5000);
+      cy.drSelectPermissionTab();
     });
 
     it(`Select '${USERS[4].name}' to Assign document to`, () => {
@@ -303,7 +310,8 @@ context("Document Operators Access Test", () => {
     });
 
     it("Check if Title input field is disabled", () => {
-      cy.get("[value='New Document']input").should("be.disabled");
+      cy.get("[data-cy=\"field-name\"]").arrowClick();
+      cy.get("input[value=\"New Document\"]").should("be.disabled");
     });
 
     it("Check if Description input field is disabled", () => {
@@ -341,7 +349,6 @@ context("Document Operators Access Test", () => {
       cy.authLoginToDashboard({ USER: USERS[4], employeeId: employeeLoginFourth.id });
     });
   });
-
 
   context(`Fill textbox field with operator '${USERS[4].name}'`, () => {
     it("Navigates to records", () => {
@@ -471,7 +478,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("Verify status is released", () => {
-      cy.drCheckDocumentStatus({ status: "Released" });
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
 });
