@@ -6,7 +6,9 @@ import { DocumentRevision, RevisionChangeType } from "../../state/ducks/document
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import FBStore from "../form.builder/FBStore/FBStore";
 import useAsync from "../hooks/useAsync";
+import { checkIsDocumentPO } from "./../../ui/documentRevision/helpers/checkDocumentGroup";
 import { DocumentCloneType } from "./Clone.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionFormValuesForOutput, toDocumentRevisionFormValuesWithRevisionChange, toNewVersionRequestBody } from "./forms/transform";
@@ -95,9 +97,13 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
       }
     },
   });
-
+  const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    async.start(create, toNewVersionRequestBody(values), async);
+    const payload = toNewVersionRequestBody(values);
+    if (isPO && values.revisionChangeType === RevisionChangeType.NextRevision) {
+      FBStore.typeChangeBeforeApprovals = documentRevision?.approvals;
+    }
+    async.start(create, payload, async);
   };
 
   const showRevisionTypeChange = type === "newVersion" && !!documentRevision;

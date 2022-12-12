@@ -9,6 +9,7 @@ import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
+import FBStore from "../FBStore/FBStore";
 import { usePoApprovals } from "./hooks";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
@@ -93,7 +94,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         if (employeesToBeRemoved.length > 0) {
           removeApprover(employeesToBeRemoved);
         }
-
+        if (FBStore?.typeChangeBeforeApprovals.length) {
+          const ApproverIDs: string[] = map(FBStore?.typeChangeBeforeApprovals, "approver.id");
+          if (ApproverIDs.length > 0) {
+            addApprover(ApproverIDs, { manually: true });
+            FBStore.typeChangeBeforeApprovals = [];
+          }
+        }
         formState?.getInputState(name)?.setRender();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
