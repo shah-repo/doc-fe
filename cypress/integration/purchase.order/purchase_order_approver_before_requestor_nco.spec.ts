@@ -981,7 +981,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
   context(`Verify that approver is added only once in the approvals field`, () => {
     it("Verify approvals is added only once in approval block", () => {
-      cy.get("[data-tag-index='0']>span>div").should("have.length", 1);
+      cy.get("[data-tag-index='1']>span>div").should("not.exist");
       cy.get("[data-tag-index='0']>span>div").should("contain.text", `${USERS[1].name} - ${USERS[1].email} `);
     });
   });
@@ -1197,7 +1197,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
   context("Navigate to Approval block and verify that approver is added only once in the approvals field", () => {
     it("Verify approvals is added only once in approval block", () => {
-      cy.get("[data-tag-index='0']>span>div").should("have.length", 1);
+      cy.get("[data-tag-index='1']>span>div").should("not.exist");
       cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[2].name} - ${USERS[2].email} `);
     });
   });
