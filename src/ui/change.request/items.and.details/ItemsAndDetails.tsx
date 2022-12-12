@@ -67,11 +67,10 @@ const ItemsAndDetails: React.FunctionComponent<{
   const { itemsAndDetailsStore } = useItemsAndDetailsStore();
 
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
-  const [showButton, setShowButton] = useState(true);
 
   const showEditRow = () => {
     setIsEditRowVisible(true);
-    setShowButton(false);
+    itemsAndDetailsStore.setViewItemActionsVisibility(false);
   };
 
   function disabledOptions(): string[] {
@@ -81,20 +80,19 @@ const ItemsAndDetails: React.FunctionComponent<{
   function resetAndCancelEdit() {
     formState.reset();
     setIsEditRowVisible(false);
-    setShowButton(true);
+    itemsAndDetailsStore.setViewItemActionsVisibility(true);
   }
 
   function addRevisionToChangeRequest() {
     setIsEditRowVisible(false);
-    setShowButton(true);
     handleAdd();
   }
 
   return useObserver(() => (
-    <div className={classes.fullWidth}>
-      <TopSection showEditRow={showEditRow} showButton={showButton}/>
+    <div className={classes.tabContent}>
+      <TopSection showEditRow={showEditRow} showButton={itemsAndDetailsStore.viewItemActionsVisible}/>
       <ChangeOrderGridHeader />
-      { isEditRowVisible &&  <ChangeOrderEditGridItem
+      { isEditRowVisible && <ChangeOrderEditGridItem
         {...{ formState }}
         disabledOptions={disabledOptions()}
         addRevisionToChangeRequest={addRevisionToChangeRequest}
@@ -109,6 +107,7 @@ const ItemsAndDetails: React.FunctionComponent<{
             disabledOptions={disabledOptions}
             handleRemove = {handleRemove}
             handleUpdate = {handleUpdate}
+            viewItemActionsVisible = {itemsAndDetailsStore.viewItemActionsVisible}
           />
         ))
       }

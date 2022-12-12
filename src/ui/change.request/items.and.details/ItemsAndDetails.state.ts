@@ -5,6 +5,8 @@ import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
 
 class ItemsAndDetailsStore {
   @observable changeOrderItemsList: ChangeOrderGridItem[] = [];
+  @observable viewItemActionsVisible = true;
+  @observable loadingState = true;
 
   @action setChangeOrderItemsList(list: ChangeOrderGridItem[]) {
     set(this, "changeOrderItemsList", list);
@@ -12,6 +14,14 @@ class ItemsAndDetailsStore {
 
   @action add(item: ChangeOrderGridItem) {
     this.setChangeOrderItemsList(union(this.changeOrderItemsList || [], [item]));
+  }
+
+  @action setViewItemActionsVisibility(isVisible = true) {
+    set(this, "viewItemActionsVisible", isVisible);
+  }
+
+  @action setLoadingState(isVisible = false) {
+    set(this, "loadingState", isVisible);
   }
 }
 

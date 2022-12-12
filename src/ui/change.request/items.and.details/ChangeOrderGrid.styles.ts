@@ -14,6 +14,10 @@ export default makeStyles((theme) =>
     fullWidth: {
       width: "100%",
     },
+    tabContent: {
+      width: "100%",
+      marginBottom: theme.spacing(3),
+    },
     titleHeading: {
       marginRight: theme.spacing(1.25),
       display: "inline-block",

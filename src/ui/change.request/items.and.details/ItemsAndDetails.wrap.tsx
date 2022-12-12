@@ -83,6 +83,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     if (autosave) {
       submitForm();
     }
+
+    itemsAndDetailsStore.setViewItemActionsVisibility(true);
   };
 
   React.useEffect(() => {

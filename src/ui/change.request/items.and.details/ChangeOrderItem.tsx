@@ -1,7 +1,10 @@
+/* eslint-disable no-console */
+import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { FBFormState } from "../../form.builder";
 import ChangeOrderEditGridItem from "./ChangeOrderEditGridItem";
 import ChangeOrderViewGridItem from "./ChangeOrderViewGridItem";
+import { useItemsAndDetailsStore } from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
 
 const ChangeOrderItem: React.FunctionComponent<{
@@ -10,18 +13,22 @@ const ChangeOrderItem: React.FunctionComponent<{
   disabledOptions: () => string[];
   handleRemove: (docRevId: string) => void;
   handleUpdate: () => void;
+  viewItemActionsVisible: boolean;
 }> = ({
   entry,
   formState,
   disabledOptions,
   handleRemove,
   handleUpdate,
+  viewItemActionsVisible,
 }) => {
 
   const [editMode, setEditMode] = useState(false);
+  const { itemsAndDetailsStore } = useItemsAndDetailsStore();
 
   function resetAndCancelEdit() {
     setEditMode(false);
+    itemsAndDetailsStore.setViewItemActionsVisibility(true);
   }
 
   function addRevisionToChangeRequest() {
@@ -39,9 +46,10 @@ const ChangeOrderItem: React.FunctionComponent<{
       formState.setFieldValue(item.key, item.value);
     });
     setEditMode(true);
+    itemsAndDetailsStore.setViewItemActionsVisibility(false);
   }
 
-  return (
+  return useObserver(() => (
     <>
       {
         editMode &&
@@ -58,9 +66,10 @@ const ChangeOrderItem: React.FunctionComponent<{
           entry={entry}
           editItem={editItem}
           handleRemove={handleRemove}
+          viewItemActionsVisible={viewItemActionsVisible}
         /> }
     </>
-  );
+  ));
 };
 
 export default ChangeOrderItem;

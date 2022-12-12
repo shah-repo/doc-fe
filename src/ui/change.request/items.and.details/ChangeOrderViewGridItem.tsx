@@ -21,10 +21,12 @@ const ChangeOrderViewGridItem: React.FunctionComponent<{
   entry: ChangeOrderGridItem;
   editItem: () => void;
   handleRemove: (docRevId: string) => void;
+  viewItemActionsVisible: boolean;
 }> = ({
   entry,
   editItem,
   handleRemove,
+  viewItemActionsVisible,
 }) => {
   const classes = useStyles();
   const {
@@ -127,7 +129,7 @@ const ChangeOrderViewGridItem: React.FunctionComponent<{
           </ul>
         </div>
       }
-      <div className={cx(classes.actionButtonChildDiv, "actionBtnClass")}>
+      { viewItemActionsVisible && <div className={cx(classes.actionButtonChildDiv, "actionBtnClass")}>
         <Button className={cx(classes.actionButton, classes.actionButtonDelete)}>
           <DeleteIcon className={classes.iconButton}
             onClick={() => handleRemove(docRevId)}/>
@@ -135,7 +137,7 @@ const ChangeOrderViewGridItem: React.FunctionComponent<{
         <Button className={classes.actionButton}>
           <EditIcon className={classes.iconButton} onClick={editItem}/>
         </Button>
-      </div>
+      </div> }
     </div>
   );
 };
