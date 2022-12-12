@@ -94,11 +94,11 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         if (employeesToBeRemoved.length > 0) {
           removeApprover(employeesToBeRemoved);
         }
-        if (FBStore?.typeChangeBeforeApprovals.length) {
-          const ApproverIDs: string[] = map(FBStore?.typeChangeBeforeApprovals, "approver.id");
+        if (FBStore?.revChangeBeforeApprovals?.length) {
+          const ApproverIDs: string[] = map(FBStore?.revChangeBeforeApprovals, "approver.id");
           if (ApproverIDs.length > 0) {
             addApprover(ApproverIDs, { manually: true });
-            FBStore.typeChangeBeforeApprovals = [];
+            FBStore.revChangeBeforeApprovals = [];
           }
         }
         formState?.getInputState(name)?.setRender();
