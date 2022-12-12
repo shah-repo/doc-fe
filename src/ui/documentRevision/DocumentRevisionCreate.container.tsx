@@ -99,11 +99,10 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   });
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    const payload = toNewVersionRequestBody(values);
     if (isPO && values.revisionChangeType === RevisionChangeType.NextRevision) {
       FBStore.typeChangeBeforeApprovals = documentRevision?.approvals;
     }
-    async.start(create, payload, async);
+    async.start(create, toNewVersionRequestBody(values), async);
   };
 
   const showRevisionTypeChange = type === "newVersion" && !!documentRevision;
