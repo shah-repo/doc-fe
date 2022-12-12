@@ -131,7 +131,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                     {map(tabConfig, (tabInfo: TabInfo) => {
                       const tabType = tabInfo.type;
                       const { tabId } = tabInfo || {};
-                      const tabSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId);
                       const availableSchema = schema?.filter((schemaItem) =>
                         schemaItem.tabId === tabId && !schemaItem.deleted);
 
@@ -146,7 +145,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             {!isEmpty(availableSchema) && <FBWorkspace
                               document={documentRevision}
                               initialValues={documentRevision.formInput}
-                              schema={tabSchema}
+                              schema={schema}
                               mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
                                 FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                             />
@@ -179,7 +178,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                               <FBWorkspace
                                 document={documentRevision}
                                 initialValues={documentRevision.formInput}
-                                schema={tabSchema}
+                                schema={schema}
                                 mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
                                   FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                               />
