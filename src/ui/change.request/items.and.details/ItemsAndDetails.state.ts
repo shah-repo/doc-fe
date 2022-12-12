@@ -6,7 +6,7 @@ import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
 class ItemsAndDetailsStore {
   @observable changeOrderItemsList: ChangeOrderGridItem[] = [];
   @observable viewItemActionsVisible = true;
-  @observable loadingState = true;
+  @observable loadingState = false;
 
   @action setChangeOrderItemsList(list: ChangeOrderGridItem[]) {
     set(this, "changeOrderItemsList", list);

@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import { cloneDeep, map } from "lodash";
 import { useObserver } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { AsyncStatus } from "../../../state/types";
 import { useFormContext } from "../../components/forms/FormContext";
 import { FB, FBForm, FBFormState } from "../../form.builder";
 import { generateDocTitleText, storeDataToFormData } from "./helpers";
@@ -18,6 +19,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   name,
   autosave,
   mode,
+  asyncState,
 }) => {
 
   const { formState: parentFormState } = FB.useStores();
@@ -27,6 +29,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
 
   const formState = FB.useRef(FBFormState, {});
   console.log(formState, formState?.getValues());
+
+  console.log(asyncState);
 
   const { submitForm } = useFormContext();
 
@@ -76,6 +80,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   };
 
   const submitData = (dataToSend) => {
+    itemsAndDetailsStore.setLoadingState(true);
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
     // Submit the form - and once that returns, add this item to the store
     // itemsAndDetailsStore.add(formValue);
@@ -83,9 +88,18 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     if (autosave) {
       submitForm();
     }
-
-    itemsAndDetailsStore.setViewItemActionsVisibility(true);
   };
+
+  useEffect(() => {
+    if ((asyncState.status === AsyncStatus.Success ||
+      asyncState.status === AsyncStatus.Error)) {
+      // i.e. processing completed
+      console.log("Processing Complete");
+      itemsAndDetailsStore.setLoadingState(false);
+      itemsAndDetailsStore.setViewItemActionsVisibility(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [asyncState.status]);
 
   React.useEffect(() => {
     processChangeRequest();
@@ -141,6 +155,7 @@ const ItemsAndDetailsWrapper: React.FunctionComponent<ItemsAndDetailsWrapperProp
   initialValues,
   autosave,
   mode,
+  asyncState,
 }) => (
   <ItemsAndDetailsStoreContext.Provider value={itemsAndDetailsStore}>
     <FBForm {...{ initialValues }}>
@@ -150,6 +165,7 @@ const ItemsAndDetailsWrapper: React.FunctionComponent<ItemsAndDetailsWrapperProp
         autosave={autosave}
         initialValues={initialValues}
         mode={mode}
+        asyncState={asyncState}
       />
     </FBForm>
   </ItemsAndDetailsStoreContext.Provider>

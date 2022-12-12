@@ -18,6 +18,10 @@ export default makeStyles((theme) =>
       width: "100%",
       marginBottom: theme.spacing(3),
     },
+    tabContentInactive: {
+      opacity: .5,
+      pointerEvents: "none",
+    },
     titleHeading: {
       marginRight: theme.spacing(1.25),
       display: "inline-block",

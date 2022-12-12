@@ -1,5 +1,6 @@
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
+import { AsyncActionPayload } from "../../../state/types";
 import { FBFormProps, FBWorkspaceMode } from "../../form.builder";
 
 export interface FBDocumentRevisionResponse {
@@ -42,4 +43,5 @@ export interface ItemsAndDetailsWrapperProps {
   initialValues: Pick<FBFormProps, "initialValues">;
   autosave: boolean;
   mode: FBWorkspaceMode;
+  asyncState: AsyncActionPayload;
 }

@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { Button, Divider, Grid, Typography } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import cx from "classnames";
 import { map } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
@@ -12,7 +13,6 @@ import ChangeOrderGridHeader from "./ChangeOrderGridHeader";
 import ChangeOrderItem from "./ChangeOrderItem";
 import { useItemsAndDetailsStore } from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
-
 
 const TopSection: React.FunctionComponent<{
   showButton?: boolean;
@@ -89,7 +89,9 @@ const ItemsAndDetails: React.FunctionComponent<{
   }
 
   return useObserver(() => (
-    <div className={classes.tabContent}>
+    <div className={cx(classes.tabContent, {
+      [classes.tabContentInactive]: itemsAndDetailsStore.loadingState,
+    })}>
       <TopSection showEditRow={showEditRow} showButton={itemsAndDetailsStore.viewItemActionsVisible}/>
       <ChangeOrderGridHeader />
       { isEditRowVisible && <ChangeOrderEditGridItem
