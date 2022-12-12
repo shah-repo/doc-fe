@@ -4,6 +4,7 @@ import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomB
 import { toastError } from "../../components/notifications";
 import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import DocumentPreview from "../../documentRevision/forms/presenters/FBActiveNoOutput/components/DocumentPreview";
+import useStyles from "./FBWorkspaceBottomBar.styles";
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   Component: React.FunctionComponent<T>,
@@ -16,7 +17,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
     includeTransport,
     ...props
   }: T) => {
-
+    const classes = useStyles();
     const { workspaceState, dialogState } = FB.useStores();
     previewDisabled = !(
       workspaceState?.mode === "formPreview" ||
@@ -104,6 +105,9 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
         open: true,
         maxWidth: "md",
         title: "form.builder.form.preview",
+        classes: {
+          paper: classes.previewDialog,
+        },
         content: (
           <DocumentPreview docRevId={workspaceState?.id} />
         ),
