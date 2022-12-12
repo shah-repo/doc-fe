@@ -117,6 +117,10 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       (outputDocumentType === DOC_TYPE_GROUP.LHR || outputDocumentType === "Lot History Record")
     && (props.name === "lhr-selected-part" || props.name === "lhrstep-built-in")) {
       return false; }
+
+    if (documentType === DOC_TYPE_GROUP.PART && !props.showErrorMsg) {
+      return props.showErrorMsg;
+    }
     return true;
   };
 

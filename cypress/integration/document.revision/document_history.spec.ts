@@ -11,7 +11,6 @@ let createdCompany;
 let loginResponse;
 let employeeLoginOwner;
 let employeeLoginShared;
-let reduceIndex = false;
 const owner = USERS[2].name;
 const sharedUser = USERS[1];
 const sharedUserTwo = USERS[3];
@@ -61,8 +60,25 @@ const history = [
   {
     owner,
     actions: [
-      { key: "Description changed", value: "Description Edited" },
       { key: "Attachments removed", value: "test_image.jpg" },
+    ],
+  },
+  {
+    owner,
+    actions: [
+      { key: "Attachment added", value: "test_image.jpg" },
+    ],
+  },
+  {
+    owner,
+    actions: [
+      { key: "Reference removed", value: reference.valueCode },
+    ],
+  },
+  {
+    owner,
+    actions: [
+      { key: "New reference to", value: reference.valueCode },
     ],
   },
   {
@@ -80,25 +96,13 @@ const history = [
   {
     owner,
     actions: [
-      { key: "Attachment added", value: "test_image.jpg" },
-    ],
-  },
-  {
-    owner,
-    actions: [
-      { key: "New reference to", value: reference.valueCode },
-    ],
-  },
-  {
-    owner,
-    actions: [
       { key: "New description", value: `${formDescription.value}` },
       { key: "New Doc ID", value: documentId.fullId },
-      { key: "New name", value: formTitle.value },
       { key: "New owner", value: `${owner}` },
+      { key: "New name", value: formTitle.value },
       { key: "Access granted to user", value: sharedUser.name },
-      { key: "Access granted to group", value: groupOne },
       { key: "Access granted to group", value: "Everyone" },
+      { key: "Access granted to group", value: groupOne },
       { key: "New status", value: `Set to Draft by ${owner}` },
     ],
   },
@@ -127,9 +131,9 @@ context("Check Document History", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[2].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[1], USERS[3], USERS[4]],
             documentTypes: [
               ClinicalProtocolDocType,
             ],
@@ -199,7 +203,6 @@ context("Check Document History", () => {
     });
 
     it("fill in output document type: Clinical Protocol, Component Specification", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.drSelectOutputDocumentType({ documentType: "Component Specification" });
     });
 
@@ -216,15 +219,6 @@ context("Check Document History", () => {
   });
 
   context("Edit document attributes", () => {
-    it("Select reference for document", () => {
-      cy.wait(2000);
-      cy.drSelectReferences( reference.value );
-    });
-
-    it("Uploads test_image.jpg", () => {
-      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-    });
-
     it("edit the title", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
         cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
@@ -239,13 +233,38 @@ context("Check Document History", () => {
       cy.progressBarShouldNotExist();
     });
 
-    it("Remove reference for document", () => {
-      cy.drRemoveReferences({ reference: "FM-00001" });
+
+    it("Select reference for document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drSelectReferences( reference.value );
+      });
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+
+    it("Remove reference for document", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.contains(reference.valueCode).arrowClick();
+        cy.contains(reference.valueCode).parent().parent().parent().find("svg").arrowClick({ force: true });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Unmark 'Training Required'", () => {
-      cy.drClickTrainingRequired();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drClickTrainingRequired();
+      });
+    });
+
+    it("Uploads test_image.jpg", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Remove attachment test_image.jpg", () => {
@@ -253,17 +272,15 @@ context("Check Document History", () => {
         cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
       });
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload test.docx", () => {
-      cy.atchUploadAttachment({ fileName: "test.docx" });
-    });
-
-    it("add another output document type: Lots", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.drSelectOutputDocumentType({ documentType: "Lots" });
-        });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.atchUploadAttachment({ fileName: "test.docx" });
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -303,14 +320,14 @@ context("Check Document History", () => {
 
     it("Add another user permission", () => {
       SystemRequirement("REQ-4240");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity, CyRoutes.GetFieldLocks], () => {
         cy.drAddUserFromPermissionTab(sharedUserTwo.name);
       });
     });
 
     it("Add another group permission", () => {
       SystemRequirement("REQ-4240");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity, CyRoutes.GetFieldLocks], () => {
         cy.drAddGroupFromPermissionTab(groupTwo);
       });
     });
@@ -340,7 +357,7 @@ context("Check Document History", () => {
     });
 
     it(`select '${formTitle.newValue}'`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
         cy.get("#root").contains(formTitle.newValue).arrowClick();
       });
     });
@@ -356,59 +373,44 @@ context("Check Document History", () => {
   context("Check document history", () => {
     it("Open history drawer and compare history values", () => {
       SystemRequirement("REQ-0360", "REQ-2670", "REQ-4000", "REQ-4250");
-      cy.drSelectHistoryTab();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+        cy.drSelectHistoryTab();
+      });
     });
 
     history.forEach((element, groupIndex) => {
       it(`Check owner name for group ${groupIndex + 1}`, () => {
-        if (groupIndex > 9) {
-          cy.get(`[data-cy="change-key-${groupIndex - 1}"]`).should("have.text", element.owner);
-        } else {
-          cy.get(`[data-cy="change-key-${groupIndex}"]`).should("have.text", element.owner);
-        }
+        cy.get(`[data-cy="user-name"]`).find(`[data-cy="change-key-${groupIndex}"]`)
+          .should("have.text", element.owner);
       });
-      reduceIndex = false;
-      element.actions.forEach((action, index, identifier) => {
+
+      element.actions.forEach((action) => {
         it(`'${action.key}' as '${action.value}' exists`, () => {
           const typeOfChange = action.key;
           let contentOfChange = action.value;
           if (action.key === "New description" || action.key === "Description changed" ) {
-            contentOfChange = "\n" + action.value + "\n";
+            contentOfChange = action.value;
           }
 
           if (typeOfChange === "s3Link added") {
-            cy.get(`[data-cy^="change-key-${groupIndex}-${index}"]`).should("have.text", typeOfChange);
-            cy.get("[data-cy='downloadS3link']").should("contain.text", contentOfChange);
+            cy.get(`[data-cy^="change-key-${groupIndex}-"]`).should("have.text", typeOfChange);
+            cy.get(`[data-cy="downloadS3link"]`).should("have.text", contentOfChange);
           }
           else {
-            if (action.key === "Access granted to group") {
-              let grpIndex = groupIndex;
-              if (groupIndex > 9) { grpIndex = groupIndex - 1; }
-              cy.get(`[data-cy^="change-value-${grpIndex}-${index}"]`).should(($identifier) =>  {
-                expect($identifier.text()).to.be.oneOf([groupOne, groupTwo, "Everyone"]);
+            cy.get(`[data-cy^="change-value-${groupIndex}-"]`)
+              .contains(action.key === "New owner" ? new RegExp("^" + action.value + "$", "g") : action.value)
+              .parent()
+              .parent()
+              .within(() => {
+                cy.get("[data-cy^=change-key]").should("have.text", typeOfChange);
+                cy.get("[data-cy^=change-value]").should("contain.text", contentOfChange);
               });
-            }
-            else {
-              let grpIndex = groupIndex;
-              if (reduceIndex && action.key !== "Attachments removed") {
-                grpIndex = groupIndex - 1;
-              }
-              cy.get(`[data-cy^="change-value-${grpIndex}-${index}"]`)
-                .contains(action.key === "New owner" ? new RegExp("^" + action.value) : action.value)
-                .parent()
-                .parent()
-                .within(() => {
-                  cy.get(`[data-cy^=change-key-${grpIndex}-${index}]`).should("have.text", typeOfChange);
-                  cy.get(`[data-cy^=change-value-${grpIndex}-${index}]`).should("contain.text", contentOfChange);
-                });
-              if (action.value === "Description Edited") {
-                reduceIndex = true;
-                return;
-              }
-            }
           }
         });
       });
     });
   });
 });
+
+export { };
+

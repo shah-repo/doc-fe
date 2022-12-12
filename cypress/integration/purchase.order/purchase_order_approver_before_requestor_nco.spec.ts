@@ -1094,7 +1094,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
       it("Verify approvers", () => {
         cy.get("[data-tag-index='1']>span>div").should("have.length", 1);
       });
-      cy.get("[data-tag-index='1']>span>div")
+      cy.get("[class=\"MuiChip-root MuiAutocomplete-tag Mui-disabled MuiChip-deletable\"]")
         .should("contain.text", "Harry Bartoletti - enlil.testmail+cy2@gmail.com");
     });
   });
@@ -1263,7 +1263,7 @@ context(`Sign-out as ${USERS[1].name} and to sign-in as ${USERS[2].name} and rel
     cy.wrapWithWaitOnApiCalls(
       [CyRoutes.PostDashboardFeedSearch], () => {
         cy.contains("needs your approval for").trigger("mouseover").wait(500);
-        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick().wait(500);
         cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
         cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       });

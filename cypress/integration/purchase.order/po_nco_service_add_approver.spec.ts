@@ -743,6 +743,7 @@ context("Add Requestor as an approver of the PO", () => {
     it(`Select '${USERS[11].name}' for Requestor`, () => {
       cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[11].name} - ${USERS[11].email}`);
       cy.unClick();
+      cy.wait(8000);
     });
 
     it(`Verify 'The requestor field is required field' is disappeared`, () => {
@@ -852,12 +853,12 @@ context("Add Requestor as an approver of the PO", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
         cy.drSelectHistoryTab();
       });
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Added")
+      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(1).should("contain", "Requestor Added")
         .and("contain", USERS[11].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0)
+      cy.get(`[data-cy="no-padding-margin"]`).eq(0)
         .should("contain", "Approver Added").should("contain", USERS[11].name);
     });
   });
@@ -942,7 +943,7 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify that history tab is capturing requestor Deleted and approver Removed", () => {
     it("Check history entry for 'Requestor Deleted'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0).should("contain", "Requestor  Deleted")
+      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(0).should("contain", "Requestor  Deleted")
         .and("contain", USERS[12].name);
     });
   });
@@ -965,13 +966,16 @@ context("Add Requestor as an approver of the PO", () => {
   });
 
   context("Verify that history tab is capturing requestor Updated and approver Added", () => {
+
     it("Check history entry for 'Requestor Updated'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Updated")
-        .and("contain", USERS[12].name);
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
+        .should("exist");
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[12].name)
+        .should("exist");
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0).should("contain", "Approver Added")
+      cy.get(`[data-cy="no-padding-margin"]`).eq(0).should("contain", "Approver Added")
         .should("contain", USERS[12].name);
     });
   });
@@ -1339,12 +1343,15 @@ context("Add Requestor as an approver of the PO", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
         cy.drSelectHistoryTab();
       });
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(1).should("contain", "Requestor Updated")
-        .and("contain", USERS[11].name);
+
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
+        .should("exist");
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[11].name)
+        .should("exist");
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[class*="makeStyles-noPaddingMargin"]`).eq(0)
+      cy.get(`[data-cy="no-padding-margin"]`).eq(0)
         .should("contain", "Approver Added").should("contain", USERS[11].name);
     });
   });
@@ -1448,6 +1455,7 @@ context("Add Requestor as an approver of the PO", () => {
 
     it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Accept Approval Request with password prompt", () => {

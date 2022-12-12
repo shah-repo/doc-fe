@@ -71,7 +71,7 @@ export const withFBAutocomplete = <T extends FBAutocompleteProps>(
         key: () => {
           const slicedValue = sliceValue(formValue);
 
-          if (isEmpty(slicedValue)) {
+          if (isEmpty(slicedValue) && freeSolo) {
             return formValue;
           }
 
