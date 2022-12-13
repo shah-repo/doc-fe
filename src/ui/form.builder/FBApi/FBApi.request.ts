@@ -72,7 +72,9 @@ export default class FBRequest<Data, Body> {
     url && this.setUrl(url);
     urlValues && this.setUrl(urlValues);
     body && this.setBody(body);
-    method && this.start(method, callback);
+    if (method) {
+      return this.start(method, callback);
+    }
   };
 
   public onSuccess() {

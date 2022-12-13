@@ -5,7 +5,6 @@
 import moment from "moment-timezone";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { FONT_SIZE_10, FONT_SIZE_12, FONT_SIZE_14, FONT_SIZE_16, FONT_WT_400, FONT_WT_600, FONT_WT_700, LINE_HT_13, LINE_HT_15, LINE_HT_15_12, LINE_HT_17_1419, LINE_HT_18, LINE_HT_19_2, LINE_HT_20, LINE_HT_20_02, LINE_HT_21, LINE_HT_24, LINE_HT_25_6, sora, soraSansserif, TEXT_TRANS_UPPER } from "../../utils/constants/fonts_constants";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -167,10 +166,14 @@ context("records_data_with_correct_font", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -189,6 +192,8 @@ context("records_data_with_correct_font", () => {
 
       it("Select 'Record Document' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Record one" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -196,11 +201,13 @@ context("records_data_with_correct_font", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Open details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Inline Approval", () => {
@@ -209,6 +216,9 @@ context("records_data_with_correct_font", () => {
         cy.listLoadingElementShouldNotExist();
         cy.fbEnterNameValue({ name: "label", value: "Inline Approval" });
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.fbAddNewFieldButton();
       });
 
@@ -221,6 +231,9 @@ context("records_data_with_correct_font", () => {
   context("Create record", () => {
     it("Navigate to records", () => {
       cy.navigToRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     context("Verify font for Landing page button", () => {
@@ -344,6 +357,9 @@ context("records_data_with_correct_font", () => {
     context("Fill in document attributes", () => {
       it("Click on create new and chose 'Record one'", () => {
         cy.recCreateRecordFromLandingPage();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it(`Verify the pop-up 'Choose a Record Type' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_600}`, () => {
@@ -364,6 +380,8 @@ context("records_data_with_correct_font", () => {
 
       it("Select'Record one' record type", () => {
         cy.recSelectRecordFormFromMultiSelect({ recordType: "Record one" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter title 'Record Document Revision'", () => {
@@ -373,30 +391,35 @@ context("records_data_with_correct_font", () => {
 
       it("Navigate to Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select approver for first inline", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name*=\"fb-ia-inline-approval-\"] input")
-              .autocompleteSelect(`${USERS[1].name}`, { force: true });
-          });
-      });
-
-      it("Click on Save", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[name*=\"fb-ia-inline-approval-\"] input")
+          .autocompleteSelect(`${USERS[1].name}`, { force: true });
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(5000);
       });
 
       it("Click on ‘Approve & Release’", () => {
         cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(1000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
         cy.get("[data-cy=\"AlertDialog-continueButton\"]").contains("Yes, I'm sure").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -479,10 +502,10 @@ context("records_data_with_correct_font", () => {
           });
       });
 
-      it(`Verify 'Set to Released by Giovanni Reynolds' font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
+      it(`Verify 'Set to Released by ${USERS[1].name} font-size ${FONT_SIZE_14} font-family ${sora} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
         cy.get(`[data-cy="change-value-0-0"]`)
           .checkStylePropExists({
-            content: "Set to Released by Giovanni Reynolds",
+            content: `Set to Released by ${USERS[1].name}`,
             props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
           });
       });
@@ -636,22 +659,22 @@ context("records_data_with_correct_font", () => {
     });
 
     context("Verify The details of each inline", () => {
-      it(`Verify the side bar 'Release Details' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_15_12} font-weight ${FONT_WT_600}`, () => {
+      it(`Verify the side bar 'Release Details' font-size ${FONT_SIZE_16} font-family ${soraSansserif} line-height ${LINE_HT_25_6} font-weight ${FONT_WT_600}`, () => {
         cy.checkStylePropExists({
           content: "Release Details",
-          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_25_6, "font-weight": FONT_WT_600 },
+          props: { "font-size": FONT_SIZE_16, "font-family": soraSansserif, "line-height": LINE_HT_25_6,   "font-weight": FONT_WT_600 },
         });
       });
 
-      it(`Verify the side bar 'Released by' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_400}`, () => {
+      it(`Verify the side bar 'Released by' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_20_02} font-weight ${FONT_WT_400}`, () => {
         cy.get(`[data-cy="releasedBy"]`)
           .checkStylePropExists({
-            content: "Released by: Giovanni Reynolds",
+            content: `Released by: ${USERS[1].name}`,
             props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_20_02, "font-weight": FONT_WT_400 },
           });
       });
 
-      it(`Verify the side bar 'Released Date' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_15} font-weight ${FONT_WT_400}`, () => {
+      it(`Verify the side bar 'Released Date' font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_20} font-weight ${FONT_WT_400}`, () => {
         const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
         cy.get(`[data-cy="releasedDate"]`)
           .checkStylePropExists({
