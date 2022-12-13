@@ -17,9 +17,11 @@ export default makeStyles((theme) =>
     tabContent: {
       width: "100%",
       marginBottom: theme.spacing(3),
+      opacity: 1,
+      transition: "opacity .2s ease-in",
     },
     tabContentInactive: {
-      opacity: .5,
+      opacity: .4,
       pointerEvents: "none",
     },
     titleHeading: {
