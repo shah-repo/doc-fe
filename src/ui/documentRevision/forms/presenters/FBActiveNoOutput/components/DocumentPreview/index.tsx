@@ -12,7 +12,7 @@ import { emptyFunction } from "../../../../../../../common/utils/helpers";
 import { authSelectors } from "../../../../../../../state/ducks/auth";
 import { documentTypeSelectors } from "../../../../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision, SmartReferenceType } from "../../../../../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from "../../../../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../../../../state/reducers";
 import { DocTypeGroups } from "../../../../../../dashboard.new/line.items/common/types";
 import AttachmentsField from "../../../../../../document.revision/form/attachments";
@@ -60,8 +60,13 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const docTypeId = documentRevision?.document?.documentType?.id as string;
   const documentType = documentTypesById[docTypeId];
   const docTypeGroup = get(documentType, "group", DOC_TYPE_GROUP.OTHER);
+  const templateOutputDocumentTypes = documentRevision?.formTemplate?.outputDocumentTypes?.[0] as FBOutputDocumentType;
 
-  const outputTypeId = documentRevision?.outputDocumentTypes?.value as string;
+  const outputTypeId = (
+    documentRevision?.outputDocumentTypes?.value
+    ?? documentRevision?.outputDocumentTypes?.[0]?.value
+    ?? templateOutputDocumentTypes?.id
+  ) as string;
   const outputType = documentTypesById[outputTypeId];
   const outputTypeGroup = get(outputType, "group");
 
@@ -242,8 +247,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 };
 
 const DocumentPreviewContainer: React.FunctionComponent<ContainerProps> = (props) => {
+  const { workspaceState } = FB.useStores();
+
   const formik = useFormikContext<DocumentRevisionFormValues>();
-  const initialValues = formik.values;
+  const initialValues = formik?.values ?? workspaceState?.document;
 
   return (
     <Formik

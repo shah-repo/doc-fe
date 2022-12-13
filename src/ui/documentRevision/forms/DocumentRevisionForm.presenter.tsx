@@ -2,7 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, get, includes, isEmpty } from "lodash";
 import { Observer, observer, useObserver } from "mobx-react";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { SM } from "../../../App";
@@ -191,8 +191,20 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   });
 
+  const prevMode = useRef<FBWorkspaceMode>();
+
   useEffect(() => {
+    if (workspaceState?.mode) {
+      prevMode.current = workspaceState?.mode;
+    }
+
     workspaceState?.setMode(mode);
+
+    return () => {
+      if (prevMode.current) {
+        workspaceState?.setMode(prevMode.current);
+      }
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
