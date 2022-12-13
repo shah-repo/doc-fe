@@ -460,7 +460,7 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click Cancel draft", () => {

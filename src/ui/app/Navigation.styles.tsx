@@ -31,7 +31,7 @@ export default (theme: Theme) =>
       color: theme.palette.common.white,
     },
     list: {
-      height: "72vh",
+      flexGrow: 1,
       overflow: "hidden",
       overflowY: "auto",
     },

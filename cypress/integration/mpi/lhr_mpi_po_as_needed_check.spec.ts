@@ -494,7 +494,8 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Save PO", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.wait(2000);
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Switch to Details tab", () => {
@@ -524,7 +525,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Click 'Approve' button", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });

@@ -491,10 +491,11 @@ context("LHRt using regular AR test", () => {
 
     it("Add first Approver'", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click on Save", () => {
-      cy.arSaveApiCall();
+    it("Capture current url", () => {
       cy.url().then((url: any) => { arUrl = url; });
     });
 
@@ -713,10 +714,11 @@ context("LHRt using regular AR test", () => {
 
     it("Add first Approver'", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
       cy.url().then((url: any) => { arUrl = url; });
     });
 

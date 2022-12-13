@@ -104,7 +104,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(groupOptions);
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
-  const isSubrevision = documentRevision?.subRevision as number > 0;
+  const isSubrevision = Boolean(documentRevision?.subRevision);
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
   const isRevised = values.outputRevision;
   const email = useSelector(authSelectors.currentUserEmail);
@@ -171,6 +171,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   useEffect(() => {
     if (revisionChangeType) {
       _documentRevisionFormState?.setDocumentRevisionChangeType(revisionChangeType);
+      workspaceState?.setDocumentRevisionChangeType(revisionChangeType);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revisionChangeType]);

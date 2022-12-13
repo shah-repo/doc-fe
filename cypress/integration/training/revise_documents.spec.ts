@@ -41,9 +41,9 @@ context("Revising Documents assigned as Training material", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -52,8 +52,8 @@ context("Revising Documents assigned as Training material", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -61,7 +61,7 @@ context("Revising Documents assigned as Training material", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -279,7 +279,7 @@ context("Revising Documents assigned as Training material", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -407,8 +407,8 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
       cy.wait(2000);
     });
 
@@ -417,7 +417,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Save training", () => {
@@ -439,7 +439,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
 
-    it(`Open and complete training for ${USERS[1].name}`, () => {
+    it(`Open and complete training for ${USERS[11].name}`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
       cy.trCompleteTraining();
     });
@@ -450,12 +450,12 @@ context("Revising Documents assigned as Training material", () => {
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
     });
 
-    it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[1].name });
+    it(`Training record for ${USERS[11].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
   });
@@ -506,29 +506,29 @@ context("Revising Documents assigned as Training material", () => {
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
     });
 
-    it(`Training record for ${USERS[1].name}`, () => {
-      cy.trLandingPageUsername({ username: USERS[1].name });
+    it(`Training record for ${USERS[11].name}`, () => {
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get(`[data-grid-row-index="1"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[1].name).and("contain", "Pending");
+        .and("contain", USERS[11].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 2);
       cy.trClearFilters();
     });
 
-    it(`Training record for ${USERS[2].name}`, () => {
-      cy.trLandingPageUsername({ username: USERS[2].name });
+    it(`Training record for ${USERS[12].name}`, () => {
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[2].name).and("contain", "Pending");
+        .and("contain", USERS[12].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
   });
 
-  context(`Verify training notification for ${USERS[1].name}`, () => {
+  context(`Verify training notification for ${USERS[11].name}`, () => {
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
     });
@@ -538,11 +538,11 @@ context("Revising Documents assigned as Training material", () => {
     });
   });
 
-  context(`Verify training notification for ${USERS[2].name}`, () => {
+  context(`Verify training notification for ${USERS[12].name}`, () => {
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[12].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
