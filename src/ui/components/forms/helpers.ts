@@ -1,4 +1,4 @@
-import { every, get, has, includes, isArray, isEmpty, isEqual, omit } from "lodash";
+import { get, has, isEmpty, isEqual, omit } from "lodash";
 import { toJS } from "mobx";
 
 const clearMobxObject = (value) => typeof value === "object" ?
@@ -54,9 +54,7 @@ const getFormInputDiff = (transformedValues, transformedInitialValues) => {
   for (const [key, value] of Object.entries(transformedValues.formInput || {})) {
     const initialValueToCompare = clearMobxObject(transformedInitialValues.formInput?.[key]);
     const valueToCompare = clearMobxObject(value);
-    if (
-      (!isEqual(valueToCompare, initialValueToCompare) && !isArray(valueToCompare))
-      || (isArray(valueToCompare) && !every(valueToCompare, (value) => includes(initialValueToCompare, value)))) {
+    if (!isEqual(valueToCompare, initialValueToCompare)) {
       formInputDiff[key] = valueToCompare;
     }
   }

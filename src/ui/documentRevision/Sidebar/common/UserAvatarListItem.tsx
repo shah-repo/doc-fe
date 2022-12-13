@@ -1,10 +1,11 @@
 import { Avatar, createStyles, ListItem, ListItemAvatar, ListItemText, makeStyles, Theme, Typography } from "@material-ui/core";
 import React from "react";
+import { useIntl } from "react-intl";
 import { User } from "../../../../state/ducks/common/types";
 import { getInitalsFromName } from "../../../components/icons/avatar/helpers";
 import Colors from "../../../layout/theme/utils/colors";
 
-const styles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     auditListItem: {
       margin: "0px",
@@ -44,7 +45,11 @@ const UserAvatarListItem: React.FunctionComponent<Props> = ({
   secondaryComponent,
   name,
 }) => {
-  const classes = styles({ initialColor: user?.initialColor });
+  const classes = useStyles({ initialColor: user?.initialColor });
+
+  const intl = useIntl();
+  const defaultName = intl.formatMessage({ id: "user.management.audit.history.Unknown" });
+
   return (
     <>
       <ListItem alignItems="flex-start" disableGutters className={classes.auditListItem}>
@@ -60,7 +65,7 @@ const UserAvatarListItem: React.FunctionComponent<Props> = ({
               className={classes.avatar}
               style={{ background: user?.initialColor }}
             >
-              {getInitalsFromName(user?.name)}
+              {getInitalsFromName(user?.name ?? defaultName )}
             </Avatar>
           )}
         </ListItemAvatar>
