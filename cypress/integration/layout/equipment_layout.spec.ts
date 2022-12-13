@@ -915,7 +915,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Type preventative maintenance instruction", () => {
-        cy.get("[data-cy^='preventative-maintenance']>div>div>div>div>div[contenteditable]")
+        cy.get("[data-cy^='preventative-maintenance'] div[contenteditable]").last()
           .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
         cy.unClick();
       });
@@ -937,7 +937,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Type calibration maintenance instruction", () => {
-        cy.get("[data-cy^='calibration']>div>div>div>div>div[contenteditable]")
+        cy.get("[data-cy^='calibration'] div[contenteditable]").last()
           .click({ force: true }).clear().arrowType("Instructions for calibration");
         cy.unClick();
       });
@@ -1527,7 +1527,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Type preventative maintenance instruction", () => {
-        cy.get("[data-cy^='preventative-maintenance']>div>div>div>div>div[contenteditable]")
+        cy.get("[data-cy^='preventative-maintenance'] div[contenteditable]").last()
           .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
         cy.unClick();
       });
@@ -1549,7 +1549,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Type calibration maintenance instruction", () => {
-        cy.get("[data-cy^='calibration']>div>div>div>div>div[contenteditable]")
+        cy.get("[data-cy^='calibration'] div[contenteditable]").last()
           .click({ force: true }).clear().arrowType("Instructions for calibration");
         cy.unClick();
       });

@@ -1,8 +1,7 @@
 import { Box } from "@material-ui/core";
 import cx from "classnames";
 import React from "react";
-import { FB, FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps, FBProvider } from "..";
-import { checkIsDocumentEquipment } from "../../documentRevision/helpers/checkDocumentGroup";
+import { FBFieldBottomBar, FBFieldMarkDown, FBFieldTopBar, FBFieldWrapperProps, FBProvider } from "..";
 import useStyles from "./FBFieldWrapper.styles";
 import { withFBFieldWrapper } from "./FBFieldWrapper.wrap";
 
@@ -21,14 +20,12 @@ const FBFieldWrapper: React.FunctionComponent<FBFieldWrapperProps> = ({
   ...props
 }) => {
   const classes = useStyles({ mt, mb, isDragged });
-  const { workspaceState } = FB.useStores();
-  const isEquipmentDoc = checkIsDocumentEquipment(workspaceState?.document?.document?.documentType?.groupOptions);
 
   return (
     <FBProvider {...{ fieldWrapperState }}>
       <Box {...{ onMouseOver, onMouseLeave }} className={cx(`fb-field-wrapper-${inputProps?.name}`, classes.root)}>
-        {!isEquipmentDoc && <Box className={classes.tools} visibility={toolsVisible}>
-          <FBFieldTopBar visibility={toolsVisible} {...{ inputProps }} />
+        {<Box className={classes.tools} visibility={toolsVisible}>
+          <FBFieldTopBar {...{ inputProps }} />
           <FBFieldBottomBar visibility={addToolVisible} {...{ index }} />
         </Box>}
         <Box className={classes.field}>

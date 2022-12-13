@@ -793,7 +793,7 @@ context("Bulk create record headers", () => {
 
     context("Verify form does not have selected type for output", () => {
       it("Save bulk document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {

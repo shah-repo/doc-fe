@@ -1532,7 +1532,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
     });
 
     it("Verify Equipment Enforce Prod is unchecked", () => {
-      cy.get(` td[role="gridcell"][aria-colindex="2"]>input[value="Lot History Record"]`)
+      cy.get(`td[role="gridcell"][aria-colindex="2"]`).contains("Lot History Record")
         .parents("tr").find(`td[data-grid-col-index="12"] input`).should("not.be.checked");
     });
   });
@@ -1701,7 +1701,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Save LHRs", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Complete step", () => {
@@ -1936,7 +1936,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Save LHRs", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Complete step", () => {

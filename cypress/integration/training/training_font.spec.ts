@@ -21,7 +21,7 @@ let multipleCompanies;
 let adminEmployee;
 let releasedFormId;
 
-context("Training notification test", { tags: ["@timetool"] }, () => {
+context("Training font test", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

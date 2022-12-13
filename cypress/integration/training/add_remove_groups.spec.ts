@@ -44,9 +44,9 @@ context("Add/Remove groups from Training Curriculum", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4], USERS[7]],
+            users: [USERS[12], USERS[13], USERS[14], USERS[7]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -55,10 +55,10 @@ context("Add/Remove groups from Training Curriculum", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
-          fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
+          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[13].email);
+          fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[14].email);
           fifthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[7].email);
           done();
         });
@@ -67,7 +67,7 @@ context("Add/Remove groups from Training Curriculum", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -321,7 +321,7 @@ context("Add/Remove groups from Training Curriculum", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -458,7 +458,7 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Save training", () => {
@@ -489,10 +489,10 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.trCompleteTraining();
     });
 
-    it(`Login as ${USERS[3].name}`, () => {
+    it(`Login as ${USERS[13].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[3].email,
+        email: USERS[13].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
@@ -503,10 +503,10 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.trCompleteTraining();
     });
 
-    it(`Login as ${USERS[1].name}`, () => {
+    it(`Login as ${USERS[11].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
@@ -554,7 +554,7 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Click Submit for Approval", () => {
@@ -575,37 +575,37 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
     });
 
-    it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[1].name });
+    it(`Training record for ${USERS[11].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[2].name} should not be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[2].name });
+    it(`Training record for ${USERS[12].name} should not be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[class="k-grid-norecords"]`).should("have.text", "No results found");
     });
 
-    it(`Training record for ${USERS[3].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[3].name });
+    it(`Training record for ${USERS[13].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[13].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[3].name).and("not.contain", "Pending");
+        .and("contain", USERS[13].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[4].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[4].name });
+    it(`Training record for ${USERS[14].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[14].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
-        .and("contain", USERS[4].name).and("contain", "Pending");
+        .and("contain", USERS[14].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
 
@@ -620,11 +620,11 @@ context("Add/Remove groups from Training Curriculum", () => {
   });
 
   context("Verify training notifications", () => {
-    context(`Verify training notification for ${USERS[2].name}`, () => {
+    context(`Verify training notification for ${USERS[12].name}`, () => {
       it("Logs user in", () => {
         cy.authLogout();
         cy.authLogin({
-          email: USERS[2].email,
+          email: USERS[12].email,
           password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
         });
       });

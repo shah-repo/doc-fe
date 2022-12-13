@@ -1,5 +1,6 @@
 import { Formik, FormikProps } from "formik";
-import React from "react";
+import { isEmpty } from "lodash";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { SMFormHOCProps } from "../../../App";
@@ -7,16 +8,18 @@ import { withSMForm } from "../../../App/Shifamed/Components/SMForm/SMForm.hoc";
 import { authSelectors } from "../../../state/ducks/auth";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";
-import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
+import { ChangeRequest, ChangeRequestEditRequestBody } from "../../../state/ducks/changeRequest/types";
 import { companySelectors } from "../../../state/ducks/company";
 import styles from "../../common/style/styles";
 import { FormContext } from "../../components/forms/FormContext";
+import { compareValuesToSubmit } from "../../components/forms/helpers";
 import { FB, FBBookmarkState, FBProvider, FBWorkspaceModeOptions } from "../../form.builder";
+import { FBFormStateContext } from "../../form.builder/FBForm/FBForm.wrap";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
 import useGetHasTag from "../../hooks/useGetHasTag";
-import { toChangeRequestFormValues, toChangeRequestUpdateRequestBody } from "../form/transform";
+import { toChangeRequestEditRequestBody, toChangeRequestFormValues } from "../form/transform";
 import { ChangeRequestFormValues } from "../form/types";
 import { canChangeCROwner, canEditApprovers, canEditChangeRequest, statesWithLastSavedEnabled } from "../utils/helpers";
 import { changeRequestEditPath } from "../utils/paths";
@@ -58,7 +61,7 @@ const Container: React.FunctionComponent<Props> = ({
     hasOwnershipTag);
   const canEdit = canEditApprovers({ dataProp: changeRequest, currentUserEmail });
   const save = useActionCreator(changeRequestsActions.save);
-
+  const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const schema = changeRequest.formDocument?.formTemplate?.schema || [];
 
   const async = useAsync<ChangeRequest>();
@@ -67,10 +70,21 @@ const Container: React.FunctionComponent<Props> = ({
   }
 
   const onSubmit = (values: ChangeRequestFormValues) => {
+    const formStateContext = FBFormStateContext as any;
+    const dataToSubmit = compareValuesToSubmit(
+      initialValues,
+      { ...values, formInput: formStateContext?._currentValue },
+      toChangeRequestEditRequestBody
+    );
+
+    if (isEmpty(dataToSubmit)) {
+      return;
+    }
+
     async.start(
       save,
       changeRequest.id,
-      toChangeRequestUpdateRequestBody(values),
+      dataToSubmit as unknown as ChangeRequestEditRequestBody,
       async,
     );
   };
