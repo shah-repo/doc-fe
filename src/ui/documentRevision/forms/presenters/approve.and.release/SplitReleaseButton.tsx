@@ -5,15 +5,15 @@ import React from "react";
 import { StyledButtonGroup } from "../../../../../App/Shifamed/Components/forms/presenters/StyledButtonGroup";
 import Text from "../../../../components/Text";
 
-export enum COActions {
+export enum ARActions {
   NEW = "new",
   EXISTING = "existing"
 }
 
 
 // TODO: move to translations
-const options = [{ label: "New CO", value: COActions.NEW },
-  { label: "Existing CO", value: COActions.EXISTING }];
+const options = [{ label: "New AR", value: ARActions.NEW },
+  { label: "Existing AR", value: ARActions.EXISTING }];
 
 const SplitReleaseButton: React.FunctionComponent<{
   onClick: (value?: string) => void;
@@ -53,17 +53,17 @@ const SplitReleaseButton: React.FunctionComponent<{
           <Button
             color="primary"
             onClick={handleClick}
-            id="ExpressCO-button"
-            data-cy="ExpressCO-button"
+            id="ApproveAndRelease-button"
+            data-cy="ApproveAndRelease-button"
           >
-            <Text message={"Express CO"} />
+            <Text message={"Express AR"} />
           </Button>
           <Button
             color="primary"
             size="small"
             aria-controls={open ? "split-button-menu" : undefined}
             aria-expanded={open ? "true" : undefined}
-            aria-label="Select CO strategy"
+            aria-label="Select AR strategy"
             aria-haspopup="menu"
             onClick={handleToggle}
           >

@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { StyledButton } from "../../../../../App/Shifamed/Components/forms/presenters/StyledListButton";
 import { StyledMenuListItem } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
 import SM from "../../../../../App/Shifamed/Utils/SM/SM";
@@ -41,7 +40,7 @@ import useDialog from "../../../../hooks/useDialog";
 import { checkIsDocumentPO } from "../../../helpers/checkDocumentGroup";
 import { ApproveAndReleaseFormValues } from "../../types";
 import ApproveAndReleaseForm from "./ApproveAndReleaseForm";
-import SplitReleaseButton, { COActions } from "./SplitReleaseButton";
+import SplitReleaseButton, { ARActions } from "./SplitReleaseButton";
 
 interface Props {
   id?: string;
@@ -344,14 +343,14 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       expressApprovalDialog.open();
     }
 
-    if (option === COActions.NEW) {
+    if (option === ARActions.NEW) {
       asyncGetDocTypeByGroup.start(
         getDocTypeByGroupAction,
         { docTypeGroupOption: "CHANGE_REQUEST" },
         asyncGetDocTypeByGroup);
     }
 
-    if (option === COActions.EXISTING) {
+    if (option === ARActions.EXISTING) {
       asyncGetDraftChangeOrders.start(
         getDraftChangeOrdersAction,
         asyncGetDraftChangeOrders);
@@ -440,14 +439,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       <CustomLabelTooltip {...{ tooltipConfig }}>
         {isNewLayout ? (
           renderAsButton ?
-            <StyledButton
-              color="primary"
-              onClick={isRecord ? alertDialog.open : openDialog}
-              id="ApproveAndRelease-button"
-              data-cy="ApproveAndRelease-button"
-            >
-              <Text message={isRecord ? "record.finalize.and.release" : label} />
-            </StyledButton> :
+            <SplitReleaseButton
+              onClick = {isRecord ? alertDialog.open : openDialog} />
+            :
             <StyledMenuListItem button alignItems="flex-start">
               <StyledMenuListItemText
                 id="ApproveAndRelease-button"
@@ -467,9 +461,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             <Text message={isRecord ? "record.finalize.and.release" : label} />
           </Button>
         )}
-      </CustomLabelTooltip>
-      <CustomLabelTooltip {...{ tooltipConfig }}>
-        <SplitReleaseButton onClick = {openDialog}></SplitReleaseButton>
       </CustomLabelTooltip>
       {
         templateSelectionDialog.isOpen &&

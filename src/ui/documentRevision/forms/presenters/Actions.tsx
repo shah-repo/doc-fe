@@ -374,7 +374,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     </>);
 
   return (
-    <div>
+    <div style={{ display: "flex", alignItems: "center" }}>
       <Observer>
         {() => (
           <>
