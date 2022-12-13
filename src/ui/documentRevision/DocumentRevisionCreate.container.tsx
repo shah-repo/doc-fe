@@ -4,6 +4,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { documentRevisionsActions } from "../../state/ducks/documentRevisions";
 import { DocumentRevision, RevisionChangeType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
+import { ApprovalStatus } from "../../state/ducks/documents/types";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
 import FBStore from "../form.builder/FBStore/FBStore";
@@ -100,7 +101,9 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const onSubmit = (values: DocumentRevisionFormValues) => {
     if (isPO && values.revisionChangeType === RevisionChangeType.NextRevision) {
-      FBStore.revChangeBeforeApprovals = documentRevision?.approvals;
+      FBStore.revChangeBeforeApprovals = (
+        documentRevision?.approvals || []
+      ).filter((approver) => approver.status !== ApprovalStatus.Abandoned);
     }
     async.start(create, toNewVersionRequestBody(values), async);
   };
