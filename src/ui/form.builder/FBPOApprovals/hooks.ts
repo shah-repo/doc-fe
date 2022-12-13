@@ -172,7 +172,7 @@ export const usePoApprovals = (
   };
 
   useEffect(() => reaction(
-    () => Object.values((poApprovalsState?.groups as {})).slice(),
+    () => Object.values((poApprovalsState?.groups ?? {})).slice(),
     (groups) => {
       if (groups && workspaceState) {
         updateSignatureGroupNames();

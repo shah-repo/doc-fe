@@ -25,6 +25,7 @@ declare global {
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectDocumentTab(): Chainable<Subject>;
       drSelectChangeDetailsTab(): Chainable<Subject>;
+      drCheckProgressBarAndListLoaderShouldNotExists(): Chainable<Subject>;
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drSelectCalPmHistoryTab(): Chainable<Subject>;
@@ -291,8 +292,13 @@ Cypress.Commands.add("drSelectChangeDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drCheckProgressBarAndListLoaderShouldNotExists", () => {
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectLineItems", () => {
-  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
