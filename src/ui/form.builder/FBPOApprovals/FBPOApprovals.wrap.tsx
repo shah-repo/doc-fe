@@ -3,12 +3,15 @@ import { compact, difference, isEmpty, map, some } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from "..";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
+import FBDataStore from "../FBStore/FBDataStore";
 import { usePoApprovals } from "./hooks";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
@@ -35,6 +38,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
     const { document, id, isOutput } = workspaceState || {};
+    const dispatch = useDispatch();
     const outputId = isOutput ? id : undefined;
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
@@ -93,7 +97,33 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         if (employeesToBeRemoved.length > 0) {
           removeApprover(employeesToBeRemoved);
         }
-
+        const approvalsLength = FBDataStore?.revChangeBeforeApprovals?.length;
+        if (approvalsLength && !isAdministrativeChange && outputId) {
+          FBDataStore?.revChangeBeforeApprovals.forEach((approver, index) => {
+            const id = approver.approver.id;
+              poApprovalsState?.addApproval(
+                {
+                  assigned: { id },
+                  type: "MASTER",
+                  fieldId: approver.fieldName,
+                  partOf: { id: outputId },
+                  signatureGroupName: approver.signatureGroupName,
+                  manually: approver.manually,
+                },
+                () => {
+                  const revId = workspaceState?.id;
+                  if (
+                    revId &&
+                    index === approvalsLength - 1
+                  ) {
+                    dispatch(documentRevisionsActions.loadAudit(revId));
+                    formState?.getInputState(name)?.setRender();
+                  }
+                }
+              );
+          });
+          FBDataStore.revChangeBeforeApprovals = [];
+        }
         formState?.getInputState(name)?.setRender();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
