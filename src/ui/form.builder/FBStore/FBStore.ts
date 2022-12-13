@@ -10,7 +10,6 @@ import FBRequest from "../FBApi/FBApi.request";
 class FBStore {
   @observable public audit = new FBRequest<FBAuditData[], null>(FBEndpoint.DocumentRevisionAudit);
   @observable public selectedTab: SidebarType | undefined;
-  public revChangeBeforeApprovals;
   @observable purchaseOrderValue;
   public damData?: FBApprovalMatrixFieldData ={
     approvalRoles: [],

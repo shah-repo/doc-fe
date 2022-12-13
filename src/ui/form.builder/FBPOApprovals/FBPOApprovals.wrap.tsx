@@ -11,7 +11,7 @@ import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
-import FBStore from "../FBStore/FBStore";
+import FBDataStore from "../FBStore/FBDataStore";
 import { usePoApprovals } from "./hooks";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
@@ -97,10 +97,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         if (employeesToBeRemoved.length > 0) {
           removeApprover(employeesToBeRemoved);
         }
-        const approvalsLength = FBStore?.revChangeBeforeApprovals?.length;
+        const approvalsLength = FBDataStore?.revChangeBeforeApprovals?.length;
         if (approvalsLength && !isAdministrativeChange && outputId) {
-            FBStore?.revChangeBeforeApprovals.forEach((approver, index) => {
-              const id = approver.approver.id;
+          FBDataStore?.revChangeBeforeApprovals.forEach((approver, index) => {
+            const id = approver.approver.id;
               poApprovalsState?.addApproval(
                 {
                   assigned: { id },
@@ -121,8 +121,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
                   }
                 }
               );
-            });
-            FBStore.revChangeBeforeApprovals = [];
+          });
+          FBDataStore.revChangeBeforeApprovals = [];
         }
         formState?.getInputState(name)?.setRender();
       }

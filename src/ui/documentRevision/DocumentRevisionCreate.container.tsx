@@ -7,7 +7,7 @@ import { documentsActions, documentsSelectors } from "../../state/ducks/document
 import { ApprovalStatus } from "../../state/ducks/documents/types";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
-import FBStore from "../form.builder/FBStore/FBStore";
+import FBDataStore from "../form.builder/FBStore/FBDataStore";
 import useAsync from "../hooks/useAsync";
 import { checkIsDocumentPO } from "./../../ui/documentRevision/helpers/checkDocumentGroup";
 import { DocumentCloneType } from "./Clone.container";
@@ -101,7 +101,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const onSubmit = (values: DocumentRevisionFormValues) => {
     if (isPO && values.revisionChangeType === RevisionChangeType.NextRevision) {
-      FBStore.revChangeBeforeApprovals = (
+      FBDataStore.revChangeBeforeApprovals = (
         documentRevision?.approvals || []
       ).filter((approver) => approver.status !== ApprovalStatus.Abandoned);
     }
