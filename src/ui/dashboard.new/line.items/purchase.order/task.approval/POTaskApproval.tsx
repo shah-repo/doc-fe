@@ -1,15 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import {
-  Avatar,
-  Box,
-  Collapse,
-  Grid,
-  Link,
-  List,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Box, Collapse, Grid, Link, List, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
@@ -41,7 +30,7 @@ import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { formatCurrency } from "../../common/Utils";
 import ApproveDialogueContainer from "./POApprovalDialogContainer";
-import { styles } from "./taskApproval.styles";
+import useStyles from "./taskApproval.styles";
 
 interface Props {
   id: string;
@@ -75,7 +64,7 @@ interface Props {
   unPinLineItem: (id: string) => void;
   dialogPDF: DialogHandler;
 }
-const taskApprovalPresenter: React.FunctionComponent<Props> = ({
+const TaskApprovalPresenter: React.FC<Props> = ({
   id,
   docDocumentId,
   docId,
@@ -102,7 +91,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   unPinLineItem,
   dialogPDF,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
@@ -226,11 +215,12 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem
-        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
-        className={classes.listItem}
         button
-        onMouseEnter={onMouseHoverListItem}
+        divider
         disableRipple
+        className={classes.listItem}
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        onMouseEnter={onMouseHoverListItem}
       >
         {open ? (
           <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick}  />
@@ -445,139 +435,91 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List disablePadding className={classes.collapsedList}>
-          {PoItems.map((poItem, index) => {
-            if (poItem.isSupplier) {
-              return (
-                <StyledListItem
-                  key={index}
-                  button
-                  className={classes.nested}
-                  disableRipple
-                >
-                  <Grid container className={classes.gridContainer}>
-                    <Grid item md={3} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyChildrenBold}
-                        color="textSecondary"
-                      >
-                        {poItem.ltext}
-                      </Typography>
-                    </Grid>
-                    <Grid item md={9} sm={6}>
-                      <RouterLink
-                        to={
-                          poItem.rtext
-                            ? documentVersionPath(
-                              purchaseOrderSupplierDocRevId || "",
-                              purchaseOrderSupplierDocId || ""
-                            )
-                            : "#"
-                        }
-                        color="inherit"
-                        className={classes.link}
-                      >
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          className={classes.linkText}
-                          color="textPrimary"
-                        >
-                          {poItem.rtext}
-                        </Typography>
-                      </RouterLink>
-                    </Grid>
-                  </Grid>
-                </StyledListItem>
-              );
-            }
-            if (poItem.isRegular) {
-              return (
-                <StyledListItem
-                  key={index}
-                  button
-                  className={classes.nested}
-                  disableRipple
-                >
-                  <Grid container className={classes.gridContainer}>
-                    <Grid item md={3} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyChildrenBold}
-                        color="textSecondary"
-                      >
-                        {poItem.ltext}
-                      </Typography>
-                    </Grid>
-                    <Grid item md={9} sm={6}>
+          {PoItems.map((poItem, index) => (
+            <StyledListItem
+              key={index}
+              button
+              className={classes.nested}
+              disableRipple
+            >
+              <Grid container className={classes.gridContainer}>
+                <Grid item md={3} sm={6}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={classes.typographyChildrenBold}
+                    color="textSecondary"
+                  >
+                    {poItem.ltext}
+                  </Typography>
+                </Grid>
+                <Grid item md={9} sm={6}>
+                  {poItem.isSupplier && (
+                    <RouterLink
+                      to={
+                        poItem.rtext
+                          ? documentVersionPath(
+                            purchaseOrderSupplierDocRevId || "",
+                            purchaseOrderSupplierDocId || ""
+                          )
+                          : "#"
+                      }
+                      color="inherit"
+                      className={classes.link}
+                    >
                       <Typography
                         component="span"
                         variant="body2"
-                        className={classes.typography}
+                        className={classes.linkText}
                         color="textPrimary"
-                        dangerouslySetInnerHTML={{ __html: poItem.rtext }}
-                      />
-                    </Grid>
-                  </Grid>
-                </StyledListItem>
-              );
-            }
-            if (poItem.isAttachments) {
-              return (
-                <StyledListItem
-                  key={index}
-                  button
-                  className={classes.nested}
-                  disableRipple
-                >
-                  <Grid container className={classes.gridContainer}>
-                    <Grid item md={3} sm={6}>
-                      <Typography
-                        component="span"
-                        variant="caption"
-                        className={classes.typographyChildrenBold}
-                        color="textSecondary"
                       >
-                        {poItem.ltext}
+                        {poItem.rtext}
                       </Typography>
-                    </Grid>
-                    <Grid item md={9} sm={6}>
-                      <Grid
-                        container
-                        justify="space-between"
-                        alignContent="center"
-                      >
-                        {poItem.rtext.map((attachmentInfo, index) => (
-                          <Grid item key={index}>
-                            <AttachmentIcon
-                              className={classes.attachmentIcon}
-                            />
-                            <Link
-                              href="#"
-                              onClick={downloadAttachment(attachmentInfo)}
-                              color="inherit"
-                              className={classes.linkTextColor}
+                    </RouterLink>
+                  )}
+                  {poItem.isRegular && (
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.typography}
+                      color="textPrimary"
+                      dangerouslySetInnerHTML={{ __html: poItem.rtext }}
+                    />
+                  )}
+                  {poItem.isAttachments && (
+                    <Grid
+                      container
+                      justify="space-between"
+                      alignContent="center"
+                    >
+                      {poItem.rtext.map((attachmentInfo, index) => (
+                        <Grid item key={index}>
+                          <AttachmentIcon
+                            className={classes.attachmentIcon}
+                          />
+                          <Link
+                            href="#"
+                            onClick={downloadAttachment(attachmentInfo)}
+                            color="inherit"
+                            className={classes.linkTextColor}
+                          >
+                            <Typography
+                              component="span"
+                              variant="body2"
+                              className={classes.linkText}
+                              color="textPrimary"
                             >
-                              <Typography
-                                component="span"
-                                variant="body2"
-                                className={classes.linkText}
-                                color="textPrimary"
-                              >
-                                {` ${attachmentInfo.name}.${attachmentInfo.type}`}
-                              </Typography>
-                            </Link>
-                          </Grid>
-                        ))}
-                      </Grid>
+                              {` ${attachmentInfo.name}.${attachmentInfo.type}`}
+                            </Typography>
+                          </Link>
+                        </Grid>
+                      ))}
                     </Grid>
-                  </Grid>
-                </StyledListItem>
-              );
-            }
-          })}
+                  )}
+                </Grid>
+              </Grid>
+            </StyledListItem>
+          ))}
         </List>
       </Collapse>
       <ApproveDialogueContainer
@@ -597,4 +539,4 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default taskApprovalPresenter;
+export default TaskApprovalPresenter;

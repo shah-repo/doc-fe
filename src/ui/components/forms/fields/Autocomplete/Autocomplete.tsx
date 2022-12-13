@@ -45,6 +45,9 @@ export const selectStyles: StylesConfig = {
   }),
   option: (base) => ({
     ...base,
+    "&:active": {
+      background: Colors.titan_white,
+    },
   }),
   placeholder: (base) => ({
     ...base,

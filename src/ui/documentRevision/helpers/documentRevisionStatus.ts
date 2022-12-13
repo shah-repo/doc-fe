@@ -12,6 +12,7 @@ export const isDocumentRevisionDeprecated = (documentRevisionStatus) => isDocume
 export const isDocumentRevisionObsolete = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.Obsolete], documentRevisionStatus);
 export const isDocumentRevisionPendingChange = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.PendingChange], documentRevisionStatus);
 export const isDocumentRevisionReleased = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.Released], documentRevisionStatus);
+export const isDocumentRevisionInStatusFlag = (documentRevisionStatus) => isDocumentRevisionInStatus([DocumentRevisionStatus.Released, DocumentRevisionStatus.InReview, DocumentRevisionStatus.Approved], documentRevisionStatus);
 
 /** Checks if a document revision is in a specific status.
    * @param documentRevisionStatus Status of a document.

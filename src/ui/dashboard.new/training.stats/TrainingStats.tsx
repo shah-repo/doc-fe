@@ -9,10 +9,11 @@ import AsyncGate from "../../components/AsyncGate";
 import useActionCreator from "../../hooks/useActionCreator";
 import TrainingChart from "./training.chart/TrainingChart.container";
 import TrainingLineItems from "./training.line.items/TrainingLineItems.container";
-import { styles } from "./TrainingStats.styles";
+import useStyles from "./TrainingStats.styles";
 
 const TrainingStatsContainer: React.FunctionComponent = () => {
-  const classes = styles();
+  const classes = useStyles();
+
   // Training Chart
   const loadTrainingStatsChart = useActionCreator(
     trainingStatsActions.loadTrainingStatsChart
@@ -27,8 +28,8 @@ const TrainingStatsContainer: React.FunctionComponent = () => {
     setTabValue(val);
   };
   return (
-    <Box marginLeft={2} marginRight={2}>
-      <Box className={classes.trainingChart}>
+    <Box className={classes.root}>
+      <Box className={classes.chart}>
         <AsyncGate
           asyncAction={loadTrainingStatsChart}
           asyncState={loadTrainingStatsChartAsyncInfo}

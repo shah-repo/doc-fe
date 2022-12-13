@@ -435,7 +435,7 @@
   "common.minimize": "Minimize",
   "common.maximize": "Maximize",
   "common.due.by.date": "Due by: {date}",
-  "common.items.count": "{count} items",
+  "common.items.count": "{count, plural, one {# item} other {# items}}",
   "common.leave": "Leave",
   "common.go.back": "Go back",
   "common.log.off": "Log off",
@@ -1345,5 +1345,6 @@
   "help.popular.resources": "Other Popular Resources",
   "help.didnt.find.what.you.need": "Didn’t find exactly what you needed?",
   "help.view.full.guide": "View full guide",
-  "help.view.all.guides": "View All Guides"
+  "help.view.all.guides": "View All Guides",
+  "form.purchare.order.table.headline": "Receiving Details"
 }

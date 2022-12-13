@@ -82,6 +82,8 @@ declare global {
       poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
       poCheckOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poBuildInStatus(params: {status: string}): Chainable<Subject>;
+      verifyPoApprovalSignature(params: {name: string; email: string}): Chainable<Subject>;
+      verifyPoApprovalDisabled(params: {name: string; email: string}): Chainable<Subject>;
     }
   }
 }
@@ -127,6 +129,18 @@ Cypress.Commands.add("poCreateNew", () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("verifyPoApprovalSignature", (params) => {
+  cy.get(`[data-cy*="fb-po-approvals-"]`).parent().parent().should("contain", `${params.name} - ${params.email}`);
+  cy.contains("PO Approval sig");
+  cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(params.name + " | DRAFT" + params.email);
+});
+
+Cypress.Commands.add("verifyPoApprovalDisabled", (params) => {
+  cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${params.name} - ${params.email}`);
+  cy.get(`input[data-cy^="fb-po-approvals-"]`).parent()
+    .find(`[class="MuiChip-root MuiAutocomplete-tag Mui-disabled MuiChip-deletable"]`).should("exist");
 });
 
 Cypress.Commands.add("poClickCreatePO", () => {
@@ -211,7 +225,9 @@ Cypress.Commands.add("poCheckDateRequired", (params: { dateRequired: string }) =
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
-  cy.get("[name*=\"shippingCost\"]").arrowClick().arrowType("{leftarrow}{leftarrow}{leftarrow}{leftarrow}" + params.number);
+  cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick();
+  cy.get(`[name*="po-items-built-in.shippingCost"]`).arrowType("{leftarrow}{leftarrow}{leftarrow}" + params.number);
+  cy.unClick();
 });
 
 Cypress.Commands.add("poCheckShippingCost", (params: {cost: string}) => {
@@ -229,6 +245,7 @@ Cypress.Commands.add("poCheckCurrency", () => {
 
 Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
   cy.get("ul[role=listbox] > li").contains(params.currencyValue).arrowClick();
+  cy.unClick();
 });
 
 Cypress.Commands.add("poSelectTaxCheckbox", () => {

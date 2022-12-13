@@ -17,6 +17,7 @@ export type FBAutocompleteProps =
  > & {
    onInputChange?: (ev: React.FocusEvent<HTMLInputElement>) => any;
    refresh?: () => any;
+   autoCompleteClasses?: AutocompleteProps["classes"];
    disabledOptions?: string[];
    customStyles?: {};
    groupByKey?: string;

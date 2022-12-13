@@ -27,5 +27,8 @@ export default makeStyles(() =>
     exportIcon: {
       margin: "0 10px",
     },
+    previewDialog: {
+      backgroundColor: Colors.alabaster,
+    },
   })
 );
