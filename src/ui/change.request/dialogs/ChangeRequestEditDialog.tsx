@@ -18,11 +18,13 @@ import useStyles from "./ChangeRequestEditDialog.styles";
 interface Props {
   changeRequestId: string;
   changeOrderDialog: DialogHandler;
+  closeDialog: () => void;
 }
 
 const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   changeRequestId,
   changeOrderDialog,
+  closeDialog,
 }) => {
 
   const classes = useStyles();
@@ -72,7 +74,7 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
           <IconButton
             className={classes.close}
             size="small"
-            onClick={changeOrderDialog.close}
+            onClick={closeDialog}
           >
             <CloseIcon />
           </IconButton>

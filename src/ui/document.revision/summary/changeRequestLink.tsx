@@ -37,6 +37,10 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
     changeOrderDialog.open();
   };
 
+  const closeCRDialog = () => {
+    changeOrderDialog.close();
+  };
+
   return (
     <ListItem style={{ padding: 0 }}>
       <Typography variant="h6">
@@ -62,7 +66,9 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
       {
         changeOrderDialog.isOpen &&
         <ChangeRequestEditDialog
-          changeRequestId={dataProp.changeRequest?.id} changeOrderDialog={changeOrderDialog}
+          changeRequestId={dataProp.changeRequest?.id}
+          changeOrderDialog={changeOrderDialog}
+          closeDialog = {closeCRDialog}
         />
       }
     </ListItem>

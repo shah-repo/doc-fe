@@ -5,7 +5,7 @@ import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash"
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { StyledMenuListItem } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListItem";
 import { StyledMenuListItemText } from "../../../../../App/Shifamed/Components/forms/presenters/StyledMenuListITemText";
@@ -114,6 +114,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const changeOrderDialog = useDialog();
 
   const alertDialog = useDialog();
+
+  const dispatch = useDispatch();
 
   const transformedDocTypeGroups = ([] as Group[]).concat(...documentTypeGroups);
   const initialValues = {
@@ -364,6 +366,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     expressApprovalDialog.close();
   };
 
+  const closeCRDialog = () => {
+    changeOrderDialog.close();
+    dispatch(documentRevisionsActions.reload(docRevId));
+  };
+
   const getApproverPayload = (approverId?: string): ApproverPayload => ({
     approver: { id: approverId || null },
     signatureGroupId: { id: find(checkedGroups, (group) => group.groupApprover === approverId)?.id || null },
@@ -533,7 +540,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       {
         changeOrderDialog.isOpen &&
         <ChangeRequestEditDialog
-          changeRequestId={changeRequestId} changeOrderDialog={changeOrderDialog}
+          changeRequestId={changeRequestId}
+          changeOrderDialog={changeOrderDialog}
+          closeDialog = {closeCRDialog}
         />
       }
       <AlertDialog
