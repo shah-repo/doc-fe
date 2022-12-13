@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { FBFormState } from "../../form.builder";
 import ChangeOrderEditGridItem from "./ChangeOrderEditGridItem";
 import ChangeOrderViewGridItem from "./ChangeOrderViewGridItem";
-import { useItemsAndDetailsStore } from "./ItemsAndDetails.state";
+import ItemsAndDetailsState from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
 
 const ChangeOrderItem: React.FunctionComponent<{
@@ -14,6 +14,7 @@ const ChangeOrderItem: React.FunctionComponent<{
   handleRemove: (docRevId: string) => void;
   handleUpdate: () => void;
   viewItemActionsVisible: boolean;
+  itemsAndDetailsState: ItemsAndDetailsState;
 }> = ({
   entry,
   formState,
@@ -21,14 +22,14 @@ const ChangeOrderItem: React.FunctionComponent<{
   handleRemove,
   handleUpdate,
   viewItemActionsVisible,
+  itemsAndDetailsState,
 }) => {
 
   const [editMode, setEditMode] = useState(false);
-  const { itemsAndDetailsStore } = useItemsAndDetailsStore();
 
   function resetAndCancelEdit() {
     setEditMode(false);
-    itemsAndDetailsStore.setViewItemActionsVisibility(true);
+    itemsAndDetailsState.setViewItemActionsVisibility(true);
   }
 
   function addRevisionToChangeRequest() {
@@ -46,7 +47,7 @@ const ChangeOrderItem: React.FunctionComponent<{
       formState.setFieldValue(item.key, item.value);
     });
     setEditMode(true);
-    itemsAndDetailsStore.setViewItemActionsVisibility(false);
+    itemsAndDetailsState.setViewItemActionsVisibility(false);
   }
 
   return useObserver(() => (

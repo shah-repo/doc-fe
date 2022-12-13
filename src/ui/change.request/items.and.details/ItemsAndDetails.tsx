@@ -11,7 +11,7 @@ import ChangeOrderEditGridItem from "./ChangeOrderEditGridItem";
 import useStyles from "./ChangeOrderGrid.styles";
 import ChangeOrderGridHeader from "./ChangeOrderGridHeader";
 import ChangeOrderItem from "./ChangeOrderItem";
-import { useItemsAndDetailsStore } from "./ItemsAndDetails.state";
+import ItemsAndDetailsState from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
 
 const TopSection: React.FunctionComponent<{
@@ -57,30 +57,30 @@ const ItemsAndDetails: React.FunctionComponent<{
   handleAdd: () => void;
   handleRemove: (docRevId: string) => void;
   handleUpdate: () => void;
+  itemsAndDetailsState: ItemsAndDetailsState;
 }> = ({
   formState,
   handleAdd,
   handleRemove,
   handleUpdate,
+  itemsAndDetailsState,
 }) => {
   const classes = useStyles();
-  const { itemsAndDetailsStore } = useItemsAndDetailsStore();
-
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
 
   const showEditRow = () => {
     setIsEditRowVisible(true);
-    itemsAndDetailsStore.setViewItemActionsVisibility(false);
+    itemsAndDetailsState.setViewItemActionsVisibility(false);
   };
 
   function disabledOptions(): string[] {
-    return map(itemsAndDetailsStore?.changeOrderItemsList, "proposedDocumentRevision.id");
+    return map(itemsAndDetailsState?.changeOrderItemsList, "proposedDocumentRevision.id");
   }
 
   function resetAndCancelEdit() {
     formState.reset();
     setIsEditRowVisible(false);
-    itemsAndDetailsStore.setViewItemActionsVisibility(true);
+    itemsAndDetailsState.setViewItemActionsVisibility(true);
   }
 
   function addRevisionToChangeRequest() {
@@ -90,9 +90,9 @@ const ItemsAndDetails: React.FunctionComponent<{
 
   return useObserver(() => (
     <div className={cx(classes.tabContent, {
-      [classes.tabContentInactive]: itemsAndDetailsStore.loadingState,
+      [classes.tabContentInactive]: itemsAndDetailsState.loadingState,
     })}>
-      <TopSection showEditRow={showEditRow} showButton={itemsAndDetailsStore.viewItemActionsVisible}/>
+      <TopSection showEditRow={showEditRow} showButton={itemsAndDetailsState.viewItemActionsVisible}/>
       <ChangeOrderGridHeader />
       { isEditRowVisible && <ChangeOrderEditGridItem
         {...{ formState }}
@@ -101,7 +101,7 @@ const ItemsAndDetails: React.FunctionComponent<{
         resetAndCancelEdit={resetAndCancelEdit}
       />}
       {
-        itemsAndDetailsStore.changeOrderItemsList.map((entry: ChangeOrderGridItem) => (
+        itemsAndDetailsState.changeOrderItemsList.map((entry: ChangeOrderGridItem) => (
           <ChangeOrderItem
             key={`fb-document-revision-${entry.id}`}
             entry={entry}
@@ -109,7 +109,8 @@ const ItemsAndDetails: React.FunctionComponent<{
             disabledOptions={disabledOptions}
             handleRemove = {handleRemove}
             handleUpdate = {handleUpdate}
-            viewItemActionsVisible = {itemsAndDetailsStore.viewItemActionsVisible}
+            viewItemActionsVisible = {itemsAndDetailsState.viewItemActionsVisible}
+            itemsAndDetailsState = {itemsAndDetailsState}
           />
         ))
       }

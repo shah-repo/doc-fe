@@ -33,12 +33,12 @@ const ChangeOrderViewGridItem: React.FunctionComponent<{
     docRevId, documentId, titleText, displayRevision, id, isPart, justificationOfChange, descriptionOfChange,
   } = entry;
 
-  console.log(docRevId,
-    titleText,
-    id,
-    isPart,
-    justificationOfChange,
-    descriptionOfChange);
+  // console.log(docRevId,
+  //   titleText,
+  //   id,
+  //   isPart,
+  //   justificationOfChange,
+  //   descriptionOfChange);
 
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string}[]>([]);

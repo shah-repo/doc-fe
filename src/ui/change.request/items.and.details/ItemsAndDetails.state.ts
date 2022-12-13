@@ -1,9 +1,15 @@
+/* eslint-disable no-console */
 import { set, union } from "lodash";
 import { action, observable } from "mobx";
-import { createContext, useContext } from "react";
 import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
 
-class ItemsAndDetailsStore {
+class ItemsAndDetailsState {
+
+  constructor() {
+    this.setViewItemActionsVisibility(true);
+    this.setLoadingState(false);
+  }
+
   @observable changeOrderItemsList: ChangeOrderGridItem[] = [];
   @observable viewItemActionsVisible = true;
   @observable loadingState = false;
@@ -25,10 +31,11 @@ class ItemsAndDetailsStore {
   }
 }
 
+export default ItemsAndDetailsState;
 
-export const itemsAndDetailsStore = {
-  itemsAndDetailsStore: new ItemsAndDetailsStore(),
-};
+// export const itemsAndDetailsStore = {
+//   itemsAndDetailsStore: new ItemsAndDetailsStore(),
+// };
 
-export const ItemsAndDetailsStoreContext = createContext(itemsAndDetailsStore);
-export const useItemsAndDetailsStore = () => useContext(ItemsAndDetailsStoreContext);
+// export const ItemsAndDetailsStoreContext = createContext(itemsAndDetailsStore);
+// export const useItemsAndDetailsStore = () => useContext(ItemsAndDetailsStoreContext);

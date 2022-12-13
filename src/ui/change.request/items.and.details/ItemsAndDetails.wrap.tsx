@@ -9,7 +9,7 @@ import { useFormContext } from "../../components/forms/FormContext";
 import { FB, FBForm, FBFormState } from "../../form.builder";
 import { generateDocTitleText, storeDataToFormData } from "./helpers";
 import ItemsAndDetails from "./ItemsAndDetails";
-import { itemsAndDetailsStore, ItemsAndDetailsStoreContext, useItemsAndDetailsStore } from "./ItemsAndDetails.state";
+import ItemsAndDetailsState from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
 
 const ItemsAndDetailsContainer: React.FunctionComponent<
@@ -23,18 +23,17 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
 }) => {
 
   const { formState: parentFormState } = FB.useStores();
-  const parentFormValue = parentFormState?.getFieldValue(name);
-
-  console.log(parentFormState, parentFormState?.getValues(), parentFormValue, name, autosave, mode);
+  // const parentFormValue = parentFormState?.getFieldValue(name);
+  // console.log(parentFormState, parentFormState?.getValues(), parentFormValue, name, autosave, mode);
 
   const formState = FB.useRef(FBFormState, {});
-  console.log(formState, formState?.getValues());
+  // console.log(formState, formState?.getValues());
 
   console.log(asyncState);
 
   const { submitForm } = useFormContext();
 
-  const { itemsAndDetailsStore } = useItemsAndDetailsStore();
+  const itemsAndDetailsState = FB.useRef<ItemsAndDetailsState>(ItemsAndDetailsState);
 
   const handleAdd = () => {
     const formValue = formState?.getValues() as FBDocumentRevisionsValue;
@@ -45,14 +44,14 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     });
 
     const dataToSend: FBDocumentRevisionsValue[] =
-      storeDataToFormData(itemsAndDetailsStore.changeOrderItemsList);
+      storeDataToFormData(itemsAndDetailsState.changeOrderItemsList);
     dataToSend.push(formValue);
 
     submitData(dataToSend);
   };
 
   const handleRemove = (docRevId: string) => {
-    const orderItemsFiltered = itemsAndDetailsStore.changeOrderItemsList
+    const orderItemsFiltered = itemsAndDetailsState.changeOrderItemsList
       .filter((item: ChangeOrderGridItem) => item.docRevId !== docRevId);
     const dataToSend: FBDocumentRevisionsValue[] =
       storeDataToFormData(orderItemsFiltered);
@@ -63,7 +62,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   const handleUpdate = () => {
     const { justificationOfChange, descriptionOfChange, proposedDocumentRevision }
       = formState?.getValues() as FBDocumentRevisionsValue;
-    const orderItemsUpdated = itemsAndDetailsStore.changeOrderItemsList
+    const orderItemsUpdated = itemsAndDetailsState.changeOrderItemsList
       .map((item: ChangeOrderGridItem) => {
         if (item.docRevId !== proposedDocumentRevision.id) {
           return item;
@@ -80,10 +79,10 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   };
 
   const submitData = (dataToSend) => {
-    itemsAndDetailsStore.setLoadingState(true);
+    itemsAndDetailsState.setLoadingState(true);
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
     // Submit the form - and once that returns, add this item to the store
-    // itemsAndDetailsStore.add(formValue);
+    // itemsAndDetailsState.add(formValue);
 
     if (autosave) {
       submitForm();
@@ -95,8 +94,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       asyncState.status === AsyncStatus.Error)) {
       // i.e. processing completed
       console.log("Processing Complete");
-      itemsAndDetailsStore.setLoadingState(false);
-      itemsAndDetailsStore.setViewItemActionsVisibility(true);
+      itemsAndDetailsState.setLoadingState(false);
+      itemsAndDetailsState.setViewItemActionsVisibility(true);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asyncState.status]);
@@ -135,7 +134,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       return entryInfo;
     });
 
-    itemsAndDetailsStore.setChangeOrderItemsList(entries);
+    itemsAndDetailsState.setChangeOrderItemsList(entries);
   };
 
   return useObserver(() => (
@@ -144,6 +143,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       handleAdd = {handleAdd}
       handleRemove = {handleRemove}
       handleUpdate = {handleUpdate}
+      itemsAndDetailsState = {itemsAndDetailsState}
     />
   ));
 
@@ -157,19 +157,16 @@ const ItemsAndDetailsWrapper: React.FunctionComponent<ItemsAndDetailsWrapperProp
   mode,
   asyncState,
 }) => (
-  <ItemsAndDetailsStoreContext.Provider value={itemsAndDetailsStore}>
-    <FBForm {...{ initialValues }}>
-      <ItemsAndDetailsContainer
-        changeRequest={changeRequest}
-        name="documentRevisions"
-        autosave={autosave}
-        initialValues={initialValues}
-        mode={mode}
-        asyncState={asyncState}
-      />
-    </FBForm>
-  </ItemsAndDetailsStoreContext.Provider>
-
+  <FBForm {...{ initialValues }}>
+    <ItemsAndDetailsContainer
+      changeRequest={changeRequest}
+      name="documentRevisions"
+      autosave={autosave}
+      initialValues={initialValues}
+      mode={mode}
+      asyncState={asyncState}
+    />
+  </FBForm>
 );
 
 export default ItemsAndDetailsWrapper;

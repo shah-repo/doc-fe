@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { cloneDeep, filter, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
@@ -36,8 +35,6 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
     formState = FB.useRef(FBFormState, {});
 
     const { submitForm } = useFormContext();
-
-    console.log(formState, parentFormState, parentFormValue, name);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // *Note: Can't remember why is this here. If it pass QA we can delete it.
