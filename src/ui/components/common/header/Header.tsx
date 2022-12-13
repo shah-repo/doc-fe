@@ -19,7 +19,7 @@ const styles = makeStyles((theme: Theme) =>
     },
     appbar: {
       zIndex: theme.zIndex.drawer + 1,
-      overflow: "hidden",
+      // overflow: "hidden", Removing this, to show the Express AR dropdown options
     },
     toolbar: (createUrl) => ({
       minHeight: createUrl ? "" : "84px",
