@@ -564,7 +564,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
       });
 
       it("Approve PO", () => {
-        cy.ebApprove();
+        cy.ebTryToApprove();
       });
     });
   });

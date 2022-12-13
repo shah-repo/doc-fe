@@ -56,7 +56,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
@@ -72,7 +72,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         multipleCompanies = loginResponse.employees.length > 1 ? true : false;
@@ -84,7 +84,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       });
     });
 
@@ -164,8 +164,8 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
       cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr, { force: true });
     });
 
-    it(`Enters company email '${USERS[1].email}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email, { force: true });
+    it(`Enters company email '${USERS[11].email}'`, () => {
+      cy.get("[name^=company-admin-email-]").arrowType(USERS[11].email, { force: true });
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
@@ -221,7 +221,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document for create company", () => {
@@ -236,7 +236,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
   context("Login User", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       });
     });
 
@@ -246,7 +246,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
           if (res.body !== "") {
             const response = res.body;
             apiCreatedCompany.employees = response.employees;
-            adminEmployee = apiCreatedCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+            adminEmployee = apiCreatedCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           }
         });
       }).as("response");
@@ -607,6 +607,8 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
 
     it("Select 'LHRt' document type", () => {
       cy.drSelectDocumentType({ documentType: "Lot History Record Template" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -740,7 +742,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Click 'LHR Step'", () => {
-      cy.get("[data-cy=\"LHR Step 2\"]").arrowClick();
+      cy.get("[data-cy=\"LHR Step 2\"]").arrowClick().wait(2000);
     });
 
     it("Click 'START MPI'", () => {
@@ -780,7 +782,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].email });
     });
 
     it("Click save document", () => {
@@ -806,7 +808,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
 
     it("Add approval", () => {
       cy.get(`[data-cy^="fb-approvals"]`).should("exist");
-      cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Click save document", () => {
