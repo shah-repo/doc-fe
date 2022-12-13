@@ -7,6 +7,8 @@ import { SM } from "../../../App";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
+import { AsyncStatus } from "../../../state/types";
+import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container";
 import { checkIsDocumentPO, checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 import FBDataStore from "../FBStore/FBDataStore";
 
@@ -26,6 +28,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   }: T) => {
 
     const dispatch = useDispatch();
+    const headerContext = React.useContext(FormHeaderContext)!;
     const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
@@ -92,6 +95,15 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     }
 
+    const loading = useObserver(() =>
+      Boolean(
+        headerContext?.asyncState?.status === AsyncStatus.Active
+      || workspaceState?.loading
+      || purchaseOrderState?.loading
+      || poReceiveState?.loading
+      || _documentRevisionFormState?.loading)
+    );
+
     return Component({
       ...(props as T),
       handleItem,
@@ -102,6 +114,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       disabled,
       name,
       isReceivable,
+      loading,
       isPO,
     });
   };

@@ -180,6 +180,7 @@ context("Document Creation Flow", () => {
     context("Uploads attachments", () => {
       it("Uploads redline attachment: test.docx", () => {
         SystemRequirement("REQ-0260");
+        cy.wait(2000);
         cy.atchUploadRedlineAttachment({ fileName: "test.docx" });
       });
 
@@ -231,6 +232,7 @@ context("Document Creation Flow", () => {
 
       it("Upload multiple attachments at once: 'image.jpg' and 'test_image.jpg'", () => {
         SystemRequirement("REQ-0220");
+        cy.wait(2000);
         cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
         cy.get("#attachments-button-file-clean-copy")
           .attachFiles(
@@ -274,6 +276,8 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads test_image.jpg", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 

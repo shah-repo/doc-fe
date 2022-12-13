@@ -428,7 +428,7 @@ context("Purchase Supplier Update1", () => {
       });
 
       it("Approve the suppller", () => {
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
       });
 
       it("Update Supplier name and Release it", () => {
@@ -438,7 +438,7 @@ context("Purchase Supplier Update1", () => {
 
         cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
       });
 
       it("Turn off autosave", () => {
@@ -483,7 +483,7 @@ context("Purchase Supplier Update1", () => {
 
         cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
       });
 
       it("Turn off autosave", () => {
@@ -524,7 +524,7 @@ context("Purchase Supplier Update1", () => {
 
       it("Approve PO", () => {
         cy.contains("PO-00001").arrowClick();
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
       });
 
       it("Log out user", () => {
@@ -550,7 +550,7 @@ context("Purchase Supplier Update1", () => {
         cy.drClickCreateDocumentWithApiCall();
         cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
         cy.pmSubmitForApproval();
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -618,7 +618,7 @@ context("Purchase Supplier Update1", () => {
       });
 
       it("Approve the doc", () => {
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
       });
 
       it("Turn off autosave", () => {

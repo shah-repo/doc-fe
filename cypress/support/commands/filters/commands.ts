@@ -85,11 +85,12 @@ Cypress.Commands.add("filterRecords", (params: {docId: string; revision: string;
   title: string; owner: string; releasedDate: string; formId: string; }) => {
   cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType(params.docId).wait(500);
   cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType(params.revision).wait(500);
-  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] [class="k-input"]`).scrollIntoView().arrowClick();
   cy.get("li").contains(params.state).arrowClick().wait(500);
   cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType(params.title).wait(500);
   cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType(params.owner).wait(500);
-  cy.get(`[aria-colindex="6"] [class="k-input"]`).arrowClick();
+  cy.get(`[aria-colindex="6"] [class="k-input"]`).scrollIntoView().arrowClick();
   cy.get("li").contains(params.releasedDate).arrowClick().wait(500);
   cy.get("[class=\"k-textbox\"]").eq(4).clear().arrowType(params.formId).wait(500);
 });

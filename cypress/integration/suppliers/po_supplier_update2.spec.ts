@@ -763,7 +763,7 @@ context("DAM approvals in LHR", () => {
 
       it("Approve PO", () => {
         cy.contains("PO-00001").arrowClick();
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
       });
 
       it("Log out user", () => {
@@ -898,7 +898,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Approve PO", () => {
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
       });
 
       it("Turn off autosave", () => {
