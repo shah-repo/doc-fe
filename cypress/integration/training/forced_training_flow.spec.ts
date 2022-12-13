@@ -490,6 +490,8 @@ context("Forced training flow", () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .autocompleteSelect("One-Time Training Test");
       });
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'Forced training title'", () => {
@@ -536,6 +538,8 @@ context("Forced training flow", () => {
 
     it("Click Submit for Approval", () => {
       cy.contains("Submit for approval").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {

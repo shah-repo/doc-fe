@@ -727,7 +727,7 @@ context("Test invalid data for records", () => {
       });
 
       it("Save bulk document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for approval", () => {

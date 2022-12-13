@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { groupBy } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import apiClient from "../../../../../../state/apiClient";
+import { DocumentRevisionStatus } from "../../../../../../state/ducks/documentRevisions/types";
 import { TRAINING_RECORDS_SEARCH_URL } from "../../../../../../state/ducks/training/constants";
 import { store } from "../../../../../../state/store";
 import FBTrainingInfoPresenter from "./FBTrainingInfo.presenter";
@@ -9,13 +10,14 @@ import { GroupByStateProps, TrainingItem, TrainingStates } from "./FBTrainingInf
 
 interface TrainingInfoContainerProps {
   documentRevisionId?: string;
+  docRevStatus: DocumentRevisionStatus;
 }
 
 let call: CancelTokenSource;
 
 const FBTrainingInfoContainer: React.FunctionComponent<
   TrainingInfoContainerProps
-> = ({ documentRevisionId }) => {
+> = ({ documentRevisionId, docRevStatus }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [trainingData, setTrainingData] = useState<GroupByStateProps>({});
 
@@ -110,6 +112,7 @@ const FBTrainingInfoContainer: React.FunctionComponent<
   return (
     <FBTrainingInfoPresenter
       trainingData={trainingData}
+      docRevStatus={docRevStatus}
       isLoading={isLoading}
     />
   );

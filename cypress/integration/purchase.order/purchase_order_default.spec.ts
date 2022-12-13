@@ -445,7 +445,7 @@ context("PO test with default enlil form", () => {
         });
 
         it("Click 'Approve' button", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
       });
     });

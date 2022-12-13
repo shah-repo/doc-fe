@@ -47,8 +47,7 @@ const FBDocumentRevisionsItem: React.FunctionComponent<FBDocumentRevisionsItemPr
           optionId={FBAutocompleteAsyncOption.documentRevisions}
           label="form.builder.document"
           gutter={false}
-          disabled={false}
-          freeSolo={true}
+          disabled
           shouldReloadOnInit
         />
       </Box>

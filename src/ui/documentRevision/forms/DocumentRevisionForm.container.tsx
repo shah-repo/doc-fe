@@ -26,7 +26,7 @@ import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
 import { checkIsDocumentDAM, checkIsDocumentEditableSchema, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
-import { isFormWithInlineApproval } from "../helpers/records";
+import { getShouldShowUpgradeForRecord, isFormWithInlineApproval } from "../helpers/records";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
 import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from "./types";
 
@@ -236,9 +236,10 @@ DocumentRevisionFormContainerProps
     documentRevision?.formDocument?.status,
     documentRevision?.formDocument?.document?.id
   );
+  const shouldShowUpgradeBannerForRecord = getShouldShowUpgradeForRecord(documentRevision);
 
   const shouldShowUpgrade =
-    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeForDocs))
+    ((!isRecord && shouldShowUpgradeForDocs) || (shouldShowUpgradeBannerForRecord && shouldShowUpgradeForDocs))
     && !isMPIOutput && !isLHR;
   const isDAM = checkIsDocumentDAM(formGroupOptions);
 
