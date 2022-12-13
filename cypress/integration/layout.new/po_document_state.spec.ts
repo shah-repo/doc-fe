@@ -302,14 +302,13 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
     });
 
     context("Add Required Fields", () => {
-      // xit(`Select '${USERS[1].name}' for Requestor`, () => {
-      //   cy.pause();
-      //   cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true });
-      //   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-      //     cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      //   });
-      //   cy.listLoadingElementShouldNotExist();
-      // });
+      it(`Select '${USERS[1].name}' for Requestor`, () => {
+        cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist().wait(2000);
+      });
 
       it("Add Required Date", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -397,15 +396,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
     context("Approve the PO → The PO is in the Released status", () => {
       it("Approve the PO", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -452,18 +443,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           });
 
           it("Approve the PO", () => {
-            cy.wait(3000);
-            cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-            cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-            cy.unClick();
-            cy.wrapWithWaitOnApiCalls(
-              [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-              () => {
-                cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-              }
-            );
-            cy.checkToastMessage({ exists: false });
-            cy.listLoadingElementShouldNotExist();
+            cy.ebApproveWithoutApi();
           });
         });
       });
@@ -505,15 +485,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Approve the PO", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -541,18 +513,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Approve the record", () => {
-          cy.wait(2000);
-          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-          cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
-          cy.checkToastMessage({ exists: false });
-          cy.listLoadingElementShouldNotExist();
+          cy.ebApproveWithoutApi();
         });
       }
     );

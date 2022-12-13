@@ -46,8 +46,8 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty } = change;
-      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
+      const { owner, ownerUser, ownerThirdParty, ownerName } = change;
+      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name ?? ownerName;
 
       if (change.field.includes("-built-in")) {
         return null;
@@ -61,7 +61,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         <Box key={groupId} className={classes.changeContainer}>
           <UserAvatarListItem
             name={<span data-cy={`change-key-${key}`}>{name}</span>}
-            user={(owner && owner.user) || ownerUser || ownerThirdParty}
+            user={(owner && owner.user) || ownerUser || ownerThirdParty || { name }}
             secondaryComponent={
               <DateTime
                 data-cy={`audit-time-${key}`}

@@ -47,6 +47,11 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @observable public leftPanelOpen = false;
 
   /**
+   * @cfg {string} Selected Tab Id at the time of opening form builder Library
+   */
+  public selectedTabIdForSchemaAddition = "";
+
+  /**
    * @cfg {boolean} Right Panel open/close.
    */
   @observable public rightPanelOpen = true;
@@ -148,6 +153,9 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
   @action setLeftPanelOpen = () => set(this, "leftPanelOpen", !this.leftPanelOpen);
   @action setRightPanelOpen = () => set(this, "rightPanelOpen", !this.rightPanelOpen);
 
+  @action public setTabIdForSchemaAddition = (tabName: string) => {
+    set(this, "selectedTabIdForSchemaAddition", tabName);
+  };
   // MARK: @helpers
   public setDocumentRevision = (documentRevision?: DocumentRevision | undefined) => {
     this.documentRevision = documentRevision;

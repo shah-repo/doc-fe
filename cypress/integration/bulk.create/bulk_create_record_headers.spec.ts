@@ -660,7 +660,7 @@ context("Bulk create record headers", () => {
 
     context("Create bulk records", () => {
       it("Save bulk document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click on 'Overview' tab", () => {

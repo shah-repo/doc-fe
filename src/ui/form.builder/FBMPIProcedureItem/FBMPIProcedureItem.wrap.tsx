@@ -1,7 +1,7 @@
 import { cloneDeep, concat, get, uniqBy } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FB, FBDialogState, FBFormMode, FBMPIProcedureItemProps, FBMPIProcedureSelect, FBMPIProcedureSelectValue, FBProcedureForm, FBProcedureItemConfig, FBProcedureItemLocale, FBProcedureItemType } from "..";
 import { companySelectors } from "../../../state/ducks/company";
@@ -26,7 +26,6 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     isDateOverdue,
     loading,
     dialogState,
-    multiplier = 1,
     isPreview,
     name,
     type,
@@ -41,6 +40,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     // MARK: @config
     const dispatch = useDispatch();
+    const [lhrsQuantity, setLhrsQuantity] = useState(1);
     const { mpiProcedureState, workspaceState, formState } = FB.useStores();
     const { document, id } = workspaceState || {};
     const { version, status } = document || {};
@@ -57,10 +57,8 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       ref?.active &&
       ((ref.fromDocRev?.version || 1 ) <= (version || 1))),
     [smartRef, version]);
-
     const usedDocumentsInLHRS = workspaceState?.document?.usedDocumentsInLHRS;
     dialogState = FB.useRef(FBDialogState);
-    multiplier = formState?.getFieldValue("lhrs-start-quantity") || 1;
     isPreview = isPreview && workspaceState?.mode !== "formPreview";
     isReleased = status === DocumentRevisionStatus.Released || status === DocumentRevisionStatus.Deprecated;
     // Have to use isDocumentForm instead of isOutput because od MPI
@@ -72,12 +70,26 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     redlineActive = useSelector(companySelectors.getRedlineActive);
 
     useEffect(() => {
+
       if (!mpiProcedureState || !smartReferencesTo) { return; }
       setFilteredParts(smartReferencesTo);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // MARK: @reactions
+
+    React.useEffect(() => {
+      reaction(
+        () => formState?.getInputState("lhrs-start-quantity")?.value,
+        (data?: DocumentRevision) => {
+          if (!data) { return; }
+          const formValue = cloneDeep(formState?.getFieldValue("lhrs-start-quantity"));
+          setLhrsQuantity(formValue);
+        }
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     React.useEffect(() => {
       reaction(
         () => mpiProcedureState?.deleteLotApi.data,
@@ -92,7 +104,6 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     // MARK: @helpers
     isDateOverdue = (date?: string) => {
@@ -146,7 +157,6 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
         ),
       });
     };
-
     handleSelect = (item: FBProcedureItemConfig) => {
       dialogState?.config({
         open: true,
@@ -176,7 +186,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     getProcedureValues = (item: FBProcedureItemConfig) => {
       const id = item.id;
-      const quantity = item.quantity ? (item.quantity * multiplier) : "form.builder.none";
+      const quantity = item.quantity ? (item.quantity * lhrsQuantity) : "form.builder.none";
       const unit = item.unit;
       const usedItem = usedDocumentsInLHRS?.[item.title];
       const revision = usedItem?.displayRevision;
@@ -227,7 +237,6 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
       mpiProcedureState,
       isPreview,
       dialogState,
-      multiplier,
       loading,
       name,
       type,

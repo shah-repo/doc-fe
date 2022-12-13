@@ -43,9 +43,9 @@ context("Training by Groups", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4], USERS[7]],
+            users: [USERS[12], USERS[13], USERS[14], USERS[7]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -54,10 +54,10 @@ context("Training by Groups", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
-          fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
+          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[13].email);
+          fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[14].email);
           fifthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[7].email);
           done();
         });
@@ -66,7 +66,7 @@ context("Training by Groups", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -320,7 +320,7 @@ context("Training by Groups", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -358,7 +358,10 @@ context("Training by Groups", () => {
     it("Select 'Training Curriculum test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
+
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithApiCall();
@@ -456,7 +459,7 @@ context("Training by Groups", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Save training", () => {
@@ -475,20 +478,24 @@ context("Training by Groups", () => {
   context("Check columns on Training Curriculums page", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter created training on Training Curriculums page", () => {
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00001").and("contain", "test training title")
-        .and("contain", USERS[1].name).and("contain", "Released").and("contain", "Group1, Group2");
+        .and("contain", USERS[11].name).and("contain", "Released").and("contain", "Group1, Group2");
     });
   });
 
   context("Revise created training by another user", () => {
-    it(`Login with ${USERS[2].name}`, () => {
+    it(`Login with ${USERS[12].name}`, () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[12].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
@@ -496,6 +503,8 @@ context("Training by Groups", () => {
 
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open created training", () => {
@@ -539,10 +548,12 @@ context("Training by Groups", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
       cy.reload();
-      cy.trLandingPageOwner({ owner: USERS[2].name });
+      cy.trLandingPageOwner({ owner: USERS[12].name });
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00001").and("contain", "test training title update")
-        .and("contain", USERS[2].name).and("contain", "Draft").and("contain", "Group2, Group3");
+        .and("contain", USERS[12].name).and("contain", "Draft").and("contain", "Group2, Group3");
       cy.get("button[data-cy=clearFilter]").arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
@@ -555,7 +566,7 @@ context("Training by Groups", () => {
 
     it("Select Approver", () => {
       cy.contains("Approvals").eq(0).arrowClick();
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[12].name });
     });
 
     it("Click Submit for Approval", () => {
@@ -576,9 +587,11 @@ context("Training by Groups", () => {
     it("Check data updated on Training Curriculum page", () => {
       cy.navigToTrainingCurriculums();
       cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("TC-00001").wait(500);
-      cy.trLandingPageOwner({ owner: USERS[2].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.trLandingPageOwner({ owner: USERS[12].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TC-00001").and("contain", "test training title update")
-        .and("contain", USERS[2].name).and("contain", "Released").and("contain", "Group2, Group3");
+        .and("contain", USERS[12].name).and("contain", "Released").and("contain", "Group2, Group3");
     });
   });
 });
