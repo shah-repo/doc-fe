@@ -44,10 +44,10 @@ const loadList = (
   });
 };
 
-const load = (id: string): ApiAction<DocumentRevision> => apiAction({
+const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC ): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
   method: "get",
-  asyncType: DOCUMENT_REVISION_GET_ASYNC,
+  asyncType,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },
