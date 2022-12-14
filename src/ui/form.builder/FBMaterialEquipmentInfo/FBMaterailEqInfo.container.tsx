@@ -23,7 +23,7 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
     itemsState.loading,
   ]));
 
-  const isObsolete = Boolean(documentRevision?.displayStatus.includes("Obsolete"));
+  const isObsolete = Boolean(documentRevision?.displayStatus?.includes("Obsolete"));
   const isLHRT = checkIsDocumentLHRT(documentRevision?.document?.documentType?.groupOptions);
   const isMPI = checkIsDocumentMPI(documentRevision?.document?.documentType?.groupOptions);
   const isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);

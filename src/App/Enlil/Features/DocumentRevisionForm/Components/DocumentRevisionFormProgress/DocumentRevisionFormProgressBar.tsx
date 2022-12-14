@@ -40,10 +40,22 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
     const inProgress: number[] = [];
     const complete: number[] = [];
     each(smartReferencesFrom, (e) => {
-      e?.stepIndex &&
-        (getLHRStatus(e?.fromDocRev) === "inprogress"
-          ? inProgress.push(e.stepIndex)
-          : complete.push(e.stepIndex));
+      if (e.stepIndex) {
+        const completedStepIndexVal = complete.indexOf(e.stepIndex);
+        const inprogressStepIndexVal = inProgress.indexOf(e.stepIndex);
+        if (getLHRStatus(e?.fromDocRev) === "inprogress") {
+          if (inprogressStepIndexVal === -1) {
+            inProgress.push(e.stepIndex);
+          }
+          if (completedStepIndexVal > -1) {
+            complete.splice(completedStepIndexVal, 1);
+          }
+        } else {
+          if (completedStepIndexVal === -1 && inprogressStepIndexVal === -1) {
+            complete.push(e.stepIndex);
+          }
+        }
+      }
     });
     setInprogress(inProgress);
     setCompleted(complete);
