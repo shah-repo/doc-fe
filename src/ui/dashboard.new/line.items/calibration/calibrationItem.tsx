@@ -1,11 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import {
-  Box,
-  Grid,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Box, Grid, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as EQIcon } from "../../../../assets/images/EQ.svg";
 import { ReactComponent as PinIcon } from "../../../../assets/images/pin.svg";
@@ -17,7 +10,7 @@ import DocId from "../common/DocId/presenter";
 import DocTitle from "../common/DocTitle/presenter";
 import { StyledListItem } from "../common/StyledListItem";
 import { StyleTooltip } from "../common/StyleTooltip";
-import { styles } from "./calibrationItem.styles";
+import useStyles from "./calibrationItem.styles";
 
 interface Props {
   id: string;
@@ -37,7 +30,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
 }
-const taskApprovalPresenter: React.FunctionComponent<Props> = ({
+const TaskApprovalPresenter: React.FC<Props> = ({
   id,
   docDocumentId,
   docId,
@@ -54,7 +47,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
@@ -73,129 +66,133 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
     setPinHover(true);
   };
   return (
-    <>
-      <StyledListItem button onMouseEnter={onMouseHoverListItem} className={classes.buttoncursor} disableRipple>
-        <ListItemIcon>
-          <EQIcon height={30} width={30} />
-        </ListItemIcon>
-        <ListItemText
-          primary={
-            <>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item={true}>
-                  <DocId
-                    url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
-                    docId={docId}
-                  />
-                </Grid>
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <DocTitle
-                    url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
-                    docRevVersion={docRevVersion}
-                    docRevName={docRevName}
-                  />
-
-                </Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={`${classes.typography} ${classes.margin5}`}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    <Text
-                      translation={
-                        type === ActionTypes.EQ_CALIBRATION_OWNER_OR_COORDINATOR
-                          ? "dashboard.calibration.due"
-                          : "dashboard.preventive.maintenance.due"
-                      }
-                      values={{
-                        noOfDays: equipmentInterval,
-                      }}
-                    />
-                  </Typography>
-                </Grid>
-                <Grid item={true} className={classes.grayDot}></Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.dueOn}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {dueOn}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item={true} className={classes.grayDot}></Grid>
-                <Grid item={true} md={12} sm={12}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.timestampContainer}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {timestamp}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </>
-          }
-        />
-        {hoverItem && !pinned && (
-          <Box
-            component="div"
-            className={classes.actionIcons}
-            onMouseLeave={onMouseLeaveActionIcons}
-          >
-            <span className={classes.actionIcon}>
-              {!pinHover && !pinned && (
-                <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
-              )}
-              {pinHover && !pinned && (
-                <StyleTooltip
-                  title={<Text translation="common.pin" />}
-                  placement="top"
-                  arrow
-                >
-                  <PinSolidIcon
-                    onClick={handlePinClick}
-                    onMouseLeave={onMouseLeaveActionIcons}
-                    className={classes.cursorPointer}
-                  />
-                </StyleTooltip>
-              )}
-            </span>
-          </Box>
-        )}
-        {pinned && (
-          <span className={classes.actionIcon}>
-            <StyleTooltip
-              title={<Text translation="common.unpin" />}
-              placement="top"
-              arrow
+    <StyledListItem
+      button
+      divider
+      disableRipple
+      className={classes.buttoncursor}
+      onMouseEnter={onMouseHoverListItem}
+    >
+      <ListItemIcon>
+        <EQIcon height={30} width={30} />
+      </ListItemIcon>
+      <ListItemText
+        primary={
+          <>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
             >
-              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
-            </StyleTooltip>
+              <Grid item={true}>
+                <DocId
+                  url={docId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                  docId={docId}
+                />
+              </Grid>
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                <DocTitle
+                  url={docRevId ? documentVersionPath(docRevId || "", docDocumentId) : "#"}
+                  docRevVersion={docRevVersion}
+                  docRevName={docRevName}
+                />
+
+              </Grid>
+              <Grid item={true}>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={`${classes.typography} ${classes.margin5}`}
+                  color="textPrimary"
+                  noWrap
+                >
+                  <Text
+                    translation={
+                      type === ActionTypes.EQ_CALIBRATION_OWNER_OR_COORDINATOR
+                        ? "dashboard.calibration.due"
+                        : "dashboard.preventive.maintenance.due"
+                    }
+                    values={{
+                      noOfDays: equipmentInterval,
+                    }}
+                  />
+                </Typography>
+              </Grid>
+              <Grid item={true} className={classes.grayDot}></Grid>
+              <Grid item={true}>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.dueOn}
+                  color="textSecondary"
+                  noWrap
+                >
+                  {dueOn}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
+            >
+              <Grid item={true} className={classes.grayDot}></Grid>
+              <Grid item={true} md={12} sm={12}>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.timestampContainer}
+                  color="textSecondary"
+                  noWrap
+                >
+                  {timestamp}
+                </Typography>
+              </Grid>
+            </Grid>
+          </>
+        }
+      />
+      {hoverItem && !pinned && (
+        <Box
+          component="div"
+          className={classes.actionIcons}
+          onMouseLeave={onMouseLeaveActionIcons}
+        >
+          <span className={classes.actionIcon}>
+            {!pinHover && !pinned && (
+              <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
+            )}
+            {pinHover && !pinned && (
+              <StyleTooltip
+                title={<Text translation="common.pin" />}
+                placement="top"
+                arrow
+              >
+                <PinSolidIcon
+                  onClick={handlePinClick}
+                  onMouseLeave={onMouseLeaveActionIcons}
+                  className={classes.cursorPointer}
+                />
+              </StyleTooltip>
+            )}
           </span>
-        )}
-      </StyledListItem>
-    </>
+        </Box>
+      )}
+      {pinned && (
+        <span className={classes.actionIcon}>
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+          </StyleTooltip>
+        </span>
+      )}
+    </StyledListItem>
   );
 };
 
-export default taskApprovalPresenter;
+export default TaskApprovalPresenter;

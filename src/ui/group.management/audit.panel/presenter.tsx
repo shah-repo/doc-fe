@@ -10,7 +10,7 @@ import { GM_AUDIT_HISTORY_INITIAL_OFFSET, GM_AUDIT_HISTORY_LIMIT, GM_AUDIT_URL }
 import { AuditDetailsProps, GMAuditProps } from "../../../state/ducks/userManagement/types";
 import { store } from "../../../state/store";
 import Default from "../../components/common/audit.history/Cards/Default";
-import { LoadMoreButton } from "../../components/common/audit.history/LoadMoreButton";
+import LoadMoreButton from "../../components/common/load.more.button/LoadMoreButton";
 import Text from "../../components/Text";
 import Colors from "../../layout/theme/utils/colors";
 import styles from "./styles";
@@ -121,22 +121,27 @@ const AuditItemPresenter: React.FunctionComponent<OwnProps> = ({
           <Box key={groupKey} style={{ padding: 0 }}>
             {<Default auditDetails={auditDetails} />}
           </Box>)
-
         )}
       </Box>
     </>
   );
+
   return (
-    <Drawer anchor="right" open={openDrawer.right} onClose={() => closeDrawer()}>
-      <Box width={300}>{renderAuditRecords()}</Box>
-      {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
-      {showLoadMoreButton && (
-        <LoadMoreButton
-          disable={isLoading || !loadMore || overallLimit >= dataTotal}
-          onLoadMore={fetchAuditRecords}
-          id="historyLoadMore"
-        />
-      )}
+    <Drawer anchor="right" open={openDrawer.right} onClose={closeDrawer}>
+      <Box className={classes.root}>
+        {renderAuditRecords()}
+        {!isEmpty(errorMessage) && <div style={{ color: "red" }}>{errorMessage}</div>}
+        {showLoadMoreButton && (
+          <Box className={classes.listActions}>
+            <LoadMoreButton
+              disable={isLoading || !loadMore || overallLimit >= dataTotal}
+              onLoadMore={fetchAuditRecords}
+              id="historyLoadMore"
+              className={classes.loadMore}
+            />
+          </Box>
+        )}
+      </Box>
     </Drawer>
   );
 };

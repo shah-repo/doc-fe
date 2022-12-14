@@ -10,13 +10,14 @@ export default makeStyles((theme: Theme) =>
       fontFamily: "inherit",
     },
     label: {
-      margin: theme.spacing(3, 0, 4, 0),
+      margin: theme.spacing(4, 0, 2, 0),
       fontWeight: "bold",
       color: Colors.dark_gray,
     },
     gridWrapper: {
       display: "flex",
       justifyContent: "center",
+      padding: theme.spacing(2, 0),
     },
   })
 );

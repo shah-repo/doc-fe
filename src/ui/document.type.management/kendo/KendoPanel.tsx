@@ -25,6 +25,7 @@ import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import CellRender from "../../components/common/kendo.column.templates/CellRender";
 import { DropdownFilterTemplate } from "../../components/common/kendo.column.templates/DropdownFilterTemplate";
 import ColumnHeader from "../../components/common/kendo/ColumnHeader";
+import ExportListIcon from "../../components/common/kendo/ExportListIcon";
 import { DisplayText, hideColumnTitleOnResize, hideOperatorTooltip, TranslatedText } from "../../components/common/kendo/helpers";
 import Loader from "../../components/common/kendo/Loader";
 import NoDataFound from "../../components/common/kendo/NoDataFound";
@@ -581,6 +582,7 @@ export function KendoPanel<T extends { id?: string }>({
   );
 
   const renderBody = () => <AutoSizer>{tableRenderer}</AutoSizer>;
+  const isGrouped = (initialDataState?.group || [])?.length > 0;
   return (
     <Grid container>
       <Grid item xs={12} className={gridClasses.headerGridItem}>
@@ -594,7 +596,9 @@ export function KendoPanel<T extends { id?: string }>({
               variant="outlined"
               data-cy="Export-Dam-Button"
               className={classes.exportBtn}
+              disabled={isGrouped}
             >
+              <ExportListIcon isGrouped={isGrouped} />
               <Text translation={"common.export.dam.details"} />
             </Button>
             <Button

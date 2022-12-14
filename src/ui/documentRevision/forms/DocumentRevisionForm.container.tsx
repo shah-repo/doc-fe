@@ -173,7 +173,7 @@ DocumentRevisionFormContainerProps
       FBDataStore.clearPoApprovals();
       FBDataStore.clearInlineApprovals();
     };
-  }, []);
+  }, [documentRevision]);
 
   useEffect(() => {
     if (type !== "newVersion" && !docId && loadDocumentProposedId && documentTypeAcronym) {
@@ -280,7 +280,7 @@ DocumentRevisionFormContainerProps
     <>
       <Grid ref={bannerPortal} />
       {/* TODO Get rid of inline styles */}
-      <Grid style={{ background: Colors.alabaster, height: "100%" }} >
+      <Grid style={{ background: Colors.alabaster, height: "100%" }}>
         <Formik
           initialValues={cleanInitialValues}
           onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }

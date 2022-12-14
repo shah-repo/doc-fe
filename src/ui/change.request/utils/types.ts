@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { RouteComponentProps } from "react-router-dom";
 import { AuthProps } from "../../../state/ducks/auth/types";
 import { changeRequestsActions } from "../../../state/ducks/changeRequest";

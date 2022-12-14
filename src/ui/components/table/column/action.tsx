@@ -24,12 +24,11 @@ Props<T>
     }
   };
 
-  // eslint-disable-next-line: no-shadowed-variable
-  const handleClick = ({ rowData, actionType }: TableSelectionProps<T>) => (
+  const handleClick = (payload: TableSelectionProps<T>) => (
     e: React.MouseEvent,
   ) => {
     if (onSelect) {
-      onSelect({ rowData, actionType })();
+      onSelect(payload)();
       e.stopPropagation();
     }
   };

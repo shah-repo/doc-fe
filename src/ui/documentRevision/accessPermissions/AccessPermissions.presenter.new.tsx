@@ -12,11 +12,11 @@ import { documentRevisionsActions } from "../../../state/ducks/documentRevisions
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
+import { FBTooltip } from "../../form.builder";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import Colors from "../../layout/theme/utils/colors";
 import { styles } from "./AccessPermissions.styles.new";
-import { FBTooltip } from "../../form.builder";
 
 interface OwnProps {
   availableApprovers: OptionType[];
@@ -345,7 +345,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                       <Text message={label || "common.operators"} />
                     </Typography>
                     <>
-                      <Box width={203} height={40} fontFamily="Sora" pt={1.825}>
+                      <Box width={203} fontFamily="Sora" pt={1.825}>
                         <Select
                           id="document.assing.to.sidebar"
                           menuPlacement={"top"}

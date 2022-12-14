@@ -172,7 +172,7 @@ const approveAndReleaseNonQms = (
   password: string,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_ROOT_URL}/release/release_non_qms/${id}`,
+  url: `${DOCUMENT_REVISION_ROOT_URL}/release_unsigned/${id}`,
   method: "post",
   data: body,
   password,
@@ -345,7 +345,7 @@ const getDocRevStatuses = (
     notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
       `${categoryUrl}`) : categoryUrl;
   const url = notIncategory === undefined ?
-    notInGroupcheckURL : `${notInGroupcheckURL}` + `notIncategory=${notIncategory}&`;
+    notInGroupcheckURL : `${notInGroupcheckURL}notIncategory=${notIncategory}&`;
   return apiActionWithCallbacks({
     url,
     method: "get",
