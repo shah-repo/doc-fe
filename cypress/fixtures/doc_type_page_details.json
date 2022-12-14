@@ -35,7 +35,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.po-docId-in-receiving",
-          "sourcePath": ["formInput.select-po-krowk9h4"],
+          "sourcePath": [
+            "formInput.select-po-krowk9h4"
+          ],
           "showOnAndroid": true
         },
         {
@@ -51,7 +53,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.po-suppliers-in-receiving",
-          "sourcePath": ["formInput.select-po-krowk9h4"],
+          "sourcePath": [
+            "formInput.select-po-krowk9h4"
+          ],
           "showOnAndroid": true
         },
         {
@@ -60,7 +64,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.po-status-in-receiving",
-          "sourcePath": ["formInput.select-po-krowk9h4"],
+          "sourcePath": [
+            "formInput.select-po-krowk9h4"
+          ],
           "showOnAndroid": true
         }
       ]
@@ -86,7 +92,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.version",
-          "sourcePath": ["revisionStage:revision"],
+          "sourcePath": [
+            "revisionStage:revision"
+          ],
           "showOnAndroid": true
         },
         {
@@ -95,7 +103,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.po_status",
-          "sourcePath": ["formDocument.formTemplate.schema"],
+          "sourcePath": [
+            "formDocument.formTemplate.schema"
+          ],
           "showOnAndroid": true
         },
         {
@@ -111,7 +121,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.supplier",
-          "sourcePath": ["formDocument.formTemplate.schema"],
+          "sourcePath": [
+            "formDocument.formTemplate.schema"
+          ],
           "showOnAndroid": true
         },
         {
@@ -120,7 +132,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.po_partNumber",
-          "sourcePath": ["formDocument.formTemplate.schema"],
+          "sourcePath": [
+            "formDocument.formTemplate.schema"
+          ],
           "showOnAndroid": true
         },
         {
@@ -129,7 +143,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.po_amount",
-          "sourcePath": ["formDocument.formTemplate.schema"],
+          "sourcePath": [
+            "formDocument.formTemplate.schema"
+          ],
           "showOnAndroid": true
         },
         {
@@ -138,7 +154,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.requestor-k740hxlb",
-          "sourcePath": ["formInput.requestor-k740hxlb"],
+          "sourcePath": [
+            "formInput.requestor-k740hxlb"
+          ],
           "showOnAndroid": true
         },
         {
@@ -147,7 +165,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.order-date-formatted",
-          "sourcePath": ["formInput.ordered-k6mlhan7"],
+          "sourcePath": [
+            "formInput.ordered-k6mlhan7"
+          ],
           "showOnAndroid": true
         }
       ]
@@ -173,7 +193,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.revision",
-          "sourcePath": ["revisionStage:revision"],
+          "sourcePath": [
+            "revisionStage:revision"
+          ],
           "showOnAndroid": true
         },
         {
@@ -262,13 +284,6 @@
           "showOnWeb": true,
           "valuePath": "owner.user.name",
           "showOnAndroid": true
-        },
-        {
-          "label": "Approval ID",
-          "fieldName": "irrelevant",
-          "showOnWeb": true,
-          "valuePath": "changeRequest.crId",
-          "showOnAndroid": true
         }
       ]
     },
@@ -293,7 +308,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.revision",
-          "sourcePath": ["revisionStage:revision"],
+          "sourcePath": [
+            "revisionStage:revision"
+          ],
           "showOnAndroid": true
         },
         {
@@ -316,7 +333,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.fb_primary_owner_eq",
-          "sourcePath": ["formInput.fb-primary-owner-eq"],
+          "sourcePath": [
+            "formInput.fb-primary-owner-eq"
+          ],
           "showOnAndroid": true
         },
         {
@@ -325,7 +344,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.cali_due_date",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": true
         },
         {
@@ -334,7 +355,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.pm_due_date",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": true
         },
         {
@@ -342,7 +365,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "formInput.fb-default-eq-status",
-          "sourcePath": ["formInput.fb-default-eq-status"],
+          "sourcePath": [
+            "formInput.fb-default-eq-status"
+          ],
           "showOnAndroid": true
         }
       ]
@@ -361,7 +386,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": false,
           "valuePath": "precalc.lot_part",
-          "sourcePath": ["formInput.lot_part"],
+          "sourcePath": [
+            "formInput.lot_part"
+          ],
           "showOnAndroid": false
         },
         {
@@ -370,7 +397,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": false,
           "valuePath": "precalc.lshs_subtitle",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": false
         },
         {
@@ -393,7 +422,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.lot_part",
-          "sourcePath": ["formInput.lot_part"],
+          "sourcePath": [
+            "formInput.lot_part"
+          ],
           "showOnAndroid": false
         },
         {
@@ -409,7 +440,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.formDocId",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": true
         }
       ]
@@ -435,7 +468,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.revision",
-          "sourcePath": ["revisionStage:revision"],
+          "sourcePath": [
+            "revisionStage:revision"
+          ],
           "showOnAndroid": true
         },
         {
@@ -472,7 +507,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.formDocId",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": true
         },
         {
@@ -481,7 +518,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.partFromEb",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": true
         }
       ]
@@ -500,7 +539,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": false,
           "valuePath": "precalc.lshs_subtitle",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": false
         },
         {
@@ -508,7 +549,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.lshs_subtitle.lot.label",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": false
         },
         {
@@ -552,7 +595,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.lhr_end_accepted_quantity",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": true
         },
         {
@@ -561,7 +606,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.formDocId",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": true
         },
         {
@@ -587,7 +634,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": false,
           "valuePath": "precalc.lot_part",
-          "sourcePath": ["formInput.lot_part"],
+          "sourcePath": [
+            "formInput.lot_part"
+          ],
           "showOnAndroid": false
         },
         {
@@ -603,7 +652,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.revision",
-          "sourcePath": ["revisionStage:revision"],
+          "sourcePath": [
+            "revisionStage:revision"
+          ],
           "showOnAndroid": true
         },
         {
@@ -640,7 +691,9 @@
           "fieldName": "irrelevant",
           "showOnWeb": true,
           "valuePath": "precalc.formDocId",
-          "sourcePath": ["irrelevant"],
+          "sourcePath": [
+            "irrelevant"
+          ],
           "showOnAndroid": true
         }
       ]

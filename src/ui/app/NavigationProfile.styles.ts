@@ -16,9 +16,9 @@ export default (theme: Theme) =>
       },
     },
     bottomPush: {
-      paddingBottom: 10,
-      marginRight: 11,
-      marginLeft: 5,
+      paddingTop: 8,
+      marginRight: 20,
+      marginLeft: 4,
     },
     emailPosition: {
       flexFlow: "nowrap",

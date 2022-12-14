@@ -43,9 +43,5 @@ export const styles = makeStyles((theme: Theme) =>
       backgroundColor: Colors.white,
       color: Colors.navy,
     },
-    iconSvg: {
-      fill: Colors.navy,
-      marginRight: theme.spacing(0.625),
-    },
   }),
 );

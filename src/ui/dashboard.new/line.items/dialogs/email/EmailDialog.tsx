@@ -1,25 +1,11 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Collapse,
-  Grid,
-  IconButton,
-  List,
-  ListItemText,
-  Modal,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Box, Button, Collapse, Grid, IconButton, List, ListItemText, Modal, Typography } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/arrow_down.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/arrow_up.svg";
 import { ReactComponent as EmailSuccessIcon } from "../../../../../assets/images/email_success.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../../assets/images/model_close.svg";
-import {
-  getFormattedDateString,
-  MomentFormats,
-} from "../../../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { emailAllActions } from "../../../../../state/ducks/email.all";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
@@ -51,14 +37,15 @@ interface EmailModalProps {
   }[];
 }
 
-const EmailModal: React.FunctionComponent<EmailModalProps> = ({
+
+const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
   id,
   handleEmailModelClose,
   setLastEmailSent,
   pendingApprovers,
   pendingEmailSentAt,
   approvedApprovers,
-}) => {
+}, ref) => {
   const classes = styles();
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
   const [openPending, setOpenPending] = React.useState(true);
@@ -371,5 +358,5 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
       </Box>
     </Box>
   );
-};
+});
 export default EmailModal;
