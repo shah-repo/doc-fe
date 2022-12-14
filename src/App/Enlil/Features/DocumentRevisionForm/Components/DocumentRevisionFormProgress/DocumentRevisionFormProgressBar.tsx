@@ -42,16 +42,16 @@ const DocumentRevisionFormProgressBar: React.FunctionComponent<Props> = ({
     each(smartReferencesFrom, (e) => {
       if (e.stepIndex) {
         const completedStepIndexVal = complete.indexOf(e.stepIndex);
-        const inprogressStepIndexVal = inProgress.indexOf(e.stepIndex);
+        const isInprogressStepExists = inProgress.includes(e.stepIndex);
         if (getLHRStatus(e?.fromDocRev) === "inprogress") {
-          if (inprogressStepIndexVal === -1) {
+          if (!isInprogressStepExists) {
             inProgress.push(e.stepIndex);
           }
           if (completedStepIndexVal > -1) {
             complete.splice(completedStepIndexVal, 1);
           }
         } else {
-          if (completedStepIndexVal === -1 && inprogressStepIndexVal === -1) {
+          if (completedStepIndexVal === -1 && !isInprogressStepExists) {
             complete.push(e.stepIndex);
           }
         }
