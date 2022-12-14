@@ -255,6 +255,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Upload Users List JSON", () => {
@@ -262,6 +263,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
@@ -270,14 +272,19 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.pmUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Click on 'Save' button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document for create company", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Log out user", () => {
@@ -543,14 +550,21 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Enter description as 'POAM Doc description'", () => {
       cy.drEnterDocumentDescription({ description: "POAM Doc description" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click 'Save' document", () => {
       cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to MatrixDetails tab", () => {
       cy.drSelectMatrixDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -564,23 +578,31 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Enter Level Name value to be 'level 1'", () => {
       cy.poAMEnterLevelName({ name: "level 1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Limit value to be '400'", () => {
       cy.poAMEnterLimit({ limit: "400" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Fill in the fields - Signature 1 group as 'QA'", () => {
       cy.get(`[name="signatures.0.groups"]`).arrowClick().wait(1000);
-      cy.contains("QA").arrowClick().wait(1000);
+      cy.contains("QA").arrowClick().wait(2000);
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Click on 'Add' button", () => {
       cy.get(`[data-cy="common.add"]`).contains("Add").arrowClick().wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify 'QA' group exists under signature 1", () => {
@@ -589,12 +611,16 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Click 'Save' document", () => {
       cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Release POAM", () => {
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -639,6 +665,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Selects 'PO Part' document type from dropdown", () => {
       cy.drSelectOutputDocumentType({ documentType: "Parts" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document after filling document", () => {
@@ -665,6 +693,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Clicks on 'PO Part' Form", () => {
       cy.ptSelectPartFormFromMultiSelect({ partForm: "Parts" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enters title 'New Part'", () => {
@@ -699,6 +729,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Clicks on 'PO Part' Form", () => {
       cy.ptSelectPartFormFromMultiSelect({ partForm: "Parts" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enters title 'New Part 2'", () => {
@@ -782,6 +814,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
   context("Create a new PO document", () => {
     it("Click on 'Create New' button", () => {
       cy.drCreateNewDocumentFromFormRecord();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -1077,6 +1111,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Check new requestor is added", () => {
@@ -1090,15 +1125,13 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
   context("Verify that history tab is capturing requestor Updated and approver Added", () => {
     it("Check history entry for 'Requestor Updated'", () => {
-      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
-        .should("exist");
-      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[12].name)
-        .should("exist");
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).contains("Requestor Updated");
+      // eslint-disable-next-line max-len
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).parent().parent().should("contain.text", USERS[12].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[data-cy="no-padding-margin"]`).eq(0)
-        .should("contain", "Approver Added").should("contain", USERS[12].name);
+      cy.get(`[data-cy="no-padding-margin"]`).eq(0).should("contain", "Approver Added").and("contain", USERS[12].name);
     });
   });
 
@@ -1134,9 +1167,11 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
 
     it("Approve & Release", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Auth logout", () => {
@@ -1149,6 +1184,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Accept Approval Request with password prompt", () => {
@@ -1171,6 +1208,9 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Purchase Order list", () => {
@@ -1195,7 +1235,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
   context("Verify all data should be visible", () => {
     it("Verify PO Status", () => {
-      cy.get("[id='mui-component-select-po-status-built-in']").should("have.text", "Open");
+      cy.get("[id='mui-component-select-po-status-built-in']").eq(0).contains("Open");
     });
 
     it("Verify Requestor", () => {
@@ -1218,39 +1258,39 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
 
     it("Verify part number", () => {
-      cy.get("[data-cy='partNumberDocId']>span").should("have.text", "PRT-00001 - 1");
+      cy.get("[data-cy='partNumberDocId']>span").last().should("have.text", "PRT-00001 - 1");
     });
 
     it("Verify Supplier Part Number", () => {
-      cy.get("[data-cy='supplierPartNumber']>span").should("have.text", "PRT-0004");
+      cy.get("[data-cy='supplierPartNumber']>span").last().should("have.text", "PRT-0004");
     });
 
     it("Verify description", () => {
-      cy.get("[data-cy='description']>span>span>span").should("have.text", "New Part 1");
+      cy.get("[data-cy='description']>span>span>span").last().should("have.text", "New Part 1");
     });
 
     it("Verify ordered quantity", () => {
-      cy.get("[data-cy='order']>span").should("have.text", "5");
+      cy.get("[data-cy='order']>span").last().should("have.text", "5");
     });
 
     it("Verify Date Required", () => {
-      cy.get("[data-cy='formattedDate']>span").should("have.text", receivingReleasedDate);
+      cy.get("[data-cy='formattedDate']>span").last().should("have.text", receivingReleasedDate);
     });
 
     it("Verify Unit", () => {
-      cy.get("[data-cy='unitPrice']>span").should("have.text", "$2.00");
+      cy.get("[data-cy='unitPrice']>span").last().should("have.text", "$2.00");
     });
 
     it("Verify tax rate", () => {
-      cy.get("[name='po-items-built-in.taxRate']").should("have.text", "9.25");
+      cy.get("[name='po-items-built-in.taxRate']").last().should("have.text", "9.25");
     });
 
     it("Verify tax value", () => {
-      cy.get("[name='po-items-built-in.tax']").should("have.text", "0.925000");
+      cy.get("[name='po-items-built-in.tax']").last().should("have.text", "0.925000");
     });
 
     it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").should("have.text", "$10.93");
+      cy.get("[data-cy='poTotal']").last().should("have.text", "$10.93");
     });
   });
 
@@ -1294,6 +1334,9 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
         loginResponse = response;
         done();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("[API]Get html document and verify PO number and Requestor information", () => {
@@ -1314,6 +1357,9 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
             .and.contains(USERS[12].name);
         });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -1327,12 +1373,19 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-
     it("Select created PO", () => {
       cy.dlSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it(`Verify document header details and status`, () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Purchase OrdersPO-00001 Rev 1`,
+        breadcrump: true,
+      });
     });
 
     it("Click on revise PO", () => {
@@ -1347,6 +1400,14 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Verify document header details and status is in ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `Purchase OrdersPO-00001 Rev 2DRAFT`,
+        breadcrump: true,
+      });
     });
   });
 
@@ -1379,35 +1440,35 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
 
     it("Verify supplier number", () => {
-      cy.get("[data-cy='supplierPartNumber']>span").should("have.text", "PRT-0004");
+      cy.get("[data-cy='supplierPartNumber']>span").last().should("have.text", "PRT-0004");
     });
 
     it("Verify description", () => {
-      cy.get("[data-cy='description']>span>span>span").should("have.text", "New Part 1");
+      cy.get("[data-cy='description']>span>span>span").last().should("have.text", "New Part 1");
     });
 
     it("Verify ordered quantity", () => {
-      cy.get("[data-cy='order']>span").should("have.text", "5");
+      cy.get("[data-cy='order']>span").last().should("have.text", "5");
     });
 
     it("Verify Date Required", () => {
-      cy.get("[data-cy='formattedDate']>span").should("have.text", receivingReleasedDate);
+      cy.get("[data-cy='formattedDate']>span").last().should("have.text", receivingReleasedDate);
     });
 
     it("Verify Unit", () => {
-      cy.get("[data-cy='unitPrice']>span").should("have.text", "$2.00");
+      cy.get("[data-cy='unitPrice']>span").last().should("have.text", "$2.00");
     });
 
     it("Verify Tax Rate", () => {
-      cy.get("[name='po-items-built-in.taxRate']").should("have.value", "9.25");
+      cy.get("[name='po-items-built-in.taxRate']").last().should("have.value", "9.25");
     });
 
     it("Verify Tax Value", () => {
-      cy.get("[name='po-items-built-in.tax']").should("have.value", "0.925000");
+      cy.get("[name='po-items-built-in.tax']").last().should("have.value", "0.925000");
     });
 
     it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").should("have.text", "$10.93");
+      cy.get("[data-cy='poTotal']").last().should("have.text", "$10.93");
     });
   });
 
@@ -1444,6 +1505,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     it(`Select '${USERS[11].name}' for Requestor`, () => {
       cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[11].name} - ${USERS[11].email}`);
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify 'The requestor field is required field' is disappeared`, () => {
@@ -1470,14 +1533,14 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).contains("Requestor Updated")
         .should("exist");
-      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[11].name)
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).parent().parent().contains(USERS[11].name)
         .should("exist");
     });
 
     it("Check history entry for 'Approver Added'", () => {
-      cy.get(`[data-cy='no-padding-margin']`).eq(0)
+      cy.get(`[data-cy="no-padding-margin"]`).eq(0)
         .should("contain", "Approver Added").should("contain", USERS[11].name);
     });
   });
@@ -1601,7 +1664,10 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
   context("Submit for Approval, verify PO can be released & verify that data is saved", () => {
     it("Approve & Release", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.authLogout();
     });
 
@@ -1611,6 +1677,9 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Accept Approval Request with password prompt", () => {
@@ -1633,6 +1702,9 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Select company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Purchase Order list", () => {
@@ -1704,15 +1776,15 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
 
     it("Verify Tax Rate", () => {
-      cy.get("[name='po-items-built-in.taxRate']").should("contain", "9.25");
+      cy.get("[name='po-items-built-in.taxRate']").last().should("contain", "9.25");
     });
 
     it("Verify Tax Value", () => {
-      cy.get("[name='po-items-built-in.tax']").should("contain", "1.850000");
+      cy.get("[name='po-items-built-in.tax']").last().should("contain", "1.850000");
     });
 
     it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").should("have.text", "$21.85");
+      cy.get("[data-cy='poTotal']").last().should("have.text", "$21.85");
     });
   });
 
@@ -1739,6 +1811,9 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
         loginResponse = response;
         done();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("[API]Get html document and verify PO number and Requestor information", () => {
