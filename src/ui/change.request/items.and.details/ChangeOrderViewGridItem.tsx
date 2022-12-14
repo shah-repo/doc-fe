@@ -30,7 +30,7 @@ const ChangeOrderViewGridItem: React.FunctionComponent<{
 }) => {
   const classes = useStyles();
   const {
-    docRevId, documentId, titleText, displayRevision, id, isPart, justificationOfChange, descriptionOfChange,
+    docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange,
   } = entry;
 
   // console.log(docRevId,
@@ -47,7 +47,7 @@ const ChangeOrderViewGridItem: React.FunctionComponent<{
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
   documentDetailsApi.setUrl({
     url: FBEndpoint.FetchAutocompleteValue,
-    values: { id, optionId: FBAutocompleteAsyncOption.DRAFTdocumentRevisions },
+    values: { id: docRevId, optionId: FBAutocompleteAsyncOption.DRAFTdocumentRevisions },
   });
 
 
@@ -71,12 +71,12 @@ const ChangeOrderViewGridItem: React.FunctionComponent<{
   const getDocumentDetails = async () => {
     if (!documentId) {
       const {
-        docId, group, documentId, displayRevision, name,
+        document, displayRevision, name,
       }: FBDocumentRevisionResponse = await documentDetailsApi.fetch();
-      const documentTitleText = generateDocTitleText(docId, displayRevision, name);
+      const documentTitleText = generateDocTitleText(document.docId, displayRevision, name);
       setDocTitle(documentTitleText);
-      if (group === DOC_TYPE_GROUP.PART) {
-        getRelatedParts(documentId, displayRevision);
+      if (document.documentType?.group === DOC_TYPE_GROUP.PART) {
+        getRelatedParts(document.id, displayRevision);
       }
     } else {
       if (isPart) {

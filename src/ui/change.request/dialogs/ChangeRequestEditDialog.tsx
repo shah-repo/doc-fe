@@ -19,12 +19,14 @@ interface Props {
   changeRequestId: string;
   changeOrderDialog: DialogHandler;
   closeDialog: () => void;
+  currentDocRevId?: string;
 }
 
 const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   changeRequestId,
   changeOrderDialog,
   closeDialog,
+  currentDocRevId,
 }) => {
 
   const classes = useStyles();
@@ -32,7 +34,6 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   const loadAsyncState =  useSelector(changeRequestsSelectors.getLoadAsyncState);
   const changeRequestDetails = useSelector((state: ApplicationState) =>
     changeRequestsSelectors.getChangeRequest(state, changeRequestId));
-  // console.log(changeRequestDetails);
 
   const load = useActionCreator(changeRequestsActions.load);
   const loadAction = () => load(changeRequestId);
@@ -84,7 +85,9 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
           id="ChangeOrder-content"
         >
           <ChangeRequestUpdateContainer
-            changeRequest={changeRequestDetails} hideSideBar></ChangeRequestUpdateContainer>
+            changeRequest={changeRequestDetails}
+            hideSideBar
+            currentDocRevId={currentDocRevId} />
         </DialogContent>
       </Dialog>
     </AsyncGate>

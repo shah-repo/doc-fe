@@ -1,3 +1,5 @@
+import { intl } from "../../../common/intl";
+import { FB } from "../../form.builder";
 import { ChangeOrderGridItem, FBDocumentRevisionsValue } from "./ItemsAndDetails.types";
 
 export const generateDocTitleText = (docId: string, displayRevision: string, name: string) => (
@@ -17,3 +19,11 @@ export const storeDataToFormData = (changeOrderItemsList: ChangeOrderGridItem[])
   ))
 );
 
+export const newARDocRevToAdd = (docRevId: string) => (
+  {
+    descriptionOfChange: intl.formatMessage({ id: "common.numeric.release" }),
+    id: FB.uniqid,
+    justificationOfChange: intl.formatMessage({ id: "common.numeric.release" }),
+    proposedDocumentRevision: { id: docRevId },
+  }
+);

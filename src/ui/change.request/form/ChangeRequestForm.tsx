@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { BoxProps } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { cloneDeep, map } from "lodash";
@@ -36,6 +37,7 @@ type ChangeRequestFormProps =
   autosave: boolean;
   formInput?: Record<string, any>;
   hideSideBar: boolean;
+  currentDocRevId?: string;
 };
 
 const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -52,11 +54,14 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   formInput,
   _documentRevisionFormState,
   hideSideBar = false,
+  currentDocRevId,
 }) => {
   const { _tabsState } = SM.useStores();
 
   _formState?.setMode(mode);
   _formState?.setAutosave(autosave);
+
+  console.log(_documentRevisionFormState, currentDocRevId);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
 
@@ -150,6 +155,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                             _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
                             changeRequest && (
                             <ItemsAndDetailsWrapper
+                              currentDocRevId={currentDocRevId}
                               changeRequest={cloneDeep(changeRequest)}
                               initialValues={formInput ?? {}}
                               autosave={autosave}

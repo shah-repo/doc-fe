@@ -7,7 +7,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../state/types";
 import { useFormContext } from "../../components/forms/FormContext";
 import { FB, FBForm, FBFormState } from "../../form.builder";
-import { generateDocTitleText, storeDataToFormData } from "./helpers";
+import { generateDocTitleText, newARDocRevToAdd, storeDataToFormData } from "./helpers";
 import ItemsAndDetails from "./ItemsAndDetails";
 import ItemsAndDetailsState from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
@@ -15,6 +15,7 @@ import { ChangeOrderGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperPr
 const ItemsAndDetailsContainer: React.FunctionComponent<
   ItemsAndDetailsWrapperProps & {name: string}
 > = ({
+  currentDocRevId,
   changeRequest,
   name,
   autosave,
@@ -106,10 +107,25 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   }, [changeRequest]);
 
   const processChangeRequest = () => {
+    let currentDocRevPresent = false;
     const documentRevisionsData = changeRequest.documentRevisions;
 
-    const documentRevisiosnAssigned = changeRequest.formInput?.documentRevisions ?? [];
-    const entries = documentRevisiosnAssigned.map((item: FBDocumentRevisionsValue) => {
+    const documentRevisionsAssigned: FBDocumentRevisionsValue[] = changeRequest.formInput?.documentRevisions ?? [];
+    // Happens only when one of the expressAR options is chosen
+    if (currentDocRevId) {
+      currentDocRevPresent = documentRevisionsAssigned.findIndex(
+        (docRev: FBDocumentRevisionsValue) => (docRev.proposedDocumentRevision.id === currentDocRevId)) !== -1;
+
+      console.log(currentDocRevPresent);
+
+      if (!currentDocRevPresent) {
+        documentRevisionsAssigned.push(newARDocRevToAdd(currentDocRevId));
+      }
+    }
+
+    console.log(documentRevisionsAssigned);
+
+    const entries = documentRevisionsAssigned.map((item: FBDocumentRevisionsValue) => {
       const entryInfo = {
         justificationOfChange: item.justificationOfChange,
         descriptionOfChange: item.descriptionOfChange,
@@ -122,8 +138,11 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       };
 
       const docRevId = item.proposedDocumentRevision.id;
+      if (docRevId === currentDocRevId) {
+        currentDocRevPresent = true;
+      }
       const { displayRevision, name, document } =
-        documentRevisionsData.find((docRev: DocumentRevision) => docRev.id === docRevId);
+        documentRevisionsData.find((docRev: DocumentRevision) => docRev.id === docRevId) ?? {};
       if (document) {
         entryInfo.titleText = generateDocTitleText(document.docId, displayRevision, name);
         entryInfo.isPart = document.documentType.group === DOC_TYPE_GROUP.PART;
@@ -135,6 +154,12 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     });
 
     itemsAndDetailsState.setChangeOrderItemsList(entries);
+
+    // If entries does not have the currentDocRevId, then we add a new entry to the parentFormState and submit data
+    console.log(currentDocRevPresent, currentDocRevId);
+    // if (!currentDocRevPresent) {
+    //   submitData(documentRevisionsAssigned);
+    // }
   };
 
   return useObserver(() => (
@@ -156,9 +181,11 @@ const ItemsAndDetailsWrapper: React.FunctionComponent<ItemsAndDetailsWrapperProp
   autosave,
   mode,
   asyncState,
+  currentDocRevId,
 }) => (
   <FBForm {...{ initialValues }}>
     <ItemsAndDetailsContainer
+      currentDocRevId={currentDocRevId}
       changeRequest={changeRequest}
       name="documentRevisions"
       autosave={autosave}

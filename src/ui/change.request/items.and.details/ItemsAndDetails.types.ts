@@ -5,14 +5,18 @@ import { FBFormProps, FBWorkspaceMode } from "../../form.builder";
 
 export interface FBDocumentRevisionResponse {
   createdAt: string;
-  id: string;
-  name: string;
   updatedAt: string;
   displayRevision: string;
-  docId: string;
-  documentId: string;
-  documentTypeId: string;
-  group: DOC_TYPE_GROUP;
+  id: string;
+  name: string;
+  document: {
+    docId: string;
+    id: string;
+    documentType: {
+      group: DOC_TYPE_GROUP;
+      id: string;
+    };
+  };
 }
 
 export interface FBDocumentRevisionsValue {
@@ -39,6 +43,7 @@ export type ChangeOrderViewItemProps =
 & ChangeOrderGridItem;
 
 export interface ItemsAndDetailsWrapperProps {
+  currentDocRevId: string | undefined;
   changeRequest: ChangeRequest;
   initialValues: Pick<FBFormProps, "initialValues">;
   autosave: boolean;

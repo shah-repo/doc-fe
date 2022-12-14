@@ -29,6 +29,7 @@ interface DispatchProps {
 interface OwnProps {
   changeRequest: ChangeRequest;
   hideSideBar?: boolean;
+  currentDocRevId?: string;
 }
 
 type ChangeRequestUpdateContainerProps = OwnProps &
@@ -40,7 +41,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 });
 
 const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
-  { save, changeRequest, currentUserEmail, loadAudit, hideSideBar = false }) => {
+  { save, changeRequest, currentUserEmail, loadAudit, hideSideBar = false, currentDocRevId }) => {
 
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
@@ -89,6 +90,7 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
         changeRequest={changeRequest}
         doNotPrompt={doNotPrompt}
         hideSideBar={hideSideBar}
+        currentDocRevId = {currentDocRevId}
       />
     </FormContext.Provider>
   );
