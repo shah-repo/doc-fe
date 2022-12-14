@@ -410,6 +410,7 @@
   "common.acknowledge": "Acknowledge",
   "common.training.record": "Training Record",
   "common.training.not.found": "Training can be assigned to this document once it is released.",
+  "common.training.released.state.doc.not.found": "No training records exist.",
   "common.email.sent": "Email Sent!",
   "common.falied.email": "Failed to Send Email",
   "common.click.here": "Click here",

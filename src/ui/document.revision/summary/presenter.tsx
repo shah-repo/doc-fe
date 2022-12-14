@@ -142,7 +142,7 @@ const Presenter: React.FunctionComponent<Props> = ({
             {...summaryStyles}
           />
         }
-        {formTemplate && (
+        {formTemplate && outputDocumentTypeName && (
           <SummaryField
             label="document.output.type"
             value={outputDocumentTypeName}

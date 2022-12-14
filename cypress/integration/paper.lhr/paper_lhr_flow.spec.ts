@@ -351,10 +351,14 @@ context("Paper Lot History Record", () => {
   context("Create 'Paper LHR' form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Create a document'", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter title 'New Purchase Order Form'", () => {
@@ -378,17 +382,23 @@ context("Paper Lot History Record", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigate to document list and check data on landing page and open it", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter Released 'Paper LHR' form", () => {
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlFilterByDocTitle({ docTitle: paperlhrTitle });
     });
 
@@ -401,6 +411,8 @@ context("Paper Lot History Record", () => {
 
     it("Click and open the FM", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -413,8 +425,14 @@ context("Paper Lot History Record", () => {
       cy.get("[data-cy=\"Build Type\"]").should("exist");
       cy.get("[data-cy=\"Build Type\"]").parent().parent().parent().parent()
         .should("contain.html", `role="radiogroup"`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[name=\"lhr-build-type\"]").eq(0).should("have.value", "R&D");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[name=\"lhr-build-type\"]").eq(1).should("have.value", "Production");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check 'Initial Quantity' is displayed", () => {
@@ -436,7 +454,11 @@ context("Paper Lot History Record", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: txtFieldTitle1 });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbAddNewFieldButton();
     });
 
@@ -472,6 +494,8 @@ context("Paper Lot History Record", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
       cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox" );
@@ -482,7 +506,9 @@ context("Paper Lot History Record", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -725,16 +751,22 @@ context("Paper Lot History Record", () => {
   context("Approve and release form", () => {
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigate to document list and check data on landing page and open it", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter Released 'Paper LHR' form", () => {
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlFilterByDocTitle({ docTitle: paperlhrTitle });
     });
 
@@ -749,6 +781,8 @@ context("Paper Lot History Record", () => {
 
     it("Click and open the FM", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -963,10 +997,14 @@ context("Paper Lot History Record", () => {
   context("Click to revise and Verify all data and predefined fields are present", () => {
     it("Click Revise document", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify 'Build Type' is displayed", () => {
@@ -1009,6 +1047,8 @@ context("Paper Lot History Record", () => {
 
     it("Approve and release form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify that FM is ${STATUS_TYPES_LABEL.RELEASED}`, () => {
@@ -1020,10 +1060,14 @@ context("Paper Lot History Record", () => {
   context(`Revise the form, upload file, approve and release it`, () => {
     it("Click Revise document", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add File Upload", () => {
@@ -1040,6 +1084,8 @@ context("Paper Lot History Record", () => {
 
     it("Approve and release form", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify that FM status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
@@ -1054,10 +1100,14 @@ context("Paper Lot History Record", () => {
   context("Create paper LHR document from newly created form", () => {
     it("Navigate to Document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clear filters", () => {
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter form by name and status, and select it", () => {
@@ -1066,6 +1116,7 @@ context("Paper Lot History Record", () => {
 
     it("Click on Create New button", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
   });
@@ -1192,7 +1243,9 @@ context("Paper Lot History Record", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1239,6 +1292,7 @@ context("Paper Lot History Record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("tr.k-master-row").first().arrowClick();
       });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
   });
@@ -1459,18 +1513,26 @@ context("Paper Lot History Record", () => {
 
     it("Add approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve record", () => {
       cy.lhrApprove();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1678,6 +1740,8 @@ context("Paper Lot History Record", () => {
   context("Verify 'Paper LHR' document details on LHR landing page", () => {
     it("Navigate to LHR landing page", () => {
       cy.navigToLHR();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify 'Lot #'", () => {
@@ -1722,6 +1786,7 @@ context("Paper Lot History Record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("tr.k-master-row").first().arrowClick();
       });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
   });
@@ -1729,6 +1794,8 @@ context("Paper Lot History Record", () => {
   context(`Revise paper LHR document, make some changes and Approve`, () => {
     it("Click Revise document", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter End Quantity field value", () => {
@@ -1739,18 +1806,30 @@ context("Paper Lot History Record", () => {
 
     it("Add approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Save it", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
       cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve record", () => {
       cy.ebApprove();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Verify that FM is ${STATUS_TYPES_LABEL.RELEASED}`, () => {
@@ -1765,12 +1844,16 @@ context("Paper Lot History Record", () => {
   context("Verify 'Paper LHR' document details on LHR landing page", () => {
     it("Navigate to LHR landing page", () => {
       cy.navigToLHR();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify document is searchable with ID", () => {
       cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get(`[aria-colindex="9"] input`).arrowType("LHR-00001").wait(500);
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1816,6 +1899,7 @@ context("Paper Lot History Record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("tr.k-master-row").first().arrowClick();
       });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
   });
@@ -1823,22 +1907,32 @@ context("Paper Lot History Record", () => {
   context(`Revise paper LHR document`, () => {
     it("Click Revise document", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Choose 'Void OBS' option", () => {
       cy.get(`[name="revisionChangeType"][value="OBSOLETE"]`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approval", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save it", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter description in the dialog box", () => {
@@ -1847,6 +1941,7 @@ context("Paper Lot History Record", () => {
 
     it("Click on Yes button", () => {
       cy.get(`button[data-cy="fb-control-btn"]`).contains("Yes").arrowClick();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1854,6 +1949,8 @@ context("Paper Lot History Record", () => {
 
     it("Approve record", () => {
       cy.ebApprove();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1868,6 +1965,8 @@ context("Paper Lot History Record", () => {
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -1969,7 +2068,7 @@ context("Paper Lot History Record", () => {
     it("Verify page 1 for paper LHR", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
-        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nN/A`, "gi" );
+        tmpRegex = new RegExp( `Paper Lot History Record\n${lotIdRef}01RD\nPRT-00001, REV 1, PART DOCUMENT1`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Attachments\nNone/);

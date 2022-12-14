@@ -158,6 +158,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.navigToDocumentList();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click on 'Create a document'", () => {
       cy.cmpClickCreateNewDocument();
     });
@@ -190,9 +194,11 @@ context("Create company via API and create Suppliers document", () => {
 
   context("import form template and release the form", () => {
     it("Import template of 'Rev D' form", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("#fb-import-schema").attachFile("Supira_Supplier_Form_Template_Rev_D.json");
-      });
+      cy.get("#fb-import-schema").attachFile("Supira_Supplier_Form_Template_Rev_D.json");
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release document", () => {
@@ -206,7 +212,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create new to create supplier", () => {
-      cy.supCreateNew();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.supCreateNew();
+      });
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -217,6 +225,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.supEnterSuppName({ name: "Test Supplier 1" });
     });
 
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Navigate to Detail Tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -225,7 +237,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
       cy.get(`[data-value="R&D/Prototype Only"]`).arrowClick();
       cy.unClick();
-      cy.wait(2000);
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Verify the status", () => {
@@ -240,7 +255,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create new to create supplier", () => {
-      cy.supCreateNew();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.supCreateNew();
+      });
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -249,6 +266,10 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Enter 'Supplier Name'", () => {
       cy.supEnterSuppName({ name: "Test Supplier 2" });
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -263,16 +284,17 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select one supplier use status", () => {
       cy.get(`[id^="mui-component-select-supplier-use-status"]`).arrowClick({ force: true });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-value="Pending Evaluation"]`).arrowClick({ force: true });
-      });
+      cy.get(`[data-value="Pending Evaluation"]`).arrowClick({ force: true });
     });
 
     it("Select Risk Classifications", () => {
       cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
       cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
       cy.unClick();
-      cy.wait(2000);
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Verify the status", () => {
@@ -287,7 +309,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create new to create supplier", () => {
-      cy.supCreateNew();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.supCreateNew();
+      });
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -298,6 +322,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.supEnterSuppName({ name: "Test Supplier 3" });
     });
 
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Navigate to Detail Tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -306,51 +334,46 @@ context("Create company via API and create Suppliers document", () => {
       cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
       cy.get(`[data-value="Production"]`).arrowClick();
       cy.unClick();
-      cy.wait(2000);
     });
 
     it("Select one supplier use status", () => {
       cy.get(`[id^="mui-component-select-supplier-use-status"]`).arrowClick({ force: true });
       cy.get(`[data-value="Pending Evaluation"]`).arrowClick({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Risk Classifications", () => {
       cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
       cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
       cy.unClick();
-      cy.wait(2000);
     });
 
     it("Select Supplier Type", () => {
       cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Supplier Capabilities", () => {
       cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Supplied parts etc.", () => {
       cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
       cy.unClick();
-      cy.wait(1000);
     });
 
     it("Select Contracts and Agreements", () => {
       cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Audits and Assessments", () => {
       cy.get(`[value="Site Quality Audit"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Certifications and Licenses", () => {
       cy.get(`[value="California FDB License"]`).check({ force: true });
-      cy.wait(1000);
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -384,8 +407,14 @@ context("Create company via API and create Suppliers document", () => {
       cy.navigToSuppliers();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click create new to create supplier", () => {
-      cy.supCreateNew();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.supCreateNew();
+      });
     });
 
     it("Enter 'Supplier Description'", () => {
@@ -396,6 +425,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.supEnterSuppName({ name: "Test Supplier 4" });
     });
 
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+    });
+
     it("Navigate to Detail Tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -404,51 +437,46 @@ context("Create company via API and create Suppliers document", () => {
       cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
       cy.get(`[data-value="Production"]`).arrowClick();
       cy.unClick();
-      cy.wait(2000);
     });
 
     it("Select one supplier use status", () => {
       cy.get(`[id^="mui-component-select-supplier-use-status"]`).arrowClick({ force: true });
       cy.get(`[data-value="Pending Evaluation"]`).arrowClick({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Risk Classifications", () => {
       cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
       cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
       cy.unClick();
-      cy.wait(2000);
     });
 
     it("Select Supplier Type", () => {
       cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Supplier Capabilities", () => {
       cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Supplied parts etc.", () => {
       cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
       cy.unClick();
-      cy.wait(1000);
     });
 
     it("Select Contracts and Agreements", () => {
       cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Audits and Assessments", () => {
       cy.get(`[value="Site Quality Audit"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Certifications and Licenses", () => {
       cy.get(`[value="California FDB License"]`).check({ force: true });
-      cy.wait(1000);
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -584,7 +612,6 @@ context("Create company via API and create Suppliers document", () => {
   context("Verify Supplier use Status column is updated for all", () => {
     it("Navigate to Document list", () => {
       cy.navigToDocumentList();
-      cy.wait(2000);
     });
 
     it("Navigate to Supplier list", () => {
@@ -618,6 +645,10 @@ context("Create company via API and create Suppliers document", () => {
       cy.navigToDocumentList();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Filters form by name and status, and select it", () => {
       cy.drFilterDocListByNameAndStatus({ title: "New Supplier Form", status: "Released" });
     });
@@ -631,9 +662,11 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Import template of 'Rev E' form", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("#fb-import-schema").attachFile("Supira_Supplier_Form_Template_Rev_E.json");
-      });
+      cy.get("#fb-import-schema").attachFile("Supira_Supplier_Form_Template_Rev_E.json");
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Approve and release document", () => {
@@ -646,9 +679,12 @@ context("Create company via API and create Suppliers document", () => {
       cy.navigToSuppliers();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Clear filters", () => {
       cy.dlClearFilters();
-      cy.wait(2000);
     });
 
     it("Select supplier 1", () => {
@@ -665,7 +701,6 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Submit for approval", () => {
-      cy.wait(2000);
       cy.pmSubmitForApproval();
     });
 
@@ -684,9 +719,12 @@ context("Create company via API and create Suppliers document", () => {
       cy.navigToSuppliers();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Clear filters", () => {
       cy.dlClearFilters();
-      cy.wait(2000);
     });
 
     it("Select supplier 2", () => {
@@ -705,38 +743,35 @@ context("Create company via API and create Suppliers document", () => {
 
     it("change supplier use status", () => {
       cy.get(`[value="Approved"]`).check({ force: true });
-      cy.wait(2000);
     });
 
     it("Select Supplier Type", () => {
       cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Supplier Capabilities", () => {
       cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Supplied parts etc.", () => {
       cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
       cy.unClick();
-      cy.wait(1000);
     });
 
     it("Select Contracts and Agreements", () => {
       cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Audits and Assessments", () => {
       cy.get(`[value="Site Quality Audit"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Certifications and Licenses", () => {
       cy.get(`[value="California FDB License"]`).check({ force: true });
-      cy.wait(1000);
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -770,9 +805,12 @@ context("Create company via API and create Suppliers document", () => {
       cy.navigToSuppliers();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Clear filters", () => {
       cy.dlClearFilters();
-      cy.wait(2000);
     });
 
     it("Select supplier 3", () => {
@@ -785,7 +823,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Add an Approval", () => {
@@ -815,9 +855,12 @@ context("Create company via API and create Suppliers document", () => {
       cy.navigToSuppliers();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Clear filters", () => {
       cy.dlClearFilters();
-      cy.wait(2000);
     });
 
     it("Select supplier 4", () => {
@@ -830,7 +873,9 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetRequiredApproversDocRev, () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
     });
 
     it("Click 'Click here' button to upgrade form to latest revision", () => {
@@ -844,24 +889,23 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier use status", () => {
       cy.get(`[value="Pending Evaluation"]`).check({ force: true });
-      cy.wait(2000);
       cy.get(`[value="Approved"]`).check({ force: true });
-      cy.wait(2000);
     });
 
     it("Select Contracts and Agreements", () => {
       cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Audits and Assessments", () => {
       cy.get(`[value="Site Quality Audit"]`).check({ force: true });
-      cy.wait(1000);
     });
 
     it("Select Certifications and Licenses", () => {
       cy.get(`[value="California FDB License"]`).check({ force: true });
-      cy.wait(1000);
+    });
+
+    it("Click 'Save' button", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -893,7 +937,6 @@ context("Create company via API and create Suppliers document", () => {
   context("Verify Supplier use Status column is updated", () => {
     it("Navigate to Document list", () => {
       cy.navigToDocumentList();
-      cy.wait(2000);
     });
 
     it("Navigate to Supplier list", () => {
@@ -902,7 +945,6 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Clear filters", () => {
-      cy.wait(2000);
       cy.dlClearFilters();
     });
 

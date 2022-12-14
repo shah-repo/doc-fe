@@ -284,7 +284,7 @@ context("Records flow", () => {
 
       it("Verify approvals field is automatically added", () => {
         SystemRequirement("REQ-0980");
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.intPageVerifyApprovalsExist();
       });
     });
 
@@ -698,7 +698,7 @@ context("Records flow", () => {
 
         it("Verify approvals field is automatically added", () => {
           SystemRequirement("REQ-0980");
-          cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+          cy.intPageVerifyApprovalsExist();
         });
 
         it("Approve and Release document", () => {
@@ -808,9 +808,16 @@ context("Records flow", () => {
     });
 
     it("Reject document", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`.MuiListItemText-dense`).first().trigger("mouseover").wait(2000);
       cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover").wait(2000);
-      cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+      cy.get(`[data-cy="transition-reject"]`).first().arrowClick({ force: true });
+      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Logout the user", () => {
@@ -865,7 +872,6 @@ context("Records flow", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
-        // eslint-disable-next-line @typescript-eslint/camelcase
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
         after: dateAfterEmailShouldArrive,
@@ -1011,7 +1017,7 @@ context("Records flow", () => {
         recDocId = $docIdElement.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      cy.sendToEmailFromHeader();
+      cy.sendToEmail();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -1184,8 +1190,10 @@ context("Records flow", () => {
         SystemRequirement("REQ-2750");
         cy.filterRecords({
           docId: "RD-00004", revision: "A", state: "Released", title: "Approval Record title", owner: USERS[2].name,
-          releasedDate: "Last 7 days", formId: "FM-00003",
+          releasedDate: "Last 7 days", formId: "FM-00002",
         });
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Navigate to Document List", () => {
@@ -1194,12 +1202,14 @@ context("Records flow", () => {
 
       it("Navigate to Records", () => {
         cy.navigToRecords();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Check if all filter values persist after changing landing page", () => {
         cy.filterCheckIfRecordsFilterPersists({
           docId: "RD-00004", revision: "A", state: "Released", title: "Approval Record title", owner: USERS[2].name,
-          releasedDate: "Last 7 days", formId: "FM-00003",
+          releasedDate: "Last 7 days", formId: "FM-00002",
         });
       });
 

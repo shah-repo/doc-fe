@@ -952,14 +952,17 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
 
     it("Click approve submission", () => {
       cy.arApproveAR();
+      cy.wait(3000);
     });
 
     it("Click Close button", () => {
       cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+      cy.wait(3000);
     });
 
     it("Select option No", () => {
       cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
+      cy.wait(3000);
     });
 
     it("Advance Effective Date to 30 days from now", () => {
@@ -994,6 +997,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
+      cy.wait(3000);
     });
   });
 

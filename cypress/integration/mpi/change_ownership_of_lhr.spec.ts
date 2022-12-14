@@ -56,9 +56,9 @@ context("Change Ownership of LHR", () => {
           specFilePath: __filename,
           payload: {
             name: newCompanyName,
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               LotHistoryRecordTest,
               MPITest,
@@ -67,8 +67,8 @@ context("Change Ownership of LHR", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
@@ -80,7 +80,7 @@ context("Change Ownership of LHR", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -494,9 +494,9 @@ context("Change Ownership of LHR", () => {
     });
   });
 
-  context("Login User 1", () => {
+  context("Login User 11", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
   });
 
@@ -541,15 +541,15 @@ context("Change Ownership of LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click on sidebar permission icon to add Operators", () => {
         cy.get("[data-cy='permission-icon']").arrowClick();
       });
 
-      it(`Assign operator '${USERS[2].name}'`, () => {
-        cy.drAssignDocumentTo({ username: USERS[2].name });
+      it(`Assign operator '${USERS[12].name}'`, () => {
+        cy.drAssignDocumentTo({ username: USERS[12].name });
         cy.wait(2000);
       });
 
@@ -558,12 +558,12 @@ context("Change Ownership of LHR", () => {
       });
 
       it("Add an Approver 1", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[12].name);
         cy.unClick();
       });
 
       it("Add an Approver 2", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[3].name);
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[13].name);
         cy.unClick();
       });
 
@@ -571,7 +571,7 @@ context("Change Ownership of LHR", () => {
         cy.url().then((url: any) => {
           lhrUrl = url;
         });
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Check history - added approvers should be displayed", () => {
@@ -579,25 +579,25 @@ context("Change Ownership of LHR", () => {
           cy.drSelectHistoryTab();
         });
         cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
-          .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
+          .should("contain.text", "Approver Added").and("contain.text", USERS[13].name);
         cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
-          .should("contain.text", "Approver Added").and("contain.text", USERS[2].name);
+          .should("contain.text", "Approver Added").and("contain.text", USERS[12].name);
       });
 
       it("Change ownership of LHR", () => {
-        cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
+        cy.drChangeOwnerFromMenu({ employee: USERS[13].name });
       });
     });
   });
 
-  context(`Login with User ${USERS[3].name} and add/remove approver`, () => {
+  context(`Login with User ${USERS[13].name} and add/remove approver`, () => {
     it("Log out user", () => {
       cy.authLogout();
     });
 
-    it(`Log in as User 3 (${USERS[3].name})`, () => {
+    it(`Log in as User 13 (${USERS[13].name})`, () => {
       cy.authLogin({
-        email: USERS[3].email,
+        email: USERS[13].email,
       });
     });
 
@@ -624,33 +624,33 @@ context("Change Ownership of LHR", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
         .find(".MuiChip-deletable").should("have.length", 2);
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
-        .find(".MuiChip-deletable").should("contain.text", USERS[2].name);
+        .find(".MuiChip-deletable").should("contain.text", USERS[12].name);
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
-        .find(".MuiChip-deletable").should("contain.text", USERS[3].name);
+        .find(".MuiChip-deletable").should("contain.text", USERS[13].name);
     });
 
     it("Check history - added approvers should be displayed", () => {
       cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
-        .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
+        .should("contain.text", "Approver Added").and("contain.text", USERS[13].name);
       cy.get("[data-cy=\"change-key-2-0\"]").parent().parent()
-        .should("contain.text", "Approver Added").and("contain.text", USERS[2].name);
+        .should("contain.text", "Approver Added").and("contain.text", USERS[12].name);
     });
 
-    it(`Remove ${USERS[3].name} approver`, () => {
-      cy.contains(`${USERS[3].name} - ${USERS[3].email}`).parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+    it(`Remove ${USERS[13].name} approver`, () => {
+      cy.contains(`${USERS[13].name} - ${USERS[13].email}`).parent().parent().find(".MuiChip-deleteIcon").arrowClick();
     });
 
-    it(`Add ${USERS[1].name} approver`, () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+    it(`Add ${USERS[11].name} approver`, () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[11].name);
       cy.unClick();
     });
 
     it("Check history - added and removed approvers should be displayed", () => {
       cy.wait(3000);
       cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
-        .should("contain.text", "Approver Added").and("contain.text", USERS[1].name);
+        .should("contain.text", "Approver Added").and("contain.text", USERS[11].name);
       cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
-        .should("contain.text", "Approver Removed").and("contain.text", USERS[3].name);
+        .should("contain.text", "Approver Removed").and("contain.text", USERS[13].name);
     });
   });
 
@@ -659,9 +659,9 @@ context("Change Ownership of LHR", () => {
       cy.authLogout();
     });
 
-    it("Log in as User 2 (operator)", () => {
+    it("Log in as User 12 (operator)", () => {
       cy.authLogin({
-        email: USERS[2].email,
+        email: USERS[12].email,
       });
     });
 
@@ -688,18 +688,18 @@ context("Change Ownership of LHR", () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
         .find(".MuiChip-deletable").should("have.length", 2);
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
-        .find(".MuiChip-deletable").should("contain.text", USERS[2].name);
+        .find(".MuiChip-deletable").should("contain.text", USERS[12].name);
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").parent().parent().parent().parent()
-        .find(".MuiChip-deletable").should("contain.text", USERS[1].name);
+        .find(".MuiChip-deletable").should("contain.text", USERS[11].name);
     });
 
-    it(`Operator can add ${USERS[4].name} approver`, () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[4].name);
+    it(`Operator can add ${USERS[14].name} approver`, () => {
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[14].name);
       cy.unClick();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("visit the LHR", () => {
@@ -717,16 +717,16 @@ context("Change Ownership of LHR", () => {
       cy.drSelectDetailsTab();
     });
 
-    it(`Operator can remove ${USERS[4].name} approver`, () => {
-      cy.contains(USERS[4].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+    it(`Operator can remove ${USERS[14].name} approver`, () => {
+      cy.contains(USERS[14].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
     });
 
     it("Check history - added and removed approvers should be displayed", () => {
       cy.wait(3000);
       cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
-        .should("have.text", `Approver Removed${USERS[4].name}`);
+        .should("have.text", `Approver Removed${USERS[14].name}`);
       cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
-        .should("have.text", `Approver Added${USERS[4].name}`);
+        .should("have.text", `Approver Added${USERS[14].name}`);
     });
 
     it("Submit for approval", () => {

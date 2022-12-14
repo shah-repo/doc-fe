@@ -144,7 +144,7 @@ const Creatable: React.FunctionComponent<CreatablePropsWithFormik> = ({
               }),
               menu: (provided) => ({
                 ...provided,
-                zIndex: 2,
+                zIndex: 5,
               }),
             }}
             autoFocus={true}
