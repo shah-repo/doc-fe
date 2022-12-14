@@ -1,9 +1,13 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 
-export const styles = makeStyles(() =>
-  createStyles({
-    trainingChart: {
-      minHeight: "233px",
-    },
-  })
-);
+export default makeStyles((theme) => ({
+  root: {
+    margin: theme.spacing(0, 2),
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+  },
+  chart: {
+    minHeight: 240,
+  },
+}));

@@ -98,9 +98,7 @@ const MultipleFormTemplateDialog: React.FunctionComponent<DocumentTypeDialogProp
       const partDocRev = checkForPart(form);
       const isLHRT = checkIsDocumentLHRT(form.document.documentType?.groupOptions);
 
-      if ((isLHRT && partDocRev) || (!isLHRT && !partDocRev)) {
-        return form;
-      }
+      return (isLHRT && partDocRev) || (!isLHRT && !partDocRev);
     });
 
     return LHRForms.map((form) => ({
