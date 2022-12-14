@@ -1,13 +1,17 @@
+/* eslint-disable no-console */
 import { Box, ListItem, Tooltip, Typography } from "@material-ui/core";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { stripTags } from "../../../common/utils/helpers";
 import { DataProps } from "../../../state/ducks/common/types";
+import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import ChangeRequestEditDialog from "../../change.request/dialogs/ChangeRequestEditDialog";
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
+import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container";
 import { useCRLink } from "../../hooks/docCustomization/useCustomization";
 import useDialog from "../../hooks/useDialog";
 import useStyles from "./changeRequestLink.styles";
@@ -18,18 +22,18 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
 
+  /* eslint-disable @typescript-eslint/no-non-null-assertion */
+  const { documentRevision } = React.useContext(FormHeaderContext)!;
+  const { changeRequest } = documentRevision;
+
   const classes = useStyles();
 
   const changeOrderDialog = useDialog();
+  const dispatch = useDispatch();
+  console.log("ChangeRequestLink", dataProp.changeRequest, changeRequest);
 
   const { isVisible } = useCRLink(dataProp?.document?.documentType?.id);
-  if (!dataProp || !dataProp.changeRequest) {
-    return null;
-  }
-
-  const { changeRequest } = dataProp;
-
-  if (!isVisible) {
+  if (!changeRequest || !isVisible) {
     return null;
   }
 
@@ -39,6 +43,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
 
   const closeCRDialog = () => {
     changeOrderDialog.close();
+    dispatch(documentRevisionsActions.reload(dataProp?.id));
   };
 
   return (
@@ -66,7 +71,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
       {
         changeOrderDialog.isOpen &&
         <ChangeRequestEditDialog
-          changeRequestId={dataProp.changeRequest?.id}
+          changeRequestId={changeRequest?.id}
           changeOrderDialog={changeOrderDialog}
           closeDialog = {closeCRDialog}
         />
