@@ -382,14 +382,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
     context("Approve Engineering Build → The Engineering Build is in the Released status", () => {
       it("Approve the record", () => {
         cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApprove();
       });
 
       it(`The Engineering Build is in the ${STATUS_TYPES_LABEL.RELEASED}  state`, () => {
@@ -455,17 +448,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
           it("Approve the Engineering Build", () => {
             cy.wait(3000);
-            cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-            cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-            cy.unClick();
-            cy.wrapWithWaitOnApiCalls(
-              [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-              () => {
-                cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-              }
-            );
-            cy.checkToastMessage({ exists: false });
-            cy.listLoadingElementShouldNotExist();
+            cy.ebApprove();
           });
         });
       });
@@ -504,14 +487,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       it("Approve the record", () => {
         cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApprove();
       });
     });
 
@@ -635,17 +611,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Approve the Engineering Build", () => {
           cy.wait(3000);
-          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-          cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
-          cy.checkToastMessage({ exists: false });
-          cy.listLoadingElementShouldNotExist();
+          cy.ebApprove();
         });
       }
     );
