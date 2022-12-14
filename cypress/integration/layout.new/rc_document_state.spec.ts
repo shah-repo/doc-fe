@@ -452,22 +452,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
             verifyChangeOwner();
           });
 
-        // it("Check if 'Change Owner' button header menu and is functional", () => {
-        //   cy.get("#HeaderMenuButton").arrowClick();
-        //   cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-        //   cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-        // });
-
-        // it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your
-        //   email shortly`, () => {
-        //   cy.get("#HeaderMenuButton").arrowClick();
-        //   cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
-        //   cy.checkToastMessageContains({
-        //     message: "File will be sent to your email shortly.",
-        //   });
-        //   cy.closeAllAlertMessages();
-        // });
-
         context(`Update Receiving and release the new revision`, () => {
           it("Check if 'Update Record' button header menu and is functional", () => {
             cy.get("[data-cy=\"updateRecord\"]").should("be.visible").arrowClick();
@@ -613,22 +597,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           () => {
             verifyChangeOwner();
           });
-
-        // it("Check if 'Change Owner' button header menu and is functional", () => {
-        //   cy.get("#HeaderMenuButton").arrowClick();
-        //   cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-        //   cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-        // });
-
-        // it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your
-        //   email shortly`, () => {
-        //   cy.get("#HeaderMenuButton").arrowClick();
-        //   cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
-        //   cy.checkToastMessageContains({
-        //     message: "File will be sent to your email shortly.",
-        //   });
-        //   cy.closeAllAlertMessages();
-        // });
       });
     });
 

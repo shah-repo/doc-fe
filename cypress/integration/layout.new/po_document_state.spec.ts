@@ -168,26 +168,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       context("Right side:", () => {
-        // it("Turn off autosave", () => {
-        //   cy.cmpTurnOffAutosave();
-        // });
-
-        // it("Enter title", () => {
-        //   cy.drEnterDocumentDescription({ description: "Purchase order document" });
-        // });
-
-        // it(`Save → Verify it is functional and the Check Auto-saving, please wait… is present)`, () => {
-        //   cy.wrapWithWaitOnApiCalls([], () => {
-        //     cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        //     cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
-        //   });
-        // });
-
-        // it("Last save should be present", () => {
-        //   cy.listLoadingElementShouldNotExist();
-        //   cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
-        // });
-
         it("Turn off autosave", () => {
           cy.cmpTurnOffAutosave();
         });
@@ -305,9 +285,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       it(`Select '${USERS[1].name}' for Requestor`, () => {
         cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true });
         cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-
-        // });
         cy.listLoadingElementShouldNotExist().wait(2000);
       });
 

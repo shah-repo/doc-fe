@@ -190,24 +190,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       context("Right side:", () => {
-        // it("Turn off autosave", () => {
-        //   cy.cmpTurnOffAutosave();
-        // });
-
-        // it("Enter title", () => {
-        //   cy.drEnterDocumentTitle({ name: "Supplier Title" });
-        // });
-
-        // it("Enters description 'Supplier description'", () => {
-        //   cy.drEnterDocumentDescription({ description: "Supplier description" });
-        // });
-
-        // it(`Save → Verify it is functional and the Check Auto-saving, please wait… is present)`, () => {
-        //   cy.wrapWithWaitOnApiCalls([], () => {
-        //     cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        //     cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
-        //   });
-        // });
         it("Turn off autosave", () => {
           cy.cmpTurnOffAutosave();
         });
@@ -293,14 +275,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
             cy.get("#AlertDialog-cancelButton").arrowClick();
             cy.checkToastMessage({ exists: false });
           });
-
           verifyChangeOwner();
-
-          // it("Check if 'Change Owner' button header menu and is functional", () => {
-          //   cy.get("#HeaderMenuButton").arrowClick();
-          //   cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-          //   cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-          // });
         }
       );
     });
@@ -356,12 +331,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         it("Last save should not be present", () => {
           cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
-
-        // it("Check if 'Change Owner' button header menu and is functional", () => {
-        //   cy.get("#HeaderMenuButton").arrowClick();
-        //   cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-        //   cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-        // });
 
         it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
@@ -433,12 +402,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         it("Last save should not be present", () => {
           cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
-
-        // it("Check if 'Change Owner' button header menu and is functional", () => {
-        //   cy.get("#HeaderMenuButton").arrowClick();
-        //   cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-        //   cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-        // });
 
         it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
@@ -586,12 +549,6 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         it("Last save should not be present", () => {
           cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
-
-        // it("Check if 'Change Owner' button header menu and is functional", () => {
-        //   cy.get("#HeaderMenuButton").arrowClick();
-        //   cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-        //   cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
-        // });
 
         it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
           email shortly`, () => {
