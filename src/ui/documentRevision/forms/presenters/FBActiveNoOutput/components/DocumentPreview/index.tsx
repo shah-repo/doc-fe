@@ -93,14 +93,18 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     }
 
     workspaceState?.setMode(mode);
+    _formState?.setValues(initialValues);
+    _formState?.setMode(mode);
+
+    // eslint-disable-next-line no-console
+    console.log("effect");
 
     return () => {
       if (prevMode.current) {
         workspaceState?.setMode(prevMode.current);
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  }, [_formState, initialValues, mode, workspaceState]);
 
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
@@ -145,12 +149,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       type: TabTypeOptions.TRAINING,
     }];
   }
-
-  useEffect(() => {
-    _formState?.setValues(initialValues);
-    _formState?.setMode(mode);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Observer>
