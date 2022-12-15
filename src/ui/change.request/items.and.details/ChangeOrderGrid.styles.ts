@@ -218,6 +218,8 @@ export default makeStyles((theme) =>
     docList: {
       listStyle: "none",
       paddingLeft: 0,
+      marginBottom: 0,
+      paddingBottom: theme.spacing(1.75),
     },
     docListItem: {
       padding: theme.spacing(.75, 0),
