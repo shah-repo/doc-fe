@@ -8,11 +8,13 @@ class ItemsAndDetailsState {
   constructor() {
     this.setViewItemActionsVisibility(true);
     this.setLoadingState(false);
+    this.setSubmitList(false);
   }
 
   @observable changeOrderItemsList: ChangeOrderGridItem[] = [];
   @observable viewItemActionsVisible = true;
   @observable loadingState = false;
+  @observable submitList = false;
 
   @action setChangeOrderItemsList(list: ChangeOrderGridItem[]) {
     set(this, "changeOrderItemsList", list);
@@ -28,6 +30,10 @@ class ItemsAndDetailsState {
 
   @action setLoadingState(isVisible = false) {
     set(this, "loadingState", isVisible);
+  }
+
+  @action setSubmitList(submit) {
+    set(this, "submitList", submit);
   }
 }
 

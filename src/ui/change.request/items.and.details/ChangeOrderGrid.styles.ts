@@ -16,17 +16,31 @@ export default makeStyles((theme) =>
     },
     tabContent: {
       width: "100%",
+      position: "relative",
       marginBottom: theme.spacing(3),
       opacity: 1,
       transition: "opacity .2s ease-in",
     },
     tabContentInactive: {
-      opacity: .4,
       pointerEvents: "none",
     },
     titleHeading: {
       marginRight: theme.spacing(1.25),
       display: "inline-block",
+    },
+    loader: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: Colors.background_white,
+      opacity: 0.7,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontWeight: 600,
+      zIndex: 1,
     },
     btnMargin: {
       margin: 0,
@@ -86,6 +100,7 @@ export default makeStyles((theme) =>
       "display": "flex",
       "alignItems": "center",
       "columnGap": theme.spacing(1.25),
+      "paddingRight": theme.spacing(1),
       "& > .MuiBox-root": {
         width: "100%",
       },
@@ -127,7 +142,7 @@ export default makeStyles((theme) =>
       },
     },
     enclosingDivOpened: {
-      "& svg": {
+      "& .iconClass": {
         transform: "rotate(90deg)",
       },
     },

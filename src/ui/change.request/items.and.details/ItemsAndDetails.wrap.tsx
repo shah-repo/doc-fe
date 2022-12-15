@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { cloneDeep, map } from "lodash";
+import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
@@ -80,15 +81,31 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   };
 
   const submitData = (dataToSend) => {
-    itemsAndDetailsState.setLoadingState(true);
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
     // Submit the form - and once that returns, add this item to the store
     // itemsAndDetailsState.add(formValue);
 
     if (autosave) {
       submitForm();
+      itemsAndDetailsState.setLoadingState(true);
     }
   };
+
+  useEffect(() => reaction(
+    () => itemsAndDetailsState.submitList,
+    (submission) => {
+      if (submission) {
+        console.log(submission, "submit data");
+        if (currentDocRevId) {
+          const dataToSend: FBDocumentRevisionsValue[] =
+            storeDataToFormData(itemsAndDetailsState.changeOrderItemsList);
+          dataToSend.push(newARDocRevToAdd(currentDocRevId));
+          submitData(dataToSend);
+        }
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), []);
 
   useEffect(() => {
     if ((asyncState.status === AsyncStatus.Success ||
@@ -101,7 +118,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [asyncState.status]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     processChangeRequest();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changeRequest]);
@@ -111,19 +128,13 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     const documentRevisionsData = changeRequest.documentRevisions;
 
     const documentRevisionsAssigned: FBDocumentRevisionsValue[] = changeRequest.formInput?.documentRevisions ?? [];
-    // Happens only when one of the expressAR options is chosen
+    // Happens only when one of the expressAR options is chosen, not when viewing from the link
     if (currentDocRevId) {
       currentDocRevPresent = documentRevisionsAssigned.findIndex(
         (docRev: FBDocumentRevisionsValue) => (docRev.proposedDocumentRevision.id === currentDocRevId)) !== -1;
 
       console.log(currentDocRevPresent);
-
-      if (!currentDocRevPresent) {
-        documentRevisionsAssigned.push(newARDocRevToAdd(currentDocRevId));
-      }
     }
-
-    console.log(documentRevisionsAssigned);
 
     const entries = documentRevisionsAssigned.map((item: FBDocumentRevisionsValue) => {
       const entryInfo = {
@@ -154,12 +165,12 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     });
 
     itemsAndDetailsState.setChangeOrderItemsList(entries);
-
-    // If entries does not have the currentDocRevId, then we add a new entry to the parentFormState and submit data
-    console.log(currentDocRevPresent, currentDocRevId);
-    // if (!currentDocRevPresent) {
-    //   submitData(documentRevisionsAssigned);
-    // }
+    if (!currentDocRevPresent && currentDocRevId) {
+      // documentRevisionsAssigned.push(newARDocRevToAdd(currentDocRevId));
+      setTimeout(() => {
+        itemsAndDetailsState.setSubmitList(true);
+      }, 100);
+    }
   };
 
   return useObserver(() => (

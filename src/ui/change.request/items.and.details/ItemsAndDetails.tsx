@@ -14,6 +14,14 @@ import ChangeOrderItem from "./ChangeOrderItem";
 import ItemsAndDetailsState from "./ItemsAndDetails.state";
 import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
 
+
+const Loader = () => {
+  const classes = useStyles();
+  return (
+    <div className={classes.loader}>Loading ...</div>
+  );
+};
+
 const TopSection: React.FunctionComponent<{
   showButton?: boolean;
   showEditRow: () => void;
@@ -92,6 +100,7 @@ const ItemsAndDetails: React.FunctionComponent<{
     <div className={cx(classes.tabContent, {
       [classes.tabContentInactive]: itemsAndDetailsState.loadingState,
     })}>
+      { itemsAndDetailsState.loadingState && <Loader /> }
       <TopSection showEditRow={showEditRow} showButton={itemsAndDetailsState.viewItemActionsVisible}/>
       <ChangeOrderGridHeader />
       { isEditRowVisible && <ChangeOrderEditGridItem
