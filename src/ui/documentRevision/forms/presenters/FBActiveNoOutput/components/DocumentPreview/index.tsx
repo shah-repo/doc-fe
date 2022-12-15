@@ -2,7 +2,7 @@ import { Formik, FormikProps, useFormikContext } from "formik";
 import { filter, get, includes, map, size } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from "../../../../../../../App";
 import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
@@ -16,10 +16,7 @@ import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from "../.
 import { ApplicationState } from "../../../../../../../state/reducers";
 import { DocTypeGroups } from "../../../../../../dashboard.new/line.items/common/types";
 import AttachmentsField from "../../../../../../document.revision/form/attachments";
-import {
-  FB, FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceMode,
-  FBWorkspaceModeOptions,
-} from "../../../../../../form.builder";
+import { FB, FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../../../../../form.builder";
 import FBMaterialEqInfoContainer from "../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import { DocumentCloneTypeOptions } from "../../../../../Clone.container";
 import { isOperator } from "../../../../../DocumentRevisionDisplay.container";
@@ -30,6 +27,7 @@ import styles from "./styles";
 
 interface ContainerProps {
   docRevId?: string;
+  formPreview?: boolean;
   _tabsState?: SMTabsState;
   _formState?: SMFormState;
 }
@@ -43,6 +41,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   _tabsState,
   _formState,
   formik,
+  formPreview = false,
 }) => {
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
@@ -76,7 +75,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(documentType.groupOptions);
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
-  const isCurrentUserOperator = React.useContext(isOperator);
+  const isCurrentUserOperator = useContext(isOperator);
   const isDisabledInput = formik.values.id !== undefined && isCurrentUserOperator && !isOwner;
   const isOutput = true;
   const showAdministrativeAndVoidChange = false;
@@ -143,8 +142,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
         workspaceState?.setMode(prevMode.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  }, [_formState, initialValues, workspaceState, mode]);
 
   return (
     <Observer>
@@ -155,11 +153,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
             height: "auto",
             minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"),
           }}
-          header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
-            type={type}
-            documentTypeId={formik.values.document?.documentType?.id}
-          />}
-          lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
+          header={(!isLHR && !isTypeMpiDoc) && !formPreview && (
+            <DocumentRevisionFormHeader type={type} documentTypeId={formik.values.document?.documentType?.id} />
+          )}
+          lhrSteps={isLHR && !formPreview && (
+            <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />
+          )}
         >
           <Observer>
             {() => (
@@ -175,7 +174,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                   return (
                     <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
                       {tabType === TabTypeOptions.MIXED && <>
-                        <DocumentRevisionFormPresenter
+                        {!formPreview && <DocumentRevisionFormPresenter
                           {...formik}
                           isPreview={true}
                           redlineActive={false}
@@ -193,8 +192,8 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             isOwner,
                             mode,
                           }}
-                        />
-                        {documentRevision && showTabContent &&  <FBWorkspace
+                        />}
+                        {documentRevision && showTabContent && <FBWorkspace
                           withoutBottomBar
                           isPortal={false}
                           document={{

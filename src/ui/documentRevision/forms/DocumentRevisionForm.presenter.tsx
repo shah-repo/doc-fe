@@ -191,6 +191,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   });
 
+  useEffect(() => {
+    workspaceState?.setMode(mode);
+  }, [mode, workspaceState]);
+
   const showOutputSection = _formState?.active && ([
     FBWorkspaceModeOptions.DESIGN,
     FBWorkspaceModeOptions.FORM,

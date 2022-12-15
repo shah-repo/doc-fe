@@ -2,8 +2,8 @@ import { find, get, map, unionBy } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
 import { toastError } from "../../components/notifications";
-import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import DocumentPreview from "../../documentRevision/forms/presenters/FBActiveNoOutput/components/DocumentPreview";
+import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
 import useStyles from "./FBWorkspaceBottomBar.styles";
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
@@ -109,7 +109,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
           paper: classes.previewDialog,
         },
         content: (
-          <DocumentPreview docRevId={workspaceState?.id} />
+          <DocumentPreview docRevId={workspaceState?.document?.docId} formPreview />
         ),
       });
     };
