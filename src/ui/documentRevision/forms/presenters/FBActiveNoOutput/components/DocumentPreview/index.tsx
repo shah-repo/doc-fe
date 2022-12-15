@@ -2,7 +2,7 @@ import { Formik, FormikProps, useFormikContext } from "formik";
 import { filter, get, includes, map, size } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
-import { useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from "../../../../../../../App";
 import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
@@ -18,6 +18,7 @@ import { DocTypeGroups } from "../../../../../../dashboard.new/line.items/common
 import AttachmentsField from "../../../../../../document.revision/form/attachments";
 import {
   FB, FBEditorState, FBSchemaProps, FBWorkspace,
+  FBWorkspaceMode,
   FBWorkspaceModeOptions,
 } from "../../../../../../form.builder";
 import FBMaterialEqInfoContainer from "../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
@@ -76,12 +77,28 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const isLHR = checkIsDocumentLHR(documentType.groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(documentType.groupOptions);
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
-  const isCurrentUserOperator = React.useContext(isOperator);
+  const isCurrentUserOperator = useContext(isOperator);
   const isDisabledInput = formik.values.id !== undefined && isCurrentUserOperator && !isOwner;
   const isOutput = true;
   const showAdministrativeAndVoidChange = false;
   const type = DocumentCloneTypeOptions.none;
   const mode = FBWorkspaceModeOptions.FORM;
+  const prevMode = useRef<FBWorkspaceMode>();
+
+  useEffect(() => {
+    if (workspaceState?.mode) {
+      prevMode.current = workspaceState?.mode;
+    }
+
+    workspaceState?.setMode(mode);
+
+    return () => {
+      if (prevMode.current) {
+        workspaceState?.setMode(prevMode.current);
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
