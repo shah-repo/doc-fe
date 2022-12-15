@@ -2,7 +2,7 @@ import { Formik, FormikProps, useFormikContext } from "formik";
 import { filter, get, includes, map, size } from "lodash";
 import { Observer } from "mobx-react";
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionFormHeader, DocumentRevisionFormProgressBar, SM, SMBox, SMFormState, SMTabs, SMTabsState, SMTemplate } from "../../../../../../../App";
 import FBTrainingInfoContainer from "../../../../../../../App/Enlil/Features/DocumentRevisionForm/Components/FBTrainingInfo/FBTrainingInfo.container";
@@ -17,7 +17,7 @@ import { ApplicationState } from "../../../../../../../state/reducers";
 import { DocTypeGroups } from "../../../../../../dashboard.new/line.items/common/types";
 import AttachmentsField from "../../../../../../document.revision/form/attachments";
 import {
-  FB, FBEditorState, FBSchemaProps, FBWorkspace,
+  FB, FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceMode,
   FBWorkspaceModeOptions,
 } from "../../../../../../form.builder";
 import FBMaterialEqInfoContainer from "../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
@@ -47,7 +47,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
-  let schema = _documentRevisionFormState?.schema;
 
   const documentTypesById = useSelector(documentTypeSelectors.byId);
 
@@ -61,6 +60,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const documentType = documentTypesById[docTypeId];
   const docTypeGroup = get(documentType, "group", DOC_TYPE_GROUP.OTHER);
   const templateOutputDocumentTypes = documentRevision?.formTemplate?.outputDocumentTypes?.[0] as FBOutputDocumentType;
+  let schema = workspaceState?.schema ?? _documentRevisionFormState?.schema;
 
   const outputTypeId = (
     documentRevision?.outputDocumentTypes?.value
@@ -127,11 +127,24 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     }];
   }
 
+  const prevMode = useRef<FBWorkspaceMode>();
+
   useEffect(() => {
+    if (workspaceState?.mode) {
+      prevMode.current = workspaceState?.mode;
+    }
+
     _formState?.setValues(initialValues);
     _formState?.setMode(mode);
+    workspaceState?.setMode(mode);
+
+    return () => {
+      if (prevMode.current) {
+        workspaceState?.setMode(prevMode.current);
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [mode]);
 
   return (
     <Observer>

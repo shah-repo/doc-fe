@@ -12,12 +12,16 @@ const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   panelProps,
 }) => {
   const classes = useStyles();
+  const active = _tabsState?.isTabActive(tabId);
+
+  if (!active) {
+    return null;
+  }
 
   return (
     <Observer>
       {() => (
         <SMBox
-          hidden={!_tabsState?.isTabActive(tabId)}
           id={`sm-tabpanel-${tabIndex ?? tabId}`}
           className={classes.content}
           {...panelProps}
