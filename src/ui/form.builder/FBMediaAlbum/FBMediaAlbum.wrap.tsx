@@ -37,8 +37,8 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
         ? collection[mediaAlbumState?.activeMedia || 0]?.name
         : "";
       hiddenContainer = Boolean(
-        (workspaceMode === "preview" || workspaceMode === "formPreview" || actionsDisabled) &&
-        isEmpty(collection)
+        (workspaceMode === "preview" || workspaceMode === "formPreview" || actionsDisabled)
+         && isEmpty(collection)
       );
     });
 
