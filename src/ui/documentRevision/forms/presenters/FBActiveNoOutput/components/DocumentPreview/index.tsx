@@ -50,7 +50,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
-  let schema = _documentRevisionFormState?.schema;
 
   const documentTypesById = useSelector(documentTypeSelectors.byId);
 
@@ -64,6 +63,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const documentType = documentTypesById[docTypeId];
   const docTypeGroup = get(documentType, "group", DOC_TYPE_GROUP.OTHER);
   const templateOutputDocumentTypes = documentRevision?.formTemplate?.outputDocumentTypes?.[0] as FBOutputDocumentType;
+  let schema = workspaceState?.schema ?? _documentRevisionFormState?.schema;
 
   const outputTypeId = (
     documentRevision?.outputDocumentTypes?.value
@@ -92,16 +92,16 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       prevMode.current = workspaceState?.mode;
     }
 
-    workspaceState?.setMode(mode);
     _formState?.setValues(initialValues);
     _formState?.setMode(mode);
+    workspaceState?.setMode(mode);
 
     return () => {
       if (prevMode.current) {
         workspaceState?.setMode(prevMode.current);
       }
     };
-  }, [_formState, initialValues, mode, workspaceState]);
+  }, [_formState, initialValues, workspaceState, mode]);
 
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
@@ -146,7 +146,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       type: TabTypeOptions.TRAINING,
     }];
   }
-
   return (
     <Observer>
       {() => (
@@ -196,7 +195,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
-                        {documentRevision && showTabContent &&  <FBWorkspace
+                        {documentRevision && showTabContent && <FBWorkspace
                           withoutBottomBar
                           isPortal={false}
                           document={{
