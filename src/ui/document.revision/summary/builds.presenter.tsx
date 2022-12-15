@@ -83,7 +83,7 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
   );
   return (
     <Grid xs={6}>
-      <Box pb={3} pt={3}>
+      <Box pb={2}>
         <ListItem data-cy="BuildsPresenter-label" disableGutters>
           <Typography variant="h6" className={classes.labelProps}>
             <Text message={label} />
