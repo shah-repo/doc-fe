@@ -2,7 +2,7 @@ import { groupBy, keyBy, keys, merge, omit, uniq } from "lodash";
 import { combineReducers } from "redux";
 import asyncReducer from "../../reducers/asyncReducer";
 import { AuditByCRIdState } from "../audit/types";
-import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
+import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_SECURITY_GET_ASYNC, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { AllIdsState, DocumentByIdState, DocumentRevisionAuditSetAction, DocumentRevisionsAllIdsState, DocumentRevisionsByIdState, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentSetAction } from "./types";
 
 type DocumentRevisionActions =
@@ -114,6 +114,7 @@ const auditsAllId = (
 export default combineReducers({
   loadListAsyncInfo: asyncReducer(DOCUMENT_REVISION_LIST_ASYNC),
   loadAsyncInfo: asyncReducer(DOCUMENT_REVISION_GET_ASYNC),
+  loadAsyncSecurityInfo: asyncReducer(DOCUMENT_REVISION_SECURITY_GET_ASYNC),
   loadDocumentAsyncInfo: asyncReducer(DOCUMENT_GET_ASYNC),
   loadAuditAsyncInfo: asyncReducer(DOCUMENT_REVISION_GET_AUDIT_ASYNC),
   byId,
