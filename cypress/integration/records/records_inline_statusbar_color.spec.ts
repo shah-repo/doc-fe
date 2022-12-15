@@ -397,6 +397,7 @@ context("Record inline Flow", () => {
     });
 
     it("Select approver for second inline", () => {
+      cy.wait(2000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
         () => {
           cy.get("[name*=\"fb-ia-second-inline-field\"] input")
