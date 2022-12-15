@@ -191,6 +191,11 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
     }
   });
 
+  useEffect(() => {
+    workspaceState?.setMode(mode);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
+
   const showOutputSection = _formState?.active && ([
     FBWorkspaceModeOptions.DESIGN,
     FBWorkspaceModeOptions.FORM,
