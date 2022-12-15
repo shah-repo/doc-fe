@@ -831,7 +831,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it(`Filter document by status ${STATUS_TYPES_LABEL.WIP}, and select it`, () => {
-      cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick({ force: true });
+      cy.get(`[aria-colindex="2"] [class="k-input"]`, { timeout: 10_000 }).arrowClick({ force: true });
       cy.get("li").contains("WIP").arrowClick({ force: true }).wait(500);
       cy.get(`td[data-grid-col-index="1"]`).eq(0).arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
@@ -1758,6 +1758,8 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     context("Approve the Lot → Click on Revision A (no status) → Check the content of the status bar", () => {
       it("Navigate to Detail Tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve the Lot", () => {
@@ -1820,14 +1822,14 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it(`Filter document by status ${STATUS_TYPES_LABEL.RELEASED}, and select it`, () => {
-        cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick({ force: true });
+        cy.get(`[aria-colindex="2"] [class="k-input"]`, { timeout: 10_000 }).arrowClick({ force: true });
         cy.get("li").contains("Released").arrowClick({ force: true }).wait(500);
         cy.get(`td[data-grid-col-index="1"]`).eq(0).arrowClick({ force: true });
         cy.listLoadingElementShouldNotExist();
       });
 
       it(`Verify LHR Step is ${STATUS_TYPES_LABEL.COMPLETED}`, () => {
-        cy.get("[data-cy=\"completed-steps\"]").should("not.exist");
+        cy.get("[data-cy=\"completed-steps\"]").should("exist");
       });
     });
 
