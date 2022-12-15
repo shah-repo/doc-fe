@@ -109,7 +109,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
           paper: classes.previewDialog,
         },
         content: (
-          <DocumentPreview docRevId={workspaceState?.document?.docId} />
+          <DocumentPreview docRevId={workspaceState?.document?.docId} formPreview />
         ),
       });
     };

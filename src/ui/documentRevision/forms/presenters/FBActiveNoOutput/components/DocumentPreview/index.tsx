@@ -31,6 +31,7 @@ import styles from "./styles";
 
 interface ContainerProps {
   docRevId?: string;
+  formPreview?: boolean;
   _tabsState?: SMTabsState;
   _formState?: SMFormState;
 }
@@ -44,6 +45,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   _tabsState,
   _formState,
   formik,
+  formPreview = false,
 }) => {
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
@@ -159,11 +161,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
             height: "auto",
             minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"),
           }}
-          header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
-            type={type}
-            documentTypeId={formik.values.document?.documentType?.id}
-          />}
-          lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
+          header={(!isLHR && !isTypeMpiDoc) && !formPreview && (
+            <DocumentRevisionFormHeader type={type} documentTypeId={formik.values.document?.documentType?.id} />
+          )}
+          lhrSteps={isLHR && !formPreview && (
+            <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />
+          )}
         >
           <Observer>
             {() => (
@@ -179,7 +182,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                   return (
                     <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
                       {tabType === TabTypeOptions.MIXED && <>
-                        <DocumentRevisionFormPresenter
+                        {!formPreview && <DocumentRevisionFormPresenter
                           {...formik}
                           isPreview={true}
                           redlineActive={false}
@@ -197,7 +200,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             isOwner,
                             mode,
                           }}
-                        />
+                        />}
                         {documentRevision && showTabContent &&  <FBWorkspace
                           withoutBottomBar
                           isPortal={false}
