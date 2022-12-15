@@ -3,12 +3,12 @@ import Colors from "../../layout/theme/utils/colors";
 
 export default () =>
   createStyles({
-    descriptionContainer: {
-      "border": "0 !important",
+    description: {
+      "border": 0,
       "maxHeight": "8em",
-      "width": "calc(95vw - 559px)",
+      "width": "100%",
       "overflow": "auto",
-      "fontSize": "16px",
+      "fontSize": 14,
       "display": "flex",
       "&.ql-container.ql-snow": {
         "border": 0,
@@ -19,8 +19,14 @@ export default () =>
       },
       "whiteSpace": "pre-line",
     },
-    btnStyle: {
-      fontSize: "14px",
+    root: {
+      marginBottom: -24,
+    },
+    button: {
+      fontSize: 14,
       color: Colors.navy,
+      marginTop: -3,
+      paddingLeft: 5,
+      cursor: "pointer",
     },
   });

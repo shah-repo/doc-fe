@@ -46,7 +46,9 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
   return (
     <Fragment>
       {loading && <CircularProgress size={12} />}
-      {!loading && <div>{first(attachmentState.filesApi.data)?.name}</div>}
+      {!loading &&
+      <div>{`${first(attachmentState.filesApi.data)?.name}.${first(attachmentState.filesApi.data)?.type}`}</div>
+      }
     </Fragment>
   );
 };

@@ -141,7 +141,7 @@ export const withFBDocumentRevisions = <T extends FBDocumentRevisionsProps>(
       const value = filter(docRevState?.value, (v) => v.proposedDocumentRevision.id !== id);
       parentFormState?.removeFieldRules(`documentRevisions.${value.length}.descriptionOfChange`);
       parentFormState?.removeFieldRules(`documentRevisions.${value.length}.justificationOfChange`);
-      docRevState?.setDocumentRevisions(value);
+      docRevState?.setDocumentRevisions(value.length === 0 ? undefined : value);
     };
 
     handleCancel = () => dialogState?.closeDialog();

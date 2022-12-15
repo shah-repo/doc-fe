@@ -11,6 +11,16 @@ export const formatCurrency = (data: string) =>  {
   return "";
 };
 
+export const formatNumberToCurrency = (data: number) =>  {
+  if (!isNaN(data)) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(data);
+  }
+  return data;
+};
+
 export const linearScale = (domain: number[], range: number[]) => {
   const scale = (value: number) => {
     const [minValue, maxValue] = [...domain];

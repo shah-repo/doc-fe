@@ -27,6 +27,8 @@ const FBPurchaseOrderClasses = makeStyles({
   table: {
     "& th": {
       whiteSpace: "nowrap",
+      backgroundColor: Colors.water,
+      cursor: "default",
     },
     "& tr": {
       cursor: "pointer",
@@ -43,6 +45,13 @@ const FBPurchaseOrderClasses = makeStyles({
     borderStyle: "dashed",
     borderColor: Colors.dodger_blue,
     height: "40px",
+  },
+  list: {
+    borderBottom: "none",
+  },
+  sum: {
+    verticalAlign: "baseline",
+    borderBottom: "none",
   },
 });
 

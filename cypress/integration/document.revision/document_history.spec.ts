@@ -131,9 +131,9 @@ context("Check Document History", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[2].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[1], USERS[3], USERS[4]],
             documentTypes: [
               ClinicalProtocolDocType,
             ],
@@ -203,7 +203,6 @@ context("Check Document History", () => {
     });
 
     it("fill in output document type: Clinical Protocol, Component Specification", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.drSelectOutputDocumentType({ documentType: "Component Specification" });
     });
 
@@ -236,48 +235,50 @@ context("Check Document History", () => {
 
 
     it("Select reference for document", () => {
-      cy.drSelectReferences( reference.value );
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drSelectReferences( reference.value );
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(5000);
     });
 
 
     it("Remove reference for document", () => {
-      cy.contains(reference.valueCode).arrowClick();
-      cy.contains(reference.valueCode).parent().parent().parent().find("svg").arrowClick({ force: true });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.contains(reference.valueCode).arrowClick();
+        cy.contains(reference.valueCode).parent().parent().parent().find("svg").arrowClick({ force: true });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Unmark 'Training Required'", () => {
-      cy.drClickTrainingRequired();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.drClickTrainingRequired();
+      });
     });
 
     it("Uploads test_image.jpg", () => {
-      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
-      cy.wait(5000);
     });
 
     it("Remove attachment test_image.jpg", () => {
-      cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(5000);
     });
 
     it("Upload test.docx", () => {
-      cy.atchUploadAttachment({ fileName: "test.docx" });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(5000);
-    });
-
-    it("add another output document type: Lots", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Lots" });
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.atchUploadAttachment({ fileName: "test.docx" });
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -319,14 +320,14 @@ context("Check Document History", () => {
 
     it("Add another user permission", () => {
       SystemRequirement("REQ-4240");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity, CyRoutes.GetFieldLocks], () => {
         cy.drAddUserFromPermissionTab(sharedUserTwo.name);
       });
     });
 
     it("Add another group permission", () => {
       SystemRequirement("REQ-4240");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity, CyRoutes.GetFieldLocks], () => {
         cy.drAddGroupFromPermissionTab(groupTwo);
       });
     });
@@ -372,7 +373,9 @@ context("Check Document History", () => {
   context("Check document history", () => {
     it("Open history drawer and compare history values", () => {
       SystemRequirement("REQ-0360", "REQ-2670", "REQ-4000", "REQ-4250");
-      cy.drSelectHistoryTab();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
+        cy.drSelectHistoryTab();
+      });
     });
 
     history.forEach((element, groupIndex) => {

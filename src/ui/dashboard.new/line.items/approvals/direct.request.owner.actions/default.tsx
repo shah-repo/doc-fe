@@ -1,10 +1,4 @@
-import {
-  Box,
-  Grid,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Box, Grid, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
@@ -22,7 +16,7 @@ import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
-import { styles } from "./default.styles";
+import useStyles from "./default.styles";
 
 interface Props {
   id: string;
@@ -42,9 +36,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
 }
-const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
-  Props
-> = ({
+const DirectRequestOwnerActionItemsPresenter: React.FC<Props> = ({
   id,
   docTypeGroup,
   docDocumentId,
@@ -61,7 +53,7 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
   pinLineItem,
   unPinLineItem,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
@@ -80,46 +72,46 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
     onMouseHoverItem(id);
   };
   return (
-    <>
-      <StyledListItem
-        style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
-        button
-        onMouseEnter={onMouseHoverListItem}
-        className={classes.buttoncursor}
-        disableRipple
-      >
-        <ListItemIcon>{getDocIcon(docTypeGroup)}</ListItemIcon>
-        <ListItemText
-          primary={
-            <>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item={true}>
-                  <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId={docId} />
-                </Grid>
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <DocTitle
-                    url={documentVersionPath(docRevId || "", docDocumentId)}
-                    docRevVersion={docRevVersion}
-                    docRevName={docRevName}
-                  />
-                </Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={`${classes.typography} ${classes.margin5}`}
-                    color="textPrimary"
-                    noWrap
-                  >
-                    <Text translation="common.is" />
-                  </Typography>
-                </Grid>
-                {STATUS_TYPES_LABEL.APPROVED === status ||
+    <StyledListItem
+      button
+      divider
+      disableRipple
+      className={classes.buttoncursor}
+      style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+      onMouseEnter={onMouseHoverListItem}
+    >
+      <ListItemIcon>{getDocIcon(docTypeGroup)}</ListItemIcon>
+      <ListItemText
+        primary={
+          <>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
+            >
+              <Grid item={true}>
+                <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId={docId} />
+              </Grid>
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                <DocTitle
+                  url={documentVersionPath(docRevId || "", docDocumentId)}
+                  docRevVersion={docRevVersion}
+                  docRevName={docRevName}
+                />
+              </Grid>
+              <Grid item={true}>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={`${classes.typography} ${classes.margin5}`}
+                  color="textPrimary"
+                  noWrap
+                >
+                  <Text translation="common.is" />
+                </Typography>
+              </Grid>
+              {STATUS_TYPES_LABEL.APPROVED === status ||
                   (STATUS_TYPES_LABEL.RELEASED === status && (
                     <Grid item={true}>
                       <Typography
@@ -152,76 +144,75 @@ const DirectRequestOwnerActionItemsPresenter: React.FunctionComponent<
                       </Typography>
                     </Grid>
                   ))}
-                {STATUS_TYPES_LABEL.APPROVED !== status &&
+              {STATUS_TYPES_LABEL.APPROVED !== status &&
                   STATUS_TYPES_LABEL.RELEASED !== status && (
-                  <Grid item={true}>
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyStatus} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
-                    >
-                      {docTypeGroup === DocTypeGroups.PI_INSTANCE
-                        ? displaystatus
-                        : status}
-                    </Typography>
-                  </Grid>
-                )}
-              </Grid>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item={true} className={classes.grayDot}></Grid>
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
-                    className={classes.timestampContainer}
+                    className={`${classes.typographyStatus} ${classes.margin5}`}
                     color="textSecondary"
                     noWrap
                   >
-                    {timestamp}
+                    {docTypeGroup === DocTypeGroups.PI_INSTANCE
+                      ? displaystatus
+                      : status}
                   </Typography>
                 </Grid>
+              )}
+            </Grid>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
+            >
+              <Grid item={true} className={classes.grayDot}></Grid>
+              <Grid item={true}>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.timestampContainer}
+                  color="textSecondary"
+                  noWrap
+                >
+                  {timestamp}
+                </Typography>
               </Grid>
-            </>
-          }
-        />
-        {hoverItem && !pinned && (
-          <Box component="div" className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
-            {pinHover && (
-              <StyleTooltip
-                title={<Text translation="common.pin" />}
-                placement="top"
-                arrow
-              >
-                <PinSolidIcon
-                  onClick={handlePinClick}
-                  onMouseLeave={onMouseLeavePinIcon}
-                  className={classes.cursorPointer}
-                />
-              </StyleTooltip>
-            )}
-          </Box>
-        )}
-        {pinned && (
-          <span className={classes.actionIcon}>
+            </Grid>
+          </>
+        }
+      />
+      {hoverItem && !pinned && (
+        <Box component="div" className={classes.actionIcons}>
+          {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
+          {pinHover && (
             <StyleTooltip
-              title={<Text translation="common.unpin" />}
+              title={<Text translation="common.pin" />}
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+              <PinSolidIcon
+                onClick={handlePinClick}
+                onMouseLeave={onMouseLeavePinIcon}
+                className={classes.cursorPointer}
+              />
             </StyleTooltip>
-          </span>
-        )}
-      </StyledListItem>
-    </>
+          )}
+        </Box>
+      )}
+      {pinned && (
+        <span className={classes.actionIcon}>
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
+          </StyleTooltip>
+        </span>
+      )}
+    </StyledListItem>
   );
 };
 

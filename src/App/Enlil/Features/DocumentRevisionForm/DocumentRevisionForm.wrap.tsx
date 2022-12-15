@@ -4,8 +4,9 @@ import React, { useCallback, useEffect } from "react";
 import { DocumentRevisionFormProps, DocumentRevisionFormState, SM, SMProvider } from "../../..";
 import { DocumentRevision } from "../../../../state/ducks/documentRevisions/types";
 import { DOCUMENT_REVISION_CREATE_URL } from "../../../../ui/constants/urls";
+import { checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionReleased } from "../../../../ui/documentRevision/helpers/documentRevisionStatus";
-import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBDocTypeGroup, FBEditorState, FBFormState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
+import { FB, FBApprovalMatrixFieldState, FBDAMFields, FBDocTypeGroup, FBEditorState, FBFormState, FBPOApprovalsState, FBProvider, FBWorkspaceState } from "../../../../ui/form.builder";
 import FBLeftPanelState from "../../../../ui/form.builder/FBLeftPanel/FBLeftPanel.state";
 import FBStore from "../../../../ui/form.builder/FBStore/FBStore";
 
@@ -18,6 +19,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     document,
     autosaveEnabled,
     isCreateUrl,
+    documentRevision,
     ...props
   }: T) => {
     const formik = useFormikContext();
@@ -44,6 +46,16 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     if (props.isDAM && !isEmpty(FBStore.damData?.approvalMatrix)) {
       props.formInput = { ...props?.formInput, ...getDAMPayload(FBStore.damData) };
     }
+
+    const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
+    const poApprovalsState = isPO ? FB.useRef(
+      FBPOApprovalsState,
+      {
+        id: documentRevision.id,
+        approvals: documentRevision?.approvals,
+      },
+    ) : undefined;
+
     const approvalMatrixState = (props.isDAM && !approvalMatrixFieldState) ? (
       FB.useRef<FBApprovalMatrixFieldState>(FBApprovalMatrixFieldState, {
         formValue: cloneDeep(props?.formInput),
@@ -123,7 +135,7 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
         <FBProvider {...{
-          leftPanelState, editorState, formState, workspaceState,
+          leftPanelState, editorState, formState, workspaceState, poApprovalsState,
           approvalMatrixFieldState: approvalMatrixState,
         }}>
           <Component
@@ -133,8 +145,9 @@ export const withDocumentRevisionFormWrap = <T extends DocumentRevisionFormProps
               _documentRevisionFormState,
               _tabsState,
               _formState,
+              documentRevision,
               autosaveEnabled,
-              schema: props?.documentRevision?.schema || _documentRevisionFormState?.schema,
+              schema: _documentRevisionFormState?.schema || documentRevision?.schema,
               workspaceState,
               isCreateUrl,
             }}
