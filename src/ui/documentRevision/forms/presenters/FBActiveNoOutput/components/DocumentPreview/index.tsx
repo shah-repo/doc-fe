@@ -16,11 +16,7 @@ import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from "../.
 import { ApplicationState } from "../../../../../../../state/reducers";
 import { DocTypeGroups } from "../../../../../../dashboard.new/line.items/common/types";
 import AttachmentsField from "../../../../../../document.revision/form/attachments";
-import {
-  FB, FBEditorState, FBSchemaProps, FBWorkspace,
-  FBWorkspaceMode,
-  FBWorkspaceModeOptions,
-} from "../../../../../../form.builder";
+import { FB, FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../../../../../form.builder";
 import FBMaterialEqInfoContainer from "../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import { DocumentCloneTypeOptions } from "../../../../../Clone.container";
 import { isOperator } from "../../../../../DocumentRevisionDisplay.container";
@@ -85,23 +81,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const showAdministrativeAndVoidChange = false;
   const type = DocumentCloneTypeOptions.none;
   const mode = FBWorkspaceModeOptions.FORM;
-  const prevMode = useRef<FBWorkspaceMode>();
-
-  useEffect(() => {
-    if (workspaceState?.mode) {
-      prevMode.current = workspaceState?.mode;
-    }
-
-    _formState?.setValues(initialValues);
-    _formState?.setMode(mode);
-    workspaceState?.setMode(mode);
-
-    return () => {
-      if (prevMode.current) {
-        workspaceState?.setMode(prevMode.current);
-      }
-    };
-  }, [_formState, initialValues, workspaceState, mode]);
 
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
@@ -146,6 +125,25 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
       type: TabTypeOptions.TRAINING,
     }];
   }
+
+  const prevMode = useRef<FBWorkspaceMode>();
+
+  useEffect(() => {
+    if (workspaceState?.mode) {
+      prevMode.current = workspaceState?.mode;
+    }
+
+    _formState?.setValues(initialValues);
+    _formState?.setMode(mode);
+    workspaceState?.setMode(mode);
+
+    return () => {
+      if (prevMode.current) {
+        workspaceState?.setMode(prevMode.current);
+      }
+    };
+  }, [_formState, initialValues, workspaceState, mode]);
+
   return (
     <Observer>
       {() => (
