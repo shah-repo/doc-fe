@@ -96,9 +96,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     _formState?.setValues(initialValues);
     _formState?.setMode(mode);
 
-    // eslint-disable-next-line no-console
-    console.log("effect");
-
     return () => {
       if (prevMode.current) {
         workspaceState?.setMode(prevMode.current);
