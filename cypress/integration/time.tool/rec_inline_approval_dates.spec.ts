@@ -64,7 +64,7 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           legalRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, LegalRecord.documentTypeName);
           done();
@@ -359,7 +359,7 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
           cy.navigToDashboard();
         });
 
-        it("Check if change order is 'In Review'", () => {
+        it("Check if Approval Request is 'In Review'", () => {
           cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
         });
 
@@ -454,7 +454,7 @@ context("Record inline approval dates flow", { tags: ["@timetool"] }, () => {
           cy.navigToDashboard();
         });
 
-        it("Check if change order is 'In Review'", () => {
+        it("Check if Approval Request is 'In Review'", () => {
           cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
         });
 

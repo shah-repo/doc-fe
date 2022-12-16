@@ -62,7 +62,7 @@ context("Layout Verification of EQ", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
           done();
@@ -1502,11 +1502,11 @@ context("Layout Verification of EQ", () => {
     });
 
     context("Create AR and select document", () => {
-      it("Navigate to Change order", () => {
+      it("Navigate to Approval Request", () => {
         cy.navigToApprovalRequestList();
       });
 
-      it("Click Create a Change Order button", () => {
+      it("Click Create a Approval Request button", () => {
         cy.arClickCreateAnAR();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1529,7 +1529,7 @@ context("Layout Verification of EQ", () => {
         cy.arClickAddBtnOnAddDocumentsDialog();
       });
 
-      it("Add approvers to change order on approver list", () => {
+      it("Add approvers to Approval Request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
       });
 

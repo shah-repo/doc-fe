@@ -51,7 +51,7 @@ context("Test upgradability of old supplier form and record", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           suppliersDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
           done();

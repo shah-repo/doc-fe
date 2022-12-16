@@ -275,7 +275,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
           thirdEmplyee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           fourthEmplyee = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
           fifthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[5].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           legalRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, LegalRecord.documentTypeName);
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
@@ -1127,11 +1127,11 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
           });
         });
 
-        it("[API] Create Change Order form", () => {
+        it("[API] Create Approval Request form", () => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Change Order form</p>",
+              description: "<p>Approval Request form</p>",
               document: {
                 docId: "FM-00008",
                 documentType: {
@@ -1153,7 +1153,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
                 ],
                 schema: [],
               },
-              name: "Change Order form",
+              name: "Approval Request form",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -1620,12 +1620,12 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
         });
       });
 
-      context("[API]Create Change Order document", () => {
-        it("[API]Create Released Change Order document", (done: any) => {
+      context("[API]Create Approval Request document", () => {
+        it("[API]Create Released Approval Request document", (done: any) => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Change Order</p>",
+              description: "<p>Approval Request</p>",
               document: {
                 docId: "AR-00005",
                 documentType: {
@@ -1644,7 +1644,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
               formDocument: {
                 id: createdARForm.id,
               },
-              name: "Released Change Order",
+              name: "Released Approval Request",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
@@ -3113,8 +3113,8 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       });
     });
 
-    context("[API]Create Change Order document", () => {
-      it("[API]Create Released Change Order document", (done: any) => {
+    context("[API]Create Approval Request document", () => {
+      it("[API]Create Released Approval Request document", (done: any) => {
         cy.grpGetGroupByName({
           sessionId: loginResponse.sessionId,
           employeeId: adminEmployee.id,
@@ -3130,7 +3130,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
             cy.drCreateDocumentRevision({
               payload: {
                 attachments: [],
-                description: "<p>Change Order</p>",
+                description: "<p>Approval Request</p>",
                 document: {
                   docId: "AR-00006",
                   documentType: {
@@ -3149,7 +3149,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
                 formDocument: {
                   id: createdARForm.id,
                 },
-                name: "Released Change Order",
+                name: "Released Approval Request",
                 referenceTo: [],
                 retrain: false,
                 revisionChangeType: RevisionChangeType.NextRevision,

@@ -82,7 +82,7 @@ context("LHR flow", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");

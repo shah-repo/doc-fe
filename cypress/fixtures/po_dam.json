@@ -996,7 +996,7 @@
       "id": "09054ac0-b1ae-445d-9e28-8c25f7e9088f",
       "docType": {
         "acronym": "AR-",
-        "name": "Change Order",
+        "name": "Approval Request",
         "defaultTraining": false,
         "group": "CHANGE_REQUEST",
         "needsSignature": true,
@@ -1010,7 +1010,7 @@
             "name": "change-request-details",
             "type": "section",
             "index": 0,
-            "label": "Change Order Details",
+            "label": "Approval Request Details",
             "applicableOn": [
               "ON_STATE_TO_IN_REVIEW"
             ],

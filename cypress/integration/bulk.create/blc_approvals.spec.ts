@@ -54,7 +54,7 @@ context("Bulk create approvals block/inline test", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           approvalsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approvals Document Type");
           approvalsInlineType = cmpFilterDocumentTypeIdByName(createdCompany, "Approvals Inline Type");

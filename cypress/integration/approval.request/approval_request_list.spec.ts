@@ -19,12 +19,12 @@ let approvalRequestDocumentType;
 let initialArDocument;
 let createdDocumentRevResponse;
 let createdDocumentRevResponse2;
-const documentRevisionName = "New document for testing change order list";
-const documentRevisionName2 = "New document for testing change order list two";
-const approvalRequestName = "Change order for testing 1";
-const approvalRequestName2 = "Change order for testing 2";
+const documentRevisionName = "New document for testing Approval Request list";
+const documentRevisionName2 = "New document for testing Approval Request list two";
+const approvalRequestName = "Approval Request for testing 1";
+const approvalRequestName2 = "Approval Request for testing 2";
 
-context("Change order landing page test", () => {
+context("Approval Request landing page test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -62,7 +62,7 @@ context("Change order landing page test", () => {
           createdCompany = response;
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });
@@ -77,7 +77,7 @@ context("Change order landing page test", () => {
       });
     });
 
-    it("[API]Create document revisions for change order list test", (done: any) => {
+    it("[API]Create document revisions for Approval Request list test", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: secondEmployee.id,
@@ -160,7 +160,7 @@ context("Change order landing page test", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: approvalRequestName,
-            description: "Description for first change order",
+            description: "Description for first Approval Request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -178,7 +178,7 @@ context("Change order landing page test", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: approvalRequestName2,
-            description: "Description for second change order",
+            description: "Description for second Approval Request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -204,18 +204,18 @@ context("Change order landing page test", () => {
   });
 
   context("Check approval list defaults to draft and in review status for AR at start of session", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
   });
 
-  context("Prepare change order", () => {
+  context("Prepare Approval Request", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
     });
 
-    it("Add approvers to change order on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
     });
 
@@ -323,7 +323,7 @@ context("Change order landing page test", () => {
       });
     });
 
-    context("Check for maintaining change order list filter options", () => {
+    context("Check for maintaining Approval Request list filter options", () => {
       it("Clear filters", () => {
         cy.alClearFilters();
       });
@@ -332,7 +332,7 @@ context("Change order landing page test", () => {
         cy.alFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       });
 
-      it("Filter list by change order title", () => {
+      it("Filter list by Approval Request title", () => {
         cy.alFilterByTitle({ title: approvalRequestName });
       });
 
@@ -340,7 +340,7 @@ context("Change order landing page test", () => {
         cy.navigToDashboard();
       });
 
-      it("Navigate back to change order list", () => {
+      it("Navigate back to Approval Request list", () => {
         cy.navigToApprovalRequestList();
       });
 
@@ -369,7 +369,7 @@ context("Change order landing page test", () => {
   context("Verify description is shown on hover", () => {
     it("Verify description", () => {
       SystemRequirement("REQ-0840");
-      cy.alVerifyDescriptionOnHover({ description: "Description for first change order" });
+      cy.alVerifyDescriptionOnHover({ description: "Description for first Approval Request" });
     });
   });
 });

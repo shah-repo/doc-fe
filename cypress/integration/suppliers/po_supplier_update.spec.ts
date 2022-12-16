@@ -61,7 +61,7 @@ context("Purchase Supplier Update", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           employeeId = employee.id;
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
         });

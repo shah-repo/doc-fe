@@ -116,7 +116,7 @@ context("File delete in Pending Change", () => {
     });
 
     context("Withdraw submission and check attachments on document", () => {
-      it("Navigates to Change Order list", () => {
+      it("Navigates to Approval Request list", () => {
         cy.navigToApprovalRequestList();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();

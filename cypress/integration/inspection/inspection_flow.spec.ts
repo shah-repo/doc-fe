@@ -515,7 +515,7 @@ context("Inspection flow", () => {
           createdCompany = response;
           subassemblyDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Subassembly");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });

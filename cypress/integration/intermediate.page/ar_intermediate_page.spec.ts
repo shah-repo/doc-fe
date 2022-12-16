@@ -11,7 +11,7 @@ let loginResponse;
 let adminEmployee;
 
 const docType = "Form";
-const arOutputDocType = "Change Order";
+const arOutputDocType = "Approval Request";
 
 context("Intermediate page validation", () => {
   before(() => {
@@ -162,7 +162,7 @@ context("Intermediate page validation", () => {
       cy.intPageVerifyApproversNotExist();
     });
 
-    it("Check 'Change Order Details' is not displayed", () => {
+    it("Check 'Approval Request Details' is not displayed", () => {
       cy.intPageVerifyApprovalRequestDetailsNotExist();
     });
 
@@ -245,7 +245,7 @@ context("Intermediate page validation", () => {
         cy.drSelectDocumentTab();
       });
 
-      it("Check 'Change Order Details' is displayed", () => {
+      it("Check 'Approval Request Details' is displayed", () => {
         cy.intPageVerifyApprovalRequestDetailsExist();
       });
 
@@ -272,7 +272,7 @@ context("Intermediate page validation", () => {
       cy.arSelectDocumentTab();
     });
 
-    it("Check 'Change Order Details' is displayed", () => {
+    it("Check 'Approval Request Details' is displayed", () => {
       cy.intPageVerifyApprovalRequestDetailsExist();
     });
 

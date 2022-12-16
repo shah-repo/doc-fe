@@ -92,7 +92,7 @@ context("LHR & LHRS Flow", () => {
           thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(
             createdCompany,
-            "Change Order"
+            "Approval Request"
           );
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(
             createdCompany,

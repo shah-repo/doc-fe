@@ -20,10 +20,10 @@ let approvalRequestDocumentType;
 let initialArDocument;
 let createdDocumentRevResponse;
 let createdDocumentRevResponse2;
-const documentRevisionName = "New document for testing change order list";
-const documentRevisionName2 = "New document for testing change order list two";
-const approvalRequestName = "Change order for testing 1";
-const approvalRequestName2 = "Change order for testing 2";
+const documentRevisionName = "New document for testing Approval Request list";
+const documentRevisionName2 = "New document for testing Approval Request list two";
+const approvalRequestName = "Approval Request for testing 1";
+const approvalRequestName2 = "Approval Request for testing 2";
 let docLastUpdatedTime;
 let thirdEmployee;
 
@@ -66,7 +66,7 @@ context("Status Bar of newly created ARs", () => {
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });
@@ -81,7 +81,7 @@ context("Status Bar of newly created ARs", () => {
       });
     });
 
-    it("[API]Create document revisions for change order list test", (done: any) => {
+    it("[API]Create document revisions for Approval Request list test", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: secondEmployee.id,
@@ -164,7 +164,7 @@ context("Status Bar of newly created ARs", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: approvalRequestName,
-            description: "Description for first change order",
+            description: "Description for first Approval Request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -182,7 +182,7 @@ context("Status Bar of newly created ARs", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: approvalRequestName2,
-            description: "Description for second change order",
+            description: "Description for second Approval Request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -212,12 +212,12 @@ context("Status Bar of newly created ARs", () => {
   });
 
   context("Check approval list defaults to draft", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
   });
 
-  context("Prepare change order", () => {
+  context("Prepare Approval Request", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
@@ -226,7 +226,7 @@ context("Status Bar of newly created ARs", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Add approvers to change order on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].name);
     });
   });
@@ -296,7 +296,7 @@ context("Status Bar of newly created ARs", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: thirdEmployee.id });
     });
 
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -323,7 +323,7 @@ context("Status Bar of newly created ARs", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
 
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -536,7 +536,7 @@ context("Status Bar of newly created ARs", () => {
   });
 
   context("Open second AR and Void it", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 

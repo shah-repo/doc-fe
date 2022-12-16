@@ -68,12 +68,12 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
           MPIDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
           CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });

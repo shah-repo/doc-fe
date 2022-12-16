@@ -59,7 +59,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           testPrivateType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Private Pool");
           testPublicType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Public Pool");

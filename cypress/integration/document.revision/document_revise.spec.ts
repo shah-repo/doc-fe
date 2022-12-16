@@ -45,7 +45,7 @@ context("Document revise test", () => {
           createdCompany = response;
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });
@@ -202,11 +202,11 @@ context("Document revise test", () => {
     });
 
     context("Create AR for reviseed document to 'Upgrade to Next Revision Level'", () => {
-      it("Navigate to change order list", () => {
+      it("Navigate to Approval Request list", () => {
         cy.navigToApprovalRequestList();
       });
 
-      it("Click Create a Change Order button", () => {
+      it("Click Create a Approval Request button", () => {
         cy.cmpClickCreateApprovalRequest();
       });
 
@@ -214,7 +214,7 @@ context("Document revise test", () => {
         cy.arEnterApprovalRequestTitle({ title: "AR for Upgrade to Next Revision Level" });
       });
 
-      it("Enter description 'AR from New form template for change order'", () => {
+      it("Enter description 'AR from New form template for Approval Request'", () => {
         cy.arEnterApprovalRequestDescription(
           { description: "AR for testing document that has been revised to 'Upgrade to Next Revision Level'" });
       });
@@ -229,11 +229,11 @@ context("Document revise test", () => {
 
       // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
-      it("Click Create Change Order", () => {
+      it("Click Create Approval Request", () => {
         cy.arSaveApiCall();
       });
 
-      it("Add first approver to change order on approver list", () => {
+      it("Add first approver to Approval Request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[2].email });
       });
 
@@ -282,11 +282,11 @@ context("Document revise test", () => {
     });
 
     context("Create AR for reviseed document to 'Obsolete'", () => {
-      it("Navigate to change order list", () => {
+      it("Navigate to Approval Request list", () => {
         cy.navigToApprovalRequestList();
       });
 
-      it("Click Create a Change Order button", () => {
+      it("Click Create a Approval Request button", () => {
         cy.arClickCreateAnAR();
       });
 
@@ -294,7 +294,7 @@ context("Document revise test", () => {
         cy.arEnterApprovalRequestTitle({ title: "AR for Upgrade to Obsolete" });
       });
 
-      it("Enter description 'AR from New form template for change order'", () => {
+      it("Enter description 'AR from New form template for Approval Request'", () => {
         cy.arEnterApprovalRequestDescription(
           { description: "AR for testing document that has been revised to 'Obsolete'" });
       });
@@ -307,11 +307,11 @@ context("Document revise test", () => {
         cy.arClickAddBtnOnAddDocumentsDialog();
       });
 
-      it("Click Create Change Order", () => {
+      it("Click Create Approval Request", () => {
         cy.arSaveApiCall();
       });
 
-      it("Add first approver to change order on approver list", () => {
+      it("Add first approver to Approval Request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[2].email });
       });
 

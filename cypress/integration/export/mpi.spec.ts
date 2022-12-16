@@ -58,7 +58,7 @@ context("Export MPI", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           done();
@@ -351,11 +351,11 @@ context("Export MPI", () => {
       });
     });
 
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -375,7 +375,7 @@ context("Export MPI", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Change Order", () => {
+    it("Click Create Approval Request", () => {
       cy.arSaveApiCall();
     });
 

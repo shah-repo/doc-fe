@@ -198,7 +198,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     <Grid item={true} data-cy="Header-listTitle" className={classes.title}>
                       {title}
                     </Grid>
-                  </Link>   // need to remove this link for change order modal
+                  </Link>   // need to remove this link for Approval Request modal
                 }
                 {
                   isTypeMpiOutput &&

@@ -76,7 +76,7 @@ context("Autocomplete 'Change orders' test", () => {
         cy.navigToApprovalRequestList();
       });
 
-      it("Click Create a Change Order button", () => {
+      it("Click Create a Approval Request button", () => {
         cy.cmpClickCreateApprovalRequest();
       });
 
@@ -84,15 +84,15 @@ context("Autocomplete 'Change orders' test", () => {
         cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
       });
 
-      it("Enter description 'AR from New form template for change order'", () => {
-        cy.arEnterApprovalRequestDescription({ description: "CR from New form template for change order" });
+      it("Enter description 'AR from New form template for Approval Request'", () => {
+        cy.arEnterApprovalRequestDescription({ description: "CR from New form template for Approval Request" });
       });
 
-      it("Click Create Change Order", () => {
+      it("Click Create Approval Request", () => {
         cy.arSaveApiCall();
       });
 
-      it("Add first approver to change order on approver list", () => {
+      it("Add first approver to Approval Request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[2].email });
       });
     });

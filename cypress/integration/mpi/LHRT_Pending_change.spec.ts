@@ -66,7 +66,7 @@ context("LHRT Pending Change", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
@@ -655,10 +655,10 @@ context("LHRT Pending Change", () => {
     });
   });
   context("Create an AR", () => {
-    it("Navigates to Change Order list", () => {
+    it("Navigates to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
     it("Enter AR title", () => {

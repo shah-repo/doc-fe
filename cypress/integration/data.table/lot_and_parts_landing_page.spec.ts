@@ -80,7 +80,7 @@ context("Test Lots and Parts landing page", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");

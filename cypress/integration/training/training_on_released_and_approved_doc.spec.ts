@@ -525,7 +525,7 @@ context("Training for same document that was first released and then revised and
   });
 
   context("Approve document", () => {
-    it("Navigate to Change order landing page", () => {
+    it("Navigate to Approval Request landing page", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -538,7 +538,7 @@ context("Training for same document that was first released and then revised and
       cy.arApproveAR();
     });
 
-    it(`Check change order status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+    it(`Check Approval Request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });

@@ -69,7 +69,7 @@ context("Change Ownership of LHR", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           lhrDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, LotHistoryRecordTest.documentTypeName);

@@ -67,7 +67,7 @@ context("Equipment due date calculation while changing frequency", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
@@ -948,11 +948,11 @@ context("Equipment due date calculation while changing frequency", () => {
           cy.cmpTurnOnAutosave();
         });
 
-        it("Navigate to change order list", () => {
+        it("Navigate to Approval Request list", () => {
           cy.navigToApprovalRequestList();
         });
 
-        it("Click Create a Change Order button", () => {
+        it("Click Create a Approval Request button", () => {
           cy.arClickCreateAnAR();
         });
 
@@ -972,11 +972,11 @@ context("Equipment due date calculation while changing frequency", () => {
           cy.arClickAddBtnOnAddDocumentsDialog();
         });
 
-        it("Click Create Change Order", () => {
+        it("Click Create Approval Request", () => {
           cy.arSaveApiCall();
         });
 
-        it("Add approvers to change order on approver list", () => {
+        it("Add approvers to Approval Request on approver list", () => {
           cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
         });
 
@@ -1204,11 +1204,11 @@ context("Equipment due date calculation while changing frequency", () => {
             cy.cmpTurnOnAutosave();
           });
 
-          it("Navigate to change order list", () => {
+          it("Navigate to Approval Request list", () => {
             cy.navigToApprovalRequestList();
           });
 
-          it("Click Create a Change Order button", () => {
+          it("Click Create a Approval Request button", () => {
             cy.arClickCreateAnAR();
           });
 
@@ -1228,11 +1228,11 @@ context("Equipment due date calculation while changing frequency", () => {
             cy.arClickAddBtnOnAddDocumentsDialog();
           });
 
-          it("Click Create Change Order", () => {
+          it("Click Create Approval Request", () => {
             cy.arSaveApiCall();
           });
 
-          it("Add approvers to change order on approver list", () => {
+          it("Add approvers to Approval Request on approver list", () => {
             cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
           });
 

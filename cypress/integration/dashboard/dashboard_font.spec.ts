@@ -106,7 +106,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
             (employee) => employee.user.email === USERS[2].email
           );
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           trainingCurriculumDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Training Curriculum Test");
           clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
@@ -1273,17 +1273,17 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context("Create change order form with title as 'Change Order Document Title'", () => {
-    it("Navigate to change order list", () => {
+  context("Create Approval Request form with title as 'Approval Request Document Title'", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
 
-    it("Enter Change Order title", () => {
-      cy.arEnterApprovalRequestTitle({ title: "Change Order Document Title" });
+    it("Enter Approval Request title", () => {
+      cy.arEnterApprovalRequestTitle({ title: "Approval Request Document Title" });
     });
 
     it("Enter description ", () => {
@@ -1298,7 +1298,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Add approvers to change order on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy^=\"fb-approvers-\"]").click().autocompleteSelect(USERS[2].email);
       cy.unClick();
@@ -1627,15 +1627,15 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context("Verify dashboard notification exist for Released Change Order", () => {
-    it(`Verify notification for Releasing Change Order exists`, () => {
+  context("Verify dashboard notification exist for Released Approval Request", () => {
+    it(`Verify notification for Releasing Approval Request exists`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
           `APPROVED${arId}Releasing ${trainingFormId}, released doc1`,
       });
     });
 
-    it(`Verify Releasing Change Order ID ${arId} has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+    it(`Verify Releasing Approval Request ID ${arId} has font-size ${FONT_SIZE_14_4} form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
       cy.checkStylePropExists({
         content: arId,
         props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },
@@ -1698,8 +1698,8 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context("Verify notification exists for CLOSED Change Order", () => {
-    it(`Verify notification exists for CLOSED Change Order`, () => {
+  context("Verify notification exists for CLOSED Approval Request", () => {
+    it(`Verify notification exists for CLOSED Approval Request`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
           `${arId}Releasing ${trainingFormId}, released doc1isCLOSED`,
@@ -2110,7 +2110,7 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context("Verify font for REJECTED Change Order", () => {
+  context("Verify font for REJECTED Approval Request", () => {
     it("Logout current user", () => {
       cy.authLogout();
     });
@@ -2144,14 +2144,14 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
       });
     });
 
-    it(`Verify notification for REJECTED Change Order`, () => {
+    it(`Verify notification for REJECTED Approval Request`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
           `${USERS[2].name}REJECTED${rejArId}`,
       });
     });
 
-    it(`Verify REJECTED Change Order ID ${rejArId} font-size ${FONT_SIZE_14_4} and form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
+    it(`Verify REJECTED Approval Request ID ${rejArId} font-size ${FONT_SIZE_14_4} and form-family ${soraSansserif} line-height ${LINE_HT_2} font-weight ${FONT_WT_400}`, () => {
       cy.checkStylePropExists({
         content: rejArId,
         props: { "font-size": FONT_SIZE_14_4, "font-family": soraSansserif, "line-height": LINE_HT_2, "font-weight": FONT_WT_400 },

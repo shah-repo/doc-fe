@@ -272,7 +272,7 @@ context("Verify Paper LHR", () => {
             if (res.body !== "") {
               apiCreatedCompany.documentTypes = res.body;
               partDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Component Specification");
-              approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Change Order");
+              approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Approval Request");
             }
           });
         }).as("response1");

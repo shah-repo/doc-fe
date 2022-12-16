@@ -18,7 +18,7 @@ let group;
 let approvalRequestDocumentType;
 let createdDocumentRevResponse;
 let initialArDocument;
-const documentRevisionName = "New document for testing change order list";
+const documentRevisionName = "New document for testing Approval Request list";
 const newNameFirstApprover = "Approver One";
 const newNameSecondApprover = "Approver Two";
 const newNameThirdApprover = "User Three";
@@ -70,7 +70,7 @@ context("E-signature test", () => {
           createdCompany = response;
           companyAdmin = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           componentSpecificationDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });
@@ -137,7 +137,7 @@ context("E-signature test", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: "Approval for esignature",
-            description: "Description for change order",
+            description: "Description for Approval Request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -329,7 +329,7 @@ context("E-signature test", () => {
   });
 
   context("Add approvers to AR", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -350,7 +350,7 @@ context("E-signature test", () => {
       cy.unClick();
     });
 
-    it("Add approvers to change order on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: emailOfFirstUserToSignUp });
       cy.wait(1000);
       cy.arAddApproverOnApproverList({ approver: emailOfSecondUserToSignUp });
@@ -558,7 +558,7 @@ context("E-signature test", () => {
     });
 
     context("Navigate to AR and confirm old names of approver one and two are present", () => {
-      it("Navigate to change order list", () => {
+      it("Navigate to Approval Request list", () => {
         cy.wait(3000);
         cy.navigToApprovalRequestList();
       });
@@ -637,7 +637,7 @@ context("E-signature test", () => {
     });
 
     context("Navigate to AR and confirm it's approved by thrid approver and that user and mail is correct", () => {
-      it("Navigate to change order list", () => {
+      it("Navigate to Approval Request list", () => {
         cy.navigToApprovalRequestList();
       });
 

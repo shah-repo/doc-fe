@@ -75,7 +75,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
           coordinatorUser = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });

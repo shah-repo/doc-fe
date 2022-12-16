@@ -70,7 +70,7 @@ context("Create Test company example", () => {
           cmpAddNewEmployeeIds(createdCompany.employees, employees);
           cmpChangeGroupEmployeeIds(employees, groups);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           engineeringBuildDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Engineering Build");
           done();

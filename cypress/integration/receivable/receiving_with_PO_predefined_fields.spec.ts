@@ -472,7 +472,7 @@ context("Receivable test with Page Details", () => {
       cy.get(`[data-cy="Receive PO"]`).should("exist");
     });
 
-    it("Verify Change Order Details disabled", () => {
+    it("Verify Approval Request Details disabled", () => {
       cy.fbVerifyElementClassByLabel({
         label: "Receive PO", el: "remove-schema-item",
         class: "schema-delete-disabled",

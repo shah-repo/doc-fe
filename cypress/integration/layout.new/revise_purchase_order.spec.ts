@@ -71,7 +71,7 @@ add the requestor to the approvals field`,
             adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
             formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
             purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PURCHASE_ORDER);
-            approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+            approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
             done();
           });
         });

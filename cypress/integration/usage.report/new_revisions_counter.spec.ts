@@ -158,7 +158,7 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           generalDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, GeneralDocumentDocType.documentTypeName);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PurchaseOrderTest.documentTypeName);

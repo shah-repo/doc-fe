@@ -70,7 +70,7 @@ context("new_layout_for_Parts", () => {
           createdCompany = response;
           employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
         });

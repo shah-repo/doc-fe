@@ -68,7 +68,7 @@ context("Check DAM enforcement rules for document types", () => {
           company = response;
           adminEmployee = company.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(company, "Purchase Order");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(company, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(company, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(company, "Form");
           POAMDocumentType = cmpFilterDocumentTypeIdByName(company, "PO Approval Matrix");
           SupplierDocumentType = cmpFilterDocumentTypeIdByName(company, "Suppliers");
@@ -513,7 +513,7 @@ context("Check DAM enforcement rules for document types", () => {
       });
 
       it("Select output document type", () => {
-        cy.drSelectOutputDocumentType({ documentType: "Change Order" });
+        cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
       });
 
       it("Select 'Numeric' revision stage", () => {

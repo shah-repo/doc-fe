@@ -58,7 +58,7 @@ context("Export Receivable doc", () => {
           createdCompany = response;
           employeeLoginFirst = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           receivableDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable Test");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
           done();

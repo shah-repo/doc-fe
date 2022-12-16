@@ -13,12 +13,12 @@ let createdCompany;
 let loginResponse;
 let secondEmployee;
 let asyncTasksGroup;
-const approvalRequestFormName = "Change order form title";
-const approvalRequestFormDesc = "Change order form title description";
-const approvalRequestDocName = "Change order document title";
-const approvalRequestDocDesc = "Change order document description";
-const approvalRequestDocName2 = "Change order document two title";
-const approvalRequestDocDesc2 = "Change order document two description";
+const approvalRequestFormName = "Approval Request form title";
+const approvalRequestFormDesc = "Approval Request form title description";
+const approvalRequestDocName = "Approval Request document title";
+const approvalRequestDocDesc = "Approval Request document description";
+const approvalRequestDocName2 = "Approval Request document two title";
+const approvalRequestDocDesc2 = "Approval Request document two description";
 const bulkCreatedFormName = "Bulk created form title";
 const bulkCreatedFormDesc = "Bulk created form description";
 
@@ -108,7 +108,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
   });
 
-  context("Create a new form for change order", () => {
+  context("Create a new form for Approval Request", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -132,8 +132,8 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Change order' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Change Order" });
+    it("Click on 'Approval Request' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
     it("Select 'Alpha' revision stage", () => {
@@ -237,12 +237,12 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
   });
 
-  context("Create change order document and save it", () => {
-    it("Navigate to change order list", () => {
+  context("Create Approval Request document and save it", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -265,7 +265,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Add approvers to change order on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
     });
 
@@ -371,7 +371,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
   });
 
   context("Go back to the AR and reject the AR", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -492,7 +492,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
   });
 
   context("Go back to the AR - Submit for approval and approve it", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -512,7 +512,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.arApproveAR();
     });
 
-    it(`Check change order status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+    it(`Check Approval Request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
@@ -586,7 +586,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
   });
 
   context("Navigate back to AR list and close it", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -754,11 +754,11 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
   });
 
   context("Create a new AR and link it to newly created document - Approve the AR", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -801,7 +801,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.arSelectChangeDetailsTab();
     });
 
-    it("Add approvers to change order on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
     });
 
@@ -811,7 +811,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
   });
 
   context("Navigate back to AR list and Approve AR and Close it", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 

@@ -79,8 +79,8 @@ export const Seed: IdocumentTypeDto = {
           value: "Action Item Record",
         },
         {
-          text: "Change Order",
-          value: "Change Order",
+          text: "Approval Request",
+          value: "Approval Request",
         },
         {
           text: "Attendance Record",
@@ -382,8 +382,8 @@ export const Seed: IdocumentTypeDto = {
           value: "Action Item Record",
         },
         {
-          text: "Change Order",
-          value: "Change Order",
+          text: "Approval Request",
+          value: "Approval Request",
         },
         {
           text: "Attendance Record",

@@ -227,11 +227,11 @@ context("Export Other internal doc", () => {
       });
     });
 
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -251,7 +251,7 @@ context("Export Other internal doc", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Change Order", () => {
+    it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 

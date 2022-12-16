@@ -79,7 +79,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           trainingCurriculumDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Training Curriculum Test");
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PurchaseOrderTest.documentTypeName);
@@ -911,7 +911,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
     });
   });
 
-  context("Ask for approvals on record, change order, PO and TC", () => {
+  context("Ask for approvals on record, Approval Request, PO and TC", () => {
     context("Ask for approvals on record", () => {
       it("Turn off autosave", () => {
         cy.cmpTurnOffAutosave();
@@ -959,7 +959,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.navigToDashboard();
       });
 
-      it("Check if change order is 'In Review'", () => {
+      it("Check if Approval Request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
       });
 
@@ -981,21 +981,21 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
     });
 
-    context("Ask for approvals on Change Order", () => {
-      it("Navigate to change order list", () => {
+    context("Ask for approvals on Approval Request", () => {
+      it("Navigate to Approval Request list", () => {
         cy.navigToApprovalRequestList();
       });
 
-      it("Click Create a Change Order button", () => {
+      it("Click Create a Approval Request button", () => {
         cy.arClickCreateAnAR();
       });
 
-      it("Enter Change Order title", () => {
-        cy.arEnterApprovalRequestTitle({ title: "Change Order title" });
+      it("Enter Approval Request title", () => {
+        cy.arEnterApprovalRequestTitle({ title: "Approval Request title" });
       });
 
       it("Enter description ", () => {
-        cy.arEnterApprovalRequestDescription({ description: "Change Order description" });
+        cy.arEnterApprovalRequestDescription({ description: "Approval Request description" });
       });
 
       it("Add sample document one", () => {
@@ -1006,11 +1006,11 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.arClickAddBtnOnAddDocumentsDialog();
       });
 
-      it("Click Create Change Order", () => {
+      it("Click Create Approval Request", () => {
         cy.arClickCreateApprovalRequestAfterCompletingForm();
       });
 
-      it("Add approvers to change order on approver list", () => {
+      it("Add approvers to Approval Request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: FIRST_USER.email, noWait: true });
       });
 
@@ -1031,7 +1031,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.navigToDashboard();
       });
 
-      it("Check if change order is 'In Review'", () => {
+      it("Check if Approval Request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").eq(0).arrowClick();
       });
 
@@ -1087,7 +1087,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.navigToDashboard();
       });
 
-      it("Check if change order is 'In Review'", () => {
+      it("Check if Approval Request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").eq(0).arrowClick();
       });
 
@@ -1143,7 +1143,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.navigToDashboard();
       });
 
-      it("Check if change order is 'In Review'", () => {
+      it("Check if Approval Request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").eq(0).arrowClick();
       });
 
@@ -1217,7 +1217,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       });
     });
 
-    context("Send email to all approval for Change Order", () => {
+    context("Send email to all approval for Approval Request", () => {
       it("Click on AR 'In Review'", () => {
         cy.get("[data-cy='AR-00004InReview']> div:nth-child(3)")
           .arrowClick();

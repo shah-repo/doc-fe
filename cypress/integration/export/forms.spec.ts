@@ -248,11 +248,11 @@ context("Export Form doc", () => {
       });
     });
 
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -272,7 +272,7 @@ context("Export Form doc", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Change Order", () => {
+    it("Click Create Approval Request", () => {
       cy.arSaveApiCall();
     });
 

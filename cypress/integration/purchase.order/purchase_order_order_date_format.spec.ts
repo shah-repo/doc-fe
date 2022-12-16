@@ -86,7 +86,7 @@ context("Search PO item with correct order date format", () => {
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         }); ``;
       });

@@ -19,7 +19,7 @@ let poamDocumentType;
 let createdPOAMform;
 let createdPOAMdoc;
 
-context("Change order landing page test", () => {
+context("Approval Request landing page test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -55,7 +55,7 @@ context("Change order landing page test", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           poamDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "PO Approval Matrix");
           done();

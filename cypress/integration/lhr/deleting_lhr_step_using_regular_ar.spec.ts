@@ -67,7 +67,7 @@ context("Deleting LHR Step using regular AR test", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
           materialsDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
@@ -458,11 +458,11 @@ context("Deleting LHR Step using regular AR test", () => {
   });
 
   context("Create AR", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -471,7 +471,7 @@ context("Deleting LHR Step using regular AR test", () => {
       cy.unClick();
     });
 
-    it("Enter description 'AR from New form template for change order'", () => {
+    it("Enter description 'AR from New form template for Approval Request'", () => {
       cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 

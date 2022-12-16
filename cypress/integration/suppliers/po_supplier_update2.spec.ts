@@ -250,7 +250,7 @@ context("DAM approvals in LHR", () => {
           if (res.body !== "") {
             apiCreatedCompany.documentTypes = res.body;
             supplierDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Supplier");
-            approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Change Order");
+            approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Approval Request");
             formDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Form");
           }
         });

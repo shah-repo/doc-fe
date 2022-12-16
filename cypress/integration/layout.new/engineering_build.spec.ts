@@ -76,7 +76,7 @@ context("Verify New Layout for EB Document", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Parts");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });

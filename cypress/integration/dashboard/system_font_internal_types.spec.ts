@@ -388,11 +388,11 @@ context("User Creation Flow", () => {
       });
     });
 
-    context("Verify font for 'Create an change order' button", () => {
-      it(`Verify 'Create an change order' button font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight  ${FONT_WT_600}`, () => {
+    context("Verify font for 'Create an Approval Request' button", () => {
+      it(`Verify 'Create an Approval Request' button font-size ${FONT_SIZE_12} font-family ${soraSansserif} line-height ${LINE_HT_21} font-weight  ${FONT_WT_600}`, () => {
         cy.get("[data-cy=\"change.request.create\"]")
           .checkStylePropExists({
-            content: "Create an change order",
+            content: "Create an Approval Request",
             props: { "font-size": FONT_SIZE_12, "font-family": soraSansserif, "line-height": LINE_HT_21, "font-weight": FONT_WT_600 },
           });
       });

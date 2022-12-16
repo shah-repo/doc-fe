@@ -62,7 +62,7 @@ context("Document form upgrade", () => {
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           recordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record Document");
           testDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Test Document Type");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           done();
         });

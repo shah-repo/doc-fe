@@ -258,7 +258,7 @@ context("DAM approvals in LHR", () => {
         req.reply((res) => {
           if (res.body !== "") {
             apiCreatedCompany.documentTypes = res.body;
-            approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Change Order");
+            approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Approval Request");
             equipmentDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Equipment or Fixture");
             partDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Component Specification");
             MPIDocumentType = cmpFilterDocumentTypeIdByName(apiCreatedCompany, "Manufacturing Process Instruction");

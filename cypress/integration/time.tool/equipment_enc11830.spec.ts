@@ -83,7 +83,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });

@@ -30,10 +30,10 @@ const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const documentRevisionName = "New document for testing AR";
-const approvalRequestTitle = "Change order from newly created form";
-const approvalRequestFormName = "New Change order form template";
+const approvalRequestTitle = "Approval Request from newly created form";
+const approvalRequestFormName = "New Approval Request form template";
 
-context("Change order form", () => {
+context("Approval Request form", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -183,20 +183,20 @@ context("Change order form", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Change order form template'", () => {
+    it("Enter title 'New Approval Request form template'", () => {
       cy.drEnterDocumentTitle({ name: approvalRequestFormName });
     });
 
-    it("Enter description 'New form template for change order'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "New form template for change order" });
+    it("Enter description 'New form template for Approval Request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "New form template for Approval Request" });
     });
 
     it("Click on 'Form' document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Change order' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Change Order" });
+    it("Click on 'Approval Request' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -252,7 +252,7 @@ context("Change order form", () => {
     });
   });
 
-  context("Verify `Change order form` title", () => {
+  context("Verify `Approval Request form` title", () => {
     it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get(`[data-cy="field-name"]`).should("have.text", approvalRequestFormName);
@@ -270,7 +270,7 @@ context("Change order form", () => {
     });
   });
 
-  context("Verify email for Change order form notification", () => {
+  context("Verify email for Approval Request form notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -305,7 +305,7 @@ context("Change order form", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file containing Change order form", () => {
+    it("Download zip file containing Approval Request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -348,7 +348,7 @@ context("Change order form", () => {
   });
 
   context("Verify PDF file content", () => {
-    it("Extract texts from PDF file content for Change order form", () => {
+    it("Extract texts from PDF file content for Approval Request form", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -374,15 +374,15 @@ context("Change order form", () => {
       });
     });
 
-    it("Verify page 1 for Change order form", () => {
+    it("Verify page 1 for Approval Request form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW CHANGE ORDER FORM TEMPLATE`, "gi" );
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW Approval Request FORM TEMPLATE`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/AR ID\nAR-00001/);
 
-        expect(el).match(/Description\nNew form template for change order/);
+        expect(el).match(/Description\nNew form template for Approval Request/);
 
         expect(el).match(/Output Document Type\nChange Order/);
 
@@ -390,7 +390,7 @@ context("Change order form", () => {
 
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/CHANGE ORDER DETAILS/);
+        expect(el).match(/Approval Request DETAILS/);
 
         expect(el).match(/DOCUMENT #1\nDescription of change\nJustification of change/);
 
@@ -406,10 +406,10 @@ context("Change order form", () => {
       }
     });
 
-    it("Verify page 2 for Change order form", () => {
+    it("Verify page 2 for Approval Request form", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW CHANGE ORDER FORM TEMPLATE`, "gi" );
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW Approval Request FORM TEMPLATE`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/DOCUMENT #2/);
@@ -433,10 +433,10 @@ context("Change order form", () => {
       }
     });
 
-    it("Verify page 3 for Change order form", () => {
+    it("Verify page 3 for Approval Request form", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW CHANGE ORDER FORM TEMPLATE`, "gi" );
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW Approval Request FORM TEMPLATE`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -457,13 +457,13 @@ context("Change order form", () => {
     });
   });
 
-  context("Create change order with newly created form", () => {
-    it("Navigate to change order list", () => {
+  context("Create Approval Request with newly created form", () => {
+    it("Navigate to Approval Request list", () => {
       SystemRequirement("REQ-0680");
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -476,9 +476,9 @@ context("Change order form", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for change order'", () => {
+    it("Enter description 'AR from New form template for Approval Request'", () => {
       cy.get(`#SMHeaderTmpl>[data-cy="description"]`).click();
-      cy.arEnterApprovalRequestDescription({ description: "AR from New form template for change order" });
+      cy.arEnterApprovalRequestDescription({ description: "AR from New form template for Approval Request" });
       cy.unClick();
     });
 
@@ -495,7 +495,7 @@ context("Change order form", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
-    it("Click Create Change Order", () => {
+    it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
@@ -602,12 +602,12 @@ context("Change order form", () => {
     });
   });
 
-  context("Verify email for draft change order notification", () => {
+  context("Verify email for draft Approval Request notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for change order ${releasedFormId}`,
+        subject: `Export for Approval Request ${releasedFormId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -636,7 +636,7 @@ context("Change order form", () => {
   });
 
   context("Verify zip file downloaded", () => {
-    it("Download zip file containing change order notification", () => {
+    it("Download zip file containing Approval Request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -691,12 +691,12 @@ context("Change order form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
-        RegExp( `Change Order\n${releasedFormId}\nCHANGE ORDER FROM NEWLY CREATED FORM`, "gi" );
+        RegExp( `Approval Request\n${releasedFormId}\nCHANGE ORDER FROM NEWLY CREATED FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Description\nAR from New form template for change order/);
+        expect(el).match(/Description\nAR from New form template for Approval Request/);
 
-        expect(el).match(/CHANGE ORDER DETAILS/);
+        expect(el).match(/Approval Request DETAILS/);
 
         expect(el).match(/DOCUMENT #1/);
 
@@ -730,7 +730,7 @@ context("Change order form", () => {
     });
   });
 
-  context("Add approvers to change order on approver list", () => {
+  context("Add approvers to Approval Request on approver list", () => {
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
     });
@@ -769,7 +769,7 @@ context("Change order form", () => {
       cy.arApproveAR();
     });
 
-    it(`Check change order status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+    it(`Check Approval Request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-4050");
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
@@ -803,7 +803,7 @@ context("Change order form", () => {
       cy.arCloseAR();
     });
 
-    it(`Check change order status is ${STATUS_TYPES_LABEL.CLOSED}`, () => {
+    it(`Check Approval Request status is ${STATUS_TYPES_LABEL.CLOSED}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-2710", "REQ-4050", "REQ-4310", "REQ-4300");
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.CLOSED });
     });
@@ -825,12 +825,12 @@ context("Change order form", () => {
 
   });
 
-  context("Verify email for Closed change order notification", () => {
+  context("Verify email for Closed Approval Request notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for change order ${releasedFormId}`,
+        subject: `Export for Approval Request ${releasedFormId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -859,7 +859,7 @@ context("Change order form", () => {
   });
 
   context("Verify zip file downloaded", () => {
-    it("Download zip file containing closed change order notification", () => {
+    it("Download zip file containing closed Approval Request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -913,12 +913,12 @@ context("Change order form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
-        RegExp( `Change Order\n${releasedFormId}\nCHANGE ORDER FROM NEWLY CREATED FORM`, "gi" );
+        RegExp( `Approval Request\n${releasedFormId}\nCHANGE ORDER FROM NEWLY CREATED FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Description\nAR from New form template for change order/);
+        expect(el).match(/Description\nAR from New form template for Approval Request/);
 
-        expect(el).match(/CHANGE ORDER DETAILS/);
+        expect(el).match(/Approval Request DETAILS/);
 
         expect(el).match(/DOCUMENT #1/);
 
@@ -962,13 +962,13 @@ context("Change order form", () => {
   });
 
   context("Create AR and move it to 'Void'", () => {
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       SystemRequirement("REQ-0680");
       cy.navigToDashboard();
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -981,8 +981,8 @@ context("Change order form", () => {
       cy.arEnterApprovalRequestTitle({ title: "AR for Void" });
     });
 
-    it("Enter description 'CR from New form template for voided change order'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for voided change order" });
+    it("Enter description 'CR from New form template for voided Approval Request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for voided Approval Request" });
     });
 
     it("Add created document revision with description", () => {
@@ -995,7 +995,7 @@ context("Change order form", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Change Order", () => {
+    it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });

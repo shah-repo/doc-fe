@@ -11,7 +11,7 @@ let createdCompany;
 let loginResponse;
 let employeeLogin;
 
-const approvalRequestTitle = "Change order from newly created form";
+const approvalRequestTitle = "Approval Request from newly created form";
 const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
 const saveFileNameTwo = (Math.round(Math.random() * 100000)) % 100000;
 const saveFileNameThree = (Math.round(Math.random() * 100000)) % 100000;
@@ -294,12 +294,12 @@ context("Document Attachment Flow", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
-    it("Navigate to change order list", () => {
+    it("Navigate to Approval Request list", () => {
       SystemRequirement("REQ-0680");
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.cmpClickCreateApprovalRequest();
     });
 
@@ -307,8 +307,8 @@ context("Document Attachment Flow", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for change order'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for change order" });
+    it("Enter description 'AR from New form template for Approval Request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for Approval Request" });
     });
 
     it("Add created document revision", () => {
@@ -319,7 +319,7 @@ context("Document Attachment Flow", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Change Order", () => {
+    it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arSaveApiCall();
     });
@@ -349,7 +349,7 @@ context("Document Attachment Flow", () => {
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "DRAFT" });
     });
 
-    it("Add first approver to change order on approver list", () => {
+    it("Add first approver to Approval Request on approver list", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[2].email });
     });
 

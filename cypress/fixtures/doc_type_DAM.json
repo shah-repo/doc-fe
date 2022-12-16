@@ -2281,7 +2281,7 @@
       "id": "d2c5e87c-7b43-4946-b5dd-b84aaeefb6ee",
       "docType": {
         "acronym": "CO-",
-        "name": "Change Order",
+        "name": "Approval Request",
         "defaultTraining": false,
         "group": "CHANGE_REQUEST",
         "needsSignature": true,
@@ -2295,7 +2295,7 @@
             "name": "change-request-details",
             "type": "section",
             "index": 0,
-            "label": "Change Order Details",
+            "label": "Approval Request Details",
             "applicableOn": [
               "ON_STATE_TO_IN_REVIEW"
             ],

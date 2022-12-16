@@ -16,10 +16,10 @@ let group;
 let asyncTasksGroup;
 
 const documentRevisionName = "New document for testing AR";
-const approvalRequestTitle = "Change order from newly created form";
-const approvalRequestFormName = "New Change order form template";
+const approvalRequestTitle = "Approval Request from newly created form";
+const approvalRequestFormName = "New Approval Request form template";
 
-context("Change order implementation tasks", () => {
+context("Approval Request implementation tasks", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -153,20 +153,20 @@ context("Change order implementation tasks", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Change order form template'", () => {
+    it("Enter title 'New Approval Request form template'", () => {
       cy.drEnterDocumentTitle({ name: approvalRequestFormName });
     });
 
-    it("Enter description 'New form template for change order'", () => {
-      cy.drEnterDocumentDescription({ description: "New form template for change order" });
+    it("Enter description 'New form template for Approval Request'", () => {
+      cy.drEnterDocumentDescription({ description: "New form template for Approval Request" });
     });
 
     it("Click on 'Form' document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Change order' outputdocument type", () => {
-      cy.drSelectOutputDocumentType({ documentType: "Change Order" });
+    it("Click on 'Approval Request' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -191,8 +191,8 @@ context("Change order implementation tasks", () => {
       cy.drSelectDocumentTab();
     });
 
-    it("Verify Change Order Details", () => {
-      cy.get(`[data-cy="Change Order Details"]`).should("exist");
+    it("Verify Approval Request Details", () => {
+      cy.get(`[data-cy="Approval Request Details"]`).should("exist");
     });
 
     it("Verify Add Document block", () => {
@@ -259,9 +259,9 @@ context("Change order implementation tasks", () => {
       cy.drSelectDocumentTab();
     });
 
-    it("Verify Change Order Details disabled", () => {
+    it("Verify Approval Request Details disabled", () => {
       cy.fbVerifyElementClassByLabel({
-        label: "Change Order Details", el: "remove-schema-item",
+        label: "Approval Request Details", el: "remove-schema-item",
         class: "schema-delete-disabled",
       });
     });
@@ -402,7 +402,7 @@ context("Change order implementation tasks", () => {
     });
 
     it("Select document template as 'AR form'", () => {
-      cy.get(`[data-cy="field-formDocument"]`).autocompleteSelect("New Change order form template");
+      cy.get(`[data-cy="field-formDocument"]`).autocompleteSelect("New Approval Request form template");
     });
 
     it("Enter password", () => {
@@ -440,12 +440,12 @@ context("Change order implementation tasks", () => {
     });
   });
 
-  context("Create change order with newly created form", () => {
-    it("Navigate to change order list", () => {
+  context("Create Approval Request with newly created form", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -459,8 +459,8 @@ context("Change order implementation tasks", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for change order'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for change order" });
+    it("Enter description 'AR from New form template for Approval Request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for Approval Request" });
     });
 
     it("Add created document revision", () => {
@@ -480,7 +480,7 @@ context("Change order implementation tasks", () => {
       cy.arSelectChangeDetailsTab();
     });
 
-    it("Add approvers to change order on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

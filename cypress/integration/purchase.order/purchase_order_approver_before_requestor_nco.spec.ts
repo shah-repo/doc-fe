@@ -1221,7 +1221,7 @@ context(`Sign-out as ${USERS[1].name} and to sign-in as ${USERS[2].name} and rel
     cy.cmpTurnOffAutosave();
   });
 
-  it("Accept Change Order with password prompt", () => {
+  it("Accept Approval Request with password prompt", () => {
     cy.wrapWithWaitOnApiCalls(
       [CyRoutes.PostDashboardFeedSearch], () => {
         cy.contains("needs your approval for").trigger("mouseover").wait(500);

@@ -73,7 +73,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
           fourthEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[4].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           trainingCurriculumDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Training Curriculum Test");
           clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");

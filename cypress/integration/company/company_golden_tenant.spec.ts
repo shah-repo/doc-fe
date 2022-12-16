@@ -561,8 +561,8 @@ context("Create company with golden tenant", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
       cy.drFilterDocListByNameAndStatus({ title: "AR Form", status: "Released" });
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Change Order Form");
-      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(1).contains("Change Order");
+      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
+      cy.get("[data-cy=\"SummaryBaseProps-values\"]").eq(1).contains("Approval Request");
     });
   });
 
@@ -668,7 +668,7 @@ context("Create company with golden tenant", () => {
       cy.arFilterARListByNameAndStatus({ title: "AR Form", status: "CLOSED" });
       cy.get("[data-cy=\"documentRevisions.0.proposedDocumentRevision.id\"]")
         .should("have.value", "FM-00001 - rev 1 - AR Form");
-      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Change Order Form");
+      cy.get("[data-cy=\"BaseWithhtml-editor\"]").contains("Approval Request Form");
     });
   });
 

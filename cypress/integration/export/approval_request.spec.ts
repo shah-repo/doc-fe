@@ -18,7 +18,7 @@ let recordDocumentType;
 let formDocumentType;
 let group;
 
-context("Export for Change Order", () => {
+context("Export for Approval Request", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -275,12 +275,12 @@ context("Export for Change Order", () => {
     });
   });
 
-  context("Create change order with newly created form", () => {
-    it("Navigate to change order list", () => {
+  context("Create Approval Request with newly created form", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Click Create a Change Order button", () => {
+    it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
 
@@ -300,7 +300,7 @@ context("Export for Change Order", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Change Order", () => {
+    it("Click Create Approval Request", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
@@ -317,7 +317,7 @@ context("Export for Change Order", () => {
     it("Verify export", () => {
       cy.exportVerifyEmail({
         status: STATUS_TYPES_LABEL.DRAFT, filename: "-AR-title",
-        pdfStatus: STATUS_TYPES_LABEL.DRAFT, type: "change order",
+        pdfStatus: STATUS_TYPES_LABEL.DRAFT, type: "Approval Request",
       });
     });
   });
@@ -331,7 +331,7 @@ context("Export for Change Order", () => {
       it("Verify export", () => {
         cy.exportVerifyEmail({
           status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-AR-title",
-          pdfStatus: "In Review", type: "change order",
+          pdfStatus: "In Review", type: "Approval Request",
         });
       });
     });
@@ -354,7 +354,7 @@ context("Export for Change Order", () => {
       it("Verify export", () => {
         cy.exportVerifyEmail({
           status: STATUS_TYPES_LABEL.APPROVED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.APPROVED,
-          type: "change order",
+          type: "Approval Request",
         });
       });
     });
@@ -376,7 +376,7 @@ context("Export for Change Order", () => {
       it("Verify export", () => {
         cy.exportVerifyEmail({
           status: STATUS_TYPES_LABEL.CLOSED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.CLOSED,
-          type: "change order",
+          type: "Approval Request",
         });
       });
     });
@@ -384,11 +384,11 @@ context("Export for Change Order", () => {
 
   context(`AR with ${STATUS_TYPES_LABEL.VOIDED} status`, () => {
     context("Create a AR from form", () => {
-      it("Navigate to change order list", () => {
+      it("Navigate to Approval Request list", () => {
         cy.navigToApprovalRequestList();
       });
 
-      it("Click Create a Change Order button", () => {
+      it("Click Create a Approval Request button", () => {
         cy.arClickCreateAnAR();
       });
 
@@ -408,7 +408,7 @@ context("Export for Change Order", () => {
         cy.arClickAddBtnOnAddDocumentsDialog();
       });
 
-      it("Click Create Change Order", () => {
+      it("Click Create Approval Request", () => {
         cy.arClickCreateApprovalRequestAfterCompletingForm();
       });
 
@@ -427,7 +427,7 @@ context("Export for Change Order", () => {
       it("Verify export", () => {
         cy.exportVerifyEmail({
           status: STATUS_TYPES_LABEL.VOIDED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.VOIDED,
-          type: "change order",
+          type: "Approval Request",
         });
       });
     });

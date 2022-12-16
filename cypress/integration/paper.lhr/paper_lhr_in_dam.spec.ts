@@ -54,7 +54,7 @@ context("Verify Paper LHR", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           damDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Document Approval Matrix");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });

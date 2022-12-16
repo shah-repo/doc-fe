@@ -81,7 +81,7 @@ context("Paper Lot History Record", () => {
           company = response;
           adminEmployee = company.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = company.employees.find((employee) => employee.user.email === USERS[2].email);
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(company, "Change Order");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(company, "Approval Request");
           partsDocumentType = cmpFilterDocumentTypeIdByName(company, "Parts");
           done();
         });
@@ -539,7 +539,7 @@ context("Paper Lot History Record", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file containing Change order form", () => {
+    it("Download zip file containing Approval Request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -805,7 +805,7 @@ context("Paper Lot History Record", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file containing Change order form", () => {
+    it("Download zip file containing Approval Request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1296,7 +1296,7 @@ context("Paper Lot History Record", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file containing Change order form", () => {
+    it("Download zip file containing Approval Request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1527,7 +1527,7 @@ context("Paper Lot History Record", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file containing Change order form", () => {
+    it("Download zip file containing Approval Request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1912,7 +1912,7 @@ context("Paper Lot History Record", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file containing Change order form", () => {
+    it("Download zip file containing Approval Request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
