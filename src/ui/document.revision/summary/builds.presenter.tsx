@@ -75,7 +75,7 @@ const BuildsPresenter: React.FunctionComponent<Props> = ({
     ));
 
   const buildsEmptyRenderer = () => (
-    <Box>
+    <Box pb={2}>
       <Typography variant="h5" className={classes.labelFont}>
         <Text message="common.none"/>
       </Typography>
