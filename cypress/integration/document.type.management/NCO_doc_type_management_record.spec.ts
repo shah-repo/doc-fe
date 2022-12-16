@@ -211,10 +211,13 @@ context("NCO document type management with record doc type", () => {
 
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add Document Type'", () => {
-      cy.dtmClickAddDocumentType();
+      cy.wait(2000);
+      cy.dtmClickAddDocumentTypeNw();
     });
   });
 
@@ -476,7 +479,7 @@ context("NCO document type management with record doc type", () => {
 
     context("Check that doc type can't be deleted", () => {
       it("Click on delete Doc Type", () => {
-        cy.wait(1000);
+        cy.wait(2000);
         cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(1).arrowClick();
       });
 

@@ -6,6 +6,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       dtmClickAddDocumentType(): Chainable<Subject>;
+      dtmClickAddDocumentTypeNw(): Chainable<Subject>;
       dtmClearFilters(): Chainable<Subject>;
       dtmSelectPrivateNumber(): Chainable<Subject>;
       dtmSelectRedline(): Chainable<Subject>;
@@ -37,6 +38,10 @@ declare global {
 
 Cypress.Commands.add("dtmClickAddDocumentType", () => {
   cy.get("button").contains("Add Document Type").arrowClick();
+});
+
+Cypress.Commands.add("dtmClickAddDocumentTypeNw", () => {
+  cy.get("[data-cy=\"Add-DocumentType-Button\"]").arrowClick({ force: true });
 });
 
 Cypress.Commands.add("dtmUpdateTextField", (params: { FilePath: string }) => {
