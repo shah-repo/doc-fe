@@ -1330,6 +1330,7 @@
   "tabId.matrixdetails": "Matrix Details",
   "tabId.documents": "Documents",
   "tabId.changedetails": "Change Details",
+  "tabId.approvals": "Approvals",
   "tabId.general": "General",
   "tabId.training": "Training",
   "tabId.calpmhistory": "Cal/PM History",

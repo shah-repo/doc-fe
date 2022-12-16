@@ -501,7 +501,7 @@ context("Change order form", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.get(`[data-cy="tabCon-tabId.changedetails"]`).arrowClick();
+      cy.get(`[data-cy="tabCon-tabId.approvals"]`).arrowClick();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
     });
 
