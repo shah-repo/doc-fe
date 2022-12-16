@@ -204,10 +204,11 @@ export const usePoApprovals = (
     () => poApprovalsState?.transitionApi.data,
     (data) => {
       FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
-      updateSignatureGroupNames();
       if (id && [ApprovalStatus.Approved, ApprovalStatus.Rejected].includes(data?.status as ApprovalStatus)) {
-        dispatch(documentRevisionsActions.reload(id));
+        // TODO investigate why reload here sometimes causes blink and returns to prev state
+        return dispatch(documentRevisionsActions.load(id));
       }
+      updateSignatureGroupNames();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);
