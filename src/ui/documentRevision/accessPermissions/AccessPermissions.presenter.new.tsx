@@ -2,13 +2,14 @@ import { Avatar, Box, Collapse, Grid, List, ListItem, ListItemSecondaryAction, L
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import { filter, isEmpty, isEqual, some, truncate } from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import Select, { components, OptionProps } from "react-select";
-import { ReactComponent as CloseIcon } from "../../../assets/images/delete_icon.svg";
+import { ReactComponent as CloseIcon } from "../../../assets/images/trash.svg";
 import { Group } from "../../../state/ducks/auth/types";
 import { Owner, TypographySize } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
+import { DOCUMENT_REVISION_SECURITY_GET_ASYNC } from "../../../state/ducks/documentRevisions/constants";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Text from "../../components/Text";
@@ -90,7 +91,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   const updateAction = useActionCreator(documentRevisionsActions.updateAccess);
   const async = useAsync({
     onSuccess: () => {
-      getList(documentRevisionId);
+      getList(documentRevisionId, DOCUMENT_REVISION_SECURITY_GET_ASYNC);
     },
   });
   const initialElements = { value: "", text: "", label: "" };
@@ -99,48 +100,54 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   const isGroup = some(groupOptions, {
     label: accessElement.label, text: accessElement.text, value: accessElement.value,
   });
+
+  useEffect(() => {
+    if (accessElement?.value)
+    { handleUpdate(null); }
+  }, [accessElement]);
+
   const handleUpdate = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (isGroup) {
-      const securityUpdateGroup = {
-        securityEmployees: [...security.securityEmployees],
-        securityGroups: [...security.securityGroups, { id: accessElement.value }],
-        operators: [...security.operators],
-      };
-      async.start(
-        updateAction,
-        documentId,
-        securityUpdateGroup,
-        async,
-      );
-    } else if (operator) {
-      const securityUpdateOperator = {
-        securityEmployees: [...security.securityEmployees],
-        securityGroups: [...security.securityGroups],
-        operators: [...security.operators, { id: operator.value }],
-      };
-      async.start(
-        updateAction,
-        documentId,
-        securityUpdateOperator,
-        async,
-      );
-      saveOperator(null);
-    } else {
-      const securityUpdateEmployee = {
-        securityEmployees: [...security.securityEmployees, { id: accessElement.value }],
-        securityGroups: [...security.securityGroups],
-        operators: [...security.operators],
-      };
-      async.start(
-        updateAction,
-        documentId,
-        securityUpdateEmployee,
-        async,
-      );
-    }
-    saveAccessElement(initialElements);
+      e?.stopPropagation();
+      e?.preventDefault();
+      if (isGroup) {
+        const securityUpdateGroup = {
+          securityEmployees: [...security.securityEmployees],
+          securityGroups: [...security.securityGroups, { id: accessElement.value }],
+          operators: [...security.operators],
+        };
+        async.start(
+          updateAction,
+          documentId,
+          securityUpdateGroup,
+          async,
+        );
+      } else if (operator) {
+        const securityUpdateOperator = {
+          securityEmployees: [...security.securityEmployees],
+          securityGroups: [...security.securityGroups],
+          operators: [...security.operators, { id: operator.value }],
+        };
+        async.start(
+          updateAction,
+          documentId,
+          securityUpdateOperator,
+          async,
+        );
+        saveOperator(null);
+      } else {
+        const securityUpdateEmployee = {
+          securityEmployees: [...security.securityEmployees, { id: accessElement.value }],
+          securityGroups: [...security.securityGroups],
+          operators: [...security.operators],
+        };
+        async.start(
+          updateAction,
+          documentId,
+          securityUpdateEmployee,
+          async,
+        );
+      }
+      saveAccessElement(initialElements);
   };
 
   const saveValue = (value) => {
@@ -229,7 +236,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                       placeholder={intl.formatMessage({
                         id: "document.revision.search.users",
                       })}
-                      components={{ DropdownIndicator, Option }}
+                      components={{ IndicatorSeparator: () => null, Option }}
                       value={
                         accessElement.value === "" || isGroup
                           ? null
@@ -305,7 +312,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
                       placeholder={intl.formatMessage({
                         id: "document.revision.search.groups",
                       })}
-                      components={{ DropdownIndicator }}
+                      components={{ IndicatorSeparator: () => null }}
                       onChange={(e) => saveValue(e)}
                       value={
                         accessElement.value === "" || !isGroup
