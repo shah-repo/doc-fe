@@ -1334,7 +1334,7 @@
   "tabId.general": "General",
   "tabId.training": "Training",
   "tabId.calpmhistory": "Cal/PM History",
-  "tabId.itemsAndDetails": "Items",
+  "tabId.items": "Items",
   "documentRevision.form.PO.matrix.duplicate": "PO matrix can't have duplicate limits or level names",
   "meq.chip.nextCalDate": "Next Callibration Due:",
   "meq.chip.prevMaintance": "Preventive Maintenance Due:",

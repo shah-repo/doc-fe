@@ -75,7 +75,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
   tabConfig = tabConfig && [...tabConfig, {
-    labelId: "tabId.itemsAndDetails",
+    labelId: "tabId.items",
     tabId: TabTypeOptions.ITEMS.toLowerCase(),
     type: TabTypeOptions.ITEMS,
   } ];
@@ -139,18 +139,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 mode={mode}
                               />
                           }
-                          {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
-                            _formState?.mode !== FBWorkspaceModeOptions.NONE &&
-                            <FBWorkspace
-                              isPortal={false}
-                              initialValues={formInput}
-                              changeRequest={cloneDeep(changeRequest)}
-                              autosave={autosave}
-                              withoutBottomBar={withoutBottomBar}
-                              schema={schema}
-                              mode={mode}
-                            />
-                          }
                           {tabType === TabTypeOptions.ITEMS &&
                             _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
                             changeRequest && (
@@ -163,6 +151,18 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               asyncState={asyncState}
                             />
                           )}
+                          {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
+                            _formState?.mode !== FBWorkspaceModeOptions.NONE &&
+                            <FBWorkspace
+                              isPortal={false}
+                              initialValues={formInput}
+                              changeRequest={cloneDeep(changeRequest)}
+                              autosave={autosave}
+                              withoutBottomBar={withoutBottomBar}
+                              schema={schema}
+                              mode={mode}
+                            />
+                          }
                         </SMBox>
                       );
                     })}
