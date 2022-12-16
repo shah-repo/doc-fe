@@ -819,7 +819,6 @@ context("Purchase Supplier Update", () => {
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description1" });
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.poApproveWithoutApi();
@@ -899,7 +898,6 @@ context("Purchase Supplier Update", () => {
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description2" });
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApproval();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.poApproveWithoutApi();
