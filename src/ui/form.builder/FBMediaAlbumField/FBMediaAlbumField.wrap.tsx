@@ -5,7 +5,7 @@ import { reaction, toJS } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FB, FBDialogState, FBMediaAlbumFieldProps, FBMediaAlbumFieldState } from "..";
+import { FB, FBDialogState, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from "..";
 import { companySelectors } from "../../../state/ducks/company";
 import { toastError } from "../../components/notifications";
 
@@ -185,7 +185,8 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
 
     function isPreview(): boolean {
       if (isTemplate) {
-        return !["design", "form"].includes(workspaceState?.mode || "");
+        return ![FBWorkspaceModeOptions.DESIGN, FBWorkspaceModeOptions.FORM]
+          .includes(workspaceState?.mode as FBWorkspaceModeOptions);
       }
       return workspaceState?.mode === "preview" && workspaceState?.isOutput;
     }

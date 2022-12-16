@@ -1,8 +1,9 @@
 import { reaction } from "mobx";
 import React from "react";
 import { useSelector } from "react-redux";
-import { FB, FBBlankTplFormProps } from "..";
+import { FB, FBBlankTplFormProps, FBWorkspaceModeOptions } from "..";
 import { companySelectors } from "../../../state/ducks/company";
+
 
 export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
   Component: React.FunctionComponent<T>,
@@ -16,7 +17,8 @@ export const withFBBlankTplForm = <T extends FBBlankTplFormProps>(
 
     const { workspaceState, formState } = FB.useStores();
     const redlineActive = useSelector(companySelectors.getRedlineActive);
-    disabled = !["design", "form"].includes(workspaceState?.mode || "") && !redlineActive;
+    disabled = ![FBWorkspaceModeOptions.DESIGN, FBWorkspaceModeOptions.FORM]
+      .includes(workspaceState?.mode as FBWorkspaceModeOptions) && !redlineActive;
     readonly = disabled;
 
     React.useEffect(() => {
