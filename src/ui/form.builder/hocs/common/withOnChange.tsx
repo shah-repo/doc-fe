@@ -61,7 +61,9 @@ export const withOnChange = <T extends FBInputProps>(
         case fieldName === `context-${field.name}` && !value:
           form?.setFieldValue(inputContextName, "");
           FBStore.setValues(omit(FBStore.getValues(), inputContextName));
-        default: break;
+          break;
+        default:
+          break;
       }
     }
 

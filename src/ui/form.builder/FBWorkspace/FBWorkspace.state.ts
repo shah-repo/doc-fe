@@ -212,7 +212,7 @@ class FBWorkspaceState extends FBSchemaState {
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
     const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
-    this.documentRevApi.set({
+    return this.documentRevApi.set({
       url,
       urlValues: { id },
       body,
@@ -242,7 +242,7 @@ class FBWorkspaceState extends FBSchemaState {
     });
   };
 
-  private setFormInputData = (data?: DocumentRevision) => {
+  public setFormInputData = (data?: DocumentRevision) => {
     const { formInput = {} } = data ?? {};
     this.formInput = formInput;
     map(formInput, (value, key) => {

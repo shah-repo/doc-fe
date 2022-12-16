@@ -6,7 +6,7 @@ import { DRAWER_WIDTH } from "./Navigation.styles";
 
 export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
-const HEADER_GAP = 96;
+export const HEADER_GAP = 96;
 
 export default (theme: Theme) =>
   createStyles({

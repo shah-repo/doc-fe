@@ -1,4 +1,4 @@
-import { Divider, List, ListItemText, Typography } from "@material-ui/core";
+import { Divider, List } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import {
@@ -7,10 +7,11 @@ import {
 } from "../../../common/utils/date";
 import { trainingSelectors } from "../../../state/ducks/dashboard.new/training";
 import { ActionTypes } from "../../../state/ducks/dashboard/types";
+import LoadMoreButton from "../../components/common/load.more.button/LoadMoreButton";
 import Text from "../../components/Text";
+import useStyles from "../Dashboard.styles";
 import NewTraining from "../line.items/training/new.training/newTraining";
-import { LoadMoreButton } from "../LoadMoreButton";
-import { styles } from "./Trainings.styles";
+import NoPendingActions from "../NoPendingActions";
 
 interface Props {
   pinLineItem: (id: string) => void;
@@ -19,13 +20,13 @@ interface Props {
   overallLimit: number;
 }
 
-const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
+const TrainingsLineItemPresenter: React.FC<Props> = ({
   pinLineItem,
   unPinLineItem,
   onLoadMoreData,
   overallLimit,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [hoverItemId, setHoverItemId] = React.useState("");
   const onMouseHoverItem = (id) => {
     setHoverItemId(id);
@@ -35,8 +36,8 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
   };
   const trainingItems: any = useSelector(trainingSelectors.trainingList);
 
-  const renderPendingActions = () => (
-    <List dense className={classes.root} onMouseLeave={onMouseLeaveItem}>
+  const PendingActions = () => (
+    <List dense onMouseLeave={onMouseLeaveItem}>
       {trainingItems.results.map((pendingAction, index) => {
         switch (pendingAction.type) {
           case ActionTypes.TRAINING_STATUS_OWNER:
@@ -74,30 +75,12 @@ const TrainingsLineItemPresenter: React.FunctionComponent<Props> = ({
         onLoadMore={onLoadMoreData}
         disable={overallLimit >= trainingItems.total}
         id="trainingBoxLoadMore"
-      />
-    </List>
-  );
-  const renderNoPendingActions = trainingItems.total === 0 && (
-    <List dense>
-      <ListItemText
-        primary={
-          <Typography className={classes.noPendingActions}>
-            <Text
-              translation="dashboard.noPendingActions"
-              dataCy="dashboard.noPendingActions"
-            />
-          </Typography>
-        }
+        className={classes.loadMore}
       />
     </List>
   );
 
-  return (
-    <>
-      {trainingItems.total > 0 && renderPendingActions()}
-      {renderNoPendingActions}
-    </>
-  );
+  return trainingItems.total === 0 ? <NoPendingActions /> : PendingActions();
 };
 
 export default TrainingsLineItemPresenter;

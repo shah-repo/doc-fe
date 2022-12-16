@@ -644,7 +644,7 @@ context("Receiving landing page test", () => {
             {
               label: "form.builder.approvals",
               tabId: "overview",
-              type: "poapprovals",
+              type: "approvals",
               deleteDisabled: false,
               name: "fb-po-approvals",
               uniqueSchemaItem: true,
@@ -721,7 +721,7 @@ context("Receiving landing page test", () => {
             {
               label: "form.builder.approvals",
               tabId: "overview",
-              type: "poapprovals",
+              type: "approvals",
               deleteDisabled: false,
               name: "fb-po-approvals",
               uniqueSchemaItem: true,
@@ -807,7 +807,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Verify approval field is visible", () => {
-        cy.get("[data-cy='fb-po-approvals']").should("exist");
+        cy.get("[data-cy='fb-approvals-fb-po-approvals']").should("exist");
       });
 
       it("Navigate to details Tab", () => {
@@ -999,14 +999,6 @@ context("Receiving landing page test", () => {
       });
     });
 
-    it("Save the  form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.listLoadingElementShouldNotExist();
-        });
-    });
-
     it("Verify form option should appear in this tab", () => {
       cy.get(".formOptionsBox").should("exist");
     });
@@ -1042,7 +1034,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Verify attachment field is visible", () => {
-        cy.get("[data-cy='fb-po-approvals']").should("exist");
+        cy.get("[data-cy='fb-approvals-fb-po-approvals']").should("exist");
       });
     });
   });
@@ -1088,7 +1080,7 @@ context("Receiving landing page test", () => {
       cy.drClickCreateDocumentWithApiCall();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
         cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
-          .parent().parent().find("svg").arrowClick({ force: true });
+          .parent().parent().parent().find("svg").arrowClick({ force: true });
       });
     });
 
@@ -1200,7 +1192,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Verify approval block is navigated", () => {
-        cy.get("[data-cy='fb-po-approvals']").should("be.visible");
+        cy.get("[data-cy='fb-approvals-fb-po-approvals']").should("be.visible");
       });
     });
 
@@ -1302,8 +1294,8 @@ context("Receiving landing page test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^='fb-po-approvals']").arrowClick();
-      cy.get("[data-cy^='fb-po-approvals']").autocompleteSelect(USERS[1].name);
+      cy.get("[data-cy^='fb-approvals-fb-po-approvals']").arrowClick();
+      cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
     });
 
     it("Save the document", () => {
@@ -1345,7 +1337,6 @@ context("Receiving landing page test", () => {
     });
   });
 
-  // verify Draft state
   context("Open Receivable Draft state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
@@ -1545,7 +1536,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Verify approval block is navigated", () => {
-        cy.get("[data-cy='fb-po-approvals']").should("be.visible");
+        cy.get("[data-cy='fb-approvals-fb-po-approvals']").should("be.visible");
       });
     });
   });

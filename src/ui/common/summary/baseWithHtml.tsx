@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, withStyles, WithStyles } from "@material-ui/core";
 import { truncate } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useIntl } from "react-intl";
 import { convertHtmlEntities } from "../../../common/utils/helpers";
 import Text from "../../components/Text";
@@ -9,49 +9,36 @@ import { SummaryBaseProps } from "./types";
 
 type Props = SummaryBaseProps & WithStyles<typeof styles>;
 
+const LENGTH_LIMIT = 100;
+
 const BaseWithhtml: React.FunctionComponent<Props> = ({
   label,
   value,
   classes,
   labelStyle,
-  valueStyle,
 }) => {
-  const intl = useIntl();
-  const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
-  const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
-  const [editor, setEditor] = useState<string>("");
-  const [btnText, setBtnText] = useState(viewMore);
-  const [flag, setFlag] = useState(false);
-  const editedValue = value ? convertHtmlEntities(value.replace(/(<([^>]+)>|\/n)/g, "")) : "";
-  useEffect(() => {
-    getTruncatText();
-  }, []);
+  const [isTruncated, setIsTruncated] = useState(true);
+  const toggleIsTruncated = useCallback(
+    () => setIsTruncated((prevValue) => !prevValue),
+    []
+  );
 
-  const completeText = () => {
-    setEditor(editedValue);
-  };
-
-  const getTruncatText = () => {
-    const truncatedText = truncate(editedValue, {
-      length: 100,
+  const sanitizedValue = value ? convertHtmlEntities(value.replace(/(<([^>]+)>|\/n)/g, "")) : "";
+  const isValueOverLimit = sanitizedValue.length > LENGTH_LIMIT;
+  const truncatedValue = isValueOverLimit && isTruncated
+    ? truncate(sanitizedValue, {
+      length: LENGTH_LIMIT,
       separator: " ",
-    });
-    setEditor(truncatedText);
-  };
+    })
+    : sanitizedValue;
+  const displayValue = truncatedValue.trim();
 
-  const toggleBtn = () => {
-    setFlag(!flag);
-    if (flag) {
-      getTruncatText();
-      setBtnText(viewMore);
-    } else {
-      completeText();
-      setBtnText(viewLess);
-    }
-  };
+  const intl = useIntl();
+  const btnText =
+    intl.formatMessage({ id: isTruncated ? "document.revision.view.more" : "document.revision.view.less" });
 
   return (
-    <Grid item={true} xs={12} style={{ marginBottom: "-24px" }} >
+    <Grid item={true} xs={12} className={classes.root}>
       {label && (
         <Grid item={true} xs={12} id="BaseWithhtml-label">
           <Typography style={labelStyle}>
@@ -60,21 +47,14 @@ const BaseWithhtml: React.FunctionComponent<Props> = ({
         </Grid>
       )}
       <Grid item={true} xs={12} id="BaseWithhtml-editor" data-cy="BaseWithhtml-editor">
-        <Box className={classes.descriptionContainer} >
-          <span
-            style = { { fontSize: "14px" }}
-          >{editor?.trim()}
-            <span className={classes.btnStyle}
-              style={{
-                marginTop: "-3px",
-                paddingLeft: "5px",
-                cursor: "pointer",
-                display: editedValue?.length < 100 ? "none" : "",
-              }}
-              onClick={() => toggleBtn()}>
+        <Box className={classes.description}>
+          {displayValue}
+          {isValueOverLimit && (
+            <span className={classes.button}
+              onClick={toggleIsTruncated}>
               {btnText}
             </span>
-          </span>
+          )}
         </Box>
       </Grid>
     </Grid>

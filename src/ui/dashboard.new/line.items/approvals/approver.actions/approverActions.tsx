@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  Grid,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Grid, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
@@ -26,7 +20,7 @@ import { NormalStyleChip } from "../../common/NormalStyleChipApprovalApproved";
 import { NormalStyleChip as RejectedNormalStyleChip } from "../../common/NormalStyleChipApprovalRejected";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import { styles } from "./approverActions.styles";
+import useStyles from "./approverActions.styles";
 
 interface Props {
   id: string;
@@ -47,7 +41,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
 }
-const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
+const ApproverActionItemPresenter: React.FC<Props> = ({
   id,
   docDocumentId,
   docId,
@@ -65,7 +59,7 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   pinned,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const handlePinClick = () => {
@@ -84,124 +78,124 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
     onMouseHoverItem(id);
   };
   return (
-    <>
-      <StyledListItem
-        style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
-        button
-        onMouseEnter={onMouseHoverListItem}
-        className={classes.buttoncursor}
-        disableRipple
-      >
-        <ListItemAvatar>
-          {approverAvatar ? (
-            <Avatar
-              style={{ backgroundColor: `${approverInitialColor}` }}
-              className={classes.avatar}
-              alt={approverName}
-              src={approverAvatar}
-            />
-          ) : (
-            <Avatar
-              style={{ backgroundColor: `${approverInitialColor}` }}
-              className={classes.avatar}
+    <StyledListItem
+      button
+      divider
+      disableRipple
+      className={classes.buttoncursor}
+      style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+      onMouseEnter={onMouseHoverListItem}
+    >
+      <ListItemAvatar>
+        {approverAvatar ? (
+          <Avatar
+            style={{ backgroundColor: `${approverInitialColor}` }}
+            className={classes.avatar}
+            alt={approverName}
+            src={approverAvatar}
+          />
+        ) : (
+          <Avatar
+            style={{ backgroundColor: `${approverInitialColor}` }}
+            className={classes.avatar}
+          >
+            {getInitalsFromName(approverName)}
+          </Avatar>
+        )}
+      </ListItemAvatar>
+      <ListItemText
+        primary={
+          <>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
             >
-              {getInitalsFromName(approverName)}
-            </Avatar>
-          )}
-        </ListItemAvatar>
-        <ListItemText
-          primary={
-            <>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
+              <Grid item={true}>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={`${classes.typographyBold} ${classes.margin5}`}
+                  color="textSecondary"
+                  noWrap
+                >
+                  {approverName}
+                </Typography>
+              </Grid>
+              {STATUS_TYPES_LABEL.REJECTED === status && (
                 <Grid item={true}>
                   <Typography
                     component="span"
                     variant="caption"
-                    className={`${classes.typographyBold} ${classes.margin5}`}
+                    className={`${classes.typographyStatus} ${classes.margin5}`}
                     color="textSecondary"
                     noWrap
                   >
-                    {approverName}
+                    {!hoverItem && (
+                      <RejectedNormalStyleChip
+                        size="small"
+                        color="primary"
+                        icon={<RejectIcon data-cy="transition-reject" />}
+                        label={STATUS_TYPES_LABEL[status]}
+                      />
+                    )}
+                    {hoverItem && (
+                      <RejectedHoverStyleChip
+                        color="primary"
+                        size="small"
+                        icon={<RejectSolidIcon data-cy="transition-reject" />}
+                        label={STATUS_TYPES_LABEL[status]}
+                      />
+                    )}
                   </Typography>
                 </Grid>
-                {STATUS_TYPES_LABEL.REJECTED === status && (
-                  <Grid item={true}>
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyStatus} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
-                    >
-                      {!hoverItem && (
-                        <RejectedNormalStyleChip
-                          size="small"
-                          color="primary"
-                          icon={<RejectIcon data-cy="transition-reject" />}
-                          label={STATUS_TYPES_LABEL[status]}
-                        />
-                      )}
-                      {hoverItem && (
-                        <RejectedHoverStyleChip
-                          color="primary"
-                          size="small"
-                          icon={<RejectSolidIcon data-cy="transition-reject" />}
-                          label={STATUS_TYPES_LABEL[status]}
-                        />
-                      )}
-                    </Typography>
-                  </Grid>
-                )}
-                {STATUS_TYPES_LABEL.APPROVED === status && (
-                  <Grid item={true}>
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyStatus} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
-                    >
-                      {!hoverItem && (
-                        <NormalStyleChip
-                          size="small"
-                          color="primary"
-                          icon={<ApprovedIcon data-cy="transition-approve" />}
-                          label={STATUS_TYPES_LABEL[status]}
-                        />
-                      )}
-                      {hoverItem && (
-                        <HoverStyleChip
-                          color="primary"
-                          size="small"
-                          icon={
-                            <ApprovedWhiteIcon data-cy="transition-approve" />
-                          }
-                          label={STATUS_TYPES_LABEL[status]}
-                        />
-                      )}
-                    </Typography>
-                  </Grid>
-                )}
-                {STATUS_TYPES_LABEL.APPROVED !== status &&
+              )}
+              {STATUS_TYPES_LABEL.APPROVED === status && (
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={`${classes.typographyStatus} ${classes.margin5}`}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {!hoverItem && (
+                      <NormalStyleChip
+                        size="small"
+                        color="primary"
+                        icon={<ApprovedIcon data-cy="transition-approve" />}
+                        label={STATUS_TYPES_LABEL[status]}
+                      />
+                    )}
+                    {hoverItem && (
+                      <HoverStyleChip
+                        color="primary"
+                        size="small"
+                        icon={
+                          <ApprovedWhiteIcon data-cy="transition-approve" />
+                        }
+                        label={STATUS_TYPES_LABEL[status]}
+                      />
+                    )}
+                  </Typography>
+                </Grid>
+              )}
+              {STATUS_TYPES_LABEL.APPROVED !== status &&
                   STATUS_TYPES_LABEL.REJECTED !== status && (
-                  <Grid item={true}>
-                    <Typography
-                      component="span"
-                      variant="caption"
-                      className={`${classes.typographyStatus} ${classes.margin5}`}
-                      color="textSecondary"
-                      noWrap
-                    >
-                      {status}
-                    </Typography>
-                  </Grid>
-                )}
-                {/* <Grid item={true}>
+                <Grid item={true}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    className={`${classes.typographyStatus} ${classes.margin5}`}
+                    color="textSecondary"
+                    noWrap
+                  >
+                    {status}
+                  </Typography>
+                </Grid>
+              )}
+              {/* <Grid item={true}>
                   <Typography
                     component="span"
                     variant="body2"
@@ -212,10 +206,10 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                     <Text translation="common.your" />
                   </Typography>
                 </Grid> */}
-                <Grid item={true}>
-                  <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId= {docId}/>
-                </Grid>
-                {/* {docRevName && (
+              <Grid item={true}>
+                <DocId url={documentVersionPath(docRevId || "", docDocumentId)} docId= {docId}/>
+              </Grid>
+              {/* {docRevName && (
                   <Grid item={true}>
                     <Typography
                       component="span"
@@ -228,66 +222,65 @@ const ApproverActionItemPresenter: React.FunctionComponent<Props> = ({
                     </Typography>
                   </Grid>
                 )} */}
-                <Grid zeroMinWidth item={true} className={classes.truncateText}>
-                  <DocTitle
-                    url={documentVersionPath(docRevId || "", docDocumentId)}
-                    docRevVersion={docRevVersion} docRevName={docRevName}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                container={true}
-                wrap="nowrap"
-                justify="flex-start"
-                alignItems="center"
-              >
-                <Grid item={true} className={classes.grayDot}></Grid>
-                <Grid item={true}>
-                  <Typography
-                    component="span"
-                    variant="caption"
-                    className={classes.timestampContainer}
-                    color="textSecondary"
-                    noWrap
-                  >
-                    {timestamp}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </>
-          }
-        />
-        {hoverItem && !pinned && (
-          <div className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
-            {pinHover && (
-              <StyleTooltip
-                title={<Text translation="common.pin" />}
-                placement="top"
-                arrow
-              >
-                <PinSolidIcon
-                  onClick={handlePinClick}
-                  onMouseLeave={onMouseLeavePinIcon}
-                  className={classes.cursorPointer}
+              <Grid zeroMinWidth item={true} className={classes.truncateText}>
+                <DocTitle
+                  url={documentVersionPath(docRevId || "", docDocumentId)}
+                  docRevVersion={docRevVersion} docRevName={docRevName}
                 />
-              </StyleTooltip>
-            )}
-          </div>
-        )}
-        {pinned && (
-          <span className={classes.actionIcon}>
+              </Grid>
+            </Grid>
+            <Grid
+              container={true}
+              wrap="nowrap"
+              justify="flex-start"
+              alignItems="center"
+            >
+              <Grid item={true} className={classes.grayDot}></Grid>
+              <Grid item={true}>
+                <Typography
+                  component="span"
+                  variant="caption"
+                  className={classes.timestampContainer}
+                  color="textSecondary"
+                  noWrap
+                >
+                  {timestamp}
+                </Typography>
+              </Grid>
+            </Grid>
+          </>
+        }
+      />
+      {hoverItem && !pinned && (
+        <div className={classes.actionIcons}>
+          {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
+          {pinHover && (
             <StyleTooltip
-              title={<Text translation="common.unpin" />}
+              title={<Text translation="common.pin" />}
               placement="top"
               arrow
             >
-              <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer}/>
+              <PinSolidIcon
+                onClick={handlePinClick}
+                onMouseLeave={onMouseLeavePinIcon}
+                className={classes.cursorPointer}
+              />
             </StyleTooltip>
-          </span>
-        )}
-      </StyledListItem>
-    </>
+          )}
+        </div>
+      )}
+      {pinned && (
+        <span className={classes.actionIcon}>
+          <StyleTooltip
+            title={<Text translation="common.unpin" />}
+            placement="top"
+            arrow
+          >
+            <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer}/>
+          </StyleTooltip>
+        </span>
+      )}
+    </StyledListItem>
   );
 };
 

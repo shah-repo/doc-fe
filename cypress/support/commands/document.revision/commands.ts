@@ -25,6 +25,7 @@ declare global {
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectDocumentTab(): Chainable<Subject>;
       drSelectChangeDetailsTab(): Chainable<Subject>;
+      drCheckProgressBarAndListLoaderShouldNotExists(): Chainable<Subject>;
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drSelectCalPmHistoryTab(): Chainable<Subject>;
@@ -40,6 +41,7 @@ declare global {
       drClickCreateDocumentWithApiCall(params?: { toastifyExists?: boolean; requiredApproversDocRev?: boolean}): Chainable<Subject>;
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
+      drClickCreateDocumentWithoutApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
       drClickCreateSupplierWithApiCallAudit(): Chainable<Subject>;
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
@@ -290,8 +292,13 @@ Cypress.Commands.add("drSelectChangeDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drCheckProgressBarAndListLoaderShouldNotExists", () => {
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectLineItems", () => {
-  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -513,6 +520,14 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
     [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
+  cy.wait(1000);
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drClickCreateDocumentWithoutApiCallForForms", () => {
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.wait(1000);
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();

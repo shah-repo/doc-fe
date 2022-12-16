@@ -23,8 +23,8 @@ export const withFBOnChange = <T extends FBInputProps>(
 
     const { formState, schemaState, workspaceState } = FB.useStores();
     const inputValue =
-      formState?.getFieldValue(name) ||
-      formState?.getInputState(name || "")?.value;
+    formState?.getFieldValue(name) ||
+    formState?.getInputState(name || "")?.value;
 
     inputState = FB.useRef<FBInputState>(FBInputState, {
       value: cloneDeep(inputValue),
@@ -156,7 +156,14 @@ export const withFBOnChange = <T extends FBInputProps>(
         const { type } = ev.target;
         let { value } = ev.target;
         if (type === "number" && value !== "") {
-          value = toNumber(value);
+          if (["lhrs-start-quantity", "lhrs-accepted-quantity", "lhrs-rejected-quantity"].includes(ev.target.name)) {
+            value = (!Number.isInteger(toNumber(value)) && value.split(".")[1]?.length > 10)
+              ? toNumber(value).toFixed(10)
+              : toNumber(value);
+          }
+          else {
+            value = toNumber(value);
+          }
         }
         if (type === "number" && value === "") {
           value = null;
@@ -179,6 +186,11 @@ export const withFBOnChange = <T extends FBInputProps>(
       (changedValue[type || ""] || changedValue.default)();
       props.onChange && props.onChange(ev, value, schemaState || formState || workspaceState);
       formState.validate();
+
+      if (type === "autocomplete" &&
+      schemaState?.getSchemaItem(name?.replace("fb-ia-", ""))?.type === "inlineapproval") {
+        workspaceState?.saveDocRev(formState.getValues());
+      }
     });
 
     const onBlur = (ev) => {

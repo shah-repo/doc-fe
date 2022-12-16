@@ -21,7 +21,7 @@ export const styles = makeStyles((theme) =>
       },
     },
     labelProps: {
-      marginBottom: 10,
+      marginBottom: 0,
       fontWeight: 600,
       fontSize: 12,
       color: Colors.almost_black,

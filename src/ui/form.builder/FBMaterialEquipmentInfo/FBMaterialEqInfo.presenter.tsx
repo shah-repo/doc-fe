@@ -13,8 +13,8 @@ const DATE_FORMAT = MomentFormats.BriefDate;
 
 const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (<>
   <ListItemText>
-    {item.docId && `${item.docId} -`} {item.title} | {item.unit} : {item.quantity}
-
+    {item.docId && `${item.docId} -`} {item.title} | {item.unit} :
+    {(item?.totalQuantity ?? item?.quantity) || "None"}
   </ListItemText>
   <ListItemText>
     {item.lots && item.lots.map((lot: LotItem) => (
@@ -135,6 +135,7 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
   includeDiff,
   handleShowDiffChange,
   loading,
+  isObsolete,
 }) => {
   const [expandedPanels, setExpanedPanels] = useState<string[]>([]);
   const allPanelsExpaned = expandedPanels.length === panels.length;
@@ -147,6 +148,10 @@ const FBMaterialEqInfoPresenter: React.FC<MaterialEqProps> = ({
     state.includes(key) ? remove(state, key) : [...state, key]
   ));
   const jumpToPanel = (key: string) => () => setExpanedPanels([key]);
+
+  if (isObsolete) {
+    return null;
+  }
 
   return (
     <Box className={classes.root}>

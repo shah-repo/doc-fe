@@ -180,7 +180,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
   );
 
   return (
-    <Box>
+    <Box className={classes.root}>
       <Box className={classes.searchBox}>
         <SearchBox onSearch={search} />
       </Box>
