@@ -913,6 +913,10 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       cy.get("header").contains("Last saved").should("not.exist");
     });
 
+    it("Update LHR button is visible", () => {
+      cy.get(`[data-cy="updateRecord"]`).should("exist");
+    });
+
     it("Send to email button visible & functional", () => {
       cy.sendToEmail();
       cy.checkToastMessageContains({
