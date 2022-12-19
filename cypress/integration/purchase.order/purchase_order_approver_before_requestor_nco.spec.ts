@@ -48,7 +48,7 @@ const COLUMN_HEADERS = [
 const level1Value = "$566.25";
 const level1Limit = "5000";
 const level2Value = "$8,566.25";
-const level2Limit = "250000";
+const level2Limit = "25000";
 
 context("Create company with JSON's and verify Purchase Order-ENC-12725", () => {
   before(() => {
@@ -129,6 +129,10 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -493,6 +497,12 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
+  context("Turn off autosave", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+  });
+
   context("Create a form with output as 'PO Approval matrix', Approve and release it", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
@@ -625,6 +635,12 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
     it("Click 'Save' document", () => {
       cy.drClickCreateDocumentWithoutApiCallForForms();
+    });
+  });
+
+  context("Turn on autosave", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
   });
 
@@ -1172,6 +1188,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.pause();
     });
   });
 
@@ -1241,12 +1258,21 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.get("[data-cy='poTotal']").should("have.text", level2Value);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(8000);
     });
   });
 
   context("Navigate to the Approval field and add User 2", () => {
     it("Switch to details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Remove requestor user1 as ${USERS[1].name}`, () => {
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
+      cy.unClick();
+      cy.wait(8000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1279,8 +1305,8 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
-  context("Navigate to Approval block and verify that approver is added only once in the approvals field", () => {
-    it("Verify approvals is added only once in approval block", () => {
+  context("Navigate to Approval block and verify that requestor is added only once in the approvals field", () => {
+    it("Verify requestor is added only once in approval block", () => {
       cy.get("[data-tag-index='1']>span>div").should("not.exist");
       cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[2].name} - ${USERS[2].email} `);
     });
