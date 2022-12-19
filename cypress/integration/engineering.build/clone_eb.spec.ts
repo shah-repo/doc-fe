@@ -1018,7 +1018,7 @@ context("Clone EB Flow test", () => {
       it("Select a part in the Part field", () => {
         cy.wait(2000);
         cy.get("[data-cy=\"childrenParts\"]").arrowClick();
-        cy.get("[data-cy=\"childrenParts\"]").arrowType("PRT-00005 - rev 1 - Part document{downarrow}{enter}");
+        cy.get(`[data-cy="childrenParts"]`).autocompleteSelect("PRT-00005 - rev 1 - Part document");
       });
 
       it("Add reference to part", () => {
@@ -1241,7 +1241,7 @@ context("Clone EB Flow test", () => {
       it("Select a part in the Part field", () => {
         cy.wait(2000);
         cy.get("[data-cy=\"childrenParts\"]").arrowClick();
-        cy.get("[data-cy=\"childrenParts\"]").arrowType("PRT-00006 - rev 1 - Part for EB document{downarrow}{enter}");
+        cy.get(`[data-cy="childrenParts"]`).autocompleteSelect("PRT-00006 - rev 1 - Part for EB document");
       });
 
       it("Add reference to part", () => {
