@@ -236,7 +236,6 @@ context("Checkboxes test", () => {
         cy.fbEnterNameValue({ name: "label", value: "rbg-wo-ch" });
         cy.fbGroupOptions("option1", "option2");
         cy.fbAddNewFieldButton();
-        cy.pause();
       });
 
       it("Add File Upload with checkboxes", () => {
