@@ -124,6 +124,10 @@ context("PO Removes lineitems removes approver", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create form for NCO document", () => {
@@ -490,6 +494,12 @@ context("PO Removes lineitems removes approver", () => {
     });
   });
 
+  context("Turn off autosave", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+  });
+
   context("Create Form PO Approval matrix", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
@@ -625,6 +635,12 @@ context("PO Removes lineitems removes approver", () => {
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Turn on autosave", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
   });
 
@@ -942,11 +958,11 @@ context("PO Removes lineitems removes approver", () => {
   });
 
   context("Verify that history tab is capturing requestor Added and approver Added", () => {
-    it("Check history entry for 'Requestor Added'", () => {
+    it("Check history entry for 'Requestor added'", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
         cy.drSelectHistoryTab();
       });
-      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor Added")
+      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor added")
         .and("contain", USERS[1].name);
     });
 
