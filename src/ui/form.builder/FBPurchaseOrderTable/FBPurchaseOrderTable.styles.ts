@@ -8,7 +8,7 @@ const FBPurchaseOrderClasses = makeStyles({
     "& th": {
       padding: "14px 8px",
       whiteSpace: "nowrap",
-      background: Colors.athens_gray,
+      background: Colors.water,
       boxShadow: `{0 1px 0 ${Colors.chinese_silver}}`,
       borderRadius: "3px 0 0 0",
     },
