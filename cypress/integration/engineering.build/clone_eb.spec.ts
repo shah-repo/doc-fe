@@ -1026,6 +1026,8 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
           cy.elUploadAttachment({
             fileName: "test.jpg",
