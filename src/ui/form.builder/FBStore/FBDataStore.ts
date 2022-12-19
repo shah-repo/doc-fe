@@ -9,7 +9,6 @@ class FBDataStore {
   @observable public refreshData: DocumentRevision | undefined;
   @observable public poApprovals: FBInlineApprovalBody[] | Approval[] = [];
   @observable public inlineApprovals: FBInlineApprovalBody[] | Approval[] = [];
-  public revChangeBeforeApprovals;
 
   @action public setRefreshData = (value) => {
     set(this, "refreshData", value);
