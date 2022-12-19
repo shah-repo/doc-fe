@@ -236,6 +236,7 @@ context("Checkboxes test", () => {
         cy.fbEnterNameValue({ name: "label", value: "rbg-wo-ch" });
         cy.fbGroupOptions("option1", "option2");
         cy.fbAddNewFieldButton();
+        cy.pause();
       });
 
       it("Add File Upload with checkboxes", () => {
@@ -587,7 +588,7 @@ context("Checkboxes test", () => {
     });
 
     it("Verify Radio Button group without 'Include Other' checkbox", () => {
-      cy.contains("rbg-wo-ch").parentsUntil("li").should("not.contain", "Other");
+      cy.get("[label='rbg-wo-ch']").last().should("not.contain", "Other");
     });
 
     it("Verify Radio Button group with 'Include Other' checkbox", () => {
