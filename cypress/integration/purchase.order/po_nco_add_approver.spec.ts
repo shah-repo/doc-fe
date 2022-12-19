@@ -127,6 +127,12 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
   });
 
+  context("Turn off autosave", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+  });
+
   context("Create form for NCO document", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
@@ -477,6 +483,12 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
   });
 
+  context("Turn off autosave", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+  });
+
   context("Check PO exists & verify the official predefined schema", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
@@ -613,6 +625,12 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.drClickCreateDocumentWithoutApiCallForForms();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Turn on autosave", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
   });
 
@@ -1010,11 +1028,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy='form.builder.audit.STRING_NEW']").contains("Requestor Added")
-        .should("exist");
-      cy.get("[data-cy='form.builder.audit.STRING_NEW']").next()
-        .contains(USERS[11].name)
-        .should("exist");
+      cy.get(`[data-cy="no-padding-margin"]`).eq(1)
+        .should("have.text", `Requestor added${USERS[11].name} ${USERS[11].email}`);
     });
 
     it("Check history entry for 'Approver Added'", () => {
