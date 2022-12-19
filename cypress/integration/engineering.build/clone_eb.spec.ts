@@ -817,11 +817,10 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
-          cy.elUploadAttachment({
-            fileName: "test.jpg",
-            el: "fb-mediaalbum-upload-",
-          });
+
+        cy.elUploadAttachment({
+          fileName: "test.jpg",
+          el: "fb-mediaalbum-upload-",
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1028,11 +1027,9 @@ context("Clone EB Flow test", () => {
       it("Add attachment", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
-          cy.elUploadAttachment({
-            fileName: "test.jpg",
-            el: "fb-mediaalbum-upload-",
-          });
+        cy.elUploadAttachment({
+          fileName: "test.jpg",
+          el: "fb-mediaalbum-upload-",
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1249,11 +1246,9 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
-          cy.elUploadAttachment({
-            fileName: "test.jpg",
-            el: "fb-mediaalbum-upload-",
-          });
+        cy.elUploadAttachment({
+          fileName: "test.jpg",
+          el: "fb-mediaalbum-upload-",
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
