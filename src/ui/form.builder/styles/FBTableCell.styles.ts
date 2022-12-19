@@ -45,4 +45,8 @@ export const FBTableCellStyles = makeStyles(() =>
     cellEmpty: {
       borderBottom: 0,
     },
+    tableboxShadow: {
+      boxShadow: "-10px 0px 8px rgb(22 34 41 / 7%)",
+      opacity: 0.8,
+    },
   }));

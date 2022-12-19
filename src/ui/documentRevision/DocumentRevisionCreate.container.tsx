@@ -1,3 +1,4 @@
+import { uniqBy } from "lodash";
 import React, { useMemo } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -101,9 +102,12 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   const isPO = checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions);
   const onSubmit = (values: DocumentRevisionFormValues) => {
     if (isPO && values.revisionChangeType === RevisionChangeType.NextRevision) {
-      FBDataStore.revChangeBeforeApprovals = (
-        documentRevision?.approvals || []
-      ).filter((approver) => approver.status !== ApprovalStatus.Abandoned);
+      FBDataStore.revChangeBeforeApprovals = uniqBy(
+        (documentRevision?.approvals || []).filter(
+          (approver) => approver.status !== ApprovalStatus.Abandoned
+        ),
+        "id"
+      );
     }
     async.start(create, toNewVersionRequestBody(values), async);
   };

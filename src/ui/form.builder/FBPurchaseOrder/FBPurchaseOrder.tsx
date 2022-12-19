@@ -3,6 +3,7 @@ import cx from "classnames";
 import React from "react";
 import { FBButton, FBDialog, FBInput, FBProvider, FBPurchaseOrderProps, FBPurchaseOrderTable, FBSection } from "..";
 import { FBButtonStyles } from "../styles/FBButton.styles";
+import { FBPurchaseOrderStyles } from "./FBPurchaseOrder.styles";
 import { withFBPurchaseOrder } from "./FBPurchaseOrder.wrap";
 
 const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
@@ -20,7 +21,7 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
   name,
   isPO,
 }) => {
-  const classes = FBButtonStyles();
+  const classes = { ...FBButtonStyles(), ...FBPurchaseOrderStyles() };
   return (<FBProvider {...{ purchaseOrderState, dialogState }}>
     <FBDialog />
     <FBInput {...{ name, disabled }} type="purchaseorder">
@@ -29,12 +30,11 @@ const FBPurchaseOrder: React.FunctionComponent<FBPurchaseOrderProps> = ({
         <FBPurchaseOrderTable {...{ name, disabled, handleItem, handleLot, mode, isReceivable, gutter }} />
         {isReceivable && (
           <FBButton
-            variant="outlined"
             color="primary"
             label="form.builder.receive"
             onClick={handleReceiveAll}
             disabled={loading}
-            className={cx(classes.button)}
+            className={cx(classes.button, classes.receiveAllBtn)}
           />
         )}
       </Box>
