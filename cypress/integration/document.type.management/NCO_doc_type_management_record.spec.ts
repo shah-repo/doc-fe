@@ -217,7 +217,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Click on 'Add Document Type'", () => {
       cy.wait(2000);
-      cy.dtmClickAddDocumentTypeNw();
+      cy.dtmClickAddDocumentType();
     });
   });
 
