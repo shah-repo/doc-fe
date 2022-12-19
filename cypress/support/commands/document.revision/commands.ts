@@ -925,7 +925,6 @@ Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
       .click();
 
     cy.get("[id^=react-select]").contains(user).arrowClick();
-    cy.get(`[data-cy="add-user"]`).eq(0).arrowClick({ force: true });
   });
 });
 
@@ -944,7 +943,6 @@ Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
       .contains("Search groups")
       .click();
     cy.get("[id^=react-select]").contains(group).arrowClick();
-    cy.get(`[data-cy="add-user"]`).eq(1).arrowClick();
   });
 });
 

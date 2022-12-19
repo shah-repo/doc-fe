@@ -390,7 +390,7 @@ context("Layout Verification of maintainance records", () => {
 
     it("Verify Click on details Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
@@ -604,7 +604,7 @@ context("Layout Verification of maintainance records", () => {
 
       it("Verify Click detail Tab, clicking on it should open that tab and close the other one", () => {
         cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-        cy.get("#sm-tabpanel-0").should("be.hidden");
+        cy.get("#sm-tabpanel-0").should("not.exist");
         cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       });
 
@@ -789,13 +789,11 @@ context("Layout Verification of maintainance records", () => {
 
         it("Add another user permission", () => {
           cy.wait(2000);
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
-          });
+          cy.drAddUserFromPermissionTab(USERS[3].name);
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab("Developers");
           });
         });
