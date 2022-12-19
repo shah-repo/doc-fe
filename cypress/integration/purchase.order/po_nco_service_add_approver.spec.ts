@@ -899,7 +899,7 @@ context("Add Requestor as an approver of the PO", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(1).should("contain", "Requestor Added")
+      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(1).should("contain", "Requestor added")
         .and("contain", USERS[11].name);
     });
 
@@ -1013,10 +1013,11 @@ context("Add Requestor as an approver of the PO", () => {
 
   context("Verify that history tab is capturing requestor Updated and approver Added", () => {
     it("Check history entry for 'Requestor Updated'", () => {
-      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
-        .should("exist");
-      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[12].name)
-        .should("exist");
+      cy.drSelectHistoryTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).contains("Requestor Updated");
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).parent().parent().contains(USERS[12].name);
     });
 
     it("Check history entry for 'Approver Added'", () => {
@@ -1430,10 +1431,11 @@ context("Add Requestor as an approver of the PO", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
 
-      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").contains("Requestor Updated")
-        .should("exist");
-      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").parent().contains(USERS[11].name)
-        .should("exist");
+      it("Check history entry for 'Requestor Updated'", () => {
+        cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).contains("Requestor Updated");
+        // eslint-disable-next-line max-len
+        cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).parent().parent().should("contain.text", USERS[11].name);
+      });
     });
 
     it("Check history entry for 'Approver Added'", () => {
