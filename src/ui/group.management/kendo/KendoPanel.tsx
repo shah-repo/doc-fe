@@ -593,7 +593,7 @@ export function KendoPanel<T extends {id: string; inEdit?: boolean | string}>({
           <Grid item>
             <Box display="flex">
               <GMExport gridData={dataState.group?.length ? flatMap(map(result, "items")) : result}
-                columns={columnDefinitions} />
+                columns={columnDefinitions} isGrouped={(dataState?.group || []).length > 0}/>
               {canCreateGroups && <AddGroupContainer addGroup={addGroup} />}
             </Box>
           </Grid>

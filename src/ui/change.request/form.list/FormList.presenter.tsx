@@ -1,7 +1,7 @@
-import { Box, Button, Dialog, Grid } from "@material-ui/core";
+import { Button, Dialog, Grid } from "@material-ui/core";
 import React from "react";
-import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { HeaderTableType } from "../../../state/ducks/documentRevisions/types";
+import ExportListIcon from "../../components/common/kendo/ExportListIcon";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
 import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
@@ -19,6 +19,7 @@ interface Props {
   headers: HeaderTableType[];
   data: any[];
   exportDialog: DialogHandler;
+  isGrouped: boolean;
 }
 
 const FormListPresenter: React.FunctionComponent<Props> = ({
@@ -29,6 +30,7 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
   handleTemplateSelection,
   headers,
   data,
+  isGrouped,
 }) => {
   const classes = styles();
   return (
@@ -44,10 +46,9 @@ const FormListPresenter: React.FunctionComponent<Props> = ({
             id="ListPresenter-export-list"
             data-cy="document.revision.export.list"
             onClick={exportDialog.open}
+            disabled={isGrouped}
           >
-            <Box display="flex">
-              <ExportIcon className={classes.iconSvg} height={14} width={14} />
-            </Box>
+            <ExportListIcon isGrouped={isGrouped} />
             <Text translation="document.revision.export.list" />
           </Button>
           <ExportListDialog

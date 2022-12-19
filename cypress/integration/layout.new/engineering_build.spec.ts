@@ -1091,6 +1091,9 @@ context("Verify New Layout for EB Document", () => {
       it("Add material document", () => {
         cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
         cy.get("[data-cy=\"title\"]").arrowClick();
+        cy.wait(1000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("ul>li[role=option]").contains("Part for EB document").arrowClick({ force: true });
         cy.get("[name=\"quantity\"]").arrowType("2");
         cy.get("[data-cy=\"unit\"]").arrowClick();
@@ -1101,6 +1104,9 @@ context("Verify New Layout for EB Document", () => {
       it("Add equipment document", () => {
         cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
         cy.get("[data-cy=\"title\"]").arrowClick();
+        cy.wait(1000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("ul>li[role=option]").contains("Equipment document").arrowClick();
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       });
@@ -1260,7 +1266,7 @@ context("Verify New Layout for EB Document", () => {
         it("Expand and verify added Material and Equipment", () => {
           cy.get(`[data-cy="common.expand.all"]`).arrowClick();
           cy.get(".MuiExpansionPanel-root")
-            .should("contain.text", "PRT-00002 - Part for EB document | each : 2")
+            .should("contain.text", "PRT-00002 - Part for EB document | each :2")
             .and("contain.text", "ET-00001 - Equipment document");
         });
 
@@ -1506,7 +1512,7 @@ context("Verify New Layout for EB Document", () => {
         it("Expand and verify added Material and Equipment", () => {
           cy.get(`[data-cy="common.expand.all"]`).arrowClick();
           cy.get(".MuiExpansionPanel-root")
-            .should("contain.text", "PRT-00002 - Part for EB document | each : 2")
+            .should("contain.text", "PRT-00002 - Part for EB document | each :2")
             .and("contain.text", "ET-00001 - Equipment document");
         });
 

@@ -1127,7 +1127,7 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Type preventative maintenance instruction", () => {
       // eslint-disable-next-line max-len
-      cy.get("[data-cy^=\"preventative-maintenance\"]>div>div>div>div>div[contenteditable]").click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
+      cy.get("div[data-cy^=\"preventative-maintenance-\"]:eq(-1)>div>div>div>div>div[contenteditable]").click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
       cy.unClick();
     });
 
@@ -1149,7 +1149,7 @@ context("Autocomplete 'Equipment' test", () => {
 
     it("Type calibration maintenance instruction", () => {
       // eslint-disable-next-line max-len
-      cy.get("[data-cy^=\"calibration\"]>div>div>div>div>div[contenteditable]").click({ force: true }).clear().arrowType("Instructions for calibration");
+      cy.get("div[data-cy^=\"calibration\"]:eq(-1)>div>div>div>div>div[contenteditable]").click({ force: true }).clear().arrowType("Instructions for calibration");
       cy.unClick();
     });
 
@@ -2131,7 +2131,7 @@ context("Autocomplete 'Equipment' test", () => {
 
         expect(el).match(/History/);
         // eslint-disable-next-line @typescript-eslint/camelcase
-        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocDraftMonth} [\n]?${pdfDocDraftDay},[\n]?${pdfDocDraftyear}`, "gi" );
+        tmpRegex = new RegExp( `MR-00003 Second Preventative Maintenance \\| ${USERS[1].name} \\| DRAFT \\| ${pdfDocDraftMonth}[ |\n]?${pdfDocDraftDay},[ |\n]?${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
         // eslint-disable-next-line @typescript-eslint/camelcase

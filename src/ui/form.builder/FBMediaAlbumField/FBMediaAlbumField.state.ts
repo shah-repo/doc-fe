@@ -21,7 +21,6 @@ class FBMediaAlbumFieldState {
   public existingFileNames: string[] = [];
   public fromUpload = false;
   public filesApi: FBRequest<FBAttachment[], null> = new FBRequest();
-
   public previewOnlyIds: string[] = [];
 
   constructor(files: Id[] | undefined = []) {

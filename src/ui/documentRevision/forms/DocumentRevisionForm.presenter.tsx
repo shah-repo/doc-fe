@@ -105,7 +105,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(groupOptions);
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
-  const isSubrevision = documentRevision?.subRevision as number > 0;
+  const isSubrevision = Boolean(documentRevision?.subRevision);
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
   const isRevised = values.outputRevision;
   const email = useSelector(authSelectors.currentUserEmail);
@@ -124,6 +124,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isRevisionVisible  = useRevisionStageSelect(documentTypeId).isVisible;
   const enableRevision = !((isDisabled && (!isDocRevFirstDraft || !shouldShowRevStageForDocType))
    || (!isRevisionVisible && defaultRevisionStage));
+  const isDCO = (documentRevision?.document?.documentType?.documentTypeName === "Document Change Order");
 
   useEffect(() => {
     if (!redlineActive) {
@@ -172,6 +173,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   useEffect(() => {
     if (revisionChangeType) {
       _documentRevisionFormState?.setDocumentRevisionChangeType(revisionChangeType);
+      workspaceState?.setDocumentRevisionChangeType(revisionChangeType);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revisionChangeType]);
@@ -192,8 +194,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
 
   useEffect(() => {
     workspaceState?.setMode(mode);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  }, [mode, workspaceState]);
 
   const showOutputSection = _formState?.active && ([
     FBWorkspaceModeOptions.DESIGN,
@@ -208,7 +209,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const outputIsPO = includes(outputDocumentTypeName, "Purchase Order");
 
   return (
-    <Box mb={6}>
+    <Box mb={isDCO ? 3 : 6}>
       <FormWrapper
         dirty={dirty}
         initialValues={initialValues}
@@ -225,7 +226,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           onDirtyFlagChange={onDirtyFlagChange}
         />
         <Grid container spacing={3}>
-          {isVisible && <Grid item xs={6}>
+          {!isDCO && (<>{isVisible && <Grid item xs={6}>
             <DocumentTypeSelect
               outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
               isDisabled={isDisabledInputInPreview}
@@ -280,7 +281,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               isDisabled={isDisabledInput}
               {...{ documentTypeId, isRecord }}
             />
-          </Grid>
+          </Grid></>)}
           {isEB && (
             <Grid item xs={12}>
               <FBEBPart name="childrenParts">
@@ -323,7 +324,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                 parentPartStatus= {documentRevision?.relatedPartsStatus} />
             </Grid>
           }
-          {showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft && (
+          {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
             <Grid item xs={12}>
               <RevisionTypeChange
                 isDisabled={isDisabledInput}
@@ -340,7 +341,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           )}
           {showOutputSection ? (
             <>
-              {(isPO || outputIsPO
+              {!isDCO && (isPO || outputIsPO
                 ? !_tabsState?.isTabActive("details") && (
                   <Grid item xs={12}>
                     <AttachmentsField

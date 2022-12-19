@@ -33,7 +33,7 @@ export default (theme: Theme) =>
       margin: "10px 0 100px 0",
     },
     title: {
-      marginBottom: "50px",
+      marginBottom: "40px",
       display: "flex",
       width: "500px",
     },

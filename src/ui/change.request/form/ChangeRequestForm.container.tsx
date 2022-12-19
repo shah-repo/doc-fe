@@ -44,7 +44,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   const autosaveEnabled = useSelector(companySelectors.getAutosaveEnabled);
 
   const calcInitialValues = useMemo(() => {
-    initialValues.formInput = initialValues.formInput ?? FBDataStore?.refreshData?.formInput;
+    initialValues.formInput = FBDataStore?.refreshData?.formInput ?? initialValues.formInput;
 
     return {
       ...initialValues,
@@ -53,7 +53,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
   }, [initialValues, FBDataStore?.refreshData]);
 
   useObserver(() => {
-    calcInitialValues.formInput = calcInitialValues.formInput ?? FBDataStore?.refreshData?.formInput;
+    calcInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? calcInitialValues.formInput;
   });
 
   const formInput = useMemo(() =>
@@ -62,6 +62,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
 
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
+    FBDataStore.setRefreshData(undefined);
   }, []);
 
   const changeOpenStatus = (isDrawerOpen) => {

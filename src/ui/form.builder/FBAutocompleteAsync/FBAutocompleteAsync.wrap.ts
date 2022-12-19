@@ -113,7 +113,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
     ), []);
     React.useEffect(
       () => {
-        if (typeof defaultValue === "string" && !autocompleteAsyncState?.autocompleteValueApi.loading) {
+        if (FB.isUUID(defaultValue) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
           autocompleteAsyncState?.fetchAutocompleteOption(defaultValue, optionId);
         }
       },

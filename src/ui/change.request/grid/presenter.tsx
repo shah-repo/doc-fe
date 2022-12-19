@@ -29,10 +29,11 @@ export function DocumentListPresenter({
     label: startCase(getTranslatedText(column.title)),
     key: column.field,
   }));
+  const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
-        <FormListContainer {...{ headers, tableData: dataToBeExported }} />
+        <FormListContainer {...{ headers, tableData: dataToBeExported, isGrouped }} />
       </Grid>
       <Grid item xs={12} className={classes.kendoGridItem}>
         <KendoGrid

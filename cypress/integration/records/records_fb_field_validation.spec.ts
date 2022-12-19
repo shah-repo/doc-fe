@@ -904,9 +904,9 @@ context("Records flow", () => {
         cy.get(`[data-cy="Approvals-btn"]`).arrowClick();
         cy.get(`[data-cy="Inline Approval"]`).parent()
           .find("button").eq(1).click();
-        cy.wait(2000);
+        cy.wait(3000);
         cy.get(`[data-cy="Inline Approval"]`).parent()
-          .find("button").eq(1).find("path").invoke("attr", "fill").should("equal", "#C8CACF");
+          .find("button").eq(1).find("path").invoke("attr", "fill").should("equal", "#FFD874");
       });
     });
 

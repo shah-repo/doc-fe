@@ -501,8 +501,11 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select Certifications and Licenses", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="California FDB License"]`).check({ force: true });
+        cy.get(`[value="California FDB License"]`).scrollIntoView().check({ force: true });
       });
+      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -1103,6 +1106,8 @@ context("Create company via API and create Suppliers document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
         cy.get(`[value="California FDB License"]`).check({ force: true });
       });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to Overview Tab", () => {

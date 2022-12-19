@@ -96,7 +96,7 @@ Cypress.Commands.add("recFilterRecordListByNameAndStatus", (params: { title: str
   cy.get(`[aria-colindex="4"] input`).arrowType(params.title).wait(500);
   cy.unClick();
   cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick({ force: true });
-  cy.get("li").contains(params.status).arrowClick({ force: true }).wait(500);
+  cy.get("li").contains(params.status).scrollIntoView().arrowClick({ force: true }).wait(500);
   cy.unClick();
   cy.landingPageLoadingElementShouldNotExist();
   cy.get("tr.k-master-row").contains(params.title).arrowClick({ force: true });
@@ -109,7 +109,7 @@ Cypress.Commands.add("recFilterRecordListByIdAndStatus", (params: { id: string; 
   cy.landingPageLoadingElementShouldNotExist();
   cy.get(`[aria-colindex="1"] input`).arrowType(params.id).wait(500);
   cy.unClick();
-  cy.get(`[aria-colindex="3"] [class="k-input"]`).arrowClick();
+  cy.get(`[aria-colindex="3"] [class="k-select"]`).arrowClick();
   cy.get("li").contains(params.status).arrowClick().wait(500);
   cy.unClick();
   cy.landingPageLoadingElementShouldNotExist();

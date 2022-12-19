@@ -13,6 +13,7 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
+import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
@@ -115,6 +116,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           ),
         }}
       >
+        {documentRevision && <LHRBanner documentRevision={documentRevision}/>}
         <Observer>
           {() => (
             <SMTemplate
@@ -128,7 +130,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                     {map(tabConfig, (tabInfo: TabInfo) => {
                       const tabType = tabInfo.type;
                       const { tabId } = tabInfo || {};
-                      const tabSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId);
                       const availableSchema = schema?.filter((schemaItem) =>
                         schemaItem.tabId === tabId && !schemaItem.deleted);
 
@@ -143,7 +144,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             {!isEmpty(availableSchema) && <FBWorkspace
                               document={documentRevision}
                               initialValues={documentRevision.formInput}
-                              schema={tabSchema}
+                              schema={schema}
                               mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
                                 FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                             />
@@ -176,7 +177,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                               <FBWorkspace
                                 document={documentRevision}
                                 initialValues={documentRevision.formInput}
-                                schema={tabSchema}
+                                schema={schema}
                                 mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
                                   FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                               />
@@ -192,6 +193,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                           {tabType === TabTypeOptions.TRAINING && _tabsState?.isTabActive(TabTypeOptions.TRAINING) && (
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
+                              docRevStatus={documentRevision.status}
                             />
                           )}
                         </SMBox>
