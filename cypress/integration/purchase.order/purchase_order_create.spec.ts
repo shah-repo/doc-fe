@@ -740,7 +740,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Order Date exists", () => {
-      cy.get(`[name="ordered-k6mlhan7"]`).eq(1).should("exist");
+      cy.get(`[name^="ordered-"]`).eq(1).should("exist");
     });
 
     it("Approals exists", () => {
@@ -761,10 +761,12 @@ context("Create company with JSON's", () => {
 
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Order Date exists", () => {
-      cy.get(`[name="po-items-built-in"]`).eq(1).should("exist");
+      cy.get(`[name^="ordered-"]`).should("exist");
     });
 
     it("Close Preview dialog", () => {
@@ -1012,6 +1014,7 @@ context("Create company with JSON's", () => {
 
     it("Order Date exists", () => {
       cy.get(`[name="po-items-built-in"]`).should("exist");
+      // cy.get(`[name="ordered-k6mlhan7"]`).should("exist");
     });
   });
 
