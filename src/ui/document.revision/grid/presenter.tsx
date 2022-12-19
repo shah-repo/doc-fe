@@ -24,6 +24,7 @@ export function DocumentListPresenter({
   const handleExportData = (dataToBeExported: DocumentRevision[]) => {
     setDataToBeExported(dataToBeExported);
   };
+  const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
@@ -32,7 +33,7 @@ export function DocumentListPresenter({
             <GridTitle translation="navigation.document.list" />
           </Grid>
           <Grid item>
-            <ExportButton columns={columns} gridData={dataToBeExported} />
+            <ExportButton columns={columns} gridData={dataToBeExported} isGrouped={isGrouped}/>
             <CreateButton url={DOCUMENT_REVISION_CREATE_URL} />
           </Grid>
         </Grid>

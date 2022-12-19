@@ -79,12 +79,13 @@ export function DocumentTypePresenter({
     });
     setDataToBeExported(copyDate);
   };
+  const isGrouped = tableCriteria?.queryDict?.dataState?.group?.length > 0;
   return (
     <Grid container>
       <Grid item xs={12} className={classes.headerGridItem}>
         <CreateDocumentByType
           {...createDocumentProps}
-          {...{ isByCategory, headers, tableData: dataToBeExported }}
+          {...{ isByCategory, headers, tableData: dataToBeExported, isGrouped }}
           labelName={
             isByCategory
               ? documentCategory.addNewBtnLabel

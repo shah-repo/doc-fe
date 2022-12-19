@@ -5,7 +5,7 @@ import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import SM from "../../../../App/Shifamed/Utils/SM/SM";
-import { ReactComponent as BredCrumbArrow } from "../../../../assets/images/breadcrumb_arrow.svg";
+import { ReactComponent as ArrowIcon } from "../../../../assets/images/breadcrumb_arrow.svg";
 import { companySelectors } from "../../../../state/ducks/company";
 import { STATUS_TYPES_LABEL } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
@@ -161,11 +161,11 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
     history.push(url);
   };
   const newHeaderRenderer = () => (
-    <Grid container xs={6} className={classes.itemWrap} >
+    <Grid item xs={6} className={classes.itemWrap}>
       <Grid item>
         <Grid item xs={12}>
-          <StyledBreadcrumb separator={<BredCrumbArrow></BredCrumbArrow>}>
-            <Typography className={classes.groupSection}>
+          <StyledBreadcrumb separator={<ArrowIcon />}>
+            <Typography className={classes.groupSection} component="div">
               <Grid
                 container={true}
                 wrap="nowrap"
@@ -201,7 +201,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
 
               </Grid>
             </Typography>
-            <Typography data-cy="HeaderInfo" className={classes.breadcrumbId}>
+            <Typography data-cy="HeaderInfo" className={classes.breadcrumbId} component="div">
               <Grid
                 container={true}
                 wrap="nowrap"
@@ -235,7 +235,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                 { isTypeMpiOutput &&
                   <>
                     <Grid item={true} className={classes.arrowPadding}>
-                      <BredCrumbArrow></BredCrumbArrow>
+                      <ArrowIcon />
                     </Grid>&nbsp;
                     <Typography className={classes.breadcrumbId}>
                       { isTypeMpiOutput && titleRenderer(classes.breadcrumbId)}
@@ -258,12 +258,10 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                 </Grid>}
               </Grid>
             </Typography>
-        )
           </StyledBreadcrumb>
         </Grid>
       </Grid>
     </Grid>
-
   );
   return (
     <>{(SM.isNewCRLayout || SM.isNewLayout) ? newHeaderRenderer() : oldHeaderRenderer()}</>

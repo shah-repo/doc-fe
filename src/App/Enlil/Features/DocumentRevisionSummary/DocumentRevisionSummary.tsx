@@ -13,6 +13,7 @@ import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/ty
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
 import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
+import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
 import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
@@ -93,10 +94,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
     <SMForm
       templateBoxProps={{ stretchY: "100%" }}
       headerBoxProps={{ maxHeight: "30%", minHeight: 84 }}
-      contentBoxProps={{
-        minHeight: "calc(70%)", height: "100%",
-        bgcolor: Colors.alabaster,
-      }}
+      contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={documentRevision}
       header= {
         <SummaryHeader
@@ -109,7 +107,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         boxProps={{ className: "hide-scroll" }}
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
-        rightSidebarBoxProps={{ zIndex: 2 }}
+        rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
         {..._documentRevisionFormState?.documentRevision && {
           rightSidebar: (
             <Observer>
@@ -118,6 +116,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           ),
         }}
       >
+        {documentRevision && <LHRBanner documentRevision={documentRevision}/>}
         <Observer>
           {() => (
             <SMTemplate
@@ -131,7 +130,6 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                     {map(tabConfig, (tabInfo: TabInfo) => {
                       const tabType = tabInfo.type;
                       const { tabId } = tabInfo || {};
-                      const tabSchema = schema?.filter((schemaItem) => schemaItem.tabId === tabId);
                       const availableSchema = schema?.filter((schemaItem) =>
                         schemaItem.tabId === tabId && !schemaItem.deleted);
 
@@ -146,7 +144,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             {!isEmpty(availableSchema) && <FBWorkspace
                               document={documentRevision}
                               initialValues={documentRevision.formInput}
-                              schema={tabSchema}
+                              schema={schema}
                               mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
                                 FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                             />
@@ -179,7 +177,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                               <FBWorkspace
                                 document={documentRevision}
                                 initialValues={documentRevision.formInput}
-                                schema={tabSchema}
+                                schema={schema}
                                 mode={checkIsDocumentForm(documentRevision?.document.documentType.groupOptions) ?
                                   FBWorkspaceModeOptions.FORMPREVIEW : FBWorkspaceModeOptions.PREVIEW}
                               />
