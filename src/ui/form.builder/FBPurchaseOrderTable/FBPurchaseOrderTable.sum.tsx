@@ -29,7 +29,7 @@ const FBPurchaseOrderTableSum: React.FunctionComponent<FBPurchaseOrderTableSumPr
     <Table className={`${classes?.table} ${cellStyle.tableboxShadow}`}>
       <TableHead>
         {isReceivable && <TableRow>
-          <FBTableCell colSpan={1} />
+          <FBTableCell colSpan={4}/>
         </TableRow>}
         <TableRow>
           {mode === "preview" && <FBTableCell />}
