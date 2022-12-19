@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Link,
-  ListItemIcon,
-  ListItemText,
-  Modal,
-  Typography,
-} from "@material-ui/core";
+import { Grid, Link, ListItemIcon, ListItemText, Modal, Typography } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as InReviewIcon } from "../../../../../../assets/images/in_review_status.svg";
@@ -28,7 +21,7 @@ import { StyleTooltip } from "../../../common/StyleTooltip";
 import { DocTypeGroups } from "../../../common/types";
 import { getPendingTooltipText } from "../../../common/Utils";
 import EmailModal from "../../../dialogs/email/EmailDialog";
-import { styles } from "./pendingReview.styles";
+import useStyles from "./pendingReview.styles";
 
 interface Props {
   id: string;
@@ -51,7 +44,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
 }
-const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
+const PendingReviewItemPresenter: React.FC<Props> = ({
   id,
   docTypeGroup,
   docDocumentId,
@@ -71,7 +64,7 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   unPinLineItem,
   pendingEmailSentAt,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
@@ -111,11 +104,12 @@ const PendingReviewItemPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem
-        style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onMouseEnter={onMouseHoverListItem}
-        className={classes.buttoncursor}
+        divider
         disableRipple
+        className={classes.buttoncursor}
+        style={hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        onMouseEnter={onMouseHoverListItem}
       >
         <ListItemIcon>{getDocIcon(docTypeGroup)}</ListItemIcon>
         <ListItemText

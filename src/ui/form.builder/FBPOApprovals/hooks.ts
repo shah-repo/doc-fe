@@ -9,6 +9,7 @@ import { GroupType } from "../../../state/ducks/auth/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
+import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
 import { isDocumentRevisionInDraft } from "../../documentRevision/helpers/documentRevisionStatus";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
@@ -203,10 +204,11 @@ export const usePoApprovals = (
     () => poApprovalsState?.transitionApi.data,
     (data) => {
       FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
-      updateSignatureGroupNames();
-      if (id && poApprovalsState?.haveAllApprovals) {
-        dispatch(documentRevisionsActions.reload(id));
+      if (id && [ApprovalStatus.Approved, ApprovalStatus.Rejected].includes(data?.status as ApprovalStatus)) {
+        // TODO investigate why reload here sometimes causes blink and returns to prev state
+        return dispatch(documentRevisionsActions.load(id));
       }
+      updateSignatureGroupNames();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);

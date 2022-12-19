@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
 export default makeStyles((theme) => ({
   root: {
@@ -12,7 +12,7 @@ export default makeStyles((theme) => ({
   },
 }));
 
-export const itemStyles = (theme: Theme) => ({
+export const itemStyles = (theme: Theme) => createStyles({
   link: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),

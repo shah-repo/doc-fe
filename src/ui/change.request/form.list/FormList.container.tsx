@@ -19,9 +19,10 @@ import FormListPresenter from "./FormList.presenter";
 interface Props {
   headers: HeaderTableType[];
   tableData: TableDataProps<ChangeRequest>;
+  isGrouped: boolean;
 }
 
-const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData }) => {
+const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData, isGrouped }) => {
   const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
   const getDocTypeByGroupAction = useActionCreator(documentTypeActions.getDocTypeByGroup);
   const history = useHistory();
@@ -93,7 +94,7 @@ const FormListContainer: React.FunctionComponent<Props> = ({ headers, tableData 
   return (
     <FormListPresenter {...{
       templateOptions, dialog, handleCreateButton, headers, data, exportDialog,
-      handleTemplateSelection: processCreatingRevision,
+      handleTemplateSelection: processCreatingRevision, isGrouped,
     }}/>
   );
 };
