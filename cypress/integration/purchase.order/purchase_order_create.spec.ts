@@ -1014,7 +1014,6 @@ context("Create company with JSON's", () => {
 
     it("Order Date exists", () => {
       cy.get(`[name="po-items-built-in"]`).should("exist");
-      // cy.get(`[name="ordered-k6mlhan7"]`).should("exist");
     });
   });
 
