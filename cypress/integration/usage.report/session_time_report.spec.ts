@@ -3999,7 +3999,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
     });
 
     it("Verify data from usage report", () => {
-      expect(spentTimeFromReport.sessionTimeAproxAdminUser).to.be.within(0, 1500);
+      expect(spentTimeFromReport.sessionTimeAproxAdminUser).to.be.within(0, 15000);
       expect(spentTimeFromReport.sessionTimeAproxUser2).to.be.within(0, 1);
       expect(spentTimeFromReport.sessionTimeAproxUser3).to.be.within(0, 1);
       expect(spentTimeFromReport.sessionTimeAproxUser4).to.be.within(0, 1);

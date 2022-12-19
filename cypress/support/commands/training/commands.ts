@@ -122,9 +122,9 @@ Cypress.Commands.add("trLandingPageDocId", (params: {docId}) => {
 });
 
 Cypress.Commands.add("trLandingPageCompletedOn", (params: {completed: string }) => {
-  cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick();
-  cy.get("li").contains(params.completed).arrowClick().wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="8"] [class="k-input"]`).arrowClick().wait(1000);
+  cy.get("li").contains(params.completed).arrowClick().wait(1000);
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("trLandingPageOwner", (params: {owner}) => {
@@ -162,7 +162,7 @@ Cypress.Commands.add("trSetTimeTravelInDays", (params: {days: number}) => {
   cy.asyncTaskSelectNextTaskType({ taskType: SQS_TYPES.TRAINING_RECORDS_STATUS });
   cy.asyncTaskClickSubmit();
   cy.progressBarShouldNotExist();
-  cy.wait(1000);
+  cy.wait(10000);
   cy.listLoadingElementShouldNotExist();
 });
 

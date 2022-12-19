@@ -963,7 +963,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Send to email button visible & functional", () => {
-        cy.sendToEmailFromHeader();
+        cy.sendToEmail();
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });
@@ -1042,7 +1042,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Send to email button visible & functional", () => {
-        cy.sendToEmailFromHeader();
+        cy.sendToEmail();
         cy.checkToastMessageContains({
           message: "File will be sent to your email shortly.",
         });

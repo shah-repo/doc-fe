@@ -177,7 +177,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const renderOutputButton = (renderAsButton) => {
     const isAR = documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[]
       && (documentRevision.formTemplate?.outputDocumentTypes as FBOutputDocumentType[])
-        .find((type) => type.documentTypeName === "Approval Request" || type.documentTypeName === "Approval Request");
+        .find((type) => type.documentTypeName === "Approval Request" ||
+        type.documentTypeName === "Document Change Order");
 
     if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
       return isNewLayout ? (

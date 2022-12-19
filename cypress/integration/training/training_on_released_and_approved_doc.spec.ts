@@ -42,9 +42,9 @@ context("Training for same document that was first released and then revised and
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -53,9 +53,9 @@ context("Training for same document that was first released and then revised and
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
-          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[3].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
+          thirdEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[13].email);
           done();
         });
       });
@@ -63,7 +63,7 @@ context("Training for same document that was first released and then revised and
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -281,7 +281,7 @@ context("Training for same document that was first released and then revised and
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -323,6 +323,8 @@ context("Training for same document that was first released and then revised and
     it("Select 'Training Curriculum test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
@@ -347,6 +349,8 @@ context("Training for same document that was first released and then revised and
       cy.get("#Checkbox-box").arrowClick();
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithApiCall();
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -359,10 +363,15 @@ context("Training for same document that was first released and then revised and
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
@@ -413,8 +422,8 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
     });
 
     it("Save training", () => {
@@ -428,7 +437,9 @@ context("Training for same document that was first released and then revised and
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
@@ -443,32 +454,39 @@ context("Training for same document that was first released and then revised and
         CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
       cy.trApproveTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Verify Training Records", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[1].name });
+    it(`Training record for ${USERS[11].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "released document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[1].name)
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[11].name)
         .and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[2].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[2].name });
+    it(`Training record for ${USERS[12].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "released document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[2].name)
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[12].name)
         .and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
@@ -497,7 +515,7 @@ context("Training for same document that was first released and then revised and
 
     it("Approve and release document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm({ approverName: USERS[3].name });
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm({ approverName: USERS[13].name });
       });
     });
 
@@ -510,7 +528,7 @@ context("Training for same document that was first released and then revised and
   context("Login third tester", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[3].email,
+        email: USERS[13].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -547,20 +565,20 @@ context("Training for same document that was first released and then revised and
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
     });
-    it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[1].name });
+    it(`Training record for ${USERS[11].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "Approved document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[1].name)
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[11].name)
         .and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[2].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[2].name });
+    it(`Training record for ${USERS[12].name} should be present`, () => {
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "Approved document" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[2].name)
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id).and("contain", USERS[12].name)
         .and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });

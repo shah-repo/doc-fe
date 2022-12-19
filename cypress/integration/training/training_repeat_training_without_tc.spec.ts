@@ -42,9 +42,9 @@ context("Repeat Training without Training Curriculum", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -53,8 +53,8 @@ context("Repeat Training without Training Curriculum", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -62,7 +62,7 @@ context("Repeat Training without Training Curriculum", () => {
 
     it("[API]Login first tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -280,7 +280,7 @@ context("Repeat Training without Training Curriculum", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -314,20 +314,24 @@ context("Repeat Training without Training Curriculum", () => {
 
     it("Click complete training button on created released document", () => {
       cy.trCompleteTraining();
-      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigate to TR and verify record of completed training exist", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`${USERS[1].name} with completed date inside 'Completed on' column should be present`, () => {
+    it(`${USERS[11].name} with completed date inside 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name)
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name)
         .and("contain", completedDate);
     });
   });
@@ -376,10 +380,15 @@ context("Repeat Training without Training Curriculum", () => {
     it("Navigate to Training Curriculums", () => {
       cy.reload();
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
@@ -388,6 +397,9 @@ context("Repeat Training without Training Curriculum", () => {
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .autocompleteSelect("Training Curriculum test");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
     });
 
@@ -405,6 +417,8 @@ context("Repeat Training without Training Curriculum", () => {
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
@@ -413,6 +427,8 @@ context("Repeat Training without Training Curriculum", () => {
 
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select refresh training periodically 'Yes'", () => {
@@ -426,18 +442,20 @@ context("Repeat Training without Training Curriculum", () => {
     it("Select User to train", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
         });
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
         });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
@@ -445,7 +463,9 @@ context("Repeat Training without Training Curriculum", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
@@ -454,27 +474,34 @@ context("Repeat Training without Training Curriculum", () => {
         CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
         cy.contains("Submit for approval").arrowClick({ force: true });
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
       cy.trApproveTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Training Records", () => {
-      cy.wait(3000);
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`${USERS[1].name} with completed date inside 'Completed on' column should be present`, () => {
+    it(`${USERS[11].name} with completed date inside 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", completedDate);
+      cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name).and("contain", completedDate);
     });
 
-    it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[12].name} with Pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[2].name });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
+      cy.trLandingPageUsername({ username: USERS[12].name });
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[12].name).and("contain", "Pending");
     });
   });
 });

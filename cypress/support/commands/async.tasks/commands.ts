@@ -42,7 +42,7 @@ Cypress.Commands.add("asyncSelectBackToTheFutureTime", (params: {
   seconds?: number; }) => {
   if (params.year) { cy.get(`input[name="year"]`).arrowType( params.year.toString() ); }
   if (params.month) { cy.get(`input[name="month"]`).arrowType( params.month.toString() ); }
-  if (params.day) { cy.get(`input[name="day"]`).clear().arrowType( params.day.toString() ); }
+  if (params.day) { cy.get(`input[name="day"]`).clear().wait(2000).arrowType( params.day.toString() ); }
   if (params.hour) { cy.get(`input[name="hour"]`).arrowType( params.hour.toString() ); }
   if (params.minute) { cy.get(`input[name="minute"]`).arrowType( params.minute.toString() ); }
   if (params.seconds) { cy.get(`input[name="seconds"]`).arrowType( params.seconds.toString() ); }

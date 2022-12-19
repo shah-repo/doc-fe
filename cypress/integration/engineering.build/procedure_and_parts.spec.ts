@@ -529,7 +529,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Add an Approval", () => {
@@ -722,13 +722,14 @@ context("Procedure and parts flow test", () => {
         });
         cy.progressBarShouldNotExist();
         cy.get("[data-cy=\"form.builder.step.number\"]").eq(1).should("have.text", "Step #2");
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Remove step", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
-        });
+        cy.fbRemoveLastAddedItem();
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save document", () => {
@@ -831,7 +832,6 @@ context("Procedure and parts flow test", () => {
           CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick();
         });
-        cy.get("[data-cy=\"form.builder.clone.step\"]").arrowClick();
         cy.wait(10000);
         cy.progressBarShouldNotExist();
       });
@@ -879,6 +879,7 @@ context("Procedure and parts flow test", () => {
           cy.get("[data-cy='remove-schema-item']").last().arrowClick({ force: true });
         });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy='form.builder.step.number']").eq(2).should("not.exist");
       });
     });
@@ -889,6 +890,7 @@ context("Procedure and parts flow test", () => {
           cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Part for EB document");
         });
         cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save document", () => {
@@ -896,12 +898,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.wait(2000);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.wait(2000);
+        cy.drApproveAndReleaseDialog();
       });
 
       it("Check if the part is displayed in the document summary", () => {
@@ -1033,12 +1030,12 @@ context("Procedure and parts flow test", () => {
         cy.wait(1000);
         SystemRequirement("REQ-3030");
         cy.get("#sm-tabpanel-2")
-          .contains("New Material for procedure | each : 3").should("exist");
+          .contains("MT-00002 - New Material for procedure | each :3").should("exist");
       });
 
       it("Verify 'Free text material' has increased number of materials to '5'", () => {
         cy.get("#sm-tabpanel-2")
-          .contains("Free text material | sets : 5").should("exist");
+          .contains("Free text material | sets :5").should("exist");
       });
 
       it("Verify 'New Equipment for procedure' is added to equipments", () => {
@@ -1160,12 +1157,12 @@ context("Procedure and parts flow test", () => {
         cy.get("[data-cy='form.builder.materials']").eq(0).arrowClick();
         cy.wait(1000);
         cy.get("#sm-tabpanel-2")
-          .contains("PRT-00005 - Part document | each : 2").should("exist");
+          .contains("PRT-00005 - Part document | each :2").should("exist");
       });
 
       it("Verify 'Free text material' is removed from materials", () => {
         cy.get("#sm-tabpanel-2")
-          .contains("Free text material | sets : 3").should("exist");
+          .contains("Free text material | sets :3").should("exist");
       });
 
       it("Verify 'Equipment document' is removed from equipment", () => {

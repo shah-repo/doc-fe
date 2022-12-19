@@ -249,7 +249,7 @@ context("Approval Request implementation tasks", { tags: ["@timetool"] }, () => 
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
   });
 

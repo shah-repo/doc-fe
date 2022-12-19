@@ -622,8 +622,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Click on Create New button", () => {
-      cy.drCreateNewDocumentFromFormRecord();
-      cy.wait(2000);
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter title", () => {
@@ -689,6 +688,9 @@ context("LHR: RD case specs", () => {
 
     it("Selects 'Manufacturing Process Instructions' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: MPI });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -760,6 +762,9 @@ context("LHR: RD case specs", () => {
 
       it("Select 'LHRt' document type", () => {
         cy.drSelectDocumentType({ documentType: "LHR Template" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -792,13 +797,11 @@ context("LHR: RD case specs", () => {
         });
 
         it("Click 'LHR Step'", () => {
-          cy.get(".MuiExpansionPanelSummary-content").eq(0).arrowClick();
           cy.get("[data-cy='LHR Step 1']").arrowClick({ force: true });
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
           cy.wait(2000);
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick();
           cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -868,12 +871,12 @@ context("LHR: RD case specs", () => {
       cy.mpiStartStep({ stepNumber: 1 });
     });
 
-    it("Select Procedure tab", () => {
-      cy.drSelectProcedureTab();
-    });
-
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
+    });
+
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
     });
 
     it("Enter 'Start quantity' for LHRs #1", () => {
@@ -892,7 +895,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickCreateDocumentWithApiCallForForms();
       cy.wait(2000);
     });
 
@@ -923,6 +926,7 @@ context("LHR: RD case specs", () => {
       ], () => {
         cy.visit(lhrDocUrl1);
       });
+      cy.wait(3000);
     });
 
     it("Add approval", () => {
@@ -930,7 +934,12 @@ context("LHR: RD case specs", () => {
       cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
     });
 
+    it("Click save document", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    });
+
     it("Submit for approval", () => {
+      cy.wait(2000);
       cy.lhrSubmitForApproval();
     });
 
@@ -948,10 +957,13 @@ context("LHR: RD case specs", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       });
+      cy.wait(5000);
     });
 
     it("Select 'R&D' build type", () => {
-      cy.get("[value=\"R&D\"]").check();
+      cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
+      cy.contains("Build Type").should("be.visible");
+      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
     });
 
     it("Select button to switch", () => {

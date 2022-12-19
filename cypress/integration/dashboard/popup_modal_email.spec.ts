@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import { TIME_ZONE } from "../../../src/common/utils/date";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -13,11 +15,11 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[29];
-const FIRST_USER = USERS[30];
-const SECOND_USER = USERS[31];
-const THIRD_USER = USERS[32];
+const FIRST_USER = USERS[11];
+const SECOND_USER = USERS[12];
+const THIRD_USER = USERS[13];
 const documentRevisionName = "New document for testing AR";
-const approvalRequestTitle = "Approval Request from newly created form";
+const approvalRequestTitle = "Approval request from newly created form";
 
 let createdCompany;
 let loginResponse;
@@ -30,7 +32,7 @@ let group;
 let dateAfterEmailShouldArrive;
 let getEmailSetting;
 
-context("Approval Request email popup modal", () => {
+context("Approval request email popup modal", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -172,8 +174,8 @@ context("Approval Request email popup modal", () => {
     });
   });
 
-  context("Create Approval Request from existing form", () => {
-    it("Navigate to Approval Request list", () => {
+  context("Create approval request from existing form", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -185,8 +187,8 @@ context("Approval Request email popup modal", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for Approval Request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for Approval Request" });
+    it("Enter description 'AR from New form template for approval request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
     });
 
     it("Add first created document revision", () => {
@@ -207,16 +209,22 @@ context("Approval Request email popup modal", () => {
 
     it("Click Create Approval Request", () => {
       cy.arSaveApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Add approvers to Approval Request on approver list", () => {
+    it("Add approvers to approval request on approver list", () => {
+      cy.wait(2000);
       cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
       cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
       cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
+      cy.wait(2000);
     });
 
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -229,11 +237,11 @@ context("Approval Request email popup modal", () => {
       cy.navigToDashboard();
     });
 
-    it("Check if Approval Request is 'In Review'", () => {
+    it("Check if approval request is 'In Review'", () => {
       cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
     });
 
-    context("Click on Approval Request status and check the pop-up content", () => {
+    context("Click on approval request status and check the pop-up content", () => {
       it("Check if headline says 'Approval Status'", () => {
         cy.get("[id='simple-modal-title']").should("contain.text", "Approval Status");
       });
@@ -255,7 +263,7 @@ context("Approval Request email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(emailDateOffset, "milliseconds");
       });
     });
   });
@@ -267,6 +275,7 @@ context("Approval Request email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: SECOND_USER, employeeId: thirdEmployee.id });
+      cy.wait(5000);
     });
   });
 
@@ -292,7 +301,7 @@ context("Approval Request email popup modal", () => {
           contains: ["Can you please approve my\r\n                                      request:)",
             `Hi ${SECOND_USER.name}`,
             "I sent a request for approval on",
-            "AR-00001 Approval Request from newly created form",
+            "AR-00001 Approval request from newly created form",
             "Thank you,",
           ],
         }];
@@ -330,11 +339,11 @@ context("Approval Request email popup modal", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
     });
 
-    it("Check if Approval Request is 'In Review'", () => {
+    it("Check if approval request is 'In Review'", () => {
       cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
     });
 
-    context("Click on Approval Request status and check the pop-up content", () => {
+    context("Click on approval request status and check the pop-up content", () => {
       it("Check if headline says 'Approval Status'", () => {
         cy.get("[id='simple-modal-title']").should("contain.text", "Approval Status");
       });
@@ -358,7 +367,7 @@ context("Approval Request email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(emailDateOffset, "milliseconds");
       });
     });
   });
@@ -438,6 +447,7 @@ context("Approval Request email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
+      cy.wait(5000);
     });
 
     it("Get emails and visit AR approval url", () => {

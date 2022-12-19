@@ -25,3 +25,5 @@ export const trCompleteDate =  momentInPST().format("M/D/YYYY");
 export const receivingReleasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
 export const receivingReleasedDateMonth = moment().tz("America/Los_Angeles").format("M/D/YYYY");
 export const currentTime = moment().tz("America/Los_Angeles").format("hh:mm:ss a");
+export const approvalNotificationToday = momentInPST().format("MMM D, YYYY");
+export const approvalNotificationPrivday = momentInPST().subtract(1, "days").format("MMM D, YYYY");

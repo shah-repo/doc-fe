@@ -425,7 +425,7 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Approve", () => {
-        cy.poApprove();
+        cy.poApproveWithoutApi();
       });
     });
   });
@@ -523,7 +523,7 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Approve", () => {
-      cy.poApprove();
+      cy.poApproveWithoutApi();
     });
   });
 });

@@ -20,10 +20,10 @@ let approvalRequestDocumentType;
 let initialArDocument;
 let createdDocumentRevResponse;
 let createdDocumentRevResponse2;
-const documentRevisionName = "New document for testing Approval Request list";
-const documentRevisionName2 = "New document for testing Approval Request list two";
-const approvalRequestName = "Approval Request for testing 1";
-const approvalRequestName2 = "Approval Request for testing 2";
+const documentRevisionName = "New document for testing approval request list";
+const documentRevisionName2 = "New document for testing approval request list two";
+const approvalRequestName = "Approval request for testing 1";
+const approvalRequestName2 = "Approval request for testing 2";
 let docLastUpdatedTime;
 let thirdEmployee;
 
@@ -81,7 +81,7 @@ context("Status Bar of newly created ARs", () => {
       });
     });
 
-    it("[API]Create document revisions for Approval Request list test", (done: any) => {
+    it("[API]Create document revisions for approval request list test", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: secondEmployee.id,
@@ -154,7 +154,7 @@ context("Status Bar of newly created ARs", () => {
       });
     });
 
-    it("[API]Create change orders for created document revisions", () => {
+    it("[API]Create approval requests for created document revisions", () => {
       cy.arGetArDocumentByName({
         sessionId: loginResponse.sessionId,
         employeeId: secondEmployee.id,
@@ -164,7 +164,7 @@ context("Status Bar of newly created ARs", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: approvalRequestName,
-            description: "Description for first Approval Request",
+            description: "Description for first approval request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -182,7 +182,7 @@ context("Status Bar of newly created ARs", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: approvalRequestName2,
-            description: "Description for second Approval Request",
+            description: "Description for second approval request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -212,12 +212,12 @@ context("Status Bar of newly created ARs", () => {
   });
 
   context("Check approval list defaults to draft", () => {
-    it("Navigate to Approval Request list", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
   });
 
-  context("Prepare Approval Request", () => {
+  context("Prepare approval request", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
@@ -226,7 +226,8 @@ context("Status Bar of newly created ARs", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Add approvers to Approval Request on approver list", () => {
+    it("Add approvers to approval request on approver list", () => {
+      cy.get("[data-cy='fb-approvers-approvers']").arrowClick();
       cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].name);
     });
   });
@@ -235,7 +236,7 @@ context("Status Bar of newly created ARs", () => {
     it("Verify DRAFT Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Change OrdersAR-00001 Rev DRAFT`,
+            `Approval RequestsAR-00001 Rev DRAFT`,
         breadcrump: true,
       });
     });
@@ -253,11 +254,11 @@ context("Status Bar of newly created ARs", () => {
 
     it("Enter new title", () => {
       cy.arEnterApprovalRequestTitle({ title: "New Ar title2" });
+      cy.wait(2000);
     });
 
-    it("Verify 'Last saved a few seconds ago' text should exist", () => {
-      cy.get("header").contains("Last saved a few seconds ago").should("exist");
-      cy.get("header").contains("Last saved a few seconds ago").should("be.visible");
+    it("Verify 'Last saved a few seconds ago' text should visible", () => {
+      cy.get(`[data-cy="header-section"]`).contains("Last saved a few seconds ago").should("be.visible");
     });
 
     it("Turn off 'auto save'", () => {
@@ -296,7 +297,7 @@ context("Status Bar of newly created ARs", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: thirdEmployee.id });
     });
 
-    it("Navigate to Approval Request list", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -323,7 +324,7 @@ context("Status Bar of newly created ARs", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
 
-    it("Navigate to Approval Request list", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -343,7 +344,7 @@ context("Status Bar of newly created ARs", () => {
   context("Verify Save button in status bar", () => {
     it("Verify Save button in status bar", () => {
       cy.get("button[data-cy='common.save']").should("be.visible");
-      cy.arSaveApiCall();
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
   });
 
@@ -371,7 +372,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
 
     it("Verify 'Send to review' in status bar", () => {
@@ -386,7 +387,7 @@ context("Status Bar of newly created ARs", () => {
     it("Verify IN_REVIEW Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Change OrdersAR-00001 Rev IN REVIEW`,
+            `Approval RequestsAR-00001 Rev IN REVIEW`,
         breadcrump: true,
       });
     });
@@ -450,7 +451,7 @@ context("Status Bar of newly created ARs", () => {
     it("Verify APPROVED Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Change OrdersAR-00001 Rev APPROVED`,
+            `Approval RequestsAR-00001 Rev APPROVED`,
         breadcrump: true,
       });
     });
@@ -482,7 +483,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
 
@@ -496,6 +497,7 @@ context("Status Bar of newly created ARs", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
+      cy.wait(3000);
     });
   });
 
@@ -503,7 +505,7 @@ context("Status Bar of newly created ARs", () => {
     it("Verify CLOSED Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Change OrdersAR-00001 Rev CLOSED`,
+            `Approval RequestsAR-00001 Rev CLOSED`,
         breadcrump: true,
       });
     });
@@ -531,12 +533,13 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.closeAllAlertMessages();
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
 
   context("Open second AR and Void it", () => {
-    it("Navigate to Approval Request list", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -564,7 +567,7 @@ context("Status Bar of newly created ARs", () => {
     it("Verify VOIDED Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Change OrdersAR-00002 Rev VOIDED`,
+            `Approval RequestsAR-00002 Rev VOIDED`,
         breadcrump: true,
       });
     });
@@ -592,7 +595,8 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.closeAllAlertMessages();
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
 });

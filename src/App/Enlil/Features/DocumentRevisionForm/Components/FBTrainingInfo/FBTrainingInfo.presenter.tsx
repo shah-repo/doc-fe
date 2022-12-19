@@ -9,12 +9,14 @@ import { getFormattedDateString, MomentFormats } from "../../../../../../common/
 import Loader from "../../../../../../ui/components/common/kendo/Loader";
 import { getInitalsFromName } from "../../../../../../ui/components/icons/avatar/helpers";
 import Text from "../../../../../../ui/components/Text";
+import { isDocumentRevisionReleased } from "../../../../../../ui/documentRevision/helpers/documentRevisionStatus";
 import { styles } from "./FBTrainingInfo.styles";
 import { FBTrainingInfoProps, TrainingItem, TrainingStates, TrainingStatusHeaders } from "./FBTrainingInfo.types";
 
 const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
   trainingData,
   isLoading,
+  docRevStatus,
 }) => {
   const classes = styles();
   const [open, setOpen] = React.useState({ [TrainingStates.COMPLETED]: true, [TrainingStates.PENDING]: true });
@@ -22,6 +24,7 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
     const updatedOpen = { [selectedListItem]: !open[selectedListItem] };
     setOpen({ ...open, ...updatedOpen });
   };
+  const isReleased = isDocumentRevisionReleased(docRevStatus);
   return (
     <>
       {isLoading && <Loader />}
@@ -30,7 +33,8 @@ const FBTrainingInfoPresenter: React.FunctionComponent<FBTrainingInfoProps> = ({
           <NoTrainingIcon />
           <Box display="flex" justifyContent="center">
             <Typography className={classes.noTrainingMessage}>
-              <Text translation="common.training.not.found" />
+              <Text translation={isReleased ? "common.training.released.state.doc.not.found"
+                : "common.training.not.found"} />
             </Typography>
           </Box>
         </Box>

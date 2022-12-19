@@ -461,7 +461,7 @@ const subassemblySchema = [
   },
 ];
 
-context("Inspection flow", () => {
+xcontext("Inspection flow", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

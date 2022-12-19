@@ -43,9 +43,9 @@ context("Training Flow test", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -54,8 +54,8 @@ context("Training Flow test", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -63,7 +63,7 @@ context("Training Flow test", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -281,7 +281,7 @@ context("Training Flow test", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -323,6 +323,8 @@ context("Training Flow test", () => {
     it("Select 'Training Curriculum test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
@@ -360,7 +362,7 @@ context("Training Flow test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
       cy.drClickCreateDocumentWithApiCall();
-      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
+      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[12].name}`]);
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
 
@@ -374,13 +376,13 @@ context("Training Flow test", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
       cy.drClickCreateDocumentWithApiCall();
-      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
+      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[12].name}`]);
       cy.authLogout();
-      cy.authLogin({ email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
+      cy.authLogin({ email: USERS[12].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
       cy.trRejectAR();
       cy.authLogout();
-      cy.authLogin({ email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
+      cy.authLogin({ email: USERS[11].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
@@ -444,7 +446,7 @@ context("Training Flow test", () => {
       cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
       cy.arSaveApiCall();
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
+      cy.arAddApproverOnApproverList({ approver: USERS[11].email, noWait: true });
       cy.arSaveApiCall();
       cy.arClickSendToReview();
       cy.arApproveAR();
@@ -455,6 +457,8 @@ context("Training Flow test", () => {
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
@@ -527,7 +531,7 @@ context("Training Flow test", () => {
     it("Select User to train", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
         });
     });
 
@@ -536,7 +540,7 @@ context("Training Flow test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -588,6 +592,8 @@ context("Training Flow test", () => {
     it("Select 'One-Time Training test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "One-Time Training test" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
@@ -604,6 +610,8 @@ context("Training Flow test", () => {
   context("One-Time Training record", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
@@ -662,7 +670,7 @@ context("Training Flow test", () => {
     it("Select User to train", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get(`[data-cy="training-select-users-to-train"]`).autocompleteSelect(`${USERS[1].name}`);
+          cy.get(`[data-cy="training-select-users-to-train"]`).autocompleteSelect(`${USERS[11].name}`);
         });
     });
 
@@ -675,7 +683,7 @@ context("Training Flow test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Save training", () => {
@@ -723,20 +731,20 @@ context("Training Flow test", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[11].name} with Pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
-        .and("contain", USERS[1].name).and("contain", "Pending");
+        .and("contain", USERS[11].name).and("contain", "Pending");
     });
 
-    it(`${USERS[2].name} with Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[12].name} with Pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
-        .and("contain", USERS[2].name).and("contain", "Pending");
+        .and("contain", USERS[12].name).and("contain", "Pending");
     });
   });
 
@@ -777,12 +785,12 @@ context("Training Flow test", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
+    it(`${USERS[11].name} with timestamp on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
     });
@@ -833,7 +841,7 @@ context("Training Flow test", () => {
     it("Select User to train", () => {
       cy.wrapWithWaitOnApiCall(
         CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
         });
     });
 
@@ -846,7 +854,7 @@ context("Training Flow test", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
     });
 
     it("Click Submit for Approval", () => {
@@ -901,12 +909,12 @@ context("Training Flow test", () => {
       cy.navigToTrainingRecords();
     });
 
-    it(`${USERS[1].name} with timestamp on 'Completed on' column should be present`, () => {
+    it(`${USERS[11].name} with timestamp on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
       cy.trLandingPagetrId({ trId: forceTrainingRecordId });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId).and("contain", USERS[1].name)
+      cy.get(`[data-grid-row-index="0"]`).should("contain", releasedFormId).and("contain", USERS[11].name)
         .and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate).and("contain", forceTrainingRecordId);

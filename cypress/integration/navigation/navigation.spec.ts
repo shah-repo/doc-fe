@@ -108,11 +108,12 @@ context(`Test: ${path.basename(__filename)}`, () => {
         NavigationItems.INSPECTION,
         NavigationItems.RECEIVING,
       );
+    });
 
-      it("Click to expand Document Control", () => {
-        cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
-        cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
-      });
+    it("Click to expand Document Control", () => {
+      cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
+      cy.navigClickOnItem({ navigItem: NavigationItems.MANUFACTURING });
+
 
       cy.navigClickOnItem({ navigItem: NavigationItems.DOCUMENT_CONTROL });
 

@@ -738,7 +738,7 @@ Cypress.Commands.add("intPageVerifyRequestorNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifySupplierExist", () => {
-  cy.get(`[data-cy="Supplier "]`).should("exist");
+  cy.get(`[data-cy^="Supplier"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifySupplierNotExist", () => {

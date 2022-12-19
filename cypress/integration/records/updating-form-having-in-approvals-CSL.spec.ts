@@ -13,7 +13,7 @@ let company;
 let adminEmployeeLoginResponse;
 let employeeLoginAdmin;
 
-const ADMIN_USER = USERS[10];
+const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[11];
 const SECOND_USER = USERS[12];
 const THIRD_USER = USERS[13];
@@ -87,6 +87,7 @@ context(testName, () => {
   context("Create document", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.cmpTurnOffAutosave();
     });
 
     it("Click on 'create a document'", () => {
@@ -147,7 +148,7 @@ context(testName, () => {
     });
 
     it("Save document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Approve and release document", () => {
@@ -186,6 +187,7 @@ context(testName, () => {
     });
 
     it("Verify Revision 1", () => {
+      cy.cmpTurnOffAutosave();
       cy.drClickRevisionsSidePanel();
       cy.get("[data-cy=revision]").eq(1).click();
       cy.drCheckDocumentStatus({ status: "LAST SIGNED" });
@@ -207,6 +209,7 @@ context(testName, () => {
     });
 
     it("Verify Revision 2", () => {
+      cy.cmpTurnOffAutosave();
       cy.drClickRevisionsSidePanel();
       cy.get("[data-cy=revision]").eq(1).click();
       cy.drCheckDocumentStatus({ status: "LAST SIGNED" });
@@ -226,7 +229,7 @@ context(testName, () => {
 
     it("Save document", () => {
       cy.url().then((url: string) => { record1Url = url; });
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -249,7 +252,7 @@ context(testName, () => {
 
     it("Save document", () => {
       cy.url().then((url) => record2Url = url);
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithApiCall();
     });
   });
 
@@ -260,6 +263,7 @@ context(testName, () => {
 
     it("Revise document", () => {
       cy.lhrClickReviseDocument();
+      cy.cmpTurnOffAutosave();
     });
 
     it("Remove approvals", () => {
@@ -295,6 +299,7 @@ context(testName, () => {
     });
 
     it("Verify revision", () => {
+      cy.cmpTurnOffAutosave();
       cy.drCheckDocumentStatus({ status: "WIP" });
     });
 
@@ -322,6 +327,7 @@ context(testName, () => {
     });
 
     it("Verify revision", () => {
+      cy.cmpTurnOffAutosave();
       cy.drCheckDocumentStatus({ status: "RELEASED" });
       cy.get("[data-cy=HeaderInfo-Rev]").should("contain", "Rev A");
     });
@@ -333,6 +339,7 @@ context(testName, () => {
     });
 
     it("Verify revision", () => {
+      cy.cmpTurnOffAutosave();
       cy.drCheckDocumentStatus({ status: "WIP" });
     });
 

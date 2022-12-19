@@ -65,6 +65,10 @@ context(
         it("Clicks on 'create a document' button", () => {
           cy.cmpClickCreateNewDocument();
         });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
       });
 
       context(
@@ -195,6 +199,10 @@ context(
             cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
             cy.fbAddNewFieldButton();
           });
+
+          it("Click save document", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
         });
 
         context("Verify Form fields in non preivew mode", () => {
@@ -307,6 +315,13 @@ context(
             cy.fbEnterNameValue({ name: "label", value: "fb-evidence" });
             cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
             cy.fbAddNewFieldButton();
+          });
+
+          it("Click save document", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.reload();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
         });
 

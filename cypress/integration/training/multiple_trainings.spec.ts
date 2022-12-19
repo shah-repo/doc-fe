@@ -1622,6 +1622,9 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
       cy.wrapWithWaitOnApiCall(CyRoutes.PostTrainingDue, () => {
         cy.get("button[aria-controls=\"full-width-tabpanel-2\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get("#full-width-tabpanel-1 ul li").should("have.length", 0);
     });
 
@@ -1631,6 +1634,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
           expect(res.body.OVERDUE).to.equal(0);
         });
       }).as("response");
+      cy.wait(5000);
       cy.reload();
       cy.wait("@response");
       cy.progressBarShouldNotExist();

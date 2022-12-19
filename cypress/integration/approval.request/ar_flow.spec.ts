@@ -30,10 +30,10 @@ const dateOffset = (5 * 1000);
 const footerDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const docRelDate = moment().tz("America/Los_Angeles").format("D MMM YYYY");
 const documentRevisionName = "New document for testing AR";
-const approvalRequestTitle = "Approval Request from newly created form";
-const approvalRequestFormName = "New Approval Request form template";
+const approvalRequestTitle = "Approval request from newly created form";
+const approvalRequestFormName = "New Approval request form template";
 
-context("Approval Request form", () => {
+context("Approval request form", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -69,7 +69,7 @@ context("Approval Request form", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response: any) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
@@ -78,7 +78,7 @@ context("Approval Request form", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
       }).then((response: any) => {
         loginResponse = response;
         done();
@@ -170,7 +170,7 @@ context("Approval Request form", () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[1], employeeId: secondEmployee.id });
     });
   });
 
@@ -183,19 +183,19 @@ context("Approval Request form", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Approval Request form template'", () => {
+    it("Enter title 'New Approval request form template'", () => {
       cy.drEnterDocumentTitle({ name: approvalRequestFormName });
     });
 
-    it("Enter description 'New form template for Approval Request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "New form template for Approval Request" });
+    it("Enter description 'New form template for approval request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "New form template for approval request" });
     });
 
     it("Click on 'Form' document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval Request' outputdocument type", () => {
+    it("Click on 'Approval request' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
@@ -252,7 +252,7 @@ context("Approval Request form", () => {
     });
   });
 
-  context("Verify `Approval Request form` title", () => {
+  context("Verify `Approval request form` title", () => {
     it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get(`[data-cy="field-name"]`).should("have.text", approvalRequestFormName);
@@ -260,7 +260,7 @@ context("Approval Request form", () => {
         releasedFormId = x.text();
       });
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - dateOffset);
-      cy.sendToEmailFromHeader();
+      cy.sendToEmail();
     });
 
     it("Verify popup message \"File will be sent to your email shortly.\"", () => {
@@ -270,7 +270,7 @@ context("Approval Request form", () => {
     });
   });
 
-  context("Verify email for Approval Request form notification", () => {
+  context("Verify email for Approval request form notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -288,8 +288,8 @@ context("Approval Request form", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -305,7 +305,7 @@ context("Approval Request form", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file containing Approval Request form", () => {
+    it("Download zip file containing Approval request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -348,7 +348,7 @@ context("Approval Request form", () => {
   });
 
   context("Verify PDF file content", () => {
-    it("Extract texts from PDF file content for Approval Request form", () => {
+    it("Extract texts from PDF file content for Approval request form", () => {
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -374,23 +374,23 @@ context("Approval Request form", () => {
       });
     });
 
-    it("Verify page 1 for Approval Request form", () => {
+    it("Verify page 1 for Approval request form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW Approval Request FORM TEMPLATE`, "gi" );
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW APPROVAL REQUEST FORM TEMPLATE`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/AR ID\nAR-00001/);
 
-        expect(el).match(/Description\nNew form template for Approval Request/);
+        expect(el).match(/Description\nNew form template for approval request/);
 
-        expect(el).match(/Output Document Type\nChange Order/);
+        expect(el).match(/Output Document Type\nApproval Request/);
 
         expect(el).match(/Attachments/);
 
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/Approval Request DETAILS/);
+        expect(el).match(/APPROVAL REQUEST DETAILS/);
 
         expect(el).match(/DOCUMENT #1\nDescription of change\nJustification of change/);
 
@@ -406,17 +406,17 @@ context("Approval Request form", () => {
       }
     });
 
-    it("Verify page 2 for Approval Request form", () => {
+    it("Verify page 2 for Approval request form", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW Approval Request FORM TEMPLATE`, "gi" );
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW APPROVAL REQUEST FORM TEMPLATE`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/DOCUMENT #2/);
 
         expect(el).match(/Description of change\nJustification of change/);
 
-        expect(el).match(/Checkbox\nTEXT FIELD\nAPPROVERS\nNone/);
+        expect(el).match(/APPROVERS\nNone\nCheckbox\nTEXT FIELD\n/);
 
         tmpRegex = new RegExp( `1 2 3`, "gi" );
         expect(el).match(tmpRegex);
@@ -433,10 +433,10 @@ context("Approval Request form", () => {
       }
     });
 
-    it("Verify page 3 for Approval Request form", () => {
+    it("Verify page 3 for Approval request form", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
-        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW Approval Request FORM TEMPLATE`, "gi" );
+        tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW APPROVAL REQUEST FORM TEMPLATE`, "gi" );
         expect(el).match(tmpRegex);
 
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
@@ -457,8 +457,8 @@ context("Approval Request form", () => {
     });
   });
 
-  context("Create Approval Request with newly created form", () => {
-    it("Navigate to Approval Request list", () => {
+  context("Create approval request with newly created form", () => {
+    it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0680");
       cy.navigToApprovalRequestList();
     });
@@ -476,9 +476,9 @@ context("Approval Request form", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for Approval Request'", () => {
+    it("Enter description 'AR from New form template for approval request'", () => {
       cy.get(`#SMHeaderTmpl>[data-cy="description"]`).click();
-      cy.arEnterApprovalRequestDescription({ description: "AR from New form template for Approval Request" });
+      cy.arEnterApprovalRequestDescription({ description: "AR from New form template for approval request" });
       cy.unClick();
     });
 
@@ -495,31 +495,35 @@ context("Approval Request form", () => {
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
+    it("Click on Save", () => {
+      cy.arSaveApiCall();
+    });
+
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
       cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
 
     it("Add first Approver'", () => {
-      cy.get(`[data-cy="tabCon-tabId.approvals"]`).arrowClick();
-      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
+      cy.get(`[data-cy="tabCon-tabId.changedetails"]`).arrowClick();
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].name });
     });
 
     it("Add second Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.arAddApproverOnApproverList({ approver: USERS[2].name });
     });
 
     it("Remove second Approver'", () => {
-      cy.contains(`${USERS[1].name} - ${USERS[1].email}`).parent().next().arrowClick({ force: true });
+      cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick({ force: true });
       cy.unClick();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("check first approvers exists and second Approver removed", () => {
       cy.get("[name^=\"fb-approvers-approvers\"]")
-        .should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+        .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
       cy.get("[name^=\"fb-approvers-approvers\"]")
-        .should("not.contain", `${USERS[1].name} - ${USERS[1].email}`);
+        .should("not.contain", `${USERS[2].name} - ${USERS[2].email}`);
     });
 
     it("Click on Save", () => {
@@ -561,7 +565,7 @@ context("Approval Request form", () => {
     });
 
     it("Reject AR from dashboard", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").contains(`${USERS[2].name}needs your approval for`)
+      cy.get("[data-cy=dashboardFeedList]>div").contains(`${USERS[1].name}needs your approval for`)
         .parent()
         .parent()
         .parent().trigger("mouseover")
@@ -573,7 +577,7 @@ context("Approval Request form", () => {
 
     it(`Verify reject notification`, () => {
       cy.get(`.MuiListItemText-root.MuiListItemText-dense`)
-        .should("contain", USERS[2].name)
+        .should("contain", USERS[1].name)
         .and("contain", STATUS_TYPES_LABEL.REJECTED)
         .and("contain", releasedFormId);
     });
@@ -602,12 +606,12 @@ context("Approval Request form", () => {
     });
   });
 
-  context("Verify email for draft Approval Request notification", () => {
+  context("Verify email for draft approval request notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for Approval Request ${releasedFormId}`,
+        subject: `Export for approval request ${releasedFormId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -620,8 +624,8 @@ context("Approval Request form", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -636,7 +640,7 @@ context("Approval Request form", () => {
   });
 
   context("Verify zip file downloaded", () => {
-    it("Download zip file containing Approval Request notification", () => {
+    it("Download zip file containing approval request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -691,12 +695,12 @@ context("Approval Request form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
-        RegExp( `Approval Request\n${releasedFormId}\nCHANGE ORDER FROM NEWLY CREATED FORM`, "gi" );
+        RegExp( `Approval Request\n${releasedFormId}\nAPPROVAL REQUEST FROM NEWLY CREATED FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Description\nAR from New form template for Approval Request/);
+        expect(el).match(/Description\nAR from New form template for approval request/);
 
-        expect(el).match(/Approval Request DETAILS/);
+        expect(el).match(/APPROVAL REQUEST DETAILS/);
 
         expect(el).match(/DOCUMENT #1/);
 
@@ -706,10 +710,10 @@ context("Approval Request form", () => {
 
         expect(el).match(/Justification of change\njustification for added document/);
 
-        tmpRegex = new RegExp(`Checkbox\\nAPPROVERS\\n${USERS[2].name} \\n(.*)\\n1 2 3`, "gi" );
+        tmpRegex = new RegExp(`APPROVERS\\n${USERS[1].name} \\n(.*)\\nCheckbox\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`${USERS[1].name}`, "gi" );
+        tmpRegex = new RegExp(`${USERS[2].name}`, "gi" );
         expect(el).not.match(tmpRegex);
 
         expect(el).not.match(/REJECTED/);
@@ -730,7 +734,7 @@ context("Approval Request form", () => {
     });
   });
 
-  context("Add approvers to Approval Request on approver list", () => {
+  context("Add approvers to approval request on approver list", () => {
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
     });
@@ -803,7 +807,7 @@ context("Approval Request form", () => {
       cy.arCloseAR();
     });
 
-    it(`Check Approval Request status is ${STATUS_TYPES_LABEL.CLOSED}`, () => {
+    it(`Check approval request status is ${STATUS_TYPES_LABEL.CLOSED}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-2710", "REQ-4050", "REQ-4310", "REQ-4300");
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.CLOSED });
     });
@@ -825,12 +829,12 @@ context("Approval Request form", () => {
 
   });
 
-  context("Verify email for Closed Approval Request notification", () => {
+  context("Verify email for Closed approval request notification", () => {
     it("Get emails", () => {
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
-        subject: `Export for Approval Request ${releasedFormId}`,
+        subject: `Export for approval request ${releasedFormId}`,
       };
 
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
@@ -843,8 +847,8 @@ context("Approval Request form", () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[2].email,
-          contains: [`Hello <b>${USERS[2].name},</b>`,
+          sentToUser: USERS[1].email,
+          contains: [`Hello <b>${USERS[1].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -859,7 +863,7 @@ context("Approval Request form", () => {
   });
 
   context("Verify zip file downloaded", () => {
-    it("Download zip file containing closed Approval Request notification", () => {
+    it("Download zip file containing closed approval request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -913,12 +917,12 @@ context("Approval Request form", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
-        RegExp( `Approval Request\n${releasedFormId}\nCHANGE ORDER FROM NEWLY CREATED FORM`, "gi" );
+        RegExp( `Approval Request\n${releasedFormId}\nAPPROVAL REQUEST FROM NEWLY CREATED FORM`, "gi" );
         expect(el).match(tmpRegex);
 
-        expect(el).match(/Description\nAR from New form template for Approval Request/);
+        expect(el).match(/Description\nAR from New form template for approval request/);
 
-        expect(el).match(/Approval Request DETAILS/);
+        expect(el).match(/APPROVAL REQUEST DETAILS/);
 
         expect(el).match(/DOCUMENT #1/);
 
@@ -929,10 +933,10 @@ context("Approval Request form", () => {
         expect(el).match(/Justification of change\njustification for added document/);
 
         tmpRegex = new
-        RegExp(`Checkbox\\nAPPROVERS\\n${USERS[2].name} \\| APPROVED \\| ${docRelDate} (.*) \\n(.*)\\n1 2 3`, "gi" );
+        RegExp(`APPROVERS\\n${USERS[1].name} \\| APPROVED \\| ${docRelDate} (.*) \\n(.*)\\nCheckbox\\n1 2 3`, "gi" );
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`${USERS[1].name}`, "gi" );
+        tmpRegex = new RegExp(`${USERS[2].name}`, "gi" );
         expect(el).not.match(tmpRegex);
 
         expect(el).match(/CLOSED/);
@@ -962,7 +966,7 @@ context("Approval Request form", () => {
   });
 
   context("Create AR and move it to 'Void'", () => {
-    it("Navigate to Approval Request list", () => {
+    it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0680");
       cy.navigToDashboard();
       cy.navigToApprovalRequestList();
@@ -981,8 +985,8 @@ context("Approval Request form", () => {
       cy.arEnterApprovalRequestTitle({ title: "AR for Void" });
     });
 
-    it("Enter description 'CR from New form template for voided Approval Request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for voided Approval Request" });
+    it("Enter description 'CR from New form template for voided approval request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for voided approval request" });
     });
 
     it("Add created document revision with description", () => {

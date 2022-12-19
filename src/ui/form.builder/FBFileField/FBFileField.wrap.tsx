@@ -16,7 +16,7 @@ export const withFBAttachmentField = <T extends FBFileFieldProps>(
     name = "",
     ...props
   }: T) => {
-    const { fileUploadState, workspaceState, formState, dialogState } = FB.useStores();
+    const { fileUploadState, workspaceState, formState, dialogState  } = FB.useStores();
     const { id } = workspaceState || {};
     fileFieldState = FB.useRef<FBFileFieldState>(FBFileFieldState);
 
