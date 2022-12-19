@@ -954,7 +954,7 @@ context("Bulk create unsupported fields for documents", () => {
         });
 
         it("Verify instruction media upload is empty", () => {
-          cy.get("div.LazyLoad").should("not.exist");
+          cy.get("[for^=\"fb-mediaalbum-upload-blc-instruction-media-upload\"]").should("not.exist");
         });
 
         it("Verify evidence media upload is empty", () => {
@@ -967,7 +967,6 @@ context("Bulk create unsupported fields for documents", () => {
         });
 
         it("Verify equip", () => {
-          // NOTE failed due to ENC-13408, will fix in 22.4
           cy.get("[id^=\"blc-equip-\"]").parent().parent().parent()
             .find("p").should("have.text", "The Preventative Maintenance required? is a required field.");
         });
@@ -1078,7 +1077,7 @@ context("Bulk create unsupported fields for documents", () => {
         });
 
         it("Verify instruction media upload is empty", () => {
-          cy.get("div.LazyLoad").should("not.exist");
+          cy.get("[for^=\"fb-mediaalbum-upload-blc-instruction-media-upload\"]").should("not.exist");
         });
 
         it("Verify evidence media upload is empty", () => {
@@ -1091,7 +1090,6 @@ context("Bulk create unsupported fields for documents", () => {
         });
 
         it("Verify equip", () => {
-          // NOTE failed due to ENC-13408, will fix in 22.4
           cy.get("[id^=\"blc-equip-\"]").parent().parent().parent()
             .find("p").should("have.text", "The Preventative Maintenance required? is a required field.");
         });
