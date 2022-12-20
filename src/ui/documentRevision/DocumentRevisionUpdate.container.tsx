@@ -20,7 +20,7 @@ import { isOperator } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
-import { checkIsDocumentDAM } from "./helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentReceivable } from "./helpers/checkDocumentGroup";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
 
 interface Props {
@@ -48,6 +48,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const { docId } = documentRevision.document;
   const formGroupOptions = documentRevision?.document.documentType.groupOptions;
   const isDAM = checkIsDocumentDAM(formGroupOptions);
+  const isReceivable = checkIsDocumentReceivable(formGroupOptions);
   useDocumentTitle(docId);
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
@@ -107,7 +108,6 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     // Hack to take updated formInput
     const formStateContext = FBFormStateContext as any;
-    const isReceivable = Object.keys(formStateContext?._currentValue)?.some((key) => key.includes("receivable"));
     if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
       set(values, "formInput", formStateContext?._currentValue);
     }
@@ -156,9 +156,14 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     }
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
 
-    // Receivable case when autosave is disabled missing form input data
-    if (isEmpty(dataToSubmit) && isEmpty(values.formInput) && isReceivable) {
-      set(dataToSubmit, "formInput", formStateContext?._currentValue);
+    // Receivable: Missing form input data on First time when initial values form input is null and autosave is disabled
+    if (isReceivable && isEmpty(dataToSubmit) && isEmpty(values.formInput)) {
+      const hasReceivableKeyExists = Object.keys(
+        formStateContext?._currentValue
+      )?.some((key) => key.includes("receivable"));
+      if (hasReceivableKeyExists) {
+        set(dataToSubmit, "formInput", formStateContext?._currentValue);
+      }
     }
 
     if (redlineActive) {
