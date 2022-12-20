@@ -100,15 +100,15 @@ export const usePoApprovals = (
     const requester = formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
     const autoApprovers = poApprovalsState?.activeApprovals.filter((item) => !item.manually);
 
-    const revisionTypesToRemoveRequestor = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
-    const isAdministrativeChange = revisionTypesToRemoveRequestor.includes(revisionChangeType as RevisionChangeType);
+    const administativeRevisionTypes = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
+    const isAdministrativeChange = administativeRevisionTypes.includes(revisionChangeType as RevisionChangeType);
 
     const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
     const hasRequesterInAllApprovers = hasUserInApprovers(requester);
     const hasRequesterInAutoApprovers = hasUserInApprovers(requester, autoApprovers);
     const hasPrevRequesterInAutoApprovers = hasUserInApprovers(prevRequester ?? "", autoApprovers);
 
-    const shouldAddRequester = !hasRequesterInAllApprovers && hasServiceOrProductPart;
+    const shouldAddRequester = !hasRequesterInAllApprovers && hasServiceOrProductPart && !isAdministrativeChange;
     const shouldRemoveRequester = hasRequesterInAutoApprovers && (!hasServiceOrProductPart || isAdministrativeChange);
     const shouldRemovePrevRequester = requester !== prevRequester && hasPrevRequesterInAutoApprovers;
 
