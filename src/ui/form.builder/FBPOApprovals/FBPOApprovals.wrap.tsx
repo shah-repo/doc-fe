@@ -170,13 +170,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       disabledOptions = checkServiceOrProductPartExists(poItems) ? [requestor] : [];
     });
 
-    const fieldValue = map(poApprovalsState?.activeApprovals, "approver.id");
-
-    formState?.setFieldValue(`${name}`, fieldValue, true);
-    documentStatus = document?.status;
-
+    formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, "approver.id"), true);
 
     disabled = disabled || loading;
+    documentStatus = document?.status;
 
     return Component({
       ...(props as T),
