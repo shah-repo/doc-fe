@@ -314,7 +314,7 @@ Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
 });
 
 Cypress.Commands.add("drSelectOverviewTab", () => {
-  cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.overview\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
