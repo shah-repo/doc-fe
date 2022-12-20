@@ -103,7 +103,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // Store previous requester value.
+    // Store previous requester value
     useEffect(
       () => {
         prevRequester.current = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
@@ -112,7 +112,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       []
     );
 
-    // On revisionChangeType change.
+    // On revisionChangeType change
     useEffect(() => reaction(
       () => FBDataStore.revisionChangeType,
       (revisionChangeType) => {
@@ -125,7 +125,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // On requester change.
+    // On requester change
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requester) => {
@@ -133,9 +133,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           updateApprovals({ prevRequester: prevRequester.current });
         }
         prevRequester.current = requester;
-      },
-      {
-        fireImmediately: true,
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);

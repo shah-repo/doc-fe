@@ -188,16 +188,6 @@ export const usePoApprovals = (
   ), []);
 
   useEffect(() => reaction(
-    () => poApprovalsState?.transitionApi.loading,
-    (loading) => {
-      if (!loading) {
-        fetchRequiredGroups();
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), []);
-
-  useEffect(() => reaction(
     () => poApprovalsState?.approvalApi.data,
     (data) => {
       FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
