@@ -99,24 +99,23 @@ export const usePoApprovals = (
 
     const poItems = args.poItems ?? formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
     const requester = formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+    const autoApprovers = poApprovalsState?.activeApprovals.filter((item) => !item.manually);
+
     const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
     const hasRequesterInAllApprovers = hasUserInApprovers(requester);
-
-    if (requester && !prevRequester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
-      return addApprover([requester], { manually: false });
-    }
-
-    // We can remove only automatically added approvers.
-    const autoApprovers = poApprovalsState?.activeApprovals.filter((item) => !item.manually);
     const hasRequesterInAutoApprovers = hasUserInApprovers(requester, autoApprovers);
     const hasPrevRequesterInAutoApprovers = prevRequester && hasUserInApprovers(prevRequester, autoApprovers);
 
-    if (requester && hasRequesterInAutoApprovers && !hasServiceOrProductPart) {
-      return removeApprover([requester]);
-    }
-
     if (prevRequester && requester !== prevRequester && hasPrevRequesterInAutoApprovers) {
       return removeApprover([prevRequester], () => requester && addApprover([requester], { manually: false }));
+    }
+
+    if (requester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
+      return addApprover([requester], { manually: false });
+    }
+
+    if (requester && hasRequesterInAutoApprovers && !hasServiceOrProductPart) {
+      return removeApprover([requester]);
     }
   };
 
