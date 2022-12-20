@@ -1031,7 +1031,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Click on Reject button", () => {
-      cy.get("[data-cy=\"common.reject\"]").arrowClick();
+      cy.get("[data-cy=\"common.reject\"]").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1039,6 +1039,8 @@ context("Export Engineering Build doc", () => {
 
   context(`Login as EB owner`, () => {
     it("Log out user", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.authLogout();
     });
 

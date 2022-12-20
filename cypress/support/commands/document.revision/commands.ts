@@ -127,6 +127,7 @@ declare global {
       drOpenCloseSidebarDrawer(): Chainable<Subject>;
       drSelectPermissionTab(): Chainable<Subject>;
       drSelectApprovalRolesTab(): Chainable<Subject>;
+      drSelectApprovalRolesTabWithoutApi(): Chainable<Subject>;
       drSelectMatrixDetailsTab(): Chainable<Subject>;
       drVerifyDocumentOWner(params: {owner: string}): Chainable<Subject>;
       drChangeOwnerByAdmin(params: {employee: string}): Chainable<Subject>;
@@ -313,7 +314,7 @@ Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
 });
 
 Cypress.Commands.add("drSelectOverviewTab", () => {
-  cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.overview\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -702,7 +703,7 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
     .autocompleteSelect(`${params.username}`, { force: true }).wait(2000);
   cy.listLoadingElementShouldNotExist();
-  cy.get("[data-cy='add-user'").eq(2).arrowClick({ force: true });
+  cy.get("[data-cy='add-user'").eq(0).arrowClick({ force: true }).wait(2000);
   cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -906,6 +907,12 @@ Cypress.Commands.add("drSelectApprovalRolesTab", () => {
   });
 });
 
+Cypress.Commands.add("drSelectApprovalRolesTabWithoutApi", () => {
+  cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectMatrixDetailsTab", () => {
   cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
 });
@@ -925,7 +932,6 @@ Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
       .click();
 
     cy.get("[id^=react-select]").contains(user).arrowClick();
-    cy.get(`[data-cy="add-user"]`).eq(0).arrowClick({ force: true });
   });
 });
 
@@ -944,7 +950,6 @@ Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
       .contains("Search groups")
       .click();
     cy.get("[id^=react-select]").contains(group).arrowClick();
-    cy.get(`[data-cy="add-user"]`).eq(1).arrowClick();
   });
 });
 

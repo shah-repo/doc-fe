@@ -323,7 +323,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Export and save the template", () => {
-      cy.get("[class=\"MuiIconButton-label\"]").eq(16).arrowClick();
+      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").arrowClick();
       cy.get("[data-cy=\"fb-template-name\"]").arrowType("NCO_Form");
       cy.get("[data-cy=\"common.add\"]").arrowClick();
     });
@@ -544,7 +544,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Export and save the template", () => {
-      cy.get("[class=\"MuiIconButton-label\"]").eq(10).arrowClick();
+      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").arrowClick();
       cy.get("[data-cy=\"fb-template-name\"]").arrowType("Seed_Form");
       cy.get("[data-cy=\"common.add\"]").arrowClick();
     });
