@@ -627,7 +627,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Supplier ' is not deletable", () => {
-      cy.get("[data-cy='Supplier ']").trigger("mouseover");
+      cy.get("[data-cy^='Supplier']").trigger("mouseover");
       cy.get(`[data-cy="edit-schema-item"]`)
         .should("not.exist");
       cy.get(`[data-cy="remove-schema-item"]`)

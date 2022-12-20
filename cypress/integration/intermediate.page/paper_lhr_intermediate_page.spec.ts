@@ -219,7 +219,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Check 'Approvals' is not deletable", () => {
-      cy.get("[data-cy='form.builder.approvals']").eq(1).trigger("mouseover");
+      cy.get("[data-cy='form.builder.approvals']").trigger("mouseover");
       cy.get(`[data-cy="edit-schema-item"]`)
         .should("not.exist");
       cy.get(`[data-cy="remove-schema-item"]`)
