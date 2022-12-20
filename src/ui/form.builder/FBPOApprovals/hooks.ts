@@ -132,7 +132,7 @@ export const usePoApprovals = (
       return;
     }
 
-    await when(() => poApprovalsState?.isMounted ?? false);
+    await when(() => Boolean(poApprovalsState?.isMounted));
 
     ids
       .filter((user) => !hasUserInApprovers(user))
@@ -150,6 +150,7 @@ export const usePoApprovals = (
           if (id) {
             dispatch(documentRevisionsActions.loadAudit(id));
           }
+          // TODO remove callback if favor of async await and Promise.all
           callback?.();
         });
       });
