@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
 import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -427,6 +426,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Verify Step 2 Added to detail tab", () => {
+        cy.get(".MuiDialogContent-root").scrollTo("bottom");
         cy.get("[data-cy='LHR Step 2']").should("be.visible");
       });
 
@@ -435,7 +435,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Verify Field1 is displayed and flagged as “Required”", () => {
-        cy.get("[data-cy='textfield-6']").contains("The fb-textfield is a required field.")
+        cy.get(`[role="dialog"] [data-cy='textfield-7']`).contains("The fb-textfield is a required field.")
           .should("exist");
       });
 
@@ -497,6 +497,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Verify Step 2 Added to detail tab", () => {
+        cy.get("[data-cy='LHR Step 2']").last().scrollIntoView();
         cy.get("[data-cy='LHR Step 2']").should("be.visible");
       });
 

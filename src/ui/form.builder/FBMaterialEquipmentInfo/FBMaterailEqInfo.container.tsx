@@ -1,7 +1,7 @@
 import { useObserver } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { FBMaterailEqInfoState } from "..";
-import { checkIsDocumentEB, checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEB, checkIsDocumentForm, checkIsDocumentLHRT, checkIsDocumentMPI } from "../../documentRevision/helpers/checkDocumentGroup";
 import FB from "../helpers/FB";
 import { MaterialEqContainerProps } from "./FBMaterailEqInfo.types";
 import { calculateDataDiff } from "./FBMaterailEqInfo.utils";
@@ -23,13 +23,17 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
     itemsState.loading,
   ]));
 
+  const isObsolete = Boolean(documentRevision?.displayStatus?.includes("Obsolete"));
+  const isLHRT = checkIsDocumentLHRT(documentRevision?.document?.documentType?.groupOptions);
+  const isMPI = checkIsDocumentMPI(documentRevision?.document?.documentType?.groupOptions);
   const isForm = checkIsDocumentForm(documentRevision?.document?.documentType?.groupOptions);
+  const shouldFetch = !isForm || isLHRT || isMPI;
 
   useEffect(() => {
-    if (inView && !isForm && documentRevision) {
+    if (inView && shouldFetch && documentRevision) {
       itemsState.fetchCurrentItems(documentRevision.id);
     }
-  }, [documentRevision, inView, itemsState, isForm]);
+  }, [documentRevision, inView, itemsState, shouldFetch]);
 
   useEffect(() => {
     if (inView && documentRevision?.parent && showDiff && !parentData) {
@@ -46,6 +50,7 @@ const FBMaterialEqInfoContainer: React.FC<MaterialEqContainerProps> = ({
         showDiff,
         includeDiff,
         loading,
+        isObsolete,
       }}
       handleShowDiffChange={setShowDiff}
     />

@@ -50,7 +50,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[21].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
@@ -63,7 +63,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[21].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
@@ -75,7 +75,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[21].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -215,7 +215,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[21].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -378,9 +378,12 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     it("Add 'Material parameter' to step #1", () => {
       SystemRequirement("REQ-3620");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material two" });
-      });
+      const params = { numbOfStep: 1, material: "Parameter for material two" };
+
+      cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"title\"]").arrowType(params.material, { force: true });
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -420,21 +423,21 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
       SystemRequirement("REQ-2800");
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"void-button\"]").should("be.visible");
       cy.get("[data-cy=\"void-button\"]").arrowClick();
       cy.get("button[data-cy=\"AlertDialog-cancelButton\"]").arrowClick();
     });
 
     it("Check if 'Change Owner' button exists", () => {
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -446,7 +449,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it("Scroll down to the bottom of the page", () => {
-      cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+      cy.get("[data-cy='form-options-text']").scrollIntoView();
     });
 
     it(`Verify statusbar conataining DRAFT is still visible`, () => {
@@ -513,7 +516,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        email: USERS[21].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
 
@@ -560,7 +563,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -613,7 +616,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
@@ -663,11 +666,13 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it(`Verify 'Send to Email' exists in statusbar`, () => {
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });
 
     it(`Verify 'Change Owner' exists in statusbar`, () => {
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 
@@ -717,7 +722,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
   context(`Click on 'Void' and verify document status as VOIDED`, () => {
     it(`Click 'Void' and 'Yes, Im sure'`, () => {
       SystemRequirement("REQ-2800");
-      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"void-button\"]").arrowClick();
       cy.get("[data-cy=\"AlertDialog-continueButton\"]").contains("Yes, I'm sure").arrowClick();
     });
@@ -742,12 +747,14 @@ context("Status Bar of New Enlil items approved via express AR", () => {
     });
 
     it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick({ force: true });
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
     });

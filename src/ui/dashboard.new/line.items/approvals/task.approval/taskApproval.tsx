@@ -1,15 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import {
-  Avatar,
-  Box,
-  Collapse,
-  Grid,
-  IconButton,
-  List,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Box, Collapse, Grid, IconButton, List, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApproveIcon } from "../../../../../assets/images/approve.svg";
 import { ReactComponent as ApproveSolidIcon } from "../../../../../assets/images/approve_solid.svg";
@@ -36,7 +25,7 @@ import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
 import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
-import { styles } from "./taskApproval.styles";
+import useStyles from "./taskApproval.styles";
 
 interface Props {
   id: string;
@@ -64,7 +53,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
 }
-const taskApprovalPresenter: React.FunctionComponent<Props> = ({
+const TaskApprovalPresenter: React.FC<Props> = ({
   id,
   arChangeRequestId,
   arId,
@@ -80,7 +69,7 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
@@ -156,16 +145,17 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem
-        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        className={classes.listItem}
-        onMouseEnter={onMouseHoverListItem}
+        divider
         disableRipple
+        className={classes.listItem}
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        onMouseEnter={onMouseHoverListItem}
       >
         {open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
+          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
+          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemAvatar>
           {docRevOwnerAvatar ? (
@@ -473,4 +463,4 @@ const taskApprovalPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default taskApprovalPresenter;
+export default TaskApprovalPresenter;

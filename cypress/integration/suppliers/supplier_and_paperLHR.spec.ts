@@ -312,7 +312,7 @@ context("supplier_and_paperLHR", () => {
     });
 
     it("Verify fb-section ", () => {
-      cy.get("[class='MuiDialogContent-root']").contains("fb-section").should("exist");
+      cy.get(`[data-cy="fb-section"]`).should("exist");
     });
 
     it("Verify fb-textfield tab", () => {
@@ -370,7 +370,7 @@ context("supplier_and_paperLHR", () => {
     });
 
     it("Verify fb-section ", () => {
-      cy.get("[class='MuiDialogContent-root']").contains("fb-section").should("exist");
+      cy.get(`[data-cy="fb-section"]`).should("exist");
     });
 
     it("Verify fb-text-editor tab", () => {
@@ -519,7 +519,7 @@ context("supplier_and_paperLHR", () => {
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
       cy.fbOpenValidation();
-      cy.fbFieldRequiredIf({ name: "End Quantity", value: "1" });
+      cy.fbFieldRequiredIfNw({ name: "End Quantity", value: "1" });
       cy.fbAddNewFieldButton();
     });
 
@@ -586,7 +586,7 @@ context("supplier_and_paperLHR", () => {
       cy.get("[data-cy=\"edit-schema-item\"]").eq(5).arrowClick({ force: true });
       cy.fbOpenValidation();
       cy.get("[data-cy='fb-control-required_if:anotherfield,value']").arrowClick();
-      cy.fbFieldRequiredIf({ name: "End Quantity", value: "2" });
+      cy.fbFieldRequiredIfNw({ name: "End Quantity", value: "2" });
       cy.fbAddNewFieldButton();
     });
   });

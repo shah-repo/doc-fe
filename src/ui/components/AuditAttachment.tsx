@@ -28,7 +28,7 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
     if (auditValue === "undefined") { return; }
     try {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      auditValue = JSON.parse(auditValue);
+      auditValue = JSON.parse(auditValue)?.id;
     } catch {
       if (isString(auditValue)) {
         auditValue = [auditValue];
@@ -46,7 +46,9 @@ const AuditAttachment: React.FunctionComponent<Props> = ({
   return (
     <Fragment>
       {loading && <CircularProgress size={12} />}
-      {!loading && <div>{first(attachmentState.filesApi.data)?.name}</div>}
+      {!loading &&
+      <div>{`${first(attachmentState.filesApi.data)?.name}.${first(attachmentState.filesApi.data)?.type}`}</div>
+      }
     </Fragment>
   );
 };

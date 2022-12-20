@@ -14,6 +14,7 @@ declare global {
       ebCheckIfPartIsInSummary(params: { partName: string }): Chainable<Subject>;
       ebVerifyNewRevisionCreated(): Chainable<Subject>;
       ebApprove(): Chainable<Subject>;
+      ebApproveWithoutApi(): Chainable<Subject>;
       lhrApprove(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
       ebClickCloneEB(): Chainable<Subject>;
@@ -29,6 +30,7 @@ declare global {
       ebTryToApprove(): Chainable<Subject>;
       ebWithdrawSubmisison(): Chainable<Subject>;
       ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      ebAddApproverOnApproverListWithPatchCall(params: {approver: string }): Chainable<Subject>;
     }
   }
 }
@@ -101,9 +103,11 @@ Cypress.Commands.add("ebCloneClickContinue", () => {
 });
 
 Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: string; name: string }) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick({ force: true });
-  cy.get("[data-cy=\"title\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
   cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -111,8 +115,8 @@ Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: s
 
 Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick();
-  cy.get("[data-cy=\"title\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
   cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -120,7 +124,7 @@ Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; val
 
 Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
-  cy.get("[data-cy=\"title\"]").arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -128,8 +132,8 @@ Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
 
 Cypress.Commands.add("ebAddStep2EquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").last().arrowClick();
-  cy.get("[data-cy=\"title\"]").arrowClick();
-  cy.get("ul>li[role=option]").contains(params.title).arrowClick();
+  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
+  cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
@@ -144,7 +148,7 @@ Cypress.Commands.add("ebSelectFirstDocument", () => {
 });
 
 Cypress.Commands.add("ebApprove", () => {
-  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
+  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.SessionDetails], () => {
@@ -155,12 +159,23 @@ Cypress.Commands.add("ebApprove", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("ebApproveWithoutApi", () => {
+  cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
+  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.unClick();
+  cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("lhrApprove", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
-    cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+    cy.get("[data-cy=\"common.confirm\"]").arrowClick({ force: true });
   });
   cy.checkToastMessage({ exists: false });
   cy.saveBarShouldNotExist();
@@ -168,13 +183,14 @@ Cypress.Commands.add("lhrApprove", () => {
 });
 
 Cypress.Commands.add("ebTryToApprove", () => {
-  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.get("[data-cy=\"common.confirm\"]").arrowClick();
 });
 
 Cypress.Commands.add("ebWithdrawSubmisison", () => {
   cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+  cy.wait(2000);
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("#AlertDialog-continueButton").arrowClick();
   });
@@ -186,6 +202,16 @@ Cypress.Commands.add("ebWithdrawSubmisison", () => {
 Cypress.Commands.add("ebAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+  });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get(`[data-cy^="fb-approvals-"]`).arrowClick();
+  cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
   });
   cy.progressBarShouldNotExist();

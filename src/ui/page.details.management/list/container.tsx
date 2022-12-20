@@ -10,7 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import cx from "classnames";
-import { sortBy } from "lodash";
+import { camelCase, sortBy } from "lodash";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -28,7 +28,11 @@ import { PageDetailsFormContainer } from "../form/container";
 const styles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      margin: theme.spacing(9.5),
+      padding: theme.spacing(6, 6, 2),
+      height: "100%",
+      overflow: "auto",
+      display: "flex",
+      flexDirection: "column",
     },
     header: {
       height: theme.spacing(7.5),
@@ -47,7 +51,7 @@ const styles = makeStyles((theme: Theme) =>
     },
     containingBox: {
       overflow: "auto",
-      height: "76vh",
+      flexGrow: 1,
     },
     thead: {
       "& th": {
@@ -56,8 +60,8 @@ const styles = makeStyles((theme: Theme) =>
         zIndex: 1000,
       },
     },
-  },
-  ));
+  })
+);
 
 function Row(props: { row: PageDetails }) {
   const { row } = props;
@@ -67,12 +71,12 @@ function Row(props: { row: PageDetails }) {
   return (
     <React.Fragment>
       <TableRow className={classes.row} onClick={() => setOpen(!open)}>
-        <TableCell >
+        <TableCell>
           <IconButton size="small">
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell component="th" scope="row" data-cy={`page-detail.${camelCase(row.category)}`}>
           {row.category}
         </TableCell>
       </TableRow>
@@ -87,8 +91,7 @@ function Row(props: { row: PageDetails }) {
   );
 }
 
-
-export const PageDetailsManagementContainer: React.FunctionComponent = () => {
+const PageDetailsManagementContainer: React.FC = () => {
   const classes = styles();
   const dialog = useDialog();
 
@@ -127,3 +130,5 @@ export const PageDetailsManagementContainer: React.FunctionComponent = () => {
 
   );
 };
+
+export default PageDetailsManagementContainer;

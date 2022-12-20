@@ -62,6 +62,7 @@ const ChangeRequestFormContainer: React.FunctionComponent<
 
   useEffect(() => () => {
     changeRequestFormOnScreenContext = React.createContext<boolean>(false);
+    FBDataStore.setRefreshData(undefined);
   }, []);
 
   const changeOpenStatus = (isDrawerOpen) => {

@@ -852,8 +852,7 @@ context("Autocomplete test", () => {
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
-
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add an Approval", () => {
@@ -871,7 +870,7 @@ context("Autocomplete test", () => {
     it("Approve record", () => {
       cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
       });
     });
@@ -922,10 +921,14 @@ context("Autocomplete test", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Click on 'New' button", () => {
       cy.fbClickButton({ el: "PreviewControlsContainer-createNew" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist().wait(2000);
     });
 
     it("Enter AR title " + approvalTitle, () => {
@@ -962,6 +965,8 @@ context("Autocomplete test", () => {
 
     it("Click 'Add Approver' & 'confirm' button", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Reload company", () => {

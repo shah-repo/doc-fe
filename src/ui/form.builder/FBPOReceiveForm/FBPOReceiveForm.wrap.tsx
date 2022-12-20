@@ -1,10 +1,11 @@
-import { isEmpty } from "lodash";
+import { first, isEmpty } from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FB, FBPOReceiveFormProps } from "..";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
+import FBDataStore from "../FBStore/FBDataStore";
 import FBPOReceiveFormState from "./FBPOReceiveForm.state";
 
 
@@ -22,7 +23,7 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
     const groupOptions = useSelector(userManagementSelectors.getGroupsOptions);
     const { dialogState, formState, poReceiveState, workspaceState } = FB.useStores();
     const documentId = workspaceState?.documentId as string;
-    const name = workspaceState?.schema?.find((e) => e.type === "poreceive")?.name as string;
+    const name = first(workspaceState?.getItemsByType("poreceive"))?.name || "";
 
 
     const poReceiveFormState = FB.useRef<FBPOReceiveFormState>(
@@ -68,20 +69,21 @@ export const withFBPOReceiveForm = <T extends FBPOReceiveFormProps>(
       };
       const hasNoReference = isEmpty(workspaceState.document?.referenceTo.find(
         (e) => e.id === poReceiveState?.data?.document.id));
-      poReceiveState?.addReceiveQuantity(
+      const updatedRevision = await poReceiveState?.addReceiveQuantity(
         workspaceState.id,
         {
           formInput: receivedItemsInput,
           referenceTo: hasNoReference ?
             [{
-              ...workspaceState.document?.referenceTo,
               id: poReceiveState?.data?.document.id,
             }] as Id[] : undefined,
         });
 
       dialogState?.closeDialog();
+      workspaceState.setFormInputData(updatedRevision);
+      FBDataStore.setRefreshData(updatedRevision);
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
-      dispatch(documentRevisionsActions.reload(workspaceState?.document?.id as string));
+      dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     };
 
 

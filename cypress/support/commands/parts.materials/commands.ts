@@ -27,6 +27,7 @@ declare global {
       lhrAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       pmDeleteApproverFromApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
+      pmSubmitForApprovalWithoutAPI(): Chainable<Subject>;
       pmClearFilters(): Chainable<Subject>;
       pmSelectFirstDocument(): Chainable<Subject>;
       lhrSubmitForApproval(): Chainable<Subject>;
@@ -71,7 +72,7 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   partLotDoc?: string;
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
 
 
   cy.get("[data-cy=\"title\"]").arrowClick();
@@ -152,6 +153,7 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
   });
+  cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -207,6 +209,12 @@ Cypress.Commands.add("pmSubmitForApproval", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("pmSubmitForApprovalWithoutAPI", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("lhrSubmitForApproval", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
@@ -249,7 +257,7 @@ Cypress.Commands.add("lhrClickSaveDocument", () => {
 });
 
 Cypress.Commands.add("lhrClearFilters", () => {
-  cy.get("button[data-cy=clearFilter]").arrowClick();
+  cy.get(`button[data-cy="clearFilter"]`).arrowClick();
   cy.landingPageLoadingElementShouldNotExist();
 });
 

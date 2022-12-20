@@ -10,6 +10,7 @@ import { ReactComponent as DisabledUnCheckedRadioIcon } from "../../../assets/im
 import Text from "../../components/Text";
 import { isTranslation } from "../../translations/types";
 import { withFBOption } from "../FBOption/FBOption.wrap";
+import { useFormContext } from "../../components/forms/FormContext";
 
 export const withFBRadioGroup = <T extends FBRadioGroupProps>(
   Component: React.FunctionComponent<T>,
@@ -29,6 +30,7 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
   }: T) => {
     const intl = useIntl();
     const { formState, workspaceState } = FB.useStores();
+    const { submitForm } = useFormContext();
 
     isInputOwner = workspaceState?.getIsInputOwner(name);
     disabled = !isInputOwner || disabled;
@@ -61,8 +63,14 @@ export const withFBRadioGroup = <T extends FBRadioGroupProps>(
     !onChange && (onChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) => {
       formState?.setFieldValue(name, value);
       formState?.validate();
-      const isUnderWorkspace = workspaceState?.getSchemaItem(name);
+      const isUnderWorkspace = workspaceState?.getSchemaItem(name?.split(".")[0]);
       if (!isUnderWorkspace) { return; }
+
+      if (workspaceState?.isChangeRequest) {
+        submitForm();
+        return;
+      }
+
       workspaceState?.saveDocRev(formState?.getValues());
     });
 

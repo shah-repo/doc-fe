@@ -5,8 +5,8 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import React from "react";
 import cx from "classnames";
+import React from "react";
 import {
   getFormattedDateString,
   MomentFormats,
@@ -135,7 +135,7 @@ const TrainingItem: React.FunctionComponent<TrainingItemProps> = ({
   );
 
   return (
-    <ListItem>
+    <ListItem divider>
       <ListItemText
         id={documentId}
         primary={titleRender(

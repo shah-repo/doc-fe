@@ -28,14 +28,15 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
   const renderAuditGroup = () =>
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
-      const { owner, ownerUser, ownerThirdParty } = change;
-      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name;
+      const { owner, ownerUser, ownerThirdParty, ownerName } = change;
+      const name = ((owner && owner.user) || ownerUser || ownerThirdParty)?.name ?? ownerName;
+
       return (
         <Box key={groupId} className={isDrawerOpen ? classes.changeContainer : classes.container}>
           <UserAvatarListItem
             data-cy={`audit-${key}`}
             name={<div data-cy={`audit-owner-${key}`}>{name}</div>}
-            user={(owner && owner.user) || ownerUser || ownerThirdParty}
+            user={(owner && owner.user) || ownerUser || ownerThirdParty || { name }}
             secondaryComponent={
               <DateTime
                 data-cy={`audit-${key}`}
@@ -83,6 +84,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
           <Box
             mb={1}
             key={`${change.groupId}-${index}`}
+            data-cy="no-padding-margin"
             className={
               index === audits.length - 1
                 ? classes.noPaddingMargin

@@ -183,7 +183,8 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Last save should be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+          cy.listLoadingElementShouldNotExist();
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
       });
 
@@ -220,19 +221,28 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
     context("Add some references", () => {
       it("Add some references", () => {
-        cy.drSelectReferences(reference.value);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drSelectReferences(reference.value);
+        });
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("Add Required Fields", () => {
       it(`Select '${USERS[1].name}' for Requestor`, () => {
         cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true });
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
 
       it("Add Required Date", () => {
-        cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-        cy.get(".MuiPickersDay-daySelected").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+          cy.get(".MuiPickersDay-daySelected").arrowClick();
+        });
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -240,10 +250,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       it("Add Approver to approvals list", () => {
         cy.wait(3000);
         cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on Submit For Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
     });
 
@@ -265,10 +276,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -280,14 +292,9 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           });
         });
 
-        it("Add Approver to approvals list", () => {
-          cy.wait(3000);
-          cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
-        });
-
         it("Click on Submit For Approval", () => {
           cy.wait(3000);
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
       });
     });
@@ -301,15 +308,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
     context("Approve the PO → The PO is in the Released status", () => {
       it("Approve the PO", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -330,10 +329,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -344,9 +344,10 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           });
 
           it("Add Approver to approvals list", () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
+            cy.drClickCreateDocumentWithoutApiCall();
             cy.wait(3000);
-            cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
+            cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[1].name);
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Click on Submit For Approval", () => {
@@ -354,18 +355,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           });
 
           it("Approve the PO", () => {
-            cy.wait(3000);
-            cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-            cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-            cy.unClick();
-            cy.wrapWithWaitOnApiCalls(
-              [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-              () => {
-                cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-              }
-            );
-            cy.checkToastMessage({ exists: false });
-            cy.listLoadingElementShouldNotExist();
+            cy.ebApproveWithoutApi();
           });
         });
       });
@@ -395,9 +385,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Add Approver to approvals list", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").should("be.visible").arrowClick();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.wait(3000);
+        cy.get("[data-cy^=fb-po-approvals-]").scrollIntoView();
         cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on Submit For Approval", () => {
@@ -405,15 +397,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Approve the PO", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -422,13 +406,17 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       the item goes to ${STATUS_TYPES_LABEL.VOIDED} state`,
       () => {
         it("Revise document with 'Void' option", () => {
+          cy.wait(3000);
           cy.drClickReviseDocument();
           cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
           cy.listLoadingElementShouldNotExist();
           cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
           cy.drClickCreateDocumentWithoutApiCall();
           cy.wait(3000);
+          cy.get("[data-cy^=fb-po-approvals-]").scrollIntoView();
           cy.get("[data-cy^=fb-po-approvals-]").autocompleteSelect(`${USERS[1].name}`);
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
           cy.drApproveAndReleaseDialog();
           cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
           cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
@@ -437,18 +425,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Approve the record", () => {
-          cy.wait(3000);
-          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-          cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
-          cy.checkToastMessage({ exists: false });
-          cy.listLoadingElementShouldNotExist();
+          cy.ebApproveWithoutApi();
         });
       }
     );
@@ -471,10 +448,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });

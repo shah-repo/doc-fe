@@ -180,6 +180,7 @@ context("Document Creation Flow", () => {
     context("Uploads attachments", () => {
       it("Uploads redline attachment: test.docx", () => {
         SystemRequirement("REQ-0260");
+        cy.wait(2000);
         cy.atchUploadRedlineAttachment({ fileName: "test.docx" });
       });
 
@@ -231,6 +232,7 @@ context("Document Creation Flow", () => {
 
       it("Upload multiple attachments at once: 'image.jpg' and 'test_image.jpg'", () => {
         SystemRequirement("REQ-0220");
+        cy.wait(2000);
         cy.get("#AttachmentFieldPresenter-linkButton").arrowClick();
         cy.get("#attachments-button-file-clean-copy")
           .attachFiles(
@@ -274,6 +276,8 @@ context("Document Creation Flow", () => {
       });
 
       it("Uploads test_image.jpg", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       });
 
@@ -392,7 +396,8 @@ context("Document Creation Flow", () => {
     context("Verify ownership mechanism", () => {
       it("Change owner of document", () => {
         SystemRequirement("REQ-0340");
-        cy.drChangeOwnerFromMenu({ employee: USERS[3].name });
+        cy.get("#HeaderMenuButton").arrowClick();
+        cy.drChangeOwnerByAdmin({ employee: USERS[3].name });
       });
 
       it("Login user to dashboard", () => {
@@ -425,6 +430,7 @@ context("Document Creation Flow", () => {
 
       it("Change owner of document by admin", () => {
         SystemRequirement("REQ-0340");
+        cy.get("#HeaderMenuButton").arrowClick();
         cy.drChangeOwnerByAdmin({ employee: USERS[2].name });
       });
 

@@ -598,7 +598,7 @@ context("Remove hyperlink and keep text when training on a document", () => {
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
-      cy.arClickCreateApprovalRequestAfterCompletingForm();
+      cy.arSaveApiCall();
       cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
       cy.arSaveApiCall();
       cy.arClickSendToReview();

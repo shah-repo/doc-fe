@@ -613,7 +613,7 @@ context("Export training curriculum", () => {
       cy.drSelectDetailsTab();
     });
 
-    it("Verify Forced Retraining / One-Time Training", () => {
+    it("Verify Forced Retraining One Time Training", () => {
       cy.get(`[data-cy="Forced Retraining / One-Time Training"]`).should("exist");
     });
 
@@ -766,7 +766,7 @@ context("Export training curriculum", () => {
       cy.drSelectDetailsTab();
     });
 
-    it("Verify Forced Retraining / One-Time Training", () => {
+    it("Verify Forced Retraining One Time Training", () => {
       cy.get(`[data-cy="Forced Retraining / One-Time Training"]`).should("exist").should("have.length", "1");
     });
 

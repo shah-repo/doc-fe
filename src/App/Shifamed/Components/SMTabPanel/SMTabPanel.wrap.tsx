@@ -1,23 +1,9 @@
 import React from "react";
 import { SM, SMTabPanelProps } from "../../..";
 
-export const withSMTabPanelWrap = <T extends SMTabPanelProps>(
-  Component: React.FunctionComponent<T>,
-) => {
-  const Comp = ({
-    ...props
-  }: T) => {
-
-    // MARK: @config
+export const withSMTabPanelWrap = <T extends SMTabPanelProps>(Component: React.FunctionComponent<T>) => {
+  const Comp = (props: T) => {
     const { _tabsState } = SM.useStores();
-
-    // MARK: @state
-
-    // MARK: @reactions
-
-    // MARK: @helpers
-
-    // MARK: @methods
 
     return (
       <Component
@@ -28,5 +14,6 @@ export const withSMTabPanelWrap = <T extends SMTabPanelProps>(
   };
 
   Comp.displayName = "withSMTabPanelWrap";
+
   return Comp;
 };

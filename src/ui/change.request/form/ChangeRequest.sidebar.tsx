@@ -1,24 +1,21 @@
-import { Box, IconButton, TooltipProps, Typography } from "@material-ui/core";
+import { Box, IconButton, Typography } from "@material-ui/core";
+import cx from "classnames";
 import React, { useState } from "react";
+import { useIntl } from "react-intl";
 import { SMBox, SMText } from "../../../App";
-import { styles as CRStyles, tooltipStyles } from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
-import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse_icon.svg";
-import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
-
-import { FBTooltip } from "../../form.builder";
-import Colors from "../../layout/theme/utils/colors";
-
-import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
-
+import useStyles from "../../../App/Enlil/Features/DocumentRevisionForm/Components/Sidebar/DocumentRevisionSidebar.new.styles";
 import { ReactComponent as BookmarkIcon } from "../../../assets/images/bookmark.svg";
+import { ReactComponent as CollapseIcon } from "../../../assets/images/collapse_icon.svg";
 import { ReactComponent as EyeIcon } from "../../../assets/images/eye-icon-references.svg";
 import { ReactComponent as TimelineIcon } from "../../../assets/images/history.svg";
-
-import { useIntl } from "react-intl";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
 import ChangeRequestAuditContainer from "../../change.request/audit/Audit.container";
 import CRReferences from "../../change.request/references/Reference";
 import Bookmarks from "../../documentRevision/Sidebar/Bookmarks.new";
+import SidebarContainer from "../../documentRevision/Sidebar/Sidebar.container";
+import { Sidebar as SidebarTypes } from "../../documentRevision/Sidebar/types";
+import { FBTooltip } from "../../form.builder";
+import Colors from "../../layout/theme/utils/colors";
 
 interface Props {
   changeRequest: ChangeRequest;
@@ -26,11 +23,6 @@ interface Props {
   isDrawerOpen: boolean;
   fromEdit?: boolean;
 }
-
-const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="left" classes={classes} {...props} />;
-};
 
 const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
   changeRequest,
@@ -42,7 +34,7 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
   const intl = useIntl();
 
   const [tab, setTab] = useState(0);
-  const crClasses = CRStyles(isDrawerOpen);
+  const classes = useStyles();
 
   const sidebarList: SidebarTypes[] = [
     {
@@ -83,7 +75,7 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
         title: intl.formatMessage({
           id: "document.revision.bookmarks",
         }),
-        component: <Bookmarks fromAR={true} />,
+        component: <Bookmarks />,
       },
     },
   ];
@@ -92,14 +84,18 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
     <Box
       height="100%"
       bgcolor="white"
-      width={isDrawerOpen ? 281 : 48}
-      marginTop={fromEdit ? 0.25 : 1.25}
+      width={isDrawerOpen ? 280 : 48}
       borderColor={Colors.medium_gray}
-      className={crClasses.sidebar}
+      className={cx(classes.sidebar, { [classes.sidebarOpened]: isDrawerOpen })}
     >
       <Box display="flex" height={48} alignItems="center">
-        <Box width={48} textAlign="center" className={crClasses.iconBox}>
-          <StyledTooltip
+        <Box
+          width={48}
+          textAlign="center"
+          className={cx(classes.iconBox, { [classes.iconBoxOpened]: isDrawerOpen })}
+        >
+          <FBTooltip
+            placement="left"
             title={
               isDrawerOpen ? (
                 <SMText label="common.minimize" />
@@ -110,17 +106,17 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
           >
             <IconButton
               onClick={() => setOpen(!isDrawerOpen)}
-              className={`${crClasses.iconButtonNew} ${!isDrawerOpen ? "maximize" : ""}`}
+              className={`${classes.iconButtonNew} ${!isDrawerOpen ? "maximize" : ""}`}
             >
               <CollapseIcon />
             </IconButton>
-          </StyledTooltip>
+          </FBTooltip>
         </Box>
         <Box width={233}>
           {isDrawerOpen && (
             <Typography
               variant="h5"
-              className={crClasses.tabTitle}
+              className={classes.tabTitle}
             >
               <SMText
                 boxProps={{ flexGrow: 1, ml: 2 }}
@@ -132,9 +128,10 @@ const ChangeRequestSidebar: React.FunctionComponent<Props> = ({
       </Box>
       <SMBox
         display="flex"
-        stretchY="calc(100% - 56px)"
+        flexGrow={1}
         borderTop={1}
         borderColor={Colors.medium_gray}
+        overflow="hidden"
       >
         <SidebarContainer
           sidebarList = {sidebarList}

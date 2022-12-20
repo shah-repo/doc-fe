@@ -27,20 +27,8 @@ export default makeStyles(() =>
     exportIcon: {
       margin: "0 10px",
     },
+    previewDialog: {
+      backgroundColor: Colors.alabaster,
+    },
   })
 );
-
-export const tooltipStyles = makeStyles(() => ({
-  tooltip: {
-    backgroundColor: Colors.almost_black,
-    fontSize: "12px",
-    fontFamily: "Sora",
-    fontWeight: 400,
-  },
-  tooltipPlacementTop: {
-    marginBottom: "20px",
-  },
-  arrow: {
-    color: Colors.almost_black,
-  },
-}));

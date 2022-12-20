@@ -186,7 +186,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Verify that Approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Approve and release the form", () => {
@@ -284,8 +284,8 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Verify that the selected part is copied to the new build", () => {
-        cy.get("[data-cy=\"childrenParts\"]").arrowType(PART_NAME + "{downarrow}{enter}");
-        cy.get("[data-cy=\"childrenParts\"]").should("contains.attr", "value", "PRT-00004 - rev 1 - Test Part");
+        cy.get("[data-cy=\"childForRevise\"]").arrowType(PART_NAME + "{downarrow}{enter}");
+        cy.get("[data-cy=\"childForRevise\"]").should("contains.attr", "value", "PRT-00004 - Test Part");
       });
     });
 

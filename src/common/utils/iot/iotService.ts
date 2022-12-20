@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 import * as AWSMqttClient from "aws-mqtt";
 import { Credentials } from "aws-sdk/global";

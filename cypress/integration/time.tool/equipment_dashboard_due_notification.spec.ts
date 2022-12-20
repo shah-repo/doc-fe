@@ -1,6 +1,10 @@
 /* eslint-disable max-len */
+
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
 
 import "moment-timezone";
 import moment from "moment-timezone";
@@ -25,17 +29,17 @@ let createdPMForm;
 let createdCalibrationForm;
 let group;
 let equipmentURL;
-let pmSchemaField;
-let calibrationSchemaField;
+let calDocId;
+let calId;
 let adminSessionId;
 let asyncTasksGroup;
 
 const equimentDueDays = (31);
-const ADMIN_USER = USERS[1];
+const ADMIN_USER = USERS[11];
 const equipmentTitleForm = `Equipment-Form`;
 const equipmentDocId = "EQ-00001";
 
-context("'Equipment' test with time tool", () => {
+context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -58,9 +62,9 @@ context("'Equipment' test with time tool", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[3], USERS[4]],
             documentTypes: [
               ClinicalProtocolDocType,
             ],
@@ -68,7 +72,7 @@ context("'Equipment' test with time tool", () => {
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
-          coordinatorUser = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          coordinatorUser = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
@@ -79,7 +83,7 @@ context("'Equipment' test with time tool", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         adminSessionId = loginResponse.sessionId;
@@ -448,13 +452,6 @@ context("'Equipment' test with time tool", () => {
     it("Click create document", () => {
       cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      cy.wait("@response").then((res) => {
-        if (res.response) {
-          const response = res.response.body;
-          pmSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Preventative Maintenance");
-          calibrationSchemaField = response.formTemplate.schema.find((schemaList) => schemaList.label === "Calibration");
-        }
-      });
       cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -496,14 +493,14 @@ context("'Equipment' test with time tool", () => {
       cy.drSelectSpecificationTab();
     });
 
-    it(`Select '${USERS[1].name}' for Primary Owner`, () => {
+    it(`Select '${USERS[11].name}' for Primary Owner`, () => {
       cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
-      cy.get("ul>li[role=\"option\"]").contains(USERS[1].name).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(USERS[11].name).arrowClick();
     });
 
-    it(`Select '${USERS[2].name}' for Coordinator`, () => {
+    it(`Select '${USERS[12].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
-      cy.get("ul>li[role=\"option\"]").contains(USERS[2].name).arrowClick();
+      cy.get("ul>li[role=\"option\"]").contains(USERS[12].name).arrowClick();
     });
 
     it("Click create document after filling document", () => {
@@ -532,7 +529,8 @@ context("'Equipment' test with time tool", () => {
     });
 
     it("Type preventative maintenance instruction", () => {
-      cy.get("[data-cy^=\"preventative-maintenance\"]>div>div>div>div>div[contenteditable]")
+      cy.get(`[data-cy="form.builder.pm.instructions"]`).eq(0).contains("Instructions").scrollIntoView();
+      cy.get("[data-cy^='preventative-maintenance'] div[contenteditable]").last()
         .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
       cy.unClick();
     });
@@ -554,7 +552,7 @@ context("'Equipment' test with time tool", () => {
     });
 
     it("Type calibration maintenance instruction", () => {
-      cy.get("[data-cy^=\"calibration\"]>div>div>div>div>div[contenteditable]")
+      cy.get(`[data-cy^="calibration"] div[contenteditable]`).last()
         .click({ force: true }).clear().arrowType("Instructions for calibration");
       cy.unClick();
     });
@@ -589,15 +587,23 @@ context("'Equipment' test with time tool", () => {
 
   context("Fill calbration form and release it", () => {
     it("Click 'NEW CAL' on calibration section", () => {
-      cy.url().then((url: any) => {
-        const docIdFromUrl = url.split("/").pop();
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationForm.id}/create_maintenance/${docIdFromUrl}/${calibrationSchemaField.name}`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.visit(newPMUrl);
-        });
+      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.get("[data-cy='form.builder.new.calibration']").arrowClick();
+      cy.wait("@response").then((res) => {
+        if (res.response) {
+          const response = res.response.body;
+          calDocId = response.documentId;
+          calId = response.id;
+          const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers], () => {
+            cy.visit(newUrl);
+          });
+        }
       });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -606,18 +612,6 @@ context("'Equipment' test with time tool", () => {
 
     it("Enter title 'Calibration document'", () => {
       cy.drEnterDocumentTitle({ name: "Calibration document" });
-    });
-
-    it("Select document type 'Maintenance Record'", () => {
-      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-    });
-
-    it("Select revision stage 'Numeric'", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Navigate to details tab", () => {
@@ -679,15 +673,22 @@ context("'Equipment' test with time tool", () => {
     });
 
     it("Click 'NEW PM' on Preventative Maintenance section", () => {
-      cy.url().then((url: any) => {
-        const docIdFromUrl = url.split("/").pop();
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMForm.id}/create_maintenance/${docIdFromUrl}/${pmSchemaField.name}`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.visit(newPMUrl);
-        });
+      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+      cy.wait("@response").then((res) => {
+        if (res.response) {
+          const response = res.response.body;
+          calDocId = response.documentId;
+          const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers], () => {
+            cy.visit(newUrl);
+          });
+        }
       });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -696,14 +697,6 @@ context("'Equipment' test with time tool", () => {
 
     it("Enter title 'Preventative Maintenance'", () => {
       cy.drEnterDocumentTitle({ name: "Preventative Maintenance" });
-    });
-
-    it("Select revision stage 'Numeric'", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("Navigate to details tab", () => {
@@ -772,16 +765,12 @@ context("'Equipment' test with time tool", () => {
     });
 
     it("Log user in", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: coordinatorUser.id });
+      cy.authLoginToDashboard({ USER: USERS[12], employeeId: coordinatorUser.id });
     });
 
     it("Verify Dashboard list", () => {
-      cy.get("[data-cy=dashboardFeedList]>div").eq(0)
-        .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days`)
-        .should("exist");
-      cy.get("[data-cy=dashboardFeedList]>div").eq(1)
-        .contains(`${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days`)
-        .should("not.exist");
+      cy.dashVerifyListItemExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Preventative Maintenance in 30 days` });
+      cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${equipmentDocId}Rev 1 Equipment documentis Due for Calibration in 30 days` });
     });
 
     it("Logout", () => {
@@ -820,7 +809,7 @@ context("'Equipment' test with time tool", () => {
 
         it("Submit async task", () => {
           cy.asyncTaskClickSubmit();
-          cy.wait(2000);
+          cy.wait(60000);
         });
       });
 
@@ -830,7 +819,7 @@ context("'Equipment' test with time tool", () => {
         });
 
         it("Log user in", () => {
-          cy.authLoginToDashboard({ USER: USERS[2], employeeId: coordinatorUser.id });
+          cy.authLoginToDashboard({ USER: USERS[12], employeeId: coordinatorUser.id });
         });
 
         it("Verify user is loged in", () => {

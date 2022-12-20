@@ -2,28 +2,24 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
 export default makeStyles((theme: Theme) =>
   createStyles({
-    leftPanelEditorForm: {
-      width: "100%",
-    },
-    headerItem: {
-      width: "300px",
-    },
-    rootContainer: {
-      height: "calc(100vh - 86px)",
-      overflow: "auto",
-      padding: "15px 0px",
+    root: {
+      height: "100%",
+      overflow: "hidden",
+      padding: theme.spacing(2, 0, 1),
+      flexDirection: "column",
+      flexWrap: "nowrap",
     },
     grid: {
-      "height": "calc(100vh - 320px)",
+      "flexGrow": 1,
       "overflow": "auto",
-      "padding": "15px",
+      "padding": theme.spacing(2),
       "& .MuiFormHelperText-root": {
-        lineHeight: "20px",
-        paddingLeft: "30px",
+        lineHeight: 1.35,
+        paddingLeft: theme.spacing(4),
       },
     },
-    gridItem: {
-      width: "100%",
+    actions: {
+      padding: theme.spacing(.5, 1, 0),
     },
   })
 );

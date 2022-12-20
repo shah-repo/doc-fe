@@ -10,9 +10,9 @@ const styles = () => ({
     "color": Colors.navy,
     "border": `1px solid ${Colors.sky_blue}`,
     "boxShadow": "none",
+    "padding": "5px 20px",
     "&:hover": {
       background: Colors.sky_blue,
-      border: `1px solid ${Colors.sky_blue}`,
     },
   },
 });

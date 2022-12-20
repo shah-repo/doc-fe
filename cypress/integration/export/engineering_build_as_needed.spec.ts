@@ -261,6 +261,7 @@ context("Procedure and parts flow test", () => {
         body: {
           category: "EB",
           addNewBtnLabel: "Create Engineering Build",
+          config: {},
           columns: [
             {
               label: "EB ID",
@@ -734,7 +735,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Verify that Approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
     });
 
@@ -771,15 +772,18 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Verify that Approvals field is automatically added", () => {
-        cy.get("div[data-cy=\"form.builder.approvals\"]").should("exist");
+        cy.get("[data-cy=\"form.builder.approvals\"]").should("exist");
       });
 
       it("Import the template", () => {
-        cy.get("#fb-import-schema").attachFile("../downloads/EB_Document.json");
+        cy.get("#fb-import-schema").attachFile("EB_Document.json");
       });
     });
 
     context("Verify the imported field", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
+      });
 
       it("Verify field EB Procedure", () => {
         cy.get("[data-cy='form.builder.procedure']").should("have.text", "EB Procedure");

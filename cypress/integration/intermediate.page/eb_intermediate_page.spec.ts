@@ -441,7 +441,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Select autocomplete", () => {
-      cy.get(`[name^="fb-autocomplete-"]`).eq(1).autocompleteSelect("FM-00001" );
+      cy.get(`[name^="fb-autocomplete-2"]`).eq(1).autocompleteSelect("FM-00001" );
     });
 
     it("Verify Checkbox group should display now", () => {

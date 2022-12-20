@@ -346,7 +346,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Check 'Documents to Train on' is displayed", () => {
-        cy.get(`.MuiDialogContent-root [value^="Documents"]`).check();
+        cy.get(`[name="training-types-of-items-to-be-trained-on"] input[value^="Documents"]`).check();
         cy.intPageVerifyDocumentsToBeTrainedOnExist();
       });
 
@@ -450,6 +450,7 @@ context("Intermediate page validation", () => {
       });
     });
   });
+
   context("Verify Preview mode for overview tab after doc creation", () => {
 
     it("Click on Preview", () => {
@@ -533,7 +534,6 @@ context("Intermediate page validation", () => {
   });
 
   context("Verify fields in preview mode editable or not", () => {
-
     it("Check documents to be trained on", () => {
       cy.get(`.MuiDialogContent-root [name="training-types-of-items-to-be-trained-on"]`).should("exist");
       cy.get(`.MuiDialogContent-root [value^="Documents"]`).check();
@@ -573,18 +573,15 @@ context("Intermediate page validation", () => {
     it("Close the preview mode dialog", () => {
       cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
-
   });
 
   context("Add FB fields and verify field 2 is visible when field 1 has value 'YES'", () => {
-
     it("Add textfield", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "FbTrainingText" });
       cy.fbAddField();
     });
-
 
     it("Add radio button group", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
@@ -624,11 +621,9 @@ context("Intermediate page validation", () => {
       cy.get("[name^='fb-training-text']").last().arrowType("Yes");
       cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
-
   });
 
   context("Remove the FB fields validation and verify", () => {
-
     it("Edit Component", () => {
       cy.get("[data-cy='edit-schema-item']").last().arrowClick({ force: true });
       cy.get(`[data-cy="fb-editor-mode-validation-1"]`).click().wait(1000);
@@ -642,8 +637,8 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify Text field and radio button group is visible after removal of validation", () => {
-      cy.get("[name^='radio-btn-group-for-inline']").last().should("exist");
-      cy.get("[data-cy='RadioBtnGroup for inline']").should("be.visible");
+      cy.get(`[data-cy="FbTrainingText"]`).last().should("exist");
+      cy.get("[data-cy='RadioBtnGroup for inline']").last().should("exist");
     });
   });
 });

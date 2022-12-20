@@ -1,10 +1,4 @@
-import {
-  Box,
-  Grid,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Box, Grid, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as ApprovedIcon } from "../../../../../assets/images/approved_status.svg";
 import { ReactComponent as ApprovedWhiteIcon } from "../../../../../assets/images/approved_status_white.svg";
@@ -16,10 +10,7 @@ import { ReactComponent as TrainingIcon } from "../../../../../assets/images/tra
 import { ReactComponent as WarningIcon } from "../../../../../assets/images/warning_status.svg";
 import { ReactComponent as WarningWhiteIcon } from "../../../../../assets/images/warning_status_white.svg";
 import { Nullable } from "../../../../../state/ducks/common/types";
-import {
-  TrainingStatus,
-  TrainingStatusLabels,
-} from "../../../../../state/ducks/dashboard.new/my.feeds/types";
+import { TrainingStatus, TrainingStatusLabels } from "../../../../../state/ducks/dashboard.new/my.feeds/types";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import DocId from "../../common/DocId/presenter";
@@ -28,7 +19,7 @@ import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { HoverStyleChip } from "./DefaultHoverStyleChip";
 import { NormalStyleChip } from "./DefaultNormalStyleChip";
-import { styles } from "./DefaultTraining.styles";
+import useStyles from "./DefaultTraining.styles";
 
 interface Props {
   id: string;
@@ -64,7 +55,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const hoverItem = hoverItemId === id;
   const onMouseHoverPinIcon = () => {
@@ -85,7 +76,13 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   docDocumentId = docDocumentId || "";
   docRevId = docRevId || "";
   return (
-    <StyledListItem button onMouseEnter={onMouseHoverItemListItem} className={classes.buttoncursor} disableRipple>
+    <StyledListItem
+      button
+      divider
+      disableRipple
+      className={classes.buttoncursor}
+      onMouseEnter={onMouseHoverItemListItem}
+    >
       <ListItemIcon>
         <TrainingIcon height={30} width={30} />
       </ListItemIcon>

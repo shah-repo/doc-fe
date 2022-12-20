@@ -1,25 +1,11 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Collapse,
-  Grid,
-  IconButton,
-  List,
-  ListItemText,
-  Modal,
-  Typography,
-} from "@material-ui/core";
+import { Avatar, Box, Button, Collapse, Grid, IconButton, List, ListItemText, Modal, Typography } from "@material-ui/core";
 import React from "react";
 import { useIntl } from "react-intl";
 import { ReactComponent as ExpandIcon } from "../../../../../assets/images/arrow_down.svg";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/arrow_up.svg";
 import { ReactComponent as EmailSuccessIcon } from "../../../../../assets/images/email_success.svg";
 import { ReactComponent as ModelCloseIcon } from "../../../../../assets/images/model_close.svg";
-import {
-  getFormattedDateString,
-  MomentFormats,
-} from "../../../../../common/utils/date";
+import { getFormattedDateString, MomentFormats } from "../../../../../common/utils/date";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { emailAllActions } from "../../../../../state/ducks/email.all";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
@@ -51,14 +37,15 @@ interface EmailModalProps {
   }[];
 }
 
-const EmailModal: React.FunctionComponent<EmailModalProps> = ({
+
+const EmailModal: React.FunctionComponent<EmailModalProps> = React.forwardRef(({
   id,
   handleEmailModelClose,
   setLastEmailSent,
   pendingApprovers,
   pendingEmailSentAt,
   approvedApprovers,
-}) => {
+}, ref) => {
   const classes = styles();
   const [apiAlertModelOpen, setApiAlertModel] = React.useState(false);
   const [openPending, setOpenPending] = React.useState(true);
@@ -121,6 +108,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
         <Grid item>
           <IconButton
             aria-label="close"
+            data-cy="close-model"
             className={classes.closemodel}
             onClick={handleApiAlertModelClose}
           >
@@ -175,6 +163,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
         <Grid item>
           <IconButton
             aria-label="close"
+            data-cy="close-model"
             className={classes.closemodel}
             onClick={handleEmailModelClose}
           >
@@ -187,11 +176,13 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           {openPending ? (
             <CollapseIcon
               className={classes.iconupdown}
+              data-cy="collapse-icon"
               onClick={handleClickPending}
             />
           ) : (
             <ExpandIcon
               className={classes.iconupdown}
+              data-cy="expand-icon"
               onClick={handleClickPending}
             />
           )}
@@ -207,6 +198,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                   <Typography
                     variant="h2"
                     component="h2"
+                    data-cy="pending-title"
                     className={classes.pendingtitle}
                     noWrap
                   >
@@ -246,6 +238,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     <Grid item>
                       <Button
                         onClick={() => handleSendEmail()}
+                        data-cy="email-button"
                         className={classes.emailbutton}
                       >
                         <Text translation="email.button.title" />
@@ -286,6 +279,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     <Typography
                       component="span"
                       variant="h2"
+                      data-cy="list-item-text"
                       className={classes.listitemtext}
                     >
                       {pending.userName}
@@ -307,6 +301,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
           ) : (
             <ExpandIcon
               className={classes.iconupdown}
+              data-cy="expand-icon"
               onClick={handleClickApproved}
             />
           )}
@@ -349,6 +344,7 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
                     <Typography
                       component="span"
                       variant="h2"
+                      data-cy="list-item-text"
                       className={classes.listitemtext}
                     >
                       {approved.userName}
@@ -362,5 +358,5 @@ const EmailModal: React.FunctionComponent<EmailModalProps> = ({
       </Box>
     </Box>
   );
-};
+});
 export default EmailModal;

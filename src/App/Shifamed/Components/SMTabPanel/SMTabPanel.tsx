@@ -6,18 +6,23 @@ import { withSMTabPanelWrap } from "./SMTabPanel.wrap";
 
 const SMTabPanel: React.FunctionComponent<SMTabPanelProps> = ({
   _tabsState,
-  index,
+  tabId,
+  tabIndex,
   children,
   panelProps,
 }) => {
   const classes = useStyles();
+  const active = _tabsState?.isTabActive(tabId);
+
+  if (!active) {
+    return null;
+  }
 
   return (
     <Observer>
       {() => (
         <SMBox
-          hidden={_tabsState?.value !== index}
-          id={`sm-tabpanel-${index}`}
+          id={`sm-tabpanel-${tabIndex ?? tabId}`}
           className={classes.content}
           {...panelProps}
         >

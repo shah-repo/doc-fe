@@ -61,14 +61,13 @@ class FBPOReceiveState extends FBRequest<DocumentRevision, any>  {
     await this.fetch();
   };
 
-  public addReceiveQuantity = (docRevId?: string, body?: ReceiveQuantityBody) => {
+  public addReceiveQuantity = async (docRevId?: string, body?: ReceiveQuantityBody) => {
     if (!docRevId) { return; }
-    this.receiveQuantityAPI.set({
-      url: FBEndpoint.PatchDocumentRevision,
-      urlValues: { docRevId },
-      body,
-      method: "patch",
-    });
+    this.receiveQuantityAPI.setUrl({ docRevId });
+    if (body) {
+      this.receiveQuantityAPI.setBody(body);
+    }
+    return this.receiveQuantityAPI.patch();
   };
 }
 

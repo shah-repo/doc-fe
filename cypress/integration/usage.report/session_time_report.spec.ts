@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import { integer } from "aws-sdk/clients/cloudfront";
 import { float } from "aws-sdk/clients/lightsail";
 import faker from "faker";
@@ -228,7 +232,7 @@ const numberOfCreatedDocsForComany2: StructureFromPerCompanyReport[] = [
   },
 ];
 
-context("Test usage report is correctly counting documents", () => {
+context("Test usage report is correctly counting documents", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -3995,7 +3999,7 @@ context("Test usage report is correctly counting documents", () => {
     });
 
     it("Verify data from usage report", () => {
-      expect(spentTimeFromReport.sessionTimeAproxAdminUser).to.be.within(0, 1500);
+      expect(spentTimeFromReport.sessionTimeAproxAdminUser).to.be.within(0, 15000);
       expect(spentTimeFromReport.sessionTimeAproxUser2).to.be.within(0, 1);
       expect(spentTimeFromReport.sessionTimeAproxUser3).to.be.within(0, 1);
       expect(spentTimeFromReport.sessionTimeAproxUser4).to.be.within(0, 1);

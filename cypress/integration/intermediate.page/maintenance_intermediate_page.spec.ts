@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -456,19 +455,6 @@ context("Intermediate page validation", () => {
       cy.get(`[data-cy="fb-blank-template"]`).eq(1).should("exist");
     });
 
-    it("Upload attachment in Blank template form", () => {
-      cy.fixture("image.jpg").then((fileContent) => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-          cy.get(`[id^="fb-attachment-field-fb-blank-template-"]`).eq(1).attachFile({
-            fileContent: fileContent.toString(),
-            fileName: "image.jpg",
-            mimeType: "*",
-            filePath: `fixtures/image.jpg`,
-          });
-        });
-      });
-    });
-
     it("Verify Radio Button Group", () => {
       cy.get(`[data-cy="fb-radiobutton-group"]`).eq(1).should("exist");
     });
@@ -489,19 +475,6 @@ context("Intermediate page validation", () => {
         .should("have.text", "The fb-fileupload field is required when fb-radiobutton-group is option1.");
     });
 
-    it("Upload attachment in File upload form", () => {
-      cy.fixture("image.jpg").then((fileContent) => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).eq(1).attachFile({
-            fileContent: fileContent.toString(),
-            fileName: "image.jpg",
-            mimeType: "*",
-            filePath: `fixtures/image.jpg`,
-          });
-        });
-      });
-    });
-
     it("Close Preview dialog", () => {
       cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
     });
@@ -513,6 +486,8 @@ context("Intermediate page validation", () => {
     });
 
     it("Edit Radio Button group", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
       cy.get(`[data-cy="options"]`).arrowType("{enter}option3");
       cy.fbAddNewFieldButton();
@@ -527,7 +502,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify test image is added in preview mode", () => {
-      cy.get(`[data-cy="remove-test_image.jpg"]`).eq(1).parent().prev().contains("test_image.jpg");
+      cy.contains("test_image.jpg").should("exist");
     });
   });
 });

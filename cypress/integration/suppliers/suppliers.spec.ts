@@ -605,7 +605,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.url().then((url: any) => {
         supplierDocument = url;
       });
@@ -631,7 +631,7 @@ context("Create company via API and create Suppliers document", () => {
 
       it("Approve supplier document", () => {
         SystemRequirement("REQ-4800");
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
         dateOfApproval2 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval2MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
           .format("MMMM D, YYYY hh:mm A");
@@ -658,7 +658,7 @@ context("Create company via API and create Suppliers document", () => {
 
       it("Approve supplier document", () => {
         SystemRequirement("REQ-4800");
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
         dateOfApproval3 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval3MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
           .format("MMMM D, YYYY hh:mm A");
@@ -683,7 +683,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Approve supplier document", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
         dateOfApproval1 = moment().tz("America/Los_Angeles").format("MMMM D, YYYY hh:mm A");
         dateOfApproval1MinuteAfter = moment().tz("America/Los_Angeles").add(1, "minute")
           .format("MMMM D, YYYY hh:mm A");
@@ -845,7 +845,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Approve supplier document", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       it("Verify revision after update is equal to 2", () => {
@@ -875,7 +875,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Click 'Save' button", () => {
-        cy.recClickCreateDocumentWithApiCall();
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1129,7 +1129,9 @@ context("Create company via API and create Suppliers document", () => {
         });
 
         it("Approve supplier document", () => {
-          cy.ebApprove();
+          cy.ebTryToApprove();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify revision after update is equal to 2", () => {

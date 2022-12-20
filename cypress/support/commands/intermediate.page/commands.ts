@@ -33,6 +33,7 @@ declare global {
       intPageVerifyApproversExist(): Chainable<Subject>;
       intPageVerifyApproversNotExist(): Chainable<Subject>;
       intPageVerifyApprovalsExist(): Chainable<Subject>;
+      intPageVerifyNewApprovalsExist(): Chainable<Subject>;
       intPageVerifyApprovalsNotExist(): Chainable<Subject>;
       intPageVerifyAddDocumentExist(): Chainable<Subject>;
       intPageVerifyAddDocumentExistDisabled(): Chainable<Subject>;
@@ -323,6 +324,10 @@ Cypress.Commands.add("intPageVerifyApproversNotExist", () => {
 
 Cypress.Commands.add("intPageVerifyApprovalsExist", () => {
   cy.get(`[data-cy="form.builder.approvals"]`).should("exist");
+});
+
+Cypress.Commands.add("intPageVerifyNewApprovalsExist", () => {
+  cy.get(`[data-cy="Approvals"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifyApprovalsNotExist", () => {
@@ -733,7 +738,7 @@ Cypress.Commands.add("intPageVerifyRequestorNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifySupplierExist", () => {
-  cy.get(`[data-cy="Supplier "]`).should("exist");
+  cy.get(`[data-cy^="Supplier"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifySupplierNotExist", () => {

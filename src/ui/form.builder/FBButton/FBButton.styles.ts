@@ -44,6 +44,7 @@ export default makeStyles(() =>
       "color": Colors.white,
       "border": `1px solid ${Colors.navy}`,
       "boxShadow": "none",
+      "padding": "5px 20px",
       "&:hover": {
         background: Colors.navy_active,
         borderColor: Colors.navy_active,
@@ -51,7 +52,7 @@ export default makeStyles(() =>
       },
       "&.Mui-disabled": {
         border: "none",
-        backgroundColor: Colors.gains_boro,
+        backgroundColor: Colors.dark_gray2,
         color: Colors.white,
       },
       "&.MuiButton-outlinedPrimary": {

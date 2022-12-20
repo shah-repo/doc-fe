@@ -868,7 +868,7 @@ context("Export Engineering Build doc", () => {
 
   context("Create new Eb doc from form", () => {
     it("Click 'Create New' button", () => {
-      cy.drCreateNewDocumentFromFormRecord();
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Turn off autosave", () => {
@@ -922,6 +922,9 @@ context("Export Engineering Build doc", () => {
     it("Add material document to step #1", () => {
       cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
       cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Materials document").arrowClick();
       cy.get("[name=\"quantity\"]").arrowType("2");
       cy.get("[data-cy=\"unit\"]").arrowClick();
@@ -932,6 +935,9 @@ context("Export Engineering Build doc", () => {
     it("Add equipment document to step #1", () => {
       cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
       cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Equipment document").arrowClick();
       cy.unClick();
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -953,6 +959,9 @@ context("Export Engineering Build doc", () => {
     it("Add material document to step #2", () => {
       cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(1).arrowClick();
       cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       cy.get("[name=\"quantity\"]").arrowType("3");
       cy.get("[data-cy=\"unit\"]").arrowClick();
@@ -963,6 +972,9 @@ context("Export Engineering Build doc", () => {
     it("Add equipment document to step #2", () => {
       cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(1).arrowClick();
       cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Equipment document").arrowClick();
       cy.unClick();
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -1019,7 +1031,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Click on Reject button", () => {
-      cy.get("[data-cy=\"common.reject\"]").arrowClick();
+      cy.get("[data-cy=\"common.reject\"]").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1027,6 +1039,8 @@ context("Export Engineering Build doc", () => {
 
   context(`Login as EB owner`, () => {
     it("Log out user", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.authLogout();
     });
 
@@ -1261,6 +1275,9 @@ context("Export Engineering Build doc", () => {
     it("Add material document to step #3", () => {
       cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(2).arrowClick();
       cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       cy.get("[name=\"quantity\"]").arrowType("4");
       cy.get("[data-cy=\"unit\"]").arrowClick();
@@ -1271,6 +1288,9 @@ context("Export Engineering Build doc", () => {
     it("Add equipment document to step #3", () => {
       cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(2).arrowClick();
       cy.get("[data-cy=\"title\"]").arrowClick();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("ul>li[role=option]").contains("Equipment document").arrowClick();
       cy.unClick();
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
@@ -1295,7 +1315,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Save the EB", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Submit for Approval", () => {

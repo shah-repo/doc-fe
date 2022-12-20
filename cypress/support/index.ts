@@ -38,6 +38,7 @@ import "./commands/export/commands";
 import "./commands/filters/commands";
 import "./commands/form.builder/commands";
 import "./commands/group.management/commands";
+import "./commands/help.center/commands";
 import "./commands/imap/commands";
 import "./commands/intermediate.page/commands";
 import "./commands/layout.new/commands";
@@ -54,6 +55,9 @@ import "./commands/user.management/commands";
 import { CONFIG, RUN_ENVIRONMENT_OPTIONS } from "./config";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require("cypress-grep")();
 
 Cypress.on("uncaught:exception", (err, runnable) => {
   const socketIsClosingError =

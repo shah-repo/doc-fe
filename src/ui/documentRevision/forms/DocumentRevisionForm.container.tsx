@@ -25,10 +25,10 @@ import useGetHasPermission from "../../hooks/useGetHasPermission";
 import useShouldUpgradeToLatest from "../../hooks/useShouldUpgradeToLatest";
 import Colors from "../../layout/theme/utils/colors";
 import { DocumentCloneType } from "../Clone.container";
-import { checkIsDocumentEditableSchema, checkIsDocumentRecord, checkIsDocumentDAM, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../helpers/checkDocumentGroup";
-import { getShouldShowUpgradeForRecord } from "../helpers/records";
+import { checkIsDocumentDAM, checkIsDocumentEditableSchema, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO, checkIsDocumentRecord } from "../helpers/checkDocumentGroup";
+import { getShouldShowUpgradeForRecord, isFormWithInlineApproval } from "../helpers/records";
 import { isDocumentAlphaReleased } from "../helpers/revisionStage";
-import { DocumentRevisionFormValues } from "./types";
+import { DocumentRevisionFormValues, FBDataStoreApprovalKeys } from "./types";
 
 export interface FormHeaderContext {
   documentRevision: DocumentRevision;
@@ -144,21 +144,36 @@ DocumentRevisionFormContainerProps
   useObserver(() => {
     cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     if (didMount) {
+
+      if (documentRevision?.updatedAt && FBDataStore?.refreshData?.updatedAt) {
+        documentRevision.updatedAt = FBDataStore?.refreshData?.updatedAt;
+      }
+
       if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
         documentRevision.approvals = FBDataStore.poApprovals as Approval[];
+      }
+
+      if (isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema)) {
+        documentRevision.approvals = FBDataStore.inlineApprovals as Approval[];
       }
     }
   });
 
   useEffect(() => {
     if (checkIsDocumentPO(documentRevision?.document?.documentType?.groupOptions)) {
-      FBDataStore.setPoApprovals(documentRevision.approvals);
+      FBDataStore.setApprovals(documentRevision.approvals, FBDataStoreApprovalKeys.PO_APPROVALS);
     }
+
+    if (isFormWithInlineApproval(documentRevision?.formDocument?.formTemplate?.schema)) {
+      FBDataStore.setApprovals(documentRevision.approvals, FBDataStoreApprovalKeys.INLINE_APPROVALS);
+    }
+
     return () => {
       FBDataStore.setRefreshData(undefined);
       FBDataStore.clearPoApprovals();
+      FBDataStore.clearInlineApprovals();
     };
-  }, []);
+  }, [documentRevision]);
 
   useEffect(() => {
     if (type !== "newVersion" && !docId && loadDocumentProposedId && documentTypeAcronym) {
@@ -265,7 +280,7 @@ DocumentRevisionFormContainerProps
     <>
       <Grid ref={bannerPortal} />
       {/* TODO Get rid of inline styles */}
-      <Grid style={{ background: Colors.alabaster, height: "100%" }} >
+      <Grid style={{ background: Colors.alabaster, height: "100%" }}>
         <Formik
           initialValues={cleanInitialValues}
           onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }

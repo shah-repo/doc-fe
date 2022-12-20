@@ -1,12 +1,13 @@
 import { get, isUndefined } from "lodash";
 import React, { useEffect } from "react";
 import { DocumentRevisionFormState, DocumentRevisionSummaryProps, SM, SMProvider } from "../../..";
+import { checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { FB, FBPOApprovalsState, FBProvider } from "../../../../ui/form.builder";
 
 export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummaryProps>(
   Component: React.FunctionComponent<T>,
 ) => {
   const Comp = ({
-    onTabChange,
     onScroll,
     _documentRevisionFormState,
     documentRevision,
@@ -24,22 +25,20 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     const formFB = formInput || formTemplate || formDocument;
     isFB = !isUndefined(formFB);
 
+    const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
+    const poApprovalsState = isPO ? FB.useRef(
+      FBPOApprovalsState,
+      {
+        id: documentRevision.id,
+        approvals: documentRevision?.approvals,
+      },
+    ) : undefined;
 
     // MARK: @state
     useEffect(() => {
       _formState?.setMode("preview");
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // MARK: @reactions
-
-    // MARK: @helpers
-
-    // MARK: @methods
-    onTabChange = (_ev, newValue, tabConfig) => {
-      _tabsState?.setValue(newValue);
-      _tabsState?.setTabID(tabConfig[newValue].tabId);
-    };
 
     onScroll = (ev) => {
       if (!_documentRevisionFormState) { return; }
@@ -52,18 +51,19 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
 
     return (
       <SMProvider {...{ _documentRevisionFormState }}>
-        <Component
-          {...props as T}
-          {...{
-            onTabChange,
-            onScroll,
-            _documentRevisionFormState,
-            _tabsState,
-            documentRevision,
-            schema,
-            isFB,
-          }}
-        />
+        <FBProvider {...{ poApprovalsState }}>
+          <Component
+            {...props as T}
+            {...{
+              onScroll,
+              _documentRevisionFormState,
+              _tabsState,
+              documentRevision,
+              schema,
+              isFB,
+            }}
+          />
+        </FBProvider>
       </SMProvider>
     );
   };

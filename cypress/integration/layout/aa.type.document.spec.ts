@@ -160,6 +160,20 @@ context("AA Document Layout verification", () => {
     });
   });
 
+  context("Navigate to DAM and Verify training 'Training required is checked YES for AA Document'", () => {
+
+    it("Filter AA type document", () => {
+      cy.listLoadingElementShouldNotExist().wait(2000);
+      cy.get(`[aria-colindex="2"] input`).arrowType("AA");
+    });
+
+    it("Verify training checkbox is checked and internal type is other", () => {
+      cy.get("[data-grid-col-index='7'] input").should("be.checked");
+      cy.get("[data-grid-row-index='0']").contains("OTHER").should("exist");
+    });
+
+  });
+
   context("Create AA Document form for migration", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
@@ -258,8 +272,27 @@ context("AA Document Layout verification", () => {
     });
   });
 
+  context("Verify predefiend fields", () => {
+    it("Verify predefiend fields", () => {
+      cy.verifyPredefiendFields();
+      cy.drIsTrainingRequired({ shouldBe: true });
+      cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
+    });
+  });
+
 
   context("Verify description field", () => {
+
+    it("Verify description is highlighted on mouse over", () => {
+      cy.verifyDescriptionIsHighlightedonHover();
+    });
+
+    it("Verify title is highlighted on mouse over", () => {
+      cy.get("#field-name").trigger("mouseover");
+      cy.get("#field-name>div>div").should("have.css", "background-color", "rgb(235, 237, 242)");
+      cy.get("#field-name").trigger("mouseout");
+    });
+
     it("Verify DescriptionToolBar", () => {
       cy.verifyDescriptionToolbar();
     });
@@ -305,20 +338,48 @@ context("AA Document Layout verification", () => {
       cy.unClick();
     });
 
-    it("Click on view more description should be expanded", () => {
+    it("Click on view more description should be expanded and its in edit mode", () => {
       cy.get("[data-cy='description'] button").arrowClick();
       cy.get("div[class^='rdw-editor-toolbar']").should("exist");
+      cy.get(`[data-cy="description"] [contenteditable]`).first().scrollIntoView({ ensureScrollable: false });
     });
 
-    it("Click on view less description should be collapsed", () => {
-      cy.get("[data-cy='description'] button").arrowClick();
-      cy.get("[data-cy='description'] .rdw-editor-toolbar").should("not.exist");
+    it("on click of description description should be editable", () => {
+      cy.get(".DraftEditor-editorContainer").eq(0).arrowClick();
+      cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
+      cy.get("[data-cy='description']").first().scrollIntoView({ ensureScrollable: false });
+    });
+
+    it("click on out side description field should collpase and 2 lines are visible with view more button", () => {
+      cy.unClick();
+      cy.get("[data-cy='description'] button").contains("View more").should("be.visible");
+      cy.get("[data-text='true']").eq(0).should("be.visible");
+      cy.get("[data-text='true']").eq(1).should("be.visible");
+      cy.get("[data-text='true']").eq(2).should("not.be.visible");
+    });
+
+    it("Verify top header is visible on scroll", () => {
+      cy.get("#SMBodyTmpl").scrollTo("top", { ensureScrollable: false });
+      cy.get("header").should("be.visible");
+    });
+
+    it("on click of description description should be editable", () => {
+      cy.get(".DraftEditor-editorContainer").eq(0).arrowClick();
+      cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
     });
   });
 
   context("Verify Document content and Tabs", () => {
     it("Verify there are two tabs Overview and Training tab", () => {
       cy.verifyTabs("overview", "training");
+    });
+
+    it("Verify tab is fixed", () => {
+      cy.verifyFixedTab();
+    });
+
+    it("Verify form opens overview tab default", () => {
+      cy.isTabActive({ name: "overview", index: 0 });
     });
 
     it("Verify form option box exist", () => {
@@ -341,7 +402,9 @@ context("AA Document Layout verification", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
-      cy.fbAddNewFieldButton();
+      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
+        cy.fbAddNewFieldButton();
+      });
     });
 
     it("Add checkbox group", () => {
@@ -361,6 +424,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify Added fields in overview tab ", () => {
+      cy.verifyPredefiendFields();
       cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
       cy.get("[data-cy^='textfield-for-inline']").should("exist");
       cy.get("[name^='checkbox-group-for-inline']").should("exist");
@@ -401,8 +465,17 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
-    it("Verify that scroll bar appearing only on hover", () => {
-      cy.get("[data-cy='timeline-icon']").realHover();
+    it("Verify it is fixed when user scroll", () => {
+      cy.get("[data-cy='generalInfo'").scrollTo("top", { ensureScrollable: false });
+      cy.get("[data-cy='References'").should("be.visible");
+    });
+
+    it("Navigate to history tab", () => {
+      cy.get("[data-cy='timeline-icon']").arrowClick();
+    });
+
+    it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
     });
 
     it("Approve and release FORM document", () => {
@@ -411,22 +484,44 @@ context("AA Document Layout verification", () => {
       });
     });
 
-    it("Check for training text inside dialog box and complete training", () => {
-      cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCompleteTraining], () => {
-          cy.get("[data-cy=training-complete]").click();
-          cy.get("form>div").should("contain.text", "TRN ID");
-          cy.get("form>div").should("contain.text", "Doc ID Rev");
-          cy.get("form>div").should("contain.text", "Title");
-          cy.get("form>div").should("contain.text", "I acknowledge I am trained on");
-          cy.get("[data-cy='training.acknowladge.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='passwordConfirm']").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+  });
+
+  context("Verify title and description not highlighted", () => {
+    it("Verify Title is not highlighted", () => {
+      cy.get("h6").eq(2).trigger("mouseover");
+      cy.get("h6").eq(2).should("not.have.css", "background-color", "rgb(235, 237, 242)");
+      cy.get("h6").eq(2).trigger("mouseout");
     });
+
+    it("Verify Description is not highlighted", () => {
+      cy.verifyDescriptionNotHighlightedonHover();
+    });
+
+    it("Click on view more description should be expanded", () => {
+      cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
+      cy.get("div[class^='rdw-editor-toolbar']").should("not.exist");
+      cy.contains("View less").should("be.visible");
+      cy.get("[data-text='true']").eq(3).should("be.visible");
+    });
+
+    it("Verify top header is visible on scroll", () => {
+      cy.get("main").scrollTo("top", { ensureScrollable: false });
+      cy.get("header").should("be.visible");
+    });
+
+    it("click on out side description field should collpase", () => {
+      cy.get("[data-cy='BaseWithhtml-editor'] button").arrowClick();
+      cy.contains("View more").should("be.visible");
+      cy.get("[data-text='true']").eq(0).should("be.visible");
+      cy.get("[data-text='true']").eq(1).should("be.visible");
+      cy.get("[data-text='true']").eq(2).should("not.be.visible");
+    });
+
+    it("Verify top header is visible on scroll", () => {
+      cy.get("main").scrollTo("top", { ensureScrollable: false });
+      cy.get("header").should("be.visible");
+    });
+
   });
 
 
@@ -446,6 +541,15 @@ context("AA Document Layout verification", () => {
       cy.drCreateNewDocumentFromForm();
     });
 
+    it("Verify Doc should  be AA", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Document List",
+        docId: "AAD-01000",
+        revision: "Rev 1",
+      });
+    });
+
     it("Enter the title", () => {
       cy.drEnterDocumentTitle({ name: "AA Title" });
     });
@@ -455,7 +559,12 @@ context("AA Document Layout verification", () => {
     });
 
     it("The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Document List",
+        docId: "AAD-01000",
+        revision: "Rev 1",
+      });
     });
 
     it("Verify there are two tabs Overview and Training tab", () => {
@@ -468,6 +577,7 @@ context("AA Document Layout verification", () => {
 
     it("Verify AAD opens to the “Overview” tab by default and should show all the default fields up to Attachments ",
       () => {
+        cy.isTabActive({ name: "overview", index: 0 });
         cy.get("[data-cy='tabId.overview']").should("exist");
         cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
       });
@@ -481,6 +591,17 @@ context("AA Document Layout verification", () => {
     });
 
     context("Verify description field", () => {
+
+      it("Verify description is highlighted on mouse over", () => {
+        cy.verifyDescriptionIsHighlightedonHover();
+      });
+
+      it("Verify title is highlighted on mouse over", () => {
+        cy.get("#field-name").trigger("mouseover");
+        cy.get("#field-name>div>div").should("have.css", "background-color", "rgb(235, 237, 242)");
+        cy.get("#field-name").trigger("mouseout");
+      });
+
       it("Verify DescriptionToolBar", () => {
         cy.verifyDescriptionToolbar();
       });
@@ -526,14 +647,34 @@ context("AA Document Layout verification", () => {
         cy.unClick();
       });
 
-      it("Click on view more description should be expanded", () => {
+      it("Click on view more description should be expanded and its in edit mode", () => {
         cy.get("[data-cy='description'] button").arrowClick();
         cy.get("div[class^='rdw-editor-toolbar']").should("exist");
+        cy.get(`[data-cy="description"] [contenteditable]`).first().scrollIntoView({ ensureScrollable: false });
       });
 
-      it("Click on view less description should be collapsed", () => {
-        cy.get("[data-cy='description'] button").arrowClick();
-        cy.get("[data-cy='description'] .rdw-editor-toolbar").should("not.exist");
+      it("on click of description description should be editable", () => {
+        cy.get(".DraftEditor-editorContainer").eq(0).arrowClick();
+        cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
+        cy.get("[data-cy='description']").first().scrollIntoView({ ensureScrollable: false });
+      });
+
+      it("click on out side description field should collpase and 2 lines are visible with view more button", () => {
+        cy.unClick();
+        cy.get("[data-cy='description'] button").contains("View more").should("be.visible");
+        cy.get("[data-text='true']").eq(0).should("be.visible");
+        cy.get("[data-text='true']").eq(1).should("be.visible");
+        cy.get("[data-text='true']").eq(2).should("not.be.visible");
+      });
+
+      it("Verify top header is visible on scroll", () => {
+        cy.get("main").scrollTo("top", { ensureScrollable: false });
+        cy.get("header").should("be.visible");
+      });
+
+      it("on click of description description should be editable", () => {
+        cy.get(".DraftEditor-editorContainer").eq(0).arrowClick();
+        cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
       });
     });
 
@@ -573,8 +714,17 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy='generalInfo']").should("be.visible");
     });
 
+    it("Verify it is fixed when user scroll", () => {
+      cy.get("[data-cy='generalInfo'").scrollTo("top", { ensureScrollable: false });
+      cy.get("[data-cy='References'").should("be.visible");
+    });
+
     it("Verify expand and collapse", () => {
       cy.verifyExpandCollpase();
+    });
+
+    it("Verify Eye icon", () => {
+      cy.verifyReferencesGeneralInfo({ user: USERS[1].name });
     });
 
     it("Verify Reference tab Info", () => {
@@ -706,9 +856,14 @@ context("AA Document Layout verification", () => {
     verifyHistoryContent(history, groupOne);
   });
 
+  context("Verify book mark", () => {
+    it("Verify Book Mark Navigation", () => {
+      cy.get("[data-cy='bookmark-icon']").arrowClick();
+      cy.get("[data-cy='Bookmarks-detail']").should("be.visible");
+    });
+  });
 
-  // start of scenario 1b exisitng AA document verification
-  context("Select Exisitng Draft state documet", () => {
+  context("Document verification before released", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
       cy.dlClearFilters();
@@ -719,6 +874,7 @@ context("AA Document Layout verification", () => {
     });
 
     it(`select 'AA Title'`, () => {
+      cy.listLoadingElementShouldNotExist();
       cy.dlFilterByDocTitle({ docTitle: "AA Title" });
       cy.dlSelectFirstDocument();
     });
@@ -728,6 +884,7 @@ context("AA Document Layout verification", () => {
       cy.get("[data-cy='select.document.documentType.id']").should("exist");
       cy.get("[data-cy='field-document.docId']").should("exist");
       cy.get("[data-cy='field-retrain']").should("exist");
+      cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
     });
     it("Verify Description", () => {
       cy.verifyDescriptionToolbar();
@@ -750,165 +907,213 @@ context("AA Document Layout verification", () => {
       });
     });
 
-    // TO DO training related checks
     it("Verify that right side panel opens by default to the References tab", () => {
       cy.get("[data-cy='References']").should("exist");
       cy.get("[data-cy='generalInfo']").should("be.visible");
     });
+
+    it("Verify it is fixed when user scroll", () => {
+      cy.get("[data-cy='generalInfo'").scrollTo("top", { ensureScrollable: false });
+      cy.get("[data-cy='References'").should("be.visible");
+    });
+
 
     it("Verify Reference tab Info", () => {
       cy.verifyRightSidePanelOtherTabs();
     });
   });
 
-  // right side pannel verification
-
-  context("Verify that right side panel", () => {
-    it("Navigate to document list", () => {
-      cy.navigToDocumentList();
-      cy.dlClearFilters();
+  context("Verify Scroll", () => {
+    it("Navigate to history tab", () => {
+      cy.get("[data-cy='timeline-icon']").arrowClick();
     });
 
-    it("Select the AA inline form", () => {
-      cy.dlFilterByDocTitle({ docTitle: "AA Title" });
-      cy.dlSelectFirstDocument();
-    });
-
-    it("Verify that right side panel opens by default to the References tab", () => {
-      cy.get("[data-cy='References']").should("exist");
-      cy.get("[data-cy='generalInfo']").should("be.visible");
-    });
-
-    it("can be expanded or collapsed and it is fixed as the user scrolls up or down", () => {
-      cy.verifyExpandCollpase();
-    });
-
-    it("Verify Reference tab Info", () => {
-      cy.verifyReferenceTab({ user: USERS[1], formId: "FM-00002", shortName: "GR" });
-    });
-
-    it("Verify References selection", () => {
-      cy.get("[data-cy='referenceTo']").arrowClick();
-      cy.drSelectReferences( "FM-00001" );
-      cy.drRemoveReferences({ reference: "FM-00001" });
+    it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
+      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
     });
   });
 
-  context("Verify Revisions", () => {
+  context("Approve and release and complete the training ", () => {
     it("Approve and release FORM document", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
-    it("Revise Record", () => {
-      cy.get("[data-cy='updateRecord']").arrowClick();
+
+    it("Check for training text inside dialog box and complete training", () => {
+      cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
+      cy.wrapWithWaitOnApiCalls(
+        [CyRoutes.PostCompleteTraining], () => {
+          cy.get("[data-cy=training-complete]").click();
+          cy.get("[data-cy='training.acknowladge.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+          cy.get("[data-cy='passwordConfirm']").arrowClick();
+        });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
     });
 
-    it("Enter document description 'test training description'", () => {
-      cy.drEnterDocumentDescription({ description: "AA Description Rev3" });
+    it("Navigate to training and verify training is completed", () => {
+      cy.drSelectTrainingTab();
+      cy.get("[data-cy='training-status'] span").should("contain.text", "Complete");
     });
 
-    it("Save Record'", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [], () => {
-          cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-        });
+    it("Verify form option should not visible for training tab", () => {
+      cy.get(".formOptionsBox").should("not.be.visible");
     });
 
-    it("Status is 'In Draft'", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-    });
-
-    it("open revision tab", () => {
-      cy.get("[data-cy='note-icon']").arrowClick();
-    });
-
-    it("Verify revision Rev3 Document open or not", () => {
-      cy.get("[data-cy='DocumentRevisionList-item']").eq(0).arrowClick();
-      cy.wait(2000);
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 3");
-    });
-
-    it("Verify revision Rev2 Document open or not", () => {
-      cy.get("[data-cy='DocumentRevisionList-item']").eq(1).arrowClick();
-      cy.wait(2000);
-      cy.get("[data-cy='HeaderInfo-Rev']").should("contain.text", "Rev 2");
-    });
   });
 
-  context("Edit permissions", () => {
-    it("Open permissions tab", () => {
-      cy.drSelectPermissionTab();
+  // Design document flow
+
+  context("Add new Doc Type", () => {
+    it("Navigate to document type management", () => {
+      cy.navigToDocumentTypeManagement();
     });
 
-    it("Add another group permission", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-        cy.drAddGroupFromPermissionTab("Owner as approver");
+    it("Click on 'Add Document Type'", () => {
+      cy.dtmClickAddDocumentType();
+    });
+
+    it("Add Document type name", () => {
+      cy.dtmAddDocType({ docType: "Design Document" });
+    });
+
+    it("Add Acronym", () => {
+      cy.dtmAddAcronym({ acronym: "DD-" });
+    });
+
+    it("Check Private Number checkbox", () => {
+      cy.dtmSelectPrivateNumber();
+    });
+
+    it("Check QMS checkbox", () => {
+      cy.dtmSelectQMS();
+    });
+
+    it("Check Needs Signature checkbox", () => {
+      cy.dtmSelectNeedsSignature();
+    });
+
+
+    it("Add Starting Number", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("center").wait(1000);
+      cy.dtmAddStartingNumber({ startingNumber: "000" });
+    });
+
+    it("Select Revision Stage 'Numeric'", () => {
+      cy.dtmSelectRevisionStage({ revisionStage: "Numeric" });
+    });
+
+    it("Select Users Without Tags 'DOCUMENT_TYPE_MANAGEMENT'", () => {
+      cy.dtmSelectUsersWithoutTags({ usersWithoutTags: "DOCUMENT_TYPE_MANAGEMENT" });
+    });
+
+    it("Select Group 'OTHER'", () => {
+      cy.get("[class='k-grid-content k-virtual-content']").scrollTo("right").wait(1000);
+      cy.dtmSelectGroup({ group: "OTHER" });
+    });
+
+    it("Create Doc Type", () => {
+      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       });
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
-  context("Check document history", () => {
-    it("Open history drawer and compare history values", () => {
-      cy.drSelectHistoryTab();
+  context("Navigate to DAM and Verify training 'Training required is checked YES for Design Document'", () => {
+
+    it("Filter Design type document", () => {
+      cy.listLoadingElementShouldNotExist().wait(2000);
+      cy.get(`[aria-colindex="2"] [class="k-textbox"]`).arrowType("Design");
     });
-    const groupOne = "Owner as approver";
-    const history = [
-      {
-        owner: USERS[1].name,
-        actions: [
-          { key: "Access granted to group", value: `Owner as approver` },
-        ],
-      },
-    ];
-    it("Verify Doc history", () => {
-      cy.drSelectHistoryTab();
+
+    it("Verify training checkbox is checked and internal type is other", () => {
+      cy.get("[data-grid-col-index='7'] input").should("not.be.checked");
+      cy.get("[data-grid-row-index='0']").contains("OTHER").should("exist");
     });
-    verifyHistoryContent(history, groupOne);
 
   });
 
-  context("Verify History Tab scroll", () => {
-    it("Verify scroll to on history tab", () => {
-      cy.drSelectHistoryTab();
-      cy.get(`[data-cy="History-detail"]`).realHover();
-      cy.get("[data-cy='History-detail']").scrollTo("bottom");
-    });
-  });
-
-  context("Verify Draft stage", () => {
+  context("Create Design document", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
-      cy.dlClearFilters();
     });
 
-    it("Filter the DRAFT document", () => {
-      cy.dlFilterByStatus({ status: "Draft" });
+    it("Click create document", () => {
+      cy.cmpClickCreateNewDocument();
     });
 
-    it(`select 'AA Title'`, () => {
-      cy.dlFilterByDocTitle({ docTitle: "AA Title" });
-      cy.dlSelectFirstDocument();
+    it("Enter document title 'Design Document type", () => {
+      cy.drEnterDocumentTitle({ name: "Design document type" });
     });
 
-    it(`Verify DOC ID ${scriptData.secondformId}`, () => {
-      cy.drCheckIfDocumentIdMatches({ docId: scriptData.secondformId });
+    it("Enter document description 'AA document description'", () => {
+      cy.drEnterDocumentDescription({ description: "Design document description" });
     });
 
-    it(`Verify Title Description and status`, () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
-      cy.drVerifyDescription({ description: "AA Description Rev3" });
-      cy.drVerifyTitle({ title: "AA Title" });
+    it("Select 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Verify Description tool bar option", () => {
-      cy.verifyDescriptionToolbar();
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
-    it("Verify form option box exist", () => {
-      cy.get(".formOptionsBox").should("exist");
+
+    it("Checked traing checkbox", () => {
+      cy.drClickTrainingRequired();
     });
+
+    it("Select 'Design Document' output document type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Design Document" });
+      cy.unClick();
+    });
+
+    it("Click create document", () => {
+      cy.drClickCreateDocumentWithApiCall();
+    });
+  });
+
+  context("Verify created form", () => {
+
+    it("Verify The top left of the page displays: Icon and document type, Doc ID, Rev stage, status (Draft)", () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Document List",
+        docId: "FM-00004",
+        revision: "Rev 1",
+      });
+    });
+
+    it("Verify there are two tabs Overview and Training tab", () => {
+      cy.verifyTabs("overview", "training");
+    });
+
+    it("Verify DD document opens to the “Overview” tab  and show default fields up to Attachments", () => {
+      cy.isTabActive({ name: "overview", index: 0 });
+      cy.verifyPredefiendFields();
+      cy.get("[data-cy='AttachmentFieldPresenter-field']").should("exist");
+    });
+
+    it("Click Training Tab, clicking on it should open that tab and close the other one", () => {
+      cy.drSelectTrainingTab();
+      cy.get("[data-cy='tabCon-tabId.training']").should("have.attr", "aria-selected", "true");
+      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
+    });
+
+    it("Check training tab  and verify training related text", () => {
+      cy.get("#sm-tabpanel-1 svg").should("exist");
+      cy.get("#sm-tabpanel-1 p").should("contain.text",
+        "Training can be assigned to this document once it is released");
+    });
+
+    it("Verify this row is fixed, user should not be able to add/ edit new rows", () => {
+      cy.verifyFixedTab();
+    });
+
   });
 
   context("Approve and release and complete the training ", () => {

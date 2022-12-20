@@ -6,7 +6,7 @@ import { DRAWER_WIDTH } from "./Navigation.styles";
 
 export const HEADER_HEIGHT = 48;
 const HEADER_HEIGHT_FULL = 160;
-const HEADER_GAP = 96;
+export const HEADER_GAP = 96;
 
 export default (theme: Theme) =>
   createStyles({
@@ -22,7 +22,7 @@ export default (theme: Theme) =>
       "minHeight": props.fullHeight ? HEADER_HEIGHT_FULL : HEADER_HEIGHT,
       "paddingBottom": props.fullHeight ? HEADER_HEIGHT_FULL - HEADER_GAP : 0,
       "paddingLeft": theme.spacing(props.fullHeight ? 8 : 3),
-      "paddingRight": theme.spacing(props.fullHeight ? 4 : 3),
+      "paddingRight": theme.spacing(props.fullHeight ? 6 : 3),
       "&::before": {
         content: "''",
         position: "absolute",

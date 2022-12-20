@@ -38,7 +38,7 @@ const reference = {
   valueCode: "LOT #22041301",
 };
 
-const owner = USERS[1].name;
+const owner = USERS[11].name;
 
 context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   before(() => {
@@ -63,16 +63,16 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [LotHistoryRecordTest, MPITest, LHRTTest, Part],
           },
           sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           equipmentDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Equipment");
@@ -89,7 +89,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -821,7 +821,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
   context("Login admin user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
   });
 
@@ -831,9 +831,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it(`Filter document by status ${STATUS_TYPES_LABEL.WIP}, and select it`, () => {
+      cy.wait(500);
       cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick({ force: true });
-      cy.get("li").contains("WIP").arrowClick().wait(500);
-      cy.get(`td[data-grid-col-index="1"]`).eq(0).arrowClick();
+      cy.get("li").contains("WIP").arrowClick({ force: true }).wait(500);
+      cy.get(`td[data-grid-col-index="1"]`).eq(0).arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Check the content of the status bar", () => {
@@ -853,21 +855,24 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Last save should be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
 
         it("Enter initial quantity", () => {
           cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist");
-          cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+            cy.unClick();
+          });
         });
 
         it("Check Last save should be present in autosave", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
 
         it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
           cy.wait(120000);
-          cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved 2 minutes ago");
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
         });
 
         it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
@@ -879,10 +884,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           cy.closeAllAlertMessages();
         });
 
-        it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
+        it(`Submit for Approval → Verify it is functional and Verify popup message`, () => {
           cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          cy.poAMCheckForAlertMessage();
+          cy.checkToastMessageIsEqual({
+            message: "The Build Type is a required field",
+          });
+          cy.listLoadingElementShouldNotExist();
         });
 
         context(
@@ -922,16 +930,23 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     context("Populate the fields - including adding some references and selecting R&D build type- ", () => {
       it("Select 'R&D' build type", () => {
         cy.contains("Build Type").should("be.visible");
-        cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
-        cy.get("[value=\"R&D\"]").check();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
+          cy.get("[value=\"R&D\"]").check();
+        });
       });
 
       it("Add some references", () => {
-        cy.drSelectReferences(reference.value);
+        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("ul>li[role=option]").contains(reference.value).arrowClick({ force: true });
+        });
       });
 
       it("Add 'Due Date'", () => {
-        cy.poAddDateRequired();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.poAddDateRequired();
+        });
       });
 
       it("Add Approver to approvals list", () => {
@@ -945,6 +960,8 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Click 'START MPI'", () => {
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
         cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
         cy.mpiStartStep({ stepNumber: 1 });
       });
@@ -993,11 +1010,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Add Approver to approvals list", () => {
-          cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
+          });
         });
 
         it("Last save should be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
 
         it("Select Procedure tab", () => {
@@ -1029,7 +1048,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Last save should be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
 
         context(
@@ -1055,14 +1074,17 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Scroll down the page → The status bar should be fixed", () => {
       it("Scroll down to the bottom of the page", () => {
-        cy.get("[class*=\"MuiGrid-root makeStyles-formOptionsBox\"]").scrollIntoView();
+        cy.get("[data-cy='form-options-text']").scrollIntoView();
         cy.get(`[data-cy="HeaderInfo"]`).should("be.visible");
       });
     });
 
     context("Click on “Complete step” and submit for approval → LHRS is “In Review” state", () => {
       it("Click on “Complete step", () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(1000);
       });
 
       it(`LHRS is ${STATUS_TYPES_LABEL.IN_REVIEW}  state`, () => {
@@ -1088,10 +1110,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -1104,7 +1127,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it(`Complete step → Verify it is functional and Verify status changed ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
+          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(1000);
           cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
         });
       });
@@ -1119,15 +1146,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Approve the submission → LHRS is in the “Completed” state ", () => {
       it("Approve LHR", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApprove();
       });
 
       it(`LHRS is in the ${STATUS_TYPES_LABEL.COMPLETED} state`, () => {
@@ -1153,16 +1172,19 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
 
         it("Click 'Revise document' button", () => {
-          cy.get("[data-cy=\"updateRecord\"]").click();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+            cy.get("[data-cy=\"updateRecord\"]").click();
+          });
         });
       });
     });
@@ -1180,26 +1202,20 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       () => {
         it("Add Approver to approvals list", () => {
           cy.wait(1000);
-          cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
+          cy.pmAddApproverOnApproverList({ approver: owner });
         });
 
         it("Click on Complete step to Complete the step again", () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+          });
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Approve LHR", () => {
-          cy.wait(3000);
-          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-          cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
-          cy.checkToastMessage({ exists: false });
-          cy.listLoadingElementShouldNotExist();
+          cy.ebApprove();
         });
 
         it(`LHRS is in the ${STATUS_TYPES_LABEL.COMPLETED} state`, () => {
@@ -1241,10 +1257,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
         context("Right side:", () => {
           it("Last save should not be present", () => {
-            cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+            cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
           });
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
             cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
@@ -1265,7 +1282,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it(`Submit it for approval and Status is in ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(1000);
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
       });
     });
@@ -1288,23 +1308,36 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.listLoadingElementShouldNotExist();
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
-          cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+          cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick({ force: true });
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click 'Withdraw Submission' button", () => {
-          cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+          cy.wait(2000);
+          cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick({ force: true });
+          cy.listLoadingElementShouldNotExist();
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-            cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+            cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick({ force: true });
           });
+          cy.wait(3000);
+          cy.landingPageLoadingElementShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it(`Submit it for approval and Verify status changed ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+          cy.wait(3000);
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+          });
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
           cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
         });
       });
@@ -1319,7 +1352,8 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Approve it → LHR is Released → Check the content of the status bar", () => {
       it("Approve LHR", () => {
-        cy.wait(3000);
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
         cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
         cy.unClick();
@@ -1352,10 +1386,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
         context("Right side:", () => {
           it("Last save should not be present", () => {
-            cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+            cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
           });
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
             cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
@@ -1370,20 +1405,28 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           });
 
           it("Click 'Revise document' button", () => {
+            cy.listLoadingElementShouldNotExist();
+            cy.wait(1000);
             cy.get("[data-cy=\"updateRecord\"]").click();
             cy.listLoadingElementShouldNotExist();
           });
 
           it("Add Approver to approvals list", () => {
-            cy.get("[name^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+              cy.get("[name^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
+            });
           });
 
           it("Click on Submit For Approval", () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            cy.wait(1000);
+            cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+              cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+            });
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Approve LHR", () => {
-            cy.wait(3000);
+            cy.wait(1000);
             cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
             cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
             cy.unClick();
@@ -1420,15 +1463,19 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Select Admin Change and release Rev A.2  → Rev A.1 is in Superseded state", () => {
       it("Add Approver to approvals list", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
+        cy.wait(2000);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
+        });
       });
 
       it("Click on Submit For Approval", () => {
+        cy.wait(1000);
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve LHR", () => {
-        cy.wait(3000);
         cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
         cy.unClick();
@@ -1468,10 +1515,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -1503,7 +1551,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Click on the references", () => {
+          cy.wait(2000);
           cy.get("#ReferencePresenter-link").invoke("removeAttr", "target").click();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it(`Status is in ${STATUS_TYPES_LABEL.RELEASED}`, () => {
@@ -1530,10 +1581,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
@@ -1558,6 +1610,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     context("Revise the LOT → Lot is in WIP → Check the status bar content:", () => {
       it("Click 'Update Record' button", () => {
         cy.get("[data-cy=\"updateRecord\"]").click();
+        cy.listLoadingElementShouldNotExist();
       });
 
       context("Check the content of the status bar", () => {
@@ -1582,7 +1635,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           });
 
           it("Last save should be present", () => {
-            cy.get(`[data-cy="header.lastSaved"]`).should("have.text", "Last saved a few seconds ago");
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
           });
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
@@ -1601,7 +1654,9 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           });
 
           it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ multiple: true, force: true }).wait(500);
+            cy.listLoadingElementShouldNotExist();
+            cy.wait(1000);
+            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ multiple: true, force: true }).wait(1000);
             cy.poAMCheckForAlertMessage();
           });
 
@@ -1628,11 +1683,18 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Add Approver to approvals list", () => {
-          cy.pmAddApproverOnApproverList({ approver: owner });
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+            cy.pmAddApproverOnApproverList({ approver: owner });
+          });
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wait(2000);
         });
 
         it("Click on Submit For Approval", () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it(`Status is in ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -1657,7 +1719,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
           context("Right side:", () => {
             it("Last save should not be present", () => {
-              cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+              cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
             });
 
             it("Click 'Withdraw Submission' button", () => {
@@ -1665,15 +1727,22 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
               cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
                 cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
               });
+              cy.wait(2000);
+              cy.landingPageLoadingElementShouldNotExist();
+              cy.listLoadingElementShouldNotExist();
             });
 
             it("Click on Submit For Approval", () => {
               cy.pmSubmitForApproval();
+              cy.wait(1000);
             });
 
             it("Check if 'Change Owner' button header menu and is functional", () => {
+              cy.listLoadingElementShouldNotExist();
+              cy.get("#HeaderMenuButton").arrowClick();
               cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
               cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
+              cy.listLoadingElementShouldNotExist();
             });
 
             it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
@@ -1695,19 +1764,12 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Approve the Lot", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApprove();
       });
 
       context("Check the content of the status bar", () => {
         it("Left side: Icon, Landing page, Doc ID, Rev stage, Status tag", () => {
+          cy.listLoadingElementShouldNotExist();
           cy.verifyHeaderInfoContent({
             status: STATUS_TYPES_LABEL.RELEASED,
             title: "Lots",
@@ -1724,10 +1786,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
         context("Right side:", () => {
           it("Last save should not be present", () => {
-            cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+            cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
           });
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
+            cy.get("#HeaderMenuButton").arrowClick();
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
             cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
           });
@@ -1761,8 +1824,9 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       it(`Filter document by status ${STATUS_TYPES_LABEL.RELEASED}, and select it`, () => {
         cy.get(`[aria-colindex="2"] [class="k-input"]`).arrowClick({ force: true });
-        cy.get("li").contains("Released").arrowClick().wait(500);
-        cy.get(`td[data-grid-col-index="1"]`).eq(0).arrowClick();
+        cy.get("li").contains("Released").arrowClick({ force: true }).wait(500);
+        cy.get(`td[data-grid-col-index="1"]`).eq(0).arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Verify LHR Step is ${STATUS_TYPES_LABEL.COMPLETED}`, () => {
@@ -1772,27 +1836,29 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context(`Revise it → Select ${STATUS_TYPES_LABEL.VOID} as revision stage`, () => {
       it("Revise document with 'Void' option", () => {
+        cy.wait(3000);
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy=\"updateRecord\"]").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
         cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
         cy.wait(3000);
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").scrollIntoView().autocompleteSelect(owner);
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
-        cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy^='fb-approvals-']").autocompleteSelect(owner);
+        });
+        cy.wait(500);
         cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+        cy.wait(300);
+        cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
+        cy.wait(300);
+        cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(1000);
       });
 
       it("Approve LHR", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApprove();
       });
 
       it(`LHR is in the ${STATUS_TYPES_LABEL.OBSOLETE} state`, () => {
@@ -1818,16 +1884,18 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       context("Right side:", () => {
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
 
         it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your
         email shortly`, () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
           cy.get("div.Toastify__toast-container").should("exist");
           cy.checkToastMessageContains({
@@ -1863,17 +1931,24 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   context(`Start the LHR step and complete it`, () => {
     it("Enter initial quantity", () => {
       cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist");
-      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("20");
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("20");
+        cy.unClick();
+      });
     });
 
     it("Select 'R&D' build type", () => {
       cy.contains("Build Type").should("be.visible");
-      cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
-      cy.get("[value=\"R&D\"]").check();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.contains("Build Type").scrollIntoView().arrowClick().wait(1000);
+        cy.get("[value=\"R&D\"]").check();
+      });
     });
 
     it("Add 'Due Date'", () => {
-      cy.poAddDateRequired();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.poAddDateRequired();
+      });
     });
 
     it("Add Approver to approvals list", () => {
@@ -1885,12 +1960,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Click 'START MPI'", () => {
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
       cy.mpiStartStep({ stepNumber: 1 });
     });
 
     it("Add Approver to approvals list", () => {
-      cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
+      cy.pmAddApproverOnApproverList({ approver: owner });
     });
 
     it("Select Procedure tab", () => {
@@ -1898,26 +1974,34 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Enter 'Start quantity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("8");
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("8");
+        cy.unClick();
+      });
     });
 
     it("Enter 'Accepted quantity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("5");
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("5");
+        cy.unClick();
+      });
     });
 
     it("Enter 'Rejected quantity' for LHRs #1", () => {
-      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("3");
-      cy.unClick();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("3");
+        cy.unClick();
+      });
     });
 
     it("Click on “Complete step", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(1000);
     });
 
     it("Approve LHR", () => {
-      cy.wait(3000);
       cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
       cy.unClick();
@@ -1935,7 +2019,9 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
   context(`Revise the LHR step and choose “Void” in the revision stage → Check the content of the status bar`, () => {
     it("Revise document with 'Void' option", () => {
+      cy.wait(1000);
       cy.drClickReviseDocument();
+      cy.wait(2000);
     });
 
     context("Check the content of the status bar", () => {
@@ -1958,6 +2044,8 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
           it("Check if 'Change Owner' button header menu and is functional", () => {
             cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
+            cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+            cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
           });
         }
       );
@@ -1969,17 +2057,26 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   Check the content of the status bar`,
     () => {
       it("Revise document with 'Void' option", () => {
+        cy.wait(3000);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
         cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
         cy.wait(3000);
-        cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner, { force: true });
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy^='fb-approvals-approvals-built-in']").autocompleteSelect(owner);
+        });
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
         cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
         cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
-        cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
+        cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick({ force: true });
         cy.listLoadingElementShouldNotExist();
+        cy.wait(1000);
       });
 
       it("Approve LHR", () => {
-        cy.wait(3000);
         cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView().contains("Approve").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
         cy.unClick();
@@ -2009,10 +2106,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         });
 
         it("Last save should not be present", () => {
-          cy.get(`[data-cy="header.lastSaved"]`).should("not.exist");
+          cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
         });
 
         it("Check if 'Change Owner' button header menu and is functional", () => {
+          cy.get("#HeaderMenuButton").arrowClick();
           cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });

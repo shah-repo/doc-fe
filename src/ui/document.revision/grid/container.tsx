@@ -5,7 +5,7 @@ import { RouteComponentProps, useHistory } from "react-router-dom";
 import { getTableCriteria } from "../../../common/utils/selectors";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
-import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
+import { CATEGORY, DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { getSchemaFromColumns } from "../../common/utils/helpers";
@@ -22,7 +22,8 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
   const TABLE_NAME = "documentRevisions";
   const schema = getSchemaFromColumns(gridConfiguration.columns);
   const dispatch = useDispatch();
-  const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD];
+  const notGroupOptions = [DOC_TYPE_GROUP_OPTION.RECORD, DOC_TYPE_GROUP_OPTION.PO];
+  const notIncategory = CATEGORY.WORKORDER_CATEGORY;
   const tableCriteria = useSelector(getTableCriteria(TABLE_NAME));
   const history = useHistory();
 
@@ -40,7 +41,9 @@ const DocumentListContainer: React.FunctionComponent<RouteComponentProps> = () =
       getStatusesAction,
       async,
       documentRevisionQueryStatus(),
-      notGroupOptions
+      notGroupOptions,
+      undefined,
+      notIncategory,
     );
 
   useEffect(() => {

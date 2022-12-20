@@ -227,6 +227,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.get("[data-cy='fb-approvers-approvers']").arrowClick();
       cy.get("[data-cy='fb-approvers-approvers']").autocompleteSelect(USERS[1].name);
     });
   });
@@ -253,11 +254,11 @@ context("Status Bar of newly created ARs", () => {
 
     it("Enter new title", () => {
       cy.arEnterApprovalRequestTitle({ title: "New Ar title2" });
+      cy.wait(2000);
     });
 
-    it("Verify 'Last saved a few seconds ago' text should exist", () => {
-      cy.get("header").contains("Last saved a few seconds ago").should("exist");
-      cy.get("header").contains("Last saved a few seconds ago").should("be.visible");
+    it("Verify 'Last saved a few seconds ago' text should visible", () => {
+      cy.get(`[data-cy="header-section"]`).contains("Last saved a few seconds ago").should("be.visible");
     });
 
     it("Turn off 'auto save'", () => {
@@ -343,7 +344,7 @@ context("Status Bar of newly created ARs", () => {
   context("Verify Save button in status bar", () => {
     it("Verify Save button in status bar", () => {
       cy.get("button[data-cy='common.save']").should("be.visible");
-      cy.arSaveApiCall();
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
   });
 
@@ -366,12 +367,12 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='changeOwner-submit']`).arrowClick();
     });
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
 
     it("Verify 'Send to review' in status bar", () => {
@@ -420,7 +421,7 @@ context("Status Bar of newly created ARs", () => {
     it(`Click on 3 dots and verify 'Change Owner' option exists`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy='changeOwner']").contains("Change Owner").arrowClick();
-      cy.get(`[class*='makeStyles-closeIcon']`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it(`Verify 'Last saved' does not exist in statusbar`, () => {
@@ -469,11 +470,11 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get(".makeStyles-lastEdited").should("not.be.exist");
+      cy.get("[data-cy='header-last-saved']").should("not.be.exist");
     });
 
     it(`Verify the statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
@@ -482,7 +483,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
 
@@ -496,6 +497,7 @@ context("Status Bar of newly created ARs", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
+      cy.wait(3000);
     });
   });
 
@@ -509,7 +511,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get("[class*='makeStyles-lastEdited']").should("not.be.exist");
+      cy.get("[data-cy='header-last-saved']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
@@ -522,7 +524,7 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it(`Verify the statusbar background-color as LIGHT GRAY(${Colors.medium_light_shade_gray})`, () => {
@@ -531,7 +533,8 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.closeAllAlertMessages();
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
 
@@ -570,7 +573,7 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it(`Verify 'Last saved: ' does not exist in Status bar`, () => {
-      cy.get(".makeStyles-lastEdited").should("not.be.exist");
+      cy.get("[data-cy='header-last-saved']").should("not.be.exist");
     });
 
     it(`Click on 3 dots and Verify 'Send to Email' exists in statusbar`, () => {
@@ -583,7 +586,7 @@ context("Status Bar of newly created ARs", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
-      cy.get(`[class*="MuiButtonBase-root MuiIconButton-root makeStyles-closeIcon"]`).arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
     it(`Verify VOIDED statusbar background-color as RED(${Colors.latest_red_varient})`, () => {
@@ -592,7 +595,8 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify header is fixed when page scroll", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
-      cy.get(`[class*="headerSection"]`).should("be.visible");
+      cy.closeAllAlertMessages();
+      cy.get(`[data-cy="header-section"]`).should("be.visible");
     });
   });
 });

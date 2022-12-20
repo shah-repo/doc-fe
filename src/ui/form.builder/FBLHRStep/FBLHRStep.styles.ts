@@ -47,6 +47,10 @@ export const FBLHRStepStyles = makeStyles(() =>
       marginRight: "22px",
       display: "block",
     },
+    panelhrtDetails: {
+      padding: "10px 0px 0px 0px",
+      display: "block",
+    },
     panelBorder: {
       marginBottom: 5,
       border: `1px solid ${Colors.gray_goose}`,
@@ -58,22 +62,6 @@ export const FBLHRStepStyles = makeStyles(() =>
       color: Colors.almost_black,
     },
     subTitle: {
-      fontSize: 14,
-      fontWeight: 400,
-      color: Colors.almost_black,
-      marginTop: 10,
-    },
-    listItem: {
-      paddingTop: 0,
-      paddingBottom: 0,
-    },
-    operatorTitle: {
-      fontWeight: 700,
-      fontSize: 14,
-      color: Colors.almost_black,
-    },
-    operatorStatus: {
-      marginRight: 2,
       fontSize: 14,
       fontWeight: 400,
       color: Colors.almost_black,

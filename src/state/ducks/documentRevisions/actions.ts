@@ -44,10 +44,10 @@ const loadList = (
   });
 };
 
-const load = (id: string): ApiAction<DocumentRevision> => apiAction({
+const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC ): ApiAction<DocumentRevision> => apiAction({
   url: `${DOCUMENT_REVISION_ROOT_URL}/${id}`,
   method: "get",
-  asyncType: DOCUMENT_REVISION_GET_ASYNC,
+  asyncType,
   onSuccess: (documentRevision, dispatch) => {
     dispatch(documentRevisionSet(documentRevision));
   },
@@ -172,7 +172,7 @@ const approveAndReleaseNonQms = (
   password: string,
   handlers: Handlers,
 ): ApiAction => apiActionWithCallbacks({
-  url: `${DOCUMENT_REVISION_ROOT_URL}/release/release_non_qms/${id}`,
+  url: `${DOCUMENT_REVISION_ROOT_URL}/release_unsigned/${id}`,
   method: "post",
   data: body,
   password,
@@ -334,15 +334,18 @@ const getDocRevStatuses = (
   states: DocumentRevisionStatus[] = [],
   notGroupOptions?: DocumentGroupOptionsType[],
   category?: string,
+  notIncategory?: string,
 ): ApiAction<Partial<DocumentRevisionStatus[]>> => {
   const categoryUrl = category === undefined ?
     states.reduce((acc, state) =>  acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?`) :
     states.reduce((acc, state) => acc + `status%5B%5D=${state}&`,
       `${DOCUMENT_REVISION_ROOT_URL}/statuses?category=${category}&`);
-  const url = notGroupOptions && notGroupOptions?.length !== 0 ?
+  const notInGroupcheckURL = notGroupOptions && notGroupOptions?.length !== 0 ?
     notGroupOptions.reduce((acc, groupOption) =>  acc + `notGroupOptions%5B%5D=${groupOption}&`,
       `${categoryUrl}`) : categoryUrl;
+  const url = notIncategory === undefined ?
+    notInGroupcheckURL : `${notInGroupcheckURL}notIncategory=${notIncategory}&`;
   return apiActionWithCallbacks({
     url,
     method: "get",

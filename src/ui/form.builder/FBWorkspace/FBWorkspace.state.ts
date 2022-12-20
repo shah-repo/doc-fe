@@ -22,7 +22,7 @@ class FBWorkspaceState extends FBSchemaState {
   @observable public loading = false;
   public externalState?: FBWorkspaceExternalState;
   public document?: DocumentRevision;
-  public changeRequest?: ChangeRequest;
+  @observable public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
   public documentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
   public loadDocumentRevApi = new FBRequest<DocumentRevision, Partial<DocumentRevisionEditRequestBody>>();
@@ -93,14 +93,18 @@ class FBWorkspaceState extends FBSchemaState {
   }
 
   public get isOutput(): boolean {
-    const { docId } = this.document?.formDocument?.document || {};
-    return Boolean(docId && !isEmpty(docId));
+    const { id } = this.document?.formDocument || {};
+    return !isEmpty(id);
   }
 
   public get isLHRProductionBuild(): boolean {
     return this.document?.smartReferencesTo?.filter(
       (ref) => ref.active && ref.type === SmartReferenceType.HiddenPiInstance)[0]?.
       toDocRev?.formInput?.["lhr-build-type"] === FBLHRBuildOptions.Production;
+  }
+
+  public get isChangeRequest(): boolean {
+    return !isEmpty(this.changeRequest);
   }
 
   public get isOutputSchema(): boolean {
@@ -173,10 +177,6 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
-  public removeAutoState = () => {
-    this.schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
-  };
-
   public saveDocRev = (values?: Record<string, any>) => {
     this.loadAudit = false;
     const { id, mode, autosave } = this;
@@ -185,7 +185,6 @@ class FBWorkspaceState extends FBSchemaState {
     if (!id) { return; }
     this.loading = true;
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
-    this.setDirty(true);
     let body = {};
     switch (mode) {
       case "design":
@@ -213,7 +212,7 @@ class FBWorkspaceState extends FBSchemaState {
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
     const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
-    this.documentRevApi.set({
+    return this.documentRevApi.set({
       url,
       urlValues: { id },
       body,
@@ -243,7 +242,7 @@ class FBWorkspaceState extends FBSchemaState {
     });
   };
 
-  private setFormInputData = (data?: DocumentRevision) => {
+  public setFormInputData = (data?: DocumentRevision) => {
     const { formInput = {} } = data ?? {};
     this.formInput = formInput;
     map(formInput, (value, key) => {

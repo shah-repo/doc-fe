@@ -2,6 +2,9 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+// eslint-disable-next-line spaced-comment
+/// <reference types="cypress-grep" />
+
 import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
@@ -29,7 +32,7 @@ let developersGroup;
 let asyncTasksGroup;
 const releasedFormId = "TC-00001";
 
-context("Test training curriculum landing page updates", () => {
+context("Test training curriculum landing page updates", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

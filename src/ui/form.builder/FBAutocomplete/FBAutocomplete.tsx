@@ -2,8 +2,10 @@ import { Box, IconButton, Popper, TextField, Typography } from "@material-ui/cor
 import CachedIcon from "@material-ui/icons/Cached";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
 import { get } from "lodash";
+import { Observer } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
+import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
 import Text from "../../components/Text";
@@ -42,9 +44,10 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   disableChipDelete = false,
   type,
   customStyles,
+  autoCompleteClasses,
   ...props
 }) => {
-  const { workspaceState } = FB.useStores();
+  const { workspaceState, dialogState } = FB.useStores();
   const renderRefreshButton = (refresh, disabled) => (
     <Box ml={-4} display="flex" alignItems="center">
       <IconButton size="small" onClick={refresh} {...{ disabled }}>
@@ -94,6 +97,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       const isAlreadyApproved = workspaceState?.changeRequest?.approvals.find((e) =>
         (e.approver.id === get(option, "id")) && e.status === ApprovalStatus.Approved ) ? true : false;
       const isOptionDisabled = disableChipDelete && disabledOptions.includes(option.id);
+
       return (
         <StyledChip
           key={`fb-autocomplete-${get(option, optionLabelKey)}-${index}`}
@@ -106,6 +110,21 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       ); }}
   </FBMapWrapper>;
 
+  const isShowErrorMsg = () => {
+    const outputDocumentType = get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], "label")
+    || get( workspaceState?.document?.formTemplate?.outputDocumentTypes[0], "group");
+    const documentType = workspaceState?.document?.document?.documentType?.group;
+    if (dialogState?.open && documentType === DOC_TYPE_GROUP.LHRT &&
+      (outputDocumentType === DOC_TYPE_GROUP.LHR || outputDocumentType === "Lot History Record")
+    && (props.name === "lhr-selected-part" || props.name === "lhrstep-built-in")) {
+      return false; }
+
+    if (documentType === DOC_TYPE_GROUP.PART && !props.showErrorMsg) {
+      return props.showErrorMsg;
+    }
+    return true;
+  };
+
   return (
     <>
       {includeQRScan && (
@@ -115,53 +134,57 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
           </Typography>
         </Box>
       )}
-      <FBInput
-        {...props}
-        {...{ multiple, defaultValue, loading }}
-        type="autocomplete"
-        disabled={props.name === "approvers" ? false : disabled}
-        labelProps={FBFontStyle.labelProps}
-      >
-        {/* hack for autocomplete, options are rendered after component is already shown */}
-        {customStyles ? <StyledPopupAutoComplete
-          {...{
-            getOptionDisabled,
-            getOptionLabel,
-            renderOption,
-            filterSelectedOptions,
-            groupBy,
-            multiple,
-            defaultValue,
-            freeSolo,
-            filterOptions,
-            disableClearable,
-          }}
-          options={modifiedOptions}
-          onInputChange={debounceFilterInput}
-          ListboxComponent={groupByKey ? undefined : ListBoxComponent }
-          renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
-          renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
-        /> : <StyledAutoComplete
-          {...{
-            getOptionDisabled,
-            getOptionLabel,
-            renderOption,
-            filterSelectedOptions,
-            groupBy,
-            multiple,
-            defaultValue,
-            freeSolo,
-            filterOptions,
-            disableClearable,
-          }}
-          options={modifiedOptions}
-          onInputChange={debounceFilterInput}
-          ListboxComponent={groupByKey ? undefined : ListBoxComponent }
-          renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
-          renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
-          PopperComponent={(props) => (<Popper {...props} />)}
-        />}
-      </FBInput>
+      <Observer>{() =>
+        <FBInput
+          {...props}
+          {...{ multiple, defaultValue, loading, showErrorMsg: isShowErrorMsg() }}
+          type="autocomplete"
+          disabled={props.name === "approvers" ? false : disabled}
+          labelProps={FBFontStyle.labelProps}
+        >
+          {/* hack for autocomplete, options are rendered after component is already shown */}
+          {customStyles ? <StyledPopupAutoComplete
+            {...{
+              getOptionDisabled,
+              getOptionLabel,
+              renderOption,
+              filterSelectedOptions,
+              groupBy,
+              multiple,
+              defaultValue,
+              freeSolo,
+              filterOptions,
+              disableClearable,
+            }}
+            classes={autoCompleteClasses}
+            options={modifiedOptions}
+            onInputChange={debounceFilterInput}
+            ListboxComponent={groupByKey ? undefined : ListBoxComponent }
+            renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
+            renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
+          /> : <StyledAutoComplete
+            {...{
+              getOptionDisabled,
+              getOptionLabel,
+              renderOption,
+              filterSelectedOptions,
+              groupBy,
+              multiple,
+              defaultValue,
+              freeSolo,
+              filterOptions,
+              disableClearable,
+            }}
+            classes={autoCompleteClasses}
+            options={modifiedOptions}
+            onInputChange={debounceFilterInput}
+            ListboxComponent={groupByKey ? undefined : ListBoxComponent }
+            renderInput={(params: RenderInputParams) => renderAutoCompleteInput(params)}
+            renderTags={(value, getTagProps) => renderAutoCompleteTags(value, getTagProps)}
+            PopperComponent={(props) => (<Popper {...props} />)}
+          />}
+        </FBInput>}
+      </Observer>
     </>
   );
 };

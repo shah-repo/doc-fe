@@ -458,6 +458,9 @@ context("Equipment maintenance test", () => {
 
     it("Approve and release EQ", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.url().then((url: any) => {
+        equipmentURL = url;
+      });
     });
 
     it("Check equipment status is 'Released'", () => {
@@ -481,18 +484,30 @@ context("Equipment maintenance test", () => {
   });
 
   context("Fill new preventative maintenance form", () => {
-    it("Click 'NEW PM' on preventative maintenace section", () => {
-      cy.url().then((url: any) => {
-        const docIdFromUrl = url.split("/").pop();
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.visit(newPMUrl);
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+    it("Navigate to Equipment document", () => {
+      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
+        cy.visit(equipmentURL);
       });
+    });
+
+    it("Click on New CAL", () => {
+      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.drSelectSpecificationTab();
+      cy.get("[data-cy='form.builder.new.calibration']").arrowClick();
+      cy.wait("@response").then((res) => {
+        if (res.response) {
+          const response = res.response.body;
+          const calDocId = response.documentId;
+          const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers], () => {
+            cy.visit(newUrl);
+          });
+        }
+      });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -501,18 +516,6 @@ context("Equipment maintenance test", () => {
 
     it("Enter title 'Preventative maintenance document'", () => {
       cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
-    });
-
-    it("Select document type 'Maintenance Record'", () => {
-      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-    });
-
-    it("Select revision stage 'Numeric'", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
     });
 
     it("navigate to Details tab", () => {
@@ -544,7 +547,7 @@ context("Equipment maintenance test", () => {
 
     it("Create 'Preventative maintenance document'", () => {
       SystemRequirement("REQ-2890");
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
       cy.url().then((url: any) => {
         pmURL = url;
       });
@@ -572,16 +575,23 @@ context("Equipment maintenance test", () => {
       cy.drSelectCalPmHistoryTab();
     });
 
-    it("Click 'NEW PM' on calibration section", () => {
-      cy.url().then((url: any) => {
-        const docIdFromUrl = url.split("/").pop();
-        // eslint-disable-next-line max-len
-        const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/calibration-ki5wtyj0`;
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.visit(newPMUrl);
-        });
+    it("Click 'NEW PM' on preventative maintenace section", () => {
+      cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+      cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+      cy.wait("@response").then((res) => {
+        if (res.response) {
+          const response = res.response.body;
+          const calDocId = response.documentId;
+          const newPMUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+            CyRoutes.GetAvailableApprovers], () => {
+            cy.visit(newPMUrl);
+          });
+        }
       });
+      cy.checkToastMessage({ exists: false });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -590,14 +600,6 @@ context("Equipment maintenance test", () => {
 
     it("Enter title 'Calibration document'", () => {
       cy.drEnterDocumentTitle({ name: "Calibration document" });
-    });
-
-    it("Select document type 'Maintenance Record'", () => {
-      cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-    });
-
-    it("Select revision stage 'Numeric'", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Click create document", () => {
@@ -634,7 +636,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Create 'Calibration document'", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+      cy.drClickCreateDocumentWithApiCall();
       cy.url().then((url: any) => {
         calibrationURL = url;
       });
@@ -826,7 +828,7 @@ context("Equipment maintenance test", () => {
         context("Verify maintenance records are present on equipment", () => {
           it("Check preventative maintenance document existance", () => {
             cy.get("div[data-cy=\"maintenanceHistory\"]")
-              .eq(0)
+              .eq(1)
               .should("contain", "MR-00001 - Preventative maintenance document");
           });
 
@@ -845,7 +847,7 @@ context("Equipment maintenance test", () => {
           it("Check Calibration document existance", () => {
             SystemRequirement("REQ-2900");
             cy.get("[data-cy=\"maintenanceHistory\"]")
-              .eq(1)
+              .eq(0)
               .should("contain", "MR-00002 - Calibration document")
               .and("contain", ADMIN_USER.name)
               .and("contain", "RELEASED");
@@ -1011,17 +1013,22 @@ context("Equipment maintenance test", () => {
     context("Add new PM and Cal", () => {
       context("Fill new preventative maintenance form", () => {
         it("Click 'NEW PM' on preventative maintenace section", () => {
-          cy.url().then((url: any) => {
-            const docIdFromUrl = url.split("/").pop();
-            // eslint-disable-next-line max-len
-            const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/pm-ki5wtk5l`;
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              CyRoutes.GetAvailableApprovers], () => {
-              cy.visit(newPMUrl);
-            });
-            cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
+          cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+          cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+          cy.wait("@response").then((res) => {
+            if (res.response) {
+              const response = res.response.body;
+              const calDocId = response.documentId;
+              const newPMUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+                CyRoutes.GetAvailableApprovers], () => {
+                cy.visit(newPMUrl);
+              });
+            }
           });
+          cy.checkToastMessage({ exists: false });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Turn off autosave", () => {
@@ -1030,14 +1037,6 @@ context("Equipment maintenance test", () => {
 
         it("Enter title 'Preventative maintenance document'", () => {
           cy.drEnterDocumentTitle({ name: "Preventative maintenance document" });
-        });
-
-        it("Select document type 'Maintenance Record'", () => {
-          cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-        });
-
-        it("Select revision stage 'Numeric'", () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
         });
 
         it("Click create document", () => {
@@ -1073,7 +1072,7 @@ context("Equipment maintenance test", () => {
 
         it("Create 'Preventative maintenance document'", () => {
           SystemRequirement("REQ-2890");
-          cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+          cy.drClickCreateDocumentWithApiCall();
           cy.url().then((url: any) => {
             pmURL = url;
           });
@@ -1105,16 +1104,24 @@ context("Equipment maintenance test", () => {
           });
         });
 
-        it("Click 'NEW PM' on calibration section", () => {
-          cy.url().then((url: any) => {
-            const docIdFromUrl = url.split("/").pop();
-            // eslint-disable-next-line max-len
-            const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdMaintenanceRecordFormDocument.id}/create_maintenance/${docIdFromUrl}/calibration-ki5wtyj0`;
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              CyRoutes.GetAvailableApprovers], () => {
-              cy.visit(newPMUrl);
-            });
+        it("Click 'NEW PM' on preventative maintenace section", () => {
+          cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
+          cy.drSelectSpecificationTab();
+          cy.get("[data-cy='form.builder.new.pm']").arrowClick();
+          cy.wait("@response").then((res) => {
+            if (res.response) {
+              const response = res.response.body;
+              const calDocId = response.documentId;
+              const newPMUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
+              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+                CyRoutes.GetAvailableApprovers], () => {
+                cy.visit(newPMUrl);
+              });
+            }
           });
+          cy.checkToastMessage({ exists: false });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Turn off autosave", () => {
@@ -1123,18 +1130,6 @@ context("Equipment maintenance test", () => {
 
         it("Enter title 'Calibration document'", () => {
           cy.drEnterDocumentTitle({ name: "Calibration document" });
-        });
-
-        it("Select document type 'Maintenance Record'", () => {
-          cy.drSelectDocumentType({ documentType: "Maintenance Record" });
-        });
-
-        it("Select revision stage 'Numeric'", () => {
-          cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-        });
-
-        it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
         });
 
         it("navigate to Details tab", () => {
@@ -1167,7 +1162,7 @@ context("Equipment maintenance test", () => {
         });
 
         it("Create 'Calibration document'", () => {
-          cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: true });
+          cy.drClickCreateDocumentWithApiCall();
           cy.url().then((url: any) => {
             calibrationURL = url;
           });

@@ -33,7 +33,7 @@ const CRReferences: React.FunctionComponent<OwnProps> = ({
           <Text translation="common.created.on" />
         </Typography>
         <Typography className={classes.released}>
-          {getFormattedDateString(changeRequest?.formDocument?.effectiveDate, MomentFormats.MonthDateYearTwoDigit)}
+          {getFormattedDateString(changeRequest?.createdAt, MomentFormats.MonthDateYearTwoDigit)}
         </Typography>
       </>
       <Box pt={2.5}>

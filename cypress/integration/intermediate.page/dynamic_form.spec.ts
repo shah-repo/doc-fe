@@ -65,6 +65,10 @@ context(
         it("Clicks on 'create a document' button", () => {
           cy.cmpClickCreateNewDocument();
         });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
       });
 
       context(
@@ -113,8 +117,11 @@ context(
             cy.intPageVerifyPreviewLayoutButtonNotExist();
           });
 
-          it("Verify Attachments and Output document type are not displayed", () => {
-            cy.get("[data-cy=\"albumMediaButton\"]").should("not.exist");
+          it("Verify Attachments is displayed", () => {
+            cy.get("[data-cy=\"AttachmentFieldPresenter-field\"]").should("exist");
+          });
+
+          it("Verify Output document type are not displayed ", () => {
             cy.intPageVerifyOutputDocTypeNotExist();
           });
 
@@ -191,6 +198,10 @@ context(
             cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
             cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
             cy.fbAddNewFieldButton();
+          });
+
+          it("Click save document", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
           });
         });
 
@@ -305,6 +316,13 @@ context(
             cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
             cy.fbAddNewFieldButton();
           });
+
+          it("Click save document", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.reload();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+          });
         });
 
         context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
@@ -356,10 +374,7 @@ context(
           });
 
           it("Verify Text field with range", () => {
-            cy.get(".MuiDialogContent-root>div>div")
-              .eq(3)
-              .then((element) => cy.wrap(element)
-                .xpath("(//div[contains(@data-cy, 'textfieldwithrange-1')])"));
+            cy.get(`[role="dialog"] [data-cy="textfieldwithrange-4"]`).should("exist");
           });
 
           it("Verify Text field with range", () => {

@@ -6,7 +6,7 @@ import useMqttSubscription from "../../hooks/useMqttSubscription";
 const FBZIPFileSocket: React.FunctionComponent<{docRevisionId: string}> = ({ docRevisionId }) => {
   const { fileUploadState } = FB.useStores();
   const [topic, setTopic] = React.useState("");
-  const [attachmentId, setAttachmentId] = React.useState("");
+  const [attachmentId, setAttachmentId] = React.useState<string>();
 
   React.useEffect(() => reaction(
     () => fileUploadState?.startAttachmentUnzippingApi.data,
@@ -22,9 +22,11 @@ const FBZIPFileSocket: React.FunctionComponent<{docRevisionId: string}> = ({ doc
   ), []);
 
   const getZIPAttachmentStatus = useCallback(() => {
+    if (!attachmentId) {
+      return;
+    }
     fileUploadState?.getZIPStatus(attachmentId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [attachmentId, fileUploadState]);
 
   useMqttSubscription(topic, getZIPAttachmentStatus);
 

@@ -1,14 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import {
-  Box,
-  Collapse,
-  Grid,
-  IconButton,
-  List,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Box, Collapse, Grid, IconButton, List, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { ReactComponent as CloseSolidIcon } from "../../../../../assets/images/close_solid.svg";
 import { ReactComponent as CloseWhiteIcon } from "../../../../../assets/images/close_status_white.svg";
@@ -29,7 +19,7 @@ import DocId from "../../common/DocId/presenter";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
-import { styles } from "./approvalClosed.styles";
+import useStyles from "./approvalClosed.styles";
 import { HoverStyleChip } from "./HoverStyleChipApprovalClosed";
 import { NormalStyleChip } from "./NormalStyleChipApprovalClosed";
 
@@ -57,7 +47,7 @@ interface Props {
   pinLineItem: (id: string) => void;
   unPinLineItem: (id: string) => void;
 }
-const approvalClosedPresenter: React.FunctionComponent<Props> = ({
+const ApprovalClosedPresenter: React.FC<Props> = ({
   id,
   arId,
   arChangeRequestId,
@@ -71,7 +61,7 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [open, setOpen] = React.useState(false);
@@ -104,16 +94,17 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem
-        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onMouseEnter={onMouseHoverListItem}
-        className={classes.listItem}
+        divider
         disableRipple
+        className={classes.listItem}
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        onMouseEnter={onMouseHoverListItem}
       >
         {open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
+          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
+          <ExpandIcon className={classes.icon} data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemIcon>
           <PendingReviewIcon height={30} width={30} />
@@ -346,4 +337,4 @@ const approvalClosedPresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default approvalClosedPresenter;
+export default ApprovalClosedPresenter;

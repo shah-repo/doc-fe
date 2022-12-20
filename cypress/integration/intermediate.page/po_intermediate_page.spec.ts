@@ -480,8 +480,13 @@ context("Intermediate page validation", () => {
     });
 
     it("Scroll page to bottom and check editor bar is fixed at the top of the field", () => {
-      cy.get("#sm-tabpanel-0").scrollTo("bottom");
-      cy.get(".rdw-editor-toolbar").should("be.visible");
+      cy.get(`[data-cy="field-securityGroups"]`).scrollIntoView();
+      cy.get(`[data-cy="field-securityEmployees"]`).should("be.visible");
+      cy.get("#attachmentHeader").should("be.visible");
+      cy.get(`[data-cy="field-revisionStage"]`).should("be.visible");
+      cy.get(`[data-cy="field-retrain"]`).should("be.visible");
+      cy.get(`[data-cy="field-document.documentType.id"]`).should("be.visible");
+      cy.get(`[data-cy="field-document.docId"]`).should("be.visible");
     });
 
     it("Verify 'Create Document' button is visible", () => {

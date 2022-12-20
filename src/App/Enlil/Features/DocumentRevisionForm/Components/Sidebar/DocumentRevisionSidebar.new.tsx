@@ -1,4 +1,5 @@
-import { Box, IconButton, TooltipProps, Typography } from "@material-ui/core";
+import { Box, IconButton, Typography } from "@material-ui/core";
+import cx from "classnames";
 import { Observer } from "mobx-react";
 import React from "react";
 import { DocumentRevisionSidebarProps, SMBox, SMText } from "../../../../..";
@@ -20,13 +21,8 @@ import RevisionHistory from "../../../../../../ui/documentRevision/Sidebar/Revis
 import SidebarContainer from "../../../../../../ui/documentRevision/Sidebar/Sidebar.container";
 import { FBTooltip } from "../../../../../../ui/form.builder";
 import Colors from "../../../../../../ui/layout/theme/utils/colors";
-import { styles, tooltipStyles } from "./DocumentRevisionSidebar.new.styles";
+import useStyles from "./DocumentRevisionSidebar.new.styles";
 import { withDocumentRevisionSidebarWrap } from "./DocumentRevisionSidebar.wrap";
-
-export const StyledTooltip = (props: TooltipProps) => {
-  const classes = tooltipStyles();
-  return <FBTooltip arrow placement="left" classes={classes} {...props} />;
-};
 
 const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarProps> = ({
   _documentRevisionFormState,
@@ -48,24 +44,30 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
   intl,
   edit,
 }) => {
-  const classes = styles(_documentRevisionSidebarState?.open);
+  const classes = useStyles();
+
   const handleRightPanelToggle = () => {
     _documentRevisionSidebarState?.setOpen();
     _documentRevisionFormState?.setRightPanelOpen();
   };
+
   return (
     <Observer>
       {() => (
         <Box
           height="100%"
           bgcolor="white"
-          width={_documentRevisionSidebarState?.open ? 281 : 48}
-          borderColor={Colors.medium_gray}
-          className={classes.sidebar}
+          width={_documentRevisionSidebarState?.open ? 280 : 48}
+          className={cx(classes.sidebar, { [classes.sidebarOpened]: _documentRevisionSidebarState?.open })}
         >
           <Box display="flex" height={48} alignItems="center">
-            <Box width={48} textAlign="center" className={classes.iconBox}>
-              <StyledTooltip
+            <Box
+              width={48}
+              textAlign="center"
+              className={cx(classes.iconBox, { [classes.iconBoxOpened]: _documentRevisionSidebarState?.open })}
+            >
+              <FBTooltip
+                placement="left"
                 title={
                   _documentRevisionSidebarState?.open ? (
                     <SMText label="common.minimize" />
@@ -76,11 +78,11 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
               >
                 <IconButton
                   onClick={handleRightPanelToggle}
-                  className={`${classes.iconButtonNew} ${!_documentRevisionSidebarState?.open ? "maximize" : ""}`}
+                  className={cx(classes.iconButtonNew, { maximize: !_documentRevisionSidebarState?.open })}
                 >
                   <CollapseIcon />
                 </IconButton>
-              </StyledTooltip>
+              </FBTooltip>
             </Box>
             <Box width={233}>
               {_documentRevisionSidebarState?.open && (
@@ -98,11 +100,13 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
           </Box>
           <SMBox
             display="flex"
-            stretchY="calc(100% - 56px)"
+            flexGrow={1}
             borderTop={1}
             borderColor={Colors.medium_gray}
+            overflow="hidden"
           >
             <SidebarContainer
+              isDrawerOpen={_documentRevisionSidebarState?.open}
               sidebarList={[
                 {
                   icon: <EyeIcon />,
@@ -138,8 +142,7 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                     shouldShow: true,
                     title:
                       intl?.formatMessage({
-                        id: `document.revision.docVersion.${_documentRevisionFormState?.documentTypeAcronym}`,
-                        defaultMessage: "document.revision.docVersion",
+                        id: `document.revision.docVersion`,
                       }) || "",
                     component: (
                       <DocumentRevisionListContainer

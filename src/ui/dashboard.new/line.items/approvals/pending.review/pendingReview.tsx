@@ -1,15 +1,4 @@
-import {
-  Box,
-  Collapse,
-  Grid,
-  IconButton,
-  Link,
-  List,
-  ListItemIcon,
-  ListItemText,
-  Modal,
-  Typography,
-} from "@material-ui/core";
+import { Box, Collapse, Grid, IconButton, Link, List, ListItemIcon, ListItemText, Modal, Typography } from "@material-ui/core";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as CollapseIcon } from "../../../../../assets/images/collapse.svg";
@@ -38,7 +27,7 @@ import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
 import { getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
-import { styles } from "./pendingReview.styles";
+import useStyles from "./pendingReview.styles";
 
 interface Props {
   id: string;
@@ -79,7 +68,7 @@ interface Props {
   unPinLineItem: (id: string) => void;
   pendingEmailSentAt: Nullable<string>;
 }
-const PendingReviewPresenter: React.FunctionComponent<Props> = ({
+const PendingReviewPresenter: React.FC<Props> = ({
   id,
   arId,
   arChangeRequestId,
@@ -96,7 +85,7 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   unPinLineItem,
   pendingEmailSentAt,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [viewHoverItem, setViewHoverItem] = React.useState("");
@@ -148,16 +137,17 @@ const PendingReviewPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem
-        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
         button
-        onMouseEnter={onMouseHoverListItem}
-        className={classes.listItem}
+        divider
         disableRipple
+        className={classes.listItem}
+        style={open || hoverItem ? { backgroundColor: Colors.sky_blue } : {}}
+        onMouseEnter={onMouseHoverListItem}
       >
         {open ? (
-          <CollapseIcon className={classes.icon} onClick={handleClick} />
+          <CollapseIcon className={classes.icon} data-cy="collapse-icon" onClick={handleClick} />
         ) : (
-          <ExpandIcon className={classes.icon} onClick={handleClick} />
+          <ExpandIcon className={classes.icon}  data-cy="expand-icon" onClick={handleClick} />
         )}
         <ListItemIcon>
           <PendingReviewIcon height={30} width={30} />

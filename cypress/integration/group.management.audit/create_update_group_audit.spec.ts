@@ -90,6 +90,7 @@ context("Group Creation Flow", () => {
         employeeId: adminEmployee.id,
         sessionId: loginResponse.sessionId,
       }).then(() => done());
+      currentDate = momentInPST().format("MMM D, YYYY hh:m");
     });
   });
 
@@ -108,6 +109,31 @@ context("Group Creation Flow", () => {
   context("Check history button is visible", () => {
     it("Check history button is visible", () => {
       cy.grpVerifyHistoryButton();
+    });
+
+    it("Open history panel", () => {
+      cy.grpHistoryClickOpenButton();
+    });
+
+    it("Verify last entry in history panel", () => {
+      cy.get("[class=\"MuiListItemText-root MuiListItemText-multiline\"]").eq(2)
+        .contains("Server Automation").should("exist");
+      cy.get("[class=\"MuiListItemText-root MuiListItemText-multiline\"]>span").eq(1).contains(currentDate)
+        .should("exist");
+    });
+
+    it("Verify latest entry in history panel", () => {
+      cy.usrHistoryVerifyCreator({ name: USERS[1].name });
+      cy.usrHistoryVerifyCurrentDate({ dateTime: currentDate });
+      cy.grpHistoryVerifyAddedGroup({ name: "API group" });
+      cy.grpHistoryVerifyAddedMember(USERS[2].name, USERS[3].name);
+      cy.grpHistoryVerifyAddedPermissions("DEVELOPERS", "GROUP_DELETE");
+      cy.grpHistoryVerifyAddedTags("CREATE_DOCS_OF_RESTRICTED_DOC_TYPES", "OWNERSHIP_CHANGE");
+      cy.grpHistoryVerifyAddedParentGroups("Company Admin", "Developers");
+    });
+
+    it("Close history panel", () => {
+      cy.grpHistoryClickCloseButton();
     });
   });
 

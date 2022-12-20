@@ -623,9 +623,7 @@ context("DAM approvals in LHR", () => {
 
       it("Add approver", () => {
         cy.get("[data-cy^=fb-approvals-approvals-]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -765,7 +763,7 @@ context("DAM approvals in LHR", () => {
 
       it("Approve PO", () => {
         cy.contains("PO-00001").arrowClick();
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
       });
 
       it("Log out user", () => {
@@ -900,7 +898,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Approve PO", () => {
-        cy.ebApprove();
+        cy.poApproveWithoutApi();
       });
 
       it("Turn off autosave", () => {
