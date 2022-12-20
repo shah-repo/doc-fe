@@ -39,7 +39,10 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
-    const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
+    const administativeRevisionTypes = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
+    const isAdministrativeChange = administativeRevisionTypes.includes(
+      workspaceState?.revisionChangeType as RevisionChangeType
+    );
 
     const {
       poApprovalsState,
