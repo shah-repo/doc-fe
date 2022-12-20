@@ -116,11 +116,11 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     useEffect(() => reaction(
       () => FBDataStore.revisionChangeType,
       (revisionChangeType) => {
-        Promise.resolve(fetchRequiredGroups()).then(() => {
-          if (revisionChangeType) {
+        if (revisionChangeType) {
+          Promise.resolve(fetchRequiredGroups()).then(() => {
             updateApprovals({ prevRequester: prevRequester.current });
-          }
-        });
+          });
+        }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
