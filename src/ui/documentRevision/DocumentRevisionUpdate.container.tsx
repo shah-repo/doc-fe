@@ -107,6 +107,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const onSubmit = (values: DocumentRevisionFormValues, helpers, cleanInitialValues) => {
     // Hack to take updated formInput
     const formStateContext = FBFormStateContext as any;
+    const isReceivable = Object.keys(formStateContext?._currentValue)?.some((key) => key.includes("receivable"));
     if (!isEmpty(formStateContext?._currentValue) && values.formInput) {
       set(values, "formInput", formStateContext?._currentValue);
     }
@@ -154,6 +155,11 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       });
     }
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
+
+    // Receivable case when autosave is disabled missing form input data
+    if (isEmpty(dataToSubmit) && isEmpty(values.formInput) && isReceivable) {
+      set(dataToSubmit, "formInput", formStateContext?._currentValue);
+    }
 
     if (redlineActive) {
       if (
