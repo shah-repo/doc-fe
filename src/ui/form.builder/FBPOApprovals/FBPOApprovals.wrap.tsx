@@ -158,9 +158,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         poApprovalsState?.transitionApi.loading
       );
 
-      disabledOptions = isAdministrativeChange
-        ? formState?.inputState.get(name)?.value
-        : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      disabledOptions = checkServiceOrProductPartExists(poItems) ? [requestor] : [];
     });
 
     const fieldValue = map(poApprovalsState?.activeApprovals, "approver.id");
@@ -168,10 +168,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     formState?.setFieldValue(`${name}`, fieldValue, true);
     documentStatus = document?.status;
 
-    const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
-    if (!checkServiceOrProductPartExists(poItems)) {
-      disabledOptions = [];
-    }
 
     disabled = disabled || loading;
 
