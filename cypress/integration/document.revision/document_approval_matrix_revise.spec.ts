@@ -298,6 +298,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("Upgrade to administrative change", () => {
+      cy.drSelectOverviewTab();
       cy.drAdministrativeRevisionLevel();
     });
 
