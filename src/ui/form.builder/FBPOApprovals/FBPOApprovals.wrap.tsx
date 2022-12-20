@@ -9,6 +9,7 @@ import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
+import FBDataStore from "../FBStore/FBDataStore";
 import { usePoApprovals } from "./hooks";
 
 export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
@@ -49,6 +50,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       addApprover,
       removeApprover,
       updateApprovals,
+      fetchRequiredGroups,
     } = usePoApprovals(
       name,
       outputId,
@@ -112,11 +114,13 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     // On revisionChangeType change.
     useEffect(() => reaction(
-      () => workspaceState?.revisionChangeType,
-      () => {
-        if (workspaceState) {
-          updateApprovals({ prevRequester: prevRequester.current });
-        }
+      () => FBDataStore.revisionChangeType,
+      (revisionChangeType) => {
+        Promise.resolve(fetchRequiredGroups()).then(() => {
+          if (revisionChangeType) {
+            updateApprovals({ prevRequester: prevRequester.current });
+          }
+        });
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
