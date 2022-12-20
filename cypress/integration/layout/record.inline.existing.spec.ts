@@ -601,16 +601,6 @@ context("Record inline Flow", () => {
 
       it("Approve Second Inline Approval", () => {
         cy.inlineApprovalWithoutApi();
-        // cy.get("[data-cy='form.builder.request.approve']").last().arrowClick();
-        // cy.listLoadingElementShouldNotExist();
-        // cy.wrapWithWaitOnApiCalls([
-        //   CyRoutes.SessionDetails], () => {
-        //   cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        //   cy.get("[data-cy='common.confirm']").arrowClick();
-        // });
-        // cy.checkToastMessage({ exists: false });
-        // cy.progressBarShouldNotExist();
-        // cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigate to Details tab", () => {
