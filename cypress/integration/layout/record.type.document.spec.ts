@@ -293,7 +293,7 @@ context("Record type Document Layout verification", () => {
 
         it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
           cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-          cy.get("#sm-tabpanel-0").should("be.hidden");
+          cy.get("#sm-tabpanel-0").should("not.exist");
           cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
           cy.get("#sm-tabpanel-1").should("be.visible");
         });
@@ -387,7 +387,7 @@ context("Record type Document Layout verification", () => {
 
       it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
         cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-        cy.get("#sm-tabpanel-0").should("be.hidden");
+        cy.get("#sm-tabpanel-0").should("not.exist");
         cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       });
     });
@@ -439,13 +439,14 @@ context("Record type Document Layout verification", () => {
         });
 
         it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
-          });
+          cy.drAddUserFromPermissionTab(USERS[3].name);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wait(2000);
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab("Developers");
           });
         });
