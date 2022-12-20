@@ -50,7 +50,6 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     schema: workspaceState?.schema ?? _documentRevisionFormState?.schema,
     mode: FBWorkspaceModeOptions.FORM,
     autosave: false,
-    isPreview: true,
   });
 
   const documentTypesById = useSelector(documentTypeSelectors.byId);
