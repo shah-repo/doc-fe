@@ -1147,7 +1147,6 @@ context("Paper LHR tab Layout", () => {
         it("Add another user permission", () => {
           cy.drAddUserFromPermissionTab(USERS[4].name);
           cy.progressBarShouldNotExist();
-          // cy.wait(2000);
         });
 
         it("Add another group permission", () => {
@@ -1334,7 +1333,6 @@ context("Paper LHR tab Layout", () => {
           cy.drAddUserFromPermissionTab(USERS[5].name);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          // cy.wait(2000);
         });
 
         it("Add another group permission", () => {
