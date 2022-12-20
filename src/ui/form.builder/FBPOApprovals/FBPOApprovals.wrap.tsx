@@ -133,6 +133,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           updateApprovals({ prevRequester: prevRequester.current });
         }
         prevRequester.current = requester;
+      },
+      {
+        fireImmediately: true,
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -150,7 +153,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       });
     };
 
-    // MARK: @observer
     useObserver(() => {
       groups = poApprovalsState?.groups;
       approvals = poApprovalsState?.activeApprovals;

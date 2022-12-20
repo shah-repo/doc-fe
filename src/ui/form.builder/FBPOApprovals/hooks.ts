@@ -1,7 +1,7 @@
 // Todo: ENC-13302 Business logic from this file should be moved to BE side.
 
 import { compact, difference, find, isEmpty, map, minBy, some, sortBy } from "lodash";
-import { reaction } from "mobx";
+import { reaction, when } from "mobx";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBInlineApprovalBody, FBPurchaseOrderValue } from "..";
@@ -117,7 +117,9 @@ export const usePoApprovals = (
     }
 
     if (prevRequester && shouldRemovePrevRequester) {
-      return removeApprover([prevRequester], () => requester && addApprover([requester], { manually: false }));
+      return removeApprover([prevRequester], () => {
+        requester && addApprover([requester], { manually: false });
+      });
     }
 
     if (requester && shouldAddRequester) {
@@ -125,10 +127,13 @@ export const usePoApprovals = (
     }
   };
 
-  const addApprover = (ids: string[], { manually = true } = {}, callback?: () => void) => {
-    if (!id || !ids || !poApprovalsState?.isMounted) {
+  const addApprover = async (ids: string[], { manually = true } = {}, callback?: () => void) => {
+    if (!id || !ids) {
       return;
     }
+
+    await when(() => poApprovalsState?.isMounted ?? false);
+
     ids
       .filter((user) => !hasUserInApprovers(user))
       .forEach((approver) => {
