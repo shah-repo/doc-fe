@@ -90,8 +90,7 @@ export const usePoApprovals = (
   const updateApprovals = ({ prevRequester, ...args }: CheckApprovalsArguments) => {
     const { revisionChangeType, document, formInputSync } = workspaceState ?? {};
 
-    const isAdministrativeChange = revisionChangeType === RevisionChangeType.AdministrativeChange;
-    const shouldUpdateApprovers = isDocumentRevisionInDraft(document?.status) && !isAdministrativeChange;
+    const shouldUpdateApprovers = isDocumentRevisionInDraft(document?.status);
 
     if (!shouldUpdateApprovers) {
       return;
@@ -101,21 +100,28 @@ export const usePoApprovals = (
     const requester = formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
     const autoApprovers = poApprovalsState?.activeApprovals.filter((item) => !item.manually);
 
+    const revisionTypesToRemoveRequestor = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
+    const isAdministrativeChange = revisionTypesToRemoveRequestor.includes(revisionChangeType as RevisionChangeType);
+
     const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
     const hasRequesterInAllApprovers = hasUserInApprovers(requester);
     const hasRequesterInAutoApprovers = hasUserInApprovers(requester, autoApprovers);
-    const hasPrevRequesterInAutoApprovers = prevRequester && hasUserInApprovers(prevRequester, autoApprovers);
+    const hasPrevRequesterInAutoApprovers = hasUserInApprovers(prevRequester ?? "", autoApprovers);
 
-    if (prevRequester && requester !== prevRequester && hasPrevRequesterInAutoApprovers) {
+    const shouldAddRequester = !hasRequesterInAllApprovers && hasServiceOrProductPart;
+    const shouldRemoveRequester = hasRequesterInAutoApprovers && (!hasServiceOrProductPart || isAdministrativeChange);
+    const shouldRemovePrevRequester = requester !== prevRequester && hasPrevRequesterInAutoApprovers;
+
+    if (requester && shouldRemoveRequester) {
+      return removeApprover([requester]);
+    }
+
+    if (prevRequester && shouldRemovePrevRequester) {
       return removeApprover([prevRequester], () => requester && addApprover([requester], { manually: false }));
     }
 
-    if (requester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
+    if (requester && shouldAddRequester) {
       return addApprover([requester], { manually: false });
-    }
-
-    if (requester && hasRequesterInAutoApprovers && !hasServiceOrProductPart) {
-      return removeApprover([requester]);
     }
   };
 
