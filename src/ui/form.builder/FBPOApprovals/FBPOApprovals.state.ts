@@ -7,7 +7,7 @@ import { ApprovalStatus } from "../../../state/ducks/common/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
-class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approval> {
+class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": string[]} | Approval> {
   @observable public groups?: Record<string, FBRequiredApprover> = {};
   @observable approvals?: FBInlineApprovalBody[];
   @observable public isMounted = false;
@@ -24,8 +24,9 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
     if (!id) {
       return;
     }
-    this.fetchRequiredApprovals(id);
-    this.setMounted(true);
+    Promise.resolve(this.fetchRequiredApprovals(id)).then(() => {
+      this.setMounted(true);
+    });
   }
 
   // MARK: @computed
@@ -71,7 +72,7 @@ class FBPOApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Appro
     super.onSuccess();
   }
 
-  private setGroups = (data) => {
+  private setGroups = (data?: FBRequiredApprover[]) => {
     this.groups = (data || []).reduce((group, item) => {
       group[item.id] = {
         ...item,

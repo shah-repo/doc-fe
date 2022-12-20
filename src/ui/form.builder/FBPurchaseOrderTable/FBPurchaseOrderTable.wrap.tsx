@@ -103,15 +103,16 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
         const requester = formState?.getFieldValue(PO_REQUESTOR_COMPONENT_NAME);
         if (requester && !hasUserInApprovers(requester, poApprovalsState?.activeApprovals) && value?.items.length) {
-          return addApprover(
+          addApprover(
             [requester],
             { manually: false },
             () => {
               updateWorkspace(value);
             }
           );
+        } else {
+          updateWorkspace(value);
         }
-        updateWorkspace(value);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
