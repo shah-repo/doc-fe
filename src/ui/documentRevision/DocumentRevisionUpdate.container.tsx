@@ -65,6 +65,10 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     },
   });
 
+  useEffect(() => {
+    FBDataStore.setRefreshData(documentRevision);
+  }, [documentRevision]);
+
   useEffect(() => () => {
     FBStore.damData = { approvalMatrix: [], approvalRoles: [] };
     documentRevisionStatusContextFromCR = React.createContext<undefined | DocumentRevisionStatus>(undefined);
