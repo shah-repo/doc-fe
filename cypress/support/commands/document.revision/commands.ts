@@ -454,8 +454,7 @@ Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", ()
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
     cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(500);
   });
-  cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
-  cy.unClick();
+  cy.progressBarShouldNotExist();
   cy.get(`[data-cy="ApproveAndRelease-submit"]`).arrowClick().wait(500);
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
