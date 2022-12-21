@@ -166,10 +166,11 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-      disabledOptions = checkServiceOrProductPartExists(poItems) ? [requestor] : [];
+      const disableRequestorApproval = checkServiceOrProductPartExists(poItems) && !isAdministrativeChange;
+      disabledOptions = disableRequestorApproval ? [requestor] : [];
     });
 
-    formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, "approver.id"), true);
+    formState?.setFieldValue(name, map(approvals, "approver.id"), true);
 
     disabled = disabled || loading;
     documentStatus = document?.status;
