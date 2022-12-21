@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, get, includes, isEmpty } from "lodash";
@@ -230,7 +231,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {!isDCO && (<>{isVisible && <Grid item xs={6}>
             <DocumentTypeSelect
               outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
-              isDisabled={isDisabledInputInPreview}
+              isDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
               {...{
                 type,
                 isDocRevStatusDraft,

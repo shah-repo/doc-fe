@@ -15,6 +15,7 @@ import { FBWorkspaceMode } from "../../form.builder/types/workspace";
 import Colors from "../../layout/theme/utils/colors";
 import ChangeRequestSidebar from "../form/ChangeRequest.sidebar";
 import { toChangeRequestFormValues } from "../form/transform";
+import ItemsAndDetailsWrapper from "../items.and.details/ItemsAndDetails.wrap";
 import Approvers from "./approvers";
 import ChangeSummaryFormHeader from "./ChangeSummaryFormHeader";
 import SummaryHeader from "./SummaryHeader";
@@ -65,8 +66,14 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   };
 
   const docTypeGroup = changeRequest.documentType.group ?? "OTHER";
-  const tabConfig = useSelector((state: ApplicationState) =>
+  let tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
+
+  tabConfig = tabConfig && [...tabConfig, {
+    labelId: "tabId.items",
+    tabId: TabTypeOptions.ITEMS.toLowerCase(),
+    type: TabTypeOptions.ITEMS,
+  } ];
 
   return (
     <SMForm
@@ -134,8 +141,18 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               />
                               <Approvers dataProp={changeRequest.approvals}/>
                             </>
-
                           }
+                          {tabType === TabTypeOptions.ITEMS &&
+                            _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
+                            changeRequest && (
+                            <ItemsAndDetailsWrapper
+                              changeRequest={cloneDeep(changeRequest)}
+                              initialValues={cloneDeep(changeRequest?.formInput) ?? {}}
+                              autosave={autosave}
+                              mode={mode}
+                              asyncState={asyncState}
+                            />
+                          )}
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
                             _formState?.mode !== FBWorkspaceModeOptions.NONE &&
                             <FBWorkspace

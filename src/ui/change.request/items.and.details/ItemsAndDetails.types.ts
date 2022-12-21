@@ -43,7 +43,7 @@ export type ChangeOrderViewItemProps =
 & ChangeOrderGridItem;
 
 export interface ItemsAndDetailsWrapperProps {
-  currentDocRevId: string | undefined;
+  currentDocRevId?: string | undefined;
   changeRequest: ChangeRequest;
   initialValues: Pick<FBFormProps, "initialValues">;
   autosave: boolean;

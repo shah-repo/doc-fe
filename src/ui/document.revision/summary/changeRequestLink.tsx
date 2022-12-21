@@ -22,9 +22,11 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
   dataProp,
 }) => {
 
-  /* eslint-disable @typescript-eslint/no-non-null-assertion */
-  const { documentRevision } = React.useContext(FormHeaderContext)!;
-  const { changeRequest } = documentRevision;
+  const { documentRevision } = React.useContext(FormHeaderContext) ?? {};
+  let changeRequest = dataProp.changeRequest;
+  if (documentRevision) {
+    changeRequest = documentRevision.changeRequest;
+  }
 
   const classes = useStyles();
 

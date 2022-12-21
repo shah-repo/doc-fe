@@ -7,7 +7,7 @@ import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentT
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../state/types";
 import { useFormContext } from "../../components/forms/FormContext";
-import { FB, FBForm, FBFormState } from "../../form.builder";
+import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from "../../form.builder";
 import { generateDocTitleText, newARDocRevToAdd, storeDataToFormData } from "./helpers";
 import ItemsAndDetails from "./ItemsAndDetails";
 import ItemsAndDetailsState from "./ItemsAndDetails.state";
@@ -120,6 +120,10 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
 
   useEffect(() => {
     processChangeRequest();
+    // Don't show the options to add / edit|delete in preview mode
+    if (mode === FBWorkspaceModeOptions.PREVIEW) {
+      itemsAndDetailsState.setViewItemActionsVisibility(false);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changeRequest]);
 
