@@ -803,8 +803,8 @@ context("Search PO: Order date can be searched using the correct format of date 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Check state as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
-      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", STATUS_TYPES_LABEL.RELEASED);
+    it(`Check state as Released`, () => {
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "Released");
     });
 
     it("Clear filters", () => {
@@ -851,8 +851,8 @@ context("Search PO: Order date can be searched using the correct format of date 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Check state as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
-      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", STATUS_TYPES_LABEL.RELEASED);
+    it(`Check state as Released`, () => {
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "Released");
     });
   });
 
@@ -871,7 +871,7 @@ context("Search PO: Order date can be searched using the correct format of date 
 
     it("Filter by PO state", () => {
       cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
-      cy.get("li").contains("RELEASED").arrowClick().wait(500);
+      cy.get("li").contains("Released").arrowClick().wait(500);
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -938,7 +938,7 @@ context("Search PO: Order date can be searched using the correct format of date 
 
     it("Filter by PO state", () => {
       cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
-      cy.get("li").contains("RELEASED").arrowClick().wait(500);
+      cy.get("li").contains("Released").arrowClick().wait(500);
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -970,6 +970,14 @@ context("Search PO: Order date can be searched using the correct format of date 
       });
     });
 
+    it("Add an approver", () => {
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick().wait(2000);
+      cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(`${USERS[1].name}{enter}`, { force: true });
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Clicks Save button", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.wait(5000);
@@ -978,11 +986,13 @@ context("Search PO: Order date can be searched using the correct format of date 
     it("Click 'Submit for Approval' button", () => {
       cy.pmSubmitForApprovalWithoutAPI();
       cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Approve it", () => {
       cy.poApproveWithoutApi();
       cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
   });
 
@@ -1023,8 +1033,8 @@ context("Search PO: Order date can be searched using the correct format of date 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Check state as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
-      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", STATUS_TYPES_LABEL.RELEASED);
+    it(`Check state as Released`, () => {
+      cy.get(`td[data-grid-col-index="3"]`).eq(0).should("contain.text", "Released");
     });
   });
 });
