@@ -49,6 +49,8 @@ const level1Value = "$566.25";
 const level1Limit = "5000";
 const level2Value = "$8,566.25";
 const level2Limit = "25000";
+const delayms1 = 5000;
+const delayms2 = 10000;
 
 context("Create company with JSON's and verify Purchase Order-ENC-12725", () => {
   before(() => {
@@ -651,7 +653,49 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
-  context("Create Form Part document to create Part", () => {
+  context("Create a form for Supplier", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'Supplier form title'", () => {
+      cy.drEnterDocumentTitle({ name: "Supplier form title" });
+    });
+
+    it("Enters description 'Supplier form description'", () => {
+      cy.drEnterDocumentDescription({ description: "Supplier form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'Supplier' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Supplier" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Create Form Part document", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
       cy.progressBarShouldNotExist();
@@ -693,7 +737,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
-  context("Create Part document for PO", () => {
+  context("Create Part document 1 for PO", () => {
     it("Navigates to parts list", () => {
       cy.navigToParts();
       cy.progressBarShouldNotExist();
@@ -710,12 +754,12 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enters title 'New Part'", () => {
-      cy.drEnterDocumentTitle({ name: "New Part" });
+    it("Enters title 'Part 1'", () => {
+      cy.drEnterDocumentTitle({ name: "Part 1" });
     });
 
-    it("Enters description 'New Part description'", () => {
-      cy.drEnterDocumentDescription({ description: "New Part description" });
+    it("Enters description 'Part 1 description'", () => {
+      cy.drEnterDocumentDescription({ description: "Part 1 description" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -746,12 +790,12 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enters title 'New Part'", () => {
-      cy.drEnterDocumentTitle({ name: "New Part 2" });
+    it("Enters title 'Part 2'", () => {
+      cy.drEnterDocumentTitle({ name: "Part 2" });
     });
 
-    it("Enters description 'New Part description'", () => {
-      cy.drEnterDocumentDescription({ description: "New Part description 2" });
+    it("Enters description 'Part 2 description'", () => {
+      cy.drEnterDocumentDescription({ description: "Part 2 description" });
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -763,9 +807,11 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
-  context("Create a form for PO with outputtype as 'Purchase Order', approve and release it", () => {
+  context("Create a PO form with outputtype as 'Purchase Order', approve and release it", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Create a document'", () => {
@@ -794,12 +840,15 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(delayms1);
     });
 
     it("Enter html code into 'Render HTML' field", () => {
       cy.drEnterHtmlText({
         htmlText: renderHTMLContent,
       });
+
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -810,13 +859,13 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`Check PO status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
-      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+    it(`Check form status as 'RELEASED'`, () => {
+      cy.arVerifyStatus({ status: "RELEASED" });
       cy.get(`[data-cy="field-name"]`).should("have.text", purchaseOrderFormName);
     });
   });
 
-  context("Create PO from created PO form", () => {
+  context("Create a new PO", () => {
     it("Navigate to Purchase Order list", () => {
       cy.navigToPurchaseOrder();
       cy.progressBarShouldNotExist();
@@ -846,10 +895,48 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     it("Select Order Date", () => {
       cy.get(`[class*="MuiOutlinedInput"] > div > button[tabindex="0"]`).arrowClick();
       cy.get("button.MuiPickersDay-daySelected").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click 'Save' document", () => {
       cy.drClickCreateDocumentWithoutApiCallForForms();
+    });
+  });
+
+  context("Add Supplier to the PO", () => {
+    it("Click 'Create A New Supplier'", () => {
+      cy.get("[data-cy=\"form.builder.create.new.supplier\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter Supplier Name 'Supplier'", () => {
+      cy.get("[data-cy=\"name\"]").arrowType("Supplier");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter Supplier Address/Phone as 'Supplier Description'", () => {
+      cy.xpath("//div[@data-cy='description']/../div[2]").eq(1).arrowClick().wait(1000);
+      cy.get("[data-cy='description'] div[contenteditable]").eq(1).clear();
+      cy.get("[data-cy='description'] div[contenteditable]").eq(1).arrowType("Supplier Description");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.checkToastMessage({ exists: false });
+    });
+
+    it("Select Document Type 'Supplier'", () => {
+      cy.get("[name=\"document.documentType.id\"]").autocompleteSelect("Supplier");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Create new supplier", () => {
+      cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -973,7 +1060,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
-  context(`Navigate to the Approval field and add User 1 as ${USERS[1].name}`, () => {
+  context(`Navigate to the Approval field and add User 1`, () => {
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
@@ -987,7 +1074,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
-  context(`Navigate to 'Requestor' field and add same User 1 as ${USERS[1].name}`, () => {
+  context(`Navigate to 'Requestor' field and add same User 1`, () => {
     it(`Add '${USERS[1].name}' as the Requestor`, () => {
       cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
       cy.unClick();
@@ -998,8 +1085,8 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
   context(`Verify that approver is added only once in the approvals field`, () => {
     it("Verify approvals is added only once in approval block", () => {
-      cy.get("[data-tag-index='1']>span>div").should("not.exist");
-      cy.get("[data-tag-index='0']>span>div").should("contain.text", `${USERS[1].name} - ${USERS[1].email} `);
+      cy.get(`[name^="fb-po-approvals-"]`).last().should("contain.text", `${USERS[1].name} - ${USERS[1].email} `)
+        .and("have.length", 1);
     });
   });
 
@@ -1020,7 +1107,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
   context(`Verify that if the Requestor fulfills the PO approval level then the system should mark the approval level as fulfilled`, () => {
     it("Check if selected approver has approval signature right by his name", () => {
       cy.contains("PO Approval sig").should("exist");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[1].name + " | DRAFT" + USERS[1].email);
+      cy.get("[name*='fb-po-approvals-']>div").contains(USERS[1].name + " | DRAFT" + USERS[1].email);
     });
 
     it("Check approval icon if it's RED colored", () => {
@@ -1056,7 +1143,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       });
     });
 
-    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for RELEASED document`, () => {
+    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for Released document`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
 
@@ -1074,6 +1161,10 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
     it(`Verify Order Date`, () => {
       cy.get(`[name^="ordered-"]`).should("not.have.value", "");
+    });
+
+    it(`Verify Supplier name`, () => {
+      cy.get(`[data-cy="po-supplier-built-in"]`).should("have.value", "SUP-00001 - rev 1 - Supplier");
     });
 
     it(`Check the Approval field contain ${USERS[1].name} - ${USERS[1].email}`, () => {
@@ -1095,7 +1186,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
 
     it("Verify description", () => {
-      cy.get("[data-cy='description']>span>span>span").should("have.text", "New Part");
+      cy.get("[data-cy='description']>span>span>span").should("have.text", "Part 1");
     });
 
     it("Verify ordered quantity", () => {
@@ -1124,7 +1215,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
-  context("Verify that downloaded PDF display Requestor information", () => {
+  context("downloaded PDF and verify Requestor information displayed in downloaded PDF", () => {
     it("Navigate to Purchase Order list", () => {
       cy.navigToPurchaseOrder();
       cy.progressBarShouldNotExist();
@@ -1141,7 +1232,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("[API]Get html document and verify PO number and Requestor information", () => {
+    it("[API]Verify PO number and Requestor information", () => {
       cy.url().then((url: any) => {
         poHTMLDocRevId = url.split("/").pop();
         cy.request({
@@ -1188,7 +1279,6 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.pause();
     });
   });
 
@@ -1269,14 +1359,6 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Remove requestor user1 as ${USERS[1].name}`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
-      cy.unClick();
-      cy.wait(8000);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it(`Add Approver '${USERS[2].name}' for Approval`, () => {
       cy.poAddApproverOnApproverList({ approver: USERS[2].name });
       cy.progressBarShouldNotExist();
@@ -1284,13 +1366,16 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
-  context("Navigate to 'Requestor' field and add same User 2", () => {
-    it(`Select '${USERS[2].name}' for Requestor`, () => {
+  context("Navigate to 'Requestor' field and add same User 2 as the Requestor", () => {
+    it(`Remove requestor user 1`, () => {
       cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
       cy.unClick();
+      cy.wait(8000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
 
+    it(`Select Requestor user 2`, () => {
       cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[2].name} - ${USERS[2].email}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
@@ -1306,17 +1391,16 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
   });
 
   context("Navigate to Approval block and verify that requestor is added only once in the approvals field", () => {
-    it("Verify requestor is added only once in approval block", () => {
-      cy.get("[data-tag-index='1']>span>div").should("not.exist");
-      cy.get("[data-tag-index='0']>span>div").should("have.text", `${USERS[2].name} - ${USERS[2].email} `);
+    it("Verify approvals is added only once in approval block", () => {
+      cy.get(`[name^="fb-po-approvals-"]`).last().should("contain.text", `${USERS[2].name} - ${USERS[2].email} `)
+        .and("have.length", 1);
     });
   });
 
-  context("Verify that user is not able to remove/delete the requestor as an approver", () => {
+  context(`Verify that user is not able to remove/delete the requestor as an approver`, () => {
     it("Navigate to Approval block and try to remove approver", () => {
-      cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${USERS[2].name} - ${USERS[2].email}`);
-      cy.get(`input[data-cy^="fb-po-approvals-"]`).parent()
-        .find(`[class*="Mui-disabled"]`).should("exist");
+      cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
+      cy.verifyPoApprovalDisabled({ name: USERS[2].name, email: USERS[2].email });
     });
   });
 
@@ -1328,7 +1412,8 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
   context(`Verify that the system automatically update the approvals field with the new requestor selected`, () => {
     it("Check approvers automatically added", () => {
-      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[2].name} - ${USERS[2].email}`);
+      cy.get(`[name^="fb-po-approvals-"]`).last().should("contain", `${USERS[2].name} - ${USERS[2].email}`)
+        .and("have.length", 1);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1412,17 +1497,19 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Select created PO", () => {
+    it("clear all filters", () => {
       cy.dlClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
 
+    it("Select first document", () => {
       cy.dlSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for RELEASED document`, () => {
+    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
   });
@@ -1452,6 +1539,10 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.get(`[name^="ordered-"]`).should("not.have.value", "");
     });
 
+    it(`Verify Supplier name`, () => {
+      cy.get(`[data-cy="po-supplier-built-in"]`).should("have.value", "SUP-00001 - rev 1 - Supplier");
+    });
+
     it(`Check the Approval field contain ${USERS[2].name} - ${USERS[2].email}`, () => {
       cy.get("div.Mui-disabled.MuiChip-deletable").should("contain", `${USERS[2].name} - ${USERS[2].email}`);
     });
@@ -1471,7 +1562,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
 
     it("Verify description", () => {
-      cy.get("[data-cy='description']>span>span>span").should("have.text", "New Part");
+      cy.get("[data-cy='description']>span>span>span").should("have.text", "Part 1");
     });
 
     it("Verify ordered quantity", () => {
@@ -1507,7 +1598,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("verify the correct data are displayed in PO table with state as 'RELEASED'", () => {
+    it("verify the correct data are displayed in PO table with state as 'Released'", () => {
       cy.dlClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1520,7 +1611,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
       cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "2");
       cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
-      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "RELEASED");
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Released");
       cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "N/A");
       cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[2].name);
       cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
