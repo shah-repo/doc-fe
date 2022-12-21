@@ -568,9 +568,9 @@ context("Owner submits LHR for approval", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
           cy.drSelectHistoryTab();
         });
-        cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+        cy.get("[data-cy=\"History-detail\"]").parent().parent()
           .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
-        cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+        cy.get("[data-cy=\"History-detail\"]").parent().parent()
           .should("contain.text", "Approver Added").and("contain.text", USERS[2].name);
       });
     });
@@ -616,9 +616,9 @@ context("Owner submits LHR for approval", () => {
     });
 
     it("Check history - added approvers should be displayed", () => {
-      cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+      cy.get("[data-cy=\"History-detail\"]").parent().parent()
         .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
-      cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
+      cy.get("[data-cy=\"History-detail\"]").parent().parent()
         .should("contain.text", "Approver Added").and("contain.text", USERS[2].name);
     });
 
