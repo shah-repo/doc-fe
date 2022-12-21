@@ -16,7 +16,7 @@ import { DocumentRevision, FBOutputDocumentType, SmartReferenceType } from "../.
 import { ApplicationState } from "../../../../../../../state/reducers";
 import { DocTypeGroups } from "../../../../../../dashboard.new/line.items/common/types";
 import AttachmentsField from "../../../../../../document.revision/form/attachments";
-import { FB, FBEditorState, FBSchemaProps, FBWorkspace, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../../../../../form.builder";
+import { FB, FBEditorState, FBSchema, FBSchemaProps, FBWorkspaceMode, FBWorkspaceModeOptions, FBWorkspaceState } from "../../../../../../form.builder";
 import FBMaterialEqInfoContainer from "../../../../../../form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import { DocumentCloneTypeOptions } from "../../../../../Clone.container";
 import { isOperator } from "../../../../../DocumentRevisionDisplay.container";
@@ -46,6 +46,11 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const classes = styles();
   const { _documentRevisionFormState } = SM.useStores();
   const { workspaceState } = FB.useStores();
+  const previewWorkspaceState = FB.useRef<FBWorkspaceState>(FBWorkspaceState, {
+    schema: workspaceState?.schema ?? _documentRevisionFormState?.schema,
+    mode: FBWorkspaceModeOptions.FORM,
+    autosave: false,
+  });
 
   const documentTypesById = useSelector(documentTypeSelectors.byId);
 
@@ -129,6 +134,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
   const prevMode = useRef<FBWorkspaceMode>();
 
   useEffect(() => {
+    workspaceState?.setIsPreview(true);
+  }, []);
+
+  useEffect(() => {
     if (workspaceState?.mode) {
       prevMode.current = workspaceState?.mode;
     }
@@ -193,17 +202,13 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             mode,
                           }}
                         />}
-                        {documentRevision && showTabContent && <FBWorkspace
-                          withoutBottomBar
-                          isPortal={false}
-                          document={{
-                            ...formik.values as unknown as DocumentRevision,
-                            ...documentRevision as unknown as DocumentRevision,
-                          }}
-                          {... { workspaceState }}
-                          initialValues={{}}
-                          schema={schema}
-                        />}
+                        {documentRevision && showTabContent &&
+                        <FBSchema
+                          {...{ schema }}
+                          schemaState={previewWorkspaceState}
+                          workspaceMode={mode}
+                        />
+                        }
                       </>}
                       {tabType === TabTypeOptions.DYNAMIC && showTabContent
                         && _formState?.mode !== FBWorkspaceModeOptions.NONE && (
@@ -221,16 +226,10 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                               labeld={"Supporting Documents"}
                             />
                           )}
-                          <FBWorkspace
-                            withoutBottomBar
-                            isPortal={false}
-                            document={{
-                              ...formik.values as unknown as DocumentRevision,
-                              ...documentRevision as unknown as DocumentRevision,
-                            }}
-                            {... { workspaceState }}
-                            initialValues={initialValues}
-                            schema={schema}
+                          <FBSchema
+                            {...{ schema }}
+                            schemaState={previewWorkspaceState}
+                            workspaceMode={mode}
                           />
                         </>
                       )}
@@ -267,6 +266,7 @@ const DocumentPreviewContainer: React.FunctionComponent<ContainerProps> = (props
   return (
     <Formik
       initialValues={initialValues}
+      enableReinitialize={true}
       onSubmit={emptyFunction}
     >
       {(formikProps) => <DocumentPreview {...props} formik={formikProps} />}
