@@ -1416,8 +1416,8 @@ context("DAM and POAM", () => {
           cy.get("[id='sm-tabpanel-0']").contains("Attachments").should("exist");
         });
 
-        it("Verify that Form Options should not appear for Overview tab", () => {
-          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("not.exist");
+        it("Verify that Form Options should  appear for Overview tab", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("exist");
         });
       });
 
