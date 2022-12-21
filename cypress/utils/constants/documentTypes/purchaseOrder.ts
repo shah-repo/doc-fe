@@ -85,6 +85,7 @@ export const PurchaseOrderTest: IdocumentTypeDto = {
       visible: true,
     },
     A4: {
+      label: "Released",
       visible: false,
     },
     A5: {
