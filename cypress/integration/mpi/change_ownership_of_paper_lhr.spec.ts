@@ -677,6 +677,8 @@ context("Change Ownership of Paper LHR", () => {
     it(`Operator can add ${USERS[4].name} approver`, () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[4].name);
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("visit the LHR", () => {
