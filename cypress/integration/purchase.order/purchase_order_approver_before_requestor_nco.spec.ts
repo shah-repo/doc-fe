@@ -50,7 +50,6 @@ const level1Limit = "5000";
 const level2Value = "$8,566.25";
 const level2Limit = "25000";
 const delayms1 = 5000;
-const delayms2 = 10000;
 
 context("Create company with JSON's and verify Purchase Order-ENC-12725", () => {
   before(() => {
