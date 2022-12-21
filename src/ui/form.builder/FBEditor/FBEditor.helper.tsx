@@ -11,7 +11,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
     ...props
   }: T) => {
     const { dialogState, workspaceState, formState, leftPanelState } = FB.useStores();
-    const { _documentRevisionFormState } = SM.useStores();
+    const { _documentRevisionFormState, _tabsState } = SM.useStores();
     function defaultProps(props: Partial<FBInputProps>): Partial<FBInputProps> {
       const { type, stepIndex } = props;
       if (includes(FBEditorState.pickStepIndex, type)) {
@@ -59,6 +59,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
       if (leftPanelState) {
         leftPanelState.setIndex(index || 0);
+        _documentRevisionFormState?.setTabIdForSchemaAddition(_tabsState?.activeTabId || "");
         leftPanelState.config({
           open: true,
           showLeftPanelEditor: true,
