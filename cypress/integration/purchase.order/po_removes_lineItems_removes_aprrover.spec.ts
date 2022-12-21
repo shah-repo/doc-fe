@@ -812,7 +812,7 @@ context("PO Removes lineitems removes approver", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it(`Check PO status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+    it(`Check PO form status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get(`[data-cy="field-name"]`).should("have.text", purchaseOrderFormName);
     });

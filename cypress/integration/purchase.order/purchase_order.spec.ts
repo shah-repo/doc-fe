@@ -129,10 +129,6 @@ context("PO test", () => {
       cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
 
-    // it("Turn off autosave", () => {
-    //   cy.cmpTurnOffAutosave();
-    // });
-
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
       cy.progressBarShouldNotExist();
@@ -708,6 +704,8 @@ context("PO test", () => {
       cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Select 'Correct PO' revision stage", () => {
@@ -729,6 +727,20 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Add an approver", () => {
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick().wait(2000);
+      cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(`${USERS[11].name}{enter}`, { force: true });
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Click 'Submit for Approval' button", () => {
       SystemRequirement("REQ-1490");
       cy.pmSubmitForApprovalWithoutAPI();
@@ -737,8 +749,6 @@ context("PO test", () => {
     });
 
     it("Click 'Approve' button", () => {
-      // getting into ENC-13421 issue.
-      // note that work-around for ENC-13421 does not work when "Correct PO" option is choosen
       cy.ebApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -871,6 +881,7 @@ context("PO test", () => {
       cy.poSelectOption({ optionName: "service" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
@@ -879,11 +890,11 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    // it("Save PO", () => {
-    //   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-    //   cy.progressBarShouldNotExist();
-    //   cy.listLoadingElementShouldNotExist();
-    // });
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
@@ -897,11 +908,12 @@ context("PO test", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    // it("Save PO", () => {
-    //     cy.drClickCreateDocumentWithoutApiCall();
-    //     cy.progressBarShouldNotExist();
-    //     cy.listLoadingElementShouldNotExist();
-    //   });
+    // getting into ENC-13547 issue on save
+    it("Save PO", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
 
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
@@ -931,7 +943,6 @@ context("PO test", () => {
 
     it("Enter Shipping Cost", () => {
       cy.poShippingCost({ number: "2" });
-      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -944,7 +955,7 @@ context("PO test", () => {
     it("Check Total value", () => {
       SystemRequirement("REQ-1440");
       cy.unClick();
-      cy.poCheckTotalAmount({ number: "€30.00" });
+      cy.poCheckTotalAmount({ number: "€12.00" });
     });
 
     it("Check if total converted to dollars is shown", () => {
@@ -953,6 +964,7 @@ context("PO test", () => {
       cy.checkToastMessage({ exists: false });
     });
 
+    // getting into ENC-13547 issue on save
     it("Save PO", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();

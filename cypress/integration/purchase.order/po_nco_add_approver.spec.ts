@@ -823,7 +823,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`Check PO status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+    it(`Check Form status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get(`[data-cy="field-name"]`).should("have.text", purchaseOrderFormName);
     });
@@ -1243,7 +1243,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for RELEASED document`, () => {
+    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for Released document`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
   });
@@ -1326,7 +1326,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
       cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "1");
       cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
-      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "RELEASED");
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Released");
       cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "N/A");
       cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "PRT-00001 - 1");
       cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$10.93");
@@ -1737,7 +1737,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for RELEASED document`, () => {
+    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient}) for Released document`, () => {
       cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
   });
