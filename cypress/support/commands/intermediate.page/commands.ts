@@ -798,7 +798,7 @@ Cypress.Commands.add("intPageVerifyGroupsToTrainExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyGroupsToTrainNotExist", () => {
-  cy.get(`[data-cy="Groups to train"]`).should("not.exist");
+  cy.get(`[data-cy="Groups to Train"]`).should("not.exist");
 });
 
 Cypress.Commands.add("intPageVerifyUsersToTrainExist", () => {
