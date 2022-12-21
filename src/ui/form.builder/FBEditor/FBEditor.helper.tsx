@@ -59,7 +59,9 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
       if (leftPanelState) {
         leftPanelState.setIndex(index || 0);
-        _documentRevisionFormState?.setTabIdForSchemaAddition(_tabsState?.activeTabId || "");
+        if (_tabsState?.activeTabId) {
+        _documentRevisionFormState?.setTabIdForSchemaAddition(_tabsState?.activeTabId);
+        }
         leftPanelState.config({
           open: true,
           showLeftPanelEditor: true,
