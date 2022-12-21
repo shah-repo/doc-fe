@@ -661,6 +661,8 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enters title 'Supplier form title'", () => {
@@ -673,10 +675,14 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Selects 'Form' document type from dropdown", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Selects 'Supplier' document type from dropdown", () => {
@@ -687,10 +693,15 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -934,6 +945,12 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
     it("Create new supplier", () => {
       cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1611,7 +1628,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "2");
       cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
       cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Released");
-      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "N/A");
+      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "Supplier");
       cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[2].name);
       cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
     });
