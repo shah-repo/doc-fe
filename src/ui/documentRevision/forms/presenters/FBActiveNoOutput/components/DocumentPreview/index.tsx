@@ -201,7 +201,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                             ...documentRevision as unknown as DocumentRevision,
                           }}
                           {... { workspaceState }}
-                          initialValues={initialValues}
+                          initialValues={{}}
                           schema={schema}
                         />}
                       </>}
