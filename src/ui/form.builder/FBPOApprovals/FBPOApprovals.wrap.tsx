@@ -83,6 +83,36 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
+      if (!approvalId) { return; }
+      poApprovalsState?.applyTransition(transition, approvalId, { password });
+    };
+
+    onApproveClick = (approvalId: string) => {
+      dialogState?.config({
+        title: "form.builder.password.prompt",
+        open: true,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
+      });
+    };
+
+    useObserver(() => {
+      groups = poApprovalsState?.groups;
+      approvals = poApprovalsState?.activeApprovals;
+      checkedGroups = poApprovalsState?.checkedGroups;
+
+      loading = (
+        poApprovalsState?.loading ||
+        poApprovalsState?.approvalApi.loading ||
+        poApprovalsState?.transitionApi.loading
+      );
+
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      const disableRequestorApproval = checkServiceOrProductPartExists(poItems) && !isAdministrativeChange;
+      disabledOptions = disableRequestorApproval ? [requestor] : [];
+    });
+
     // This runs when you manually remove an approver from the list
     useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
@@ -140,36 +170,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
-      if (!approvalId) { return; }
-      poApprovalsState?.applyTransition(transition, approvalId, { password });
-    };
-
-    onApproveClick = (approvalId: string) => {
-      dialogState?.config({
-        title: "form.builder.password.prompt",
-        open: true,
-        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
-      });
-    };
-
-    useObserver(() => {
-      groups = poApprovalsState?.groups;
-      approvals = poApprovalsState?.activeApprovals;
-      checkedGroups = poApprovalsState?.checkedGroups;
-
-      loading = (
-        poApprovalsState?.loading ||
-        poApprovalsState?.approvalApi.loading ||
-        poApprovalsState?.transitionApi.loading
-      );
-
-      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
-      const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-      disabledOptions = checkServiceOrProductPartExists(poItems) ? [requestor] : [];
-    });
-
-    formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, "approver.id"), true);
+    formState?.setFieldValue(name, map(approvals, "approver.id"), true);
 
     disabled = disabled || loading;
     documentStatus = document?.status;
