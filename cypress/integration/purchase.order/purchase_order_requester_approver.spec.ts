@@ -31,7 +31,7 @@ let multipleCompanies;
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 const delayms1 = 5000;
-const delayms2 = 15000;
+const delayms2 = 10000;
 
 context("po_requestor_as_an_approver - ENC-12724", () => {
   before(() => {
@@ -1975,8 +1975,8 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
   context("Remove Approver added manually and verify that Approver can not be removed", () => {
     it("remove Approver added manually and verify that Approver can be removed", () => {
-      cy.get(`[class*="MuiChip-root MuiAutocomplete-tag MuiChip-deletable"] div`).contains(USERS[3].email)
-        .parent().parent().find("svg").arrowClick({ force: true });
+      cy.get(`[class*="MuiChip-root MuiAutocomplete-tag MuiChip-deletable"] div`).contains(USERS[3].email);
+      cy.get(`[class*="MuiChip-root MuiAutocomplete-tag MuiChip-deletable"] svg`).arrowClick({ force: true });
       cy.unClick();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
       cy.wait(delayms2);
@@ -1993,21 +1993,24 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
       cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${USERS[1].name} - ${USERS[1].email}`);
       cy.get(`input[data-cy^="fb-po-approvals-"]`).parent()
         .find(`[class="MuiChip-root MuiAutocomplete-tag Mui-disabled MuiChip-deletable"]`).should("exist");
+      cy.wait(delayms1);
+      cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
   });
 
   context("Add Approver manually, Verify it can be added.", () => {
-    it("navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
-    });
-
     it("Add an Approval", () => {
-      cy.get(`[data-cy^="fb-po-approvals-"]`).scrollIntoView().arrowClick().wait(500);
-      cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(USERS[3].name);
+      cy.get(`[data-cy^="fb-po-approvals-"]`).scrollIntoView().arrowClick();
+      cy.get(`[data-cy^="fb-po-approvals-"]`).autocompleteSelect(USERS[3].name, { force: true });
       cy.unClick();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
       cy.wait(delayms1);
+    });
+
+    // putting work-around for ENC-13550
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
     it("verify approver added", () => {
