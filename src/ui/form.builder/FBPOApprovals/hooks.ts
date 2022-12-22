@@ -162,6 +162,9 @@ export const usePoApprovals = (
     }
     map(ids, (approver) => {
       const approval = find(poApprovalsState?.activeApprovals, (a) => a.approver?.id === approver);
+      if (approval?.status === ApprovalStatus.Abandoned) {
+        return;
+      }
       poApprovalsState?.applyTransition(
         "abandon",
         approval?.id,
@@ -171,6 +174,7 @@ export const usePoApprovals = (
           if (id) {
             dispatch(documentRevisionsActions.loadAudit(id));
           }
+          // TODO remove callback if favor of async await and Promise.all
           callback?.();
         }
       );
