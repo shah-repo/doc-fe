@@ -11,7 +11,7 @@ import Colors from "../../layout/theme/utils/colors";
 import FBStore from "../FBStore/FBStore";
 
 const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({ defaultValue, name, ...props }) => {
-  const requiredKeys = ["subTotal", "tax", "currency", "totalAmount"];
+  const requiredKeys = ["subTotal", "tax", "shippingCost", "currency", "totalAmount"];
   const { formState, workspaceState } = FB.useStores();
   const { _tabsState } = SM.useStores();
   const formInputName = props?.lineItem ? props?.lineItem : "po-items-built-in";
@@ -36,6 +36,7 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
   const labelMap = {
     subTotal: "SubTotal",
     tax: "Tax Total",
+    shippingCost: "Shipping Cost",
   };
 
   if (workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.RECEIVABLE)  {
@@ -49,9 +50,9 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
       </Box>
       <Box pl={2.75} pr={3.125} pt={3.5} pb={4.75} bgcolor={Colors.white}>
         <Box>
-          {map(pick(poSummary, ["subTotal", "tax"]), (value, key) => (
+          {map(pick(poSummary, ["subTotal", "tax", "shippingCost"]), (value, key) => (
             <Grid container spacing={3} alignItems="center" justify="space-between"
-              style={{ marginBottom: key === "subTotal" ? 8 : 0 }}>
+              style={{ marginBottom: key === "shippingCost" ? 8 : 0 }}>
               <Grid item xs="auto">
                 <FBText locale={labelMap[key]}></FBText>
               </Grid>
