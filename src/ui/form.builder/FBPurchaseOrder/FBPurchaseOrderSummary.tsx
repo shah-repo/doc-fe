@@ -52,7 +52,7 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
         <Box>
           {map(pick(poSummary, ["subTotal", "tax", "shippingCost"]), (value, key) => (
             <Grid container spacing={3} alignItems="center" justify="space-between"
-              style={{ marginBottom: key === "shippingCost" ? 8 : 0 }}>
+              style={{ marginBottom: key !== "shippingCost" ? 8 : 0 }}>
               <Grid item xs="auto">
                 <FBText locale={labelMap[key]}></FBText>
               </Grid>
