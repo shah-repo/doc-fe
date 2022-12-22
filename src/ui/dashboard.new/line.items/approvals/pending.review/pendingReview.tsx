@@ -65,8 +65,8 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
   pendingEmailSentAt: Nullable<string>;
   dismissLineItem?: (id: string) => void;
 }
@@ -104,10 +104,10 @@ const PendingReviewPresenter: React.FC<Props> = ({
     dismissLineItem?.(id);
   };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const hoverItem = hoverItemId === id;
   const onMouseHoverListItem = () => {
@@ -139,6 +139,9 @@ const PendingReviewPresenter: React.FC<Props> = ({
       dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
     }
   };
+
+  const showPin = pinLineItem && !pinned;
+  const showUnpin = unPinLineItem && pinned;
 
   return (
     <>
@@ -288,8 +291,8 @@ const PendingReviewPresenter: React.FC<Props> = ({
         />
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
-            {pinHover && (
+            {!pinHover && showPin && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
+            {pinHover && showPin && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
                 placement="top"
@@ -307,7 +310,7 @@ const PendingReviewPresenter: React.FC<Props> = ({
             )}
           </Box>
         )}
-        {pinned && (
+        {showUnpin && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}

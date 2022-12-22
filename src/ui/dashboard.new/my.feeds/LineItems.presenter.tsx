@@ -36,8 +36,8 @@ import NoPendingActions from "../NoPendingActions";
 interface Props {
   loadMyFeeds: any;
   hoverItemId: string;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (pinnedItemId: string) => void;
   onMouseLeaveItem: (any) => void;
   onMouseHoverItem: (id: string) => void;
   loadMyFeedsListAsyncState: AsyncState;
@@ -69,7 +69,7 @@ const LineItemsPresenter: React.FC<Props> = ({
   const PendingActions = () => (
     <List dense onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
       {feedItems.results
-        .map((pendingAction, index) => {
+        .map((pendingAction) => {
           switch (pendingAction.type) {
             case ActionTypes.EQ_MAINTENANCE_OWNER_OR_COORDINATOR:
             case ActionTypes.EQ_CALIBRATION_OWNER_OR_COORDINATOR:

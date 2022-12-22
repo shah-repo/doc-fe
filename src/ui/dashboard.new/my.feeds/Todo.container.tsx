@@ -1,11 +1,10 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   dashboardTodoActions,
   dashboardTodoSelectors,
 } from "../../../state/ducks/dashboard.new/todo";
-import { dashboardMyFeedsActions } from "../../../state/ducks/dashboard.new/my.feeds";
-import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_INITIAL_PAYLOAD, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/todo/constants";
+import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/todo/constants";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -13,7 +12,6 @@ import { scrollToBottom } from "../line.items/common/Utils";
 import LineItemsPresenter from "./LineItems.presenter";
 
 const TodoContainer: React.FunctionComponent = () => {
-  const dispatch = useDispatch();
   const [hoverItemId, setHoverItemId] = React.useState("");
   const [offset, setOffset] = React.useState(MY_FEEDS_INITIAL_OFFSET);
   const [overallLimit, setOverallLimit] = React.useState(MY_FEEDS_LIMIT);
@@ -35,21 +33,6 @@ const TodoContainer: React.FunctionComponent = () => {
     dashboardTodoSelectors.getLoadMyFeedsListAsyncInfo
   );
   const feedItems = useSelector(dashboardTodoSelectors.myFeedsList);
-  const pinnedOrUnPinnedAsync = useAsync({
-    onSuccess: () => {
-      setOffset(MY_FEEDS_INITIAL_OFFSET);
-      setOverallLimit(MY_FEEDS_LIMIT);
-      dispatch(dashboardTodoActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
-    },
-  });
-  const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem);
-  const unPinnedLineItem = useActionCreator(dashboardMyFeedsActions.unPinnedLineItem);
-  const pinLineItem = (id: string) => {
-    pinnedOrUnPinnedAsync.start(pinnedLineItem, id, pinnedOrUnPinnedAsync);
-  };
-  const unPinLineItem = (pinnedItemId: string) => {
-    pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
-  };
 
   const async = useAsync();
   const onLoadMoreData = () => {
@@ -68,8 +51,8 @@ const TodoContainer: React.FunctionComponent = () => {
   return (
     <LineItemsPresenter
       {...{
-        loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
-        pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
+        loadMyFeeds, loadMyFeedsListAsyncState, feedItems,
+        hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
         dialogPDF,
       }}
       onLoadMoreData={onLoadMoreData}

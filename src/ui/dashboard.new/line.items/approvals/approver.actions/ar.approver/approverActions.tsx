@@ -53,8 +53,8 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
   dismissLineItem?: (id: string) => void;
 }
 const ARApproverActionItemPresenter: React.FC<Props> = ({
@@ -84,10 +84,10 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
     dismissLineItem?.(id);
   };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const onMouseHoverPinIcon = () => {
     setPinHover(true);
@@ -107,6 +107,10 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
   const onMouseLeaveViewIcon = () => {
     setViewHoverItem("");
   };
+
+  const showPin = pinLineItem && !pinned;
+  const showUnpin = unPinLineItem && pinned;
+
   return (
     <>
       <StyledListItem
@@ -286,8 +290,8 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
         />
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon}  className={classes.cursorPointer}/>}
-            {pinHover && (
+            {!pinHover && showPin && <PinIcon onMouseEnter={onMouseHoverPinIcon}  className={classes.cursorPointer}/>}
+            {pinHover && showPin && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
                 placement="top"
@@ -305,7 +309,7 @@ const ARApproverActionItemPresenter: React.FC<Props> = ({
             )}
           </Box>
         )}
-        {pinned && (
+        {showUnpin && (
           <Box component="div" className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}

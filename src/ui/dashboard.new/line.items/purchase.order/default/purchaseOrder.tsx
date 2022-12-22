@@ -60,8 +60,8 @@ interface Props {
   purchaseSupplierName: string;
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
   dialogPDF: DialogHandler;
   dismissLineItem?: (id: string) => void;
 }
@@ -139,10 +139,10 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
     dismissLineItem?.(id);
   };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const onMouseHoverPinIcon = () => {
     setDownloadPdfHover(false);
@@ -168,6 +168,9 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const downloadAttachment = (attachment: Attachment) => () => {
     async.start(downloadAction, attachment, async);
   };
+
+  const showPin = pinLineItem && !pinned;
+  const showUnpin = unPinLineItem && pinned;
 
   return (
     <>
@@ -313,10 +316,10 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               </StyleTooltip>
             }
             <span className={classes.actionIcon}>
-              {!pinHover && !pinned && (
+              {!pinHover && showPin && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
-              {pinHover && !pinned && (
+              {pinHover && showPin && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
@@ -329,7 +332,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   />
                 </StyleTooltip>
               )}
-              {pinned && (
+              {showUnpin && (
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
                   placement="top"
@@ -348,7 +351,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
             )}
           </Box>
         )}
-        {pinned && (
+        {showUnpin && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}

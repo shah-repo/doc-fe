@@ -43,8 +43,8 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (pinnedItemId: string) => void;
   dismissLineItem?: (id: string) => void;
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
@@ -77,10 +77,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     dismissLineItem?.(id);
   };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const handleApproveClick = () => {
     openApproveDialog();
@@ -144,6 +144,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
       null
     );
   };
+
+  const showPin = pinLineItem && !pinned;
+  const showUnpin = unPinLineItem && pinned;
 
   return (
     <>
@@ -290,7 +293,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </StyleTooltip>
               )}
             </span>
-            {!pinned && (
+            {showPin && (
               <span className={classes.actionIcon}>
                 {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
                 {pinHover && (
@@ -308,7 +311,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 )}
               </span>
             )}
-            {pinned && (
+            {showUnpin && (
               <span className={classes.actionIcon}>
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
@@ -328,7 +331,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             )}
           </Box>
         )}
-        {pinned && (
+        {showUnpin && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}

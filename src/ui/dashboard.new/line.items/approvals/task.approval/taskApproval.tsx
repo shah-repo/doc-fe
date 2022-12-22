@@ -51,8 +51,8 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
   dismissLineItem?: (id: string) => void;
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
@@ -85,10 +85,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     dismissLineItem?.(id);
   };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const handleClick = () => {
     setOpen(!open);
@@ -148,6 +148,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     async.reset();
     transitionDialog1.open();
   };
+
+  const showPin = pinLineItem && !pinned;
+  const showUnpin = unPinLineItem && pinned;
+
   return (
     <>
       <StyledListItem
@@ -293,10 +297,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
             </span>
             <span className={classes.actionIcon}>
-              {!pinHover && !pinned && (
+              {!pinHover && showPin && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
-              {pinHover && !pinned && (
+              {pinHover && showPin && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
@@ -309,7 +313,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   />
                 </StyleTooltip>
               )}
-              {pinned && (
+              {showUnpin && (
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
                   placement="top"
@@ -328,7 +332,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             )}
           </Box>
         )}
-        {pinned && (
+        {showUnpin && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}
