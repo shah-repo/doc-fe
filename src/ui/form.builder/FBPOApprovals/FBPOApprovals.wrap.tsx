@@ -100,12 +100,8 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       groups = poApprovalsState?.groups;
       approvals = poApprovalsState?.activeApprovals;
       checkedGroups = poApprovalsState?.checkedGroups;
-
-      loading = (
-        poApprovalsState?.loading ||
-        poApprovalsState?.approvalApi.loading ||
-        poApprovalsState?.transitionApi.loading
-      );
+      loading = !poApprovalsState?.idle;
+      disabled = disabled || loading;
 
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
@@ -172,7 +168,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
     formState?.setFieldValue(name, map(approvals, "approver.id"), true);
 
-    disabled = disabled || loading;
     documentStatus = document?.status;
 
     return Component({
