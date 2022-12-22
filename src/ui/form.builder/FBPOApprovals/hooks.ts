@@ -41,22 +41,20 @@ export const usePoApprovals = (
     }
   };
 
-  const updateApprovalSignatureGroupName = (approval: FBInlineApprovalBody) =>
-    new Promise((resolve) => {
-      if (some(poApprovalsState?.checkedGroups, { name: approval.signatureGroupName }) || !approval.approverId) {
-        return resolve(approval);
-      }
+  const updateApprovalSignatureGroupName = async (approval: FBInlineApprovalBody) => {
+    if (some(poApprovalsState?.checkedGroups, { name: approval.signatureGroupName }) || !approval.approverId) {
+      return approval;
+    }
 
-      const updatedSignatureGroupName = getSignatureGroupName(approval.approverId);
+    const updatedSignatureGroupName = getSignatureGroupName(approval.approverId);
 
-      if (updatedSignatureGroupName) {
-        poApprovalsState?.updateSignatureGroupName(
-          approval.id,
-          updatedSignatureGroupName,
-          () => resolve(approval),
-        );
-      }
-    });
+    if (updatedSignatureGroupName) {
+      return poApprovalsState?.updateSignatureGroupName(
+        approval.id,
+        updatedSignatureGroupName
+      );
+    }
+  };
 
   const updateSignaturesQueue = async (approvals: string[]) => {
     for (const approvalId of approvals) {
@@ -132,52 +130,58 @@ export const usePoApprovals = (
       return;
     }
 
-    await when(() => Boolean(poApprovalsState?.isMounted));
+    await when(() => Boolean(poApprovalsState?.isMounted) && Boolean(poApprovalsState?.idle));
 
-    ids
-      .filter((user) => !hasUserInApprovers(user))
-      .forEach((approver) => {
-        const signatureGroupName = getSignatureGroupName(approver);
-        poApprovalsState?.addApproval({
-          assigned: { id: approver },
-          type: "MASTER",
-          fieldId: fieldName,
-          partOf: { id },
-          signatureGroupName,
-          manually,
-        }, () => {
-          const id  = workspaceState?.id;
-          if (id) {
-            dispatch(documentRevisionsActions.loadAudit(id));
-          }
-          // TODO remove callback if favor of async await and Promise.all
-          callback?.();
-        });
-      });
+    // TODO remove after upgrade TS
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    return Promise.allSettled(
+      ids
+        .filter((user) => !hasUserInApprovers(user))
+        .map((approver) => {
+          const signatureGroupName = getSignatureGroupName(approver);
+          return poApprovalsState?.addApproval({
+            assigned: { id: approver },
+            type: "MASTER",
+            fieldId: fieldName,
+            partOf: { id },
+            signatureGroupName,
+            manually,
+          });
+        })
+    ).then(() => {
+      const id  = workspaceState?.id;
+      if (id) {
+        dispatch(documentRevisionsActions.loadAudit(id));
+      }
+      callback?.();
+    });
   };
 
   const removeApprover = (ids?: string[], callback?: () => void) => {
     if (!ids || formState?.workspaceMode === "preview") {
       return;
     }
-    map(ids, (approver) => {
+
+    // TODO remove after upgrade TS
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    return Promise.allSettled(map(ids, (approver) => {
       const approval = find(poApprovalsState?.activeApprovals, (a) => a.approver?.id === approver);
       if (approval?.status === ApprovalStatus.Abandoned) {
         return;
       }
-      poApprovalsState?.applyTransition(
+      return poApprovalsState?.applyTransition(
         "abandon",
         approval?.id,
         undefined,
-        () => {
-          const id  = workspaceState?.id;
-          if (id) {
-            dispatch(documentRevisionsActions.loadAudit(id));
-          }
-          // TODO remove callback if favor of async await and Promise.all
-          callback?.();
-        }
       );
+    })).then(() => {
+      const id  = workspaceState?.id;
+      if (id) {
+        dispatch(documentRevisionsActions.loadAudit(id));
+      }
+      callback?.();
     });
   };
 

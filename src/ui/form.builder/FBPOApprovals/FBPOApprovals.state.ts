@@ -97,8 +97,7 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
   };
 
   public addApproval = (
-    approval: Partial<FBInlineApprovalBody>,
-    callback?: () => void
+    approval: Partial<FBInlineApprovalBody>
   ) => this.approvalApi.set({
     url: FBEndpoint.Approvals,
     body: approval,
@@ -112,14 +111,12 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     }
     this.approvalApi.data = data;
     this.approvalApi.onSuccess();
-    callback?.();
   });
 
   public applyTransition = (
     transition: FBInlineApprovalTransition,
     id?: string,
-    body?: FBInlineApprovalTransitionBody,
-    callback?: () => void
+    body?: FBInlineApprovalTransitionBody
   ) => {
     if (!id) { return; }
     return this.transitionApi.set({
@@ -136,14 +133,12 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
       }
       this.transitionApi.data = data;
       this.transitionApi.onSuccess();
-      callback?.();
     });
   };
 
   public updateSignatureGroupName = (
     id: string,
-    signatureGroupName: string,
-    callback?: () => void
+    signatureGroupName: string
   ) => this.updateApi.set({
     url: FBEndpoint.ApprovalsUpdate,
     urlValues: { id },
@@ -160,7 +155,6 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     }
     this.updateApi.data = data;
     this.updateApi.onSuccess();
-    callback?.();
   });
 }
 
