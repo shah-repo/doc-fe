@@ -176,7 +176,15 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    formState?.setFieldValue(name, map(approvals, "approver.id"), true);
+    useEffect(() => reaction(
+      () => poApprovalsState?.idle,
+      () => {
+        formState?.getInputState(name)?.setRender();
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
+
+    formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, "approver.id"), true);
 
     documentStatus = document?.status;
 
