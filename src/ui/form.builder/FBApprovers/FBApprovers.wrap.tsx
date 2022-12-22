@@ -29,6 +29,8 @@ export const withFBApprovers = <T extends FBApproversProps>(
     const { formState, workspaceState } = FB.useStores();
     const { submitForm } = useFormContext();
     const schema = workspaceState?.getSchema();
+    const changeRequestApprovals = workspaceState?.changeRequest?.approvals;
+    const isChangeRequest = workspaceState?.isChangeRequest;
     const { name: docRevName } = useMemo(() => find(schema, { type: "documentRevisions" }) || {}, [schema]);
     const docRevFormValue = formState?.getFieldValue(docRevName);
     const documentRevisions = useMemo(() => map(docRevFormValue, "proposedDocumentRevision.id"), [docRevFormValue]);
@@ -176,6 +178,8 @@ export const withFBApprovers = <T extends FBApproversProps>(
       groups,
       defaultValue,
       disabled,
+      isChangeRequest,
+      changeRequestApprovals,
     });
   };
 

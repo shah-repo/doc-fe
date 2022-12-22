@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Box, Grid } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { flatten, get, includes, isEmpty } from "lodash";

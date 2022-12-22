@@ -16,7 +16,6 @@ import Colors from "../../layout/theme/utils/colors";
 import ChangeRequestSidebar from "../form/ChangeRequest.sidebar";
 import { toChangeRequestFormValues } from "../form/transform";
 import ItemsAndDetailsWrapper from "../items.and.details/ItemsAndDetails.wrap";
-import Approvers from "./approvers";
 import ChangeSummaryFormHeader from "./ChangeSummaryFormHeader";
 import SummaryHeader from "./SummaryHeader";
 
@@ -129,18 +128,15 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       return (
                         <SMBox key={index} {...{ py: 2 }}>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
-                            <>
-                              <FBWorkspace
-                                isPortal={false}
-                                initialValues={cloneDeep(changeRequest?.formInput)}
-                                changeRequest={cloneDeep(changeRequest)}
-                                autosave={autosave}
-                                withoutBottomBar={withoutBottomBar}
-                                schema={schema}
-                                mode={mode}
-                              />
-                              <Approvers dataProp={changeRequest.approvals}/>
-                            </>
+                            <FBWorkspace
+                              isPortal={false}
+                              initialValues={cloneDeep(changeRequest?.formInput)}
+                              changeRequest={cloneDeep(changeRequest)}
+                              autosave={autosave}
+                              withoutBottomBar={withoutBottomBar}
+                              schema={schema}
+                              mode={mode}
+                            />
                           }
                           {tabType === TabTypeOptions.ITEMS &&
                             _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
@@ -155,15 +151,15 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                           )}
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
                             _formState?.mode !== FBWorkspaceModeOptions.NONE &&
-                            <FBWorkspace
-                              isPortal={false}
-                              initialValues={cloneDeep(changeRequest?.formInput)}
-                              changeRequest={cloneDeep(changeRequest)}
-                              autosave={autosave}
-                              withoutBottomBar={withoutBottomBar}
-                              schema={schema}
-                              mode={mode}
-                            />
+                              <FBWorkspace
+                                isPortal={false}
+                                initialValues={cloneDeep(changeRequest?.formInput)}
+                                changeRequest={cloneDeep(changeRequest)}
+                                autosave={autosave}
+                                withoutBottomBar={withoutBottomBar}
+                                schema={schema}
+                                mode={mode}
+                              />
                           }
                         </SMBox>
                       );
