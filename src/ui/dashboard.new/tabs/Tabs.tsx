@@ -2,6 +2,7 @@ import { Box, Typography } from "@material-ui/core";
 import cx from "classnames";
 import React, { FC, ComponentProps, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
+import { ReactComponent as TodoIcon } from "../../../assets/images/todo.svg";
 import { ReactComponent as MyFeedIcon } from "../../../assets/images/my_feed.svg";
 import { ReactComponent as TrainingIcon } from "../../../assets/images/training_tab.svg";
 import { ReactComponent as RecentIcon } from "../../../assets/images/recent.svg";
@@ -88,7 +89,7 @@ const Tabs: FC = () => {
       >
         <Tab
           value={DashboardTabValues.Todo}
-          icon={<MyFeedIcon />}
+          icon={<TodoIcon />}
           title="common.todo"
           count={todoItems.total ?? 0}
         />
