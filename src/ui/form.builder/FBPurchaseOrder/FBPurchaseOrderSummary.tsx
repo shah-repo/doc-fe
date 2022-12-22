@@ -34,9 +34,9 @@ const FBPurchaseOrderSummary: React.FunctionComponent<FBPurchaseOrderProps> = ({
   ));
 
   const labelMap = {
-    subTotal: "SubTotal",
-    tax: "Tax Total",
-    shippingCost: "Shipping Cost",
+    subTotal: "common.summary.sub.total",
+    tax: "common.summary.tax",
+    shippingCost: "common.summary.shipping.cost",
   };
 
   if (workspaceState?.document?.document.documentType.group === DOC_TYPE_GROUP.RECEIVABLE)  {

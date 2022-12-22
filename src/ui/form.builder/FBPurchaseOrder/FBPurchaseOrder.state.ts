@@ -181,7 +181,10 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     const sum = this.calculateItemSum();
     const lineItemsLength = this.value.items.length;
     const taxRate = lineItemsLength ? this.value.taxRate : TAX_RATE;
-    const tax = lineItemsLength ? sum.forTax ? (sum.forTax * this.value.taxRate / 100) : 0 : 0;
+    let tax = 0;
+    if (lineItemsLength && sum.forTax) {
+      tax = sum.forTax * this.value.taxRate / 100;
+    }
 
     const shippingCost = lineItemsLength ? this.value.shippingCost || 0 : 0;
     const totalAmount = tax + sum.subTotal + Number(shippingCost);
