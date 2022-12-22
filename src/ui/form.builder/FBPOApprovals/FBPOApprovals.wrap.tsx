@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, isEmpty, map, some } from "lodash";
+import { compact, difference, isEmpty, isEqual, map, some } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
@@ -112,19 +112,29 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // This runs when you manually remove an approver from the list
     useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
-      (fieldValue: string[]) => {
-        const formValue: string[] = map(poApprovalsState?.activeApprovals, "approver.id");
+      (formValue) => {
+        if (typeof formValue !== "object") {
+          return formState?.getInputState(name)?.setRender();
+        }
+        const stateValue = map(poApprovalsState?.activeApprovals, "approver.id");
 
-        const employeesToBeAdded = difference(fieldValue, formValue);
+        const employeesToBeAdded = difference(formValue, stateValue);
+        const employeesToBeRemoved = difference(stateValue, formValue);
+
         if (employeesToBeAdded.length > 0) {
           addApprover(employeesToBeAdded, { manually: true });
+          return;
         }
 
-        const employeesToBeRemoved = difference(formValue, fieldValue);
         if (employeesToBeRemoved.length > 0) {
           removeApprover(employeesToBeRemoved);
+          return;
         }
+
         formState?.getInputState(name)?.setRender();
+      },
+      {
+        equals: isEqual,
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
