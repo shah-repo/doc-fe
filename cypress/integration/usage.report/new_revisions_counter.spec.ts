@@ -1229,6 +1229,8 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
   context("Revise normal document", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter document by name and status, and select it", () => {
@@ -1237,64 +1239,86 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
 
     it("Click revise button", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks Save button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
   context("Revise record document", () => {
     it("Navigate to records", () => {
       cy.navigToRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select first record", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click revise button", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Revise PO document", () => {
     it("Navigate to PO list", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select PO document", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click revise button", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks Save button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
   context("Revise EB document", () => {
     it("Navigate to EB list", () => {
       cy.navigToEB();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select EB document", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click revise button", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select administrative change", () => {
       cy.drAdministrativeRevisionLevel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks Save button", () => {
-      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -1305,6 +1329,8 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
 
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task USAGE_REPORT", () => {
@@ -1313,10 +1339,13 @@ context("Usage report document counter for new revisions", { tags: ["@timetool"]
 
     it("Select date time", () => {
       cy.get("#datetime-local").eq(0).arrowType(usageReportTomorrow);
+
     });
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
