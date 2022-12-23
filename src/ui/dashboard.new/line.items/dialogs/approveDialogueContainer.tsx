@@ -7,7 +7,7 @@ import {
   ChangeRequestTransitionResponse,
 } from "../../../../state/ducks/changeRequest/types";
 import { dashboardMyFeedsActions } from "../../../../state/ducks/dashboard.new/my.feeds";
-import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../state/ducks/dashboard.new/my.feeds/constants";
+import { dashboardTodoActions } from "../../../../state/ducks/dashboard.new/todo";
 import {
   EffectiveDateFormValues,
   PasswordFormValues,
@@ -47,14 +47,14 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
   const async = useAsync<ChangeRequestTransitionResponse>({
     onSuccess: () => {
       onSuccess && onSuccess();
-      if (transition === "closed") {
-        effectiveDateDialog.close();
-      } else {
-        transitionDialog.close();
-      }
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
+
+      effectiveDateDialog.close();
+      transitionDialog.close();
+
+      dispatch(dashboardTodoActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
-    onError: (error) => {
+    onError: () => {
       transitionDialog.close();
     },
   });

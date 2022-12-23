@@ -1,4 +1,3 @@
-import { isEmpty } from "lodash";
 import { apiAction, apiActionWithCallbacks } from "../../../factories";
 import { ApiAction, Handlers } from "../../../types";
 import { DASHBOARD_MY_FEEDS_URL_SEARCH, MY_FEEDS_INITIAL_PAYLOAD, MY_FEEDS_LIST, MY_FEEDS_LIST_ASYNC, MY_FEEDS_LIST_INITIAL_STATE } from "./constants";
@@ -11,18 +10,19 @@ MyFeedsListAction => ({
   initialLoad,
 });
 
-const loadMyFeedsList = (queryPayload): ApiAction<MyFeedsListApiResponse> => {
-  const finalPayload = isEmpty(queryPayload) ? MY_FEEDS_INITIAL_PAYLOAD : queryPayload;
-  return apiAction({
+const loadMyFeedsList = (
+  queryPayload = MY_FEEDS_INITIAL_PAYLOAD
+): ApiAction<MyFeedsListApiResponse> => (
+  apiAction({
     url: DASHBOARD_MY_FEEDS_URL_SEARCH,
     method: "post",
-    data: finalPayload,
+    data: queryPayload,
     asyncType: MY_FEEDS_LIST_ASYNC,
     onSuccess: (myFeeds, dispatch) => {
-      dispatch(myFeedsList(myFeeds, finalPayload.offset === MY_FEEDS_INITIAL_PAYLOAD.offset));
+      dispatch(myFeedsList(myFeeds, queryPayload.offset === MY_FEEDS_INITIAL_PAYLOAD.offset));
     },
-  });
-};
+  })
+);
 
 
 const pinnedLineItem = (
