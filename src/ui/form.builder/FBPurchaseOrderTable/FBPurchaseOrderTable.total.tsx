@@ -134,6 +134,7 @@ const FBPurchaseOrderTableTotal: React.FunctionComponent<FBPurchaseOrderTableTot
             type="number"
             size="small"
             customHeight={25}
+            value={calculation?.shippingCost}
             inputProps={{
               style: {
                 padding: "5px",
