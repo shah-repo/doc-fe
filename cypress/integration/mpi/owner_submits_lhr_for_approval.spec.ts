@@ -1078,9 +1078,9 @@ context("Owner submits LHR for approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
         cy.drSelectHistoryTab();
       });
-      cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+      cy.get("[data-cy=\"History-detail\"]")
         .should("contain.text", "Approver Remove").and("contain.text", USERS[3].name);
-      cy.get("[data-cy=\"change-key-2-0\"]").parent().parent()
+      cy.get("[data-cy=\"History-detail\"]")
         .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
     });
 

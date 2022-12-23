@@ -328,6 +328,11 @@ context("Intermediate page validation", () => {
         cy.fbClickButton({ el: "FBWorkspace-clickView" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Add and check Quantity field", () => {
         cy.get(`[data-cy="form.builder.form.preview"]`).parentsUntil(".MuiDialog-root")
           .find("input[name^=fb-quantity-]").clear().arrowType("1");
@@ -389,20 +394,22 @@ context("Intermediate page validation", () => {
     it("Reopen Preview window and verify approval block should not have any value", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
       cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).should("not.contain.value");
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
   });
 
   context("Verify Preview mode after doc creation and check is it editable", () => {
-    it("Navigate to detail tab ", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it("Verify form preview button in Overview Tab", () => {
+    it("Click form preview button", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
     });
 
     it("Verify tabs overview, detail", () => {
       cy.verifyTabs("overview", "details");
+    });
+
+    it("Navigate to detail tab ", () => {
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify receivable po field should be visible", () => {
@@ -419,6 +426,8 @@ context("Intermediate page validation", () => {
 
     it("Reopen Preview window and verify receivable po field should not have any value", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
       cy.get(`.MuiDialogContent-root [data-cy^="porec-fb-receive-po"]`).should("not.contain.value");
     });
 
@@ -442,7 +451,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify Receive Purchase Order should exist", () => {
-      cy.get(`[data-cy^="porec-fb-receive-purchase-order-"]`).eq(1).should("exist");
+      cy.get(`.MuiDialogContent-root [data-cy^="porec-fb-receive-purchase-order-"]`).should("exist");
     });
 
     it("Close Preview dialog", () => {

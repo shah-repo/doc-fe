@@ -902,6 +902,7 @@ context("Change owner after starting LHRs", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
         });
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Add an Approval", () => {
@@ -909,10 +910,7 @@ context("Change owner after starting LHRs", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
         });
-      });
-
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 

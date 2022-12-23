@@ -295,7 +295,7 @@ export const withFBInput = <T extends FBInputProps>(
       isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
        formState?.setValidationAttributeName(name, attr);
        if (!rules) { return; }
-       formState!.setFieldRules(name, rules);
+       formState?.setFieldRules(name, rules);
        if (!omitFinalValidation) {
         formState?.setFieldFinalValidationRules(name, rules);
        }
