@@ -9,6 +9,7 @@ import {
   FBProcedureItemLocale,
   FBText,
 } from "..";
+import { toFixed } from "../../dashboard.new/line.items/common/Utils";
 import Colors from "../../layout/theme/utils/colors";
 import { FBClasses } from "../defaults/layout";
 import FBProvider from "../FBProvider/FBProvider";
@@ -79,12 +80,12 @@ const FBLHRStepProcedureItem: React.FunctionComponent<FBLHRStepProcedureItemProp
                       {
                         id: item.id,
                         title: getItem?.(item.title),
-                        quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
+                        quantity: item.quantity ? toFixed(item.quantity * multiplier) : "form.builder.none",
                         unit: item.unit,
                       } :
                       {
                         title: getItem?.(item.title),
-                        quantity: item.quantity ? (item.quantity * multiplier) : "form.builder.none",
+                        quantity: item.quantity ? toFixed(item.quantity * multiplier) : "form.builder.none",
                         unit: item.unit,
                       }
                     }
