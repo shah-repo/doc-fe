@@ -333,17 +333,9 @@ context("Export Engineering Build doc", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create EB form", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
     });
@@ -871,10 +863,6 @@ context("Export Engineering Build doc", () => {
       cy.drCreateNewDocumentFromForm();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Enter title 'EB doc'", () => {
       cy.drEnterDocumentTitle({ name: "EB doc" });
       cy.unClick();
@@ -911,6 +899,10 @@ context("Export Engineering Build doc", () => {
       });
     });
 
+    it("Save the EB", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
+    });
+
     it("Choose an existing part from the list of available parts", () => {
       cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Part document");
     });
@@ -945,15 +937,18 @@ context("Export Engineering Build doc", () => {
 
     it("Upload attachment 'test_image.jpg' to step #1", () => {
       cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-        cy.pmUploadAttachment({ fileName: "test_image.jpg" });
-      });
+      cy.pmUploadAttachment({ fileName: "test_image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Enter description to step #2", () => {
       cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Step #2 description" });
+    });
+
+    it("Save the EB", () => {
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
     });
 
     it("Add material document to step #2", () => {
@@ -982,20 +977,17 @@ context("Export Engineering Build doc", () => {
 
     it("Upload attachment 'image.jpg' to step #2", () => {
       cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-        cy.fixture("image.jpg").then((fileContent) => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-            cy.get("[id^=\"fb-mediaalbum-upload\"]").eq(1).attachFile({
-              fileContent: fileContent.toString(),
-              fileName: "image.jpg",
-              mimeType: "*",
-              filePath: `fixtures/${"image.jpg"}`,
-            });
-          });
+      cy.fixture("image.jpg").then((fileContent) => {
+        cy.get("[id^=\"fb-mediaalbum-upload\"]").eq(1).attachFile({
+          fileContent: fileContent.toString(),
+          fileName: "image.jpg",
+          mimeType: "*",
+          filePath: `fixtures/${"image.jpg"}`,
         });
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Add Step #3", () => {
@@ -1003,15 +995,14 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Save the EB", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
+      cy.url().then((url: any) => {
+        ebUrl = url;
+      });
     });
 
     it("Submit for Approval", () => {
       cy.pmSubmitForApproval();
-      cy.url().then((url: any) => {
-        ebUrl = url;
-      });
     });
   });
 
@@ -1025,7 +1016,9 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Open EB", () => {
-      cy.visit(ebUrl);
+      cy.navigToRecords();
+      cy.dlFilterByDocId({ docId: "EB-00001" });
+      cy.dlSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1042,6 +1035,8 @@ context("Export Engineering Build doc", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.authLogout();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Login user to dashboard", () => {
@@ -1054,10 +1049,11 @@ context("Export Engineering Build doc", () => {
       cy.visit(ebUrl);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -1312,6 +1308,7 @@ context("Export Engineering Build doc", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Save the EB", () => {
