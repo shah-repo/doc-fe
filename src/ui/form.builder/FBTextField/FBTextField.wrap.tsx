@@ -68,6 +68,9 @@ export const withFBTextField = <T extends FBTextFieldProps>(
         submitForm();
         return;
       }
+      if (!workspaceState?.autosave && name?.includes("lhrs-start-quantity")) {
+        workspaceState?.saveDocRev(formState?.getValues(), true);
+      }
     };
 
     useEffect(() => reaction(

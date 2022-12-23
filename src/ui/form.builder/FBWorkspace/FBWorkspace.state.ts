@@ -182,12 +182,12 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
-  public saveDocRev = (values?: Record<string, any>) => {
+  public saveDocRev = (values?: Record<string, any>, excludeAutoSave?: boolean) => {
     this.loadAudit = false;
     const { id, mode, autosave } = this;
     if (this.isPreview) { return; }
     if ((mode === "form") && !values) { return; }
-    if (!autosave) { return; }
+    if (!autosave && !excludeAutoSave) { return; }
     if (!id) { return; }
     this.loading = true;
     const schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));

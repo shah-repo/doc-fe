@@ -91,6 +91,12 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
     }, []);
 
     React.useEffect(() => {
+      const formValue = cloneDeep(formState?.getFieldValue("lhrs-start-quantity"));
+      setLhrsQuantity(formValue);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lhrsQuantity]);
+
+    React.useEffect(() => {
       reaction(
         () => mpiProcedureState?.deleteLotApi.data,
         (data?: DocumentRevision) => {
