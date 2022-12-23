@@ -1,7 +1,7 @@
 // Todo: ENC-13302 Business logic from this file should be moved to BE side.
 
 import { compact, difference, find, isEmpty, map, minBy, some, sortBy } from "lodash";
-import { reaction } from "mobx";
+import { reaction, when } from "mobx";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { FB, FBInlineApprovalBody, FBPurchaseOrderValue } from "..";
@@ -90,8 +90,7 @@ export const usePoApprovals = (
   const updateApprovals = ({ prevRequester, ...args }: CheckApprovalsArguments) => {
     const { revisionChangeType, document, formInputSync } = workspaceState ?? {};
 
-    const isAdministrativeChange = revisionChangeType === RevisionChangeType.AdministrativeChange;
-    const shouldUpdateApprovers = isDocumentRevisionInDraft(document?.status) && !isAdministrativeChange;
+    const shouldUpdateApprovers = isDocumentRevisionInDraft(document?.status);
 
     if (!shouldUpdateApprovers) {
       return;
@@ -99,31 +98,42 @@ export const usePoApprovals = (
 
     const poItems = args.poItems ?? formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
     const requester = formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+    const autoApprovers = poApprovalsState?.activeApprovals.filter((item) => !item.manually);
+
+    const administativeRevisionTypes = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
+    const isAdministrativeChange = administativeRevisionTypes.includes(revisionChangeType as RevisionChangeType);
+
     const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
     const hasRequesterInAllApprovers = hasUserInApprovers(requester);
-
-    if (requester && !prevRequester && !hasRequesterInAllApprovers && hasServiceOrProductPart) {
-      return addApprover([requester], { manually: false });
-    }
-
-    // We can remove only automatically added approvers.
-    const autoApprovers = poApprovalsState?.activeApprovals.filter((item) => !item.manually);
     const hasRequesterInAutoApprovers = hasUserInApprovers(requester, autoApprovers);
-    const hasPrevRequesterInAutoApprovers = prevRequester && hasUserInApprovers(prevRequester, autoApprovers);
+    const hasPrevRequesterInAutoApprovers = hasUserInApprovers(prevRequester ?? "", autoApprovers);
 
-    if (requester && hasRequesterInAutoApprovers && !hasServiceOrProductPart) {
+    const shouldAddRequester = !hasRequesterInAllApprovers && hasServiceOrProductPart && !isAdministrativeChange;
+    const shouldRemoveRequester = hasRequesterInAutoApprovers && (!hasServiceOrProductPart || isAdministrativeChange);
+    const shouldRemovePrevRequester = requester !== prevRequester && hasPrevRequesterInAutoApprovers;
+
+    if (requester && shouldRemoveRequester) {
       return removeApprover([requester]);
     }
 
-    if (prevRequester && requester !== prevRequester && hasPrevRequesterInAutoApprovers) {
-      return removeApprover([prevRequester], () => requester && addApprover([requester], { manually: false }));
+    if (prevRequester && shouldRemovePrevRequester) {
+      return removeApprover([prevRequester], () => {
+        requester && addApprover([requester], { manually: false });
+      });
+    }
+
+    if (requester && shouldAddRequester) {
+      return addApprover([requester], { manually: false });
     }
   };
 
-  const addApprover = (ids: string[], { manually = true } = {}, callback?: () => void) => {
-    if (!id || !ids || !poApprovalsState?.isMounted) {
+  const addApprover = async (ids: string[], { manually = true } = {}, callback?: () => void) => {
+    if (!id || !ids) {
       return;
     }
+
+    await when(() => Boolean(poApprovalsState?.isMounted));
+
     ids
       .filter((user) => !hasUserInApprovers(user))
       .forEach((approver) => {
@@ -140,6 +150,7 @@ export const usePoApprovals = (
           if (id) {
             dispatch(documentRevisionsActions.loadAudit(id));
           }
+          // TODO remove callback if favor of async await and Promise.all
           callback?.();
         });
       });
@@ -183,16 +194,6 @@ export const usePoApprovals = (
   ), []);
 
   useEffect(() => reaction(
-    () => poApprovalsState?.transitionApi.loading,
-    (loading) => {
-      if (!loading) {
-        fetchRequiredGroups();
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), []);
-
-  useEffect(() => reaction(
     () => poApprovalsState?.approvalApi.data,
     (data) => {
       FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
@@ -204,10 +205,11 @@ export const usePoApprovals = (
     () => poApprovalsState?.transitionApi.data,
     (data) => {
       FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
-      updateSignatureGroupNames();
       if (id && [ApprovalStatus.Approved, ApprovalStatus.Rejected].includes(data?.status as ApprovalStatus)) {
-        dispatch(documentRevisionsActions.reload(id));
+        // TODO investigate why reload here sometimes causes blink and returns to prev state
+        return dispatch(documentRevisionsActions.load(id));
       }
+      updateSignatureGroupNames();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), []);

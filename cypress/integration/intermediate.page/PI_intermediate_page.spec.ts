@@ -344,6 +344,12 @@ context("Intermediate page validation", () => {
           cy.fbClickButton({ el: "FBWorkspace-clickView" });
         });
 
+        it("Select 'Procedure' tab", () => {
+          cy.get(`[data-cy="tabId.procedure"]`).last().arrowClick();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
         it("Verify 'PI Procedure'", () => {
           cy.get(`[data-cy="form.builder.mpiprocedure"]`).eq(1).should("exist");
         });
@@ -381,7 +387,7 @@ context("Intermediate page validation", () => {
         });
 
         it("Verify TEXT FIELD is not displayed", () => {
-          cy.get(`[data-cy="TEXT FIELD"]`).eq(1).should("not.exist");
+          cy.get(`.MuiDialogContent-root [data-cy="TEXT FIELD"]`).should("not.exist");
         });
 
         it("Verify Quantity field", () => {
@@ -443,8 +449,15 @@ context("Intermediate page validation", () => {
           cy.fbClickButton({ el: "FBWorkspace-clickView" });
         });
 
+        it("Select 'Procedure' tab", () => {
+          cy.get(`[data-cy="tabId.procedure"]`).last().arrowClick();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+        });
+
         it("Verify Quantity field's position", () => {
-          cy.get(".MuiDialogContent-root>div>div").eq(2).contains("fb-quantity").should("exist");
+          cy.get(`[name^="fb-quantity-"]`).eq(1).parent().parent().parent().parent()
+            .should("have.attr", "data-cy", "textfield-2");
         });
 
         it("Verify Quantity field", () => {

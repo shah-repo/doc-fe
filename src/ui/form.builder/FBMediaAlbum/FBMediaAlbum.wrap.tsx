@@ -1,7 +1,7 @@
 import { isEmpty } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
-import { FB, FBMediaAlbumProps, FBMediaAlbumState } from "..";
+import { FB, FBMediaAlbumProps, FBMediaAlbumState, FBWorkspaceModeOptions } from "..";
 
 export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
   Component: React.FunctionComponent<T>
@@ -36,9 +36,9 @@ export const withFBMediaAlbum = <T extends FBMediaAlbumProps>(
       title = (mode === "carousel")
         ? collection[mediaAlbumState?.activeMedia || 0]?.name
         : "";
-      hiddenContainer = Boolean(
-        (workspaceMode === "preview" || workspaceMode === "formPreview" || actionsDisabled) &&
-        isEmpty(collection)
+      hiddenContainer = Boolean((workspaceMode === FBWorkspaceModeOptions.PREVIEW ||
+        workspaceMode === FBWorkspaceModeOptions.FORMPREVIEW || actionsDisabled)
+         && isEmpty(collection)
       );
     });
 

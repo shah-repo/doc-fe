@@ -316,6 +316,11 @@ context(
               cy.fbClickButton({ el: "FBWorkspace-clickView" });
             });
 
+            it("navigate to Line Items", () => {
+              cy.get("[data-cy=\"tabId.lineitems\"]").last().arrowClick({ force: true });
+              cy.listLoadingElementShouldNotExist();
+            });
+
             it("Add and check Date picker field", () => {
               cy.get("[data-cy='form.builder.form.preview']")
                 .parentsUntil(".MuiDialog-root")

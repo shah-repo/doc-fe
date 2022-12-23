@@ -504,7 +504,8 @@ context("Intermediate page validation", () => {
       });
 
       it("Verify that date picker is in Updated position", () => {
-        cy.get(".MuiDialogContent-root>div>div>div").eq(3).should("have.attr", "data-cy", "datepicker-3");
+        cy.get(`[name^="fb-datepicker"]`).eq(1).parent().parent().parent().parent()
+          .should("have.attr", "data-cy", "datepicker-3");
       });
 
       it("Close Preview dialog", () => {

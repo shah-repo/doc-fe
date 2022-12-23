@@ -1179,13 +1179,16 @@ context("LFPO new layout verification", () => {
       });
 
       it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[3].name);
-        });
+        cy.drAddUserFromPermissionTab(USERS[3].name);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+        cy.wait(2000);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
           cy.drAddGroupFromPermissionTab("Developers");
         });
       });
