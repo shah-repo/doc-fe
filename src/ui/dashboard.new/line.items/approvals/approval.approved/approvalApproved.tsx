@@ -232,7 +232,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
           >
             <span>
               {!closeHover && (
-                <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
+                <CloseIcon className={classes.cursorPointer} onMouseEnter={onMouseHoverCloseIcon} />
               )}
               {closeHover && (
                 <StyleTooltip
@@ -241,6 +241,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                   arrow
                 >
                   <CloseSolidIcon
+                    className={classes.cursorPointer}
                     onClick={handleCloseClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
@@ -249,7 +250,12 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </span>
             {!pinned && (
               <span className={classes.actionIcon}>
-                {!pinHover && showPin && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
+                {!pinHover && showPin && (
+                  <PinIcon
+                    className={classes.cursorPointer}
+                    onMouseEnter={onMouseHoverPinIcon}
+                  />
+                )}
                 {pinHover && showPin && (
                   <StyleTooltip
                     title={<Text translation="common.pin" />}
