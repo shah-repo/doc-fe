@@ -1098,6 +1098,10 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
       cy.drEnterDocumentDescription({ description: "New Purchase Order" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Select 'Open' for PO status", () => {
       cy.poSelectPOStatus({ status: "Open" });
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
@@ -2005,12 +2009,6 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
       cy.unClick();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
       cy.wait(delayms1);
-    });
-
-    // putting work-around for ENC-13550
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
     it("verify approver added", () => {

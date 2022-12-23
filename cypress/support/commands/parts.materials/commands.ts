@@ -25,6 +25,7 @@ declare global {
       pmAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       pmAddApproverOnApproverListNw(params: {approver: string }): Chainable<Subject>;
       lhrAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      lhrAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       pmDeleteApproverFromApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
       pmSubmitForApprovalWithoutAPI(): Chainable<Subject>;
@@ -173,6 +174,13 @@ Cypress.Commands.add("lhrAddApproverOnApproverList", (params: { approver: string
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("[data-cy^=\"fb-approvals\"]").click().autocompleteSelect(params.approver);
   });
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy^=\"fb-approvals\"]").click().autocompleteSelect(params.approver);
   cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

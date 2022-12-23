@@ -5,7 +5,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -161,10 +160,14 @@ context("Record inline Flow", () => {
     context("Start document creation flow", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -183,6 +186,8 @@ context("Record inline Flow", () => {
 
       it("Select 'Record Document' output document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Record one" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -190,11 +195,13 @@ context("Record inline Flow", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Navigate to Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add first inline approval", () => {
@@ -220,7 +227,9 @@ context("Record inline Flow", () => {
 
     context("Release form", () => {
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -228,11 +237,17 @@ context("Record inline Flow", () => {
   context("Create record", () => {
     it("Navigate to records", () => {
       cy.navigToRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on create new and chose 'Record one'", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.recSelectRecordFormFromMultiSelect({ recordType: "Record one" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -302,12 +317,13 @@ context("Record inline Flow", () => {
     it("Enter title 'Record Document Revision'", () => {
       cy.drEnterDocumentTitle({ name: "Record Document Revision" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {
       cy.get(`[data-cy="DocumentRevisionForm-submit"]`).arrowClick();
-      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
-        .contains("Auto-saving, please wait…");
+      cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Auto-saving, please wait");
     });
 
     it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
@@ -322,23 +338,29 @@ context("Record inline Flow", () => {
   context("Assign and approve first Inline Approval", () => {
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select approver for first inline", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-        () => {
-          cy.listLoadingElementShouldNotExist();
-          cy.get("[name*=\"fb-ia-inline-field\"] input")
-            .autocompleteSelect(`${USERS[2].name}`, { force: true });
-        });
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[name*=\"fb-ia-inline-field\"] input")
+        .autocompleteSelect(`${USERS[2].name}`, { force: true });
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Send request for approval", () => {
       cy.get("[data-cy=\"form.builder.request.approval\"]").first().arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve first Inline Approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check inline record creation default to numeric revision", () => {
@@ -385,24 +407,32 @@ context("Record inline Flow", () => {
     });
 
     it("Select approver for second inline", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-        () => {
-          cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-            .autocompleteSelect(`${USERS[2].name}`, { force: true });
-        });
+      cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+        .autocompleteSelect(`${USERS[2].name}`, { force: true });
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Send request for approval", () => {
       cy.get("[data-cy=\"form.builder.request.approval\"]").first().arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve second Inline Approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check system creates new major revision after inline approve", () => {
       cy.drClickRevisionsSidePanel();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.recCheckRevisionStage({ stage: "Revision 3" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).contains("Revision 2")
         .and("contain.text", "Last Signed");
       cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).contains("Revision 1")
@@ -431,6 +461,8 @@ context("Record inline Flow", () => {
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").should("not.be.disabled");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if 'Void' button exists", () => {
