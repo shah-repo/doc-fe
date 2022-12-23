@@ -1704,19 +1704,23 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Verify References selection Add Remove", () => {
-        const docId = "FM-00001";
-        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-          cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.wait(1000);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-          cy.drRemoveReferences({ reference: docId });
-        });
+        cy.verifyAddRemoveReference({ formId: "FM-00001" });
       });
+
+      // it("Verify References selection Add Remove", () => {
+      //   const docId = "FM-00001";
+      //   cy.get("[data-cy=\"referenceTo\"]").arrowClick();
+      //   cy.listLoadingElementShouldNotExist();
+      //   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+      //     cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
+      //   });
+      //   cy.wait(1000);
+      //   cy.progressBarShouldNotExist();
+      //   cy.listLoadingElementShouldNotExist();
+      //   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+      //     cy.drRemoveReferences({ reference: docId });
+      //   });
+      // });
 
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
         cy.verifyReferenceInfo();
@@ -1865,12 +1869,18 @@ context("LHR & LHRS Flow", () => {
         lhr1DocUrl = url;
       });
       cy.drSelectDetailsTab();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'START MPI'", () => {
       cy.get("[data-cy='LHR Step 1']").arrowClick();
       cy.mpiStartStep({ stepNumber: 1 });
+      cy.wait(1000);
       cy.landingPageLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1895,13 +1905,13 @@ context("LHR & LHRS Flow", () => {
 
     context("Overview Tab - should have the attachments and approval block", () => {
       it("Verify Attachments exists or not", () => {
-        cy.get("[data-cy='AttachmentFieldPresenter-field'").should(
+        cy.get("[data-cy='AttachmentFieldPresenter-field']").should(
           "be.visible"
         );
       });
 
       it("Verify Approval Block is exists or not", () => {
-        cy.get("[data-cy^='fb-approvals'").should("be.visible");
+        cy.get("[data-cy^='fb-approvals']").should("be.visible");
       });
     });
 
@@ -1918,16 +1928,16 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Verify Attachment field is exists or not", () => {
-        cy.get("[data-cy='form.builder.attachments'").should("exist");
+        cy.get("[data-cy='form.builder.attachments']").should("exist");
       });
 
       it("Verify Materials is exists or not", () => {
-        cy.get("[data-cy='form.builder.materials'").scrollIntoView()
+        cy.get("[data-cy='form.builder.materials']").scrollIntoView()
           .should("be.visible");
       });
 
       it("Verify Equipment is exists or not", () => {
-        cy.get("[data-cy='form.builder.equipment'").scrollIntoView()
+        cy.get("[data-cy='form.builder.equipment']").scrollIntoView()
           .should("be.visible");
       });
 
@@ -2148,6 +2158,7 @@ context("LHR & LHRS Flow", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev], () => {
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
       });
+      cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
