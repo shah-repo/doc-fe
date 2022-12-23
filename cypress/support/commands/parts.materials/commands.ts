@@ -178,12 +178,13 @@ Cypress.Commands.add("lhrAddApproverOnApproverList", (params: { approver: string
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("lhrAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
-  cy.listLoadingElementShouldNotExist();
-  cy.get("[data-cy^=\"fb-approvals\"]").click().autocompleteSelect(params.approver);
-  cy.saveBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
-});
+Cypress.Commands.add("lhrAddApproverOnApproverListWithoutApi",
+  (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+    cy.listLoadingElementShouldNotExist();
+    cy.get("[data-cy^=\"fb-approvals\"]").click().autocompleteSelect(params.approver);
+    cy.saveBarShouldNotExist();
+    cy.listLoadingElementShouldNotExist();
+  });
 
 Cypress.Commands.add("pmDeleteApproverFromApproverList",
   (params: { approver: string; waitAggregatedAudit?: boolean }) => {

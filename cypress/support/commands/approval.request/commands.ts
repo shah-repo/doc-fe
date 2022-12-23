@@ -20,6 +20,7 @@ declare global {
       arEnterApprovalRequestTitle(params: { title: string }): Chainable<Subject>;
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
+      arClickAddDocumentWithoutApi(): Chainable<Subject>;
       arChoseSpecificProposedDocument(params: { name: string }): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
@@ -47,6 +48,7 @@ declare global {
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
       arCloseAR(): Chainable<Subject>;
+      arCloseARWithoutApi(): Chainable<Subject>;
       arCloseARFromMenu(): Chainable<Subject>;
       arVoidAR(): Chainable<Subject>;
       arSaveApiCallWithoutApi(): Chainable<Subject>;
@@ -290,12 +292,25 @@ Cypress.Commands.add("arClickAddDocument", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("arClickAddDocumentWithoutApi", () => {
+  cy.get("[data-cy=\"form.builder.add.document\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("arCloseAR", () => {
   cy.get("[aria-label=closed]").arrowClick();
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
       cy.get("[data-cy=AlertDialog-continueButton]").arrowClick();
     });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arCloseARWithoutApi", () => {
+  cy.get("[aria-label=closed]").arrowClick();
+  cy.get("[data-cy=AlertDialog-continueButton]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });

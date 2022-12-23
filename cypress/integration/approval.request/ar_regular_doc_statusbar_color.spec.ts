@@ -20,6 +20,7 @@ const approvalRequestDocName2 = "Approval request document two title";
 const approvalRequestDocDesc2 = "Approval request document two description";
 const bulkCreatedFormName = "Bulk created form title";
 const bulkCreatedFormDesc = "Bulk created form description";
+const apiDelay1 = 5000;
 
 context("Status Bar of New Enlil items approved via regular AR", () => {
   before(() => {
@@ -45,9 +46,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -56,7 +57,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           done();
         });
       });
@@ -64,7 +65,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     it("[API]Login first tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -97,7 +98,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -264,7 +265,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Add first document revision", () => {
-      cy.arClickAddDocument();
+      cy.arClickAddDocumentWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arChoseSpecificProposedDocument({ name: "FM-00002" });
@@ -276,7 +277,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[11].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -285,6 +286,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.arSaveApiCallWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(apiDelay1);
     });
   });
 
@@ -293,6 +295,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.contains("Send to review").arrowClick();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(apiDelay1);
     });
   });
 
@@ -403,6 +406,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
   context("Go back to the AR and reject the AR", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestListWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Clear Filter", () => {
@@ -418,7 +424,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Reject AR", () => {
-      cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+      cy.get(`[data-cy="transition-reject"]`).first().arrowClick({ force: true });
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -544,6 +550,8 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestDocName, status: "DRAFT" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Send AR to review", () => {
@@ -605,7 +613,11 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if 'Send To Email' button exists", () => {
@@ -659,7 +671,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Close AR", () => {
-      cy.get(`[data-cy="transition-closed"]`).contains("Close").arrowClick();
+      cy.get(`[data-cy="transition-closed"]`).contains("Close").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -724,7 +736,11 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
       cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if 'Send To Email' button exists", () => {
@@ -795,6 +811,8 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
@@ -882,7 +900,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Add first document revision", () => {
-      cy.arClickAddDocument();
+      cy.arClickAddDocumentWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.arChoseSpecificProposedDocument({ name: "FM-00003" });
@@ -907,7 +925,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     });
 
     it("Add approvers to approval request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
+      cy.arAddApproverOnApproverList({ approver: USERS[11].email, noWait: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -922,6 +940,8 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
   context("Navigate back to AR list and Approve AR and Close it", () => {
     it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestListWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clear Filter", () => {
@@ -933,12 +953,13 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     it("Filter approval by name and status, and select it", () => {
       cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestDocName2, status: "DRAFT" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Send AR to review", () => {
       cy.contains("Send to review").arrowClick();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1011,10 +1032,14 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
       cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify 'Change Owner' exists in statusbar`, () => {
       cy.get("#HeaderMenuButton").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible");
     });
 
