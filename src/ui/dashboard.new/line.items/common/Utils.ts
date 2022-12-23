@@ -21,10 +21,15 @@ export const formatNumberToCurrency = (data: number) =>  {
   return data;
 };
 
-export const toFixed = (value: string | number) =>  (!Number.isInteger(toNumber(value)) && value.toString().split(".")[1]?.length > 10)
-  ? toNumber(toNumber(value).toFixed(10))
-  : toNumber(value);
-
+export const toFixed = (value: string | number) => {
+  if (Number.isNaN(toNumber(value))) {
+    return value;
+  }
+  if (!Number.isInteger(toNumber(value)) && value?.toString()?.split(".")[1]?.length > 10) {
+    return toNumber(toNumber(value).toFixed(10));
+  }
+  else { return toNumber(value); }
+};
 export const linearScale = (domain: number[], range: number[]) => {
   const scale = (value: number) => {
     const [minValue, maxValue] = [...domain];
