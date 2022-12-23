@@ -1281,6 +1281,8 @@ context("Test training records and training curriculum landing page", () => {
   context("Verify Training Curriculums landing page", () => {
     it("Navigate to Training Curriculums landing page", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify landing page table is using Kendo grid", () => {
@@ -1333,6 +1335,8 @@ context("Test training records and training curriculum landing page", () => {
       cy.trSelectFirstDocument();
       cy.get("[data-cy=\"HeaderInfo-docId\"]").should("exist");
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("div[role=dialog]").should("not.exist");
     });
 

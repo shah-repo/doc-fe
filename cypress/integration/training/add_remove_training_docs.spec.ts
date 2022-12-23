@@ -289,10 +289,6 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum form", () => {
@@ -316,6 +312,8 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     it("Enter document description 'test training description'", () => {
       cy.drEnterDocumentDescription({ description: "test training description" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Form' document type", () => {
@@ -341,7 +339,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -370,7 +368,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Release the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -392,7 +390,9 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
       cy.drClickCreateDocumentWithoutApiCall();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc2Id = x.text(); });
     });
@@ -410,7 +410,9 @@ context("Add/Remove Training docs from Training Curriculum", () => {
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithoutApiCall();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc3Id = x.text(); });
     });
@@ -652,11 +654,15 @@ context("Add/Remove Training docs from Training Curriculum", () => {
 
     it("Select document 'released doc3' to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc3");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove document 'released doc2' to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").parent()
         .find(".MuiAutocomplete-tag").eq(1).find(".MuiSvgIcon-root.MuiChip-deleteIcon").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {

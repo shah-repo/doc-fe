@@ -5,7 +5,6 @@ import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import {
   OneTimeTrainingTest,
@@ -387,9 +386,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-      });
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -401,7 +398,9 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -415,6 +414,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {

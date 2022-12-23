@@ -16,6 +16,7 @@ declare global {
       ebApprove(): Chainable<Subject>;
       ebApproveWithoutApi(): Chainable<Subject>;
       lhrApprove(): Chainable<Subject>;
+      lhrApproveWitoutApi(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
       ebClickCloneEB(): Chainable<Subject>;
       ebCloneClickYes(): Chainable<Subject>;
@@ -178,6 +179,17 @@ Cypress.Commands.add("lhrApprove", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick({ force: true });
   });
+  cy.checkToastMessage({ exists: false });
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrApproveWithoutApi", () => {
+  cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").arrowClick({ force: true });
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.unClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"common.confirm\"]").arrowClick({ force: true });
   cy.checkToastMessage({ exists: false });
   cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
