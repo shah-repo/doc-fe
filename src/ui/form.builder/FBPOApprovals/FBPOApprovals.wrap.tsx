@@ -100,7 +100,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       groups = poApprovalsState?.groups;
       approvals = poApprovalsState?.activeApprovals;
       checkedGroups = poApprovalsState?.checkedGroups;
-      loading = !poApprovalsState?.idle;
+      loading = poApprovalsState?.busy;
       disabled = disabled || loading;
 
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
@@ -178,7 +178,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     ), []);
 
     useEffect(() => reaction(
-      () => poApprovalsState?.idle,
+      () => poApprovalsState?.busy,
       () => {
         formState?.getInputState(name)?.setRender();
       }

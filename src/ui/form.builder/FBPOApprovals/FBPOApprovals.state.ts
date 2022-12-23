@@ -29,11 +29,10 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     });
   }
 
-  @computed public get idle() {
-    return !(this.loading || this.approvalApi.loading || this.transitionApi.loading);
+  @computed public get busy() {
+    return this.loading || this.approvalApi.loading || this.transitionApi.loading;
   }
 
-  // MARK: @computed
   @computed public get activeApprovals(): FBInlineApprovalBody[] {
     return filter(this.approvals, (a) => a.status !== "ABANDONED" && a.type === "MASTER");
   }

@@ -132,7 +132,7 @@ export const usePoApprovals = (
       return Promise.reject();
     }
 
-    await when(() => Boolean(poApprovalsState?.isMounted) && Boolean(poApprovalsState?.idle));
+    await when(() => Boolean(poApprovalsState?.isMounted) && !poApprovalsState?.busy);
 
     const addActions = ids
       .filter((user) => !hasUserInApprovers(user))
@@ -161,7 +161,7 @@ export const usePoApprovals = (
       return Promise.reject();
     }
 
-    await when(() => Boolean(poApprovalsState?.isMounted) && Boolean(poApprovalsState?.idle));
+    await when(() => Boolean(poApprovalsState?.isMounted) && !poApprovalsState?.busy);
 
     const removeActions = map(ids, (approver) => {
       const approval = find(poApprovalsState?.activeApprovals, (a) => a.approver?.id === approver);
