@@ -114,6 +114,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       () => formState?.inputState.get(name)?.value,
       (formValue) => {
         if (typeof formValue !== "object") {
+          formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, "approver.id"), true);
           return formState?.getInputState(name)?.setRender();
         }
         const stateValue = map(poApprovalsState?.activeApprovals, "approver.id");
