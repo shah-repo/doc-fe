@@ -226,7 +226,7 @@ context("DAM and POAM", () => {
       });
 
       it("Click on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release document for create company", () => {
@@ -619,13 +619,16 @@ context("DAM and POAM", () => {
         });
 
         it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
-          });
+          cy.drAddUserFromPermissionTab(USERS[3].name);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.wait(2000);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab("Developers");
           });
         });
@@ -721,7 +724,7 @@ context("DAM and POAM", () => {
         });
 
         it("Verify that Form Options should not appear for this tab", () => {
-          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.get(".formOptionsBox").should("not.exist");
         });
       });
 
@@ -1306,15 +1309,16 @@ context("DAM and POAM", () => {
           });
 
           it("Add another user permission", () => {
-            cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-              cy.drAddUserFromPermissionTab(userOne);
-            });
+            cy.drAddUserFromPermissionTab(userOne);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
           });
 
           it("Add another group permission", () => {
-            cy.progressBarShouldNotExist();
+            cy.wait(2000);
             cy.listLoadingElementShouldNotExist();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.progressBarShouldNotExist();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
               cy.drAddGroupFromPermissionTab(groupOne);
             });
           });
@@ -1356,6 +1360,9 @@ context("DAM and POAM", () => {
 
         context("Training Required is unchecked, there should be no Training Tab", () => {
           it("Training Required is unchecked", () => {
+            cy.drSelectOverviewTab();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
             cy.get(`[data-cy="field-retrain"] input[type=checkbox]`).should("not.be.checked");
           });
         });
@@ -1409,8 +1416,8 @@ context("DAM and POAM", () => {
           cy.get("[id='sm-tabpanel-0']").contains("Attachments").should("exist");
         });
 
-        it("Verify that Form Options should not appear for Overview tab", () => {
-          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("not.exist");
+        it("Verify that Form Options should  appear for Overview tab", () => {
+          cy.get("#sm-tabpanel-0").find(".formOptionsBox").should("exist");
         });
       });
 
@@ -1594,13 +1601,16 @@ context("DAM and POAM", () => {
           });
 
           it("Add another user permission", () => {
-            cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-              cy.drAddUserFromPermissionTab(userTwo);
-            });
+            cy.drAddUserFromPermissionTab(userTwo);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
           });
 
           it("Add another group permission", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.wait(2000);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
               cy.drAddGroupFromPermissionTab(groupTwo);
             });
           });

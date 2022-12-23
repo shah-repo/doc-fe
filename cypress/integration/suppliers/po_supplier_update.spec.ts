@@ -449,7 +449,7 @@ context("Purchase Supplier Update", () => {
         cy.drEnterDocumentTitle({ name: "1" });
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.poApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 1", status: STATUS_TYPES_LABEL.RELEASED });
@@ -532,7 +532,7 @@ context("Purchase Supplier Update", () => {
         cy.drEnterDocumentTitle({ name: "2" });
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.poApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
@@ -619,7 +619,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it(`check status should be '${STATUS_TYPES_LABEL.PENDING_APPROVAL}'`, () => {
@@ -637,7 +637,7 @@ context("Purchase Supplier Update", () => {
         cy.drEnterDocumentTitle({ name: "3" });
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.poApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 3", status: STATUS_TYPES_LABEL.RELEASED });
@@ -696,7 +696,7 @@ context("Purchase Supplier Update", () => {
         cy.drEnterDocumentTitle({ name: "4" });
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.poApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 4", status: STATUS_TYPES_LABEL.RELEASED });
@@ -778,7 +778,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve PO", () => {
@@ -800,7 +800,7 @@ context("Purchase Supplier Update", () => {
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.poApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 2", status: STATUS_TYPES_LABEL.RELEASED });
@@ -819,8 +819,7 @@ context("Purchase Supplier Update", () => {
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description1" });
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.poApproveWithoutApi();
       });
@@ -877,7 +876,7 @@ context("Purchase Supplier Update", () => {
         cy.drEnterDocumentTitle({ name: "2" });
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.poApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 3", status: STATUS_TYPES_LABEL.RELEASED });
@@ -899,8 +898,7 @@ context("Purchase Supplier Update", () => {
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description2" });
         cy.drClickCreateDocumentWithApiCallForForms();
-        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.poApproveWithoutApi();
       });
@@ -1042,7 +1040,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve PO", () => {
@@ -1086,7 +1084,7 @@ context("Purchase Supplier Update", () => {
         cy.drEnterDocumentTitle({ name: "3" });
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.poApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 4", status: STATUS_TYPES_LABEL.RELEASED });
@@ -1185,7 +1183,7 @@ context("Purchase Supplier Update", () => {
         cy.drEnterDocumentTitle({ name: "4" });
         cy.drClickCreateDocumentWithApiCallForForms();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.poApproveWithoutApi();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
         cy.drVerifyFirstDocumentRevisionList({ revision: "Rev 5", status: STATUS_TYPES_LABEL.RELEASED });
@@ -1254,6 +1252,7 @@ context("Purchase Supplier Update", () => {
       });
     });
   });
+
 });
 
 
