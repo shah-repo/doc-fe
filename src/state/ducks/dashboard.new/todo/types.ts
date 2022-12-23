@@ -1,7 +1,8 @@
 import { MY_FEEDS_LIST } from "./constants";
-import { MyFeedsListApiResponse } from "../my.feeds/types";
+import * as feedTypes from "../my.feeds/types";
 
-export * from "../my.feeds/types";
+export type MyFeedsListApiResponse = feedTypes.MyFeedsListApiResponse;
+export type MyFeedsState = feedTypes.MyFeedsState;
 
 export interface MyFeedsListAction {
   type: typeof MY_FEEDS_LIST;
