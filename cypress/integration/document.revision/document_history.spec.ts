@@ -268,17 +268,15 @@ context("Check Document History", () => {
     });
 
     it("Remove attachment test_image.jpg", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
-      });
+      cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
+      cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload test.docx", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.atchUploadAttachment({ fileName: "test.docx" });
-      });
+      cy.atchUploadAttachment({ fileName: "test.docx" });
+      cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -320,16 +318,12 @@ context("Check Document History", () => {
 
     it("Add another user permission", () => {
       SystemRequirement("REQ-4240");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity, CyRoutes.GetFieldLocks], () => {
-        cy.drAddUserFromPermissionTab(sharedUserTwo.name);
-      });
+      cy.drAddUserFromPermissionTab(sharedUserTwo.name);
     });
 
     it("Add another group permission", () => {
       SystemRequirement("REQ-4240");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity, CyRoutes.GetFieldLocks], () => {
-        cy.drAddGroupFromPermissionTab(groupTwo);
-      });
+      cy.drAddGroupFromPermissionTab(groupTwo);
     });
   });
 
