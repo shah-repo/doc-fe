@@ -29,6 +29,7 @@ declare global {
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
       ebWithdrawSubmisison(): Chainable<Subject>;
+      ebWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
       ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       ebAddApproverOnApproverListWithPatchCall(params: {approver: string }): Chainable<Subject>;
     }
@@ -194,6 +195,15 @@ Cypress.Commands.add("ebWithdrawSubmisison", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("#AlertDialog-continueButton").arrowClick();
   });
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebWithdrawSubmisisonWithoutApi", () => {
+  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+  cy.wait(2000);
+  cy.get("#AlertDialog-continueButton").arrowClick();
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

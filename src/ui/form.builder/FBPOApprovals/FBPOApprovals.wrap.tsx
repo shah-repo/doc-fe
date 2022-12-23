@@ -3,9 +3,7 @@ import { compact, difference, isEmpty, map, some } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from "..";
-import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
@@ -38,18 +36,21 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
     const { document, id, isOutput } = workspaceState || {};
-    const dispatch = useDispatch();
     const outputId = isOutput ? id : undefined;
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
-    const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
+    const administativeRevisionTypes = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
+    const isAdministrativeChange = administativeRevisionTypes.includes(
+      workspaceState?.revisionChangeType as RevisionChangeType
+    );
 
     const {
       poApprovalsState,
       addApprover,
       removeApprover,
       updateApprovals,
+      fetchRequiredGroups,
     } = usePoApprovals(
       name,
       outputId,
@@ -82,6 +83,36 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
+      if (!approvalId) { return; }
+      poApprovalsState?.applyTransition(transition, approvalId, { password });
+    };
+
+    onApproveClick = (approvalId: string) => {
+      dialogState?.config({
+        title: "form.builder.password.prompt",
+        open: true,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
+      });
+    };
+
+    useObserver(() => {
+      groups = poApprovalsState?.groups;
+      approvals = poApprovalsState?.activeApprovals;
+      checkedGroups = poApprovalsState?.checkedGroups;
+
+      loading = (
+        poApprovalsState?.loading ||
+        poApprovalsState?.approvalApi.loading ||
+        poApprovalsState?.transitionApi.loading
+      );
+
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      const disableRequestorApproval = checkServiceOrProductPartExists(poItems) && !isAdministrativeChange;
+      disabledOptions = disableRequestorApproval ? [requestor] : [];
+    });
+
     // This runs when you manually remove an approver from the list
     useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
@@ -97,39 +128,12 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
         if (employeesToBeRemoved.length > 0) {
           removeApprover(employeesToBeRemoved);
         }
-        const approvalsLength = FBDataStore?.revChangeBeforeApprovals?.length;
-        if (approvalsLength && !isAdministrativeChange && outputId) {
-          FBDataStore?.revChangeBeforeApprovals.forEach((approver, index) => {
-            const id = approver.approver.id;
-              poApprovalsState?.addApproval(
-                {
-                  assigned: { id },
-                  type: "MASTER",
-                  fieldId: approver.fieldName,
-                  partOf: { id: outputId },
-                  signatureGroupName: approver.signatureGroupName,
-                  manually: approver.manually,
-                },
-                () => {
-                  const revId = workspaceState?.id;
-                  if (
-                    revId &&
-                    index === approvalsLength - 1
-                  ) {
-                    dispatch(documentRevisionsActions.loadAudit(revId));
-                    formState?.getInputState(name)?.setRender();
-                  }
-                }
-              );
-          });
-          FBDataStore.revChangeBeforeApprovals = [];
-        }
         formState?.getInputState(name)?.setRender();
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // Store previous requester value.
+    // Store previous requester value
     useEffect(
       () => {
         prevRequester.current = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
@@ -138,18 +142,20 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       []
     );
 
-    // On revisionChangeType change.
+    // On revisionChangeType change
     useEffect(() => reaction(
-      () => workspaceState?.revisionChangeType,
-      () => {
-        if (workspaceState) {
-          updateApprovals({ prevRequester: prevRequester.current });
+      () => FBDataStore.revisionChangeType,
+      (revisionChangeType) => {
+        if (revisionChangeType) {
+          Promise.resolve(fetchRequiredGroups()).then(() => {
+            updateApprovals({ prevRequester: prevRequester.current });
+          });
         }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    // On requester change.
+    // On requester change
     useEffect(() => reaction(
       () => workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME),
       (requester) => {
@@ -157,51 +163,17 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
           updateApprovals({ prevRequester: prevRequester.current });
         }
         prevRequester.current = requester;
+      },
+      {
+        fireImmediately: true,
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
-      if (!approvalId) { return; }
-      poApprovalsState?.applyTransition(transition, approvalId, { password });
-    };
-
-    onApproveClick = (approvalId: string) => {
-      dialogState?.config({
-        title: "form.builder.password.prompt",
-        open: true,
-        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
-      });
-    };
-
-    // MARK: @observer
-    useObserver(() => {
-      groups = poApprovalsState?.groups;
-      approvals = poApprovalsState?.activeApprovals;
-      checkedGroups = poApprovalsState?.checkedGroups;
-
-      loading = (
-        poApprovalsState?.loading ||
-        poApprovalsState?.approvalApi.loading ||
-        poApprovalsState?.transitionApi.loading
-      );
-
-      disabledOptions = isAdministrativeChange
-        ? formState?.inputState.get(name)?.value
-        : [workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME)];
-    });
-
-    const fieldValue = map(poApprovalsState?.activeApprovals, "approver.id");
-
-    formState?.setFieldValue(`${name}`, fieldValue, true);
-    documentStatus = document?.status;
-
-    const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
-    if (!checkServiceOrProductPartExists(poItems)) {
-      disabledOptions = [];
-    }
+    formState?.setFieldValue(name, map(approvals, "approver.id"), true);
 
     disabled = disabled || loading;
+    documentStatus = document?.status;
 
     return Component({
       ...(props as T),

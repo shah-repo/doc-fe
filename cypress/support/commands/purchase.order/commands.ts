@@ -215,7 +215,7 @@ Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {
 });
 
 Cypress.Commands.add("poAddDateRequired", () => {
-  cy.xpath("//input[@name]/ ../div/button").arrowClick();
+  cy.xpath("//input[@name]/ ../div/button").arrowClick({ force: true });
   cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
     .click();
 });

@@ -305,7 +305,6 @@ context("Autosave LHR", () => {
 
       context("Select created MPI in LHR template", () => {
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
           cy.get("input[data-cy^=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
         });
       });
@@ -364,6 +363,7 @@ context("Autosave LHR", () => {
         lhrDocUrl = url;
       });
       cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
+      cy.wait(3000);
     });
   });
 
@@ -383,6 +383,8 @@ context("Autosave LHR", () => {
     it("Reload Page'", () => {
       cy.reload();
       cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("check approvers after reload page", () => {
@@ -441,12 +443,15 @@ context("Autosave LHR", () => {
         cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("6");
         cy.unClick();
         cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
+        cy.wait(3000);
       });
 
       it("Change value in 'Accepted quntity' fields", () => {
         cy.get("[name=\"lhrs-accepted-quantity\"]").arrowClick({ force: true })
           .clear().arrowType("8");
         cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("While autosaving, enter 'Rejected quntity' for LHRs #1", () => {
@@ -460,6 +465,8 @@ context("Autosave LHR", () => {
           .clear().arrowType("2");
         cy.unClick();
         cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
+        cy.unClick();
+        cy.wait(3000);
       });
     });
 
@@ -467,6 +474,7 @@ context("Autosave LHR", () => {
 
       it("Navigate to overview Tab", () => {
         cy.drSelectOverviewTab();
+        cy.progressBarShouldNotExist();
       });
 
       it("Add first Approver'", () => {
