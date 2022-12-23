@@ -1707,21 +1707,6 @@ context("LHR & LHRS Flow", () => {
         cy.verifyAddRemoveReference({ formId: "FM-00001" });
       });
 
-      // it("Verify References selection Add Remove", () => {
-      //   const docId = "FM-00001";
-      //   cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-      //   cy.listLoadingElementShouldNotExist();
-      //   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-      //     cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
-      //   });
-      //   cy.wait(1000);
-      //   cy.progressBarShouldNotExist();
-      //   cy.listLoadingElementShouldNotExist();
-      //   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-      //     cy.drRemoveReferences({ reference: docId });
-      //   });
-      // });
-
       it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
         cy.verifyReferenceInfo();
         cy.get("[data-cy='common.revision']").should(
