@@ -2143,7 +2143,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
         }).then((response) => {
           const responseBody = response.body.toString();
           expect(responseBody)
-            .contains(`PO Number: PO-00001-A`)
+            .contains(`PO Number: PO-00001-1`)
             .and.contains("Requestor:")
             .and.contains(USERS[3].name);
         });
