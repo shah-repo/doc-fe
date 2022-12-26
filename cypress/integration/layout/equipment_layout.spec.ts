@@ -713,7 +713,17 @@ context("Layout Verification of EQ", () => {
     });
 
     context("Verify form migration", () => {
+
+      it("Navigate to specification tab", () => {
+        cy.drSelectSpecificationTab();
+      });
+
+      it("Verify the checkbox field data after migration", () => {
+        cy.get("[value='1']").arrowClick();
+      });
+
       it("Verify migrate form button is visible", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.get("[data-cy=references-icon]").arrowClick();
         cy.get("[data-cy='common.form.migration']").should("be.visible");
       });
