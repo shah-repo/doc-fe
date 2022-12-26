@@ -768,9 +768,9 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Click on confirm change", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-          cy.get("[data-cy='common.confirm.change']").arrowClick();
-        });
+        cy.drClickConfirmChange();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Turn off autosave", () => {
