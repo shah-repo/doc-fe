@@ -20,7 +20,7 @@ import { isOperator } from "./DocumentRevisionDisplay.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
 import { toDocumentRevisionEditRequestBody, toDocumentRevisionFormValues } from "./forms/transform";
 import { DocumentRevisionFormValues } from "./forms/types";
-import { checkIsDocumentDAM } from "./helpers/checkDocumentGroup";
+import { checkIsDocumentDAM, checkIsDocumentReceivable } from "./helpers/checkDocumentGroup";
 import { canEditDocumentRevision } from "./helpers/documentRevisionPermissions";
 
 interface Props {
@@ -48,6 +48,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
   const { docId } = documentRevision.document;
   const formGroupOptions = documentRevision?.document.documentType.groupOptions;
   const isDAM = checkIsDocumentDAM(formGroupOptions);
+  const isReceivable = checkIsDocumentReceivable(formGroupOptions);
   useDocumentTitle(docId);
   const status = documentRevision ? documentRevision.status : undefined;
   documentRevisionStatusContextFromCR = React.createContext(status);
@@ -64,6 +65,10 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       setDoNotPrompt(true);
     },
   });
+
+  useEffect(() => {
+    FBDataStore.setRefreshData(documentRevision);
+  }, [documentRevision]);
 
   useEffect(() => () => {
     FBStore.damData = { approvalMatrix: [], approvalRoles: [] };
@@ -88,7 +93,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
     );
     // workaround when editing document through CR view. The form is marked dirty when editing FB fields
     promise?.then(() => {
-      if ( FBStore?.isHistoryTabSelected) {
+      if (FBStore?.isHistoryTabSelected) {
         dispatch(documentRevisionsActions.loadAudit(documentRevision.id ));
         FBStore.audit.set({
           url: FBEndpoint.DocumentRevisionAudit,
@@ -99,6 +104,7 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
 
       FBDataStore?.setRefreshData({
         ...FBDataStore?.refreshData,
+        ...data,
         formInput: data.formInput ?? FBDataStore?.refreshData?.formInput,
       });
     });
@@ -154,6 +160,16 @@ const DocumentRevisionUpdateContainer: React.FunctionComponent<Props> = ({
       });
     }
     const redlineDataToSubmit = pick(values, "schema", "formInput", "redline");
+
+    // Receivable: Missing form input data on First time when initial values form input is null and autosave is disabled
+    if (isReceivable && isEmpty(dataToSubmit) && isEmpty(values.formInput)) {
+      const hasReceivableKeyExists = Object.keys(
+        formStateContext?._currentValue
+      )?.some((key) => key.includes("receivable"));
+      if (hasReceivableKeyExists) {
+        set(dataToSubmit, "formInput", formStateContext?._currentValue);
+      }
+    }
 
     if (redlineActive) {
       if (

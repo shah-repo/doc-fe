@@ -492,6 +492,8 @@ context("Layout Verification of maintainance records", () => {
       cy.fbEnterNameValue({ name: "label", value: "Calibration" });
       cy.get("input[value='calibration']").arrowClick();
       cy.fbAddField();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist().wait(2000);
     });
 
     it(`Select '${USERS[1].name}' for Primary Owner`, () => {
@@ -651,15 +653,21 @@ context("Layout Verification of maintainance records", () => {
 
       it("Navigate to detail tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist().wait(500);
       });
 
       it("fill EQ,Maintainer,completion date fields", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy='equipment_id']").autocompleteSelect("EQ-00001");
-        });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy='equipment_maintainer']").autocompleteSelect(USERS[1].name);
-        });
+        cy.get("[data-cy='equipment_id']").autocompleteSelect("EQ-00001");
+        cy.get("[data-cy='equipment_maintainer']").autocompleteSelect(USERS[1].name);
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+      });
+
+      it("Save the detail", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Fill 'Completion Date'", () => {
@@ -790,10 +798,15 @@ context("Layout Verification of maintainance records", () => {
         it("Add another user permission", () => {
           cy.wait(2000);
           cy.drAddUserFromPermissionTab(USERS[3].name);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
+          cy.wait(2000);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([ CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab("Developers");
           });
         });

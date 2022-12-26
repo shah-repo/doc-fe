@@ -5,7 +5,6 @@ import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import {
   OneTimeTrainingTest,
@@ -334,6 +333,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -344,10 +345,14 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter document title 'Form-TC Training Dashboard Notification'", () => {
@@ -376,24 +381,26 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         documentType: "Training Curriculum test",
       });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-      });
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -401,25 +408,21 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     it("Navigate to Training Curriculums", () => {
       cy.reload();
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.DocPreview,
-          CyRoutes.GetFieldLocks,
-        ],
-        () => {
-          cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
-            .arrowClick({ force: true })
-            .autocompleteSelect("Training Curriculum test");
-        }
-      );
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']")
+        .arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test");
+      cy.unClick();
     });
 
     it("Enter training title 'Training Dashboard Notification'", () => {
@@ -440,18 +443,26 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Upload logo picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training options document types", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "AR Form");
     });
 
@@ -459,46 +470,62 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect(
         "AR Form"
       );
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select refresh training periodically 'Yes'", () => {
       cy.get("[name=training-refresh-training-periodically]")
         .eq(0)
         .arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training refresh period days", () => {
       cy.get("[name=training-validity]").arrowType("60");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
         `${USERS[2].name}`
       );
+      cy.unClick();
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
         `${USERS[3].name}`
       );
+      cy.unClick();
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(
         `${USERS[4].name}`
       );
-    });
-
-    it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
-    });
-
-    it("Click on 'Overview' tab", () => {
-      cy.drSelectOverviewTab();
-    });
-
-    it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+    });
+
+    it("Click on 'Overview' tab", () => {
+      cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select Approver", () => {
+      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save training", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status`, () => {
@@ -510,15 +537,15 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
   context("Submit for approval", () => {
     it("Click Submit for Approval", () => {
       cy.contains("Submit for approval").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
       cy.get("[data-cy='form.builder.request.approve']").contains("Approve").click();
       cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-        cy.get("[data-cy=\"common.confirm\"]").click();
-        cy.progressBarShouldAppear();
-      });
+      cy.get("[data-cy=\"common.confirm\"]").click();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -535,6 +562,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: firstEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training notification`, () => {
@@ -554,6 +583,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
         USER: USERS[3],
         employeeId: secondEmployee.id,
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training notification`, () => {
@@ -570,6 +601,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[4], employeeId: thirdEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training notification`, () => {
@@ -586,11 +619,15 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Use time tool to travel user back to future", () => {
       it("Select 24 day to back in future", () => {
         cy.trSetTimeTravelInDays({ days: 24 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.setTimeTravelToComplete({
           tasktype: "TIME_TRAVEL_COMPANY",
           days: "24 days",
@@ -601,7 +638,9 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     context("Check training notifications", () => {
       it("Goto Dashboard", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Trainings' tab", () => {
@@ -705,6 +744,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           USER: USERS[3],
           employeeId: secondEmployee.id,
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify training notification", () => {
@@ -725,6 +766,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           USER: USERS[4],
           employeeId: thirdEmployee.id,
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify training notification", () => {
@@ -740,11 +783,15 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Use time tool to travel user back to future", () => {
       it("Select 30 day to back in future", () => {
         cy.trSetTimeTravelInDays({ days: 6 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.setTimeTravelToComplete({
           tasktype: "TIME_TRAVEL_COMPANY",
           days: "6 days",
@@ -768,7 +815,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     });
 
     it("Click complete training button", () => {
-      cy.trCompleteTraining();
+      cy.trCompleteTrainingWithoutApi();
     });
   });
 
@@ -797,6 +844,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           .eq(0)
           .should("have.text", "DUE IN 7 DAYS")
           .arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("[class='MuiCollapse-wrapperInner']")
           .should("contain.text", USERS[2].name)
           .and("contain.text", USERS[3].name);
@@ -849,6 +898,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     context("Use time tool to travel user back to future", () => {
       it("Select 31 day to back in future", () => {
         cy.trSetTimeTravelInDays({ days: 1 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.setTimeTravelToComplete({
           tasktype: "TIME_TRAVEL_COMPANY",
           days: "a day",
@@ -859,7 +910,7 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     context("Check training notifications", () => {
       it("Goto Dashboard", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
       });
 
       it("Select 'Trainings' tab", () => {
@@ -968,6 +1019,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
             USER: USERS[3],
             employeeId: secondEmployee.id,
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify training notification", () => {
@@ -984,11 +1037,15 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Use time tool to travel user back to future", () => {
       it("Select 40 day to back in future", () => {
         cy.trSetTimeTravelInDays({ days: 9 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.setTimeTravelToComplete({
           tasktype: "TIME_TRAVEL_COMPANY",
           days: "9 days",
@@ -1012,10 +1069,14 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
 
     it("Open assigned Training", () => {
       cy.dashGoToListItemFromDashboard({ listItem: "FM-00001Rev 1 AR Form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click complete training button", () => {
-      cy.trCompleteTraining();
+      cy.trCompleteTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1031,6 +1092,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
     context("Check training notifications", () => {
       it("Goto Dashboard", () => {
         cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Trainings' tab", () => {
@@ -1049,6 +1112,8 @@ context("Overdue and Due in 7 Days Training Dashboard Notification", () => {
           USERS[2].name
         );
         cy.get("button[aria-label=close]").eq(0).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
