@@ -278,7 +278,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Export and save the template", () => {
-        cy.get("[data-cy='FBWorkspace-exportTemplate']").eq(0).arrowClick();
+        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").arrowClick();
         cy.get("[data-cy=\"fb-template-name\"]").arrowType("Equipment_Form");
         cy.get("[data-cy=\"common.add\"]").arrowClick();
       });
@@ -496,7 +496,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Export and save the template", () => {
-        cy.get("[class=\"MuiIconButton-label\"]").eq(6).arrowClick();
+        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").arrowClick();
         cy.get("[data-cy=\"fb-template-name\"]").arrowType("PM_Form");
         cy.get("[data-cy=\"common.add\"]").arrowClick();
       });
@@ -717,7 +717,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Export and save the template", () => {
-        cy.get("[class=\"MuiIconButton-label\"]").eq(6).arrowClick();
+        cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").arrowClick();
         cy.get("[data-cy=\"fb-template-name\"]").arrowType("CAL_Form");
         cy.get("[data-cy=\"common.add\"]").arrowClick();
       });

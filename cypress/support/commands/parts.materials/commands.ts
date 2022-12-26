@@ -31,6 +31,7 @@ declare global {
       pmClearFilters(): Chainable<Subject>;
       pmSelectFirstDocument(): Chainable<Subject>;
       lhrSubmitForApproval(): Chainable<Subject>;
+      lhrSubmitForApprovalWithoutApi(): Chainable<Subject>;
       ptClickCreateNewPart(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
       ptSelectPartFormFromMultiSelect(params: {partForm: string}): Chainable<Subject>;
@@ -219,6 +220,12 @@ Cypress.Commands.add("lhrSubmitForApproval", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrSubmitForApprovalWithoutApi", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

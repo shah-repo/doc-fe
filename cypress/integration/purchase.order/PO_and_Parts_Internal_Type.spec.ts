@@ -2,10 +2,10 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 import "moment-timezone";
+import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -261,10 +261,6 @@ context("PO and parts ", () => {
       cy.navigToDocumentList();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Click on 'Create a document'", () => {
       cy.cmpClickCreateNewDocument();
     });
@@ -500,7 +496,7 @@ context("PO and parts ", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -525,6 +521,8 @@ context("PO and parts ", () => {
   context("Move & Edit & Remove component", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add component", () => {
@@ -532,6 +530,8 @@ context("PO and parts ", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for Po  " });
       cy.fbAddField();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("move component", () => {
@@ -559,13 +559,15 @@ context("PO and parts ", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
   context("Verify that the Form contains Details and Line Items tab", () => {
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Button should have text Details Tab", () => {
@@ -702,12 +704,16 @@ context("PO and parts ", () => {
   context("Approve and Release", () => {
     it("Approve and Release", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Fill out all the fields", () => {
     it("click on create New", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter description 'New Purchase Order'", () => {
@@ -716,33 +722,40 @@ context("PO and parts ", () => {
 
     it("Select 'Open' for PO status", () => {
       cy.poSelectPOStatus({ status: "Open" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-    });
-
-    it("Add Required Date", () => {
-      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
+    it(`Add '${USERS[1].name}' as the Requestor`, () => {
+      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Save PO", () => {
-      cy.poSaveDocument();
+    it("Add Required Date", () => {
+      cy.get(`[name="po-order-date"]`).next().find("button").arrowClick();
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("verify all the fields", () => {
     it("Navigate to PO Landing Page", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("click on Add New Purchase order", () => {
-      cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
+    it("Click create new PO", () => {
+      cy.poClickCreatePO();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -752,19 +765,13 @@ context("PO and parts ", () => {
       cy.progressBarShouldNotExist();
     });
 
-    it("Verify that the top left of the page displays docId", () => {
-      cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("PO-00002")
-        .should("exist");
-    });
-
-    it("Verify that the top left of the page displays Rev", () => {
-      cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev A")
-        .should("exist");
-    });
-
-    it("Verify that the top left of the page displays status", () => {
-      cy.get("[data-cy=\"HeaderInfo-status\"]").contains("DRAFT")
-        .should("exist");
+    it(`Verify document header details and status is in ${STATUS_TYPES_LABEL.DRAFT}`, () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.DRAFT,
+        title: "Purchase Orders",
+        docId: "PO-00002",
+        revision: "Rev A",
+      });
     });
 
     it("Button should have text Details Tab", () => {
@@ -878,15 +885,18 @@ context("PO and parts ", () => {
 
     it("Add reference to part", () => {
       cy.drSelectReferences("FM-00002");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove reference for document", () => {
       cy.drRemoveReferences({ reference: "FM-00002" });
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Save PO", () => {
-      cy.poSaveDocument();
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -903,6 +913,8 @@ context("PO and parts ", () => {
 
     it("Open History drawer and compare history values", () => {
       cy.drSelectHistoryTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     history.forEach((element, groupIndex) => {
@@ -959,33 +971,43 @@ context("PO and parts ", () => {
   context("Fill all fields", () => {
     it("Select 'Open' for PO status", () => {
       cy.poSelectPOStatus({ status: "Open" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+    it(`Add '${USERS[1].name}' as the Requestor`, () => {
+      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Supplier", () => {
       cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001 - rev 1 - API Supplier Document");
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
-      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+      cy.get(`[name="po-order-date"]`).next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Save PO", () => {
-      cy.poSaveDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Verify the Predefined schema field for PO line item", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Supporting Documents", () => {
@@ -1081,217 +1103,61 @@ context("PO and parts ", () => {
       cy.get("[id=\"sm-tabpanel-1\"]").contains("Grand Total")
         .should("exist");
     });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+    });
   });
 
   context("Click 'Add line item' and fill the data", () => {
-    it("Turn on autosave", () => {
-      cy.cmpTurnOnAutosave();
-    });
-
-    it("Click on 'Add' inside PO dialog box and check for required fields", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").click();
+    it("Click on 'Add line Item'", () => {
+      cy.get(`button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select Part Number", () => {
-      cy.wait(2000);
       cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Quantity Ordered", () => {
       cy.poEnterQuantityOrdered({ quantity: "5" });
-    });
-
-    it("Select Units", () => {
-      cy.poSelectUnits();
-    });
-
-    it("Select GL code", () => {
-      cy.poSelectGLCode();
-    });
-
-    it("Enter number of Units", () => {
-      cy.poNumberOfUnits({ number: "2" });
-    });
-
-    it("Add Required Date", () => {
-      cy.get("[name=\"date\"]").next().find("button").arrowClick();
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
-    });
-
-    it("Check Tax box", () => {
-      cy.poSelectTaxCheckbox();
-    });
-
-    it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poAddPOButtonClick();
-      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enter Shipping Cost", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poShippingCost({ number: "2" });
-        cy.unClick();
-      });
+    it("Select Units", () => {
+      cy.poSelectUnits();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check Subtotal value", () => {
-      cy.poCheckAmount({ number: "$10.00" });
-    });
-
-    it("Check Tax value", () => {
-      cy.poCheckTax({ number: "0.925000" });
-    });
-
-    it("Check Total value", () => {
-      cy.get("[data-cy=\"poTotal\"]").should("have.text", "$30.93");
-    });
-
-    it("navigate to Details tab and verify the Summary of totals", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it(`Verify SubTotal field`, () => {
-      cy.get("[class=\"MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto\"]").eq(1).contains("$10.00")
-        .should("exist");
-    });
-
-    it(`Verify Tax Total field`, () => {
-      cy.get("[class=\"MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto\"]").eq(3).contains("$0.93")
-        .should("exist");
-    });
-
-    it(`Verify Grand Total field`, () => {
-      cy.get("[class=\"MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto\"]").eq(5).contains("$30.93")
-        .should("exist");
-    });
-
-    it("navigate to Line Items", () => {
-      cy.drSelectLineItems();
-    });
-
-    it("delete line item", () => {
-      cy.get("[class=\"MuiSvgIcon-root FBIcon-root MuiSvgIcon-fontSizeSmall\"]").eq(0).click();
-    });
-
-    it("navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it(`Verify Grand Total field`, () => {
-      cy.get("[class=\"MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto\"]").eq(5).contains("$20.00")
-        .should("exist");
-    });
-  });
-
-  context("Click 'Add line item' and select Service data", () => {
-    it("navigate to Line Items", () => {
-      cy.drSelectLineItems();
-    });
-
-    it("Click on 'Add item' button", () => {
-      cy.unClick();
-      cy.get("[data-cy=\"fb-control-btn\"]").click();
-    });
-
-    it("Click on service option", () => {
-      cy.poSelectOption({ optionName: "service" });
-    });
-
-    it("Select service id", () => {
-      cy.poEnterServiceID({ serviceId: "SRV123" });
-    });
-
-    it("Enter Description", () => {
-      cy.poEnterDescription({ description: "Description for SRV123" });
-    });
-
-    it("Enter Quantity Ordered", () => {
-      cy.poEnterQuantityOrdered({ quantity: "2" });
-    });
-
-    it("Select Units", () => {
-      cy.poSelectUnits();
-    });
-
     it("Select GL code", () => {
       cy.poSelectGLCode();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Unit Price", () => {
-      cy.poNumberOfUnits({ number: "10" });
-    });
-
-    it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poAddPOButtonClick();
-      });
-    });
-
-    it("Check Subtotal value", () => {
-      cy.poCheckAmount({ number: "$20.00" });
-    });
-
-    it("Check Total value", () => {
-      cy.get("[data-cy=\"poTotal\"]").should("have.text", "$40.00");
-    });
-
-    it("navigate to Details tab and verify the Summary of totals", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it(`Verify SubTotal field`, () => {
-      cy.get("[class=\"MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto\"]").eq(1).contains("$20.00")
-        .should("exist");
-    });
-
-    it(`Verify Grand Total field`, () => {
-      cy.get("[class=\"MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto\"]").eq(5).contains("$40.00")
-        .should("exist");
-    });
-  });
-
-  context("Navigate to Line items tab and add Enlil part, include taxes", () => {
-    it("navigate to Line Items", () => {
-      cy.drSelectLineItems();
-    });
-
-    it("Click on 'Add' inside PO dialog box and check for required fields", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").click();
-    });
-
-    it("Select Part Number", () => {
-      cy.wait(2000);
-      cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
-    });
-
-    it("Enter Quantity Ordered", () => {
-      cy.poEnterQuantityOrdered({ quantity: "5" });
-    });
-
-    it("Select Units", () => {
-      cy.poSelectUnits();
-    });
-
-    it("Select GL code", () => {
-      cy.poSelectGLCode();
-    });
-
-    it("Enter number of Units", () => {
       cy.poNumberOfUnits({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
-      cy.get("[name=\"date\"]").next().find("button").arrowClick();
+      cy.get(`[name="date"]`).next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check Tax box", () => {
+    it("Check Tax option", () => {
       cy.poSelectTaxCheckbox();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
@@ -1301,8 +1167,244 @@ context("PO and parts ", () => {
     });
 
     it("Enter Shipping Cost", () => {
-      cy.progressBarShouldNotExist();
       cy.poShippingCost({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check Subtotal value", () => {
+      cy.poCheckAmount({ number: "$10.00" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check Tax value", () => {
+      cy.poCheckTax({ number: "0.925000" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check Total value", () => {
+      cy.poCheckTotalAmount({ number: "$12.93" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
+    });
+
+
+    it("navigate to Details tab and verify the Summary of totals", () => {
+      cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Summary of totals should be visible", () => {
+      cy.get(`[data-cy="common.summary.total"]`).scrollIntoView();
+    });
+
+    it("Check Subtotal", () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(1).contains("$10.00");
+    });
+
+    it("Check Tax Total", () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(3).contains("$0.93");
+    });
+
+    it(`Verify Grand Total field`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$12.93");
+    });
+
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("delete line item", () => {
+      cy.get("[data-cy=\"poItems\"]").eq(0).find("td").eq(0).click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Verify Grand Total field`, () => {
+      cy.get("[class=\"MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto\"]").eq(5).contains("$0.00");
+    });
+  });
+
+  context("Click 'Add line item' and select Service data", () => {
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on 'Add line Item'", () => {
+      cy.get(`button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Click on service option", () => {
+      cy.poSelectOption({ optionName: "service" });
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Select service id", () => {
+      cy.poEnterServiceID({ serviceId: "SRV123" });
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Enter Description", () => {
+      cy.poEnterDescription({ description: "Description for SRV123" });
+    });
+
+    it("Enter Quantity Ordered", () => {
+      cy.poEnterQuantityOrdered({ quantity: "2" });
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Select Units", () => {
+      cy.poSelectUnits();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Select GL code", () => {
+      cy.poSelectGLCode();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Enter Unit Price", () => {
+      cy.poNumberOfUnits({ number: "10" });
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Click on 'Add' inside PO dialog box", () => {
+      cy.poAddPOButtonClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Check Subtotal value", () => {
+      cy.poCheckAmount({ number: "$20.00" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check Tax value", () => {
+      cy.poCheckTax({ number: "0.00" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check Total value", () => {
+      cy.poCheckTotalAmount({ number: "$20.00" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
+    });
+
+    it("navigate to Details tab and verify the Summary of totals", () => {
+      cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Summary of totals should be visible", () => {
+      cy.get(`[data-cy="common.summary.total"]`).scrollIntoView();
+    });
+
+    it("Check Subtotal", () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(1).contains("$20.00");
+    });
+
+    it("Check Tax Total", () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(3).contains("$0.00");
+    });
+
+    it(`Verify Grand Total field`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$20.00");
+    });
+  });
+
+  context("Navigate to Line items tab and add Enlil part, include taxes", () => {
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on 'Add line Item'", () => {
+      cy.get(`button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Select Part Number", () => {
+      cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter Quantity Ordered", () => {
+      cy.poEnterQuantityOrdered({ quantity: "5" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select Units", () => {
+      cy.poSelectUnits();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select GL code", () => {
+      cy.poSelectGLCode();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter Unit Price", () => {
+      cy.poNumberOfUnits({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add Required Date", () => {
+      cy.get(`[name="date"]`).next().find("button").arrowClick();
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check Tax box", () => {
+      cy.poSelectTaxCheckbox();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on 'Add' inside PO dialog box", () => {
+      cy.poAddPOButtonClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter Shipping Cost", () => {
+      cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick();
+      cy.get(`[name*="po-items-built-in.shippingCost"]`).arrowType("{selectAll}{backspace}{2}");
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1310,28 +1412,47 @@ context("PO and parts ", () => {
 
     it("Check Subtotal value", () => {
       cy.poCheckAmount({ number: "$30.00" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check Tax value", () => {
       cy.poCheckTax({ number: "0.925000" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check Total value", () => {
-      cy.get("[data-cy=\"poTotal\"]").should("have.text", "$250.93");
+      cy.poCheckTotalAmount({ number: "$32.92" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("navigate to Details tab and verify the Summary of totals", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Verify SubTotal field`, () => {
-      cy.get("[class=\"MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto\"]").eq(1).contains("$30.00")
-        .should("exist");
+    it("Summary of totals should be visible", () => {
+      cy.get(`[data-cy="common.summary.total"]`).scrollIntoView();
+    });
+
+    it("Summary of totals should be visible", () => {
+      cy.get(`[data-cy="common.summary.total"]`).scrollIntoView();
+    });
+
+    it("Check Subtotal", () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(1).contains("$30.00");
+    });
+
+    it("Check Tax Total", () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(3).contains("$0.93");
     });
 
     it(`Verify Grand Total field`, () => {
-      cy.get("[class=\"MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto\"]").eq(5).contains("$250.93")
-        .should("exist");
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$32.92");
     });
   });
 
@@ -1345,14 +1466,19 @@ context("PO and parts ", () => {
     it("Upload attachement picture 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("navigate to Details tab ", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check one attachment is displayed: image.jpg", () => {
@@ -1380,25 +1506,34 @@ context("PO and parts ", () => {
 
     it("navigate to Details tab ", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approver", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[2].name);
+      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("check attachement on dashboard", () => {
       cy.get("svg[data-cy='expand-icon']").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("verify Attachments", () => {
@@ -1420,6 +1555,8 @@ context("PO and parts ", () => {
 
     it("check attachement on dashboard", () => {
       cy.get("svg[data-cy='expand-icon']").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("verify Attachments", () => {
@@ -1441,6 +1578,14 @@ context("PO and parts ", () => {
 
     it("Navigate to PO", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Clear filter", () => {
+      cy.get("[data-cy=\"clearFilter\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("verify that PO landing page is pulling correct data", () => {
@@ -1454,17 +1599,24 @@ context("PO and parts ", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[class='k-textbox']").eq(4).clear().arrowType("PRT-00005 - 1").wait(500);
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class='k-textbox']").eq(5).clear().arrowType("$250.93").wait(500);
+      cy.get("[class='k-textbox']").eq(5).clear().arrowType("$32.92").wait(500);
       cy.listLoadingElementShouldNotExist();
       cy.get("[class='k-textbox']").eq(6).clear().arrowType("Giovanni Reynolds").wait(500);
       cy.listLoadingElementShouldNotExist();
       cy.get("[class='k-textbox']").eq(7).clear().arrowType("N/A").wait(500);
       cy.listLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Select PO from the list", () => {
       cy.get("[data-cy=\"clearFilter\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+
       cy.get("[class='k-textbox']").eq(0).clear().arrowType("PO-00001");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+
       cy.dlSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1472,21 +1624,34 @@ context("PO and parts ", () => {
 
     it("Add approver", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[1].name);
+      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve PO", () => {
-      cy.ebTryToApprove();
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to PO", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Clear filter", () => {
+      cy.get("[data-cy=\"clearFilter\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("verify that PO landing page is pulling correct data for newly released po", () => {
@@ -1506,11 +1671,18 @@ context("PO and parts ", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[class='k-textbox']").eq(7).clear().arrowType("N/A").wait(500);
       cy.listLoadingElementShouldNotExist();
+      cy.dlVerifyDocumentCount({ numberOfDoc: 1 });
     });
 
     it("Select PO from the list", () => {
       cy.get("[data-cy=\"clearFilter\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+
       cy.get("[class='k-textbox']").eq(0).clear().arrowType("PO-00002");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+
       cy.dlSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1518,20 +1690,22 @@ context("PO and parts ", () => {
 
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Download all attachments with redline document", () => {
       cy.atchDownloadAll();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context(`Navigate to Po landing page`, () => {
     it("Navigate to PO", () => {
       cy.navigToPurchaseOrder();
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("click on Add New Purchase order", () => {
@@ -1543,22 +1717,28 @@ context("PO and parts ", () => {
     it("type a description", () => {
       cy.drEnterDocumentDescription({ description: "Another new purchase order description" });
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select Requestor`, () => {
       cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.get("[data-cy='po-requestor-autocomplete']").autocompleteSelect(USERS[1].name);
+      cy.unClick();
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
       cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save PO", () => {
-      cy.poSaveDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("navigate to Line Items", () => {
@@ -1587,7 +1767,9 @@ context("PO and parts ", () => {
     });
 
     it("Save PO", () => {
-      cy.poSaveDocument();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("navigate to Details tab ", () => {
@@ -1600,27 +1782,40 @@ context("PO and parts ", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy^='fb-po-approvals-']").arrowClick({ force: true });
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[1].name);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Download attachments document", () => {
       cy.atchDownloadAll();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("navigate to Details tab ", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve PO", () => {
-      cy.ebTryToApprove();
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 });

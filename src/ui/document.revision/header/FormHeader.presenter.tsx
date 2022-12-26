@@ -1,7 +1,10 @@
 import { Grid, LinearProgress } from "@material-ui/core";
 import { useObserver } from "mobx-react";
 import React from "react";
+import { useSelector } from "react-redux";
 import { SM } from "../../../App";
+import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
+import { ApplicationState } from "../../../state/reducers";
 import { AsyncStatus } from "../../../state/types";
 import Header from "../../components/common/header/Header";
 import HeaderInfo from "../../components/common/header/HeaderInfo";
@@ -27,9 +30,12 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
   const { documentRevision, isDisabled, asyncState, type } = React.useContext(FormHeaderContext)!;
   const { workspaceState } = FB.useStores();
   const { _documentRevisionFormState } = SM.useStores();
+  const asyncSecurityState = useSelector((state: ApplicationState) =>
+    documentRevisionsSelectors.getLoadAsyncSecurityState(state));
 
   const isLoading = useObserver(() => (
-    asyncState.status === AsyncStatus.Active
+    asyncSecurityState.status === AsyncStatus.Active
+    || asyncState.status === AsyncStatus.Active
       || workspaceState?.documentRevApi.loading
       || _documentRevisionFormState?.loading)
   );
@@ -60,7 +66,7 @@ const FormHeaderPresenter: React.FunctionComponent<Props> = ({
           {documentRevision?.updatedAt && (
             <HeaderLastSaved
               timestamp={documentRevision.updatedAt}
-              loading={asyncState.status === AsyncStatus.Active}
+              loading={asyncState.status === AsyncStatus.Active || asyncSecurityState.status === AsyncStatus.Active}
             />
           )}
           <DocRevActions {...{ isCreateDocumentDisabled }} />

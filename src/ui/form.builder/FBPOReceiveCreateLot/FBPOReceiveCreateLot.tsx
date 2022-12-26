@@ -33,19 +33,12 @@ const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> =
         defaultValue={item?.partNumberTitle || item?.description}
         disabled={true}
       />
-      <FBTextField
-        label="form.builder.field.ordered"
-        defaultValue={item?.order}
-        disabled={true}
-      />
       <Box display="flex" justifyContent="space-between">
         <Box width="100%" marginRight="10px">
           <FBTextField
-            inputProps={{ type: "number", min: "0" }}
-            defaultValue={item?.received}
-            label="form.builder.quantity.received"
-            name="received"
-            rules="required|min:1"
+            label="form.builder.field.ordered"
+            defaultValue={item?.order}
+            disabled={true}
           />
         </Box>
         <Box width="100%" marginLeft="10px">
@@ -56,6 +49,13 @@ const FBPOReceiveCreateLot: React.FunctionComponent<FBPOReceiveCreateLotProps> =
           />
         </Box>
       </Box>
+      <FBTextField
+        inputProps={{ type: "number", min: "0" }}
+        defaultValue={item?.received}
+        label="form.builder.quantity.received"
+        name="received"
+        rules="required|min:1"
+      />
       <FBDatePicker
         label="form.builder.field.expiration.date"
         name="expirationDate"

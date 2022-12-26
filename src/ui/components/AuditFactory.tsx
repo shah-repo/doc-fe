@@ -151,6 +151,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           returnValue = (audit.nextValue as Employee).user?.name;
           break;
         }
+        // falls through intentionally
       case "status":
         if (audit?.approvalStatus === ApprovalStatus.Abandoned) {
           returnValue = (audit.nextValue as Employee).user?.name;

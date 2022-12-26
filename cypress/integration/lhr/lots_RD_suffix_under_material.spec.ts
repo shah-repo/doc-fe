@@ -760,6 +760,7 @@ context("Lots RD suffix under Materials", () => {
 
       it("Select 'LHRt' document type", () => {
         cy.drSelectDocumentType({ documentType: "LHR Template" });
+        cy.wait(2000);
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -1044,6 +1045,7 @@ context("Lots RD suffix under Materials", () => {
 
       it("Select 'LHRt' document type", () => {
         cy.drSelectDocumentType({ documentType: "LHR Template" });
+        cy.wait(2000);
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -1163,6 +1165,7 @@ context("Lots RD suffix under Materials", () => {
 
     it("Lot dialog should open", () => {
       cy.get("[data-cy=\"form.builder.lot.number\"]").should("exist");
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Lot with RD suffix and enter quantity", () => {

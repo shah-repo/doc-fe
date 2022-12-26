@@ -615,13 +615,16 @@ context("Verify New Layout for Bulk Import Document", () => {
       });
 
       it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(userOne);
-        });
+        cy.drAddUserFromPermissionTab(userOne);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+        cy.wait(2000);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
           cy.drAddGroupFromPermissionTab(groupOne);
         });
       });
@@ -872,13 +875,16 @@ context("Verify New Layout for Bulk Import Document", () => {
         });
 
         it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(userTwo);
-          });
+          cy.drAddUserFromPermissionTab(userTwo);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.wait(2000);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab(groupTwo);
           });
         });
@@ -1124,15 +1130,16 @@ context("Verify New Layout for Bulk Import Document", () => {
         });
 
         it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(userThree);
-          });
+          cy.drAddUserFromPermissionTab(userThree);
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.wait(2000);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab(groupThree);
           });
           cy.progressBarShouldNotExist();

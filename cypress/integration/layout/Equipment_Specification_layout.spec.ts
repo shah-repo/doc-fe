@@ -269,7 +269,7 @@ context("Verification of Equipment Specification", () => {
 
     it("Verify Click Specification Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
     });
 
@@ -292,9 +292,9 @@ context("Verification of Equipment Specification", () => {
 
   context("Release ES", () => {
     it("Approve and release  document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -344,7 +344,7 @@ context("Verification of Equipment Specification", () => {
 
       it("Verify Click Specification Tab, clicking on it should open that tab and close the other one", () => {
         cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-        cy.get("#sm-tabpanel-0").should("be.hidden");
+        cy.get("#sm-tabpanel-0").should("not.exist");
         cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
       });
 
@@ -441,13 +441,16 @@ context("Verification of Equipment Specification", () => {
         });
 
         it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
-          });
+          cy.drAddUserFromPermissionTab(USERS[3].name);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.wait(2000);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab("Developers");
           });
         });
@@ -599,9 +602,9 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Approve and release  document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
