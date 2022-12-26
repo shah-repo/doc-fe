@@ -2108,7 +2108,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
     it("Verify PO Statusbar exists Icon, Landing page, Doc ID, Rev stage", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Purchase OrdersPO-00001 Rev A`,
+            `Purchase OrdersPO-00001 Rev 1`,
         breadcrump: true,
       });
     });
@@ -2161,14 +2161,14 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
     it(`verify PO Notification for ${USERS[1].name}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[1].name}APPROVEDPO-00001Rev A`,
+        `${USERS[1].name}APPROVEDPO-00001Rev 1`,
       });
     });
 
     it(`verify PO Notification from ${USERS[3].name}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[3].name}APPROVEDPO-00001Rev A`,
+        `${USERS[3].name}APPROVEDPO-00001Rev 1`,
       });
     });
   });
