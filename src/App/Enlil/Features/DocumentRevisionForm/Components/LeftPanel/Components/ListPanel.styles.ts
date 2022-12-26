@@ -1,11 +1,18 @@
 import { createStyles, makeStyles } from "@material-ui/core";
 import Colors from "../../../../../../../ui/layout/theme/utils/colors";
 
-export default makeStyles(() =>
+export default makeStyles((theme) =>
   createStyles({
+    root: {
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      overflow: "hidden",
+    },
     collapseRoot: {
-      padding: "15px",
+      padding: theme.spacing(2),
       background: Colors.whitest_grey,
+      borderBottom: `1px solid ${Colors.lightest_grey1}`,
     },
     outerBox: {
       background: Colors.whitest_grey,
@@ -15,54 +22,48 @@ export default makeStyles(() =>
       background: Colors.whitest_grey,
     },
     listItemBtn: {
-      "padding": "0 10px 0 15px",
-      "width": "300px",
-      "height": "50px",
-      "boxShadow": `0 1px 0 ${Colors.lightest_grey1}`,
-      "borderTop": `1px solid ${Colors.lightest_grey1}`,
-      "&.firstItem": {
-        borderTop: 0,
-      },
+      padding: theme.spacing(0, 1.25, 0, 2),
+      height: 50,
+      borderTop: "none",
+      borderBottom: `1px solid ${Colors.lightest_grey1}`,
     },
     listItemStyle: {
-      "height": "48px",
-      "width": "269px",
-      "background": Colors.white,
-      "border": `1px solid ${Colors.lightest_grey1}`,
-      "borderRadius": "3px",
-      "marginBottom": "10px",
-      "&.lastItem": {
-        marginBottom: 0,
-      },
+      height: 48,
+      background: Colors.white,
+      border: `1px solid ${Colors.lightest_grey1}`,
+      borderRadius: 3,
+      marginBottom: 10,
     },
     listItemText: {
       fontWeight: 500,
-      fontSize: "12px",
-      lineHeight: "15px",
+      fontSize: 12,
+      lineHeight: 1.25,
       display: "flex",
       textTransform: "uppercase",
       color: Colors.almost_black,
     },
     listSubItem: {
       fontWeight: 500,
-      fontSize: "14px",
-      lineHeight: "18px",
+      fontSize: 14,
+      lineHeight: 1.25,
       letterSpacing: 0,
-      marginLeft: "3px",
+      marginLeft: 3,
       color: Colors.almost_black,
       cursor: "pointer",
     },
     searchBox: {
-      padding: "20px 0",
+      padding: theme.spacing(2.5, 0),
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
     },
     list: {
-      height: "calc(100vh - 165px)",
+      flexGrow: 1,
       overflowY: "auto",
-      padding: "0px",
+      padding: 0,
     },
-    iconBtn: { marginLeft: "3px" },
+    iconBtn: {
+      marginLeft: 3,
+    },
   })
 );

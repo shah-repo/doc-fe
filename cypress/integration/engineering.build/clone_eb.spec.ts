@@ -817,15 +817,18 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
-          cy.elUploadAttachment({
-            fileName: "test.jpg",
-            el: "fb-mediaalbum-upload-",
-          });
+
+        cy.elUploadAttachment({
+          fileName: "test.jpg",
+          el: "fb-mediaalbum-upload-",
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add material document", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.ebAddMaterialDocument({ title: "Materials document", value: "4", name: "Each" });
       });
 
@@ -1014,8 +1017,7 @@ context("Clone EB Flow test", () => {
       it("Select a part in the Part field", () => {
         cy.wait(2000);
         cy.get("[data-cy=\"childrenParts\"]").arrowClick();
-        cy.get("[data-cy=\"childrenParts\"]").arrowType("PRT-00005 - rev 1 - Part document").arrowClick();
-        cy.contains("PRT-00005 - rev 1 - Part document").eq(0).arrowClick();
+        cy.get(`[data-cy="childrenParts"]`).autocompleteSelect("PRT-00005 - rev 1 - Part document");
       });
 
       it("Add reference to part", () => {
@@ -1023,15 +1025,19 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
-          cy.elUploadAttachment({
-            fileName: "test.jpg",
-            el: "fb-mediaalbum-upload-",
-          });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.elUploadAttachment({
+          fileName: "test.jpg",
+          el: "fb-mediaalbum-upload-",
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add material document", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.ebAddMaterialDocument({ title: "Materials document", value: "4", name: "Each" });
       });
 
@@ -1232,8 +1238,7 @@ context("Clone EB Flow test", () => {
       it("Select a part in the Part field", () => {
         cy.wait(2000);
         cy.get("[data-cy=\"childrenParts\"]").arrowClick();
-        cy.get("[data-cy=\"childrenParts\"]").arrowType("PRT-00006 - rev 1 - Part for EB document").arrowClick();
-        cy.contains("PRT-00006 - rev 1 - Part for EB document").eq(0).arrowClick();
+        cy.get(`[data-cy="childrenParts"]`).autocompleteSelect("PRT-00006 - rev 1 - Part for EB document");
       });
 
       it("Add reference to part", () => {
@@ -1241,15 +1246,17 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add attachment", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev ], () => {
-          cy.elUploadAttachment({
-            fileName: "test.jpg",
-            el: "fb-mediaalbum-upload-",
-          });
+        cy.elUploadAttachment({
+          fileName: "test.jpg",
+          el: "fb-mediaalbum-upload-",
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add material document", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.ebAddMaterialDocument({ title: "Materials document", value: "4", name: "Each" });
       });
 
@@ -1304,3 +1311,4 @@ context("Clone EB Flow test", () => {
     });
   });
 });
+

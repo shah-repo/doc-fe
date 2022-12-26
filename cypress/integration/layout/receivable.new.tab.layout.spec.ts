@@ -820,7 +820,7 @@ context("Receiving landing page test", () => {
 
       it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
         cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-        cy.get("#sm-tabpanel-0").should("be.hidden");
+        cy.get("#sm-tabpanel-0").should("not.exist");
         cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       });
 
@@ -1103,14 +1103,16 @@ context("Receiving landing page test", () => {
       });
 
       it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[3].name);
-        });
+        cy.drAddUserFromPermissionTab(USERS[3].name);
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
           cy.drAddGroupFromPermissionTab("Developers");
         });
       });
@@ -1387,7 +1389,7 @@ context("Receiving landing page test", () => {
 
     it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
@@ -1452,7 +1454,7 @@ context("Receiving landing page test", () => {
 
     it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
@@ -1491,13 +1493,15 @@ context("Receiving landing page test", () => {
       });
 
       it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[4].name);
-        });
+        cy.drAddUserFromPermissionTab(USERS[4].name);
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
           cy.drAddGroupFromPermissionTab("Can be approver");
         });
       });

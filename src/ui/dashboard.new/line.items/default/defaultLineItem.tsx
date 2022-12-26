@@ -1,26 +1,33 @@
 import { Grid, ListItemText, Typography } from "@material-ui/core";
 import React from "react";
 import { StyledListItem } from "../common/StyledListItem";
-import { styles } from "./defaultLineItem.styles";
+import useStyles from "./defaultLineItem.styles";
 
 interface Props {
   type: string;
   status?: string;
   onMouseHoverItem: (id: string) => void;
 }
-const approvalChangePresenter: React.FunctionComponent<Props> = ({
+
+const ApprovalChangePresenter: React.FC<Props> = ({
   type,
   status,
   onMouseHoverItem,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
 
   const onMouseHoverListItem = () => {
     onMouseHoverItem("");
   };
 
   return (
-    <StyledListItem button onMouseEnter={onMouseHoverListItem} className={classes.buttoncursor} disableRipple>
+    <StyledListItem
+      button
+      divider
+      disableRipple
+      className={classes.buttoncursor}
+      onMouseEnter={onMouseHoverListItem}
+    >
       <ListItemText
         primary={
           <Grid container={true}>
@@ -49,4 +56,4 @@ const approvalChangePresenter: React.FunctionComponent<Props> = ({
   );
 };
 
-export default approvalChangePresenter;
+export default ApprovalChangePresenter;

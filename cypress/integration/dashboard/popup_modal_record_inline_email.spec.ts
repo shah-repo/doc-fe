@@ -430,6 +430,10 @@ context("Records Inline approval email popup modal", () => {
   });
 
   context("Open record and add second approver", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Open record", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
         cy.contains("Record inline form").arrowClick();
