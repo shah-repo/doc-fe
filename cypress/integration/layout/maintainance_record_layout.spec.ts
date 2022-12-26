@@ -436,9 +436,9 @@ context("Layout Verification of maintainance records", () => {
     });
 
     it("Click on Add New Equipment button", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-        cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
-      });
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify equipment is created", () => {
@@ -998,19 +998,7 @@ context("Layout Verification of maintainance records", () => {
       });
 
       it("Approve first Inline Approval", () => {
-        cy.get("[data-cy='form.builder.request.approve']").contains("Approve").arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.SessionDetails,
-          CyRoutes.GetRequiredApproversDocRev,
-        ], () => {
-          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApproveWithoutApi();
       });
 
       it("Verify document is released The top left of the page displays: status(Released)", () => {
