@@ -106,10 +106,9 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
           addApprover(
             [requester],
             { manually: false },
-            () => {
-              updateWorkspace(value);
-            }
-          );
+          ).then(() => {
+            updateWorkspace(value);
+          });
         } else {
           updateWorkspace(value);
         }

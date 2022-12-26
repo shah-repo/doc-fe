@@ -29,7 +29,10 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
     });
   }
 
-  // MARK: @computed
+  @computed public get busy() {
+    return this.loading || this.approvalApi.loading || this.transitionApi.loading;
+  }
+
   @computed public get activeApprovals(): FBInlineApprovalBody[] {
     return filter(this.approvals, (a) => a.status !== "ABANDONED" && a.type === "MASTER");
   }
@@ -93,34 +96,29 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
   };
 
   public addApproval = (
-    approval: Partial<FBInlineApprovalBody>,
-    callback?: () => void
-  ) => {
-    this.approvalApi.set({
-      url: FBEndpoint.Approvals,
-      body: approval,
-      method: "post",
-    }, (data, error) => {
-      if (error) {
-        return this.approvalApi.onError(error);
-      }
-      if (data) {
-        this.upsertApproval(data);
-      }
-      this.approvalApi.data = data;
-      this.approvalApi.onSuccess();
-      callback?.();
-    });
-  };
+    approval: Partial<FBInlineApprovalBody>
+  ) => this.approvalApi.set({
+    url: FBEndpoint.Approvals,
+    body: approval,
+    method: "post",
+  }, (data, error) => {
+    if (error) {
+      return this.approvalApi.onError(error);
+    }
+    if (data) {
+      this.upsertApproval(data);
+    }
+    this.approvalApi.data = data;
+    this.approvalApi.onSuccess();
+  });
 
   public applyTransition = (
     transition: FBInlineApprovalTransition,
     id?: string,
-    body?: FBInlineApprovalTransitionBody,
-    callback?: () => void
+    body?: FBInlineApprovalTransitionBody
   ) => {
     if (!id) { return; }
-    this.transitionApi.set({
+    return this.transitionApi.set({
       url: FBEndpoint.ApprovalsTransition,
       urlValues: { id, transition },
       body,
@@ -134,34 +132,29 @@ class FBPOApprovalsState extends FBRequest<FBRequiredApprover[], {"ids[]": strin
       }
       this.transitionApi.data = data;
       this.transitionApi.onSuccess();
-      callback?.();
     });
   };
 
   public updateSignatureGroupName = (
     id: string,
-    signatureGroupName: string,
-    callback?: () => void
-  ) => {
-    this.updateApi.set({
-      url: FBEndpoint.ApprovalsUpdate,
-      urlValues: { id },
-      body: {
-        signatureGroupName,
-      },
-      method: "post",
-    }, (data, error) => {
-      if (error) {
-        return this.updateApi.onError(error);
-      }
-      if (data) {
-        this.upsertApproval(data);
-      }
-      this.updateApi.data = data;
-      this.updateApi.onSuccess();
-      callback?.();
-    });
-  };
+    signatureGroupName: string
+  ) => this.updateApi.set({
+    url: FBEndpoint.ApprovalsUpdate,
+    urlValues: { id },
+    body: {
+      signatureGroupName,
+    },
+    method: "post",
+  }, (data, error) => {
+    if (error) {
+      return this.updateApi.onError(error);
+    }
+    if (data) {
+      this.upsertApproval(data);
+    }
+    this.updateApi.data = data;
+    this.updateApi.onSuccess();
+  });
 }
 
 export default FBPOApprovalsState;
