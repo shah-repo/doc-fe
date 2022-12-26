@@ -1,4 +1,4 @@
-import { get, has, isEmpty, isEqual, omit } from "lodash";
+import { has, isEmpty, isEqual, omit } from "lodash";
 import { toJS } from "mobx";
 
 const clearMobxObject = (value) => typeof value === "object" ?
@@ -68,7 +68,7 @@ export const compareValuesToSubmit = (initialValues, values, transformMethod) =>
   const formInputDiff = getFormInputDiff(transformedValues, transformedInitialValues);
 
   // Added in case maintenance is created outside of EQ Maintenance
-  const equipmentId = get(transformedValues, "formInput.equipment_id");
+  const equipmentId = initialValues?.parentEquipment?.id;
   if (!isEmpty(equipmentId)) {
     diff = {
       ...diff,
