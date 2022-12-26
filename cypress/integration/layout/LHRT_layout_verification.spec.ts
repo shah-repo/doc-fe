@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
 import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -424,9 +423,13 @@ context("Create new LHRT Layout Verification", () => {
     context("Click on Form Preview and verify the fields", () => {
       it("Click 'Preview Layout' button", () => {
         cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
+        cy.listLoadingElementShouldExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify Step 2 Added to detail tab", () => {
+        cy.get(".MuiDialogContent-root").scrollTo("bottom");
+        cy.get(".MuiDialogContent-root [data-cy='tabCon-tabId.details']").arrowClick({ force: true });
         cy.get("[data-cy='LHR Step 2']").should("be.visible");
       });
 
@@ -494,9 +497,13 @@ context("Create new LHRT Layout Verification", () => {
 
       it("Click 'Preview Layout' button", () => {
         cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
+        cy.listLoadingElementShouldExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify Step 2 Added to detail tab", () => {
+        cy.get(".MuiDialogContent-root [data-cy=\"tabCon-tabId.details\"]").arrowClick({ force: true });
+        cy.get("[data-cy='LHR Step 2']").last().scrollIntoView();
         cy.get("[data-cy='LHR Step 2']").should("be.visible");
       });
 

@@ -1,4 +1,4 @@
-import { IconButton, ListItemIcon, ListItemText, MenuItem } from "@material-ui/core";
+import { ListItemIcon, ListItemText, MenuItem } from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
@@ -32,9 +32,7 @@ const UserMenuPresenter: React.FunctionComponent<Props> = ({
 
   return (
     <>
-      <IconButton id="UserMenuButton" data-cy="UserMenuButton">
-        <MoreHorizIcon fontSize="small"  style={{ color: Colors.white }}  />
-      </IconButton>
+      <MoreHorizIcon fontSize="small" style={{ color: Colors.white }} id="UserMenuButton" data-cy="UserMenuButton" />
       <Menu
         id="UserMenu"
         anchorEl={anchorEl}

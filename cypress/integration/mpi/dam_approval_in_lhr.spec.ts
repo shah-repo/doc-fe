@@ -1,6 +1,5 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
-
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
@@ -770,6 +769,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
         cy.url().then((url: any) => {
           lhrUrl = url;
@@ -781,7 +781,8 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click on sidebar permission icon to add group", () => {
-        cy.get("[data-cy='permission-icon']").arrowClick().wait(2000);
+        cy.get("[data-cy='permission-icon']").arrowClick();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add another group", () => {
@@ -806,12 +807,10 @@ context("DAM approvals in LHR", () => {
       });
 
       it(`Assign operator '${USERS[3].name}'`, () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
           cy.drAssignDocumentTo({ username: USERS[3].name });
         });
-        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        // cy.wait(2000);
       });
     });
 
@@ -821,6 +820,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Verify no approver should be selected", () => {
+        cy.drSelectDetailsTab();
         cy.get("[data-cy='form.builder.approvals']").parent().parent().parent().parent()
           .find(".MuiChip-deletable").should("not.exist");
       });
@@ -996,8 +996,9 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Submit for approval", () => {
-        cy.lhrSubmitForApproval();
-        cy.wait(2000);
+        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+          cy.lhrSubmitForApproval();
+        });
       });
 
       it("Select Details tab", () => {
@@ -1069,8 +1070,11 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Open approval roles tab", () => {
-        cy.drSelectApprovalRolesTab();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it(`Add ${USERS[4].name} in approving users`, () => {
@@ -1110,6 +1114,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
         cy.url().then((url: any) => {
           lhrUrl1 = url;
@@ -1123,20 +1128,22 @@ context("DAM approvals in LHR", () => {
       it("Click on sidebar permission icon to add group", () => {
         cy.cmpTurnOnAutosave();
         cy.drSelectPermissionTab();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
       });
 
       it(`Assign operator ${USERS[3].name}`, () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
           cy.drAssignDocumentTo({ username: USERS[3].name });
         });
-        cy.wait(2000);
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Assign operator ${USERS[4].name}`, () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
           cy.drAssignDocumentTo({ username: USERS[4].name });
         });
-        cy.wait(2000);
       });
     });
 
@@ -1244,8 +1251,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Open approval roles tab", () => {
-        cy.drSelectApprovalRolesTab();
-        cy.listLoadingElementShouldNotExist();
+        cy.drSelectApprovalRolesTabWithoutApi();
       });
 
       it(`Remove ${USERS[4].name} in approving users`, () => {
@@ -1290,6 +1296,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
         cy.url().then((url: any) => {
           lhrUrl2 = url;
@@ -1301,18 +1308,19 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click on sidebar permission icon to add group", () => {
-        cy.get("[data-cy='permission-icon']").arrowClick().wait(2000);
+        cy.get("[data-cy='permission-icon']").arrowClick();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Assign operator ${USERS[3].name}`, () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
           cy.drAssignDocumentTo({ username: USERS[3].name });
         });
-        cy.wait(2000);
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Assign operator ${USERS[4].name}`, () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
           cy.drAssignDocumentTo({ username: USERS[4].name });
         });
       });
@@ -1448,6 +1456,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
       });
 
@@ -1552,6 +1561,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
       });
 
@@ -1705,7 +1715,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Submit for approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
           cy.lhrSubmitForApproval();
         });
       });
@@ -1841,6 +1851,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("New owner can add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
       });
 
@@ -1939,8 +1950,9 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Submit for approval", () => {
-        cy.lhrSubmitForApproval();
-        cy.wait(2000);
+        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+          cy.lhrSubmitForApproval();
+        });
       });
 
       it("Select Details tab", () => {
@@ -1997,8 +2009,9 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Submit for approval", () => {
-        cy.lhrSubmitForApproval();
-        cy.wait(2000);
+        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
+          cy.lhrSubmitForApproval();
+        });
       });
 
       it("Select Details tab", () => {

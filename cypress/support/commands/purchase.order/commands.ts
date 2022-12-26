@@ -78,9 +78,12 @@ declare global {
       poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
       poApprove(): Chainable<Subject>;
+      poApproveWithoutApi(): Chainable<Subject>;
       poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
       poCheckOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poBuildInStatus(params: {status: string}): Chainable<Subject>;
+      verifyPoApprovalSignature(params: {name: string; email: string}): Chainable<Subject>;
+      verifyPoApprovalDisabled(params: {name: string; email: string}): Chainable<Subject>;
     }
   }
 }
@@ -113,7 +116,8 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("poAddNewFieldItem", () => {
-  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick().wait(500);
+  cy.get("button[data-cy=\"fb-control-btn\"]").contains("ADD LINE ITEM").arrowClick({ force: true });
+  cy.wait(500);
 });
 
 Cypress.Commands.add("poAddPOButtonClick", () => {
@@ -125,6 +129,18 @@ Cypress.Commands.add("poCreateNew", () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
   cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("verifyPoApprovalSignature", (params) => {
+  cy.get(`[data-cy*="fb-po-approvals-"]`).parent().parent().should("contain", `${params.name} - ${params.email}`);
+  cy.contains("PO Approval sig");
+  cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(params.name + " | DRAFT" + params.email);
+});
+
+Cypress.Commands.add("verifyPoApprovalDisabled", (params) => {
+  cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${params.name} - ${params.email}`);
+  cy.get(`input[data-cy^="fb-po-approvals-"]`).parent()
+    .find(`[class="MuiChip-root MuiAutocomplete-tag Mui-disabled MuiChip-deletable"]`).should("exist");
 });
 
 Cypress.Commands.add("poClickCreatePO", () => {
@@ -199,7 +215,7 @@ Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {
 });
 
 Cypress.Commands.add("poAddDateRequired", () => {
-  cy.xpath("//input[@name]/ ../div/button").arrowClick();
+  cy.xpath("//input[@name]/ ../div/button").arrowClick({ force: true });
   cy.xpath("//div[@class=\"MuiPickersCalendar-week\"] [last()]/div[@role=\"presentation\"]/button[not(@tabindex=\"-1\")]").last()
     .click();
 });
@@ -209,7 +225,9 @@ Cypress.Commands.add("poCheckDateRequired", (params: { dateRequired: string }) =
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
-  cy.get("[name*=\"shippingCost\"]").arrowClick().arrowType("{leftarrow}{leftarrow}{leftarrow}{leftarrow}" + params.number);
+  cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick();
+  cy.get(`[name*="po-items-built-in.shippingCost"]`).arrowType("{leftarrow}{leftarrow}{leftarrow}" + params.number);
+  cy.unClick();
 });
 
 Cypress.Commands.add("poCheckShippingCost", (params: {cost: string}) => {
@@ -227,6 +245,7 @@ Cypress.Commands.add("poCheckCurrency", () => {
 
 Cypress.Commands.add("poSelectCurrency", (params: { currencyValue: string }) => {
   cy.get("ul[role=listbox] > li").contains(params.currencyValue).arrowClick();
+  cy.unClick();
 });
 
 Cypress.Commands.add("poSelectTaxCheckbox", () => {
@@ -455,6 +474,17 @@ Cypress.Commands.add("poApprove", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
     cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("poApproveWithoutApi", () => {
+  cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
+  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.unClick();
+  cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

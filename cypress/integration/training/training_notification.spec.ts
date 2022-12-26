@@ -11,7 +11,6 @@ import { LINE_ITEMS_STATUS_TYPES, STATUS_TYPES_LABEL, TrainingStatus } from "../
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, momentInPST, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
@@ -65,9 +64,9 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -75,8 +74,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -84,7 +83,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -324,7 +323,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -332,19 +331,19 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter document title 'test training form title'", () => {
@@ -366,23 +365,29 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     it("Select 'Training Curriculum test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Create a document", () => {
     it("Document with Released status", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drEnterDocumentTitle({ name: "released form" });
       cy.drEnterDocumentDescription({ description: "test description" });
       cy.drSelectDocumentType({ documentType: "Form" });
@@ -390,10 +395,14 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.get("#Checkbox-box").arrowClick();
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedFormId = x.text(); });
     });
@@ -402,19 +411,22 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'training title'", () => {
@@ -430,29 +442,31 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
-    });
-
-    it("Click Refresh on 'Document to trained on'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
-      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select refresh training periodically 'Yes'", () => {
       cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training refresh period days", () => {
       cy.get("[name=training-validity]").arrowType("5");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Trainee Details should be present", () => {
@@ -460,79 +474,95 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Select First User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Second User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Third User to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[3].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[13].name}`);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.wait(10000);
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.wait(10000);
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
-      cy.wait(10000);
+      cy.trApproveTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigate to Training Records and check separate training record for each user", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`${USERS[1].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+    it(`${USERS[11].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
+      cy.trLandingPageUsername({ username: USERS[11].name }).wait(500);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name).and("contain", "Pending");
     });
 
-    it(`${USERS[2].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+    it(`${USERS[12].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[2].name).and("contain", "Pending");
+      cy.trLandingPageUsername({ username: USERS[12].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[12].name).and("contain", "Pending");
     });
 
-    it(`${USERS[3].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+    it(`${USERS[13].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[3].name }).wait(500);
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[3].name).and("contain", "Pending");
+      cy.trLandingPageUsername({ username: USERS[13].name }).wait(500);
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[13].name).and("contain", "Pending");
     });
   });
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
@@ -557,6 +587,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("Check for training complete and check training ID, Title", () => {
       cy.get("button[data-cy=\"training-complete\"]").contains("Complete training").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("form>div").should("contain.text", "TRN ID");
       cy.get("form>div>div:nth-child(1)").should("contain.text", "TRN-00001");
       cy.get("form>div>div:nth-child(1)").should("be.visible");
@@ -576,17 +608,14 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Check if trainee name is correct", () => {
-      cy.get("[role='dialog']").should("contain.text", USERS[1].name);
-      cy.get("[role='dialog']").contains(USERS[1].name).should("be.visible");
+      cy.get("[role='dialog']").should("contain.text", USERS[11].name);
+      cy.get("[role='dialog']").contains(USERS[11].name).should("be.visible");
     });
 
     it("Click on acknowladge", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCompleteTraining], () => {
-          cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-          cy.progressBarShouldAppear();
-        });
+      cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
     });
@@ -595,6 +624,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   context("Revise document and goes it to Approved status", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filters document by name and status, and select it", () => {
@@ -603,6 +634,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("Clicks on revise document", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Edit document description", () => {
@@ -610,17 +643,17 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
+      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[12].name}`]);
     });
 
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        email: USERS[12].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
 
@@ -635,7 +668,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        email: USERS[11].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
 
@@ -656,20 +689,24 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`${USERS[1].name} with Pending on 'COMPLETED ON' column should be present`, () => {
+    it(`${USERS[11].name} with Pending on 'COMPLETED ON' column should be present`, () => {
       cy.trClearFilters();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.wait(5000);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.get("[data-grid-row-index]").should("have.length", 1);
       cy.get(`[data-grid-row-index]`).should("contain", releasedFormId)
-        .and("contain", USERS[1].name).and("contain", "Pending");
+        .and("contain", USERS[11].name).and("contain", "Pending");
       cy.get(`[data-grid-col-index="0"]`).invoke("text").then(($el) => {
         trnId = $el;
       });
@@ -713,8 +750,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
+          sentToUser: USERS[11].email,
+          contains: [`Hello <b>${USERS[11].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -770,7 +807,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
         tmpRegex = new RegExp( trnId, "gi" );
         expect(cdata.text).match(tmpRegex);
 
-        tmpRegex = new RegExp(`${USERS[1].name}`, "gi");
+        tmpRegex = new RegExp(`${USERS[11].name}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 2`, "gi");
@@ -779,7 +816,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
         tmpRegex = new RegExp(`Title\nreleased form`, "gi");
         expect(cdata.text).match(tmpRegex);
 
-        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 2\\n${USERS[1]
+        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 2\\n${USERS[11]
           .name} \\| Trainee \\| Not Completed`, "gi");
         expect(cdata.text).match(tmpRegex);
 
@@ -796,7 +833,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
   context("Check the completed training notification", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -814,15 +851,20 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`${USERS[1].name} with timestamp on 'COMPLETED ON' column should be present`, () => {
+    it(`${USERS[11].name} with timestamp on 'COMPLETED ON' column should be present`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released form" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: releasedFormId });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
       cy.trLandingPageCompletedOn({ completed: "Last 7 days" });
       cy.get("[data-grid-row-index]").should("have.length", 1);
       cy.get(`[data-grid-row-index]`).should("contain", releasedFormId)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get(`[data-grid-col-index="0"]`).invoke("text").then(($el) => {
         trnId = $el;
       });
@@ -866,8 +908,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     it("Verify the emails that should be received", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[1].email,
-          contains: [`Hello <b>${USERS[1].name},</b>`,
+          sentToUser: USERS[11].email,
+          contains: [`Hello <b>${USERS[11].name},</b>`,
             "Your documents are ready for download.",
             "<button type=\"button\">DOWNLOAD</button>",
             createdCompany.id],
@@ -925,7 +967,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
         tmpRegex = new RegExp( trnId, "gi" );
         expect(cdata.text).match(tmpRegex);
 
-        tmpRegex = new RegExp(`${USERS[1].name}`, "gi");
+        tmpRegex = new RegExp(`${USERS[11].name}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc ID Rev\\n${releasedFormId} Rev 1`, "gi");
@@ -934,7 +976,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
         tmpRegex = new RegExp(`Title\nreleased form`, "gi");
         expect(cdata.text).match(tmpRegex);
 
-        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[1]
+        tmpRegex = new RegExp(`I completed training on ${releasedFormId} Rev 1\\n${USERS[11]
           .name} \\| Trainee \\| ${pdfDocRelDate}`, "gi");
         expect(cdata.text).match(tmpRegex);
 
@@ -952,6 +994,9 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
   context("Verify email for completed training notification", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Clear filters", () => {
@@ -1045,11 +1090,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
             }
           });
       });
-
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-          cy.get("#confirmEffectiveDate").arrowClick();
-        });
+      cy.get("#confirmEffectiveDate").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -1077,6 +1118,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(10000);
     });
 
     it("Verify the time travel will appear in History list as 'Requested'", () => {
@@ -1088,12 +1130,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
-      cy.wait(20000);
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.reload();
-        });
+      cy.wait(10000);
+      cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("tr.k-master-row").should("have.length", 1);
@@ -1106,7 +1144,11 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
   context("Verify ASSIGN DATE and Due Date are adjusted accordingly", () => {
     it("Navigate to Training Records", () => {
+      cy.wait(60000);
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Clear filters", () => {
@@ -1163,6 +1205,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
 
     it("Clear filters", () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify AR ID as ${aRID}`, () => {

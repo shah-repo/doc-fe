@@ -675,6 +675,8 @@ context("Export Part Lot", () => {
       it("Finalize and release button click'", () => {
         cy.reload();
         cy.recFinalizeAndReleaseRecord();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist().wait(500);
       });
 
       it("Verify export", () => {
@@ -693,7 +695,7 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click Cancel draft", () => {

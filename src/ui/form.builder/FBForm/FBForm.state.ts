@@ -55,7 +55,7 @@ class FBFormState extends FBSchemaState {
     return lodashGet(window, "EnlilRemoteValidators.validator");
   }
 
-  @computed public get shouldValidate(): boolean {
+  public get shouldValidate(): boolean {
     return !FBWorkspaceSkipValidationModes.some((mode) => this.workspaceMode === mode);
   }
 
@@ -254,6 +254,9 @@ class FBFormState extends FBSchemaState {
       const rulesArray = value?.split("|");
       const valuesArray: any = [];
       map(rulesArray, (val) => {
+        if (!val) {
+          return;
+        }
         const splitVal = val.split(":");
         if (splitVal.length === 1) {
           parsedRules[key] = val;
@@ -322,7 +325,7 @@ class FBFormState extends FBSchemaState {
     const inputState = this.inputState.get(name);
     if (!inputState) { return; }
     const formValue = cloneDeep(this.getFieldValue(name));
-    inputState.setAutosaveValue(cloneDeep(formValue));
+    inputState.setAutosaveValue(formValue);
   };
 
   public lockField = (

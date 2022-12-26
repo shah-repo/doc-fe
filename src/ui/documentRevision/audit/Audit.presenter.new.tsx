@@ -365,10 +365,14 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
                 </Typography>
               )}
               {(isFBField || isSmartRef) && (
-                <FBText
-                  locale={`form.builder.audit.${change.type}`}
-                  values={{ label: fbLabel }}
-                />
+                <Typography
+                  className={classes.auditKey}
+                >
+                  <FBText
+                    locale={`form.builder.audit.${change.type}`}
+                    values={{ label: fbLabel }}
+                  />
+                </Typography>
               )}
             </>
             <div className={classes.auditValue}>

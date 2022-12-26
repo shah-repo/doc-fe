@@ -67,9 +67,9 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolNotRedline,
               { ...TrainingCurriculum, documentTypeName: "Training Curriculum Test" },
@@ -77,8 +77,8 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           trainingCurriculumDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Training Curriculum Test");
@@ -90,7 +90,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -591,11 +591,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
-    });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
   });
 
@@ -610,6 +606,8 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
       cy.get("#Checkbox-box").arrowClick();
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drClickCreateDocumentWithApiCall();
       cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
@@ -622,10 +620,15 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
@@ -635,6 +638,8 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .autocompleteSelect("Training Curriculum test");
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'training title'", () => {
@@ -651,6 +656,9 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
     it("Click save document", () => {
       cy.drClickCreateDocumentWithApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Open details tab", () => {
@@ -670,8 +678,8 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
 
     it("Select 2 Users to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -679,9 +687,9 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
@@ -689,7 +697,9 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -697,13 +707,15 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
       cy.pmSubmitForApproval();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -712,20 +724,26 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
     it("Click Approve", () => {
       cy.trApproveTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc1` });
     });
 
-    it(`Login user ${USERS[2].name} to dashboard`, () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+    it(`Login user ${USERS[12].name} to dashboard`, () => {
+      cy.authLoginToDashboard({ USER: USERS[12], employeeId: secondEmployee.id });
     });
 
     it("Verify training notification", () => {
@@ -735,7 +753,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
   context("Login user", () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
 
     it("Turn off autosave", () => {
@@ -746,6 +764,8 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
   context("Use time tool to travel user back to future", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task TIME_TRAVEL_USER", () => {
@@ -768,6 +788,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(15000);
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
@@ -783,7 +804,11 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
+      cy.wait(50000);
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", { retries: 3 }, () => {
@@ -809,8 +834,8 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
     it("Check if pop-up modal has pending trainings with 2 users", () => {
       cy.get("h2").should("contain.text", "DUE IN 7 DAYS (2)");
-      cy.get("[class='MuiCollapse-wrapperInner']").eq(-1).should("contain.text", USERS[1].name)
-        .and("contain.text", USERS[2].name);
+      cy.get("[class='MuiCollapse-wrapperInner']").eq(-1).should("contain.text", USERS[11].name)
+        .and("contain.text", USERS[12].name);
       cy.get("h2").should("contain.text", "DUE IN 7 DAYS (2)");
     });
 
@@ -830,7 +855,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
   });
 
-  context(`Verify email for pending training notification to ${USERS[1].name}`, () => {
+  context(`Verify email for pending training notification to ${USERS[11].name}`, () => {
     it("Verify emails", () => {
       getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -851,9 +876,9 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
         .format("MMM D, YYYY");
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[1].email,
+          sentToUser: USERS[11].email,
           contains: ["Your training is coming due soon...",
-            `Hi ${USERS[1].name}`,
+            `Hi ${USERS[11].name}`,
             "FM-00002\r\n                                        released doc1</strong></u> is due on",
             `${dueDate}`,
             "Thank you,",
@@ -872,23 +897,30 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
     it("Get emails and visit training page", () => {
       getEmailSetting =  {
-        to: USERS[1].email,
+        to: USERS[11].email,
         after: dateAfterEmailShouldArrive,
         subject: "Your training is due",
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
-      cy.imapGetRecordRequestLink({ userEmail: USERS[1].email, options: getEmailSetting });
+      cy.imapGetRecordRequestLink({ userEmail: USERS[11].email, options: getEmailSetting });
     });
 
     it("click complete training button", () => {
       cy.trCompleteTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
+      cy.wait(5000);
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Trainings' tab", () => {
@@ -903,7 +935,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
     it("Check if pop-up modal has pending trainings with 1 user", () => {
       cy.get("h2").should("contain.text", "DUE IN 7 DAYS (1)");
-      cy.get("[class='MuiCollapse-wrapperInner']").eq(-1).should("contain.text", USERS[2].name);
+      cy.get("[class='MuiCollapse-wrapperInner']").eq(-1).should("contain.text", USERS[12].name);
       cy.get("h2").should("contain.text", "DUE IN 7 DAYS (1)");
     });
 
@@ -918,13 +950,13 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
   });
 
-  context(`Login user as ${USERS[2].name}`, () => {
+  context(`Login user as ${USERS[12].name}`, () => {
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[12], employeeId: secondEmployee.id });
     });
   });
 
-  context(`Verify email for pending training notification to ${USERS[2].name}`, () => {
+  context(`Verify email for pending training notification to ${USERS[12].name}`, () => {
     it("Verify emails", () => {
       getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
@@ -945,9 +977,9 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
         .format("MMM D, YYYY");
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
-          sentToUser: USERS[2].email,
+          sentToUser: USERS[12].email,
           contains: ["Your training is coming due soon...",
-            `Hi ${USERS[2].name}`,
+            `Hi ${USERS[12].name}`,
             "FM-00002\r\n                                        released doc1</strong></u> is due on",
             `${dueDate}`,
             "Thank you,",
@@ -966,23 +998,29 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
 
     it("Get emails and visit training page", () => {
       getEmailSetting =  {
-        to: USERS[2].email,
+        to: USERS[12].email,
         after: dateAfterEmailShouldArrive,
         subject: "Your training is due",
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
-      cy.imapGetRecordRequestLink({ userEmail: USERS[2].email, options: getEmailSetting });
+      cy.imapGetRecordRequestLink({ userEmail: USERS[12].email, options: getEmailSetting });
     });
 
     it("click complete training button", () => {
       cy.trCompleteTraining();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
       cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("'Due in 7 days' should not exist", () => {

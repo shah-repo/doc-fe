@@ -23,13 +23,15 @@ export const withFBPurchaseOrderForm = <T extends FBPurchaseOrderFormProps>(
     formState = FB.useRef<FBFormState>(FBFormState, { initialValues });
 
     React.useEffect(() => {
+      const item = formState?.getValues() as FBPurchaseOrderItem;
+      purchaseOrderState?.setPartNumber(item.partNumber);
       formState?.setFieldValue("type", get(initialValues, "type") || "product");
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     handlePartTitle = (_ev: any, value?: DocumentRevision) => {
       const item = formState?.getValues() as FBPurchaseOrderItem;
-      purchaseOrderState?.sePartNumber(item.partNumber);
+      purchaseOrderState?.setPartNumber(item.partNumber);
       formState?.setFieldValue("partNumberTitle", value?.name, true);
       formState?.setFieldValue("partNumberDocId", generateDocIdLabel(value));
     };

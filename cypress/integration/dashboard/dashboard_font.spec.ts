@@ -1521,6 +1521,9 @@ context("Dashboard notification font test", { tags: ["@timetool"] }, () => {
 
     it("Enter 'Accepted quntity' for LHRs #1", () => {
       cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("1");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Click save document", () => {

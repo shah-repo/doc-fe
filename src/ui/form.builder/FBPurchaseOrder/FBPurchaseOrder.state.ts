@@ -73,7 +73,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     set(this, "value", { ...initialValues, items });
   }
 
-  @action public sePartNumber = (partNumber?: string) => {
+  @action public setPartNumber = (partNumber?: string) => {
     set(this, "hasPartNumber", (!isUndefined(partNumber) && !isEmpty(partNumber)));
   };
 

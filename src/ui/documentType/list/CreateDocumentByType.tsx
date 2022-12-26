@@ -1,4 +1,3 @@
-import { Box } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { Formik, FormikProps } from "formik";
@@ -7,7 +6,6 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { companySelectors } from "../../../state/ducks/company";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
@@ -19,11 +17,12 @@ import { DocumentProposedId } from "../../../state/ducks/documents/types";
 import { userManagementSelectors } from "../../../state/ducks/userManagement";
 import { ApplicationState } from "../../../state/reducers";
 import { AsyncState } from "../../../state/types";
+import ExportListIcon from "../../components/common/kendo/ExportListIcon";
 import { OptionType } from "../../components/forms/fields/Autocomplete/types";
 import { FormContext } from "../../components/forms/FormContext";
 import GridTitle from "../../components/KendoGrid/GridTitle/presenter";
-import Text from "../../components/Text";
 import { toastError } from "../../components/notifications";
+import Text from "../../components/Text";
 import ExportListDialog from "../../document.revision/list/ExportListDialog/ExportListDialog";
 import { documentVersionPath } from "../../document.revision/utils/paths";
 import { toDocumentRevisionFormValuesForOutput, toNewVersionRequestBody } from "../../documentRevision/forms/transform";
@@ -48,6 +47,7 @@ interface Props {
   categoryName?: string;
   headers: HeaderTableType[];
   tableData: any[];
+  isGrouped: boolean;
 }
 
 let selectedTypeLabel = "";
@@ -126,6 +126,7 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
   categoryName = "",
   isByCategory,
   headers,
+  isGrouped,
   tableData,
 }) => {
   const title = useSelector((state: ApplicationState) => companySelectors.getNavigationTitle(state, categoryName));
@@ -315,10 +316,9 @@ const CreateDocumentByType: React.FunctionComponent<Props> = ({
             id="ListPresenter-export-list"
             data-cy="document.revision.export.list"
             onClick={exportDialog.open}
+            disabled ={isGrouped}
           >
-            <Box display="flex">
-              <ExportIcon className={classes.iconSvg} height={14} width={14}/>
-            </Box>
+            <ExportListIcon isGrouped={isGrouped} />
             <Text translation="document.revision.export.list" />
           </Button>
           <ExportListDialog

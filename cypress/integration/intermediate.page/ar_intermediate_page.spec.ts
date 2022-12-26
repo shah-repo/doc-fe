@@ -460,20 +460,6 @@ context("Intermediate page validation", () => {
         .find("[data-cy='fileupload-5']").should("exist");
     });
 
-    it("Upload attachment test.docx", () => {
-      cy.fixture("test.docx").then((fileContent) => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).eq(1).attachFile({
-            fileContent: fileContent.toString(),
-            fileName: "test.docx",
-            mimeType: "*",
-            filePath: `fixtures/test.docx`,
-          });
-        });
-      });
-      cy.unClick();
-    });
-
     it("Make sure Field 3 (Datepicker) is displayed as required", () => {
       cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
         .find(".MuiFormHelperText-root.Mui-error").contains("The fb-datepicker is a required field.");

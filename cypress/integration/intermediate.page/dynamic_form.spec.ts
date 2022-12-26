@@ -65,6 +65,10 @@ context(
         it("Clicks on 'create a document' button", () => {
           cy.cmpClickCreateNewDocument();
         });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
+        });
       });
 
       context(
@@ -195,6 +199,10 @@ context(
             cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
             cy.fbAddNewFieldButton();
           });
+
+          it("Click save document", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+          });
         });
 
         context("Verify Form fields in non preivew mode", () => {
@@ -225,6 +233,12 @@ context(
         context("Verify Form fields in preview mode", () => {
           it("Open Preview dialog", () => {
             cy.fbClickButton({ el: "FBWorkspace-clickView" });
+          });
+
+          it("Navigate to Detail Tab", () => {
+            cy.get(`[data-cy="tabId.details"]`).last().arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
           });
 
           it("Add and check Quantity field", () => {
@@ -308,6 +322,13 @@ context(
             cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
             cy.fbAddNewFieldButton();
           });
+
+          it("Click save document", () => {
+            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.reload();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+          });
         });
 
         context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
@@ -316,19 +337,19 @@ context(
           });
 
           it("Verify Text field with range", () => {
-            cy.get("[name^='fb-range-']").should("exist");
+            cy.get(".MuiDialogContent-root [name^='fb-range-']").should("be.visible");
           });
 
           it("Verify Paragraph", () => {
-            cy.contains("fb-paragraph").should("exist");
+            cy.get(".MuiDialogContent-root").contains("fb-paragraph").should("be.visible");
           });
 
           it("Verify Evidence Media Upload", () => {
-            cy.contains("fb-evidence").should("exist");
+            cy.get(".MuiDialogContent-root").contains("fb-evidence").should("be.visible");
           });
 
           it("Verify instructions media", () => {
-            cy.get("[data-cy='fb-instructions']").should("exist");
+            cy.get(".MuiDialogContent-root [data-cy='fb-instructions']").should("be.visible");
           });
 
           it("Close Preview dialog", () => {
@@ -355,11 +376,11 @@ context(
           });
 
           it("Verify Paragraph", () => {
-            cy.get(".MuiDialogContent-root>div>div").eq(0).contains("fb-paragraph").should("exist");
+            cy.get(".MuiDialogContent-root").contains("fb-paragraph").should("exist");
           });
 
           it("Verify Text field with range", () => {
-            cy.get(`[role="dialog"] [data-cy="textfieldwithrange-4"]`).should("exist");
+            cy.get(`[role="dialog"] [data-cy^="textfieldwithrange"]`).should("exist");
           });
 
           it("Verify Text field with range", () => {
