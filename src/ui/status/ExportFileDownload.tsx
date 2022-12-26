@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Box, Paper, Typography } from "@material-ui/core";
 import moment from "moment";
 import queryString from "query-string";

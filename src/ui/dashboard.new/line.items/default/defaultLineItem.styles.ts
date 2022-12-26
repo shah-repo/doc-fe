@@ -1,26 +1,6 @@
-import { createStyles, makeStyles } from "@material-ui/core";
-import Colors from "../../../layout/theme/utils/colors";
+import { makeStyles } from "@material-ui/core";
+import { lineItemStyles } from "../common/styles";
 
-export const styles = makeStyles(() =>
-  createStyles({
-    link: {
-      color: Colors.black,
-    },
-    typography: {
-      fontSize: "14px",
-      fontWeight: 400,
-      letterSpacing: 0,
-    },
-    buttoncursor: {
-      cursor: "unset",
-    },
-    typographyBold: {
-      fontSize: "14px",
-      fontWeight: 600,
-      letterSpacing: 0,
-    },
-    margin5: {
-      marginRight: "5px",
-    },
-  })
-);
+export default makeStyles((theme) => ({
+  ...lineItemStyles(theme),
+}));

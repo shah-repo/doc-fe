@@ -36,6 +36,7 @@ declare global {
 }
 
 Cypress.Commands.add("dtmClickAddDocumentType", () => {
+  cy.get("button").contains("Add Document Type").scrollIntoView();
   cy.get("button").contains("Add Document Type").arrowClick();
 });
 

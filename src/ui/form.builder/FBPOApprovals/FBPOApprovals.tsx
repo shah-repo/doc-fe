@@ -38,16 +38,16 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
           {...{ label }}
         />
         <FBAutocompleteAsync
+          name={name}
           label="form.builder.approvers"
-          name={`${name}`}
           optionId={FBAutocompleteAsyncOption.availableApprovers}
-          withState
           gutter={false}
-          multiple={true}
-          omitFormValue={true}
-          filterSelectedOptions={true}
-          disableClearable={true}
-          disableBackspace={true}
+          multiple
+          withState
+          omitFormValue
+          filterSelectedOptions
+          disableClearable
+          disableBackspace
           {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
         />
         <Box display="flex" flexWrap="wrap" my={2}>

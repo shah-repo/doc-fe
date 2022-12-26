@@ -1,16 +1,12 @@
-import { Divider, List } from "@material-ui/core";
+import { List } from "@material-ui/core";
 import React from "react";
 import { ActionCreator } from "redux";
 import { getHumanizedFormat } from "../../../common/utils/date";
-import {
-  RecentItems,
-  RecentTypes,
-} from "../../../state/ducks/dashboard.new/recents/types";
+import { RecentItems, RecentTypes } from "../../../state/ducks/dashboard.new/recents/types";
 import { ApiAction, AsyncState } from "../../../state/types";
 import AsyncGate from "../../components/AsyncGate";
 import Text from "../../components/Text";
 import RecentsItem from "./Recents.item";
-import { styles } from "./Recents.styles";
 
 interface Props {
   loadRecents: ActionCreator<ApiAction<RecentItems[], any>>;
@@ -18,47 +14,28 @@ interface Props {
   recents: RecentItems[];
 }
 
-const RecentsPresenter: React.FunctionComponent<Props> = ({
+const RecentsPresenter: React.FC<Props> = ({
   loadRecents,
   loadRecentsListAsyncState,
   recents,
 }) => {
-  const classes = styles();
   const renderItems = () => (
-    <List className={classes.root}>
+    <List>
       {recents.map((data, index) => {
         switch (data.itemType) {
           case RecentTypes.DOCUMENT:
-            return (
-              <>
-                <RecentsItem
-                  key={index}
-                  itemId={data.itemId}
-                  docId={data.docId}
-                  itemType={data.itemType}
-                  docTypeGroup={data.docTypeGroup}
-                  docRevId={data.docRevId}
-                  docTitle={data.docTitle}
-                  accessedAt={getHumanizedFormat(data.accessedAt)}
-                />
-                <Divider />
-              </>
-            );
           case RecentTypes.CHANGE_REQUEST:
             return (
-              <>
-                <RecentsItem
-                  key={index}
-                  itemId={data.itemId}
-                  docId={data.docId}
-                  itemType={data.itemType}
-                  docTypeGroup={data.docTypeGroup}
-                  docRevId={data.docRevId}
-                  docTitle={data.docTitle}
-                  accessedAt={getHumanizedFormat(data.accessedAt)}
-                />
-                <Divider />
-              </>
+              <RecentsItem
+                key={data.itemId}
+                itemId={data.itemId}
+                docId={data.docId}
+                itemType={data.itemType}
+                docTypeGroup={data.docTypeGroup}
+                docRevId={data.docRevId}
+                docTitle={data.docTitle}
+                accessedAt={getHumanizedFormat(data.accessedAt)}
+              />
             );
           default:
             return <Text key={index} translation="common.undefined" />;

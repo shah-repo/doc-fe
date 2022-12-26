@@ -624,7 +624,7 @@ context("Layout Verification of EQ", () => {
 
     it("Verify Click on Specification Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.isTabActive({ name: "specification", index: 1 });
     });
 
@@ -791,7 +791,7 @@ context("Layout Verification of EQ", () => {
 
       it("Verify Click Specification Tab, clicking on it should open that tab and close the other one", () => {
         cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-        cy.get("#sm-tabpanel-0").should("be.hidden");
+        cy.get("#sm-tabpanel-0").should("not.exist");
         cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
       });
 
@@ -1332,13 +1332,16 @@ context("Layout Verification of EQ", () => {
         });
 
         it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
-          });
+          cy.drAddUserFromPermissionTab(USERS[3].name);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.wait(2000);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab("Developers");
           });
         });
@@ -1381,7 +1384,7 @@ context("Layout Verification of EQ", () => {
           cy.get("[data-cy='Calibration']").should("be.visible");
         });
 
-        it("Click on procedure book mark verify procedure block is visible", () => {
+        it("Click on  book mark verify procedure block is visible", () => {
           cy.get("[data-cy='Bookmarks-detail'] p").eq(1).arrowClick();
           cy.get("[data-cy='Preventative Maintenance']").should("be.visible");
         });

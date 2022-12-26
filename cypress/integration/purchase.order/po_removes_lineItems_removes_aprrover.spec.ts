@@ -5,7 +5,6 @@ import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { receivingReleasedDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
@@ -123,6 +122,10 @@ context("PO Removes lineitems removes approver", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -490,6 +493,12 @@ context("PO Removes lineitems removes approver", () => {
     });
   });
 
+  context("Turn off autosave", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+  });
+
   context("Create Form PO Approval matrix", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
@@ -625,6 +634,12 @@ context("PO Removes lineitems removes approver", () => {
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+    });
+  });
+
+  context("Turn on autosave", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
   });
 
@@ -797,7 +812,7 @@ context("PO Removes lineitems removes approver", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
-    it(`Check PO status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+    it(`Check PO form status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get(`[data-cy="field-name"]`).should("have.text", purchaseOrderFormName);
     });
@@ -853,11 +868,9 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Click on 'Add item' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.poAddNewFieldItem();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
+      cy.poAddNewFieldItem();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on service option", () => {
@@ -942,11 +955,11 @@ context("PO Removes lineitems removes approver", () => {
   });
 
   context("Verify that history tab is capturing requestor Added and approver Added", () => {
-    it("Check history entry for 'Requestor Added'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-        cy.drSelectHistoryTab();
-      });
-      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor Added")
+    it("Check history entry for 'Requestor added'", () => {
+      cy.drSelectHistoryTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor added")
         .and("contain", USERS[1].name);
     });
 
@@ -1041,10 +1054,8 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Verify history that 'Approver Removed' should be displayed", () => {
-      cy.wrapWithWaitOnApiCalls([], () => {
-        cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
-          .should("contain.text", "Approver Removed").and("contain.text", USERS[1].name);
-      });
+      cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
+        .should("contain.text", "Approver Removed").and("contain.text", USERS[1].name);
     });
   });
 

@@ -11,15 +11,14 @@ import { ACTION_TITLE_MAPPING, UMAuditGroupProps, UMAuditProps, UM_AUDIT_CONCAT_
 import Colors from "../../layout/theme/utils/colors";
 import AuditItemPresenter from "./presenter";
 
-interface Props {
-  openHistoryPanel: boolean;
-  closeHistoryPanel: () => void;
-}
-
 interface TranslatedTextProps {
   [employeeName: string]: string;
 }
 
+interface Props {
+  openHistoryPanel: boolean;
+  closeHistoryPanel: () => void;
+}
 
 const AuditItemsContainer: React.FunctionComponent<Props> = ({
   openHistoryPanel,

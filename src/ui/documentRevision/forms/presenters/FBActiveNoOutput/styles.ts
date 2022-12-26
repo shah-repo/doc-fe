@@ -27,7 +27,7 @@ export default makeStyles((theme) =>
       backgroundColor: `${Colors.dawn} !important`,
     },
     previewDialog: {
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.alabaster,
     },
   }),
 );

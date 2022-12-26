@@ -3,31 +3,36 @@ import Colors from "../../../../../../ui/layout/theme/utils/colors";
 
 export default makeStyles(() =>
   createStyles({
-    sidebar: (drawerOpen: boolean) => ({
-      transition: drawerOpen
-        ? "all .2s ease-in"
-        : " all .2s ease-out",
+    sidebar: {
+      transition: "all .2s ease-out",
       background: Colors.white,
       filter: `drop-shadow(0px 4px 24px rgba(22, 34, 41, 0.06))`,
-      borderRadius: "7px",
-      marginRight: "13px",
+      borderRadius: 6,
+      marginRight: 10,
       marginTop: 0,
-    }),
-    iconBox: {
-      minWidth: "48px",
       display: "flex",
-      height: "48px",
+      flexDirection: "column",
+    },
+    sidebarOpened: {
+      transition: "all .2s ease-in",
+    },
+    iconBox: {
+      minWidth: 48,
+      display: "flex",
+      height: 48,
       alignItems: "center",
       justifyContent: "center",
+    },
+    iconBoxOpened: {
       borderRight: `1px solid ${Colors.light_gray_border}`,
     },
     iconButtonNew: {
-      "width": "36px",
-      "height": "30px",
-      "padding": "0px",
+      "width": 36,
+      "height": 30,
+      "padding": 0,
       "&:hover, &:focus, li.active > a": {
         "background": Colors.light_blue,
-        "borderRadius": "5px",
+        "borderRadius": 5,
         "& svg": {
           stroke: Colors.medium_blue,
         },
@@ -41,7 +46,7 @@ export default makeStyles(() =>
     },
     tabTitle: {
       fontWeight: 600,
-      fontSize: "14px",
+      fontSize: 14,
       lineHeight: "18px",
       color: Colors.dark_jungle_green,
     },

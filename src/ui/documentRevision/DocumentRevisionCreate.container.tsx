@@ -6,6 +6,7 @@ import { DocumentRevision, RevisionChangeType } from "../../state/ducks/document
 import { documentsActions, documentsSelectors } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import { documentVersionPath } from "../document.revision/utils/paths";
+import FBDataStore from "../form.builder/FBStore/FBDataStore";
 import useAsync from "../hooks/useAsync";
 import { DocumentCloneType } from "./Clone.container";
 import DocumentRevisionForm from "./forms/DocumentRevisionForm.container";
@@ -97,7 +98,13 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    async.start(create, toNewVersionRequestBody(values), async);
+    const promise = async.start(create, toNewVersionRequestBody(values), async);
+
+    promise?.then(() => {
+      FBDataStore?.setRefreshData({
+        ...values,
+      });
+    });
   };
 
   const showRevisionTypeChange = type === "newVersion" && !!documentRevision;

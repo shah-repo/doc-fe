@@ -1,9 +1,9 @@
-import { Box, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { isEmpty, map, startCase } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { ReactComponent as ExportIcon } from "../../../assets/images/export_data.svg";
 import { UMExportDataProp } from "../../../state/ducks/userManagement/types";
+import ExportListIcon from "../../components/common/kendo/ExportListIcon";
 import { DisplayText, TranslatedText } from "../../components/common/kendo/helpers";
 import { KendoColumn } from "../../components/common/kendo/types";
 import Text from "../../components/Text";
@@ -14,8 +14,9 @@ import useDialog from "../../hooks/useDialog";
 interface Props {
   gridData: Partial<UMExportDataProp>[];
   columns: KendoColumn[];
+  isGrouped: boolean;
 }
-const UMExport: React.FunctionComponent<Props> = ({ gridData, columns }) => {
+const UMExport: React.FunctionComponent<Props> = ({ gridData, columns, isGrouped }) => {
   const classes = styles();
   const dialog = useDialog();
   const intl = useIntl();
@@ -49,12 +50,9 @@ const UMExport: React.FunctionComponent<Props> = ({ gridData, columns }) => {
         id="ListPresenter-export-list"
         data-cy="um-open-export-dialog"
         onClick={dialog.open}
+        disabled={isGrouped}
       >
-        <Box display="flex">
-          <ExportIcon
-            className={classes.iconSvg}
-            height={14} width={14} />
-        </Box>
+        <ExportListIcon isGrouped={isGrouped} />
         <Text translation="document.revision.export.list" />
       </Button>
       <ExportListDialog
