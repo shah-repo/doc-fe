@@ -644,7 +644,8 @@ add the requestor to the approvals field`,
     context("Fill in Fields including field Requestor", () => {
       it(`Select '${USERS[2].name}' for Requestor`, () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get(`div[name^="po-requestor-autocomplete"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
+          cy.get(`div[name^="po-requestor-autocomplete"]`)
+            .find(`button[aria-label="Clear"]`).arrowClick({ force: true });
           cy.get("[data-cy^=po-requestor-autocomplete]").arrowClick();
           cy.wait(3000);
           cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
