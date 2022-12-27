@@ -7,7 +7,10 @@ import { SM } from "../../../App";
 import { Id } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
+import { AsyncStatus } from "../../../state/types";
+import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container";
 import { checkIsDocumentPO, checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
+import FBDataStore from "../FBStore/FBDataStore";
 
 export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   Component: React.FunctionComponent<T>,
@@ -25,6 +28,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
   }: T) => {
 
     const dispatch = useDispatch();
+    const headerContext = React.useContext(FormHeaderContext)!;
     const { _documentRevisionFormState } = SM.useStores();
     const { workspaceState, formState, poReceiveState } = FB.useStores();
     const formValue = formState?.getFieldValue(name, defaultValue);
@@ -78,16 +82,27 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
         },
       };
 
-      poReceiveState?.addReceiveQuantity(workspaceState.id, {
+      const updatedRevision = await poReceiveState?.addReceiveQuantity(workspaceState.id, {
         formInput: receivedItemsInput,
         referenceTo: hasNoReference ?
           [{
             id: poReceiveState?.data?.document.id,
           }] as Id[] : undefined,
       });
+      workspaceState.setFormInputData(updatedRevision);
+      FBDataStore.setRefreshData(updatedRevision);
       await poReceiveState?.setPOId(poReceiveState?.data?.id);
-      dispatch(documentRevisionsActions.reload(workspaceState?.document?.id as string));
+      dispatch(documentRevisionsActions.documentRevisionSet(updatedRevision));
     }
+
+    const loading = useObserver(() =>
+      Boolean(
+        headerContext?.asyncState?.status === AsyncStatus.Active
+      || workspaceState?.loading
+      || purchaseOrderState?.loading
+      || poReceiveState?.loading
+      || _documentRevisionFormState?.loading)
+    );
 
     return Component({
       ...(props as T),
@@ -99,6 +114,7 @@ export const withFBPurchaseOrder = <T extends FBPurchaseOrderProps>(
       disabled,
       name,
       isReceivable,
+      loading,
       isPO,
     });
   };

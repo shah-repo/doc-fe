@@ -323,7 +323,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Export and save the template", () => {
-      cy.get("[class=\"MuiIconButton-label\"]").eq(16).arrowClick();
+      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").arrowClick();
       cy.get("[data-cy=\"fb-template-name\"]").arrowType("NCO_Form");
       cy.get("[data-cy=\"common.add\"]").arrowClick();
     });
@@ -544,7 +544,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Export and save the template", () => {
-      cy.get("[class=\"MuiIconButton-label\"]").eq(10).arrowClick();
+      cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").arrowClick();
       cy.get("[data-cy=\"fb-template-name\"]").arrowType("Seed_Form");
       cy.get("[data-cy=\"common.add\"]").arrowClick();
     });
@@ -635,7 +635,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Filter document by ID", () => {
-      cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00004", status: "Released" });
+      cy.drFilterDocListByDocIdAndName({  docId: "FM-00004", title: "Seed Form" });
     });
 
     it("Create new document from form", () => {
@@ -677,8 +677,8 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("check validation for Default Revision Stage", () => {
-      cy.get("[class=\"MuiFormHelperText-root Mui-error\"]").eq(3)
-        .should("have.text", "The Default Revision Stage is a required field.");
+      cy.get("[data-cy=\"radiogroup-6\"]")
+        .contains("The Default Revision Stage is a required field.").should("exist");
     });
   });
 
@@ -735,7 +735,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Filter document by ID", () => {
-      cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00002", status: "Released" });
+      cy.drFilterDocListByDocIdAndName({  docId: "FM-00002", title: "NCO Form" });
     });
 
     it("Create new document from form", () => {

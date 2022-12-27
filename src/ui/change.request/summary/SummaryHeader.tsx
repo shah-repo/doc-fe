@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import { FormikErrors } from "formik";
+import { FormikErrors, useFormikContext } from "formik";
 import React from "react";
 import { SM } from "../../../App";
 import { ChangeRequest } from "../../../state/ducks/changeRequest/types";
@@ -30,12 +30,15 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   displayLastSaved,
 }) => {
   const isNewLayout = SM.isNewCRLayout;
+  const formik = useFormikContext();
+
   const submitButtonRenderer = canEdit && (
     <SubmitButton
       asyncState={asyncState}
       label="document.save"
       errors={errors}
       showNewButton={isNewLayout}
+      onClick={() => formik.submitForm()}
     />
   );
   return (

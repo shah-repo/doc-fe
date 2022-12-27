@@ -808,9 +808,16 @@ context("Records flow", () => {
     });
 
     it("Reject document", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`.MuiListItemText-dense`).first().trigger("mouseover").wait(2000);
       cy.get(`[data-cy="transition-reject"]`).first().trigger("mouseover").wait(2000);
-      cy.get(`[data-cy="transition-reject"]`).first().arrowClick();
+      cy.get(`[data-cy="transition-reject"]`).first().arrowClick({ force: true });
+      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Logout the user", () => {
@@ -1185,6 +1192,8 @@ context("Records flow", () => {
           docId: "RD-00004", revision: "A", state: "Released", title: "Approval Record title", owner: USERS[2].name,
           releasedDate: "Last 7 days", formId: "FM-00002",
         });
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Navigate to Document List", () => {
@@ -1193,6 +1202,8 @@ context("Records flow", () => {
 
       it("Navigate to Records", () => {
         cy.navigToRecords();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Check if all filter values persist after changing landing page", () => {

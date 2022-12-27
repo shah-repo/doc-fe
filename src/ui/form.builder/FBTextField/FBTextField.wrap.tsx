@@ -3,6 +3,7 @@ import { reaction } from "mobx";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 import { FB, FBTextFieldProps } from "..";
+import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 
 export const withFBTextField = <T extends FBTextFieldProps>(
@@ -21,6 +22,7 @@ export const withFBTextField = <T extends FBTextFieldProps>(
   }: T) => {
 
     const { formState, workspaceState } = FB.useStores();
+    const { submitForm } = useFormContext();
     const { workspaceMode: mode } = formState || {};
     const { id } = workspaceState || {};
     defaultValue = defaultValue || formState?.getFieldValue(name);
@@ -61,6 +63,11 @@ export const withFBTextField = <T extends FBTextFieldProps>(
       if (!name) { return; }
       formState?.unlockField(name);
       formState?.setFieldAutosave(name);
+      if (workspaceState?.isChangeRequest && workspaceState?.autosave &&
+         (name.includes(".justificationOfChange") ||  name.includes(".descriptionOfChange"))) {
+        submitForm();
+        return;
+      }
     };
 
     useEffect(() => reaction(

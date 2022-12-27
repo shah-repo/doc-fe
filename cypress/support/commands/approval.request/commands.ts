@@ -33,6 +33,7 @@ declare global {
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
+      arApproveARWithoutApi(): Chainable<Subject>;
       arSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
       arApproveARFromDashboard(): Chainable<Subject>;
       arClearFilters(): Chainable<Subject>;
@@ -394,6 +395,15 @@ Cypress.Commands.add("arApproveAR", () => {
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arApproveARWithoutApi", () => {
+  cy.get("button[aria-label=approve]").first().arrowClick();
+  cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });

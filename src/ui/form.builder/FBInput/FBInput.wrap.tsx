@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union } from "lodash";
+import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union, uniqWith } from "lodash";
 import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
 import { useIntl } from "react-intl";
-import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, FBWorkspaceModeOptions, OmitInputClones } from "..";
+import { FB, FBAutosave, FBInputProps, FBInputType, FBLHRBuildOptions, FBOption, OmitInputClones } from "..";
 import { useFormContext } from "../../components/forms/FormContext";
 import { isTranslation } from "../../translations/types";
 import { FBClasses } from "../defaults/layout";
@@ -76,10 +76,12 @@ export const withFBInput = <T extends FBInputProps>(
     ...props
   }: T) => {
     const { formState, workspaceState, bookmarkState, schemaState } = FB.useStores();
-    const { isOutput } = workspaceState || {};
+    const { isOutput, isChangeRequest } = workspaceState || {};
     const { submitForm } = useFormContext();
     const intl = useIntl();
     const initialValue = defaultValue;
+    let showValidationField;
+    let isFieldUnderValidation;
     const { email: ownerName } = workspaceState?.document?.owner?.user || {};
 
     const feedbackDetails = useLocalStore(() => ({
@@ -137,22 +139,65 @@ export const withFBInput = <T extends FBInputProps>(
 
     if (validationMode === "visibility" || validationMode === "disabled") {
       map(get(formState?.validatorRules, name), (rule) => {
-        if (!formState) { return; }
         const { value = "" } = rule || {};
+        const isValueObj = value?.includes("{") || value?.includes("}");
         const fieldName: string = first(value.split(",")) || "";
-        const fieldValue = last(value.split(","));
+        let fieldValue = value?.substring(value?.indexOf(",") + 1, value?.length) || last(value?.split(","));
+
+        if (!fieldName || !formState) {
+          return;
+        }
+
+        if (!isValueObj && fieldValue.includes(",")) {
+          fieldValue = fieldValue.split(",");
+        }
         const validationRules = formState.validationRelatedRules[fieldName] || [];
-        formState.validationRelatedRules[fieldName] = union([{ name, value: fieldValue }], validationRules);
+
+        formState.validationRelatedRules[fieldName] = uniqWith(
+          union([{ name, value: fieldValue }], validationRules),
+          isEqual
+        );
+
+        isFieldUnderValidation = ["required_if_in", "required_if"].includes(rule?.name) &&
+          formState.validationRelatedRules[fieldName]?.some((data) => data.name === name);
+
+        let convertedFieldValue;
+        try {
+          convertedFieldValue = JSON.parse(fieldValue as string);
+        } catch (error) {
+          convertedFieldValue = fieldValue;
+        }
+        const formStateFieldValue = formState?.getFieldValue(fieldName);
+
+        if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
+          if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue)) {
+            showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue) :
+              formStateFieldValue === fieldValue;
+          }
+        } else if (typeof convertedFieldValue === "object") {
+          let intermediateFlag;
+          for (const [, fieldValueEntry] of Object.entries(convertedFieldValue)) {
+            if (Array.isArray(formState?.getFieldValue(fieldName))) {
+              if (isUndefined(intermediateFlag)) {
+                intermediateFlag = false;
+              }
+              const flag = !isUndefined(fieldValueEntry) &&
+              formState?.getFieldValue(fieldName).includes(fieldValueEntry);
+              if (flag) {
+                intermediateFlag = flag;
+              }
+            }
+          }
+          if (!isUndefined(intermediateFlag)) {
+            showValidationField = intermediateFlag;
+          }
+
+        }
       });
     }
 
-    if (
-      (isOutput || formState?.workspaceMode !== FBWorkspaceModeOptions.DESIGN) &&
-      ![FBWorkspaceModeOptions.FORMPREVIEW, FBWorkspaceModeOptions.PREVIEW].includes(
-        formState?.workspaceMode as FBWorkspaceModeOptions
-      )
-    ) {
-      const isUnderMode = (
+    if (isChangeRequest || isOutput || formState?.shouldValidate) {
+      let isUnderMode = (
         !feedbackDetails.helperText && (
           isUndefined(validationValue) ||
           validationValue === "" ||
@@ -161,6 +206,9 @@ export const withFBInput = <T extends FBInputProps>(
       );
 
       if (validationMode === "visibility") {
+        if (isFieldUnderValidation && !isUndefined(showValidationField)) {
+          isUnderMode = !showValidationField;
+        }
         hidden = isUnderMode;
 
         if (isUnderMode) {
@@ -242,16 +290,15 @@ export const withFBInput = <T extends FBInputProps>(
       if (!formState && !inputState) { return; }
       // Input states
       formState?.inputState.set(name, inputState!);
-
       // Validation settings
       let attr = validationAttribute || (label as string) || placeholder || name;
       isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));
-      formState?.setValidationAttributeName(name, attr);
-      if (!rules) { return; }
-      formState!.setFieldRules(name, rules);
-      if (!omitFinalValidation) {
+       formState?.setValidationAttributeName(name, attr);
+       if (!rules) { return; }
+       formState?.setFieldRules(name, rules);
+       if (!omitFinalValidation) {
         formState?.setFieldFinalValidationRules(name, rules);
-      }
+       }
     }, [rules]);
 
     useEffect(() => {
@@ -271,6 +318,12 @@ export const withFBInput = <T extends FBInputProps>(
               });
               return;
             }
+
+            if (workspaceState.isChangeRequest) {
+              submitForm();
+              return;
+            }
+
             if (type && FBAutosave.includes(type)) {
               workspaceState.saveDocRev(formState?.getValues());
             } else {

@@ -822,7 +822,7 @@ context("Create new LHRT Layout Verification", () => {
 
     it("Verify Click details Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
@@ -902,9 +902,9 @@ context("Create new LHRT Layout Verification", () => {
 
     it("Verify material", () => {
       cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
-        .should("have.text", "MT-00004 - Material one | sets : 2");
+        .should("have.text", "MT-00004 - Material one | sets :2");
       cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(1)
-        .should("have.text", "MT-00006 - Material two | boxes : 4");
+        .should("have.text", "MT-00006 - Material two | boxes :4");
     });
 
     it("Verify equipment", () => {

@@ -309,7 +309,7 @@ context("Export for Approval Request", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
     });
   });
 

@@ -44,6 +44,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
   disableChipDelete = false,
   type,
   customStyles,
+  autoCompleteClasses,
   ...props
 }) => {
   const { workspaceState, dialogState } = FB.useStores();
@@ -117,6 +118,10 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
       (outputDocumentType === DOC_TYPE_GROUP.LHR || outputDocumentType === "Lot History Record")
     && (props.name === "lhr-selected-part" || props.name === "lhrstep-built-in")) {
       return false; }
+
+    if (documentType === DOC_TYPE_GROUP.PART && !props.showErrorMsg) {
+      return props.showErrorMsg;
+    }
     return true;
   };
 
@@ -151,6 +156,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               filterOptions,
               disableClearable,
             }}
+            classes={autoCompleteClasses}
             options={modifiedOptions}
             onInputChange={debounceFilterInput}
             ListboxComponent={groupByKey ? undefined : ListBoxComponent }
@@ -169,6 +175,7 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
               filterOptions,
               disableClearable,
             }}
+            classes={autoCompleteClasses}
             options={modifiedOptions}
             onInputChange={debounceFilterInput}
             ListboxComponent={groupByKey ? undefined : ListBoxComponent }

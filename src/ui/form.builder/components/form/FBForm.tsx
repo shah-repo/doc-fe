@@ -4,7 +4,6 @@ import React from "react";
 import { FBFormikProps } from "../../types/formik";
 
 const FBForm: React.FunctionComponent<FBFormikProps> = ({
-  // eslint-disable-next-line: no-empty
   onSubmit = () => null,
   initialValues = {},
   ...props

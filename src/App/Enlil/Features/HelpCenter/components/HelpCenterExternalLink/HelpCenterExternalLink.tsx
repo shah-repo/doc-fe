@@ -5,10 +5,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useStyles from "./HelpCenterExternalLink.styles";
 
-const getCurrentEnvName = (whitelist = ["dev", "demo", "prod", "prod2"], position = 2) => {
+const getCurrentEnvName = (position = 2) => {
   const hostParts = window?.location?.host.split(".").reverse();
-  const env = hostParts[position];
-  return whitelist.includes(env) ? env : "";
+  return hostParts[position];
 };
 
 const envUrl = (url: string) => {

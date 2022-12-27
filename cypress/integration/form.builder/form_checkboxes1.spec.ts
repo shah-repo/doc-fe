@@ -412,7 +412,7 @@ context("Checkboxes test1", () => {
     });
 
     it("Verify Radio Button group without 'Include Other' checkbox", () => {
-      cy.contains("rbg-wo-ch").parentsUntil("li").should("not.contain", "Other");
+      cy.get("[label='rbg-wo-ch']").last().should("not.contain", "Other");
     });
 
     it("Verify Radio Button group with 'Include Other' checkbox", () => {

@@ -10,7 +10,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -48,9 +47,9 @@ context("Training notifications for documents with approved and released revisio
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -58,8 +57,8 @@ context("Training notifications for documents with approved and released revisio
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -67,7 +66,7 @@ context("Training notifications for documents with approved and released revisio
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -307,7 +306,7 @@ context("Training notifications for documents with approved and released revisio
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -324,10 +323,14 @@ context("Training notifications for documents with approved and released revisio
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter document title 'test training form title'", () => {
@@ -349,23 +352,33 @@ context("Training notifications for documents with approved and released revisio
     it("Select 'Training Curriculum test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Create a document", () => {
     it("Document with Released status", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drEnterDocumentTitle({ name: "released form" });
       cy.drEnterDocumentDescription({ description: "test description" });
       cy.drSelectDocumentType({ documentType: "Form" });
@@ -373,10 +386,12 @@ context("Training notifications for documents with approved and released revisio
       cy.get("#Checkbox-box").arrowClick();
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDocId = x.text(); });
     });
@@ -385,19 +400,23 @@ context("Training notifications for documents with approved and released revisio
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'training title'", () => {
@@ -413,29 +432,39 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Refresh on 'Document to trained on'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
-      });
+      cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select refresh training periodically 'Yes'", () => {
       cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training refresh period days", () => {
       cy.get("[name=training-validity]").arrowType("30");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Trainee Details should be present", () => {
@@ -443,54 +472,64 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Select Users to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverListNw({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListNw({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Verify Training Records", () => {
     it("Navigate to Training Records", () => {
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it(`Training record for ${USERS[1].name} should be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[1].name });
-      cy.trLandingPageDocRevTitle({ title: "released form" });
+    it(`Training record for ${USERS[11].name} should be present`, () => {
       cy.trLandingPageDocId({ docId: releasedDocId });
+      cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.trLandingPageDocRevTitle({ title: "released form" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[1].name).and("contain", "Pending");
+        .and("contain", USERS[11].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
   });
@@ -498,6 +537,8 @@ context("Training notifications for documents with approved and released revisio
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
@@ -514,14 +555,19 @@ context("Training notifications for documents with approved and released revisio
       cy.contains("Complete training").should("be.visible");
     });
 
-    it(`complete training for ${USERS[1].name}`, () => {
-      cy.trCompleteTraining();
+    it(`complete training for ${USERS[11].name}`, () => {
+      cy.trCompleteTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Revise document and goes it to Approved status", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filters document by name and status, and select it", () => {
@@ -530,6 +576,15 @@ context("Training notifications for documents with approved and released revisio
 
     it("Clicks on revise document", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Edit document description", () => {
@@ -537,17 +592,21 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[2].name}`]);
+      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[12].name}`]);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        email: USERS[12].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
 
@@ -563,13 +622,17 @@ context("Training notifications for documents with approved and released revisio
     });
   });
 
-  context(`Check new training notification for ${USERS[2].name}`, () => {
+  context(`Check new training notification for ${USERS[12].name}`, () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training notification", () => {
@@ -593,6 +656,8 @@ context("Training notifications for documents with approved and released revisio
 
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Click training notification and check doc with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
@@ -606,11 +671,11 @@ context("Training notifications for documents with approved and released revisio
     });
   });
 
-  context(`Check new training notification for ${USERS[1].name}`, () => {
+  context(`Check new training notification for ${USERS[11].name}`, () => {
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        email: USERS[11].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
 
@@ -635,6 +700,8 @@ context("Training notifications for documents with approved and released revisio
   context("Use time tool to travel user back to future", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task TIME_TRAVEL_USER", () => {
@@ -658,14 +725,15 @@ context("Training notifications for documents with approved and released revisio
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(15000);
     });
   });
 
-  context(`Login with ${USERS[2].name} and complete Rev 1 released form training`, () => {
+  context(`Login with ${USERS[12].name} and complete Rev 1 released form training`, () => {
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[2].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        email: USERS[12].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
 
@@ -681,8 +749,11 @@ context("Training notifications for documents with approved and released revisio
       cy.contains("Complete training").should("be.visible");
     });
 
-    it(`complete training for ${USERS[2].name}`, () => {
-      cy.trCompleteTraining();
+    it(`complete training for ${USERS[12].name}`, () => {
+      cy.trCompleteTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -690,7 +761,7 @@ context("Training notifications for documents with approved and released revisio
     it("Logs user in", () => {
       cy.authLogout();
       cy.authLogin({
-        email: USERS[1].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
+        email: USERS[11].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
 
@@ -700,51 +771,60 @@ context("Training notifications for documents with approved and released revisio
 
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("4 records should be created", () => {
       cy.get("tbody>tr").should("have.length", 4);
     });
 
-    it(`Training record for ${USERS[1].name} Rev1`, () => {
+    it(`Training record for ${USERS[11].name} Rev1`, () => {
       cy.trClearFilters();
       cy.trLandingPageOwner({ owner: "1" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").subtract(1, "days").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
       cy.get("tbody>tr").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[1].name} Rev2`, () => {
+    it(`Training record for ${USERS[11].name} Rev2`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: "2" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[1].name).and("contain", "Pending");
+        .and("contain", USERS[11].name).and("contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("not.contain", completedDate);
       cy.get("tbody>tr").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[2].name} Rev1`, () => {
+    it(`Training record for ${USERS[12].name} Rev1`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: "1" });
-      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[2].name).and("not.contain", "Pending");
+        .and("contain", USERS[12].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
       cy.get("tbody>tr").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[2].name} Rev2`, () => {
+    it(`Training record for ${USERS[12].name} Rev2`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: "2" });
-      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[2].name).and("contain", "Pending");
+        .and("contain", USERS[12].name).and("contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("not.contain", completedDate);
       cy.get("tbody>tr").should("have.length", 1);
@@ -754,6 +834,8 @@ context("Training notifications for documents with approved and released revisio
   context("Use time tool to travel by 29 days", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task TIME_TRAVEL_USER", () => {
@@ -776,7 +858,7 @@ context("Training notifications for documents with approved and released revisio
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(10000);
+      cy.wait(60000);
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -784,63 +866,86 @@ context("Training notifications for documents with approved and released revisio
   context("Check new training records", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("5 records should be created", () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("tbody>tr").should("have.length", 5);
     });
 
-    it(`Training record for ${USERS[1].name} Rev1`, () => {
+    it(`Training record for ${USERS[11].name} Rev1`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: "1" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.contains("COMPLETED ON").arrowClick().wait(500);
       cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").subtract(30, "days").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
       cy.get("tbody>tr").should("have.length", 2);
 
       cy.get(`[data-grid-row-index="1"]`).should("contain", releasedDocId)
-        .and("contain", USERS[1].name).and("contain", "Pending");
+        .and("contain", USERS[11].name).and("contain", "Pending");
     });
 
-    it(`Training record for ${USERS[1].name} Rev2`, () => {
+    it(`Training record for ${USERS[11].name} Rev2`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: "2" });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[1].name).and("contain", "Pending");
+        .and("contain", USERS[11].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[2].name} Rev1`, () => {
+    it(`Training record for ${USERS[12].name} Rev1`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: "1" });
-      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageUsername({ username: USERS[12].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[2].name).and("not.contain", "Pending");
+        .and("contain", USERS[12].name).and("not.contain", "Pending");
       const completedDate = moment().tz("America/Los_Angeles").subtract(29, "days").format("M/D/YYYY");
       cy.get(`[data-grid-row-index="0"]`).should("contain", completedDate);
       cy.get("tbody>tr").should("have.length", 1);
     });
 
-    it(`Training record for ${USERS[2].name} Rev2`, () => {
+    it(`Training record for ${USERS[12].name} Rev2`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: "2" });
-      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageUsername({ username: USERS[12].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[2].name).and("contain", "Pending");
+        .and("contain", USERS[12].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Revise training", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -849,15 +954,15 @@ context("Training notifications for documents with approved and released revisio
 
     it("Select training", () => {
       cy.trSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Click on Revise Document`, () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -870,10 +975,9 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
@@ -881,23 +985,29 @@ context("Training notifications for documents with approved and released revisio
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverListNw({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListNw({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Open assigned Training", () => {
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on the Training notification", () => {
@@ -908,18 +1018,25 @@ context("Training notifications for documents with approved and released revisio
       cy.contains("Complete training").should("be.visible");
     });
 
-    it(`complete training for ${USERS[1].name}`, () => {
-      cy.trCompleteTraining();
+    it(`complete training for ${USERS[11].name}`, () => {
+      cy.trCompleteTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Check training records", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("5 records should be present", () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("tbody>tr").should("have.length", 5);
     });
   });
@@ -949,7 +1066,7 @@ context("Training notifications for documents with approved and released revisio
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(10000);
+      cy.wait(15000);
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -957,18 +1074,25 @@ context("Training notifications for documents with approved and released revisio
   context("Check new training records", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("6 records should be created", () => {
       cy.get("tbody>tr").should("have.length", 6);
     });
 
-    it(`New Training record for ${USERS[2].name} Rev1`, () => {
+    it(`New Training record for ${USERS[12].name} Rev1`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPagetrId({ trId: "TRN-00006" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: "1" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[2].name).and("contain", "Pending");
+        .and("contain", USERS[12].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
   });
@@ -976,6 +1100,8 @@ context("Training notifications for documents with approved and released revisio
   context("Use time tool to travel by 9 days", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task TIME_TRAVEL_USER", () => {
@@ -998,7 +1124,7 @@ context("Training notifications for documents with approved and released revisio
       cy.asyncTaskClickSubmit();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(10000);
+      cy.wait(15000);
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -1006,19 +1132,30 @@ context("Training notifications for documents with approved and released revisio
   context("Check new training records", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("7 records should be created", () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("tbody>tr").should("have.length", 7);
     });
 
-    it(`New Training record for ${USERS[1].name} Rev2`, () => {
+    it(`New Training record for ${USERS[11].name} Rev2`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPagetrId({ trId: "TRN-00007" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageOwner({ owner: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDocId)
-        .and("contain", USERS[1].name).and("contain", "Pending");
+        .and("contain", USERS[11].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
   });

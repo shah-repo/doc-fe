@@ -604,7 +604,7 @@ context("Receiving landing page test", () => {
     });
 
 
-    it("[API]Create Receiving form", (done: any) => {
+    it("[API]Create migration Receiving form", (done: any) => {
       cy.drCreateDocumentRevision({
         payload: {
           attachments: [],
@@ -644,7 +644,7 @@ context("Receiving landing page test", () => {
             {
               label: "form.builder.approvals",
               tabId: "overview",
-              type: "poapprovals",
+              type: "approvals",
               deleteDisabled: false,
               name: "fb-po-approvals",
               uniqueSchemaItem: true,
@@ -721,7 +721,7 @@ context("Receiving landing page test", () => {
             {
               label: "form.builder.approvals",
               tabId: "overview",
-              type: "poapprovals",
+              type: "approvals",
               deleteDisabled: false,
               name: "fb-po-approvals",
               uniqueSchemaItem: true,
@@ -807,7 +807,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Verify approval field is visible", () => {
-        cy.get("[data-cy='fb-po-approvals']").should("exist");
+        cy.get("[data-cy='fb-approvals-fb-po-approvals']").should("exist");
       });
 
       it("Navigate to details Tab", () => {
@@ -820,7 +820,7 @@ context("Receiving landing page test", () => {
 
       it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
         cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-        cy.get("#sm-tabpanel-0").should("be.hidden");
+        cy.get("#sm-tabpanel-0").should("not.exist");
         cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
       });
 
@@ -927,7 +927,7 @@ context("Receiving landing page test", () => {
       });
     });
 
-    it("Save the  form", () => {
+    it("Save the form", () => {
       cy.wrapWithWaitOnApiCalls(
         [CyRoutes.PatchDocRev], () => {
           cy.drClickCreateDocumentWithoutApiCall();
@@ -953,6 +953,11 @@ context("Receiving landing page test", () => {
       });
     });
 
+    it("Navigate to detail tab", () => {
+      cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Verify that all Parts, non-Enlil parts and PO services should have received quantities", () => {
       cy.get("[data-cy='received']").eq(0).scrollIntoView().wait(2000);
       cy.get("[data-cy='received']").eq(0).should("have.text", "200");
@@ -972,12 +977,9 @@ context("Receiving landing page test", () => {
       });
     });
 
-    it("Save the  form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.listLoadingElementShouldNotExist();
-        });
+    it("Navigate to detail tab", () => {
+      cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify inserted quantity saved and display in the table ", () => {
@@ -995,14 +997,6 @@ context("Receiving landing page test", () => {
         cy.get("[data-cy='form.builder.save']").arrowClick();
         cy.listLoadingElementShouldNotExist().wait(2000);
       });
-    });
-
-    it("Save the  form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.listLoadingElementShouldNotExist();
-        });
     });
 
     it("Verify form option should appear in this tab", () => {
@@ -1040,7 +1034,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Verify attachment field is visible", () => {
-        cy.get("[data-cy='fb-po-approvals']").should("exist");
+        cy.get("[data-cy='fb-approvals-fb-po-approvals']").should("exist");
       });
     });
   });
@@ -1074,7 +1068,20 @@ context("Receiving landing page test", () => {
 
     it("Verify References selection Add Remove", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.verifyAddRemoveReference({ formId: "FM-00001" });
+      const docId = "FM-00001";
+      cy.get("[data-cy='referenceTo']").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.get("[data-cy='referenceTo']").autocompleteSelect(docId);
+        cy.unClick();
+      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithApiCall();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
+        cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
+          .parent().parent().parent().find("svg").arrowClick({ force: true });
+      });
     });
 
     it("Verify Referenced By, Training ,and Release date Item exist or not", () => {
@@ -1096,14 +1103,16 @@ context("Receiving landing page test", () => {
       });
 
       it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[3].name);
-        });
+        cy.drAddUserFromPermissionTab(USERS[3].name);
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
           cy.drAddGroupFromPermissionTab("Developers");
         });
       });
@@ -1185,7 +1194,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Verify approval block is navigated", () => {
-        cy.get("[data-cy='fb-po-approvals']").should("be.visible");
+        cy.get("[data-cy='fb-approvals-fb-po-approvals']").should("be.visible");
       });
     });
 
@@ -1287,8 +1296,8 @@ context("Receiving landing page test", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^='fb-po-approvals']").arrowClick();
-      cy.get("[data-cy^='fb-po-approvals']").autocompleteSelect(USERS[1].name);
+      cy.get("[data-cy^='fb-approvals-fb-po-approvals']").arrowClick();
+      cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
     });
 
     it("Save the document", () => {
@@ -1330,7 +1339,6 @@ context("Receiving landing page test", () => {
     });
   });
 
-  // verify Draft state
   context("Open Receivable Draft state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
@@ -1381,7 +1389,7 @@ context("Receiving landing page test", () => {
 
     it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
@@ -1398,7 +1406,7 @@ context("Receiving landing page test", () => {
 
   // End of draft state verification
   // verify release state
-  context("Open Receivable Draft state document and validate the layout", () => {
+  context("Open Receivable Released state document and validate the layout", () => {
     it("Navigate to Receivable", () => {
       cy.navigToReceivableList();
       cy.dlClearFilters();
@@ -1410,7 +1418,7 @@ context("Receiving landing page test", () => {
     });
   });
 
-  context("Verify Layout for created receiving record in draft state", () => {
+  context("Verify Layout for created receiving record in Released state", () => {
     it("Verify that two tabs are displayed, Overview and Details tab", () => {
       cy.get("[data-cy='tabId.overview']").should("exist");
       cy.get("[data-cy='tabId.details']").should("exist");
@@ -1446,7 +1454,7 @@ context("Receiving landing page test", () => {
 
     it("Clicking on details Tab other tabs should be closed and details tab should open", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
@@ -1485,13 +1493,15 @@ context("Receiving landing page test", () => {
       });
 
       it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[4].name);
-        });
+        cy.drAddUserFromPermissionTab(USERS[4].name);
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
           cy.drAddGroupFromPermissionTab("Can be approver");
         });
       });
@@ -1530,7 +1540,7 @@ context("Receiving landing page test", () => {
       });
 
       it("Verify approval block is navigated", () => {
-        cy.get("[data-cy='fb-po-approvals']").should("be.visible");
+        cy.get("[data-cy='fb-approvals-fb-po-approvals']").should("be.visible");
       });
     });
   });

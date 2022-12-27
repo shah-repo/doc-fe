@@ -1,6 +1,8 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import moment from "moment";
+import { TIME_ZONE } from "../../../src/common/utils/date";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
@@ -13,9 +15,9 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[29];
-const FIRST_USER = USERS[30];
-const SECOND_USER = USERS[31];
-const THIRD_USER = USERS[32];
+const FIRST_USER = USERS[11];
+const SECOND_USER = USERS[12];
+const THIRD_USER = USERS[13];
 const documentRevisionName = "New document for testing AR";
 const approvalRequestTitle = "Approval request from newly created form";
 
@@ -207,16 +209,22 @@ context("Approval request email popup modal", () => {
 
     it("Click Create Approval Request", () => {
       cy.arSaveApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to approval request on approver list", () => {
+      cy.wait(2000);
       cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
       cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
       cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
+      cy.wait(2000);
     });
 
     it("Click 'Send To Review'", () => {
       cy.arClickSendToReview();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -255,7 +263,7 @@ context("Approval request email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(emailDateOffset, "milliseconds");
       });
     });
   });
@@ -267,6 +275,7 @@ context("Approval request email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: SECOND_USER, employeeId: thirdEmployee.id });
+      cy.wait(5000);
     });
   });
 
@@ -342,7 +351,8 @@ context("Approval request email popup modal", () => {
       it("Check if pop-up modal has pending with all the approvers", () => {
         SystemRequirement("REQ-2150", "REQ-5020");
         cy.get("h2").should("contain.text", "PENDING (2)");
-        cy.get("[class*='MuiListItem-dense MuiListItem-gutters MuiListItem-button']>svg").eq(4).arrowClick();
+        cy.get("[class*='MuiListItem-dense MuiListItem-gutters MuiListItem-button']")
+          .find(`[data-cy="expand-icon"]`).arrowClick();
         cy.get("[class='MuiCollapse-wrapperInner']").should("contain.text", FIRST_USER.name)
           .and("contain.text", SECOND_USER.name)
           .and("contain.text", THIRD_USER.name);
@@ -358,7 +368,7 @@ context("Approval request email popup modal", () => {
         cy.contains("EMAIL SENT TO ALL").should("exist");
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+        dateAfterEmailShouldArrive = moment().tz(TIME_ZONE).subtract(emailDateOffset, "milliseconds");
       });
     });
   });
@@ -438,6 +448,7 @@ context("Approval request email popup modal", () => {
 
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
+      cy.wait(5000);
     });
 
     it("Get emails and visit AR approval url", () => {

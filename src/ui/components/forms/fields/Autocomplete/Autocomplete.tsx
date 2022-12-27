@@ -45,6 +45,12 @@ export const selectStyles: StylesConfig = {
   }),
   option: (base) => ({
     ...base,
+    "&:hover": {
+      background: Colors.sky_blue,
+    },
+    "&:active": {
+      background: Colors.sky_blue,
+    },
   }),
   placeholder: (base) => ({
     ...base,

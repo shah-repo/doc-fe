@@ -21,6 +21,7 @@ class FBWorkspaceState extends FBSchemaState {
   // everything to _formState
   @observable public loading = false;
   public externalState?: FBWorkspaceExternalState;
+  public isPreview?: boolean;
   public document?: DocumentRevision;
   @observable public changeRequest?: ChangeRequest;
   @observable public autosave?: boolean;
@@ -103,6 +104,10 @@ class FBWorkspaceState extends FBSchemaState {
       toDocRev?.formInput?.["lhr-build-type"] === FBLHRBuildOptions.Production;
   }
 
+  public get isChangeRequest(): boolean {
+    return !isEmpty(this.changeRequest);
+  }
+
   public get isOutputSchema(): boolean {
     const { documentType: { groupOptions = [] } = {} } = this.document?.document ?? {};
     return groupOptions.includes(DOC_TYPE_GROUP_OPTION.EDITABLE_SCHEMA);
@@ -134,6 +139,10 @@ class FBWorkspaceState extends FBSchemaState {
 
   @action public setMode = (mode: FBWorkspaceMode) => {
     set(this, "mode", mode);
+  };
+
+  @action public setIsPreview = (isPreview: boolean) => {
+    set(this, "isPreview", isPreview);
   };
 
   @action public setAutosave = (autosave: boolean) => {
@@ -173,13 +182,10 @@ class FBWorkspaceState extends FBSchemaState {
     set(this.formInputSync, name, value);
   };
 
-  public removeAutoState = () => {
-    this.schema = this.schema?.map((schemaItem) => omit(schemaItem, ["autoFocus", "autoScrollTo"]));
-  };
-
   public saveDocRev = (values?: Record<string, any>) => {
     this.loadAudit = false;
     const { id, mode, autosave } = this;
+    if (this.isPreview) { return; }
     if ((mode === "form") && !values) { return; }
     if (!autosave) { return; }
     if (!id) { return; }
@@ -212,7 +218,7 @@ class FBWorkspaceState extends FBSchemaState {
     this.omitAutosave = true;
     appGlobals.omitReloadNotification = true;
     const url = isUndefined(this.document) ? FBEndpoint.ChangeRequestPatch : FBEndpoint.DocumentRevisionPatch;
-    this.documentRevApi.set({
+    return this.documentRevApi.set({
       url,
       urlValues: { id },
       body,
@@ -242,7 +248,7 @@ class FBWorkspaceState extends FBSchemaState {
     });
   };
 
-  private setFormInputData = (data?: DocumentRevision) => {
+  public setFormInputData = (data?: DocumentRevision) => {
     const { formInput = {} } = data ?? {};
     this.formInput = formInput;
     map(formInput, (value, key) => {
