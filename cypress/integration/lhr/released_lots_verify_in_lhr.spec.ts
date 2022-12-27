@@ -683,7 +683,7 @@ context("Released_lots_verify_in_lhr", () => {
         });
 
         it("Approve inline approval", () => {
-          cy.inlineApproval();
+          cy.inlineApprovalWithoutApi();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist().wait(1000);
         });
@@ -691,7 +691,7 @@ context("Released_lots_verify_in_lhr", () => {
         it("Finalize and release button click'", () => {
           cy.recFinalizeAndReleaseRecord();
           cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.listLoadingElementShouldNotExist().wait(1000);
         });
 
         it("Record is in RELEASED status", () => {
@@ -885,6 +885,8 @@ context("Released_lots_verify_in_lhr", () => {
         cy.poAddDateRequired();
         cy.unClick();
       });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Details tab", () => {
@@ -966,12 +968,13 @@ context("Released_lots_verify_in_lhr", () => {
       cy.inlineApprovalWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Finalize and release button click'", () => {
       cy.recFinalizeAndReleaseRecord();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldNotExist().wait(1000);
     });
 
     it("Record is in RELEASED status", () => {

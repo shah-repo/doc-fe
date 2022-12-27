@@ -16,6 +16,7 @@ declare global {
       ebApprove(): Chainable<Subject>;
       ebApproveWithoutApi(): Chainable<Subject>;
       lhrApprove(): Chainable<Subject>;
+      lhrApproveWitoutApi(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
       ebClickCloneEB(): Chainable<Subject>;
       ebCloneClickYes(): Chainable<Subject>;
@@ -29,6 +30,7 @@ declare global {
       ebSelectFirstDocument(): Chainable<Subject>;
       ebTryToApprove(): Chainable<Subject>;
       ebWithdrawSubmisison(): Chainable<Subject>;
+      ebWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
       ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       ebAddApproverOnApproverListWithPatchCall(params: {approver: string }): Chainable<Subject>;
     }
@@ -182,6 +184,17 @@ Cypress.Commands.add("lhrApprove", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("lhrApproveWithoutApi", () => {
+  cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").arrowClick({ force: true });
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.unClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"common.confirm\"]").arrowClick({ force: true });
+  cy.checkToastMessage({ exists: false });
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("ebTryToApprove", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick({ force: true });
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
@@ -194,6 +207,15 @@ Cypress.Commands.add("ebWithdrawSubmisison", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("#AlertDialog-continueButton").arrowClick();
   });
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebWithdrawSubmisisonWithoutApi", () => {
+  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
+  cy.wait(2000);
+  cy.get("#AlertDialog-continueButton").arrowClick();
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

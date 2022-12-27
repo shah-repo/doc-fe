@@ -100,9 +100,17 @@ context("AA Document Layout verification", () => {
   context("Add new Doc Type", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Click on 'Add Document Type'", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dtmClickAddDocumentType();
     });
 
@@ -215,7 +223,7 @@ context("AA Document Layout verification", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
-      cy.fbAddNewFieldButton();
+      cy.fbAddField();
     });
 
     it("Save document", () => {
@@ -402,9 +410,7 @@ context("AA Document Layout verification", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "Textfield for inline" });
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.fbAddNewFieldButton();
-      });
+      cy.fbAddField();
     });
 
     it("Add checkbox group", () => {
@@ -443,7 +449,7 @@ context("AA Document Layout verification", () => {
     it("Click Training Tab, clicking on it should open that tab and close the other one", () => {
       cy.drSelectTrainingTab();
       cy.get("[data-cy='tabCon-tabId.training']").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("be.hidden");
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
     });
 
@@ -475,13 +481,11 @@ context("AA Document Layout verification", () => {
     });
 
     it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
-      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom", { ensureScrollable: false });
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
   });
@@ -531,7 +535,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
-      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom", { ensureScrollable: false });
     });
   });
 
@@ -548,6 +552,10 @@ context("AA Document Layout verification", () => {
         docId: "AAD-01000",
         revision: "Rev 1",
       });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Enter the title", () => {
@@ -676,10 +684,10 @@ context("AA Document Layout verification", () => {
         cy.get(".DraftEditor-editorContainer").eq(0).arrowClick();
         cy.get(".DraftEditor-editorContainer>div").eq(0).should("have.attr", "contenteditable", "true");
       });
-    });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      it("save document", () => {
+        cy.drClickCreateDocumentWithApiCall();
+      });
     });
   });
 
@@ -687,7 +695,7 @@ context("AA Document Layout verification", () => {
     it("verify Click Training Tab, clicking on it should open that tab and close the other one", () => {
       cy.drSelectTrainingTab();
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("be.hidden");
       cy.get("[data-cy='tabCon-tabId.training']").should("have.attr", "aria-selected", "true");
     });
 
@@ -769,9 +777,7 @@ context("AA Document Layout verification", () => {
 
   context("Verify Revisions", () => {
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Revise Record", () => {
@@ -812,20 +818,15 @@ context("AA Document Layout verification", () => {
     });
 
     it("Add another user permission", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-        cy.drAddUserFromPermissionTab(USERS[2].name);
-      });
+      cy.drAddUserFromPermissionTab(USERS[2].name);
     });
 
     it("Add another group permission", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-        cy.drAddGroupFromPermissionTab("Developers");
-      });
+      cy.drAddGroupFromPermissionTab("Developers");
     });
   });
 
   context("Check document history", () => {
-
     it("Open history drawer and compare history values", () => {
       cy.drSelectHistoryTab();
     });
@@ -840,6 +841,7 @@ context("AA Document Layout verification", () => {
       {
         owner: USERS[1].name,
         actions: [
+          { key: "Access revoked for user", value: USERS[2].name },
           { key: "Access granted to group", value: `Developers` },
         ],
       },
@@ -929,15 +931,13 @@ context("AA Document Layout verification", () => {
     });
 
     it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
-      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom");
+      cy.get("[data-cy='History-detail']").realHover().wait(2000).scrollTo("bottom", { ensureScrollable: false });
     });
   });
 
   context("Approve and release and complete the training ", () => {
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Check for training text inside dialog box and complete training", () => {
@@ -959,9 +959,8 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify form option should not visible for training tab", () => {
-      cy.get(".formOptionsBox").should("not.be.visible");
+      cy.intPageVerifyFormOptionsNotExist();
     });
-
   });
 
   // Design document flow
@@ -1100,7 +1099,7 @@ context("AA Document Layout verification", () => {
     it("Click Training Tab, clicking on it should open that tab and close the other one", () => {
       cy.drSelectTrainingTab();
       cy.get("[data-cy='tabCon-tabId.training']").should("have.attr", "aria-selected", "true");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("[data-cy='tabCon-tabId.overview']").should("be.hidden");
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
     });
 
@@ -1118,9 +1117,7 @@ context("AA Document Layout verification", () => {
 
   context("Approve and release and complete the training ", () => {
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
     it("Check for training text inside dialog box and complete training", () => {

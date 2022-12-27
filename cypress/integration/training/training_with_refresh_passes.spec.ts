@@ -14,7 +14,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -583,10 +582,6 @@ context("Test training records after refresh period passes", { tags: ["@timetool
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum record", () => {
@@ -604,12 +599,8 @@ context("Test training records after refresh period passes", { tags: ["@timetool
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -628,41 +619,55 @@ context("Test training records after refresh period passes", { tags: ["@timetool
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released form");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select refresh training periodically 'Yes'", () => {
       cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training refresh period days", () => {
       cy.get("[name=training-validity]").arrowType("2");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Groups to train 'Developers'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Developers");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select User to train", () => {
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
@@ -676,13 +681,11 @@ context("Test training records after refresh period passes", { tags: ["@timetool
     });
 
     it("Save training", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -692,7 +695,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -700,7 +703,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
   context("Check training notifications", () => {
     it("Goto Dashboard", () => {
-      cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -726,10 +729,12 @@ context("Test training records after refresh period passes", { tags: ["@timetool
       }).as("response");
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
       cy.wait("@response");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("click complete training button", () => {
-      cy.trCompleteTraining();
+      cy.trCompleteTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -757,6 +762,8 @@ context("Test training records after refresh period passes", { tags: ["@timetool
   context("Use time tool to travel user back to future", () => {
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task TIME_TRAVEL_USER", () => {
@@ -791,11 +798,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
     });
 
     it("Reload the page and Check status as COMPLETE", { retries: 3 }, () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.reload();
-        });
+      cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("tr.k-master-row").should("have.length", 1);
@@ -838,5 +841,6 @@ context("Test training records after refresh period passes", { tags: ["@timetool
         .and("contain", USERS[11].name).and("contain", "Pending");
     });
   });
-
 });
+
+export { };

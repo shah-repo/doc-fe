@@ -3,7 +3,6 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { isEmpty } from "lodash";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBData, FBEQMaintenanceHistory, FBEQMaintenanceProps, FBInput, FBQuantityField, FBRadioGroup, FBSection, FBText, FBTextEditor } from "..";
-import { intl } from "../../../common/intl";
 import styles from "./FBEQMaintenance.styles";
 import { withFBEQMaintenance } from "./FBEQMaintenance.wrap";
 
@@ -45,8 +44,7 @@ const FBEQMaintenance: React.FunctionComponent<FBEQMaintenanceProps> = ({
       </FBSection>
       <FBRadioGroup
         label={isTypePM ? "form.builder.pm.required" : "form.builder.calibration.required"}
-        name={isTypePM ? intl.formatMessage({ id: "form.builder.pm.required" })
-          : intl.formatMessage({ id: "form.builder.calibration.required" })}
+        name={`${name}.requirements`}
         options={FBData.yesNoOptions}
         rules="required"
         {...{ disabled }}
