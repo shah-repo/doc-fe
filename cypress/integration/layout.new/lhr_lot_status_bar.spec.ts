@@ -828,6 +828,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   context(`Navigate to LHR and Verify Status is ${STATUS_TYPES_LABEL.WIP}`, () => {
     it("Navigate to LHR landing page", () => {
       cy.navigToLHR();
+      cy.wait(1000);
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it(`Filter document by status ${STATUS_TYPES_LABEL.WIP}, and select it`, () => {
@@ -862,20 +867,22 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
       it("Enter initial quantity", () => {
         cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
-          cy.unClick();
-        });
+        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.unClick();
+      });
+
+      it("Click save document", () => {
+        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Check Last save should be present in autosave", () => {
         cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
       });
 
-      it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
-        cy.wait(120000);
-        cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
-      });
+      // it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+      //   cy.wait(120000);
+      //   cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
+      // });
 
       it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
         email shortly`, () => {
@@ -927,6 +934,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     context("Populate the fields - including adding some references and selecting R&D build type- ", () => {
+      it("Turn on autosave", () => {
+        cy.cmpTurnOnAutosave();
+      });
+
       it("Select 'R&D' build type", () => {
         cy.contains("Build Type").should("be.visible");
         cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
@@ -949,13 +960,15 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Add Approver to approvals list", () => {
-        cy.pmAddApproverOnApproverList({ approver: owner });
+        cy.pmAddApproverOnApproverListNw({ approver: owner });
       });
     });
 
     context("Start the step → LHR Step is created in WIP", () => {
       it("Select Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'START MPI'", () => {
@@ -988,9 +1001,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Add Approver to approvals list", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
-        });
+        // cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+        //   cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
+        // });
+        cy.pmAddApproverOnApproverListNw({ approver: owner });
       });
 
       it(`Save → Verify it is functional and the last saved should be updated every time there is a “save” event 
@@ -1000,10 +1014,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           .contains("Auto-saving, please wait…");
       });
 
-      it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
-        cy.wait(120000);
-        cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
-      });
+      // it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+      //   cy.wait(120000);
+      //   cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
+      // });
 
       it("Select Procedure tab", () => {
         cy.drSelectProcedureTab();
@@ -1148,7 +1162,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Approve the submission → LHRS is in the “Completed” state ", () => {
       it("Approve LHR", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       it(`LHRS is in the ${STATUS_TYPES_LABEL.COMPLETED} state`, () => {
@@ -1204,23 +1218,25 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
             cy.get("[data-cy=\"updateRecord\"]").click();
           });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add Approver to approvals list", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.pmAddApproverOnApproverList({ approver: owner });
+            cy.pmAddApproverOnApproverListNw({ approver: owner });
           });
         });
 
         it("Click on Complete step to Complete the step again", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev], () => {
             cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
           });
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Approve LHR", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
 
         it(`LHRS is in the ${STATUS_TYPES_LABEL.COMPLETED} state`, () => {
@@ -1410,13 +1426,16 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           });
 
           it("Add Approver to approvals list", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-              cy.get("[name^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
-            });
+            // cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+            //   cy.get("[name^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
+            // });
+            cy.get("[data-cy^=\"fb-approvals\"]", { timeout: 10_000 }).scrollIntoView().should("be.visible");
+            cy.pmAddApproverOnApproverListNw({ approver: owner });
+            cy.saveBarShouldNotExist();
           });
 
           it("Click on Submit For Approval", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
+            cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev], () => {
               cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
             });
             cy.listLoadingElementShouldNotExist();
@@ -1447,6 +1466,8 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev], () => {
           cy.get("[data-cy=\"updateRecord\"]").click();
         });
+        cy.saveBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`A new revision is created in ${STATUS_TYPES_LABEL.WIP}`, () => {
@@ -1456,9 +1477,11 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Select Admin Change and release Rev A.2  → Rev A.1 is in Superseded state", () => {
       it("Add Approver to approvals list", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
-        });
+        // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        //   cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
+        // });
+        cy.get("[data-cy^=\"fb-approvals\"]", { timeout: 10_000 }).scrollIntoView().should("be.visible");
+        cy.pmAddApproverOnApproverListNw({ approver: owner });
       });
 
       it("Click on Submit For Approval", () => {
@@ -1628,10 +1651,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
 
-        it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
-          cy.wait(120000);
-          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
-        });
+        // it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+        //   cy.wait(120000);
+        //   cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
+        // });
 
         it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ multiple: true, force: true }).wait(1000);
@@ -1678,14 +1701,16 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       () => {
         it("Navigate to Detail Tab", () => {
           cy.drSelectDetailsTab();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add Approver to approvals list", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.pmAddApproverOnApproverList({ approver: owner });
+            cy.pmAddApproverOnApproverListNw({ approver: owner });
           });
-          cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Click on Submit For Approval", () => {
@@ -1763,7 +1788,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Approve the Lot", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       context("Check the content of the status bar", () => {
@@ -1815,6 +1840,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     context(`Go back to the LHR and open the completed LHR Step`, () => {
       it("Navigate to LHR landing page", () => {
         cy.navigToLHR();
+        cy.wait(1000);
       });
 
       it("Clear filter", () => {
@@ -1882,7 +1908,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Approve LHR", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       it(`LHR is in the ${STATUS_TYPES_LABEL.OBSOLETE} state`, () => {
@@ -1934,6 +1960,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
   context(`Go back to the LHR and Create a new LHR`, () => {
     it("Navigate to LHR landing page", () => {
       cy.navigToLHR();
+      cy.wait(1000);
     });
 
     it("Click 'Initiate New LHR'", () => {
@@ -1976,11 +2003,13 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Add Approver to approvals list", () => {
-      cy.pmAddApproverOnApproverList({ approver: owner });
+      cy.pmAddApproverOnApproverListNw({ approver: owner });
     });
 
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'START MPI'", () => {
@@ -1990,7 +2019,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Add Approver to approvals list", () => {
-      cy.pmAddApproverOnApproverList({ approver: owner });
+      cy.pmAddApproverOnApproverListNw({ approver: owner });
     });
 
     it("Select Procedure tab", () => {
