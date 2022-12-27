@@ -152,7 +152,7 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver, { force: true });
   });
   cy.unClick();
   cy.progressBarShouldNotExist();
