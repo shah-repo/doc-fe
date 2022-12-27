@@ -879,10 +879,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
         cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
       });
 
-      // it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
-      //   cy.wait(120000);
-      //   cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
-      // });
+      it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+        cy.wait(120000);
+        cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
+      });
 
       it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
         email shortly`, () => {
@@ -1001,9 +1001,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Add Approver to approvals list", () => {
-        // cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        //   cy.get("[data-cy^=fb-approvals-approvals-built-in]").autocompleteSelect(owner);
-        // });
         cy.pmAddApproverOnApproverListNw({ approver: owner });
       });
 
@@ -1014,10 +1011,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           .contains("Auto-saving, please wait…");
       });
 
-      // it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
-      //   cy.wait(120000);
-      //   cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
-      // });
+      it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+        cy.wait(120000);
+        cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
+      });
 
       it("Select Procedure tab", () => {
         cy.drSelectProcedureTab();
@@ -1426,9 +1423,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           });
 
           it("Add Approver to approvals list", () => {
-            // cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            //   cy.get("[name^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
-            // });
             cy.get("[data-cy^=\"fb-approvals\"]", { timeout: 10_000 }).scrollIntoView().should("be.visible");
             cy.pmAddApproverOnApproverListNw({ approver: owner });
             cy.saveBarShouldNotExist();
@@ -1477,9 +1471,6 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
 
     context("Select Admin Change and release Rev A.2  → Rev A.1 is in Superseded state", () => {
       it("Add Approver to approvals list", () => {
-        // cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        //   cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(owner);
-        // });
         cy.get("[data-cy^=\"fb-approvals\"]", { timeout: 10_000 }).scrollIntoView().should("be.visible");
         cy.pmAddApproverOnApproverListNw({ approver: owner });
       });
@@ -1651,10 +1642,10 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
           cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
         });
 
-        // it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
-        //   cy.wait(120000);
-        //   cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
-        // });
+        it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+          cy.wait(120000);
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
+        });
 
         it(`Submit for Approval → Verify it is functional and Verify popup message Approvals not present`, () => {
           cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ multiple: true, force: true }).wait(1000);
