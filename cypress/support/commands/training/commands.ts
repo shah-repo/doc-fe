@@ -14,16 +14,20 @@ declare global {
       trVerifyElementByColumnName(params: { name: string }): Chainable<Subject>;
       trFilterDocListByNameAndSelect(params: { title: string }): Chainable<Subject>;
       trApproveAR(): Chainable<Subject>;
+      trApproveARWithout(): Chainable<Subject>;
       trClearFilters(): Chainable<Subject>;
       trRejectAR(): Chainable<Subject>;
       trCompleteTraining(): Chainable<Subject>;
+      trCompleteTrainingWithoutApi(): Chainable<Subject>;
       trApproveTraining(): Chainable<Subject>;
+      trApproveTrainingWithoutApi(): Chainable<Subject>;
       trSelectFirstDocument(): Chainable<Subject>;
       trLandingPageUsername(params: { username: string }): Chainable<Subject>;
       trLandingPageDocRevTitle(params: { title: string }): Chainable<Subject>;
       trLandingPageDocId(params: { docId: string }): Chainable<Subject>;
       trLandingPageCompletedOn(params: { completed: string }): Chainable<Subject>;
       trLandingPageClearFilter(): Chainable<Subject>;
+      trLandingPageClearFilterWithoutApi(): Chainable<Subject>;
       trLandingPageOwner(params: { owner: string }): Chainable<Subject>;
       trLandingPageName(params: { name: string }): Chainable<Subject>;
       trLandingPagetrId(params: { trId: string }): Chainable<Subject>;
@@ -70,6 +74,17 @@ Cypress.Commands.add("trApproveAR", () => {
   cy.checkToastMessage({ exists: false });
 });
 
+Cypress.Commands.add("trApproveARWithoutApi", () => {
+  cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover").wait(500);
+  cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
+  cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
+  cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
 Cypress.Commands.add("trRejectAR", () => {
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostRejectCR], () => {
@@ -96,6 +111,16 @@ Cypress.Commands.add("trCompleteTraining", () => {
   cy.checkToastMessage({ exists: false });
 });
 
+Cypress.Commands.add("trCompleteTrainingWithoutApi", () => {
+  cy.get("button[data-cy=training-complete]").click();
+  cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+
 Cypress.Commands.add("trApproveTraining", () => {
   cy.get("[data-cy=\"form.builder.request.approve\"]").click();
   cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
@@ -103,6 +128,14 @@ Cypress.Commands.add("trApproveTraining", () => {
     cy.get("[data-cy=\"common.confirm\"]").click();
     cy.progressBarShouldNotExist();
   });
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("trApproveTrainingWithoutApi", () => {
+  cy.get("[data-cy=\"form.builder.request.approve\"]").click();
+  cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy=\"common.confirm\"]").click();
+  cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -136,6 +169,11 @@ Cypress.Commands.add("trLandingPageClearFilter", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetTrainingRecord, () => {
     cy.get("[data-cy=\"clearFilter\"]").arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("trLandingPageClearFilterWithoutApi", () => {
+  cy.get("[data-cy=\"clearFilter\"]").arrowClick();
   cy.listLoadingElementShouldNotExist();
 });
 

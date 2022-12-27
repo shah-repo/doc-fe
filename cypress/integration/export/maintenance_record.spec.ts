@@ -570,8 +570,15 @@ context("Export maintenance record", () => {
           .autocompleteSelect(USERS[1].name);
         cy.wait(2000);
       });
+
       it("Click on revisions tab on side panel", () => {
         cy.drClickRevisionsSidePanel();
+      });
+
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Click WIP status Maintenance Record", () => {
@@ -592,6 +599,8 @@ context("Export maintenance record", () => {
 
       it("Save and submit for Approval", () => {
         cy.pmSubmitForApproval();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Open details tab", () => {
@@ -615,12 +624,21 @@ context("Export maintenance record", () => {
 
   context("Maintenance Record with Canceled status", () => {
     context("Add Maintenance Record with Canceled", () => {
+
+      it("Open details tab", () => {
+        cy.drSelectDetailsTab();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+      });
+
       it("Click Update Maintenance Record", () => {
         cy.drClickReviseDocument();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click Cancel draft", () => {

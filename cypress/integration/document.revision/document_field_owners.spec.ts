@@ -170,15 +170,11 @@ context("Document Field Owners Test", () => {
     });
 
     it(`Select '${USERS[3].name}' to Assign document to`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.drAssignDocumentTo({ username: USERS[3].name });
-      });
+      cy.drAssignDocumentTo({ username: USERS[3].name });
     });
 
     it(`Select '${USERS[4].name}' to Assign document to`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.drAssignDocumentTo({ username: USERS[4].name });
-      });
+      cy.drAssignDocumentTo({ username: USERS[4].name });
     });
 
     it(`Logout as current user`, () => {
@@ -198,7 +194,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Filter document by id and status, and select it", () => {
-      cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
+      cy.recFilterRecordListByIdAndStatusNw({ id: "LHRO-00003", status: "Draft" });
     });
 
     it("Check if Document Type input field is disabled", () => {
@@ -233,7 +229,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Filter document by id and status, and select it", () => {
-      cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
+      cy.recFilterRecordListByIdAndStatusNw({ id: "LHRO-00003", status: "Draft" });
     });
 
     it("Fill value for FB textbox field", () => {
@@ -267,7 +263,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Filter document by id and status, and select it", () => {
-      cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
+      cy.recFilterRecordListByIdAndStatusNw({ id: "LHRO-00003", status: "Draft" });
     });
 
     it("Check field from first colaborator is disabled", () => {
@@ -300,7 +296,7 @@ context("Document Field Owners Test", () => {
     });
 
     it("Filter document by id and status, and select it", () => {
-      cy.recFilterRecordListByIdAndStatus({ id: "LHRO-00003", status: "Draft" });
+      cy.recFilterRecordListByIdAndStatusNw({ id: "LHRO-00003", status: "Draft" });
     });
 
     it("Check field from first colaborator is disabled", () => {
