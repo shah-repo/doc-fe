@@ -599,6 +599,8 @@ add the requestor to the approvals field`,
     context("Purchase Order Landing page", () => {
       it("Navigate to Purchase Order", () => {
         cy.navigToPurchaseOrder();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist().wait(2000);
       });
 
       it(`Filter document by status ${STATUS_TYPES_LABEL.RELEASED}, and select it`, () => {
@@ -699,7 +701,7 @@ add the requestor to the approvals field`,
       });
 
       it("Approve PO", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
