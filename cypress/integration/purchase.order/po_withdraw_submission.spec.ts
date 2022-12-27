@@ -4,11 +4,11 @@
 import "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
+import { receivingReleasedDate } from "../../utils/constants/dateHandler";
 import { Part } from "../../utils/constants/documentTypes/part";
-import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
@@ -24,14 +24,36 @@ let createdSupplierFormDocument;
 let createdSupplierDocument;
 let partDocumentType;
 let createdPartDocument;
-let purchaseOrderDocumentType;
-let createdPOFormDocument;
+let loginResponse;
+let poPageDetailsId;
+let poHTMLDocRevId;
 
 
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
+const delayms1 = 2000;
+const delayms2 = 5000;
+const purchaseOrderFormName = "New Purchase Order Form";
+// eslint-disable-next-line max-len
+const renderHTMLContent = `<!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8" />  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  <title>Document</title>  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&display=swap" rel="stylesheet" />  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script></head><body>  <style>    html {      zoom: 0.2;    }    * {      margin: 0;      padding: 0;      box-sizing: border-box;      font-family: "Open Sans", sans-serif;      -webkit-print-color-adjust: exact;    }    .container {      width: 2480px;      padding: 80px;      margin: 0 auto;      position: relative;      background: #ffffff;    }    header {      padding-bottom: 30px;      border-bottom: 1px solid #d3d3d3;      margin-bottom: 80px;      height: 180px;    }    .fs41 {      font-size: 41px;    }    .fs34 {      font-size: 34px;    }    .fwb {      font-weight: bold;      letter-spacing: 1px;    }    .text-white {      color: white;    }    .title {      padding: 33px 30px;      background-color: #0381CB;    }    .title strong {      font-size: 34px;      color: white;    }    .information {      margin-bottom: 1.5em;    }    .information:after {      content: "";      display: block;      clear: both;    }    .information__supplier {      width: 1007px;      float: left;      border: 1px solid #d3d3d3;      min-height: 1100px;    }    .information__shipping {      width: 1273px;      float: right;      border: 1px solid #d3d3d3;      min-height: 1100px;    }    .supplier__address {      padding: 50px 30px;      border-bottom: 1px solid #d3d3d3;      height: 711px;    }    .supplier__contacts,    .billing__mail {      height: 220px;    }    .shipping-billing {      height: 314px;    }    .address-value,    .phone-value,    .fax-value,    .shipping-value,    .billing-value,    .data-value {      margin-left: 10px;    }    .supplier__contacts,    .supplier__info,    .billing__mail {      padding-left: 30px;      padding-top: 20px;      border-bottom: 1px solid #d3d3d3;    }    .supplier__info,    .billing__contacts {      border-bottom: none;      height: 200px;    }    .invoice_mail,    .contact_mail,    .data__item,    .total__item {      margin-bottom: 45px;    }    .invoice_mail div,    .contact_mail div {      float: left;      margin-right: 30px;    }    .data__item div {      float: left;      margin-right: 30px;    }    .data__item::after {      content: "";      display: block;      clear: both;    }    .invoice_mail:after {      content: "";      display: block;      clear: both;    }    .contact_mail:after {      content: "";      display: block;      clear: both;    }    .data-value {      font-size: 34px;      letter-spacing: 0px;      color: #292929;    }    .shipping-billing {      padding: 50px 30px;      border-bottom: 1px solid #d3d3d3;    }    .shipping-billing:after {      content: "";      display: block;      clear: both;    }    .shipping,    .billing {      width: 48%;    }    .shipping {      float: left;    }    .billing {      float: right;    }    .billing__contacts {      border-bottom: none;      padding-left: 30px;      padding-top: 20px;    }    .data_element {      float: left;      padding-right: 10px;      width: 50%;    }    .list table {      border-spacing: 0;      border-collapse: collapse;      border: 1px solid #007698;    }    .table th {      text-align: center;    }    .list td {      border: 1px solid #d3d3d3;    }    table {      max-width: 100%;    }    th {      font-weight: 900;    }    table {      margin-bottom: 1.5em;      position: relative;      width: 100%;      z-index: 1;    }    table th,    table td {      font-family: inherit;      font-size: inherit;      padding: 12px 0px;      vertical-align: middle;      font-size: 28px;    }    #checkbox {      border: 0.1px solid black;      height: 40px;      width: 40px;      position: absolute;      top: 30px;      left: 40px;    }    .checked {      width: 30px;      height: 15px;      border: 2px solid;      position: absolute;      top: 18%;      left: 13%;      transform: rotate(-45deg);      border-top: none;      border-right: none;      /* display:none; */    }    .smallCell {      width: 140px;    }    section {      margin-bottom: 50px;    }    .comments {      width: 1509px;      border: 1px solid #d3d3d3;      margin-right: 100px;      float: left;    }    .comments__block,    .subtotal {      height: 240px;    }    .subtotal {      width: 635px;      float: left;      padding-top: 30px;    }    section:after {      content: "";      display: block;      clear: both;    }    .subtotal .data__item {      margin-bottom: 20px;    }    .total {      padding: 10px 50px 10px 10px;      width: 635px;      border: 1px solid #d3d3d3;    }    .total .total__item {      margin-bottom: 0px;    }    .total__item div {      float: left;    }    .total__item:after {      content: "";      display: block;      clear: both;    }    .approvals {      border: 1px solid #d3d3d3;      margin-bottom: 50px;      width: 2320px;    }    .directors {      padding: 20px 50px 20px 20px;    }    .directors div {      float: left;      margin-right: 200px;      width: fit-content;    }    .directors div:last-child {      margin-right: 0px;    }    .directors:after {      content: "";      display: block;      clear: both;    }    .directors ul {      list-style-type: none;      padding-top: 30px;    }    .directors ul li {      margin-bottom: 30px;      font-size: 34px;    }    .directors ul li:last-child {      margin-bottom: 0px;    }    .signature span {      font-size: 34px;    }    .notification {      padding-bottom: 50px;      border-bottom: 1px solid #d3d3d3;    }    #date {      position: absolute;      right: 80px;      margin-top: 10px;      font-weight: bold;      font-size: 20px;    }  </style>  <div class="container">    <header>      <div style="float: left; width: 33%;">        <p class="fwb fs41">Purchase Order </p>        <p class="fs41" style="color: #292929;">Shifamed</p>      </div>      <div style="float: left; width: 33%; text-align: center;"> <img          src="https://doc-be-dev-public.s3.us-west-2.amazonaws.com/fbeba60d-2f25-4f35-90e8-41bb79b40df2/2021-01-26T12%3A27%3A29.846Z/Adona_logo.png"          alt="Logo" /> </div>      <div style="float: right;">        <p class="fwb fs41" style="color: #292929;">PO Number:          {{documentRevision.document.docId}}-{{documentRevision.displayRevision}}<span></span></p>      </div>    </header>    <div style="clear: both;"></div>    <div class="information">      <div class="information__supplier">        <div class="title"> <strong class="fs18 text-white">SUPPLIER INFORMATION</strong> </div>        <div class="supplier__address">          <div style="float: left; margin-right: 20px; height: 100%;"> <strong              style="color: #292929; font-size: 34px;">To:</strong> </div>          <div class="data-value">            <div>{{autocompletes.po-supplier-built-in.name}}</div>            <div id="to-description" style="white-space: pre;">{{{autocompletes.po-supplier-built-in.description}}}            </div>          </div>        </div>        <div style="clear: both;"></div>        <div class="supplier__info">          <div class="data__item">            <div style="width: 330px;"> <strong style="color: #292929; font-size: 34px;">Department:</strong> </div>            <div class="data-value">{{documentRevision.formInput.department-k6ml6ew5}}</div>          </div>          <div class="data__item">            <div style="width: 330px;"> <strong style="color: #292929; font-size: 34px;">Requestor:</strong> </div>            <div class="data-value">{{autocompletes.po-requestor-autocomplete.user.name}}</div>          </div>        </div>      </div>      <div class="information__shipping">        <div class="title"> <strong>SHIPPING/BILLING INFORMATION</strong> </div>        <div class="shipping-billing" style="height: 100%">          <div class="shipping" style="height: 100%;width: 100%;">            <div style="float: left; height: 175px; margin-right: 30px;"> <strong                style="color: #292929; font-size: 34px;">Ship To:</strong> </div>            <div class="data-value">              <div id="shipping" style="">                <div id="shipping-customer-company" style="display: none">                  {{documentRevision.formInput.company-ship-to-address-kn5cq5gi}}</div>                <div id="shipping-third-party-company" style="display: none">                  {{autocompletes.third-party-company-k7f25yb6.name}}                  <br />{{{autocompletes.third-party-company-k7f25yb6.description}}}</div>                <div id="shipping-complete-manually" style="display: none">                  {{documentRevision.formInput.ship-to-address-k7f27j0k}}</div>              </div>            </div>          </div>          <div class="billing" style="width: 100%;margin-top: 40px;">            <div style="float: left; height: 175px; margin-right: 30px;"> <strong                style="color: #292929; font-size: 34px;">Bill To:</strong> </div>            <div class="data-value">              <div id="billing1" style="">                <div id="billing-customer-company"> Adona Medical <br>590 Division St <br>Campbell CA 95008 </div>                <div id="billing-complete-manually" style="display: none">                  {{documentRevision.formInput.company-bill-to-k7f2e82a}}</div>              </div>              <div id="billing"></div>            </div>          </div>        </div>        <div class="billing__mail">          <div class="invoice_mail">            <div style="float: left; width: 220px;"> <strong style="color: #292929; font-size: 34px;">Invoices                to:</strong> </div>            <div class="data-value" style="float: left;">accounting@shifamed.com </div>          </div>          <div class="contact_mail">            <div style="float: left; width: 202px;"> <strong style="color: #292929; font-size: 34px;">Contact:</strong>            </div>            <div class="data-value" style="float: left;">{{documentRevision.formInput.contact-email-kl7slf5l}}</div>          </div>        </div>        <div class="billing__contacts">          <div class="data_element">            <div class="data__item">              <div style="width: 160px;"> <strong style="color: #292929; font-size: 34px;">Shipping:</strong> </div>              <div class="data-value">{{documentRevision.formInput.shipping-k6mletok}}</div>            </div>            <div class="data__item">              <div style="width: 160px;"> <strong style="color: #292929; font-size: 34px;">Terms:</strong> </div>              <div class="data-value">{{documentRevision.formInput.terms-k6mlftzn}}</div>            </div>          </div>          <div class="data_element">            <div class="data__item">              <div style="width: 170px;"> <strong style="color: #292929; font-size: 34px;">Ordered:</strong> </div>              <div id="ordered" class="data-value"> </div>            </div>            <div class="data__item">              <div style="width: 170px;"> <strong style="color: #292929; font-size: 34px;">Quote:</strong> </div>              <div class="data-value">{{documentRevision.formInput.quotation-number-k7dwg3xr}} </div>            </div>          </div>        </div>      </div>    </div>    <div class="list">      <table id="items-table">        <thead>          <tr class="title text-white fwb" style="text-transform: uppercase;">            <th style="text-align: center;">Item</th>            <th style="text-align: center;width: 200px;">Order Qty</th>            <th style="text-align: center;">Units</th>            <th style="text-align: center;width: 400px;">SUP PN / Date Required</th>            <th style="text-align: center;">Description / PN</th>            <th style="text-align: center;">Price</th>            <th style="text-align: center;width: 230px;">Ext. Amount</th>            <th class="smallCell" style="text-align: center;">Tax</th>          </tr>        </thead>        <tbody> {{#documentRevision.formInput.po-items-built-in.items}} <tr title="table-item">            <td class="data-value" style="text-align: center;">{{index++}}</td>            <td class="data-value" style="text-align: center;">{{order}}</td>            <td class="data-value" style="text-align: center;">{{units}}</td>            <td class="data-value" style="text-align: center;">{{supplierPartNumber}}<br /> {{formattedDate}}</td>            <td class="data-value" style="text-align: center;">              {{partNumberTitle}}{{^partNumberTitle}}{{description}}{{^description}}{{/description}}{{/partNumberTitle}}              <br />              {{partNumberDocId}}{{^partNumberDocId}}{{serviceId}}{{^serviceId}}{{/serviceId}}{{/partNumberDocId}}</td>            </td>            <td class="data-value" style="text-align: center;"><span class="currency"></span>{{unitPrice}}</td>            <td class="data-value" style="text-align: center;"><span class="currency"></span>{{totalAmount}}</td>            <td style="position: relative; height: 188px;">              <div id="checkbox">{{#tax}}&#10003;{{/tax}}</div>            </td>          </tr>          <tr style="text-align: center; height: 95px;background-color: #ECECEC;">            <td colspan="8" style="color: #292929; height: 95px;" class="data-value">{{glCode}}</td>          </tr> {{/documentRevision.formInput.po-items-built-in.items}}        </tbody>      </table>    </div>    <section>      <div class="comments">        <div class="title"> <strong class="text-white fwb">NOTES / COMMENTS FOR SUPPLIER</strong> </div>        <div class="comments__block">          <div class="data-value" style="text-align: left; margin-left: 30px; margin-top: 30px;">            {{{documentRevision.formInput.comments-k6mlinzm}}} </div>        </div>      </div>      <div class="subtotal">        <div class="data__item">          <div style="width: 250px;"> <strong style="color: #292929; font-size: 34px;">Subtotal:</strong> </div>          <div class="data-value"> <span              class="currency"></span>{{documentRevision.formInput.po-items-built-in.subTotal}} </div>        </div>        <div class="data__item">          <div style="width: 250px;"> <strong style="color: #292929; font-size: 34px;">Tax:</strong> </div>          <div class="data-value"> <span class="currency"></span>{{documentRevision.formInput.po-items-built-in.tax}}          </div>        </div>        <div class="data__item">          <div style="width: 250px;"> <strong style="color: #292929; font-size: 34px;">Shipping Cost:</strong> </div>          <div class="data-value"> <span              class="currency"></span>{{documentRevision.formInput.po-items-built-in.shippingCost}} </div>        </div>        <div class="total">          <div class="total__item">            <div style="width: 268px;"> <strong style="color: #292929; font-size: 34px;">Total:</strong> </div>            <div class="data-value"> <span                class="currency"></span>{{documentRevision.formInput.po-items-built-in.totalAmount}} </div>          </div>        </div>      </div>    </section>    <div class="approvals">      <div class="title"> <strong class="text-white fwb">APPROVALS:<span></span></strong> </div>      <div class="directors">        <div style="margin-left: 100px;"> <strong style="color: #292929; font-size: 34px;">Name</strong>          {{#documentRevision.approvals}} <ul>            <li>{{approver.user.name}}</li>          </ul> {{/documentRevision.approvals}} </div>        <div> <strong style="color: #292929; font-size: 34px;">Date</strong> {{#validApprovalDates}} <ul>            <li>{{reviewedAt}}</li>          </ul> {{/validApprovalDates}} </div>      </div>    </div>    <div class="notification">      <p style="color: #292929; font-size: 34px;"> <strong style="color: #292929; font-size: 34px;"> Change          Notification: </strong> Supplier shall provide notification of any change or deviation to Goods and/or        Services to be provided under the Purchase Order. Any change or deviation requires prior written consent. </p>    </div>    <div> </div>    <footer>      <div id="pageFooter-last" />    </footer>  </div>  <script>         var table = document.getElementById('items-table'); var rows = []; var tempRows = table.getElementsByTagName('tr'); for (var i = 0; i < tempRows.length; i++) { if (tempRows[i].title === "table-item") { rows.push(tempRows[i]); } } for (var i = 0; i < rows.length; i++) { var index = i + 1; rows[i].cells[0].innerHTML = index; }      </script>  <script>   document.getElementById("to-description").innerHTML = document.getElementById("to-description").innerHTML.replace(/(<((?!br|\/br)[^>]+)>)/gi, ""); function formatDate(date) { if (!date) { return ""; } return moment(date).format("MM/DD/YYYY"); } document.getElementById("ordered").innerHTML = formatDate("{{documentRevision.formInput.po-order-date}}"); function shipping(field, options) { if (field === "Customer Company") { document.getElementById("shipping").style.whiteSpace = 'normal'; return options.customerCompany; } else if (field === "Third Party Company") { document.getElementById("shipping").style.whiteSpace = 'normal'; return options.thirdPartyCompany; } else if (field === "Complete Manually") { document.getElementById("shipping").style.whiteSpace = 'pre'; return options.completeManually; } else return ""; }; document.getElementById("shipping").innerHTML = shipping("{{documentRevision.formInput.ship-to-k7f1t1lw}}", { customerCompany: document.getElementById("shipping-customer-company").innerHTML, thirdPartyCompany: document.getElementById("shipping-third-party-company").innerHTML, completeManually: document.getElementById("shipping-complete-manually").innerHTML, }); function billing(field, options) { if (field === "Customer Company") { document.getElementById("billing").style.whiteSpace = 'normal'; return options.customerCompany; } else if (field === "Complete Manually") { document.getElementById("billing").style.whiteSpace = 'pre'; return options.completeManually; } else return ""; }; document.getElementById("billing").innerHTML = billing("{{documentRevision.formInput.bill-to-k7f29tfo}}", { customerCompany: document.getElementById("billing-customer-company").innerHTML, completeManually: document.getElementById("billing-complete-manually").innerHTML, }); function getCurrency(currency) { switch (currency) { case "EUR": return "€"; case "USD": return "$"; case "GBP": return "£"; default: return ""; } } var currencyElements = document.getElementsByClassName("currency"); for (var i = 0; i < currencyElements.length; i++) { currencyElements[i].innerHTML = getCurrency("{{documentRevision.formInput.po-items-built-in.currency}}"); }; if ("{{documentRevision.formInput.ship-to-k7f1t1lw}}" === "Customer Company") { document.getElementById("shipping").innerHTML = document.getElementById("shipping").innerHTML.replace(/, /gi, "<br>"); }; if ("{{documentRevision.formInput.bill-to-k7f29tfo}}" === "Customer Company") { document.getElementById("billing").innerHTML = document.getElementById("billing").innerHTML.replace(/, /gi, "<br>"); } </script></body></html>`;
 
-context("po withdraw submission", () => {
+const COLUMN_HEADERS = [
+  "PO #",
+  "REVISION",
+  "PO STATUS",
+  "PO STATE",
+  "SUPPLIER",
+  "PART NUMBER",
+  "AMOUNT",
+  "REQUESTOR",
+  "ORDER DATE",
+];
+
+const poDescription1 = "First PO Desc";
+const poDescription2 = "Second PO Desc";
+const level1Value = "$30.93";
+
+context("po withdraw submission ENC-12707", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -64,7 +86,6 @@ context("po withdraw submission", () => {
             users: [],
             documentTypes: [
               Part,
-              ReceivableTest,
             ],
           }, sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
         }).then((response) => {
@@ -72,7 +93,6 @@ context("po withdraw submission", () => {
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ADMIN_USER.email);
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           done();
@@ -241,187 +261,125 @@ context("po withdraw submission", () => {
       });
     });
 
-    it("[API]Create PO form", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>PO Form document</p>",
-          document: {
-            docId: "FM-00003",
-            documentType: {
-              id: formDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
+    context("PO Page Details API", () => {
+      it("[API] Patch page details", (done: any) => {
+        cy.request({
+          method: "GET",
+          url: `${CONFIG.BE_URL}/api/v1/page_details`,
+          qs: {
+            category: "Purchase Order",
+          },
+          headers: {
+            Authorization: `bearer ${adminEmployee.id}:${adminEmployeeLoginResponse.sessionId}`,
+          },
+        }).then((response) => {
+          if (response.body) {
+            poPageDetailsId = response.body[0].id;
+          }
+        }).then(() => {
+          cy.intercept({ method: "PATCH", pathname: "/api/v1/page_details/*" }).as("response");
+          cy.cmpUpdatePageDetails({
+            id: poPageDetailsId,
+            payload: {
+              columns: [
                 {
-                  id: group.body[0].id,
+                  label: COLUMN_HEADERS[0],
+                  fieldName: "irrelevant",
+                  showOnWeb: true,
+                  valuePath: "document.docId",
+                  showOnAndroid: true,
+                },
+                {
+                  fn: "DOCUMENT_REVISION_VERSION",
+                  label: COLUMN_HEADERS[1],
+                  fieldName: "irrelevant",
+                  showOnWeb: true,
+                  valuePath: "precalc.version",
+                  sourcePath: [
+                    "revisionStage:revision",
+                  ],
+                  showOnAndroid: true,
+                },
+                {
+                  fn: "PO_STATUS_FROM_PURCHASE_ORDER",
+                  label: COLUMN_HEADERS[2],
+                  fieldName: "irrelevant",
+                  showOnWeb: true,
+                  valuePath: "precalc.po_status",
+                  sourcePath: [
+                    "formDocument.formTemplate.schema",
+                  ],
+                  showOnAndroid: true,
+                },
+                {
+                  label: COLUMN_HEADERS[3],
+                  fieldName: "irrelevant",
+                  showOnWeb: true,
+                  valuePath: "displayStatus",
+                  showOnAndroid: true,
+                },
+                {
+                  fn: "SUPPLIER_NAME_FROM_PURCHASE_ORDER",
+                  label: COLUMN_HEADERS[4],
+                  fieldName: "irrelevant",
+                  showOnWeb: true,
+                  valuePath: "precalc.supplier",
+                  sourcePath: [
+                    "formDocument.formTemplate.schema",
+                  ],
+                  showOnAndroid: true,
+                },
+                {
+                  fn: "PO_PART_NUMBER_FROM_PURCHASE_ORDER",
+                  label: COLUMN_HEADERS[5],
+                  fieldName: "irrelevant",
+                  showOnWeb: true,
+                  valuePath: "precalc.po_partNumber",
+                  sourcePath: [
+                    "formDocument.formTemplate.schema",
+                  ],
+                  showOnAndroid: true,
+                },
+                {
+                  fn: "PO_AMOUNT_FROM_PURCHASE_ORDER",
+                  label: COLUMN_HEADERS[6],
+                  fieldName: "irrelevant",
+                  showOnWeb: true,
+                  valuePath: "precalc.po_amount",
+                  sourcePath: [
+                    "formDocument.formTemplate.schema",
+                  ],
+                  showOnAndroid: true,
+                },
+                {
+                  fn: "USER_NAME",
+                  label: COLUMN_HEADERS[7],
+                  fieldName: "irrelevant",
+                  showOnWeb: true,
+                  valuePath: "precalc.requestor-k740hxlb",
+                  sourcePath: [
+                    "formInput.requestor-k740hxlb",
+                    "formInput.po-requestor-autocomplete",
+                  ],
+                  showOnAndroid: true,
+                },
+                {
+                  fn: "DATE_FORMAT_MM_DD_YYYY",
+                  label: COLUMN_HEADERS[8],
+                  fieldName: "irrelevant",
+                  showOnWeb: true,
+                  valuePath: "precalc.order-date-formatted",
+                  sourcePath: [
+                    "formInput.ordered-k6mlhan7",
+                    "formInput.po-order-date",
+                  ],
+                  showOnAndroid: true,
                 },
               ],
             },
-          },
-          name: "PO Form document",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [{
-              id: purchaseOrderDocumentType[0].id,
-            }],
-            schema: [
-              {
-                name: "po-status-built-in",
-                type: "select",
-                index: 0,
-                label: "PO Status",
-                tabId: "details",
-                options: [
-                  {
-                    text: "Open",
-                    value: "Open",
-                  },
-                  {
-                    text: "Closed",
-                    value: "Closed",
-                  },
-                  {
-                    text: "Cancelled",
-                    value: "Cancelled",
-                  },
-                ],
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                validationAttribute: "PO Status",
-                applicableValidationSchema: true,
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "po-general-information-to-be-completed-by-requester-section",
-                type: "section",
-                index: 1,
-                label: "General Information",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-              },
-              {
-                name: "po-requestor-autocomplete",
-                type: "autocomplete",
-                index: 2,
-                label: "Requestor",
-                tabId: "details",
-                rules: "required",
-                hidden: false,
-                deleted: false,
-                optionId: "3",
-                placeholder: "[Select requestor here]",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: false,
-                optionLabelKey: "user.email",
-                optionValueKey: "id",
-                outputDisabled: false,
-                validationMode: "default",
-                editorProperties: [
-                  "deleteDisabled",
-                ],
-                validationAttribute: "Requestor",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "po-supplier-built-in",
-                type: "supplier",
-                tabId: "details",
-                index: 3,
-                label: "Supplier ",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                validationAttribute: "Supplier",
-                applicableValidationSchema: true,
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "po-order-date",
-                type: "datepicker",
-                index: 4,
-                label: "Order Date",
-                tabId: "details",
-                rules: "required",
-                hidden: false,
-                deleted: false,
-                validators: {
-                  required: true,
-                },
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: false,
-                outputDisabled: false,
-                validationMode: "default",
-                editorProperties: [
-                  "deleteDisabled",
-                ],
-                validationAttribute: "Order Date",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "po-items-built-in",
-                type: "purchaseorder",
-                index: 5,
-                label: "Purchase Order",
-                tabId: "lineitems",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                applicableValidationSchema: true,
-                validationAttribute: "Purchase Order",
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "fb-po-approvals",
-                type: "approvals",
-                index: 6,
-                label: "Approvals",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                uniqueSchemaItem: true,
-                validationAttribute: "Approvals",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-            ],
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: adminEmployeeLoginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdPOFormDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdPOFormDocument.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: adminEmployeeLoginResponse.sessionId,
-        }).then(() => {
-          done();
+            employeeId: adminEmployee.id,
+            sessionId: adminEmployeeLoginResponse.sessionId,
+          }).then(() => done());
         });
       });
     });
@@ -433,28 +391,96 @@ context("po withdraw submission", () => {
     });
   });
 
-  context("Create PO document in pending approval state ", () => {
+  context("Create a form for PO with outputtype as 'Purchase Order', approve and release it", () => {
+    it("Navigate to document list", () => {
+      cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on 'Create a document'", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enter title 'New Purchase Order Form'", () => {
+      cy.drEnterDocumentTitle({ name: purchaseOrderFormName });
+    });
+
+    it("Enter description 'New Purchase Order Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "New Purchase Order Form description" });
+    });
+
+    it("Click on 'Form' document type", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Click on 'Purchase Order' outputdocument type", () => {
+      cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter html code into 'Render HTML' field", () => {
+      cy.drEnterHtmlText({
+        htmlText: renderHTMLContent,
+      });
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+    });
+
+    it("Approve and release the form for PO", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it(`Check PO form status as ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
+      cy.get(`[data-cy="field-name"]`).should("have.text", purchaseOrderFormName);
+    });
+  });
+
+  context("Create first PO document in pending approval state", () => {
     it("Navigate to PO", () => {
-      cy.wait(1000);
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Create PO' button", () => {
       cy.poClickCreatePO();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Requestor", () => {
-      cy.get("[data-cy=\"Requestor\"]").contains("Requestor")
-        .should("exist");
+      cy.get("[data-cy=\"Requestor\"]").contains("Requestor");
     });
 
     it("Verify Order Date", () => {
-      cy.get("[data-cy=\"Order Date\"]").contains("Order Date")
-        .should("exist");
+      cy.get(`[data-cy="Order Date"]`).contains("Order Date");
     });
 
-    it("Enter description 'New Purchase Order'", () => {
-      cy.drEnterDocumentDescription({ description: "New Purchase Order" });
+    it(`Enter description ${poDescription1}`, () => {
+      cy.drEnterDocumentDescription({ description: poDescription1 });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
     it("Select 'Open' for PO status", () => {
@@ -462,169 +488,177 @@ context("po withdraw submission", () => {
     });
 
     it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms1);
     });
 
     it("Select Supplier", () => {
       cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001 - rev 1 - API Supplier Document");
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
-      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+      cy.get(`[name="po-order-date"]`).next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
-    });
-
-    it("Submit for approval", () => {
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.pmSubmitForApprovalWithoutAPI();
-    });
-  });
-
-  context("Create second PO document in pending approval state ", () => {
-    it("Navigate to PO", () => {
-      cy.navigToPurchaseOrder();
-    });
-
-    it("Click on 'Create PO' button", () => {
-      cy.poClickCreatePO();
-    });
-
-    it("Verify Requestor", () => {
-      cy.get("[data-cy=\"Requestor\"]").contains("Requestor")
-        .should("exist");
-    });
-
-    it("Verify Order Date", () => {
-      cy.get("[data-cy=\"Order Date\"]").contains("Order Date")
-        .should("exist");
-    });
-
-    it("Enter description 'New Purchase Order'", () => {
-      cy.drEnterDocumentDescription({ description: "New Purchase Order" });
-    });
-
-    it("Select 'Open' for PO status", () => {
-      cy.poSelectPOStatus({ status: "Open" });
-    });
-
-    it(`Select '${USERS[1].name}' for Requestor`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-    });
-
-    it("Select Supplier", () => {
-      cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001 - rev 1 - API Supplier Document");
+      cy.get(`[data-cy^="fb-po-approvals"]`).autocompleteSelect(USERS[1].name);
       cy.unClick();
-    });
-
-    it("Add Required Date", () => {
-      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
-      cy.get(".MuiPickersDay-daySelected").arrowClick();
-    });
-
-    it("Add an Approval", () => {
-      cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms1);
     });
 
     it("Save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick({ force: true });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.pmSubmitForApprovalWithoutAPI();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(delayms2);
     });
   });
 
-  context("Withdraw Submission", () => {
+  context("Verify first PO in PENDING APPROVAL state and Withdraw the Submission", () => {
     it("Navigate to PO", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify the part document on lot", () => {
       cy.get(`[aria-colindex="1"] input`).arrowType("PO-00001");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Verify PO is in ${STATUS_TYPES_LABEL.PENDING_APPROVAL} state`, () => {
+      cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
     });
 
     it("Withdraw Submission", () => {
-      cy.ebWithdrawSubmisison();
+      cy.ebWithdrawSubmisisonWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("PO is in Draft", () => {
       cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
-    it("remove Approval", () => {
-      cy.get("[data-cy^='fb-approvals-fb-po-approvals']").clear();
+    it("Remove Approver", () => {
+      cy.get(`[data-cy^="form.builder.approvers"]`).scrollIntoView();
+      cy.get(`[name^="fb-po-approvals"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`div.MuiChip-root.MuiAutocomplete-tag.MuiChip-deletable > svg`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms2);
+    });
+
+    it("Verify that Approver removed", () => {
+      cy.get(`[name^="fb-po-approvals"]`).should("not.contain", USERS[1].name);
+    });
+
+    it("Verify that Requestor is filled", () => {
+      cy.get(`[name^="po-requestor-"] input`).should("have.value", `${USERS[1].name} - ${USERS[1].email}`);
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
-  context("Click 'Add line item' and fill the data", () => {
+  context("First PO click 'Add line item' and fill the data", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click on 'Add Line Item", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.poAddNewFieldItem();
-      });
+    it("Click on 'Add Line Item' button", () => {
+      cy.poAddNewFieldItem();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select Part Number", () => {
       cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter Supplier Part Number", () => {
+      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Quantity Ordered", () => {
       cy.poEnterQuantityOrdered({ quantity: "5" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Units", () => {
       cy.poSelectUnits();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enter number of Units", () => {
+    it("Enter Unit Price", () => {
       cy.poNumberOfUnits({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
-      cy.get("[name=\"date\"]").next().find("button").arrowClick();
+      cy.get(`[name="date"]`).next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
     it("Check Tax box", () => {
       cy.poSelectTaxCheckbox();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
       cy.poAddPOButtonClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms2);
     });
 
-    it("Save PO", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
-  context("Click 'Add line item' and select Service data", () => {
+  context("First PO click 'Add line item' and select Service data", () => {
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
       cy.get("[data-cy=\"form.builder.add.line.item\"]").click();
     });
 
     it("Click on service option", () => {
       cy.poSelectOption({ optionName: "service" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select service id", () => {
@@ -637,10 +671,14 @@ context("po withdraw submission", () => {
 
     it("Enter Quantity Ordered", () => {
       cy.poEnterQuantityOrdered({ quantity: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Units", () => {
       cy.poSelectUnits();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
@@ -650,100 +688,398 @@ context("po withdraw submission", () => {
 
     it("Enter Unit Price", () => {
       cy.poNumberOfUnits({ number: "10" });
-    });
-
-    it("Click on 'Add' inside PO dialog box", () => {
-      cy.poAddPOButtonClick();
-    });
-
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
+    it("Click on 'Add' inside PO dialog box", () => {
+      cy.poAddPOButtonClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms2);
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms2);
+    });
+  });
+
+  context(`First PO verify that the system should automatically add the requestor to the approval field`, () => {
     it("navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify Approvals", () => {
-      // eslint-disable-next-line max-len
-      cy.get("[ class='MuiChip-root MuiAutocomplete-tag MuiChip-deletable']").eq(0).contains("Giovanni Reynolds - enlil.testmail+cy1@gmail.com")
-        .should("exist");
+    it("Verify approvals is added in approval block", () => {
+      cy.get(`[name^="fb-po-approvals"]`).should("contain.text", `${USERS[1].name} - ${USERS[1].email}`);
     });
   });
 
-  context("Verify the history part", () => {
-    it("Open History drawer and compare history values", () => {
+  context(`Verify that user is not able to remove/delete the requestor as an approver`, () => {
+    it("Navigate to Approval block and try to remove approver", () => {
+      cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
+      cy.verifyPoApprovalDisabled({ name: USERS[1].name, email: USERS[1].email });
+    });
+  });
+
+  context("Verify that history tab is capturing the changes - Adding requestor to the approval field", () => {
+    it("Open History tab and compare history values", () => {
       cy.drSelectHistoryTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Verify Requestor Added as User 1 ", () => {
-      cy.get("[data-cy='form.builder.audit.STRING_NEW']").contains("Requestor Added")
-        .should("exist");
-      cy.get("[data-cy='form.builder.audit.STRING_NEW']").next()
-        .contains("Giovanni Reynolds enlil.testmail+cy1@gmail.com")
-        .should("exist");
+    it("Check history entry for 'Requestor added'", () => {
+      cy.get(`[data-cy='no-padding-margin']`).eq(5).should("contain", "Requestor added")
+        .and("contain", USERS[1].name);
     });
 
-    it("Verify Approver Added as User 1 ", () => {
-      cy.get("[data-cy='change-key-2-0']").should("have.text", "Approver Added");
-      cy.get("[data-cy='change-key-2-0']").parent().next().should("have.text", USERS[1].name);
+    it("Check history entry for 'Approver Added'", () => {
+      cy.get(`[data-cy="no-padding-margin"]`).eq(3).should("contain", "Approver Added").and("contain", USERS[1].name);
     });
   });
 
-  context("Approve PO", () => {
+  context(`Verify that “Backspace” and “Clear all” option will not be available in the PO approval field`, () => {
+    it(`Verify that “Backspace” and “Clear all” option will not be available in the PO approval field`, () => {
+      cy.get("[data-cy^=fb-po-approvals]").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
+    });
+  });
+
+  context(`Submit for Approval, verify PO can be released`, () => {
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(delayms1);
     });
 
     it("Approve PO", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms1);
     });
+  });
 
+  context(`Verify that data is saved`, () => {
     it("Navigate to PO", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+
+      cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms1);
+    });
+
+    it("Select created PO", () => {
+      cy.dlFilterByDocId({ docId: "PO-00001" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("verify that PO landing page is pulling correct data", () => {
-      cy.get("[class=\"k-textbox\"]").eq(0).clear().arrowType("PO-00001").wait(500);
+      cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
+      cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "1");
+      cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "RELEASED");
+      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "API Supplier Document");
+      cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "PRT-00005 - 1");
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$30.93");
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[1].name);
+      cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
+    });
+
+    it("Select the first created PO", () => {
+      cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(1).clear().arrowType("A").wait(500);
+    });
+
+    it(`Verify PO statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+    });
+
+    it("Verify document header details", () => {
+      cy.verifyHeaderInfoContent({
+        title: "Purchase Orders",
+        docId: "PO-00001",
+        revision: "Rev 1",
+      });
+    });
+
+    it(`Verify PO description as ${poDescription1}`, () => {
+      cy.get(`[data-cy="BaseWithhtml-editor"]`).should("contain.text", poDescription1);
+    });
+
+    it(`Verify PO status is Open`, () => {
+      cy.get("#mui-component-select-po-status-built-in").should("contain.text", "Open");
+    });
+
+    it(`Check the Requestor field contain ${USERS[1].name} - ${USERS[1].email}`, () => {
+      cy.get(`[data-cy^="po-requestor-"]`).should("have.value", `${USERS[1].name} - ${USERS[1].email}`);
+    });
+
+    it(`Verify Order Date`, () => {
+      cy.get(`input[name^="po-order-date"]`).should("have.value", receivingReleasedDate);
+    });
+
+    it(`Verify Supplier name`, () => {
+      cy.get(`[data-cy="po-supplier-built-in"]`).should("have.value", "SUP-00001 - rev 1 - API Supplier Document");
+    });
+
+    it(`Check the Approval field contain ${USERS[1].name} - ${USERS[1].email}`, () => {
+      cy.get("div.Mui-disabled.MuiChip-deletable").should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+    });
+
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(2).clear().arrowType("Open").wait(500);
+      cy.wait(delayms1);
+    });
+
+    it("Verify part number", () => {
+      cy.get(`[data-cy="partNumberDocId"]`).eq(0).should("have.text", "PRT-00005 - 1");
+      cy.get(`[data-cy="serviceId"]`).eq(0).should("have.text", "SRV123");
+    });
+
+    it("Verify supplier number", () => {
+      cy.get("[data-cy='supplierPartNumber']").eq(0).should("have.text", "PRT-0004");
+      cy.get("[data-cy='supplierPartNumber']").eq(1).should("have.text", "N/A");
+    });
+
+    it("Verify description", () => {
+      cy.get("[data-cy='description']").eq(0).should("have.text", "Part document");
+      cy.get("[data-cy='description']").eq(1).should("have.text", "Description for SRV123");
+    });
+
+    it("Verify ordered quantity", () => {
+      cy.get("[data-cy='order']").eq(0).should("have.text", "5");
+      cy.get("[data-cy='order']").eq(1).should("have.text", "2");
+    });
+
+    it("Verify Date Required", () => {
+      cy.get("[data-cy='formattedDate']").eq(0)
+        .should("have.text", receivingReleasedDate);
+      cy.get("[data-cy='formattedDate']").eq(1)
+        .should("have.text", receivingReleasedDate);
+    });
+
+    it("Verify Unit Price", () => {
+      cy.get("[data-cy='unitPrice']").eq(0).should("have.text", "$2.00");
+      cy.get("[data-cy='unitPrice']").eq(1).should("have.text", "$10.00");
+    });
+
+    it("Verify tax rate", () => {
+      cy.get("[name='po-items-built-in.taxRate']").should("have.text", "9.25");
+    });
+
+    it("Verify tax value", () => {
+      cy.get("[name='po-items-built-in.tax']").should("have.text", "0.925000");
+    });
+
+    it("Verify Grand Total", () => {
+      cy.get("[data-cy='poTotal']").should("have.text", level1Value);
+    });
+  });
+
+  context("Verify that downloaded PDF display Requestor information", () => {
+    it("Navigate to PO", () => {
+      cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(3).clear().arrowType("API Supplier Document").wait(500);
+
+      cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(4).clear().arrowType("PRT-00005 - 1").wait(500);
+      cy.wait(delayms1);
+    });
+
+    it("Select created PO", () => {
+      cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(5).clear().arrowType("$30.93").wait(500);
+    });
+
+    it("[API]Login admin tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
+      });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(6).clear().arrowType("Giovanni Reynolds").wait(500);
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("[API]Get html document and verify PO number and Requestor information", () => {
+      cy.url().then((url: any) => {
+        poHTMLDocRevId = url.split("/").pop();
+        cy.request({
+          method: "GET",
+          url: `${CONFIG.BE_URL}/api/v1/document_revisions/generate_html/${poHTMLDocRevId}`,
+          headers: {
+            Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
+          },
+        }).then((response) => {
+          const responseBody = response.body.toString();
+          cy.log(responseBody);
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+
+          expect(responseBody)
+            .contains(`PO Number:          PO-00001-1`)
+            .and.contains("Requestor:")
+            .and.contains(USERS[1].name);
+        });
+      });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[class=\"k-textbox\"]").eq(7).clear().arrowType("N/A").wait(500);
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Create second PO", () => {
+    it("Navigate to PO", () => {
+      cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on 'Create PO' button", () => {
+      cy.poClickCreatePO();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Verify Requestor", () => {
+      cy.get("[data-cy=\"Requestor\"]").contains("Requestor");
+    });
+
+    it("Verify Order Date", () => {
+      cy.get("[data-cy=\"Order Date\"]").contains("Order Date");
+    });
+
+    it(`Enter description ${poDescription2}`, () => {
+      cy.drEnterDocumentDescription({ description: poDescription2 });
+      cy.unClick();
+    });
+
+    it("Select 'Open' for PO status", () => {
+      cy.poSelectPOStatus({ status: "Open" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it(`Select '${USERS[1].name}' for Requestor`, () => {
+      cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[1].name} - ${USERS[1].email}`);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms1);
+    });
+
+    it("Select Supplier", () => {
+      cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00001 - rev 1 - API Supplier Document");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add Required Date", () => {
+      cy.get("[name=\"po-order-date\"]").next().find("button").arrowClick();
+      cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add an Approval", () => {
+      cy.get("[data-cy^='fb-po-approvals']").autocompleteSelect(USERS[1].name);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms1);
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Submit for approval", () => {
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(delayms1);
     });
   });
 
   context("select the second po document", () => {
-    it("Veryfy the part document on lot", () => {
-      cy.get("[data-cy=\"clearFilter\"]").arrowClick();
-      cy.get(`[aria-colindex="1"] input`).arrowType("PO-00002");
+    it("Navigate to PO", () => {
+      cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+
+      cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms1);
+    });
+
+    it("Select the 2nd created PO", () => {
+      cy.dlFilterByDocId({ docId: "PO-00002" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("verify that PO landing page is pulling correct data", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00002");
+      cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "1");
+      cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Pending Approval");
+      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "API Supplier Document");
+      cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "N/A");
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$0.00");
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[1].name);
+      cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
+    });
+
+    it("Open the PO", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("PO is in PENDING APPROVAL", () => {
       cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
     });
+  });
 
+  context(`Approve the PO`, () => {
     it("Approve PO", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms1);
     });
+  });
 
-    it("Verify Approvals", () => {
-      // eslint-disable-next-line max-len
-      cy.get("[ class='MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth']").eq(2).contains("Giovanni Reynolds - enlil.testmail+cy1@gmail.com")
-        .should("exist");
+  context(`Verify that the system did NOT automatically added the requestor to the approval field`, () => {
+    it("Verify that the system did NOT automatically added the requestor to the approval field", () => {
+      cy.get(`input[data-cy^="fb-po-approvals"]`).parent().should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+      cy.get(`input[data-cy^="fb-po-approvals"]`).parent()
+        .find(`[class="MuiChip-root MuiAutocomplete-tag Mui-disabled MuiChip-deletable"]`).should("not.exist");
     });
   });
 });
+
+export { };

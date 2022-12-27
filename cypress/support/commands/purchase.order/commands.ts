@@ -138,8 +138,8 @@ Cypress.Commands.add("verifyPoApprovalSignature", (params) => {
 });
 
 Cypress.Commands.add("verifyPoApprovalDisabled", (params) => {
-  cy.get(`input[data-cy^="fb-po-approvals-"]`).parent().should("contain", `${params.name} - ${params.email}`);
-  cy.get(`input[data-cy^="fb-po-approvals-"]`).parent()
+  cy.get(`input[data-cy^="fb-po-approvals"]`).parent().should("contain", `${params.name} - ${params.email}`);
+  cy.get(`input[data-cy^="fb-po-approvals"]`).parent()
     .find(`[class="MuiChip-root MuiAutocomplete-tag Mui-disabled MuiChip-deletable"]`).should("exist");
 });
 
