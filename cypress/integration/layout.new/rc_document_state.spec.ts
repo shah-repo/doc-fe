@@ -384,9 +384,9 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Click 'Withdraw Submission' button", () => {
           cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-            cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-          });
+          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Click on Submit For Approval", () => {

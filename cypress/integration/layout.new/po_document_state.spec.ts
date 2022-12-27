@@ -210,7 +210,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           });
 
           it("Remove requestor", () => {
-            cy.get(".MuiAutocomplete-clearIndicator").realHover().arrowClick();
+            cy.get(".MuiAutocomplete-clearIndicator").first().realHover().arrowClick();
             cy.listLoadingElementShouldNotExist();
             cy.progressBarShouldNotExist();
           });
