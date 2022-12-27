@@ -219,8 +219,8 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     downloadAsync.start(downloadAction, attachment, downloadAsync);
   };
 
-  const showPin = pinLineItem && !pinned;
-  const showUnpin = unPinLineItem && pinned;
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <>
@@ -399,10 +399,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
             </span>
             <span className={classes.actionIcon}>
-              {!pinHover && showPin && (
+              {!pinHover && isPinShown && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
-              {pinHover && showPin && (
+              {pinHover && isPinShown && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
@@ -415,7 +415,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   />
                 </StyleTooltip>
               )}
-              {showUnpin && (
+              {isUnpinShown && (
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
                   placement="top"

@@ -178,8 +178,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
     async.start(downloadAction, attachment, async);
   };
 
-  const showPin = pinLineItem && !pinned;
-  const showUnpin = unPinLineItem && pinned;
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <>
@@ -393,10 +393,10 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
               </StyleTooltip>
             }
             <span className={classes.actionIcon}>
-              {!pinHover && showPin && (
+              {!pinHover && isPinShown && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
-              {pinHover && !showPin && (
+              {pinHover && !isPinShown && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
@@ -409,7 +409,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                   />
                 </StyleTooltip>
               )}
-              {showUnpin && (
+              {isUnpinShown && (
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
                   placement="top"
@@ -428,7 +428,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
             )}
           </Box>
         )}
-        {showUnpin && (
+        {isUnpinShown && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}

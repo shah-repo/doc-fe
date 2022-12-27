@@ -97,8 +97,8 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
     setViewHoverItem("");
   };
 
-  const showPin = pinLineItem && !pinned;
-  const showUnpin = unPinLineItem && pinned;
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <>
@@ -198,8 +198,10 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
         />
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
-            {!pinHover && showPin && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
-            {pinHover && showPin && (
+            {!pinHover && isPinShown && (
+              <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
+            )}
+            {pinHover && isPinShown && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
                 placement="top"
@@ -217,7 +219,7 @@ const ApprovalClosedPresenter: React.FC<Props> = ({
             )}
           </Box>
         )}
-        {showUnpin && (
+        {isUnpinShown && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}

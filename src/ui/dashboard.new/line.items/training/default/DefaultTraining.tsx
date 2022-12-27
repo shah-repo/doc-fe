@@ -82,8 +82,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   docDocumentId = docDocumentId || "";
   docRevId = docRevId || "";
 
-  const showPin = pinLineItem && !pinned;
-  const showUnpin = unPinLineItem && pinned;
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <StyledListItem
@@ -265,8 +265,8 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
       />
       {hoverItem && !pinned && (
         <Box component="div" className={classes.actionIcons}>
-          {!pinHover && showPin && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
-          {pinHover && showPin && (
+          {!pinHover && isPinShown && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
+          {pinHover && isPinShown && (
             <StyleTooltip
               title={<Text translation="common.pin" />}
               placement="top"
@@ -284,7 +284,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
           )}
         </Box>
       )}
-      {showUnpin && (
+      {isUnpinShown && (
         <Box component="div" className={classes.actionIcon}>
           <StyleTooltip
             title={<Text translation="common.unpin" />}

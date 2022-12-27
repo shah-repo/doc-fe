@@ -84,8 +84,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
     onMouseHoverItem(id);
   };
 
-  const showPin = pinLineItem && !pinned;
-  const showUnpin = unPinLineItem && pinned;
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <StyledListItem
@@ -263,8 +263,8 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
       />
       {hoverItem && !pinned && (
         <div className={classes.actionIcons}>
-          {!pinHover && showPin && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
-          {pinHover && showPin && (
+          {!pinHover && isPinShown && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
+          {pinHover && isPinShown && (
             <StyleTooltip
               title={<Text translation="common.pin" />}
               placement="top"
@@ -282,7 +282,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
           )}
         </div>
       )}
-      {showUnpin && (
+      {isUnpinShown && (
         <span className={classes.actionIcon}>
           <StyleTooltip
             title={<Text translation="common.unpin" />}

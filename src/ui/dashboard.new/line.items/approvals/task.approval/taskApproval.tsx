@@ -120,15 +120,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   };
   const transitionDialogApprove = useDialog();
   const transitionDialogReject = useDialog();
-  const handleApproveClick = () => {
-    transitionDialogApprove.open();
-  };
+  const handleApproveClick = transitionDialogApprove.open;
   const handleRejectClick = () => {
     transitionDialogReject.open();
   };
 
-  const showPin = pinLineItem && !pinned;
-  const showUnpin = unPinLineItem && pinned;
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <>
@@ -275,10 +273,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
             </span>
             <span className={classes.actionIcon}>
-              {!pinHover && showPin && (
+              {!pinHover && isPinShown && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
-              {pinHover && showPin && (
+              {pinHover && isPinShown && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
@@ -291,7 +289,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   />
                 </StyleTooltip>
               )}
-              {showUnpin && (
+              {isUnpinShown && (
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
                   placement="top"
@@ -310,7 +308,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
             )}
           </Box>
         )}
-        {showUnpin && (
+        {isUnpinShown && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}

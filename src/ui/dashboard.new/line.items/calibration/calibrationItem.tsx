@@ -72,8 +72,8 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     setPinHover(true);
   };
 
-  const showPin = pinLineItem && !pinned;
-  const showUnpin = unPinLineItem && pinned;
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <StyledListItem
@@ -164,7 +164,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           </>
         }
       />
-      {hoverItem && showPin && (
+      {hoverItem && isPinShown && (
         <Box
           component="div"
           className={classes.actionIcons}
@@ -193,7 +193,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
           )}
         </Box>
       )}
-      {showUnpin && (
+      {isUnpinShown && (
         <span className={classes.actionIcon}>
           <StyleTooltip
             title={<Text translation="common.unpin" />}
