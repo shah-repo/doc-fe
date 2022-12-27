@@ -110,7 +110,7 @@ context("DAM and POAM", () => {
       });
 
       it("Click on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("'Approve and Release' the document", () => {
@@ -226,7 +226,7 @@ context("DAM and POAM", () => {
       });
 
       it("Click on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release document for create company", () => {
@@ -418,7 +418,7 @@ context("DAM and POAM", () => {
 
       context(`Add New Role: Role One`, () => {
         it("Open approval roles tab", () => {
-          cy.drSelectApprovalRolesTab();
+          cy.drSelectApprovalRolesTabWithoutApi();
         });
 
         it("Open 'Add Role' dialog", () => {
@@ -580,7 +580,7 @@ context("DAM and POAM", () => {
         });
 
         it("Navigate to Approval roles Tab", () => {
-          cy.drSelectApprovalRolesTab();
+          cy.drSelectApprovalRolesTabWithoutApi();
         });
 
         it("Verify 'Approval Role' value after migration", () => {
@@ -619,15 +619,18 @@ context("DAM and POAM", () => {
         });
 
         it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
-          });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.drAddUserFromPermissionTab(USERS[3].name);
+          cy.wait(2000);
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Developers");
-          });
+          cy.drAddGroupFromPermissionTab("Developers");
+        });
+
+        it("Save document", () => {
+          cy.drClickCreateDocumentWithApiCall();
         });
       });
 
@@ -721,7 +724,7 @@ context("DAM and POAM", () => {
         });
 
         it("Verify that Form Options should not appear for this tab", () => {
-          cy.get("#sm-tabpanel-1").find(".formOptionsBox").scrollIntoView().should("exist");
+          cy.intPageVerifyFormOptionsNotExist();
         });
       });
 
@@ -1306,17 +1309,16 @@ context("DAM and POAM", () => {
           });
 
           it("Add another user permission", () => {
-            cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-              cy.drAddUserFromPermissionTab(userOne);
-            });
+            cy.drAddUserFromPermissionTab(userOne);
+            cy.wait(2000);
           });
 
           it("Add another group permission", () => {
-            cy.progressBarShouldNotExist();
-            cy.listLoadingElementShouldNotExist();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-              cy.drAddGroupFromPermissionTab(groupOne);
-            });
+            cy.drAddGroupFromPermissionTab(groupOne);
+          });
+
+          it("Save document", () => {
+            cy.drClickCreateDocumentWithApiCall();
           });
         });
 
@@ -1356,6 +1358,7 @@ context("DAM and POAM", () => {
 
         context("Training Required is unchecked, there should be no Training Tab", () => {
           it("Training Required is unchecked", () => {
+            cy.drSelectOverviewTab();
             cy.get(`[data-cy="field-retrain"] input[type=checkbox]`).should("not.be.checked");
           });
         });
@@ -1594,15 +1597,12 @@ context("DAM and POAM", () => {
           });
 
           it("Add another user permission", () => {
-            cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-              cy.drAddUserFromPermissionTab(userTwo);
-            });
+            cy.drAddUserFromPermissionTab(userTwo);
+            cy.wait(2000);
           });
 
           it("Add another group permission", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
-              cy.drAddGroupFromPermissionTab(groupTwo);
-            });
+            cy.drAddGroupFromPermissionTab(groupTwo);
           });
         });
 
@@ -1610,7 +1610,9 @@ context("DAM and POAM", () => {
           const history = [
             {
               owner,
-              actions: [{ key: "Access granted to group", value: groupTwo }],
+              actions: [
+                { key: "Access granted to group", value: groupTwo },
+              ],
             },
             {
               owner,

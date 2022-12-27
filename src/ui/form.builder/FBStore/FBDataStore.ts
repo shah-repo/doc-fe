@@ -1,5 +1,5 @@
 import { findIndex, isArray, map, unionBy } from "lodash";
-import { action, observable, set } from "mobx";
+import { action, computed, observable, set } from "mobx";
 import { Approval } from "../../../state/ducks/common/types";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { FBDataStoreApprovalKeys } from "../../documentRevision/forms/types";
@@ -9,7 +9,10 @@ class FBDataStore {
   @observable public refreshData: DocumentRevision | undefined;
   @observable public poApprovals: FBInlineApprovalBody[] | Approval[] = [];
   @observable public inlineApprovals: FBInlineApprovalBody[] | Approval[] = [];
-  public revChangeBeforeApprovals;
+
+  @computed public get revisionChangeType() {
+    return this.refreshData?.revisionChangeType;
+  }
 
   @action public setRefreshData = (value) => {
     set(this, "refreshData", value);

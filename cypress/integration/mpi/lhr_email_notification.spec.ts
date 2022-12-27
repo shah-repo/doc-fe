@@ -266,7 +266,6 @@ context("LHRs email notifications", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
           cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect(MPIDocumentTitle, { force: true });
         });
       });
@@ -310,7 +309,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Click save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
       cy.url().then((url: any) => {
         lhr1DocUrl = url;
       });
@@ -365,10 +364,11 @@ context("LHRs email notifications", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhr1DocUrl);
         });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add a first Approval", () => {
-        cy.get(dataCyFbApprovals).arrowClick();
+        cy.get(dataCyFbApprovals).scrollIntoView().arrowClick({ force: true });
         cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
           cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
         });
@@ -397,6 +397,7 @@ context("LHRs email notifications", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
         cy.visit(lhrtDocUrl);
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create new document from LHRt", () => {
@@ -474,6 +475,7 @@ context("LHRs email notifications", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhr2DocUrl);
         });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add a first Approval", () => {
@@ -506,6 +508,7 @@ context("LHRs email notifications", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
         cy.visit(lhrtDocUrl);
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create new document from LHRt", () => {
@@ -592,6 +595,7 @@ context("LHRs email notifications", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhr3DocUrl);
         });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add a first Approval", () => {
@@ -775,6 +779,7 @@ context("LHRs email notifications", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhr1DocUrl);
         });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Revise LHR", () => {
@@ -827,6 +832,7 @@ context("LHRs email notifications", () => {
         cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
           cy.visit(lhr2DocUrl);
         });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Revise LHR", () => {

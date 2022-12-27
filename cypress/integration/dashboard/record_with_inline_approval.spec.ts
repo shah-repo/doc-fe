@@ -343,7 +343,12 @@ context("Records test with Inline approval", () => {
       cy.get("[data-cy=\"revision\"]").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+
       cy.drSelectDetailsTab();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+
       cy.get("[name^=age-]").should("exist");
       cy.get("[name^=age-]").arrowType("10");
     });

@@ -11,7 +11,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, momentInPST } from "../../utils/constants/dateHandler";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { GeneralDocumentDocType } from "../../utils/constants/documentTypes/generalDocument";
@@ -3936,10 +3935,14 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
 
     it("Navigate to User management", () => {
       cy.usrNavigateToUserManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'ADD EMPLOYEE'", () => {
       cy.usrClickAddEmployee();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Fill in user attributes", () => {
@@ -3955,6 +3958,8 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
     context("Create user", () => {
       it("Clicks the save button", () => {
         cy.usrClickSaveButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.checkToastMessage({ exists: false });
       });
     });
@@ -4011,6 +4016,8 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
 
     it("Open first document", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -4021,37 +4028,44 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
 
     it("Navigate to LHR", () => {
       cy.navigToLHR();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select first LHR", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Enter LHR atributes", () => {
       it("Enter initial quantity", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
-          cy.unClick();
-          cy.url().then((url: any) => {
-            lhrDocUrl = url;
-          });
+        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.url().then((url: any) => {
+          lhrDocUrl = url;
         });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Select 'R&D' build type", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[value=\"R&D\"]").check();
-        });
+        cy.get("[value=\"R&D\"]").check();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add 'Due Date'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.poAddDateRequired();
-        });
+        cy.poAddDateRequired();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click save document", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.wait(7000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -4061,19 +4075,25 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
     context("Complete LHR step", () => {
       it("Navigate to Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Open LHRs 1 dropdown", () => {
         cy.get(`div[id="sm-tabpanel-1"] circle`).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'START MPI'", () => {
         cy.mpiStartStep({ stepNumber: 1 });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click save document", () => {
         cy.wait(5000);
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -4084,24 +4104,28 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
 
       it("Select 'Procedure' tab", () => {
         cy.drSelectProcedureTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
-          cy.unClick();
-        });
+        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter 'Rejected quntity' for LHRs #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
-          cy.unClick();
-        });
+        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'Overview' tab", () => {
         cy.drSelectOverviewTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approval", () => {
@@ -4113,39 +4137,41 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
       it("Submit for approval", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve approval", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
     context("Complete LHR", () => {
       it("Navig to LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(lhrDocUrl);
-        });
+        cy.visit(lhrDocUrl);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
-        });
+        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Submit for approval", () => {
-        cy.lhrSubmitForApproval();
+        cy.lhrSubmitForApprovalWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Approve approval", () => {
         cy.listLoadingElementShouldNotExist();
         cy.wait(2000);
-        cy.lhrApprove();
+        cy.lhrApproveWitoutApi();
       });
     });
   });
@@ -4157,6 +4183,8 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
 
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task USAGE_REPORT", () => {
@@ -4169,6 +4197,8 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
