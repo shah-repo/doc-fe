@@ -201,6 +201,18 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           it("Enters description 'PO Record '", () => {
             cy.drEnterDocumentDescription({ description: "PO Record " });
             cy.progressBarShouldNotExist();
+            cy.wait(2000);
+          });
+
+          it(`Select '${USERS[2].name}' for Requestor`, () => {
+            cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+            cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+          });
+
+          it("Remove requestor", () => {
+            cy.get(".MuiAutocomplete-clearIndicator").realHover().arrowClick();
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
           });
 
           it("Check Last save should be present for autosave", () => {
