@@ -51,6 +51,7 @@ declare global {
       arCloseARWithoutApi(): Chainable<Subject>;
       arCloseARFromMenu(): Chainable<Subject>;
       arVoidAR(): Chainable<Subject>;
+      arSaveApiCall(): Chainable<Subject>;
       arSaveApiCallWithoutApi(): Chainable<Subject>;
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
       arVerifySignatureIsNotMet(): Chainable<Subject>;
