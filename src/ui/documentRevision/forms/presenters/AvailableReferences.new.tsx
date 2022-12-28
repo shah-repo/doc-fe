@@ -67,7 +67,6 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
   const loadAction =  useActionCreator(documentRevisionsActions.loadList);
   const loadAsyncState = useSelector(documentRevisionsSelectors.getLoadListAsyncState);
   const loading = ![AsyncStatus.Success, AsyncStatus.Error].includes(loadAsyncState.status);
-  const truncateLable = (label) => truncate(label, { length: 20, omission: " ..." });
 
   const onChange = (e, val) => {
     const newValue = isArray(val) ? val : [...value, val];
@@ -263,7 +262,7 @@ const AvailableReferences: React.FunctionComponent<AvailableReferencesPropsWithF
             label={
               <Typography className={classes.chip}>
                 <FBTooltip title={option.label}>
-                  <>{truncateLable(option.label)}</>
+                  {option.label}
                 </FBTooltip>
               </Typography>}
             disabled={option.deleteDisabled}
