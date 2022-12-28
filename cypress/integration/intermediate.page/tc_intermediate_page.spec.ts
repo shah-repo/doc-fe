@@ -443,6 +443,7 @@ context("Intermediate page validation", () => {
 
     it("Click on Preview", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Approval should be visible", () => {
