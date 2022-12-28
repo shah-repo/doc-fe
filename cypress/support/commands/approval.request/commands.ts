@@ -349,9 +349,11 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string;
 });
 
 Cypress.Commands.add("arAddApproverOnApproverListWithoutApiCall", (params: { approver: string; noWait?: bool  }) => {
-  cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick({ force: true });
-  cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
-  cy.unClick().wait(500);
+  cy.get(`[data-cy="fb-approvers-approvers"]`).arrowClick({ force: true });
+  cy.get(`[data-cy=\"fb-approvers-approvers"]`).autocompleteSelect(params.approver);
+  cy.unClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
@@ -384,7 +386,7 @@ Cypress.Commands.add("arSaveApiCall", () => {
 });
 
 Cypress.Commands.add("arSaveApiCallWithoutApi", () => {
-  cy.get("[data-cy=\"common.save\"]").arrowClick();
+  cy.get("[data-cy=\"common.save\"]").arrowClick().wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
