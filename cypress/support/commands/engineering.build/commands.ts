@@ -16,7 +16,7 @@ declare global {
       ebApprove(): Chainable<Subject>;
       ebApproveWithoutApi(): Chainable<Subject>;
       lhrApprove(): Chainable<Subject>;
-      lhrApproveWitoutApi(): Chainable<Subject>;
+      lhrApproveWithoutApi(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
       ebClickCloneEB(): Chainable<Subject>;
       ebCloneClickYes(): Chainable<Subject>;
