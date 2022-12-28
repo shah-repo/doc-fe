@@ -15,4 +15,13 @@ export default (theme: Theme) =>
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
     },
+    passiveContainer: {
+      position: "relative",
+    },
+    passiveProgress: {
+      width: "100%",
+      marginTop: theme.spacing(1),
+      position: "absolute",
+      zIndex: 2,
+    },
   });

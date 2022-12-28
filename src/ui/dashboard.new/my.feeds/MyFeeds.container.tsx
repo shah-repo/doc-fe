@@ -9,7 +9,7 @@ import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
 import { scrollToBottom } from "../line.items/common/Utils";
-import MyFeedsLineItemPresenter from "./MyFeeds.presenter";
+import LineItemsPresenter from "./LineItems.presenter";
 
 const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -52,6 +52,18 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     pinnedOrUnPinnedAsync.start(unPinnedLineItem, pinnedItemId, pinnedOrUnPinnedAsync);
   };
 
+  const dismissAction = useActionCreator(dashboardMyFeedsActions.dismissLineItem);
+  const dismissAsync = useAsync({
+    onSuccess: () => {
+      setOffset(MY_FEEDS_INITIAL_OFFSET);
+      setOverallLimit(MY_FEEDS_LIMIT);
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
+    },
+  });
+  const dismissLineItem = (id: string) => {
+    dismissAsync.start(dismissAction, id, dismissAsync);
+  };
+
   const async = useAsync();
   const onLoadMoreData = () => {
     const nextOffset = offset + MY_FEEDS_LIMIT;
@@ -67,11 +79,11 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     }, 2000);
   };
   return (
-    <MyFeedsLineItemPresenter
+    <LineItemsPresenter
       {...{
         loadMyFeeds, loadMyFeedsListAsyncState, feedItems, unPinLineItem,
         pinLineItem, hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
-        dialogPDF,
+        dialogPDF, dismissLineItem,
       }}
       onLoadMoreData={onLoadMoreData}
     />

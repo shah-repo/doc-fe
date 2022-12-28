@@ -10,12 +10,10 @@ import { ReactComponent as RejectIcon } from "../../../../../assets/images/rejec
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { ReactComponent as ViewIcon } from "../../../../../assets/images/view.svg";
 import { ReactComponent as ViewSolidIcon } from "../../../../../assets/images/view_solid.svg";
-import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
 import Text from "../../../../components/Text";
-import useAsync from "../../../../hooks/useAsync";
 import useDialog from "../../../../hooks/useDialog";
 import Colors from "../../../../layout/theme/utils/colors";
 import ApprovalTitle from "../../common/ApprovalTitle/presenter";
@@ -26,6 +24,7 @@ import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
 import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import useStyles from "./taskApproval.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -50,8 +49,9 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 const TaskApprovalPresenter: React.FC<Props> = ({
   id,
@@ -68,6 +68,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const [pinHover, setPinHover] = React.useState(false);
@@ -75,14 +76,15 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const [viewHoverItem, setViewHoverItem] = React.useState("");
   const [approveHover, setApproveHover] = React.useState(false);
   const [rejectHover, setRejectHover] = React.useState(false);
-  const [approved, setApproved] = React.useState(false);
-  const [rejected, setRejected] = React.useState(false);
   const hoverItem = hoverItemId === id;
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const handleClick = () => {
     setOpen(!open);
@@ -92,14 +94,6 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   };
   const onMouseLeaveViewIcon = () => {
     setViewHoverItem("");
-  };
-  const handleApproveClick = () => {
-    openApproveDialog();
-    setApproved(!approved);
-  };
-  const handleRejectClick = () => {
-    openRejectDialog();
-    setRejected(!rejected);
   };
   const onMouseLeaveActionIcons = () => {
     setApproveHover(false);
@@ -124,24 +118,16 @@ const TaskApprovalPresenter: React.FC<Props> = ({
   const onMouseHoverListItem = () => {
     onMouseHoverItem(id);
   };
-  const transitionDialog = useDialog();
-  const transitionDialog1 = useDialog();
-  const async = useAsync<ChangeRequestTransitionResponse>({
-    onSuccess: () => {
-      transitionDialog.close();
-    },
-    onError: (error) => {
-      transitionDialog.close();
-    },
-  });
-  const openApproveDialog = () => {
-    async.reset();
-    transitionDialog.open();
+  const transitionDialogApprove = useDialog();
+  const transitionDialogReject = useDialog();
+  const handleApproveClick = transitionDialogApprove.open;
+  const handleRejectClick = () => {
+    transitionDialogReject.open();
   };
-  const openRejectDialog = () => {
-    async.reset();
-    transitionDialog1.open();
-  };
+
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
+
   return (
     <>
       <StyledListItem
@@ -287,10 +273,10 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               )}
             </span>
             <span className={classes.actionIcon}>
-              {!pinHover && !pinned && (
+              {!pinHover && isPinShown && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
-              {pinHover && !pinned && (
+              {pinHover && isPinShown && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
@@ -303,7 +289,7 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                   />
                 </StyleTooltip>
               )}
-              {pinned && (
+              {isUnpinShown && (
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
                   placement="top"
@@ -317,9 +303,12 @@ const TaskApprovalPresenter: React.FC<Props> = ({
                 </StyleTooltip>
               )}
             </span>
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
-        {pinned && (
+        {isUnpinShown && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}
@@ -329,6 +318,9 @@ const TaskApprovalPresenter: React.FC<Props> = ({
               <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -450,13 +442,13 @@ const TaskApprovalPresenter: React.FC<Props> = ({
       <ApproveDialogueContainer
         transition="reject"
         changeRequestId={arChangeRequestId}
-        transitionDialog={transitionDialog1}
+        transitionDialog={transitionDialogReject}
         label="transition.action.reject"
       />
       <ApproveDialogueContainer
         transition="approve"
         changeRequestId={arChangeRequestId}
-        transitionDialog={transitionDialog}
+        transitionDialog={transitionDialogApprove}
         label="transition.action.approve"
       />
     </>
