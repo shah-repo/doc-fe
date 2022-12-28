@@ -2,6 +2,7 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
+import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -9,7 +10,7 @@ let loginResponse;
 let adminEmployee;
 
 const docType = "Form";
-const tcOutputDocType = "Training Curriculum";
+const tcOutputDocType = "Training Curriculum test";
 
 context("Intermediate page validation", () => {
   before(() => {
@@ -37,7 +38,9 @@ context("Intermediate page validation", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [
+              TrainingCurriculum,
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
@@ -254,9 +257,17 @@ context("Intermediate page validation", () => {
       });
     });
 
-    context("verify predefined fields are displayed", () => {
+    context("verify predefined fields are displayed and are not deletable", () => {
       it("Check 'Approvals' is displayed", () => {
         cy.intPageVerifyApprovalsExist();
+      });
+
+      it("Check 'Approvals' is not deletable", () => {
+        cy.get("[data-cy='form.builder.approvals']").trigger("mouseover");
+        cy.get(`[data-cy="edit-schema-item"]`)
+          .should("not.exist");
+        cy.get(`[data-cy="remove-schema-item"]`)
+          .should("not.exist");
       });
 
       it("Click on 'Details' tab", () => {
@@ -267,9 +278,24 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyPeriodicTraningExist();
       });
 
+      it("Check 'PERIODIC TRAINING' is not deletable", () => {
+        cy.get("[data-cy='Periodic Training']").trigger("mouseover");
+        cy.get(`[data-cy="edit-schema-item"]`)
+          .should("not.exist");
+        cy.get(`[data-cy="remove-schema-item"]`)
+          .should("not.exist");
+      });
+
       it("Check 'Documents to Train on' is displayed", () => {
-        cy.get(`[name="training-types-of-items-to-be-trained-on"] input[value^="Documents"]`).check();
         cy.intPageVerifyDocumentsToBeTrainedOnExist();
+      });
+
+      it("Check 'Documents to Train on' is not deletable", () => {
+        cy.get("[data-cy='Documents to Train on']").trigger("mouseover");
+        cy.get(`[data-cy="edit-schema-item"]`)
+          .should("not.exist");
+        cy.get(`[data-cy="remove-schema-item"]`)
+          .should("not.exist");
       });
 
       it("Check 'Refresh/repeat training periodically?' is displayed", () => {
@@ -277,20 +303,60 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyPeriodicTraningExist();
       });
 
+      it("Check 'Refresh/repeat training periodically?' is not deletable", () => {
+        cy.get("[data-cy='Refresh/repeat training periodically?']").trigger("mouseover");
+        cy.get(`[data-cy="edit-schema-item"]`)
+          .should("not.exist");
+        cy.get(`[data-cy="remove-schema-item"]`)
+          .should("not.exist");
+      });
+
       it("Check 'Training Frequency (in days)' is displayed", () => {
         cy.intPageVerifyTrainingFrequencyExist();
+      });
+
+      it("Check 'Training Frequency (in days)' is not deletable", () => {
+        cy.get("[data-cy='Training Frequency (in days)']").trigger("mouseover");
+        cy.get(`[data-cy="edit-schema-item"]`)
+          .should("not.exist");
+        cy.get(`[data-cy="remove-schema-item"]`)
+          .should("not.exist");
       });
 
       it("Check 'TRAINEES DETAILS' is displayed", () => {
         cy.intPageVerifyTraineesDetailsExist();
       });
 
+      it("Check 'TRAINEES DETAILS' is not deletable", () => {
+        cy.get("[data-cy='Trainees Details']").trigger("mouseover");
+        cy.get(`[data-cy="edit-schema-item"]`)
+          .should("not.exist");
+        cy.get(`[data-cy="remove-schema-item"]`)
+          .should("not.exist");
+      });
+
       it("Check 'Groups to Train' is displayed", () => {
         cy.intPageVerifyGroupsToTrainExist();
       });
 
+      it("Check 'Groups to Train' is not deletable", () => {
+        cy.get("[data-cy='Groups to Train']").trigger("mouseover");
+        cy.get(`[data-cy="edit-schema-item"]`)
+          .should("not.exist");
+        cy.get(`[data-cy="remove-schema-item"]`)
+          .should("not.exist");
+      });
+
       it("Check 'Users to Train (if applicable)' is displayed", () => {
         cy.intPageVerifyUsersToTrainExist();
+      });
+
+      it("Check 'Users to Train (if applicable)' is not deletable", () => {
+        cy.get("[data-cy='Users to Train (if applicable)']").trigger("mouseover");
+        cy.get(`[data-cy="edit-schema-item"]`)
+          .should("not.exist");
+        cy.get(`[data-cy="remove-schema-item"]`)
+          .should("not.exist");
       });
 
       it("Close Preview dialog", () => {
@@ -394,6 +460,7 @@ context("Intermediate page validation", () => {
     it("Reopen Preview window and verify approval block should not have any value", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
       cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).should("not.contain.value");
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
     });
   });
 
@@ -416,12 +483,18 @@ context("Intermediate page validation", () => {
   });
 
   context("Verify Preview mode after doc creation", () => {
-    it("verify form preview button in Overview Tab", () => {
-      cy.get("[data-cy='FBWorkspace-clickView']").click();
-    });
-
     it("Verify tabs overview, detail", () => {
       cy.verifyTabs("overview", "details");
+    });
+
+    it("Click form preview button", () => {
+      cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on 'Detail' tab", () => {
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training curiculam section visible", () => {
@@ -429,13 +502,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Verify document to be train on should be visible", () => {
-      cy.get(`.MuiDialogContent-root [name="training-types-of-items-to-be-trained-on"]`).should("exist");
-      cy.get(`.MuiDialogContent-root [value^="Documents"]`).should("exist");
-      cy.get(`.MuiDialogContent-root [value^="Process Instruction"]`).should("exist");
-    });
-
-    it("Verify force retraining should be visible", () => {
-      cy.get(`.MuiDialogContent-root [data-cy^="Force retraining"]`).should("exist");
+      cy.get(`.MuiDialogContent-root [data-cy="Documents to Train on"]`).should("exist");
     });
 
     it("Verify Refresh retraining should be visible", () => {
@@ -456,14 +523,8 @@ context("Intermediate page validation", () => {
   });
 
   context("Verify fields in preview mode editable or not", () => {
-    it("Check documents to be trained on", () => {
-      cy.get(`.MuiDialogContent-root [name="training-types-of-items-to-be-trained-on"]`).should("exist");
-      cy.get(`.MuiDialogContent-root [value^="Documents"]`).check();
-      cy.get(`.MuiDialogContent-root [value^="Process Instruction"]`).check();
-    });
-
-    it("Select force retraining", () => {
-      cy.get(`.MuiDialogContent-root [name="training-force-retraining-for-everyone"]`).arrowClick({ multiple: true });
+    it("Check Documents to Train on", () => {
+      cy.get(`.MuiDialogContent-root [data-cy="training-document-to-be-trained-on"]`).autocompleteSelect("FM-00001");
     });
 
     it("Select refresh training", () => {
@@ -484,12 +545,11 @@ context("Intermediate page validation", () => {
 
     it("Reopen the preview mode and verify enter detail not saved", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
       cy.get(`.MuiDialogContent-root [data-cy="training-select-users-to-train"]`).should("not.contain.value");
       cy.get(`.MuiDialogContent-root [data-cy="training-select-groups-to-train"]`).should("not.contain.value");
-      cy.get(`.MuiDialogContent-root [value^="Documents"]`).should("not.be.checked");
-      cy.get(`.MuiDialogContent-root [value^="Process Instruction"]`).should("not.be.checked");
       cy.get(`.MuiDialogContent-root [name="training-refresh-training-periodically"]`).should("not.be.selected");
-      cy.get(`.MuiDialogContent-root [name="training-force-retraining-for-everyone"]`).should("not.be.selected");
     });
 
     it("Close the preview mode dialog", () => {
@@ -498,6 +558,10 @@ context("Intermediate page validation", () => {
   });
 
   context("Add FB fields and verify field 2 is visible when field 1 has value 'YES'", () => {
+    it("Click on 'Overview' tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
     it("Add textfield", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
@@ -524,7 +588,7 @@ context("Intermediate page validation", () => {
 
     it("Verify FB Text field 'Text1' is visible and radio button group is hidden", () => {
       cy.get("[name^='fb-training-text']").last().should("exist");
-      cy.get("[name^='radio-btn-group-for-inline']").should("be.hidden");
+      cy.get("[name^='radio-btn-group-for-inline']").should("not.be.visible");
     });
 
     it("Enter value 'Yes' in text field Text1 Radio button group should be visible", () => {
@@ -535,8 +599,8 @@ context("Intermediate page validation", () => {
 
     it("Remove value 'Yes' in text field Text1 Radio button group should be hidden", () => {
       cy.get("[name^='fb-training-text']").last().arrowType("Ye").clear();
-      cy.get("[name^='radio-btn-group-for-inline']").last().should("be.hidden");
-      cy.get("[data-cy='RadioBtnGroup for inline']").should("be.hidden");
+      cy.get("[name^='radio-btn-group-for-inline']").last().should("not.be.visible");
+      cy.get("[data-cy='RadioBtnGroup for inline']").should("not.be.visible");
     });
 
     it("Close the preview mode dialog", () => {
