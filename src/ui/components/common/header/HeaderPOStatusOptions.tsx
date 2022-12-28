@@ -9,12 +9,15 @@ import Text from "../../../../ui/components/Text";
 import useStyles from "./HeaderPOStatus.styles";
 
 interface Props {
-  status?: string;
+  status: string;
+  docId: string;
 }
 
 const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
-  children,
+  status, docId,
 }) => {
+  console.log("status ::", status);
+  console.log("docId ::", docId);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -54,6 +57,16 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       })}
     />
   );
+
+  // const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
+  // const voidDocument = () => {
+  //   documentRevision
+  //   && async.start(
+  //     voidAction,
+  //     documentRevision.id,
+  //     async,
+  //   );
+  // };
 
   return (
     <>
@@ -106,6 +119,11 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
           <Text message="Void" />
         </MenuItem>
       </StyledMenu>
+      {/* <AlertDialog
+        confirmAction={voidDocument}
+        message={isRecord ? "documentRevision.record.void.alert" : "documentRevision.void.alert"}
+        {...{ dialog }}
+      /> */}
     </>
   );
 };

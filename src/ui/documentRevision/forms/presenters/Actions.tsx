@@ -13,7 +13,7 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
-import HeaderPOStatusOptions from "../../../components/common/header/HeaderPOStatusOptions";
+import HeaderPOStatus from "../../../components/common/header/HeaderPOStatus";
 import HeaderMenu from "../../../components/common/header/Menu";
 import { default as OwnerChangerContainer } from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -377,8 +377,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
-      {/* <>{isPO && <HeaderPOStatus/>}</> */}
-      <>{isPO && <HeaderPOStatusOptions/>}</>
+      <>{isPO && <HeaderPOStatus/>}</>
       <Observer>
         {() => (
           <>

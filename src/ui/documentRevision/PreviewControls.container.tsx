@@ -37,7 +37,7 @@ import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
-import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
@@ -336,6 +336,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
+  const isDocumentApproved = isDocumentRevisionApproved(documentRevision.status);
+  const isDocumentReleased = isDocumentRevisionReleased(documentRevision.status);
 
   if (!(!isDocumentDraft || !canCreateInspection)) {
     accessableButtons.push("inspectionControl");
@@ -405,7 +407,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     <>
       <PDFSocket {...{ documentRevision }}/>
       {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
-      <>{isPO && <HeaderPOStatusOptions/>}</>
+      <>{isPO && (isDocumentApproved || isDocumentReleased) &&
+       <HeaderPOStatusOptions status={documentRevision?.status} docId= {documentRevision?.id || ""}/>}</>
       {initialButtons.length > 0 && renderbuttons(initialButtons, true)}
       {restButtons.length > 0 && (
         <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>
