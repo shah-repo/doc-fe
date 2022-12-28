@@ -810,13 +810,16 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
         });
 
         it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(userOne);
-          });
+          cy.drAddUserFromPermissionTab(userOne);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.wait(2000);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab(groupOne);
           });
         });
@@ -1056,7 +1059,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
             cy.listLoadingElementShouldNotExist();
             cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
               cy.get(`[data-cy="field-referenceTo"]`).contains(docId)
-                .parent().parent().find("svg").arrowClick({ force: true });
+                .parent().parent().parent().find("svg").arrowClick({ force: true });
             });
           });
 
@@ -1078,13 +1081,16 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           });
 
           it("Add another user permission", () => {
-            cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-              cy.drAddUserFromPermissionTab(userTwo);
-            });
+            cy.drAddUserFromPermissionTab(userTwo);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
           });
 
           it("Add another group permission", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.wait(2000);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
               cy.drAddGroupFromPermissionTab(groupTwo);
             });
           });
@@ -1272,13 +1278,16 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           });
 
           it("Add another user permission", () => {
-            cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-              cy.drAddUserFromPermissionTab(userThree);
-            });
+            cy.drAddUserFromPermissionTab(userThree);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
           });
 
           it("Add another group permission", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.wait(2000);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
               cy.drAddGroupFromPermissionTab(groupThree);
             });
           });

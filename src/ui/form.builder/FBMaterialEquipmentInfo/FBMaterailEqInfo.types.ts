@@ -1,6 +1,6 @@
+import React from "react";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import useStyles from "./FBMaterialEqInfo.styles";
-import React from "react";
 
 export enum FBMEQItemStatus {
   Removed = "removed",
@@ -27,6 +27,7 @@ export interface Material extends GenericItem {
   quantity: number;
   unit: string;
   lots: LotItem[];
+  totalQuantity: number;
 }
 
 export interface Equipment extends GenericItem {
@@ -44,6 +45,7 @@ export interface MaterialEqProps {
   includeDiff: boolean;
   showDiff: boolean;
   loading?: boolean;
+  isObsolete: boolean;
   handleShowDiffChange: (value: boolean) => void;
 }
 

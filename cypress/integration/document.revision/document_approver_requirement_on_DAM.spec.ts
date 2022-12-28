@@ -567,10 +567,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Checkbox option 2 checked", () => {
       cy.get(`input[type="checkbox"][value="2"]`).last().check();
-    });
-
-    it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -757,10 +756,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
   });
 
   context("Clicks on 'Save' button", () => {
-    it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
-
     it("Check doc Draft status and click on Send To Email", () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.DRAFT });
       cy.drVerifyTitle({ title: DAMDocument });

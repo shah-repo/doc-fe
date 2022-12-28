@@ -14,7 +14,6 @@ const UserMenuContainer: React.FunctionComponent<Props> = ({
 }) => {
   const location = useLocation();
 
-
   return (
     <UserMenuPresenter
       {...{

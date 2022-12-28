@@ -223,7 +223,7 @@ context("Mpi Layout", () => {
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions" });
-        cy.listLoadingElementShouldNotExist();
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
 
       it("Select 'Numeric' revision stage", () => {
@@ -547,7 +547,7 @@ context("Mpi Layout", () => {
 
         it("Verify material", () => {
           cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
-            .should("have.text", "MT-00004 - Material one | sets : 9");
+            .should("have.text", "MT-00004 - Material one | sets :9");
         });
         it("Verify equipment", () => {
           cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(0).should("have.text", "ET-00003 - Equipment one");
@@ -636,13 +636,16 @@ context("Mpi Layout", () => {
           });
 
           it("Add another user permission", () => {
-            cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-              cy.drAddUserFromPermissionTab(USERS[3].name);
-            });
+            cy.drAddUserFromPermissionTab(USERS[3].name);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
           });
 
           it("Add another group permission", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+            cy.wait(2000);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
               cy.drAddGroupFromPermissionTab("Developers");
             });
           });
@@ -737,7 +740,7 @@ context("Mpi Layout", () => {
 
         it("Verify training tab is empty", () => {
           cy.contains("No training records exist").should("be.visible");
-          cy.get("#Presenter-FBWorkspace ul").should("not.be.visible");
+          cy.get("#Presenter-FBWorkspace ul").should("not.exist");
         });
       });
     });

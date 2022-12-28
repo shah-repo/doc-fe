@@ -1989,6 +1989,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Enter LHR document 1", () => {
+        cy.dlClearFilters();
         cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00004");
         cy.wait(5000);
         cy.dlSelectFirstDocument();

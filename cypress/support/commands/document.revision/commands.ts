@@ -25,6 +25,7 @@ declare global {
       drSelectOverviewTab(): Chainable<Subject>;
       drSelectDocumentTab(): Chainable<Subject>;
       drSelectChangeDetailsTab(): Chainable<Subject>;
+      drCheckProgressBarAndListLoaderShouldNotExists(): Chainable<Subject>;
       drSelectLineItems(): Chainable<Subject>;
       drSelectSpecificationTab(): Chainable<Subject>;
       drSelectCalPmHistoryTab(): Chainable<Subject>;
@@ -36,10 +37,12 @@ declare global {
       drEnterHtmlText(params: { htmlText: string }): Chainable<Subject>;
       drApproveAndReleaseDocument(): Chainable<Subject>;
       drApproveAndReleaseDocumentWithoutSelectingForm(params?: { approverName?: string; toastifyExists?: boolean }): Chainable<Subject>;
+      drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi(params?: { approverName?: string; toastifyExists?: boolean }): Chainable<Subject>;
       drCloseApproveAndReleaseDialog(): Chainable<Subject>;
       drClickCreateDocumentWithApiCall(params?: { toastifyExists?: boolean; requiredApproversDocRev?: boolean}): Chainable<Subject>;
       drClickCreateSupplierWithApiCall(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForForms(): Chainable<Subject>;
+      drClickCreateDocumentWithoutApiCallForForms(): Chainable<Subject>;
       drClickCreateDocumentWithApiCallForFormsExpectingToastError(): Chainable<Subject>;
       drClickCreateSupplierWithApiCallAudit(): Chainable<Subject>;
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
@@ -125,6 +128,7 @@ declare global {
       drOpenCloseSidebarDrawer(): Chainable<Subject>;
       drSelectPermissionTab(): Chainable<Subject>;
       drSelectApprovalRolesTab(): Chainable<Subject>;
+      drSelectApprovalRolesTabWithoutApi(): Chainable<Subject>;
       drSelectMatrixDetailsTab(): Chainable<Subject>;
       drVerifyDocumentOWner(params: {owner: string}): Chainable<Subject>;
       drChangeOwnerByAdmin(params: {employee: string}): Chainable<Subject>;
@@ -290,8 +294,13 @@ Cypress.Commands.add("drSelectChangeDetailsTab", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drCheckProgressBarAndListLoaderShouldNotExists", () => {
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectLineItems", () => {
-  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.lineitems\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -306,7 +315,7 @@ Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
 });
 
 Cypress.Commands.add("drSelectOverviewTab", () => {
-  cy.get("[data-cy=\"tabId.overview\"]").arrowClick();
+  cy.get("[data-cy=\"tabId.overview\"]").arrowClick({ force: true });
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -419,6 +428,40 @@ Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingForm", (params?
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi", (params?: { approverName?: string; toastifyExists?: boolean }) => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick().wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  if (params !== undefined && params.approverName !== undefined)
+  {
+    cy.get("[data-cy='field-approvals']").arrowType(params.approverName);
+    cy.get("[id^='react-select-']").contains(params.approverName).arrowClick();
+  }
+  cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
+  cy.unClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick().wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  if (params === undefined)
+  {
+    cy.checkToastMessage({ exists: false });
+  }
+  else {
+    if (params.toastifyExists)
+    {
+      cy.checkToastMessage({ exists: true });
+    }
+    else
+    {
+      cy.checkToastMessage({ exists: false });
+    }
+  }
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drApproveAndReleaseDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers, CyRoutes.GetAvailableApprovers], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
@@ -447,8 +490,7 @@ Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", ()
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
     cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(500);
   });
-  cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
-  cy.unClick();
+  cy.progressBarShouldNotExist();
   cy.get(`[data-cy="ApproveAndRelease-submit"]`).arrowClick().wait(500);
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
@@ -513,6 +555,14 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForForms", () => {
     [CyRoutes.PatchDocRev], () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
+  cy.wait(1000);
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drClickCreateDocumentWithoutApiCallForForms", () => {
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.wait(1000);
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
@@ -687,7 +737,7 @@ Cypress.Commands.add("drAssignDocumentTo", (params: {username: string}) => {
   cy.get("[id='document.assing.to.sidebar']>div>div>div:nth-child(2)>div>input")
     .autocompleteSelect(`${params.username}`, { force: true }).wait(2000);
   cy.listLoadingElementShouldNotExist();
-  cy.get("[data-cy='add-user'").eq(2).arrowClick({ force: true });
+  cy.get("[data-cy='add-user'").eq(0).arrowClick({ force: true }).wait(2000);
   cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -891,6 +941,12 @@ Cypress.Commands.add("drSelectApprovalRolesTab", () => {
   });
 });
 
+Cypress.Commands.add("drSelectApprovalRolesTabWithoutApi", () => {
+  cy.get("[data-cy=\"tabId.approvalroles\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
+
 Cypress.Commands.add("drSelectMatrixDetailsTab", () => {
   cy.get("[data-cy=\"tabId.matrixdetails\"]").arrowClick();
 });
@@ -910,7 +966,6 @@ Cypress.Commands.add("drAddUserFromPermissionTab", (...users: string[]) => {
       .click();
 
     cy.get("[id^=react-select]").contains(user).arrowClick();
-    cy.get(`[data-cy="add-user"]`).eq(0).arrowClick({ force: true });
   });
 });
 
@@ -929,7 +984,6 @@ Cypress.Commands.add("drAddGroupFromPermissionTab", (...groups: string[]) => {
       .contains("Search groups")
       .click();
     cy.get("[id^=react-select]").contains(group).arrowClick();
-    cy.get(`[data-cy="add-user"]`).eq(1).arrowClick();
   });
 });
 

@@ -15,6 +15,7 @@ declare global {
     interface Chainable<Subject> {
       exportVerifyEmail(params: { status: string; filename: string; pdfStatus?: string; type?: string }): Chainable<Subject>;
       inlineApproval(): Chainable<Subject>;
+      inlineApprovalWithoutApi(): Chainable<Subject>;
       getExportPdfContent(params: { status: string; filename: string; type?: string }): Chainable<Subject>;
     }
   }
@@ -101,6 +102,19 @@ Cypress.Commands.add("inlineApproval", () => {
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 
+});
+
+Cypress.Commands.add("inlineApprovalWithoutApi", () => {
+  cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"common.confirm\"]").arrowClick({ force: true });
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("getExportPdfContent", (params: { status: string; filename: string; type?: string}) => {

@@ -60,6 +60,7 @@ declare global {
       fbEditHiddenBtn(): Chainable<Subject>;
       fbEnterNameValue(params: { name: string; value: string | number }): Chainable<Subject>;
       fbFieldRequiredIf(params: { name: string; value: string | number }): Chainable<Subject>;
+      fbFieldRequiredIfNw(params: { name: string; value: string | number }): Chainable<Subject>;
       fbFieldRequiredIfIn(params: { name: string }): Chainable<Subject>;
       verifyFieldConfigExist(): Chainable<Subject>;
       verifySetRulesExist(): Chainable<Subject>;
@@ -518,6 +519,12 @@ Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string
   cy.get("input[name=\"validators.required_if\"]").arrowClick();
   cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(params.name);
   cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect(params.value);
+});
+
+Cypress.Commands.add("fbFieldRequiredIfNw", (params: { name: string; value: string }) => {
+  cy.get("input[name=\"validators.required_if\"]").arrowClick();
+  cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(params.name);
+  cy.get(`[data-cy="validators.required_if.value"]`).arrowType(params.value);
 });
 
 Cypress.Commands.add("fbFieldRequiredIfIn", (params: { name: string}) => {

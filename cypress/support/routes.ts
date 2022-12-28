@@ -52,6 +52,7 @@ export enum CyRoutes {
   PatchAR = "PatchAR",
   GetDocAggregatedAudit = "GetDocAggregatedAudit",
   PostApprovalsApprove = "PostApprovalsApprove",
+  OptionsApprovalsApprove = "OptionsApprovalsApprove",
   GetGroupsApprovalRoles = "GetGroupsApprovalRoles",
   GroupsGetClearFilter = "GroupsGetClearFilter",
   PostChangeRequests = "PostChangeRequests",
@@ -112,6 +113,7 @@ export enum CyRoutes {
   PostNewUserSetPassword = "PostNewUserSetPassword",
   GetUsersAudit = "GetUsersAudit",
   GetGroupsAudit = "GetGroupsAudit",
+  GetUserFavourites ="GetUserFavourites",
 }
 
 export const routes: ICyRoutes =   {
@@ -963,6 +965,15 @@ export const routes: ICyRoutes =   {
     requestConfig: {
       method: "GET",
       url: "/api/v1/groups/audit*",
+    },
+    callConfig: {
+      responseTimeout: 30 * 1000,
+    },
+  },
+  GetUserFavourites: {
+    requestConfig: {
+      method: "GET",
+      url: "/api/v1/user_favourites",
     },
     callConfig: {
       responseTimeout: 30 * 1000,
