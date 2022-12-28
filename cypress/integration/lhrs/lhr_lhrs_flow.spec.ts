@@ -2812,6 +2812,21 @@ context("LHR & LHRS Flow", () => {
       });
     });
 
+    it("Click Red Line Button", () => {
+      cy.get("[data-cy='HeaderMenuButton']").arrowClick();
+      cy.get("[data-cy='redlineButton']").arrowClick();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click save document", () => {
+      cy.drSaveDocumentWithoutaudit();
+      cy.wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Click complete step", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
         cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
@@ -2869,8 +2884,8 @@ context("LHR & LHRS Flow", () => {
         cy.get("input[value='LHR-00001, Step #2 (QPI-00002, QPI document1, Rev 1)']").should(
           "exist"
         );
-        // cy.get("input[value='LHR-00001, Step #2 (QPI-00002, QPI document1, Rev 1)']")
-        //   .should("have.css", "border-color", "rgb(245, 248, 255)");
+        cy.get("input[value='LHR-00001, Step #2 (QPI-00002, QPI document1, Rev 1)']")
+          .should("have.css", "border-color", "rgb(244, 67, 54)");
       });
     });
 
