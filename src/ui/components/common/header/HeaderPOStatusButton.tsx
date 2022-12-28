@@ -1,8 +1,8 @@
 
-import { Button, withStyles } from "@material-ui/core";
+import { Button, Theme, withStyles } from "@material-ui/core";
 import Colors from "../../../layout/theme/utils/colors";
 
-const styles = () => ({
+const styles = (theme: Theme) => ({
   root: {
     "margin": 0,
     "&:hover": {
@@ -10,7 +10,7 @@ const styles = () => ({
     },
   },
   label: {
-    padding: "10px 15px 10px 12px",
+    padding: theme.spacing(1.25, 1.875, 1.25, 1.5),
     fontFamily: "Sora",
     fontStyle: "normal",
     fontWeight: 600,
@@ -18,7 +18,7 @@ const styles = () => ({
     lineHeight: "15px",
     backgroundColor: Colors.white,
     color: Colors.almost_black,
-    borderRadius: "4px",
+    borderRadius: 4,
   },
 });
 

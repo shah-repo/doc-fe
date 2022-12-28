@@ -23,6 +23,12 @@ export enum DocumentRevisionStatus {
   Voided = "VOIDED",
 }
 
+export enum POStatus {
+  OPEN = "open",
+  CLOSE = "close",
+  VOID = "void",
+}
+
 
 export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
