@@ -25,7 +25,7 @@ export const withFBSchemaSelect = <T extends FBSchemaSelectProps>(
     defaultValue = formState?.getFieldValue(name);
 
     function getOptions(): FBSchemaProps[] {
-      const scheme: FBSchemaProps[] = workspaceState?.getValidationSchema() || workspaceState?.getSchema();
+      const scheme: FBSchemaProps[] = workspaceState?.getSchema() || workspaceState?.getValidationSchema();
       const options = scheme.reduce((reduced: FBSchemaProps[], item) => {
         const { type, deleted, multiple } = item || {};
         if (!type || deleted) { return reduced; }

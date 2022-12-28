@@ -61,9 +61,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -72,7 +72,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           done();
         });
       });
@@ -80,7 +80,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     it("[API]Login first tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -113,7 +113,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -196,6 +196,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
     });
 
+    // eslint-disable-next-line max-len
     context(`Click on 3 dots and verify 'Void' 'Change Owner' and 'Send To Email' options displayed and check their functions`, () => {
       it(`Click on 3 dots and verify 'Void' option exists`, () => {
         SystemRequirement("REQ-2800");
@@ -1879,11 +1880,11 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Add approvers to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
+        cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email, noWait: true });
       });
 
       it("Save AR", () => {
-        cy.arSaveApiCall();
+        cy.arSaveApiCallWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1891,7 +1892,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Navigate back to AR list and Approve AR and Close AR", () => {
       it("Navigate to approval request list", () => {
-        cy.navigToApprovalRequestList();
+        cy.navigToApprovalRequestListWithoutApi();
       });
 
       it("Clear Filter", () => {
@@ -1911,12 +1912,9 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Approve the AR", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.get("[data-cy='transition-approve']").contains("Approve submission").arrowClick();
-            cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-            cy.get("[data-cy='passwordConfirm']").arrowClick();
-          });
+        cy.get("[data-cy='transition-approve']").contains("Approve submission").arrowClick();
+        cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("[data-cy='passwordConfirm']").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

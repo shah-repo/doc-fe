@@ -1,9 +1,10 @@
-import { Box } from "@material-ui/core";
 import { find, get, map, unionBy } from "lodash";
 import React from "react";
 import { FB, FBFieldName, FBForm, FBSchemaProps, FBTextField, FBWorkspaceBottomBarProps, FBWorkspaceTplActions } from "..";
 import { toastError } from "../../components/notifications";
+import DocumentPreview from "../../documentRevision/forms/presenters/FBActiveNoOutput/components/DocumentPreview";
 import { checkIsDocumentForm } from "../../documentRevision/helpers/checkDocumentGroup";
+import useStyles from "./FBWorkspaceBottomBar.styles";
 
 export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
   Component: React.FunctionComponent<T>,
@@ -16,7 +17,7 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
     includeTransport,
     ...props
   }: T) => {
-
+    const classes = useStyles();
     const { workspaceState, dialogState } = FB.useStores();
     previewDisabled = !(
       workspaceState?.mode === "formPreview" ||
@@ -104,10 +105,11 @@ export const withFBWorkspaceBottomBar = <T extends FBWorkspaceBottomBarProps>(
         open: true,
         maxWidth: "md",
         title: "form.builder.form.preview",
+        classes: {
+          paper: classes.previewDialog,
+        },
         content: (
-          <Box mx={8}>
-            <FBForm schema={workspaceState?.schema} initialValidation={true} workspaceMode="form" />
-          </Box>
+          <DocumentPreview docRevId={workspaceState?.document?.docId} formPreview />
         ),
       });
     };

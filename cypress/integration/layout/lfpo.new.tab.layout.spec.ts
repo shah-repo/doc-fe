@@ -747,10 +747,6 @@ context("LFPO new layout verification", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Migration FORM document creation flow", () => {
@@ -981,10 +977,6 @@ context("LFPO new layout verification", () => {
 
 
   context("Receving flow", () => {
-    it("toggle off auto save", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Navigate to Receiving landing page", () => {
       cy.navigToReceivableList();
     });
@@ -995,7 +987,7 @@ context("LFPO new layout verification", () => {
 
     it("Create Receiving Record", () => {
       cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
+        CyRoutes.DocPreview,
         CyRoutes.GetFieldLocks], () => {
         cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
           .autocompleteSelect("Receivable test");
@@ -1026,7 +1018,7 @@ context("LFPO new layout verification", () => {
     });
 
     it("Save the form data", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click on create lot", () => {
@@ -1039,7 +1031,7 @@ context("LFPO new layout verification", () => {
     });
 
     it("fill the fields", () => {
-      cy.get("[name^='received']").arrowType("100");
+      cy.get("[name^='received']").arrowType("100").wait(2000);
     });
 
     it("Enter Expiration date", () => {
@@ -1163,7 +1155,8 @@ context("LFPO new layout verification", () => {
       });
       cy.drClickCreateDocumentWithApiCall();
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-        cy.drRemoveReferences({ reference: docId });
+        cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
+          .parent().parent().parent().find("svg").arrowClick({ force: true });
       });
     });
 
@@ -1186,13 +1179,16 @@ context("LFPO new layout verification", () => {
       });
 
       it("Add another user permission", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-          cy.drAddUserFromPermissionTab(USERS[3].name);
-        });
+        cy.drAddUserFromPermissionTab(USERS[3].name);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Add another group permission", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+        cy.wait(2000);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
           cy.drAddGroupFromPermissionTab("Developers");
         });
       });
@@ -1320,7 +1316,6 @@ context("LFPO new layout verification", () => {
   context("Fill in the fields and Release", () => {
 
     it("Checked chebox value", () => {
-      cy.cmpTurnOffAutosave();
       cy.get(`input[type="checkbox"][value="1"]`).last().check();
     });
 
@@ -1331,7 +1326,7 @@ context("LFPO new layout verification", () => {
     });
 
     it("Save the form data", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release Record", () => {

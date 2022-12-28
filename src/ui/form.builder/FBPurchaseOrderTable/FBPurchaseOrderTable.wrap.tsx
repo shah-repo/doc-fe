@@ -2,9 +2,11 @@ import { cloneDeep, first, omit } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
-import { FB } from "..";
+import { FB, FBPurchaseOrderValue } from "..";
+import { PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
 import { SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
+import { usePoApprovals } from "../FBPOApprovals/hooks";
 import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBStore from "../FBStore/FBStore";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
@@ -28,10 +30,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     name,
     ...props
   }: T) => {
-
     const { purchaseOrderState, formState, workspaceState } = FB.useStores();
-    const isReceivable = checkIsDocumentReceivable(workspaceState?.document?.document.documentType.groupOptions);
-    const smartReferencesFrom = workspaceState?.document?.document?.smartReferencesFrom?.filter(
+    const { document, id, isOutput } = workspaceState || {};
+    const outputId = isOutput ? id : undefined;
+    const isReceivable = checkIsDocumentReceivable(document?.document.documentType.groupOptions);
+    const smartReferencesFrom = document?.document?.smartReferencesFrom?.filter(
       (ref) => ref.type === SmartReferenceType.LotSoruce);
     classes = FBPurchaseOrderClasses();
 
@@ -73,18 +76,48 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
       FBStore?.setPurchaseOrderValue(value);
     });
 
+    const approvalsFieldName = workspaceState?.schema?.find((item) => item.type === "poapprovals")?.name ?? "";
+
+    const {
+      poApprovalsState,
+      addApprover,
+      updateApprovals,
+      hasUserInApprovers,
+      fetchRequiredGroups,
+    } = usePoApprovals(
+      approvalsFieldName,
+      outputId,
+    );
+
+    const updateWorkspace = (value?: FBPurchaseOrderValue) => {
+      Promise.resolve(workspaceState?.saveDocRev(formState?.getValues()))
+        .then(() => Promise.resolve(fetchRequiredGroups()))
+        .then(() => updateApprovals({ poItems: value }));
+    };
+
     useEffect(() => reaction(
       () => purchaseOrderState?.value,
       (value) => {
         formState?.setFieldValue(name, value);
         FBStore?.setPurchaseOrderValue(value);
-        workspaceState?.saveDocRev(formState?.getValues());
+
+        const requester = formState?.getFieldValue(PO_REQUESTOR_COMPONENT_NAME);
+        if (requester && !hasUserInApprovers(requester, poApprovalsState?.activeApprovals) && value?.items.length) {
+          addApprover(
+            [requester],
+            { manually: false },
+          ).then(() => {
+            updateWorkspace(value);
+          });
+        } else {
+          updateWorkspace(value);
+        }
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     useEffect(() => {
-      if (isReceivable)  { purchaseOrderState?.getPartsVersion(); }
+      if (isReceivable) { purchaseOrderState?.getPartsVersion(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

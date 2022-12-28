@@ -585,8 +585,8 @@ context("Create receivable test with PO, Lot and Supplier", () => {
                     },
                     {
                       label: "form.builder.approvals",
-                      type: "poapprovals",
-                      tabId: "details",
+                      tabId: "overview",
+                      type: "approvals",
                       deleteDisabled: false,
                       name: "fb-po-approvals-kqqix31p",
                       uniqueSchemaItem: true,
@@ -619,6 +619,91 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
   });
 
+  context("[API]Update document type", () => {
+    it("Change fields config in BLC document type", () => {
+      cy.drUpdateDocumentTypeName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        id: receivableDocumentType[0].id,
+        payload: {
+          fieldsConfig: {
+            D: {
+              visible: false,
+              required: false,
+            },
+            E: {
+              label: "Record Type",
+              visible: false,
+              required: true,
+            },
+            F: {
+              label: "Record ID",
+              visible: false,
+              required: true,
+            },
+            G: {
+              visible: false,
+              required: false,
+            },
+            I: {
+              visible: false,
+            },
+            J: {
+              visible: false,
+            },
+            K: {
+              label: "Void",
+              visible: true,
+            },
+            L: {
+              label: "Correction",
+              visible: true,
+            },
+            N: {
+              label: "Approve and Release",
+              visible: true,
+            },
+            O: {
+              label: "Record History",
+              visible: true,
+            },
+            R: {
+              visible: false,
+            },
+            S: {
+              label: "Update Record",
+              visible: true,
+            },
+            A1: {
+              label: "WIP",
+              visible: true,
+            },
+            A2: {
+              label: "Voided",
+              visible: true,
+            },
+            A3: {
+              label: "Archive",
+              visible: true,
+            },
+            P1: {
+              label: "WIP",
+              visible: true,
+            },
+            P2: {
+              label: "Voided",
+              visible: true,
+            },
+            P3: {
+              label: "Archive",
+              visible: true,
+            },
+          },
+        },
+      });
+    });
+  });
+
   context("Login user", () => {
     context("Login user when he doesn't have privileges", () => {
       it("Login user to dashboard", () => {
@@ -644,6 +729,8 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Select 'Open' for PO status", () => {
       cy.poSelectPOStatus({ status: "Open" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select 'SUP-00001' Supplier ", () => {
@@ -746,20 +833,11 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-          cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Click 'Approve' button", () => {
-        cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
+        cy.poApproveWithoutApi();
       });
     });
   });
@@ -801,13 +879,14 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Click on 'Details' tab", () => {
       cy.drSelectDetailsTab();
+      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select PO Receivable from dropdown for 'RC-00002'", () => {
       SystemRequirement("REQ-1830");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy*=\"porec-receivable-\"]").autocompleteSelect("PO-00001");
-      });
+      cy.get("[data-cy*=\"porec-receivable-\"]").autocompleteSelect("PO-00001");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -870,11 +949,10 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Select PO Receivable from dropdown for 'RC-00001'", () => {
       SystemRequirement("REQ-1830");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy*=\"porec-receivable-\"]").autocompleteSelect("PO-00001");
-      });
+      cy.get("[data-cy*=\"porec-receivable-\"]").autocompleteSelect("PO-00001");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -902,6 +980,8 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
         cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
       });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select 'Lots form document' form", () => {
@@ -979,12 +1059,16 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Click on 'Details' tab", () => {
-      cy.drSelectDetailsTab();
+    it("Click on 'overview' tab", () => {
+      cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
-      cy.poAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save PO", () => {
@@ -992,12 +1076,14 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Click 'Submit for Approval' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("button[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+    it("Click on 'overview' tab", () => {
+      cy.drSelectOverviewTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Navigate to Details tab again", () => {
@@ -1005,11 +1091,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovalsApprove, () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick().wait(1000);
-      });
+      cy.poApproveWithoutApi();
     });
 
     it("Click on update record", () => {

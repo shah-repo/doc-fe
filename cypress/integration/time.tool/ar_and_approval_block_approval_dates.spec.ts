@@ -8,7 +8,7 @@ import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { emailDateOffset, momentInPST } from "../../utils/constants/dateHandler";
+import { approvalNotificationPrivday, approvalNotificationToday, emailDateOffset } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { LegalRecord } from "../../utils/constants/documentTypes/record";
@@ -35,8 +35,6 @@ let trainingCurriculumDocumentType;
 let createdTrainingCurriculumFormDocument;
 let developersGroup;
 const FIRST_USER = USERS[1];
-
-const approvalNotificationToday = momentInPST().format("MMM D, YYYY");
 
 context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () => {
   before(() => {
@@ -1251,6 +1249,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
 
       it("Click on 'EMAIL ALL'", () => {
         cy.get("button").contains("EMAIL ALL").arrowClick();
+        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
@@ -1323,8 +1322,6 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
 
       it("Click on 'EMAIL ALL'", () => {
         cy.get("button").contains("EMAIL ALL").arrowClick();
-        dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-
       });
 
       it("Check if 'EMAIL SENT TO ALL' message is shown", () => {
@@ -1332,6 +1329,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.get("button[aria-label=close]").eq(1).arrowClick();
         cy.get("button[aria-label=close]").eq(0).arrowClick();
         cy.cmpExitDropdown();
+        cy.wait(10000);
       });
     });
   });
@@ -1345,7 +1343,6 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         // eslint-disable-next-line @typescript-eslint/camelcase
         include_body: true,
       };
-      cy.wait(20000);
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
         emailsFromInbox = emails;
       });
@@ -1355,19 +1352,19 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationToday, "LR-00002"],
+          contains: [`Hi ${FIRST_USER.name}`, approvalNotificationPrivday, "TCT-00001"],
         },
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationToday, "TCT-00001"],
+          contains: [`Hi ${FIRST_USER.name}`, approvalNotificationPrivday, "POT-00001"],
         },
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationToday, "POT-00001"],
+          contains: [`Hi ${FIRST_USER.name}`, approvalNotificationPrivday, "AR-00004"],
         },
         {
           sentToUser: FIRST_USER.email,
-          contains: [approvalNotificationToday, "AR-00004"],
+          contains: [`Hi ${FIRST_USER.name}`, approvalNotificationPrivday, "LR-00002"],
         },
       ];
 

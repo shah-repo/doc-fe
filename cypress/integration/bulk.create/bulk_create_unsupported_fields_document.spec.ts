@@ -954,10 +954,7 @@ context("Bulk create unsupported fields for documents", () => {
         });
 
         it("Verify instruction media upload is empty", () => {
-          cy.get("[for^=\"fb-mediaalbum-upload-blc-instruction-media-upload\"]")
-            .parent()
-            .parent()
-            .should("have.attr", "disabled");
+          cy.get("[for^=\"fb-mediaalbum-upload-blc-instruction-media-upload\"]").should("not.exist");
         });
 
         it("Verify evidence media upload is empty", () => {
@@ -999,6 +996,9 @@ context("Bulk create unsupported fields for documents", () => {
     context("Verify document two data", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Filter document two", () => {
@@ -1077,10 +1077,7 @@ context("Bulk create unsupported fields for documents", () => {
         });
 
         it("Verify instruction media upload is empty", () => {
-          cy.get("[for^=\"fb-mediaalbum-upload-blc-instruction-media-upload\"]")
-            .parent()
-            .parent()
-            .should("have.attr", "disabled");
+          cy.get("[for^=\"fb-mediaalbum-upload-blc-instruction-media-upload\"]").should("not.exist");
         });
 
         it("Verify evidence media upload is empty", () => {

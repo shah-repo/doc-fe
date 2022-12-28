@@ -4,8 +4,6 @@ import Colors from "../../../layout/theme/utils/colors";
 export const styles = makeStyles(() =>
   createStyles({
     chartContainer: {
-      overflow: "auto",
-      maxHeight: "calc(100vh - 300px)",
     },
     title: {
       fontWeight: 600,
