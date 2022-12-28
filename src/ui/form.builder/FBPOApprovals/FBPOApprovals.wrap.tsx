@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core";
-import { compact, difference, isEmpty, map, some } from "lodash";
+import { compact, difference, isEmpty, isEqual, map, some } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
@@ -83,22 +83,59 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       );
     };
 
+    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
+      if (!approvalId) { return; }
+      poApprovalsState?.applyTransition(transition, approvalId, { password });
+    };
+
+    onApproveClick = (approvalId: string) => {
+      dialogState?.config({
+        title: "form.builder.password.prompt",
+        open: true,
+        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
+      });
+    };
+
+    useObserver(() => {
+      groups = poApprovalsState?.groups;
+      approvals = poApprovalsState?.activeApprovals;
+      checkedGroups = poApprovalsState?.checkedGroups;
+      loading = poApprovalsState?.busy;
+      disabled = disabled || loading;
+
+      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
+      const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
+      const disableRequestorApproval = checkServiceOrProductPartExists(poItems) && !isAdministrativeChange;
+      disabledOptions = disableRequestorApproval ? [requestor] : [];
+    });
+
     // This runs when you manually remove an approver from the list
     useEffect(() => reaction(
       () => formState?.inputState.get(name)?.value,
-      (fieldValue: string[]) => {
-        const formValue: string[] = map(poApprovalsState?.activeApprovals, "approver.id");
+      (formValue) => {
+        if (typeof formValue !== "object") {
+          formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, "approver.id"), true);
+          return formState?.getInputState(name)?.setRender();
+        }
+        const stateValue = map(poApprovalsState?.activeApprovals, "approver.id");
 
-        const employeesToBeAdded = difference(fieldValue, formValue);
+        const employeesToBeAdded = difference(formValue, stateValue);
+        const employeesToBeRemoved = difference(stateValue, formValue);
+
         if (employeesToBeAdded.length > 0) {
           addApprover(employeesToBeAdded, { manually: true });
+          return;
         }
 
-        const employeesToBeRemoved = difference(formValue, fieldValue);
         if (employeesToBeRemoved.length > 0) {
           removeApprover(employeesToBeRemoved);
+          return;
         }
+
         formState?.getInputState(name)?.setRender();
+      },
+      {
+        equals: isEqual,
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
@@ -140,38 +177,16 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
-    approvalTransition = (transition: FBApprovalsStatusEndpoint, approvalId?: string, password?: string) => {
-      if (!approvalId) { return; }
-      poApprovalsState?.applyTransition(transition, approvalId, { password });
-    };
-
-    onApproveClick = (approvalId: string) => {
-      dialogState?.config({
-        title: "form.builder.password.prompt",
-        open: true,
-        content: <FBApprovalPasswordForm {...{ approvalId, approvalTransition }} />,
-      });
-    };
-
-    useObserver(() => {
-      groups = poApprovalsState?.groups;
-      approvals = poApprovalsState?.activeApprovals;
-      checkedGroups = poApprovalsState?.checkedGroups;
-
-      loading = (
-        poApprovalsState?.loading ||
-        poApprovalsState?.approvalApi.loading ||
-        poApprovalsState?.transitionApi.loading
-      );
-
-      const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
-      const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-      disabledOptions = checkServiceOrProductPartExists(poItems) ? [requestor] : [];
-    });
+    useEffect(() => reaction(
+      () => poApprovalsState?.busy,
+      () => {
+        formState?.getInputState(name)?.setRender();
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), []);
 
     formState?.setFieldValue(name, map(poApprovalsState?.activeApprovals, "approver.id"), true);
 
-    disabled = disabled || loading;
     documentStatus = document?.status;
 
     return Component({

@@ -31,6 +31,7 @@ declare global {
       pmClearFilters(): Chainable<Subject>;
       pmSelectFirstDocument(): Chainable<Subject>;
       lhrSubmitForApproval(): Chainable<Subject>;
+      lhrSubmitForApprovalWithoutApi(): Chainable<Subject>;
       ptClickCreateNewPart(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
       ptSelectPartFormFromMultiSelect(params: {partForm: string}): Chainable<Subject>;
@@ -151,7 +152,7 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver, { force: true });
   });
   cy.unClick();
   cy.progressBarShouldNotExist();
@@ -219,6 +220,12 @@ Cypress.Commands.add("lhrSubmitForApproval", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
     cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   });
+  cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrSubmitForApprovalWithoutApi", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

@@ -25,7 +25,7 @@ export const usePoApprovals = (
   id?: string,
 ) => {
   const dispatch = useDispatch();
-  const { workspaceState, formState, poApprovalsState } = FB.useStores();
+  const { workspaceState, poApprovalsState } = FB.useStores();
 
   const getSignatureGroupName = (id: string) => {
     const approversGroups = compact(map(poApprovalsState?.groups, (group) =>
@@ -41,22 +41,20 @@ export const usePoApprovals = (
     }
   };
 
-  const updateApprovalSignatureGroupName = (approval: FBInlineApprovalBody) =>
-    new Promise((resolve) => {
-      if (some(poApprovalsState?.checkedGroups, { name: approval.signatureGroupName }) || !approval.approverId) {
-        return resolve(approval);
-      }
+  const updateApprovalSignatureGroupName = async (approval: FBInlineApprovalBody) => {
+    if (some(poApprovalsState?.checkedGroups, { name: approval.signatureGroupName }) || !approval.approverId) {
+      return approval;
+    }
 
-      const updatedSignatureGroupName = getSignatureGroupName(approval.approverId);
+    const updatedSignatureGroupName = getSignatureGroupName(approval.approverId);
 
-      if (updatedSignatureGroupName) {
-        poApprovalsState?.updateSignatureGroupName(
-          approval.id,
-          updatedSignatureGroupName,
-          () => resolve(approval),
-        );
-      }
-    });
+    if (updatedSignatureGroupName) {
+      return poApprovalsState?.updateSignatureGroupName(
+        approval.id,
+        updatedSignatureGroupName
+      );
+    }
+  };
 
   const updateSignaturesQueue = async (approvals: string[]) => {
     for (const approvalId of approvals) {
@@ -67,7 +65,7 @@ export const usePoApprovals = (
     }
   };
 
-  const updateSignatureGroupNames = () => {
+  const updateSignatureGroupNames = async () => {
     const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
 
     const shouldUpdate =
@@ -79,7 +77,7 @@ export const usePoApprovals = (
       return;
     }
 
-    updateSignaturesQueue(
+    return updateSignaturesQueue(
       sortBy(poApprovalsState?.activeApprovals, "signatureGroupName").map((approval) => approval.id)
     );
   };
@@ -87,7 +85,7 @@ export const usePoApprovals = (
   const hasUserInApprovers = (approverId: string, approversList?: FBInlineApprovalBody[]) =>
     some(approversList ?? poApprovalsState?.activeApprovals, { approverId });
 
-  const updateApprovals = ({ prevRequester, ...args }: CheckApprovalsArguments) => {
+  const updateApprovals = async ({ prevRequester, ...args }: CheckApprovalsArguments) => {
     const { revisionChangeType, document, formInputSync } = workspaceState ?? {};
 
     const shouldUpdateApprovers = isDocumentRevisionInDraft(document?.status);
@@ -117,8 +115,10 @@ export const usePoApprovals = (
     }
 
     if (prevRequester && shouldRemovePrevRequester) {
-      return removeApprover([prevRequester], () => {
-        requester && addApprover([requester], { manually: false });
+      return removeApprover([prevRequester]).then(() => {
+        if (requester) {
+          addApprover([requester], { manually: false });
+        }
       });
     }
 
@@ -127,53 +127,55 @@ export const usePoApprovals = (
     }
   };
 
-  const addApprover = async (ids: string[], { manually = true } = {}, callback?: () => void) => {
+  const addApprover = async (ids: string[], { manually = true } = {}) => {
     if (!id || !ids) {
-      return;
+      return Promise.reject();
     }
 
-    await when(() => Boolean(poApprovalsState?.isMounted));
+    await when(() => Boolean(poApprovalsState?.isMounted) && !poApprovalsState?.busy);
 
-    ids
+    const addActions = ids
       .filter((user) => !hasUserInApprovers(user))
-      .forEach((approver) => {
+      .map((approver) => {
         const signatureGroupName = getSignatureGroupName(approver);
-        poApprovalsState?.addApproval({
+        return poApprovalsState?.addApproval({
           assigned: { id: approver },
           type: "MASTER",
           fieldId: fieldName,
           partOf: { id },
           signatureGroupName,
           manually,
-        }, () => {
-          const id  = workspaceState?.id;
-          if (id) {
-            dispatch(documentRevisionsActions.loadAudit(id));
-          }
-          // TODO remove callback if favor of async await and Promise.all
-          callback?.();
         });
       });
+
+    return Promise.all(addActions).then(() => {
+      const id  = workspaceState?.id;
+      if (id) {
+        dispatch(documentRevisionsActions.loadAudit(id));
+      }
+    });
   };
 
-  const removeApprover = (ids?: string[], callback?: () => void) => {
-    if (!ids || formState?.workspaceMode === "preview") {
-      return;
+  const removeApprover = async (ids?: string[]) => {
+    if (!ids || !id) {
+      return Promise.reject();
     }
-    map(ids, (approver) => {
+
+    await when(() => Boolean(poApprovalsState?.isMounted) && !poApprovalsState?.busy);
+
+    const removeActions = map(ids, (approver) => {
       const approval = find(poApprovalsState?.activeApprovals, (a) => a.approver?.id === approver);
-      poApprovalsState?.applyTransition(
-        "abandon",
-        approval?.id,
-        undefined,
-        () => {
-          const id  = workspaceState?.id;
-          if (id) {
-            dispatch(documentRevisionsActions.loadAudit(id));
-          }
-          callback?.();
-        }
-      );
+      if (approval?.status === ApprovalStatus.Abandoned) {
+        return;
+      }
+      return poApprovalsState?.applyTransition("abandon", approval?.id, undefined);
+    });
+
+    return Promise.all(removeActions).then(() => {
+      const id = workspaceState?.id;
+      if (id) {
+        dispatch(documentRevisionsActions.loadAudit(id));
+      }
     });
   };
 
