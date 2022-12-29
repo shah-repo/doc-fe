@@ -769,6 +769,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
         cy.url().then((url: any) => {
           lhrUrl = url;
@@ -1112,6 +1113,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
         cy.url().then((url: any) => {
           lhrUrl1 = url;
@@ -1248,7 +1250,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Open approval roles tab", () => {
-        cy.drSelectApprovalRolesTab();
+        cy.drSelectApprovalRolesTabWithoutApi();
       });
 
       it(`Remove ${USERS[4].name} in approving users`, () => {
@@ -1294,6 +1296,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
         cy.url().then((url: any) => {
           lhrUrl2 = url;
@@ -1453,6 +1456,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
       });
 
@@ -1557,6 +1561,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
       });
 
@@ -1846,6 +1851,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("New owner can add 'Due Date'", () => {
+        cy.unClick();
         cy.poAddDateRequired();
       });
 

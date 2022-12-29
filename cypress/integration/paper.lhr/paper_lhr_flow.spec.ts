@@ -1941,6 +1941,7 @@ context("Paper Lot History Record", () => {
 
     it("Click on Yes button", () => {
       cy.get(`button[data-cy="fb-control-btn"]`).contains("Yes").arrowClick();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();

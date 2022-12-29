@@ -8,7 +8,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
@@ -256,10 +255,14 @@ context("Create company with JSON's", () => {
 
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Enters title '${ncoFormName}'`, () => {
@@ -283,7 +286,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
@@ -294,6 +297,8 @@ context("Create company with JSON's", () => {
   context("Create NCO document from Form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select released NCO Form", () => {
@@ -314,6 +319,8 @@ context("Create company with JSON's", () => {
 
     it("Click on 'Details' tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Enters company name '${newCompanyName}'`, () => {
@@ -334,38 +341,52 @@ context("Create company with JSON's", () => {
 
     it("Upload DOM JSON", () => {
       cy.atchUploadDOMJSONForNCO({ fileName: "po_dam.json", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
       cy.get("[name*='approved-page-details-json-is-used-']").check("Yes");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Page Details JSON", () => {
       cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
       cy.get("[name*='approved-navigation-json-is-used-']").check("Yes");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Navigation JSON", () => {
       cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Users List JSON", () => {
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
       cy.get("[data-cy='albumMediaButton']").eq(0).arrowClick();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+    it("Click on 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
-    it("Approve and release document - create company", () => {
+    it("Approve and release document for create company", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
     });
 
@@ -399,10 +420,14 @@ context("Create company with JSON's", () => {
     context("Create Form Part document to create Part", () => {
       it("Navigates to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enters title 'New Part Form'", () => {
@@ -423,10 +448,12 @@ context("Create company with JSON's", () => {
 
       it("Selects 'PO Part' document type from dropdown", () => {
         cy.drSelectOutputDocumentType({ documentType: "Parts" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release document", () => {
@@ -437,14 +464,20 @@ context("Create company with JSON's", () => {
     context("Create Part document for PO", () => {
       it("Navigates to parts list", () => {
         cy.navigToParts();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'Add new part' button", () => {
         cy.ptClickCreateNewPart();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'PO Part' Form", () => {
         cy.ptSelectPartFormFromMultiSelect({ partForm: "Parts" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enters title 'New Part'", () => {
@@ -467,10 +500,14 @@ context("Create company with JSON's", () => {
     context("Create Supplier form for PO", () => {
       it("Navigates to document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enters title 'New Supplier Form'", () => {
@@ -491,10 +528,12 @@ context("Create company with JSON's", () => {
 
       it("Click on 'Supplier' outputdocument type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Supplier" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release document", () => {
@@ -505,10 +544,14 @@ context("Create company with JSON's", () => {
     context("Create Supplier document for PO", () => {
       it("Navigates to suppliers list", () => {
         cy.navigToSuppliers();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Clicks on 'Add new supplier' button", () => {
         cy.ptClickCreateNewPart();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enters title 'New Supplier'", () => {
@@ -532,10 +575,14 @@ context("Create company with JSON's", () => {
   context("Check PO exists & verify schema with predefined schema", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check filters for document type management", () => {
       cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.filterDocTypeManagement({
         status: "Active", documentType: "Purchase Order", acronym: "PO-",
         privateNumber: "Yes", redline: "No", qms: "Yes", needsSignature: "Yes", training: "No",
@@ -546,6 +593,8 @@ context("Create company with JSON's", () => {
 
     it("Check predefined schema matches the one set in previous", () => {
       cy.get("[data-grid-row-index='0']>td[data-grid-col-index='14']>span").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[class="k-form-field-wrap"]>span>textarea`)
         .invoke("val")
         .then((res) => JSON.parse(res as string))
@@ -565,10 +614,14 @@ context("Create company with JSON's", () => {
   context("Create a new form with output PO", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Create a document'", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter title 'New Purchase Order Form'", () => {
@@ -585,6 +638,8 @@ context("Create company with JSON's", () => {
 
     it("Click on 'Purchase Order' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -592,7 +647,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("PO Status is a Select Field", () => {
@@ -641,6 +696,8 @@ context("Create company with JSON's", () => {
 
     it("Switch to Line items tab", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("PO table field labeled 'Purchase Order'", () => {
@@ -656,10 +713,14 @@ context("Create company with JSON's", () => {
   context("See preview & Send to email and verify all fields are present", () => {
     it("Switch to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("PO Status is a Select Field", () => {
@@ -679,7 +740,7 @@ context("Create company with JSON's", () => {
     });
 
     it("Order Date exists", () => {
-      cy.get(`[name="ordered-k6mlhan7"]`).eq(1).should("exist");
+      cy.get(`[name^="ordered-"]`).eq(1).should("exist");
     });
 
     it("Approals exists", () => {
@@ -688,22 +749,30 @@ context("Create company with JSON's", () => {
 
     it("Close Preview dialog", () => {
       cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Switch to Line items tab", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Order Date exists", () => {
-      cy.get(`[name="po-items-built-in"]`).eq(1).should("exist");
+      cy.get(`[name^="ordered-"]`).should("exist");
     });
 
     it("Close Preview dialog", () => {
       cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -885,12 +954,16 @@ context("Create company with JSON's", () => {
   context("In Render HTML paste an updated code", () => {
     it("Switch to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter html code into 'Render HTML' field", () => {
       cy.drEnterHtmlText({
         htmlText: renderHTMLContent,
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document after filling document", () => {
@@ -935,6 +1008,8 @@ context("Create company with JSON's", () => {
 
     it("Switch to Line items tab", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Order Date exists", () => {
@@ -951,17 +1026,18 @@ context("Create company with JSON's", () => {
       SystemRequirement("REQ-1630");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-        cy.drSelectHistoryTab();
-      });
-
+      cy.drSelectHistoryTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy="change-key-0"]`).contains(USERS[1].name);
       cy.get("time[data-cy='audit-time-0']")
         .contains((poCreationDate1 || poCreationDate2));
     });
 
-    it("Switch to Line items tab", () => {
+    it("Switch to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Open' for PO status", () => {
@@ -972,17 +1048,21 @@ context("Create company with JSON's", () => {
     it(`Select '${USERS[1].name}' for Requestor`, () => {
       cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
       cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Create A New Supplier'", () => {
       SystemRequirement("REQ-4900");
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.get("[data-cy='form.builder.create.new.supplier']").arrowClick();
-      });
+      cy.get("[data-cy='form.builder.create.new.supplier']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Supplier Title 'Supplier'", () => {
       cy.get("[data-cy='name']").arrowType("Supplier");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Supplier Description 'Supplier Description'", () => {
@@ -994,43 +1074,54 @@ context("Create company with JSON's", () => {
     });
 
     it("Select Document Type 'Supplier'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("[name='document.documentType.id']").autocompleteSelect("Supplier");
-      });
+      cy.get("[name='document.documentType.id']").autocompleteSelect("Supplier");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new supplier", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
+      cy.get("[data-cy='common.confirm']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Order Date", () => {
-      cy.get("input[name^=ordered]").parent().find("button").arrowClick();
-      cy.get("button.MuiPickersDay-day[tabindex='0']").last().arrowClick();
+      cy.get("input[name^=ordered]").parent().find("button").arrowClick().wait(1000);
+      cy.get("button.MuiPickersDay-daySelected").arrowClick().wait(1000);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
-      cy.wait(3000);
       cy.poAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Uploads text.docx", () => {
       SystemRequirement("REQ-1350");
       cy.atchUploadAttachment({ fileName: "test.docx" });
-      cy.progressBarShouldAppear();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add item' button", () => {
       SystemRequirement("REQ-1360");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.poAddNewFieldItem();
-      });
+      cy.poAddNewFieldItem();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box and check for required fields", () => {
@@ -1045,16 +1136,22 @@ context("Create company with JSON's", () => {
     it("Select Part Number", () => {
       SystemRequirement("REQ-1410");
       cy.poSelectPartNumber({ partNo: "PRT-00001 - 1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Quantity Ordered", () => {
       SystemRequirement("REQ-1410");
       cy.poEnterQuantityOrdered({ quantity: "5" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Units", () => {
       SystemRequirement("REQ-1410");
       cy.poSelectUnits();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select GL code", () => {
@@ -1065,42 +1162,57 @@ context("Create company with JSON's", () => {
     it("Enter Supplier Part Number", () => {
       SystemRequirement("REQ-1410");
       cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter number of Units", () => {
       SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
       SystemRequirement("REQ-1410");
       cy.get("[name='date']").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Check Tax box", () => {
       SystemRequirement("REQ-1450");
       cy.poSelectTaxCheckbox();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poAddPOButtonClick();
-      });
+      cy.poAddPOButtonClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add item' button to add item without Part Number", () => {
       cy.get("[data-cy='fb-control-btn']").last().arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Quantity Ordered", () => {
       SystemRequirement("REQ-1410");
       cy.poEnterQuantityOrdered({ quantity: "10" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Units", () => {
       SystemRequirement("REQ-1410");
       cy.poSelectUnits();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select GL code", () => {
@@ -1111,17 +1223,24 @@ context("Create company with JSON's", () => {
     it("Enter Supplier Part Number", () => {
       SystemRequirement("REQ-1410");
       cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter number of Units", () => {
       SystemRequirement("REQ-1410");
       cy.poNumberOfUnits({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
       SystemRequirement("REQ-1410");
       cy.get("[name='date']").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Check Tax box", () => {
@@ -1130,14 +1249,16 @@ context("Create company with JSON's", () => {
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poAddPOButtonClick();
-      });
+      cy.poAddPOButtonClick();
     });
 
     it("Check line items have unique IDs", () => {
       SystemRequirement("REQ-1380");
       cy.poCheckForLineItemsAndTheirID({ firstId: "1", secondId: "2" });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Check currency options dropdown", () => {
@@ -1146,13 +1267,20 @@ context("Create company with JSON's", () => {
     });
 
     it("Select Currency 'USD'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poSelectCurrency({ currencyValue: "USD" });
-      });
+      cy.poSelectCurrency({ currencyValue: "USD" });
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Shipping Cost", () => {
       cy.poShippingCost({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
     });
 
     it("Check Subtotal value", () => {
@@ -1163,12 +1291,16 @@ context("Create company with JSON's", () => {
     it("Check Tax value", () => {
       SystemRequirement("REQ-1450");
       cy.poCheckTax({ number: "2.775000" });
+      cy.unClick();
     });
 
     it("Check Total value", () => {
       SystemRequirement("REQ-1440");
-      cy.unClick();
-      cy.get("[data-cy='poTotal']").should("have.text", "$52.77");
+      cy.get("[data-cy='poTotal']").should("have.text", "$34.77");
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -1176,11 +1308,14 @@ context("Create company with JSON's", () => {
     it("Click 'Submit for Approval' button", () => {
       SystemRequirement("REQ-1490");
       cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 });

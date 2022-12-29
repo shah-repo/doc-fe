@@ -1,12 +1,13 @@
-import { Box, Divider, List } from "@material-ui/core";
+import { Box, List } from "@material-ui/core";
+import cx from "classnames";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Nullable } from "../../../../state/ducks/common/types";
 import { trainingStatsSelectors } from "../../../../state/ducks/dashboard.new/training.stats";
+import LoadMoreButton from "../../../components/common/load.more.button/LoadMoreButton";
 import Text from "../../../components/Text";
-import { LoadMoreButton } from "../../LoadMoreButton";
 import TrainingItem from "./TrainingItem";
-import { styles } from "./TrainingLineItems.styles";
+import useStyles from "./TrainingLineItems.styles";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -33,33 +34,31 @@ const TabPanel: React.FunctionComponent<TabPanelProps> = ({
   onLoadMoreData,
   ...other
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const totalTrainingData = useSelector(trainingStatsSelectors.totalTrainingStatsList);
 
   const renderItems = () =>
     value === index && (
       <List className={classes.listRoot}>
         {panelData.map((data, index) => (
-          <>
-            <TrainingItem
-              key={index}
-              id={data.id}
-              avatar={data.user.avatar}
-              initialColor={data.user.initialColor}
-              name={data.user.name}
-              status={data.status}
-              documentId={data.docId}
-              title={data.docTitle}
-              date={data.dueOn}
-            />
-            <Divider />
-          </>
+          <TrainingItem
+            key={data.id}
+            id={data.id}
+            avatar={data.user.avatar}
+            initialColor={data.user.initialColor}
+            name={data.user.name}
+            status={data.status}
+            documentId={data.docId}
+            title={data.docTitle}
+            date={data.dueOn}
+          />
         ))}
         {totalTrainingData > 0 && (
           <LoadMoreButton
             onLoadMore={onLoadMoreData}
             disable={overallLimit >= totalTrainingData}
-            id={`trainingListBoxLoadMore`}
+            id="trainingListBoxLoadMore"
+            className={classes.loadMore}
           />
         )}
       </List>
@@ -88,9 +87,9 @@ interface TrainingLineItemsProps {
 const TrainingLineItemsPresenter: React.FunctionComponent<TrainingLineItemsProps> =
   ({ tabValue, overallLimit, onLoadMoreData }) => {
     const trainingStatsList = useSelector(trainingStatsSelectors.trainingStatsList);
-    const classes = styles();
+    const classes = useStyles();
     return (
-      <Box component="div" className={classes.root} >
+      <Box component="div" className={cx(classes.root, "containing-box-scrollbar")} >
         <TabPanel
           key={0}
           value={tabValue}

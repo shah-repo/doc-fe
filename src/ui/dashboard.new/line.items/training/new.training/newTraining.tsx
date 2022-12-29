@@ -1,12 +1,4 @@
-import {
-  Box,
-  Grid,
-  Link,
-  ListItemIcon,
-  ListItemText,
-  Modal,
-  Typography,
-} from "@material-ui/core";
+import { Box, Grid, Link, ListItemIcon, ListItemText, Modal, Typography } from "@material-ui/core";
 import { size } from "lodash";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -34,7 +26,7 @@ import { HoverStyleChip } from "../../common/HoverStyleChip";
 import { NormalStyleChip } from "../../common/NormalStyleChip";
 import { StyledListItem } from "../../common/StyledListItem";
 import { StyleTooltip } from "../../common/StyleTooltip";
-import { styles } from "./newTraining.styles";
+import useStyles from "./newTraining.styles";
 
 interface Props {
   id: string;
@@ -72,7 +64,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   pinLineItem,
   unPinLineItem,
 }) => {
-  const classes = styles();
+  const classes = useStyles();
   const dispatch = useDispatch();
   const [pinHover, setPinHover] = React.useState(false);
   const [emailModelopen, setEmailModelopen] = React.useState(false);
@@ -179,7 +171,7 @@ const PendingTrainingPresenter: React.FunctionComponent<Props> = ({
   return (
     <>
       <StyledListItem button onMouseEnter={onMouseHoverItemListItem} className={classes.buttoncursor} disableRipple>
-        <ListItemIcon className={classes.listItemIcon}>
+        <ListItemIcon className={classes.actionIcon}>
           <TrainingIcon height={30} width={30} />
         </ListItemIcon>
         <ListItemText

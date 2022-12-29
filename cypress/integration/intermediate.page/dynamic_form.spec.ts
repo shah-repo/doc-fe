@@ -235,6 +235,12 @@ context(
             cy.fbClickButton({ el: "FBWorkspace-clickView" });
           });
 
+          it("Navigate to Detail Tab", () => {
+            cy.get(`[data-cy="tabId.details"]`).last().arrowClick();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+          });
+
           it("Add and check Quantity field", () => {
             cy.get("[data-cy=\"form.builder.form.preview\"]").parentsUntil(".MuiDialog-root")
               .find("input[name^=fb-quantity-]").clear().arrowType("1");
@@ -331,19 +337,19 @@ context(
           });
 
           it("Verify Text field with range", () => {
-            cy.get("[name^='fb-range-']").should("exist");
+            cy.get(".MuiDialogContent-root [name^='fb-range-']").should("be.visible");
           });
 
           it("Verify Paragraph", () => {
-            cy.contains("fb-paragraph").should("exist");
+            cy.get(".MuiDialogContent-root").contains("fb-paragraph").should("be.visible");
           });
 
           it("Verify Evidence Media Upload", () => {
-            cy.contains("fb-evidence").should("exist");
+            cy.get(".MuiDialogContent-root").contains("fb-evidence").should("be.visible");
           });
 
           it("Verify instructions media", () => {
-            cy.get("[data-cy='fb-instructions']").should("exist");
+            cy.get(".MuiDialogContent-root [data-cy='fb-instructions']").should("be.visible");
           });
 
           it("Close Preview dialog", () => {
@@ -370,11 +376,11 @@ context(
           });
 
           it("Verify Paragraph", () => {
-            cy.get(".MuiDialogContent-root>div>div").eq(0).contains("fb-paragraph").should("exist");
+            cy.get(".MuiDialogContent-root").contains("fb-paragraph").should("exist");
           });
 
           it("Verify Text field with range", () => {
-            cy.get(`[role="dialog"] [data-cy="textfieldwithrange-4"]`).should("exist");
+            cy.get(`[role="dialog"] [data-cy^="textfieldwithrange"]`).should("exist");
           });
 
           it("Verify Text field with range", () => {

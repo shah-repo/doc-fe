@@ -19,6 +19,7 @@ const reference = {
   value: "FM-00001",
   valueCode: "FM-00001",
 };
+const owner = USERS[1].name;
 
 context(`Scenario 2.1 Status bar design of new items approved via approval block (PO).`, () => {
   before(() => {
@@ -171,21 +172,85 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.cmpTurnOffAutosave();
         });
 
-        it("Enter title", () => {
-          cy.drEnterDocumentDescription({ description: "Purchase order document" });
+        it("Make a change", () => {
+          cy.drEnterDocumentDescription({ description: "PO Record " });
         });
 
-        it(`Save → Verify it is functional and the Check Auto-saving, please wait… is present)`, () => {
-          cy.wrapWithWaitOnApiCalls([], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-            cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
+        it("Verify Status bar displays “Last saved a few seconds ago", () => {
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+        });
+
+        it("Turn on autosave", () => {
+          cy.cmpTurnOnAutosave();
+        });
+
+        it("Make a change to Description", () => {
+          cy.drEnterDocumentDescription({ description: "PO Record 2" });
+        });
+
+        it(`Verify auto save is functional and the Check Auto-saving, please wait… is present)`, () => {
+          cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
+        });
+
+        it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+          cy.wait(120000);
+          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
+        });
+
+        context("Edit all the fields, and make sure the “last saved” data is updated each time", () => {
+          it("Enters description 'PO Record '", () => {
+            cy.drEnterDocumentDescription({ description: "PO Record " });
+            cy.progressBarShouldNotExist();
+            cy.wait(2000);
+          });
+
+          it(`Select '${USERS[2].name}' for Requestor`, () => {
+            cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+            cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+          });
+
+          it("Remove requestor", () => {
+            cy.get(".MuiAutocomplete-clearIndicator").first().realHover().arrowClick();
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
+          });
+
+          it("Check Last save should be present for autosave", () => {
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+          });
+
+          it("Add Approver to approvals list", () => {
+            cy.wait(3000);
+            cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
+            cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
+              cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+            });
+          });
+
+          it("Check Last save should be present in header", () => {
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+          });
+
+          it(`Select '${USERS[1].name}' for Requestor`, () => {
+            cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
+            cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+          });
+
+          it("Check Last save should be present header", () => {
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+          });
+
+          it("remove Approver to approvals list", () => {
+            cy.wait(3000);
+            cy.get(`[class*="MuiChip-root MuiAutocomplete-tag MuiChip-deletable"] div`).contains(owner)
+              .parent().parent().find("svg").arrowClick({ force: true });
+          });
+
+          it("Check Last save should be present in autosave", () => {
+            cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
           });
         });
 
-        it("Last save should be present", () => {
-          cy.listLoadingElementShouldNotExist();
-          cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
-        });
       });
 
       context(
@@ -231,10 +296,8 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
     context("Add Required Fields", () => {
       it(`Select '${USERS[1].name}' for Requestor`, () => {
         cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
 
       it("Add Required Date", () => {
@@ -243,6 +306,21 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.get(".MuiPickersDay-daySelected").arrowClick();
         });
         cy.listLoadingElementShouldNotExist();
+      });
+    });
+
+    context("Verify Save and submit for approval button visble and functional", () => {
+      it("Verify Save button is visible on header", () => {
+        cy.cmpTurnOffAutosave();
+        cy.drEnterDocumentDescription({ description: "Test PO Record description" });
+        cy.get("#DocumentRevisionForm-submit").contains("Save").should("be.visible");
+        cy.get("#DocumentRevisionForm-submit").contains("Save").arrowClick();
+        cy.progressBarShouldExist();
+        cy.cmpTurnOnAutosave();
+      });
+
+      it("Verify submit for approval button is visible on header", () => {
+        cy.get("#DocumentRevisionForm-submit").contains("Save").should("be.visible");
       });
     });
 
@@ -308,15 +386,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
     context("Approve the PO → The PO is in the Released status", () => {
       it("Approve the PO", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -363,18 +433,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           });
 
           it("Approve the PO", () => {
-            cy.wait(3000);
-            cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-            cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-            cy.unClick();
-            cy.wrapWithWaitOnApiCalls(
-              [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-              () => {
-                cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-              }
-            );
-            cy.checkToastMessage({ exists: false });
-            cy.listLoadingElementShouldNotExist();
+            cy.ebApproveWithoutApi();
           });
         });
       });
@@ -416,15 +475,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Approve the PO", () => {
-        cy.wait(3000);
-        cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-        cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -452,18 +503,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Approve the record", () => {
-          cy.wait(2000);
-          cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
-          cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
-          cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
-          cy.checkToastMessage({ exists: false });
-          cy.listLoadingElementShouldNotExist();
+          cy.ebApproveWithoutApi();
         });
       }
     );

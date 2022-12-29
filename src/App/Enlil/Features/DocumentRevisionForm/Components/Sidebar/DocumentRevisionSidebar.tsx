@@ -73,7 +73,6 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
         <SMBox
           display="flex"
           p={0.5}
-          stretchY="calc(100% - 56px)"
           borderTop={1}
           borderColor={Colors.medium_gray}
         >

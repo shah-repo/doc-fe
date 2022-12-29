@@ -1,12 +1,20 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
+import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
+import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
 let loginResponse;
 let adminEmployee;
+let group;
+let partDocumentType;
+let createdPartDocument;
+let approvalRequestDocumentType;
+let initialArDocument;
 
 const docType = "Form";
 const lotsOutputDocType = "Component Specification Lot";
@@ -37,11 +45,15 @@ context("Part Lot Preview mode validation", () => {
             companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
-            documentTypes: [],
+            documentTypes: [
+              Part,
+            ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
+          partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Part");
+          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           done();
         });
       });
@@ -49,10 +61,70 @@ context("Part Lot Preview mode validation", () => {
 
     it("[API]Login second tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[2].email,
+        email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
         done();
+      });
+    });
+
+    it("[API]Create part document", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Part document</p>",
+              document: {
+                docId: "PRT-00005",
+                documentType: {
+                  id: partDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Part document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            createdPartDocument = response;
+            cy.drAPIApproveAndRelease({
+              documentId: createdPartDocument.id,
+              payload: {
+                effectiveDate: (new Date()).toISOString(),
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then(() => {
+              done();
+            });
+          });
+        });
       });
     });
   });
@@ -318,13 +390,9 @@ context("Part Lot Preview mode validation", () => {
   });
 
   context("Verify Preview mode after doc creation for detail tab", () => {
-
     it("Select detail tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
-    it("verify form preview button in Overview Tab", () => {
-      cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify lot  quantity visible", () => {
@@ -346,17 +414,9 @@ context("Part Lot Preview mode validation", () => {
     it("Verify '100 % inspection override' is visible", () => {
       cy.get(`.MuiDialogContent-root [name="100-inspection-override"]`).should("be.visible");
     });
-
-    it("Close the preview mode", () => {
-      cy.get(`[data-cy="dialog-close"]`).arrowClick();
-    });
   });
 
   context("Verify fields in preview mode editable or not", () => {
-    it("verify form preview button in Overview Tab", () => {
-      cy.get("[data-cy='FBWorkspace-clickView']").click();
-    });
-
     it("Enter initial lot  quantity", () => {
       cy.get(`.MuiDialogContent-root [name="lot_quantity"]`).arrowType("10");
     });
@@ -386,6 +446,8 @@ context("Part Lot Preview mode validation", () => {
 
     it("Reopen the preview mode and verify enter detail not saved", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
       cy.get(`.MuiDialogContent-root [name="lot_quantity"]`).should("not.contain.value");
       cy.get(`.MuiDialogContent-root [name="lot_usable_quantity"]`).should("not.contain.value");
       cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`).should("not.contain.value");
@@ -422,7 +484,7 @@ context("Part Lot Preview mode validation", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Verify form preview button in Overview Tab", () => {
+    it("Click form preview button", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
     });
 
