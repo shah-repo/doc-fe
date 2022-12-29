@@ -438,6 +438,11 @@ context("Intermediate page validation", () => {
         cy.fbClickButton({ el: "FBWorkspace-clickView" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Add and check Quantity field", () => {
         cy.get(`[data-cy="form.builder.form.preview"]`).parentsUntil(".MuiDialog-root")
           .find("input[name^=fb-quantity-]").clear().arrowType("1");
@@ -489,6 +494,11 @@ context("Intermediate page validation", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
     });
 
+    it("Click on 'Details' tab", () => {
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Verify 'Autocomplete 2' field is displayed and clickable", () => {
       cy.get(`[data-cy^="fb-autocomplete-2-"]`).eq(1).should("exist");
       cy.get(`[data-cy^="fb-autocomplete-2-"]`).eq(1).arrowClick();
@@ -525,6 +535,11 @@ context("Intermediate page validation", () => {
 
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Click on 'Details' tab", () => {
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify position of autocomplete 2", () => {

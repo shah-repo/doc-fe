@@ -27,7 +27,7 @@ const FBPurchaseOrderClasses = makeStyles({
   table: {
     "& th": {
       whiteSpace: "nowrap",
-      backgroundColor: Colors.water,
+      backgroundColor: Colors.athens_gray,
       cursor: "default",
     },
     "& tr": {

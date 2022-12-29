@@ -1244,6 +1244,8 @@ context("LHR flow", () => {
         });
 
         it("Verify materials of clone of Step #1", () => {
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
           cy.contains("Step #2").parentsUntil("li")
             .find("[data-cy=\"form.builder.mpi.procedure.materials.title\"]")
             .should("have.text", "MT-00004 - Material one | Qty: 3 each");
@@ -1394,7 +1396,6 @@ context("LHR flow", () => {
         });
 
         it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true }).wait(3000);
           cy.get("input[data-cy=\"lhrstep-built-in\"]").focus()
             .autocompleteSelect("PI-00002", { force: true });
           cy.unClick();
@@ -1403,7 +1404,6 @@ context("LHR flow", () => {
         });
 
         it("Verify indicator for parametrized Material", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
           SystemRequirement("REQ-3630");
           cy.get("[data-cy=\"form.builder.mpi.procedure.materials.title.id\"]")
             .should("have.text", "A: Parameter for material three | Qty: None ");
@@ -1421,7 +1421,6 @@ context("LHR flow", () => {
         });
 
         it("Select MPI document created with API for step #2 in LHRt", () => {
-          cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(1).arrowClick({ force: true });
           cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API", { force: true });
           cy.unClick();
           cy.progressBarShouldNotExist();
@@ -1857,8 +1856,7 @@ context("LHR flow", () => {
 
           it("Verify user who completed LHRs", () => {
             SystemRequirement("REQ-3240");
-            cy.get("div[id=Presenter-FBWorkspace]>div").eq(-2).find("div>div:nth-child(5)")
-              .should("contain.text", USERS[2].name);
+            cy.get("div[id=Presenter-FBWorkspace]").should("contain.text", USERS[2].name);
           });
         });
       });
@@ -1894,9 +1892,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Add an Approval", () => {
@@ -1911,9 +1907,7 @@ context("LHR flow", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Complete step", () => {

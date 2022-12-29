@@ -423,10 +423,13 @@ context("Create new LHRT Layout Verification", () => {
     context("Click on Form Preview and verify the fields", () => {
       it("Click 'Preview Layout' button", () => {
         cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
+        cy.listLoadingElementShouldExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify Step 2 Added to detail tab", () => {
         cy.get(".MuiDialogContent-root").scrollTo("bottom");
+        cy.get(".MuiDialogContent-root [data-cy='tabCon-tabId.details']").arrowClick({ force: true });
         cy.get("[data-cy='LHR Step 2']").should("be.visible");
       });
 
@@ -494,9 +497,12 @@ context("Create new LHRT Layout Verification", () => {
 
       it("Click 'Preview Layout' button", () => {
         cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
+        cy.listLoadingElementShouldExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify Step 2 Added to detail tab", () => {
+        cy.get(".MuiDialogContent-root [data-cy=\"tabCon-tabId.details\"]").arrowClick({ force: true });
         cy.get("[data-cy='LHR Step 2']").last().scrollIntoView();
         cy.get("[data-cy='LHR Step 2']").should("be.visible");
       });
