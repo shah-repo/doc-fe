@@ -4,8 +4,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { default as classNames, default as cx } from "classnames";
 import { default as React } from "react";
 import { ReactComponent as CaretIcon } from "../../../../assets/images/leftPanel/po_status_dd.svg";
+import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { POStatus } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../../ui/components/Text";
+import AlertDialog from "../../../app/alert.dialog/AlertDialog";
+import useActionCreator from "../../../hooks/useActionCreator";
+import useAsync from "../../../hooks/useAsync";
+import useDialog from "../../../hooks/useDialog";
 import useStyles from "./HeaderPOStatus.styles";
 
 interface Props {
@@ -16,9 +21,9 @@ interface Props {
 const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   status, docId,
 }) => {
-  console.log("status ::", status);
-  console.log("docId ::", docId);
   const classes = useStyles();
+  const dialog = useDialog();
+  const async = useAsync();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -27,6 +32,11 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleVoid = () => {
+    dialog.open();
+    handleClose();
   };
   const StyledMenu = withStyles({
     list: {
@@ -58,15 +68,14 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     />
   );
 
-  // const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
-  // const voidDocument = () => {
-  //   documentRevision
-  //   && async.start(
-  //     voidAction,
-  //     documentRevision.id,
-  //     async,
-  //   );
-  // };
+  const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
+  const voidDocument = () => {
+    async.start(
+      voidAction,
+      docId,
+      async,
+    );
+  };
 
   return (
     <>
@@ -112,18 +121,18 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
           />
           <Text message="Close" />
         </MenuItem>
-        <MenuItem onClick={handleClose} className={classes.menuItem}>
+        <MenuItem onClick={handleVoid} className={classes.menuItem}>
           <div
             className={classNames(classes.statusIcon, classes.voidStatusIcon)}
           />
           <Text message="Void" />
         </MenuItem>
       </StyledMenu>
-      {/* <AlertDialog
+      <AlertDialog
         confirmAction={voidDocument}
-        message={isRecord ? "documentRevision.record.void.alert" : "documentRevision.void.alert"}
+        message={"documentRevision.record.void.alert"}
         {...{ dialog }}
-      /> */}
+      />
     </>
   );
 };
