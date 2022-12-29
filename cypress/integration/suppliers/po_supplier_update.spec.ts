@@ -680,6 +680,7 @@ context("Purchase Supplier Update", () => {
     context("for existing PO", () => {
       it(`Open existing PO and verify PO in ${STATUS_TYPES_LABEL.PENDING_APPROVAL} and verify Supplier`, () => {
         cy.navigToPurchaseOrder();
+        cy.wait(1000);
         cy.poClickOnSpecificPOFromList({ item: "PO-00002" });
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00001 - rev 3 - New suplier for PO123");
@@ -819,6 +820,8 @@ context("Purchase Supplier Update", () => {
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description1" });
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApprovalWithoutAPI();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.poApproveWithoutApi();
@@ -898,6 +901,8 @@ context("Purchase Supplier Update", () => {
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description2" });
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApprovalWithoutAPI();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.poApproveWithoutApi();
