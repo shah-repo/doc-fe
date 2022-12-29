@@ -39,6 +39,7 @@ const COLUMN_HEADERS = [
   "ORDER DATE",
 ];
 const supplierDocName = "SUP-00001 - rev 1 - API Supplier Document";
+const releasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
 
 context(
   `As a user, if I revise a PO and select Admin change (dot release), then the system should not automatically
@@ -708,14 +709,47 @@ add the requestor to the approvals field - ENC-12706`,
       });
 
       it("Verify PO is relased and released date", () => {
-        cy.get("[data-cy='releaseDate']").parent().parent().should("contain.text",
-          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
+        cy.get("[data-cy='releaseDate']").parent().parent().should("contain.text", releasedDate);
         cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
       });
 
     });
 
+
     context("Verify that data is saved", () => {
+      it("Navigate to PO", () => {
+        cy.navigToPurchaseOrder();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.dlClearFilters();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select created PO", () => {
+        cy.dlFilterByDocId({ docId: "PO-00001" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("verify that PO landing page is pulling correct data", () => {
+        cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
+        cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "1.1");
+        cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
+        cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Released");
+        cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "API Supplier Document");
+        cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "N/A");
+        cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$0.00");
+        cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[2].name);
+        cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", releasedDate);
+      });
+
+      it("Select the first created PO", () => {
+        cy.dlSelectFirstDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it(`Verify title is ${TITLE}`, () => {
         cy.get("[data-cy=\"BaseWithhtml-editor\"]").should("exist").contains(TITLE);
       });
@@ -724,16 +758,16 @@ add the requestor to the approvals field - ENC-12706`,
         cy.get("#mui-component-select-po-status-built-in").should("exist").contains("Open");
       });
 
+      it(`Check the supplier field contains ${supplierDocName}`, () => {
+        cy.get("[data-cy='po-supplier-built-in']").should("have.value", supplierDocName);
+      });
+
       it(`Check the Requestor field contain ${USERS[2].name} - ${USERS[2].email}`, () => {
         cy.get("[data-cy^=po-requestor-autocomplete]").should("have.value", `${USERS[2].name} - ${USERS[2].email}`);
       });
 
       it(`Check the Approval field contain ${USERS[1].name} - ${USERS[1].email}`, () => {
         cy.get("div.Mui-disabled.MuiChip-deletable").should("contain", `${USERS[1].name} - ${USERS[1].email}`);
-      });
-
-      it(`Check the supplier field contains ${supplierDocName}`, () => {
-        cy.get("[data-cy='po-supplier-built-in']").should("have.value", supplierDocName);
       });
     });
   }
