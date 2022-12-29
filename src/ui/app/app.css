@@ -221,6 +221,11 @@ td#kendo-expandable-column[role="gridcell"] {
   padding-bottom: 0;
 }
 
+.k-grid-header-wrap table,
+.k-grid-content .k-grid-table {
+  min-width: 100%;
+}
+
 .k-grid {
   color: var(--almost_black);
   border-radius: 4px;
