@@ -556,17 +556,13 @@ context("supplier_and_paperLHR", () => {
   });
 
   context("Add fields", () => {
-    it("Navigate to detail tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
     it("Add TextField", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbEnterNameValue({ name: "label", value: "fb-textfield" });
       cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
       cy.fbOpenValidation();
-      cy.fbFieldRequiredIf({ name: "End Quantity", value: "1" });
+      cy.fbFieldRequiredIfNw({ name: "End Quantity", value: "1" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.fbAddNewFieldButton();
@@ -645,7 +641,7 @@ context("supplier_and_paperLHR", () => {
       cy.get("[data-cy='fb-control-required_if:anotherfield,value']").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.fbFieldRequiredIf({ name: "End Quantity", value: "2" });
+      cy.fbFieldRequiredIfNw({ name: "End Quantity", value: "2" });
       cy.fbAddNewFieldButton();
     });
   });
