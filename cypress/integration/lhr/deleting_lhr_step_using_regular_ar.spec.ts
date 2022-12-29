@@ -488,7 +488,7 @@ context("Deleting LHR Step using regular AR test", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arClickCreateApprovalRequestAfterCompletingForm();
       cy.url().then((url: any) => { arUrl = url; });
     });
 
