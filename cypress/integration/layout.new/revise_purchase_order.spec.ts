@@ -651,7 +651,6 @@ add the requestor to the approvals field - ENC-12706`,
         cy.get(`div[name^="po-requestor-autocomplete"]`)
           .find(`button[aria-label="Clear"]`).arrowClick({ force: true });
         cy.get("[data-cy^='po-requestor-autocomplete']").autocompleteSelect(USERS[2].name);
-        cy.wait(3000);
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
       });
@@ -684,7 +683,7 @@ add the requestor to the approvals field - ENC-12706`,
 
     context("Check “Backspace” and “Clear all” option will not be available in the PO approval field", () => {
       it(`Verify that “Backspace” and “Clear all” option will not be available in the PO approval field`, () => {
-        cy.wait(1000);
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy^='fb-po-approvals']").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
       });
     });
