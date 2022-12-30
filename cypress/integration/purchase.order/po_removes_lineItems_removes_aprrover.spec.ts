@@ -1255,6 +1255,8 @@ context("PO Removes lineitems removes approver", () => {
     });
   });
 
+  // Note the following code may be changed based on the decision that ENC-13619.
+  // The following code will work if ENC-13619 is abandoned and only last step in the TC ENC-12713 needs change
   // eslint-disable-next-line max-len
   context("Verify that the system does not removed User 1 from the approvals field (as the requirement no longer applies)", () => {
     it("Select detail tab", () => {
