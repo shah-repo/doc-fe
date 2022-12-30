@@ -1106,6 +1106,23 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     });
   });
 
+  context("Verify that history tab is capturing the changes - Adding requestor to the approval field", () => {
+    it("Open History tab and compare history values", () => {
+      cy.drSelectHistoryTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check history entry for 'Requestor added'", () => {
+      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Requestor added")
+        .and("contain", USERS[1].name);
+    });
+
+    it("Check history entry for 'Approver Added'", () => {
+      cy.get(`[data-cy="no-padding-margin"]`).eq(1).should("contain", "Approver Added").and("contain", USERS[1].name);
+    });
+  });
+
   context(`Verify that user is not able to remove/delete the requestor as an approver`, () => {
     it("Navigate to Approval block and try to remove approver", () => {
       cy.get(`[data-cy="form.builder.approvers"]`).scrollIntoView();
@@ -1403,6 +1420,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
   });
 
@@ -1410,6 +1428,26 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     it("Verify approvals is added only once in approval block", () => {
       cy.get(`[name^="fb-po-approvals-"]`).last().should("contain.text", `${USERS[2].name} - ${USERS[2].email} `)
         .and("have.length", 1);
+    });
+  });
+
+  context("Verify that history tab is capturing the changes - Adding requestor to the approval field", () => {
+    it("Open History tab and compare history values", () => {
+      cy.drSelectHistoryTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
+    });
+
+    it("Check history entry for 'Requestor Updated'", () => {
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).contains("Requestor Updated");
+      // eslint-disable-next-line max-len
+      cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).parent().parent().should("contain.text", USERS[2].name);
+    });
+
+    it("Check history entry for 'Approver Added'", () => {
+      // Failure is noticed in this step due to ENC-13615. once the issue fixed, the script should work fine
+      cy.get(`[data-cy="no-padding-margin"]`).eq(0).should("contain", "Approver Added").and("contain", USERS[2].name);
     });
   });
 
