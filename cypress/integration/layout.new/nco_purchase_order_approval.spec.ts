@@ -1,7 +1,6 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 
-import moment from "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
 import { receivingReleasedDate } from "../../utils/constants/dateHandler";
@@ -45,7 +44,6 @@ const COLUMN_HEADERS = [
   "REQUESTOR",
   "ORDER DATE",
 ];
-const releasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
 
 context("Create company with JSON's and verify Purchase Order", () => {
   before(() => {
