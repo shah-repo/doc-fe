@@ -133,7 +133,7 @@ const TrainingChartPresenter: React.FunctionComponent<TrainingChartPresenterProp
         myChart.resize();
       };
       myChart.on("mouseover", (evt: any) => {
-        DoughnutChartOptions.series.data.map((data, index) => {
+        DoughnutChartOptions.series.data.forEach((data, index) => {
           if (index !== evt?.dataIndex) {
             DoughnutChartOptions.series.data[index].itemStyle.color =
               Colors.platinum_grey;

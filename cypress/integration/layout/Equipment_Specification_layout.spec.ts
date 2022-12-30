@@ -269,7 +269,7 @@ context("Verification of Equipment Specification", () => {
 
     it("Verify Click Specification Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
     });
 
@@ -292,9 +292,9 @@ context("Verification of Equipment Specification", () => {
 
   context("Release ES", () => {
     it("Approve and release  document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -344,7 +344,7 @@ context("Verification of Equipment Specification", () => {
 
       it("Verify Click Specification Tab, clicking on it should open that tab and close the other one", () => {
         cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-        cy.get("#sm-tabpanel-0").should("be.hidden");
+        cy.get("#sm-tabpanel-0").should("not.exist");
         cy.get("[data-cy='tabCon-tabId.specification']").should("have.attr", "aria-selected", "true");
       });
 
@@ -423,6 +423,19 @@ context("Verification of Equipment Specification", () => {
           moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
 
+      it("Verify formInfo Document ID, Revision, and Release date of the Form ", () => {
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "FM-00003");
+        cy.get("[data-cy='common.revision']").should("contain.text", "Revision");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text", "1");
+        cy.get("[data-cy='common.revision']").parent().should("contain.text",
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
+      });
+
+      it("Verify release date should be none", () => {
+        cy.get("[data-cy='releaseDate']").should("exist");
+        cy.get("[data-cy='releaseDate']").parent().parent().should("contain.text", "None");
+      });
+
       context("Verify Revision", () => {
         it("open revision tab", () => {
           cy.get("[data-cy='note-icon']").arrowClick();
@@ -441,13 +454,16 @@ context("Verification of Equipment Specification", () => {
         });
 
         it("Add another user permission", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetFieldLocks, () => {
-            cy.drAddUserFromPermissionTab(USERS[3].name);
-          });
+          cy.drAddUserFromPermissionTab(USERS[3].name);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.PatchDocSecurity], () => {
+          cy.wait(2000);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
             cy.drAddGroupFromPermissionTab("Developers");
           });
         });
@@ -599,9 +615,25 @@ context("Verification of Equipment Specification", () => {
       });
 
       it("Approve and release  document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+    });
+
+    context("Verify ES is released and Released date", () => {
+      it("Verify The top left of the page displays: Icon and type, ID, Rev stage, status (Released)", () => {
+        cy.verifyHeaderInfoContent({
+          status: STATUS_TYPES_LABEL.RELEASED,
+          title: "Document List",
+          docId: "ES-00004",
+          revision: "Rev 1",
         });
+      });
+
+      it("Verify released date", () => {
+        cy.get("[data-cy='releaseDate']").parent().parent().should("contain.text",
+          moment().tz("America/Los_Angeles").format("MM/DD/YYYY"));
       });
     });
   });

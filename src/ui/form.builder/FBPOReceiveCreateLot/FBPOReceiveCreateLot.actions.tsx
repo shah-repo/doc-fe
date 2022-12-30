@@ -16,6 +16,7 @@ const FBPOReceiveCreateLotActions: React.FunctionComponent<FBPOReceiveCreateLotP
     />
     <StyledCancelFBButton
       variant="outlined"
+      color="primary"
       label="common.cancel"
       onClick={handleCancel}
     />

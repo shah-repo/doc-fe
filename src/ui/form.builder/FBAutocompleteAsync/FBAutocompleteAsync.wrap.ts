@@ -82,7 +82,6 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
           ? autocompleteAsyncState?.sliceValue(selectedOptions)
           : slicedOptions;
       }
-      // forceNewRender = formState?.getInputState(name || "")?.forceRender;
     });
 
     // Add some static additional data to dynamic store list
@@ -111,6 +110,7 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
+
     React.useEffect(
       () => {
         if (FB.isUUID(defaultValue) && !autocompleteAsyncState?.autocompleteValueApi.loading) {
@@ -119,6 +119,13 @@ export const withFBAutocompleteAsync = <T extends FBAutocompleteAsyncProps>(
       },
       [autocompleteAsyncState, defaultValue, optionId]
     );
+
+    useEffect(() => {
+      if (!optionId) {
+        return;
+      }
+      formState?.getInputState(name ?? "")?.setRender();
+    }, [formState, name, optionId, options]);
 
     !getOptionLabel && (getOptionLabel = (option) => {
       if (freeSolo && !isObject(option)) {

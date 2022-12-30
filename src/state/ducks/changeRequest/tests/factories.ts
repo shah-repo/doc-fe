@@ -1,6 +1,7 @@
 import faker from "faker";
 import { Audit } from "../../audit/types";
 import { getOwner, getUser } from "../../common/tests/factories";
+import { DocumentType } from "../../documentRevisions/documentType/types";
 import { ChangeRequest, ChangeRequestAvailableApprovers, ChangeRequestStatus } from "../types";
 
 const createNestedObject = () => (
@@ -10,6 +11,16 @@ const createNestedObject = () => (
     attachments: [],
   }
 );
+
+const createDocumentType = (docType: Partial<DocumentType> = {}): DocumentType => ({
+  id: faker.random.uuid(),
+  documentTypeAcronym: faker.random.word(),
+  documentTypeName: faker.random.words(),
+  group: "OTHER",
+  isQms: false,
+  defaultTraining: false,
+  ...docType,
+});
 
 const createAssessment = () => (
   {
@@ -55,6 +66,7 @@ export const getChangeRequest = (changeRequest: Partial<ChangeRequest> = {}): Ch
   approvals: [],
   owner: getOwner(),
   documentRevisions: [],
+  documentType: createDocumentType(),
   closedAt: faker.date.future(undefined, "2019-05-31"),
   ...changeRequest,
 });

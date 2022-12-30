@@ -1043,6 +1043,7 @@ context("Owner submits LHR for approval", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
         cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
       });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check status of LHR is 'WIP'", () => {

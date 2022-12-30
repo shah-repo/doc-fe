@@ -351,7 +351,8 @@ context("Approval request email popup modal", () => {
       it("Check if pop-up modal has pending with all the approvers", () => {
         SystemRequirement("REQ-2150", "REQ-5020");
         cy.get("h2").should("contain.text", "PENDING (2)");
-        cy.get("[class*='MuiListItem-dense MuiListItem-gutters MuiListItem-button']>svg").eq(4).arrowClick();
+        cy.get("[class*='MuiListItem-dense MuiListItem-gutters MuiListItem-button']")
+          .find(`[data-cy="expand-icon"]`).arrowClick();
         cy.get("[class='MuiCollapse-wrapperInner']").should("contain.text", FIRST_USER.name)
           .and("contain.text", SECOND_USER.name)
           .and("contain.text", THIRD_USER.name);
