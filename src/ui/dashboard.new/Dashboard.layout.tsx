@@ -3,7 +3,7 @@ import React from "react";
 import { GroupTag } from "../../state/ducks/auth/types";
 import useGetHasTag from "../hooks/useGetHasTag";
 import useStyles from "./Dashboard.styles";
-import DashboardTabs from "./DashboardTabs";
+import Tabs from "./tabs/Tabs";
 import TrainingStats from "./training.stats/TrainingStats";
 
 const DashboardLayout: React.FC = () => {
@@ -14,7 +14,7 @@ const DashboardLayout: React.FC = () => {
     <Box className={classes.box}>
       <Grid container className={classes.root}>
         <Grid item className={classes.tabs} xs={12} md={isDashboardAdmin ? 8 : 12}>
-          <DashboardTabs />
+          <Tabs />
         </Grid>
         {isDashboardAdmin && (
           <Grid item className={classes.stats} xs={12} md={4}>

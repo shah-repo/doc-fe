@@ -1,6 +1,6 @@
 import { Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import Colors from "../layout/theme/utils/colors";
+import Colors from "../../../layout/theme/utils/colors";
 
 const styles = () => ({
   indicator: {
@@ -15,4 +15,4 @@ const styles = () => ({
   },
 });
 
-export const StyledTabs = withStyles(styles)(Tabs);
+export default withStyles(styles)(Tabs);

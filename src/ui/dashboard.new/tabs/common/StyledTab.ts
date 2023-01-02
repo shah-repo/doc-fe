@@ -1,6 +1,6 @@
 import { Tab } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import Colors from "../layout/theme/utils/colors";
+import Colors from "../../../layout/theme/utils/colors";
 
 const styles = () => ({
   root: {
@@ -26,4 +26,4 @@ const styles = () => ({
   },
 });
 
-export const StyledTab = withStyles(styles)(Tab);
+export default withStyles(styles)(Tab);

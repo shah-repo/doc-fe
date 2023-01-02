@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import Colors from "../../layout/theme-next/colors";
 
 export default makeStyles((theme) => ({
   root: {
@@ -11,13 +12,23 @@ export default makeStyles((theme) => ({
     flexGrow: 1,
     overflow: "auto",
   },
-  tabItemText: {
+  tabItemIcon: {
+    "& path": {
+      fill: Colors.textGray,
+    },
+  },
+  tabItemIconActive: {
+    "& path": {
+      fill: Colors.textBlack,
+    },
+  },
+  tabItemTitle: {
     marginLeft: 10,
     fontSize: 16,
     fontWeight: 400,
     letterSpacing: 0.25,
   },
-  tabItemTextActive: {
+  tabItemTitleActive: {
     fontWeight: 600,
   },
   tabItemCount: {

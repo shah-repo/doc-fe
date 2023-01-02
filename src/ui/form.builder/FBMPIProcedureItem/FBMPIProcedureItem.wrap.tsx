@@ -93,7 +93,7 @@ export const withFBMPIProcedureItem = <T extends FBMPIProcedureItemProps>(
 
     React.useEffect(() => {
       const formValue = cloneDeep(formState?.getFieldValue("lhrs-start-quantity"));
-      setLhrsQuantity(formValue);
+      formValue && setLhrsQuantity(formValue);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lhrsQuantity]);
 

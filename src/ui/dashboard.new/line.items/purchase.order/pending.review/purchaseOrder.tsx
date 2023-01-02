@@ -34,6 +34,7 @@ import { StyleTooltip } from "../../common/StyleTooltip";
 import { formatCurrency, getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import useStyles from "./purchaseOrder.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -77,9 +78,10 @@ interface Props {
   hoverItemId: string;
   pendingEmailSentAt: Nullable<string>;
   onMouseHoverItem: (id: string) => void;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
   dialogPDF: DialogHandler;
+  dismissLineItem?: (id: string) => void;
 }
 const PurchaseOrderItemPresenter: React.FC<Props> = ({
   id,
@@ -109,6 +111,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   unPinLineItem,
   pendingEmailSentAt,
   dialogPDF,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
 
@@ -159,11 +162,14 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const handleClick = () => {
     setOpen(!open);
   };
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const onMouseHoverPinIcon = () => {
     setDownloadPdfHover(false);
@@ -203,6 +209,10 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
   const downloadAttachment = (attachment: Attachment) => () => {
     async.start(downloadAction, attachment, async);
   };
+
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
+
   return (
     <>
       <StyledListItem
@@ -390,10 +400,10 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               </StyleTooltip>
             }
             <span className={classes.actionIcon}>
-              {!pinHover && !pinned && (
+              {!pinHover && isPinShown && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
-              {pinHover && !pinned && (
+              {pinHover && isPinShown && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"
@@ -406,7 +416,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                   />
                 </StyleTooltip>
               )}
-              {pinned && (
+              {isUnpinShown && (
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
                   placement="top"
@@ -420,9 +430,12 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 </StyleTooltip>
               )}
             </span>
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
-        {pinned && (
+        {isUnpinShown && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}
@@ -432,6 +445,9 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
               <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

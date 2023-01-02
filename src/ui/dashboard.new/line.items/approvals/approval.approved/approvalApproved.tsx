@@ -28,6 +28,7 @@ import { StyleTooltip } from "../../common/StyleTooltip";
 import { DocTypeGroups } from "../../common/types";
 import ApproveDialogueContainer from "../../dialogs/approveDialogueContainer";
 import useStyles from "./approvalApproved.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -50,8 +51,9 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
+  dismissLineItem?: (id: string) => void;
 }
 const ApprovalApprovedPresenter: React.FC<Props> = ({
   id,
@@ -66,6 +68,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   pinned,
   pinLineItem,
   unPinLineItem,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const [closeHover, setCloseHover] = React.useState(false);
@@ -79,11 +82,14 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
   const handleClick = () => {
     setOpen(!open);
   };
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const handleCloseClick = () => {
     openClosedDialog();
@@ -122,6 +128,9 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
       transitionDialog.close();
     },
   });
+
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <>
@@ -223,7 +232,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
           >
             <span>
               {!closeHover && (
-                <CloseIcon onMouseEnter={onMouseHoverCloseIcon} />
+                <CloseIcon className={classes.cursorPointer} onMouseEnter={onMouseHoverCloseIcon} />
               )}
               {closeHover && (
                 <StyleTooltip
@@ -232,6 +241,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                   arrow
                 >
                   <CloseSolidIcon
+                    className={classes.cursorPointer}
                     onClick={handleCloseClick}
                     onMouseLeave={onMouseLeaveActionIcons}
                   />
@@ -240,8 +250,13 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
             </span>
             {!pinned && (
               <span className={classes.actionIcon}>
-                {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
-                {pinHover && (
+                {!pinHover && isPinShown && (
+                  <PinIcon
+                    className={classes.cursorPointer}
+                    onMouseEnter={onMouseHoverPinIcon}
+                  />
+                )}
+                {pinHover && isPinShown && (
                   <StyleTooltip
                     title={<Text translation="common.pin" />}
                     placement="top"
@@ -256,7 +271,7 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                 )}
               </span>
             )}
-            {pinned && (
+            {isUnpinShown && (
               <span className={classes.actionIcon}>
                 <StyleTooltip
                   title={<Text translation="common.unpin" />}
@@ -271,9 +286,12 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
                 </StyleTooltip>
               </span>
             )}
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
-        {pinned && (
+        {isUnpinShown && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}
@@ -287,6 +305,9 @@ const ApprovalApprovedPresenter: React.FC<Props> = ({
               />
             </StyleTooltip>
           </span>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
