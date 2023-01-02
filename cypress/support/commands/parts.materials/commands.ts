@@ -25,6 +25,7 @@ declare global {
       pmAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       pmAddApproverOnApproverListNw(params: {approver: string }): Chainable<Subject>;
       lhrAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      lhrAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       pmDeleteApproverFromApproverList(params: {approver: string }): Chainable<Subject>;
       pmSubmitForApproval(): Chainable<Subject>;
       pmSubmitForApprovalWithoutAPI(): Chainable<Subject>;
@@ -152,7 +153,7 @@ Cypress.Commands.add("pmUploadAttachment", (params: {fileName: string }) => {
 Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver, { force: true });
   });
   cy.unClick();
   cy.progressBarShouldNotExist();
@@ -176,6 +177,14 @@ Cypress.Commands.add("lhrAddApproverOnApproverList", (params: { approver: string
   cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
+
+Cypress.Commands.add("lhrAddApproverOnApproverListWithoutApi",
+  (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+    cy.listLoadingElementShouldNotExist();
+    cy.get("[data-cy^=\"fb-approvals\"]").click().autocompleteSelect(params.approver);
+    cy.saveBarShouldNotExist();
+    cy.listLoadingElementShouldNotExist();
+  });
 
 Cypress.Commands.add("pmDeleteApproverFromApproverList",
   (params: { approver: string; waitAggregatedAudit?: boolean }) => {

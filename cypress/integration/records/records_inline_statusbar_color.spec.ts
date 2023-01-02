@@ -12,7 +12,6 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let secondEmployee;
-let adminEmployee;
 let RDdocumentType;
 
 
@@ -39,16 +38,15 @@ context("Record inline Flow", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[2].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[3], USERS[4]],
             documentTypes: [
               RecordOne,
             ],
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
           RDdocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Record one");
           done();
@@ -58,7 +56,7 @@ context("Record inline Flow", () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[2].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -70,7 +68,7 @@ context("Record inline Flow", () => {
     it("Change fields config in record document type", () => {
       cy.drUpdateDocumentTypeName({
         sessionId: loginResponse.sessionId,
-        employeeId: adminEmployee.id,
+        employeeId: secondEmployee.id,
         id: RDdocumentType[0].id,
         payload: {
           fieldsConfig: {
@@ -237,6 +235,10 @@ context("Record inline Flow", () => {
   });
 
   context("verify WIP Statusbar items", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it(`Check doc status as ${STATUS_TYPES_LABEL.WIP}`, () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.WIP });
     });
@@ -250,8 +252,24 @@ context("Record inline Flow", () => {
       });
     });
 
-    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
-      cy.verifyLastSavedExists();
+    it("Enter title 'Record Document Revision'", () => {
+      cy.drEnterDocumentTitle({ name: "Record Document Revision" });
+      cy.unClick();
+    });
+
+    it("Click on Save", () => {
+      cy.get(`[data-cy="DocumentRevisionForm-submit"]`).arrowClick();
+      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+        .contains("Auto-saving, please wait…");
+    });
+
+    it("Check Last save should be present in autosave", () => {
+      cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
+    });
+
+    it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+      cy.wait(120000);
+      cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
     });
 
     it(`Click on 3 dots and verify 'Void' option exists`, () => {
@@ -268,17 +286,8 @@ context("Record inline Flow", () => {
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
-    it("Check if 'Void' button exists", () => {
-      cy.get("#HeaderMenuButton").arrowClick();
-      cy.get(`[data-cy="void-button"]`).should("be.visible").should("not.be.disabled");
-    });
-
     it("Check if 'Send To Email' button exists", () => {
-      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible");
-      cy.get("[data-cy=\"exportToEmail\"]").arrowClick();
-    });
-
-    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.sendToEmail();
       cy.checkToastMessageContains({
         message: "File will be sent to your email shortly.",
       });
@@ -299,27 +308,16 @@ context("Record inline Flow", () => {
   });
 
   context("Fill in document attributes", () => {
-    it("Enter title 'Record Document Revision'", () => {
-      cy.drEnterDocumentTitle({ name: "Record Document Revision" });
-      cy.unClick();
-    });
-
-    it("Click on Save", () => {
-      cy.get(`[data-cy="DocumentRevisionForm-submit"]`).arrowClick();
-      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
-        .contains("Auto-saving, please wait…");
-    });
-
-    it(`Verify 'Last saved' exist in statusbar with time-duration`, () => {
-      cy.verifyLastSavedExists();
-    });
-
     it("Add reference", () => {
       cy.drSelectReferences("FM-00001 - 1 - AR Form");
     });
   });
 
   context("Assign and approve first Inline Approval", () => {
+    it("Turn on autosave", () => {
+      cy.cmpTurnOnAutosave();
+    });
+
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
     });
@@ -347,14 +345,24 @@ context("Record inline Flow", () => {
       cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).contains("Revision 1")
         .and("contain.text", "Last Signed");
     });
+  });
+
+  context("Verify Rev 1 is in Last Signed state", () => {
+    it("click on revision 1", () => {
+      cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
+    });
 
     it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
       cy.get(`[data-cy="Header-listIcon"]`).should("exist");
       cy.verifyListItemExistsOnHeader({
         listItem:
-          `RecordsRD-00003 Rev 2WIP`,
+          `RecordsRD-00003 Rev 1LAST SIGNED`,
         breadcrump: true,
       });
+    });
+
+    it("Check Last save in not present in header", () => {
+      cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
     });
 
     it("Check if 'Change Owner' button exists", () => {
@@ -364,32 +372,41 @@ context("Record inline Flow", () => {
       cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
     });
 
-    it("Check if 'Void' button exists", () => {
-      cy.get("#HeaderMenuButton").arrowClick();
-      cy.get(`[data-cy="void-button"]`).should("be.visible").should("not.be.disabled");
-    });
-
     it("Check if 'Send To Email' button exists", () => {
-      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible").should("not.be.disabled");
-      cy.get("#HeaderMenu").click();
+      cy.sendToEmail();
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+      cy.closeAllAlertMessages();
     });
 
-    it(`Verify WIP statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
-      cy.verifyStatusbarBgcolor({ bcolor: "rgb(77, 136, 255)" });
+    it(`Verify WIP statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
     });
   });
 
   context("Assign and approve second Inline Approval", () => {
+    it("click on revision 2", () => {
+      cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+    });
+
     it("Navigate to Details tab", () => {
-      cy.drSelectDetailsTab();
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
+        cy.drSelectDetailsTab();
+      });
     });
 
     it("Select approver for second inline", () => {
+      cy.wait(2000);
       cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
         () => {
           cy.get("[name*=\"fb-ia-second-inline-field\"] input")
             .autocompleteSelect(`${USERS[2].name}`, { force: true });
         });
+    });
+
+    it("Check Last save should be present in autosave", () => {
+      cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
     });
 
     it("Send request for approval", () => {
@@ -408,6 +425,88 @@ context("Record inline Flow", () => {
       cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).contains("Revision 1")
         .and("contain.text", "Archive");
     });
+  });
+
+  context("Verify Rev 1 is in Archive state", () => {
+    it("click on revision 1", () => {
+      cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(2).arrowClick();
+    });
+
+    it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+          `RecordsRD-00003 Rev 1ARCHIVE`,
+        breadcrump: true,
+      });
+    });
+
+    it("Check Last save in not present in header", () => {
+      cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
+    });
+
+    it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").should("not.be.disabled");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.sendToEmail();
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+      cy.closeAllAlertMessages();
+    });
+
+    it(`Verify WIP statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+    });
+  });
+
+  context("Verify Rev 2 is in Last Signed state", () => {
+    it("click on revision 2", () => {
+      cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(1).arrowClick();
+    });
+
+    it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
+      cy.get(`[data-cy="Header-listIcon"]`).should("exist");
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+          `RecordsRD-00003 Rev 2LAST SIGNED`,
+        breadcrump: true,
+      });
+    });
+
+    it("Check Last save in not present in header", () => {
+      cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
+    });
+
+    it("Check if 'Change Owner' button exists", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").should("not.be.disabled");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.sendToEmail();
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+      cy.closeAllAlertMessages();
+    });
+
+    it(`Verify WIP statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+    });
+  });
+
+  context("Verify Rev 3 is in WIP", () => {
+    it("click on revision 1", () => {
+      cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+    });
 
     it("Verify left side of Statusbar exists Icon, Landing page, Doc ID, Rev stage, Status and breadcrump", () => {
       cy.get(`[data-cy="Header-listIcon"]`).should("exist");
@@ -422,10 +521,6 @@ context("Record inline Flow", () => {
       cy.verifyLastSavedExists();
     });
 
-    it("Check if 'Finalize and Release' button exists", () => {
-      cy.get(`[data-cy="ApproveAndRelease-button"]`).should("be.visible").should("not.be.disabled");
-    });
-
     it("Check if 'Change Owner' button exists", () => {
       cy.get("#HeaderMenuButton").arrowClick();
       cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").should("not.be.disabled");
@@ -435,12 +530,17 @@ context("Record inline Flow", () => {
 
     it("Check if 'Void' button exists", () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get(`[data-cy="void-button"]`).should("be.visible").should("not.be.disabled");
+      cy.get("[data-cy=\"void-button\"]").should("be.visible");
+      cy.get("[data-cy=\"void-button\"]").arrowClick();
+      cy.get("button[data-cy=\"AlertDialog-cancelButton\"]").arrowClick();
     });
 
     it("Check if 'Send To Email' button exists", () => {
-      cy.get("[data-cy=\"exportToEmail\"]").should("be.visible").should("not.be.disabled");
-      cy.get("#HeaderMenu").click();
+      cy.sendToEmail();
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+      cy.closeAllAlertMessages();
     });
 
     it(`Verify WIP statusbar background-color as BLUE(${Colors.dodger_blue})`, () => {
@@ -449,6 +549,10 @@ context("Record inline Flow", () => {
   });
 
   context("Click on Finalize and Release", () => {
+    it("Check if 'Finalize and Release' button exists", () => {
+      cy.get(`[data-cy="ApproveAndRelease-button"]`).should("be.visible").should("not.be.disabled");
+    });
+
     it("Approve and release it", () => {
       cy.recApproveAndReleaseInlineRecord();
     });
@@ -462,13 +566,27 @@ context("Record inline Flow", () => {
       });
     });
 
+    it("Check Last save in not present in header", () => {
+      cy.get(`[data-cy="header-last-saved"]`).should("not.exist");
+    });
+
     it("Check if 'Update Record' button exists", () => {
       cy.get(`[data-cy="updateRecord"]`).should("be.visible").should("not.be.disabled");
     });
 
-    it("Check if 'Send To Email' button exists", () => {
+    it("Check if 'Change Owner' button exists", () => {
       cy.get("#HeaderMenuButton").arrowClick();
-      cy.get(`[data-cy="exportToEmail"]`).should("be.visible").should("not.be.disabled");
+      cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").should("not.be.disabled");
+      cy.get("#OwnerChangerPresenter-changeOwner").arrowClick();
+      cy.get(`[data-cy='change-owner-close-icon']`).arrowClick();
+    });
+
+    it("Check if 'Send To Email' button exists", () => {
+      cy.sendToEmail();
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
+      cy.closeAllAlertMessages();
     });
 
     it(`Verify WIP statusbar background-color as GREEN(${Colors.latest_green_varient})`, () => {
@@ -478,5 +596,4 @@ context("Record inline Flow", () => {
 });
 
 export { };
-
 

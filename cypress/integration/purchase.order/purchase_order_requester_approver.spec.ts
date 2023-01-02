@@ -1098,6 +1098,10 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
       cy.drEnterDocumentDescription({ description: "New Purchase Order" });
     });
 
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
     it("Select 'Open' for PO status", () => {
       cy.poSelectPOStatus({ status: "Open" });
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
@@ -2007,12 +2011,6 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
       cy.wait(delayms1);
     });
 
-    // putting work-around for ENC-13550
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
-    });
-
     it("verify approver added", () => {
       cy.get(".MuiBox-root").contains(`${USERS[3].name} - ${USERS[3].email}`).should("exist");
     });
@@ -2110,7 +2108,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
     it("Verify PO Statusbar exists Icon, Landing page, Doc ID, Rev stage", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Purchase OrdersPO-00001 Rev A`,
+            `Purchase OrdersPO-00001 Rev 1`,
         breadcrump: true,
       });
     });
@@ -2145,7 +2143,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
         }).then((response) => {
           const responseBody = response.body.toString();
           expect(responseBody)
-            .contains(`PO Number: PO-00001-A`)
+            .contains(`PO Number: PO-00001-1`)
             .and.contains("Requestor:")
             .and.contains(USERS[3].name);
         });
@@ -2163,14 +2161,14 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
     it(`verify PO Notification for ${USERS[1].name}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[1].name}APPROVEDPO-00001Rev A`,
+        `${USERS[1].name}APPROVEDPO-00001Rev 1`,
       });
     });
 
     it(`verify PO Notification from ${USERS[3].name}`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[3].name}APPROVEDPO-00001Rev A`,
+        `${USERS[3].name}APPROVEDPO-00001Rev 1`,
       });
     });
   });

@@ -16,7 +16,7 @@ declare global {
       ebApprove(): Chainable<Subject>;
       ebApproveWithoutApi(): Chainable<Subject>;
       lhrApprove(): Chainable<Subject>;
-      lhrApproveWitoutApi(): Chainable<Subject>;
+      lhrApproveWithoutApi(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
       ebClickCloneEB(): Chainable<Subject>;
       ebCloneClickYes(): Chainable<Subject>;
@@ -163,8 +163,8 @@ Cypress.Commands.add("ebApprove", () => {
 
 Cypress.Commands.add("ebApproveWithoutApi", () => {
   cy.get("[data-cy=\"form.builder.request.approve\"]").scrollIntoView();
-  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true });
-  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
+  cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick({ force: true }).wait(1500);
+  cy.get("input[name=\"password\"]").click().arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
   cy.get("[data-cy=\"common.confirm\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
@@ -173,7 +173,7 @@ Cypress.Commands.add("ebApproveWithoutApi", () => {
 });
 
 Cypress.Commands.add("lhrApprove", () => {
-  cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").arrowClick({ force: true });
+  cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").arrowClick({ force: true }).wait(1500);
   cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
   cy.unClick();
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove], () => {

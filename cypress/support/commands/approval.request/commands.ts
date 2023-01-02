@@ -20,18 +20,20 @@ declare global {
       arEnterApprovalRequestTitle(params: { title: string }): Chainable<Subject>;
       arEnterApprovalRequestDescription(params: { description: string }): Chainable<Subject>;
       arClickAddDocument(): Chainable<Subject>;
+      arClickAddDocumentWithoutApi(): Chainable<Subject>;
       arChoseSpecificProposedDocument(params: { name: string }): Chainable<Subject>;
       arEnterDescriptionAddDocumentsDialog(params: { description: string }): Chainable<Subject>;
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
       arAddApproverOnApproverList(params: { approver: string; noWait?: bool }): Chainable<Subject>;
-      arAddApproverOnApproverListWithoutApiCall(params: { approver: string }): Chainable<Subject>;
+      arAddApproverOnApproverListWithoutApiCall(params: { approver: string; noWait?: bool  }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
       arCheckImplementationTaskStatus(params: { status: string }): Chainable<Subject>;
       arClickOnFirstAddedDocument(): Chainable<Subject>;
       arFilterARListByNameAndStatus(params: { title: string; status: string }): Chainable<Subject>;
+      arFilterARListByNameAndStatusWithoutApi(params: { title: string; status: string }): Chainable<Subject>;
       arApproveAR(): Chainable<Subject>;
       arApproveARWithoutApi(): Chainable<Subject>;
       arSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
@@ -46,9 +48,11 @@ declare global {
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
       arCloseAR(): Chainable<Subject>;
+      arCloseARWithoutApi(): Chainable<Subject>;
       arCloseARFromMenu(): Chainable<Subject>;
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
+      arSaveApiCallWithoutApi(): Chainable<Subject>;
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
       arVerifySignatureIsNotMet(): Chainable<Subject>;
       arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
@@ -289,12 +293,25 @@ Cypress.Commands.add("arClickAddDocument", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("arClickAddDocumentWithoutApi", () => {
+  cy.get("[data-cy=\"form.builder.add.document\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("arCloseAR", () => {
   cy.get("[aria-label=closed]").arrowClick();
   cy.wrapWithWaitOnApiCalls(
     [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
       cy.get("[data-cy=AlertDialog-continueButton]").arrowClick();
     });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arCloseARWithoutApi", () => {
+  cy.get("[aria-label=closed]").arrowClick();
+  cy.get("[data-cy=AlertDialog-continueButton]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
@@ -331,10 +348,12 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
-Cypress.Commands.add("arAddApproverOnApproverListWithoutApiCall", (params: { approver: string }) => {
-  cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick({ force: true });
-  cy.get("ul>li[role=option]").contains(params.approver).arrowClick();
-  cy.unClick().wait(500);
+Cypress.Commands.add("arAddApproverOnApproverListWithoutApiCall", (params: { approver: string; noWait?: bool  }) => {
+  cy.get(`[data-cy="fb-approvers-approvers"]`).arrowClick({ force: true });
+  cy.get(`[data-cy=\"fb-approvers-approvers"]`).autocompleteSelect(params.approver);
+  cy.unClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("arClickCreateApprovalRequestAfterCompletingForm", () => {
@@ -366,6 +385,13 @@ Cypress.Commands.add("arSaveApiCall", () => {
   cy.checkToastMessage({ exists: false });
 });
 
+Cypress.Commands.add("arSaveApiCallWithoutApi", () => {
+  cy.get("[data-cy=\"common.save\"]").arrowClick().wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
 Cypress.Commands.add("arVerifyStatus", (params: { status: string }) => {
   cy.get(`div[data-cy="HeaderInfo-status"]`).should("contain", params.status);
 });
@@ -384,6 +410,18 @@ Cypress.Commands.add("arFilterARListByNameAndStatus", (params: { title: string; 
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get(".k-master-row").contains(params.title).arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arFilterARListByNameAndStatusWithoutApi", (params: { title: string; status: string }) => {
+  cy.get(`[aria-colindex="2"] input`).arrowType(params.title).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick();
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get("li").contains(params.status).arrowClick().wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(".k-master-row").contains(params.title).arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

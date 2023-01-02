@@ -97,6 +97,7 @@ const emailOfUserToSignUp =
 `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`.toLowerCase();
 
 const usageReportTomorrow = momentInPST().add("days", "2").format("YYYY-MM-DDThh:mm");
+const delay1 = 5000;
 
 export interface StructureFromPerCompanyReport {
   name: string;
@@ -4047,26 +4048,26 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
         cy.url().then((url: any) => {
           lhrDocUrl = url;
         });
-        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
 
       it("Select 'R&D' build type", () => {
         cy.get("[value=\"R&D\"]").check();
-        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
 
       it("Add 'Due Date'", () => {
         cy.poAddDateRequired();
-        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
 
       it("Click save document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
-        cy.wait(7000);
+        cy.wait(delay1);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -4089,13 +4090,13 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
         cy.mpiStartStep({ stepNumber: 1 });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
 
       it("Click save document", () => {
-        cy.wait(5000);
         cy.drClickCreateDocumentWithoutApiCall();
-        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
 
       it("Verify status is WIP", () => {
@@ -4132,46 +4133,53 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
+
 
       it("Submit for approval", () => {
         cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
         cy.pmSubmitForApprovalWithoutAPI();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
 
       it("Approve approval", () => {
-        cy.progressBarShouldNotExist();
+        cy.ebApproveWithoutApi();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
-        cy.ebApproveWithoutApi();
+        cy.wait(delay1);
       });
     });
 
     context("Complete LHR", () => {
       it("Navig to LHR", () => {
         cy.visit(lhrDocUrl);
-        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
 
       it("Add approval", () => {
-        cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
-        cy.progressBarShouldNotExist();
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
         cy.listLoadingElementShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
 
       it("Submit for approval", () => {
         cy.lhrSubmitForApprovalWithoutApi();
-        cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
 
       it("Approve approval", () => {
         cy.listLoadingElementShouldNotExist();
-        cy.wait(2000);
-        cy.lhrApproveWitoutApi();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.wait(delay1);
+        cy.lhrApproveWithoutApi();
       });
     });
   });
@@ -4183,8 +4191,6 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
 
     it("Navigate to async tasks", () => {
       cy.navigToAsyncTasks();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select task USAGE_REPORT", () => {
@@ -4197,8 +4203,6 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
 
     it("Submit async task", () => {
       cy.asyncTaskClickSubmit();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
   });
 

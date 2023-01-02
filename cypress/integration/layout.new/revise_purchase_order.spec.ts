@@ -1,8 +1,10 @@
+import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { PurchaseOrderNew } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -16,9 +18,12 @@ let formDocumentType;
 let createdPOFormDocument;
 let purchaseOrderDocumentType;
 let createdPODocument;
+let createdSupplierFormDocument;
+let createdSupplierDocument;
+let supplierDocumentType;
 let approvalRequestDocumentType;
 
-const PURCHASE_ORDER = "Purchase Order";
+const PURCHASE_ORDER = "Purchase Order New";
 const PO_FORM_DOCUMENT = "PO Form document";
 const TITLE = "API PO document";
 const groupOne = "Developers";
@@ -33,10 +38,12 @@ const COLUMN_HEADERS = [
   "REQUESTOR",
   "ORDER DATE",
 ];
+const supplierDocName = "SUP-00001 - rev 1 - API Supplier Document";
+const releasedDate = moment().tz("America/Los_Angeles").format("MM/DD/YYYY");
 
 context(
   `As a user, if I revise a PO and select Admin change (dot release), then the system should not automatically
-add the requestor to the approvals field`,
+add the requestor to the approvals field - ENC-12706`,
   () => {
     before(() => {
       cy.clearLocalStorageSnapshot();
@@ -63,7 +70,7 @@ add the requestor to the approvals field`,
               companyAdminEmail: USERS[1].email,
               importerEmail: IMPORTER_USER.email,
               users: [USERS[2], USERS[3], USERS[4]],
-              documentTypes: [],
+              documentTypes: [PurchaseOrderNew],
             },
             sessionId: loginResponse.sessionId as unknown as string,
           }).then((response) => {
@@ -71,6 +78,7 @@ add the requestor to the approvals field`,
             adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
             formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
             purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PURCHASE_ORDER);
+            supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
             approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
             done();
           });
@@ -162,6 +170,115 @@ add the requestor to the approvals field`,
           },
         }).then(() => {
           done();
+        });
+      });
+    });
+    context("[API]create supplier", () => {
+      it("[API]Create Supplier form", (done: any) => {
+        cy.grpGetGroupByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          groupName: "Everyone",
+        }).then((response) => {
+          group = response;
+          cy.arGetArDocumentByName({
+            sessionId: loginResponse.sessionId,
+            employeeId: adminEmployee.id,
+            name: "AR Form",
+          }).then((response) => {
+            initialArDocument = response;
+            cy.drCreateDocumentRevision({
+              payload: {
+                attachments: [],
+                description: "<p>Supplier Form document</p>",
+                document: {
+                  docId: "FM-00010",
+                  documentType: {
+                    id: formDocumentType[0].id,
+                  },
+                  securityList: {
+                    operators: [],
+                    securityEmployees: [],
+                    securityGroups: [
+                      {
+                        id: group.body[0].id,
+                      },
+                    ],
+                  },
+                },
+                name: "supplier form",
+                referenceTo: [],
+                retrain: false,
+                revisionChangeType: RevisionChangeType.NextRevision,
+                revisionStage: 1,
+                formTemplate: {
+                  outputDocumentTypes: [{
+                    id: supplierDocumentType[0].id,
+                  }],
+                  schema: [],
+                },
+
+              },
+              employeeId: adminEmployee.id as unknown as string,
+              sessionId: loginResponse.sessionId as unknown as string,
+            }).then((response) => {
+              createdSupplierFormDocument = response;
+              cy.drAPIApproveAndRelease({
+                documentId: createdSupplierFormDocument.id,
+                payload: {
+                  effectiveDate: (new Date()).toISOString(),
+                  documentType: { id: approvalRequestDocumentType[0].id },
+                  formDocument: { id: initialArDocument[0].id },
+                  approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                },
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then(() => {
+                cy.poAPICreatePO({
+                  payload: {
+                    name: "API Supplier Document",
+                    attachments: [],
+                    referenceTo: [],
+                    formDocument: { id: createdSupplierFormDocument.id },
+                    description: "API Supplier document",
+                    revisionChangeType: RevisionChangeType.NextRevision,
+                    document: {
+                      docId: "SUP-00001",
+                      documentType: {
+                        id: supplierDocumentType[0].id,
+                      },
+                      securityList: {
+                        operators: [],
+                        securityEmployees: [],
+                        securityGroups: [
+                          {
+                            id: group.body[0].id,
+                          },
+                        ],
+                      },
+                    },
+                  },
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                }).then((response) => {
+                  createdSupplierDocument = response;
+                  cy.drAPIApproveAndRelease({
+                    documentId: createdSupplierDocument.id,
+                    payload: {
+                      effectiveDate: (new Date()).toISOString(),
+                      documentType: { id: approvalRequestDocumentType[0].id },
+                      formDocument: { id: initialArDocument[0].id },
+                      approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                    },
+                    employeeId: adminEmployee.id,
+                    sessionId: loginResponse.sessionId,
+                  }).then(() => {
+                    done();
+                  });
+                });
+              });
+            });
+          });
         });
       });
     });
@@ -481,22 +598,26 @@ add the requestor to the approvals field`,
       });
     });
 
-    context("Purchase Order Landing page", () => {
-      it("Navigate to Purchase Order", () => {
+    context("Navigate to PO Landing page", () => {
+      it("Navigate to PO Landing page", () => {
         cy.navigToPurchaseOrder();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist().wait(2000);
       });
+    });
 
-      it(`Filter document by status ${STATUS_TYPES_LABEL.RELEASED}, and select it`, () => {
+    context("Select a PO in “Released” state ", () => {
+      it(`Filter document by status "Released" and select it`, () => {
         cy.get(`[aria-colindex="4"] [class="k-input"]`).arrowClick({ force: true });
-        cy.get("li").contains("RELEASED").arrowClick().wait(500);
+        cy.get("li").contains("Released").arrowClick().wait(500);
         cy.get(`td[data-grid-col-index="3"]`).eq(0).arrowClick();
       });
 
-      it(`Verify document header details and status is in ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      it(`Verify document header details`, () => {
         cy.verifyHeaderInfoContent({
           title: "Purchase Orders",
           docId: "PO-00001",
-          revision: "Rev A",
+          revision: "Rev 1",
         });
       });
     });
@@ -511,7 +632,7 @@ add the requestor to the approvals field`,
       });
 
       it("Clicks Save button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -521,17 +642,25 @@ add the requestor to the approvals field`,
           status: STATUS_TYPES_LABEL.DRAFT,
           title: "Purchase Orders",
           docId: "PO-00001",
-          revision: "Rev A",
+          revision: "Rev 1",
         });
       });
     });
 
     context("Fill in Fields including field Requestor", () => {
       it(`Select '${USERS[2].name}' for Requestor`, () => {
-        cy.get(`div[name^="po-requestor-autocomplete"]`).find(`button[aria-label="Clear"]`).arrowClick({ force: true });
-        cy.get("[data-cy^=po-requestor-autocomplete]").arrowClick();
-        cy.wait(3000);
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+        cy.get(`div[name^="po-requestor-autocomplete"]`)
+          .find(`button[aria-label="Clear"]`).arrowClick({ force: true });
+        cy.get("[data-cy^='po-requestor-autocomplete']").autocompleteSelect(USERS[2].name);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+      });
+
+      it("Select Supplier", () => {
+        cy.get("[data-cy='po-supplier-built-in']").autocompleteSelect(supplierDocName);
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
     });
 
@@ -540,22 +669,23 @@ add the requestor to the approvals field`,
     the requestor to the approval field`,
       () => {
         it(`Check the Approval field does not contain requestor ${USERS[2].name}`, () => {
-          cy.get("[data-cy^=fb-po-approvals]").should("not.have.text", USERS[2].name);
+          cy.get("[data-cy^='fb-po-approvals']").should("not.have.text", USERS[2].name);
         });
       }
     );
 
     context("Insert Approver to Approval Block", () => {
       it(`Insert Approver '${USERS[1].name}' for Approval`, () => {
-        cy.get("[data-cy^=fb-po-approvals]").click({ force: true });
-        cy.get("ul>li[role=option]").contains(USERS[1].name).should("be.visible").click();
+        cy.get("[data-cy^='fb-po-approvals']").autocompleteSelect(USERS[1].name);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
     });
 
     context("Check “Backspace” and “Clear all” option will not be available in the PO approval field", () => {
       it(`Verify that “Backspace” and “Clear all” option will not be available in the PO approval field`, () => {
-        cy.wait(1000);
-        cy.get("[data-cy^=fb-po-approvals]").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy^='fb-po-approvals']").arrowClick({ force: true }).arrowType(`{backspace}`).clear();
       });
     });
 
@@ -570,18 +700,66 @@ add the requestor to the approvals field`,
           title: "Purchase Orders",
           status: STATUS_TYPES_LABEL.PENDING_APPROVAL,
           docId: "PO-00001",
-          revision: "Rev A.1",
+          revision: "Rev 1.1",
         });
       });
+
+      it("Approve PO", () => {
+        cy.ebApproveWithoutApi();
+      });
+
+      it("Verify PO is relased and released date", () => {
+        cy.get("[data-cy='releaseDate']").parent().parent().should("contain.text", releasedDate);
+        cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+      });
+
     });
 
+
     context("Verify that data is saved", () => {
+      it("Navigate to PO", () => {
+        cy.navigToPurchaseOrder();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.dlClearFilters();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("Select created PO", () => {
+        cy.dlFilterByDocId({ docId: "PO-00001" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
+      it("verify that PO landing page is pulling correct data", () => {
+        cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
+        cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "1.1");
+        cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
+        cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Released");
+        cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "API Supplier Document");
+        cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "N/A");
+        cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$0.00");
+        cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[2].name);
+        cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", releasedDate);
+      });
+
+      it("Select the first created PO", () => {
+        cy.dlSelectFirstDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it(`Verify title is ${TITLE}`, () => {
         cy.get("[data-cy=\"BaseWithhtml-editor\"]").should("exist").contains(TITLE);
       });
 
       it(`Verify PO status is Open`, () => {
         cy.get("#mui-component-select-po-status-built-in").should("exist").contains("Open");
+      });
+
+      it(`Check the supplier field contains ${supplierDocName}`, () => {
+        cy.get("[data-cy='po-supplier-built-in']").should("have.value", supplierDocName);
       });
 
       it(`Check the Requestor field contain ${USERS[2].name} - ${USERS[2].email}`, () => {
@@ -596,4 +774,3 @@ add the requestor to the approvals field`,
 );
 
 export { };
-
