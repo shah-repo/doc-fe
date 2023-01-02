@@ -6,7 +6,6 @@ import moment from "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
 import { STATUS_TYPES_LABEL } from "./../../../src/state/ducks/dashboard.new/my.feeds/types";
@@ -410,9 +409,9 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Click on 'Create Document'", () => {
-      cy.wrapWithWaitOnApiCalls( [CyRoutes.PostDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -516,9 +515,9 @@ context("Layout Verification of EQ", () => {
     });
 
     it("Click on 'create document'", () => {
-      cy.wrapWithWaitOnApiCalls( [CyRoutes.PostDocRev], () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -658,9 +657,9 @@ context("Layout Verification of EQ", () => {
 
   context("Release EQ", () => {
     it("Approve and release  document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -996,10 +995,9 @@ context("Layout Verification of EQ", () => {
             calDocId = response.documentId;
             calId = response.id;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              CyRoutes.GetAvailableApprovers], () => {
-              cy.visit(newUrl);
-            });
+            cy.visit(newUrl);
+            cy.listLoadingElementShouldExist();
+            cy.progressBarShouldNotExist();
           }
         });
         cy.checkToastMessage({ exists: false });
@@ -1068,18 +1066,18 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Approve record", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-          cy.ebApprove();
-        });
+        cy.ebApproveWithoutApi();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
     });
 
     context("Fill new PM form", () => {
       const ADMIN_USER = USERS[1];
       it("Navigate to EQ document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-          cy.visit(equipmentURL);
-        });
+        cy.visit(equipmentURL);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Navigate to specification tab", () => {
@@ -1095,10 +1093,9 @@ context("Layout Verification of EQ", () => {
             calDocId = response.documentId;
             calId = response.id;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              CyRoutes.GetAvailableApprovers], () => {
-              cy.visit(newUrl);
-            });
+            cy.visit(newUrl);
+            cy.listLoadingElementShouldNotExist();
+            cy.progressBarShouldNotExist();
           }
         });
         cy.checkToastMessage({ exists: false });
@@ -1167,9 +1164,7 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Approve record", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-          cy.ebApprove();
-        });
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -1351,9 +1346,9 @@ context("Layout Verification of EQ", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Developers");
-          });
+          cy.drAddGroupFromPermissionTab("Developers");
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
       });
 
@@ -1613,12 +1608,9 @@ context("Layout Verification of EQ", () => {
       });
 
       it("Approve the AR", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetRequiredApproversDocRev], () => {
-            cy.get("[data-cy='transition-approve']").contains("Approve submission").arrowClick();
-            cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-            cy.get("[data-cy='passwordConfirm']").arrowClick();
-          });
+        cy.get("[data-cy='transition-approve']").contains("Approve submission").arrowClick();
+        cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+        cy.get("[data-cy='passwordConfirm']").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.checkToastMessage({ exists: false });
@@ -1706,10 +1698,9 @@ context("Layout Verification of EQ", () => {
               calDocId = response.documentId;
               calId = response.id;
               const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
-              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                CyRoutes.GetAvailableApprovers], () => {
-                cy.visit(newUrl);
-              });
+              cy.visit(newUrl);
+              cy.listLoadingElementShouldNotExist();
+              cy.progressBarShouldNotExist();
             }
           });
           cy.checkToastMessage({ exists: false });
@@ -1778,18 +1769,21 @@ context("Layout Verification of EQ", () => {
         });
 
         it("Approve record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-            cy.ebApprove();
-          });
+          cy.ebApproveWithoutApi();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
       });
 
       context("Fill new PM form", () => {
         const ADMIN_USER = USERS[1];
         it("Navigate to EQ document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-            cy.visit(equipmentURL);
-          });
+          cy.visit(equipmentURL);
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          // cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
+          //   cy.visit(equipmentURL);
+          // });
         });
 
         it("Navigate to specification tab", () => {
@@ -1805,10 +1799,13 @@ context("Layout Verification of EQ", () => {
               calDocId = response.documentId;
               calId = response.id;
               const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
-              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                CyRoutes.GetAvailableApprovers], () => {
-                cy.visit(newUrl);
-              });
+              cy.visit(newUrl);
+              cy.listLoadingElementShouldNotExist();
+              cy.progressBarShouldNotExist();
+              // cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
+              //   CyRoutes.GetAvailableApprovers], () => {
+              //   cy.visit(newUrl);
+              // });
             }
           });
           cy.checkToastMessage({ exists: false });
@@ -1877,9 +1874,9 @@ context("Layout Verification of EQ", () => {
         });
 
         it("Approve record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-            cy.ebApprove();
-          });
+          cy.ebApproveWithoutApi();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
       });
     });
