@@ -150,7 +150,7 @@ context("Approval Request landing page test", () => {
       });
     });
 
-    it("[API]Create change orders for created document revisions", () => {
+    it("[API]Create Approval Requests for created document revisions", () => {
       cy.arGetArDocumentByName({
         sessionId: loginResponse.sessionId,
         employeeId: secondEmployee.id,
@@ -240,7 +240,7 @@ context("Approval Request landing page test", () => {
   });
 
   context("Check for AR-s only on approval list", () => {
-    it("Check only change orders are shown on approval list", () => {
+    it("Check only Approval Requests are shown on approval list", () => {
       SystemRequirement("REQ-0760");
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
     });

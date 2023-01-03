@@ -86,7 +86,7 @@
   "changeRequest.table.state": "Status",
   "changeRequest.table.actions": "Actions",
   "changeRequest.table.editAction": "Edit",
-  "changeRequest.table.noChangeRequests": "No change orders",
+  "changeRequest.table.noChangeRequests": "No Approval Requests",
   "changeRequest.documentControl.changeRequestForm": "Approval Request form",
   "changeRequest.documentControl.addDocuments": "Add documents",
   "changeRequest.documentControl.addDocument": "Add Document",

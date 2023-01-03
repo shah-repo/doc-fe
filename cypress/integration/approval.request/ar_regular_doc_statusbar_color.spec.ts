@@ -284,7 +284,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
     it("Verify AR state as 'IN REVIEW'", () => {
       cy.verifyListItemExistsOnHeader({
         listItem:
-            `Change OrdersAR-00001 Rev`,
+            `Approval RequestsAR-00001 Rev`,
         breadcrump: true,
       });
     });

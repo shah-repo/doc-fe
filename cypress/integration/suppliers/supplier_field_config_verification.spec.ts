@@ -108,7 +108,7 @@ context("Supplier test with Field Config", () => {
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Change Orders",
+                  label: "Approval Requests",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",

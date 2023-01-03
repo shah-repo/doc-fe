@@ -160,7 +160,7 @@ context(`Test: ${path.basename(__filename)}`, () => {
                 type: "LINK",
               },
               {
-                label: "Change Orders",
+                label: "Approval Requests",
                 path: "/change_request",
                 type: "LINK",
               },

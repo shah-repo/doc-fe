@@ -207,7 +207,7 @@ context("Check Usage report atributes are present in report", { tags: ["@timetoo
         "LOT",
         "Records",
         "Documents",
-        "Change Orders",
+        "Approval Requests",
         "Training Records",
       ];
 
@@ -233,7 +233,7 @@ context("Check Usage report atributes are present in report", { tags: ["@timetoo
         "LOT",
         "Records",
         "Documents",
-        "Change Orders",
+        "Approval Requests",
         "Training Records",
       ];
 

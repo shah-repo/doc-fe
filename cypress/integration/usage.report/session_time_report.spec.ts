@@ -158,7 +158,7 @@ const numberOfCreatedDocsForComany1: StructureFromPerCompanyReport[] = [
     draftPending: 8,
   },
   {
-    name: "Change Orders",
+    name: "Approval Requests",
     releasedCompleted: 28,
     draftPending: 0,
   },
@@ -221,7 +221,7 @@ const numberOfCreatedDocsForComany2: StructureFromPerCompanyReport[] = [
     draftPending: 0,
   },
   {
-    name: "Change Orders",
+    name: "Approval Requests",
     releasedCompleted: 1,
     draftPending: 0,
   },
@@ -379,7 +379,7 @@ context("Test usage report is correctly counting documents", { tags: ["@timetool
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Change Orders",
+                  label: "Approval Requests",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",

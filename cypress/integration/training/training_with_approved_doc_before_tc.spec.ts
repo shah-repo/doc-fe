@@ -121,7 +121,7 @@ context("Training notifications for documents with approved and released revisio
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Change Orders",
+                  label: "Approval Requests",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",

@@ -444,8 +444,8 @@ context("Document list test", () => {
     });
   });
 
-  context("Change Orders", () => {
-    it("Navigate to Change Orders Landing page", () => {
+  context("Approval Requests", () => {
+    it("Navigate to Approval Requests Landing page", () => {
       cy.navigToApprovalRequestList();
     });
 

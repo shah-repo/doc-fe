@@ -127,7 +127,7 @@ context("E-signature test", () => {
       });
     });
 
-    it("[API]Create change orders for created document revisions", () => {
+    it("[API]Create Approval Requests for created document revisions", () => {
       cy.arGetArDocumentByName({
         sessionId: loginResponse.sessionId,
         employeeId: companyAdmin.id,

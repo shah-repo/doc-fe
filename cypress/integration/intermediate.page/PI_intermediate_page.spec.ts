@@ -411,7 +411,7 @@ context("Intermediate page validation", () => {
       context("Change the order of the fields", () => {
         it("Make autocomplete field as required field", () => {
           cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
-          cy.get(`[data-cy="optionId"]`).clear().autocompleteSelect("Change orders");
+          cy.get(`[data-cy="optionId"]`).clear().autocompleteSelect("Approval Requests");
           cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
           cy.fbFieldRequired();
           cy.fbAddNewFieldButton();

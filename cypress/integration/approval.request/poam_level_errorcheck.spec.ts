@@ -407,7 +407,7 @@ context("Approval Request landing page test", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
     });
 
-    it("Navigates to Change Orders", () => {
+    it("Navigates to Approval Requests", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -433,7 +433,7 @@ context("Approval Request landing page test", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
 
-    it("Navigates to Change Orders", () => {
+    it("Navigates to Approval Requests", () => {
       cy.navigToApprovalRequestList();
     });
 

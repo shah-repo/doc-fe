@@ -609,7 +609,7 @@ context("LHRs email notifications", () => {
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Change Orders",
+                  label: "Approval Requests",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",

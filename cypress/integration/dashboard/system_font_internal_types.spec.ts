@@ -133,7 +133,7 @@ context("User Creation Flow", () => {
                   icon: "/navigation_icons/cr.svg",
                   path: "/change_request",
                   type: "LINK",
-                  label: "Change Orders",
+                  label: "Approval Requests",
                 },
                 {
                   icon: "/navigation_icons/text-paper.svg",
@@ -372,15 +372,15 @@ context("User Creation Flow", () => {
   });
 
 
-  context("Change Orders", () => {
-    context("Navigate to Change Orders", () => {
-      it("Navigate to Change Orders", () => {
+  context("Approval Requests", () => {
+    context("Navigate to Approval Requests", () => {
+      it("Navigate to Approval Requests", () => {
         cy.navigToApprovalRequestList();
       });
     });
 
-    context("Verify font for nagigation bar 'Change Orders'", () => {
-      it(`Verify 'Change Orders' font-size ${FONT_SIZE_13} and font-family ${soraSansserif} line-height ${LINE_HT_19_5} font-weight ${FONT_WT_400}`, () => {
+    context("Verify font for nagigation bar 'Approval Requests'", () => {
+      it(`Verify 'Approval Requests' font-size ${FONT_SIZE_13} and font-family ${soraSansserif} line-height ${LINE_HT_19_5} font-weight ${FONT_WT_400}`, () => {
         cy.get(`[data-cy="navigation.approvalRequests"]>span>span`).should("have.css", "font-size", "13px")
           .and("have.css", "font-family", "Sora, sans-serif")
           .and("have.css", "font-weight", "700")
