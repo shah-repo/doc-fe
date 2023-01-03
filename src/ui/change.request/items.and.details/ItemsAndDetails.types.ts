@@ -39,9 +39,6 @@ export interface ChangeOrderGridItem {
   isPart: boolean;
 }
 
-export type ChangeOrderViewItemProps =
-& ChangeOrderGridItem;
-
 export interface ItemsAndDetailsWrapperProps {
   currentDocRevId?: string | undefined;
   changeRequest: ChangeRequest;
