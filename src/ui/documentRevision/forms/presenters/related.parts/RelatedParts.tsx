@@ -34,7 +34,8 @@ import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
 import Text from "../../../../components/Text";
 import useStyles from "./RelatedPart.styles";
-import { useRelatedPartsStore } from "./RelatedParts.state";
+import RelatedPartsState from "./RelatedParts.state";
+
 
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_PARTS_STATUS | undefined;
@@ -129,15 +130,16 @@ const RelatedPartGrid: React.FunctionComponent<{
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   fetchRelatedParts;
   voidRelatedPart;
+  relatedPartsState: RelatedPartsState;
 }> = ({
   documentRevision,
   createNewDocument,
   viewRelatedPart,
   fetchRelatedParts,
   voidRelatedPart,
+  relatedPartsState,
 }) => {
   const classes = useStyles();
-  const { relatedPartsStore } = useRelatedPartsStore();
 
   const [isEditRowVisible, setIsEditRowVisible] = useState(false);
   const [showButton, setShowButton] = useState(true);
@@ -154,12 +156,12 @@ const RelatedPartGrid: React.FunctionComponent<{
 
 
   useEffect(() => reaction(
-    () => relatedPartsStore.relatedPartsList.length,
+    () => relatedPartsState.relatedPartsList.length,
     () => {
       setIsEditRowVisible(false);
       setShowButton(true);
     }
-  ), [relatedPartsStore.relatedPartsList.length]);
+  ), [relatedPartsState.relatedPartsList.length]);
 
   const cancelEdit = () => {
     setIsEditRowVisible(false);
@@ -197,9 +199,10 @@ const RelatedPartGrid: React.FunctionComponent<{
         <RelatedPartList
           voidRelatedPart = {voidRelatedPart}
           viewRelatedPart={viewRelatedPart}
-          rootPartName= {documentRevision.name} />
+          rootPartName= {documentRevision.name}
+          relatedPartsState = {relatedPartsState} />
         {isEditRowVisible && <RelatedPartEditRow documentRevision={documentRevision}
-          createNewDocument={createNewDocument} cancelEdit={cancelEdit}/>}
+          createNewDocument={createNewDocument} cancelEdit={cancelEdit} relatedPartsState={relatedPartsState}/>}
         {
           showButton && <Button
             className={classes.fullLengthButton}
@@ -220,12 +223,13 @@ const RelatedPartList: React.FunctionComponent<{
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   rootPartName: string;
+  relatedPartsState: RelatedPartsState;
 }> = ({
   voidRelatedPart,
   viewRelatedPart,
   rootPartName,
+  relatedPartsState,
 }) => {
-  const { relatedPartsStore } = useRelatedPartsStore();
   const classes = useStyles();
   return useObserver(() => (
     <div className={classes.fullWidth}>
@@ -249,7 +253,7 @@ const RelatedPartList: React.FunctionComponent<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {relatedPartsStore.relatedPartsList.map((listItem: RelatedPartsListItem) => (
+          {relatedPartsState.relatedPartsList.map((listItem: RelatedPartsListItem) => (
             <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart} viewRelatedPart={viewRelatedPart}
               key={listItem.documentRevisionId} rootPartName={rootPartName}/>
           ))}
@@ -306,10 +310,12 @@ const RelatedPartEditRow: React.FunctionComponent<{
   documentRevision: DocumentRevision;
   createNewDocument: (details? : {docId: string; name: string}) => void;
   cancelEdit: () => void;
+  relatedPartsState: RelatedPartsState;
 }> = ({
   documentRevision,
   createNewDocument,
   cancelEdit,
+  relatedPartsState,
 }) => {
   const [relatedPartDetails, setRelatedPartDetails] = React.useState({
     docId: "",
@@ -317,7 +323,6 @@ const RelatedPartEditRow: React.FunctionComponent<{
   });
 
   const classes = useStyles();
-  const { relatedPartsStore } = useRelatedPartsStore();
 
   const resetAndCancelEdit = () => {
     setRelatedPartDetails({ docId: "", name: "" });
@@ -329,14 +334,14 @@ const RelatedPartEditRow: React.FunctionComponent<{
   };
 
   const checkForDuplicateDocIds = () => {
-    relatedPartsStore.checkForDuplicateDocIds(`${documentRevision?.document?.docId}-${relatedPartDetails.docId}`);
+    relatedPartsState.checkForDuplicateDocIds(`${documentRevision?.document?.docId}-${relatedPartDetails.docId}`);
   };
 
   return useObserver(() => (
     <>
       <div className={cx(classes.editRowParentDiv, {
-        [classes.editRowParentNormal]: !relatedPartsStore.docIdExists,
-        [classes.editRowParentError]: relatedPartsStore.docIdExists,
+        [classes.editRowParentNormal]: !relatedPartsState.docIdExists,
+        [classes.editRowParentError]: relatedPartsState.docIdExists,
       })}>
         <div className={classes.editRowChildDivOne}>
           <label >{documentRevision?.document?.docId} - </label>
@@ -347,8 +352,8 @@ const RelatedPartEditRow: React.FunctionComponent<{
               setRelatedPartDetails({ ...relatedPartDetails, docId: e.target.value })}
             onBlur = {checkForDuplicateDocIds}
             value={relatedPartDetails.docId}
-            error = {relatedPartsStore.docIdExists}
-            helperText={relatedPartsStore.docIdExists ? <Text translation="relatedParts.docId.exists.msg"/> : ""}
+            error = {relatedPartsState.docIdExists}
+            helperText={relatedPartsState.docIdExists ? <Text translation="relatedParts.docId.exists.msg"/> : ""}
           />
         </div>
         <div
@@ -362,7 +367,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
               setRelatedPartDetails({ ...relatedPartDetails, name: e.target.value })}/>
         </div>
       </div>
-      {!relatedPartsStore.docIdExists &&
+      {!relatedPartsState.docIdExists &&
         <div className={classes.actionButtonParentDiv}>
           <div className={classes.actionButtonChildDiv}>
             <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
@@ -387,6 +392,7 @@ const RelatedParts: React.FunctionComponent<{
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   fetchRelatedParts: (documentId: any) => void;
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
+  relatedPartsState: RelatedPartsState;
 }> = ({
   documentRevision,
   parentStatus,
@@ -395,6 +401,7 @@ const RelatedParts: React.FunctionComponent<{
   viewRelatedPart,
   fetchRelatedParts,
   voidRelatedPart,
+  relatedPartsState,
 }) => {
 
   const classes = useStyles();
@@ -414,7 +421,7 @@ const RelatedParts: React.FunctionComponent<{
         {parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER && (
           <RelatedPartGrid documentRevision={documentRevision} createNewDocument={createNewDocument}
             viewRelatedPart={viewRelatedPart} fetchRelatedParts = {fetchRelatedParts}
-            voidRelatedPart = {voidRelatedPart}
+            voidRelatedPart = {voidRelatedPart} relatedPartsState = {relatedPartsState}
           />
         )}
       </div>}

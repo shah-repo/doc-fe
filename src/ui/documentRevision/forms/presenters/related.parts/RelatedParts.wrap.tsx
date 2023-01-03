@@ -11,13 +11,15 @@ import { RelatedPartsListItem, RELATED_PARTS_STATUS } from "../../../../../state
 import { toastSuccess } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
 import { documentPreviewPath } from "../../../../document.revision/utils/paths";
+import { FB } from "../../../../form.builder";
 import useActionCreator from "../../../../hooks/useActionCreator";
 import useAsync from "../../../../hooks/useAsync";
 import useStyles from "./RelatedPart.styles";
 import RelatedParts from "./RelatedParts";
-import { relatedPartsStore, RelatedPartsStoreContext, useRelatedPartsStore } from "./RelatedParts.state";
+import RelatedPartsState from "./RelatedParts.state";
 
 interface Props {
+  isDisabled: boolean;
   documentRevision: DocumentRevision;
   parentPartStatus: RELATED_PARTS_STATUS | undefined;
 }
@@ -60,12 +62,14 @@ const SuccessMsg: React.FunctionComponent<{
 const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   documentRevision,
   parentPartStatus,
+  isDisabled,
 }) => {
 
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { relatedPartsStore } = useRelatedPartsStore();
+  const relatedPartsState = FB.useRef<RelatedPartsState>(RelatedPartsState);
+  relatedPartsState.setAddActionVisible(!isDisabled);
 
   const [parentStatus, setParentStatus] = useState(parentPartStatus);
 
@@ -83,7 +87,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
       } else if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
         // populate the list with the new added part
-        relatedPartsStore.addNewRelatedPart(createdDocumentRevision, suffixName);
+        relatedPartsState.addNewRelatedPart(createdDocumentRevision, suffixName);
       }
     },
   });
@@ -116,7 +120,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const fetchAllRelatedPartsAction = useActionCreator(relatedPartsActions.fetchAllRelatedParts);
   const fetchRelatedPartsAsync = useAsync({
     onSuccess: (relatedPartsList) => {
-      relatedPartsStore.setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
+      relatedPartsState.setRelatedPartsList(relatedPartsList as RelatedPartsListItem[]);
     },
   });
 
@@ -127,7 +131,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
   const voidRelatedPartAsync = useAsync({
     onSuccess: ({ docRevId, name }: any) => {
-      relatedPartsStore.updateRelatedPartsList(docRevId, name);
+      relatedPartsState.updateRelatedPartsList(docRevId, name);
     },
   });
 
@@ -178,7 +182,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   const parentStatusChanged = (value) => {
     // Make an API call to persist the parent row.
-    if (value) {
+    if (value && documentRevision.documentId) {
       parentChoiceAsync.start(createParentPartChoiceAction, {
         documentId: documentRevision.documentId,
         rootDocId: documentRevision.document?.docId,
@@ -202,6 +206,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       viewRelatedPart = {viewRelatedPart}
       fetchRelatedParts = {fetchRelatedParts}
       voidRelatedPart = {voidRelatedPart}
+      relatedPartsState = {relatedPartsState}
     />
   ));
 };
@@ -210,13 +215,13 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 const RelatedPartsWrapper: React.FunctionComponent<Props> = ({
   documentRevision,
   parentPartStatus,
+  isDisabled,
 }) => (
-  <RelatedPartsStoreContext.Provider value={relatedPartsStore}>
-    <RelatedPartsContainer
-      documentRevision={documentRevision}
-      parentPartStatus = {parentPartStatus}
-    />
-  </RelatedPartsStoreContext.Provider>
+  <RelatedPartsContainer
+    isDisabled = {isDisabled}
+    documentRevision={documentRevision}
+    parentPartStatus = {parentPartStatus}
+  />
 );
 
 

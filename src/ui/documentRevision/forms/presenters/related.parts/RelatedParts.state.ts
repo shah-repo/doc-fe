@@ -1,11 +1,18 @@
-import { get } from "lodash";
+import { get, set } from "lodash";
 import { action, observable } from "mobx";
-import { createContext, useContext } from "react";
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
 
-class RelatedPartsStore {
+class RelatedPartsState {
+
+  constructor() {
+    this.setAddActionVisible(true);
+    this.setLoadingState(false);
+  }
+
   @observable relatedPartsList: RelatedPartsListItem[] = [];
+  @observable addActionVisible = true;
+  @observable loadingState = false;
   @observable docIdExists = false;
 
   @action setRelatedPartsList(list: RelatedPartsListItem[]) {
@@ -41,12 +48,21 @@ class RelatedPartsStore {
     this.docIdExists = this.relatedPartsList.filter(
       (listItem: RelatedPartsListItem) => listItem.rootDocId === docId).length > 0;
   }
+
+  @action setAddActionVisible(isVisible = true) {
+    set(this, "addActionVisible", isVisible);
+  }
+
+  @action setLoadingState(isVisible = false) {
+    set(this, "loadingState", isVisible);
+  }
 }
 
+export default RelatedPartsState;
 
-export const relatedPartsStore = {
-  relatedPartsStore: new RelatedPartsStore(),
-};
+// export const relatedPartsStore = {
+//   relatedPartsStore: new RelatedPartsStore(),
+// };
 
-export const RelatedPartsStoreContext = createContext(relatedPartsStore);
-export const useRelatedPartsStore = () => useContext(RelatedPartsStoreContext);
+// export const RelatedPartsStoreContext = createContext(relatedPartsStore);
+// export const useRelatedPartsStore = () => useContext(RelatedPartsStoreContext);
