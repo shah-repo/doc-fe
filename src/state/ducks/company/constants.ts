@@ -41,7 +41,7 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItem[] = [
         path: DOCUMENT_REVISION_LIST_URL,
       },
       {
-        label: "Change Orders",
+        label: "Approval Requests",
         type: "LINK",
         path: CHANGE_REQUEST_LIST_URL,
         icon: "/navigation_icons/cr.svg",

@@ -4,7 +4,7 @@ export enum HelpModule {
   DocumentList = "Document List",
   UserManagement = "User Management",
   GroupManagement = "Group Management",
-  ApprovalRequests = "Change Orders",
+  ApprovalRequests = "Approval Requests",
   EB = "EB",
   Lhr = "Lhr",
   Lot = "Lot",

@@ -201,7 +201,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         crId: option.crId,
       }));
       if (options.length === 0) {
-        toastError("No Change Orders in Draft");
+        toastError("No Approval Requests in Draft");
         return;
       }
 
