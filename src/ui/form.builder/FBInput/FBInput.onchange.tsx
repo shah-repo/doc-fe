@@ -2,6 +2,7 @@ import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString
 import { useObserver } from "mobx-react";
 import React from "react";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
+import { toFixed } from "../../dashboard.new/line.items/common/Utils";
 import { FBFieldName } from "../helpers/FBFieldName";
 
 export const withFBOnChange = <T extends FBInputProps>(
@@ -156,10 +157,11 @@ export const withFBOnChange = <T extends FBInputProps>(
         const { type } = ev.target;
         let { value } = ev.target;
         if (type === "number" && value !== "") {
-          if (["lhrs-start-quantity", "lhrs-accepted-quantity", "lhrs-rejected-quantity"].includes(ev.target.name)) {
-            value = (!Number.isInteger(toNumber(value)) && value.split(".")[1]?.length > 10)
-              ? toNumber(value).toFixed(10)
-              : toNumber(value);
+          if (["lhrs-start-quantity",
+            "lhrs-accepted-quantity",
+            "lhrs-rejected-quantity",
+            "quantity"].includes(ev.target.name)) {
+            value = toFixed(value);
           }
           else {
             value = toNumber(value);

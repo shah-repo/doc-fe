@@ -14,6 +14,7 @@ import { getFormattedDateString, MomentFormats } from "../../../common/utils/dat
 import { User } from "../../../state/ducks/common/types";
 import { companySelectors } from "../../../state/ducks/company";
 import Text from "../../components/Text";
+import { toFixed } from "../../dashboard.new/line.items/common/Utils";
 import { isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "../../documentRevision/helpers/documentRevisionStatus";
 import Colors from "../../layout/theme/utils/colors";
 import FBLHRStepProcedureItem from "../FBLHRStepProcedureItem/FBLHRStepProcedureItem";
@@ -267,7 +268,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <Text translation="form.builder.start.quantity" />
                   </Typography>
                   <Typography className={classes.subTitle} data-cy={`start-quantity-value-${stepIndex}`}>
-                    {stepLHRs?.formInput?.["lhrs-start-quantity"]}
+                    {toFixed(stepLHRs?.formInput?.["lhrs-start-quantity"])}
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -275,7 +276,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <Text translation="form.builder.accepted.quantity" />
                   </Typography>
                   <Typography className={classes.subTitle} data-cy={`accepted-quantity-value-${stepIndex}`}>
-                    {stepLHRs?.formInput?.["lhrs-accepted-quantity"]}
+                    {toFixed(stepLHRs?.formInput?.["lhrs-accepted-quantity"])}
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -283,7 +284,7 @@ const FBLHRStep: React.FunctionComponent<FBLHRStepProps> = ({
                     <Text translation="form.builder.rejected.quantity" />
                   </Typography>
                   <Typography className={classes.subTitle} data-cy={`rejected-quantity-value-${stepIndex}`}>
-                    {stepLHRs?.formInput?.["lhrs-rejected-quantity"]}
+                    {toFixed(stepLHRs?.formInput?.["lhrs-rejected-quantity"])}
                   </Typography>
                 </Grid>
               </Grid>

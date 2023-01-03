@@ -1,4 +1,4 @@
-import { size } from "lodash";
+import { size, toNumber } from "lodash";
 import { Translation } from "../../../translations/types";
 
 export const formatCurrency = (data: string) =>  {
@@ -21,6 +21,15 @@ export const formatNumberToCurrency = (data: number) =>  {
   return data;
 };
 
+export const toFixed = (value: string | number) => {
+  if (Number.isNaN(toNumber(value))) {
+    return value;
+  }
+  if (!Number.isInteger(toNumber(value)) && value?.toString()?.split(".")[1]?.length > 10) {
+    return toNumber(toNumber(value).toFixed(10));
+  }
+  else { return toNumber(value); }
+};
 export const linearScale = (domain: number[], range: number[]) => {
   const scale = (value: number) => {
     const [minValue, maxValue] = [...domain];

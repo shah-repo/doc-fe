@@ -28,6 +28,7 @@ import { DocTypeGroups } from "../../common/types";
 import { getPendingTooltipText } from "../../common/Utils";
 import EmailModal from "../../dialogs/email/EmailDialog";
 import useStyles from "./pendingReview.styles";
+import DismissAction from "../../common/DismissAction";
 
 interface Props {
   id: string;
@@ -64,9 +65,10 @@ interface Props {
   hoverItemId: string;
   onMouseHoverItem: (id: string) => void;
   pinned: boolean;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (id: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (id: string) => void;
   pendingEmailSentAt: Nullable<string>;
+  dismissLineItem?: (id: string) => void;
 }
 const PendingReviewPresenter: React.FC<Props> = ({
   id,
@@ -84,6 +86,7 @@ const PendingReviewPresenter: React.FC<Props> = ({
   pinLineItem,
   unPinLineItem,
   pendingEmailSentAt,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -97,11 +100,14 @@ const PendingReviewPresenter: React.FC<Props> = ({
   const handleClick = () => {
     setOpen(!open);
   };
+  const handleDismiss = () => {
+    dismissLineItem?.(id);
+  };
   const handlePinClick = () => {
-    pinLineItem(id);
+    pinLineItem?.(id);
   };
   const handleUnPinClick = () => {
-    unPinLineItem(id);
+    unPinLineItem?.(id);
   };
   const hoverItem = hoverItemId === id;
   const onMouseHoverListItem = () => {
@@ -133,6 +139,9 @@ const PendingReviewPresenter: React.FC<Props> = ({
       dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
     }
   };
+
+  const isPinShown = pinLineItem && !pinned;
+  const isUnpinShown = unPinLineItem && pinned;
 
   return (
     <>
@@ -282,8 +291,10 @@ const PendingReviewPresenter: React.FC<Props> = ({
         />
         {hoverItem && !pinned && (
           <Box component="div" className={classes.actionIcons}>
-            {!pinHover && <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />}
-            {pinHover && (
+            {!pinHover && isPinShown && (
+              <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
+            )}
+            {pinHover && isPinShown && (
               <StyleTooltip
                 title={<Text translation="common.pin" />}
                 placement="top"
@@ -296,9 +307,12 @@ const PendingReviewPresenter: React.FC<Props> = ({
                 />
               </StyleTooltip>
             )}
+            {dismissLineItem && (
+              <DismissAction classes={classes} onClick={handleDismiss} />
+            )}
           </Box>
         )}
-        {pinned && (
+        {isUnpinShown && (
           <span className={classes.actionIcon}>
             <StyleTooltip
               title={<Text translation="common.unpin" />}
@@ -308,6 +322,9 @@ const PendingReviewPresenter: React.FC<Props> = ({
               <PinSolidIcon onClick={handleUnPinClick} className={classes.cursorPointer} />
             </StyleTooltip>
           </span>
+        )}
+        {hoverItem && dismissLineItem && (
+          <DismissAction classes={classes} onClick={handleDismiss} />
         )}
       </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

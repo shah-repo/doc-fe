@@ -36,8 +36,8 @@ import NoPendingActions from "../NoPendingActions";
 interface Props {
   loadMyFeeds: any;
   hoverItemId: string;
-  pinLineItem: (id: string) => void;
-  unPinLineItem: (pinnedItemId: string) => void;
+  pinLineItem?: (id: string) => void;
+  unPinLineItem?: (pinnedItemId: string) => void;
   onMouseLeaveItem: (any) => void;
   onMouseHoverItem: (id: string) => void;
   loadMyFeedsListAsyncState: AsyncState;
@@ -46,9 +46,10 @@ interface Props {
   overallLimit: number;
   onLoadMoreData: () => void;
   dialogPDF: DialogHandler;
+  dismissLineItem?: (id: string) => void;
 }
 
-const MyFeedsLineItemPresenter: React.FC<Props> = ({
+const LineItemsPresenter: React.FC<Props> = ({
   loadMyFeeds,
   loadMyFeedsListAsyncState,
   feedItems,
@@ -60,6 +61,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
   onMouseHoverItem,
   onLoadMoreData,
   dialogPDF,
+  dismissLineItem,
 }) => {
   const classes = useStyles();
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
@@ -67,7 +69,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
   const PendingActions = () => (
     <List dense onMouseLeave={onMouseLeaveItem} data-cy="dashboardFeedList">
       {feedItems.results
-        .map((pendingAction, index) => {
+        .map((pendingAction) => {
           switch (pendingAction.type) {
             case ActionTypes.EQ_MAINTENANCE_OWNER_OR_COORDINATOR:
             case ActionTypes.EQ_CALIBRATION_OWNER_OR_COORDINATOR:
@@ -94,6 +96,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                 />
@@ -140,6 +143,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                   dialogPDF={dialogPDF}
@@ -168,6 +172,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                 />
@@ -215,6 +220,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                   dialogPDF={dialogPDF}
@@ -242,6 +248,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                 />
@@ -296,6 +303,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
+                    dismissLineItem={dismissLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
                     pendingEmailSentAt={pendingAction.pendingEmailSentAt}
@@ -344,6 +352,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   hoverItemId={hoverItemId}
                   dialogPDF={dialogPDF}
                 />
@@ -376,6 +385,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
+                    dismissLineItem={dismissLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
                     pendingEmailSentAt={pendingAction.pendingEmailSentAt}
@@ -402,6 +412,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                 />
@@ -430,6 +441,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
                 />
               );
@@ -453,6 +465,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                 />
@@ -478,6 +491,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                   onMouseHoverItem={onMouseHoverItem}
                   pinLineItem={pinLineItem}
                   unPinLineItem={unPinLineItem}
+                  dismissLineItem={dismissLineItem}
                   pinned={pendingAction.pinned}
                   hoverItemId={hoverItemId}
                 />
@@ -502,6 +516,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
+                    dismissLineItem={dismissLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
                   />
@@ -525,6 +540,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
+                    dismissLineItem={dismissLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
                   />
@@ -550,6 +566,7 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
                     onMouseHoverItem={onMouseHoverItem}
                     pinLineItem={pinLineItem}
                     unPinLineItem={unPinLineItem}
+                    dismissLineItem={dismissLineItem}
                     pinned={pendingAction.pinned}
                     hoverItemId={hoverItemId}
                     pendingEmailSentAt={pendingAction.pendingEmailSentAt}
@@ -583,10 +600,11 @@ const MyFeedsLineItemPresenter: React.FC<Props> = ({
       asyncAction={loadMyFeeds}
       asyncState={loadMyFeedsListAsyncState}
       startActionOnMount={!!currentEmployeeId}
+      passive
     >
       {feedItems.total === 0 ? <NoPendingActions /> : PendingActions() }
     </AsyncGate>
   );
 };
 
-export default MyFeedsLineItemPresenter;
+export default LineItemsPresenter;

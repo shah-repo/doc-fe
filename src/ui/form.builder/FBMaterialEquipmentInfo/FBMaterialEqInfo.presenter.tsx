@@ -6,6 +6,7 @@ import { useIntl } from "react-intl";
 import { SMText } from "../../../App";
 import { ReactComponent as ExpandIcon } from "../../../assets/images/tabExpand.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
+import { toFixed } from "../../dashboard.new/line.items/common/Utils";
 import { Equipment, ItemProps, LotItem, Material, MaterialEqProps, PanelData, PanelProps } from "./FBMaterailEqInfo.types";
 import useStyles, { useItemStatusStyles } from "./FBMaterialEqInfo.styles";
 
@@ -13,8 +14,8 @@ const DATE_FORMAT = MomentFormats.BriefDate;
 
 const MaterialItem: React.FC<ItemProps<Material>> = ({ item, classes }) => (<>
   <ListItemText>
-    {item.docId && `${item.docId} -`} {item.title} | {item.unit} :
-    {(item?.totalQuantity ?? item?.quantity) || "None"}
+    {item.docId && `${item.docId} -`} {item.title} | {`${item.unit}: `}
+    {toFixed(item?.totalQuantity ?? item?.quantity) || "None"}
   </ListItemText>
   <ListItemText>
     {item.lots && item.lots.map((lot: LotItem) => (

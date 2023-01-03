@@ -129,7 +129,7 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
     if (!shippingCost) {
       return;
     }
-    set(this.value, "shippingCost", this.formatCost(shippingCost));
+    set(this.value, "shippingCost", Number(this.formatCost(shippingCost)));
   };
 
   @action public setValue = (value = {}) => {
@@ -179,14 +179,20 @@ class FBPurchaseOrderState extends FBRequest<any, Dictionary<number>> {
 
   public calculateCost = (): FBPurchaseOrderValue => {
     const sum = this.calculateItemSum();
-    const tax = sum.forTax ? (sum.forTax * this.value.taxRate / 100) : 0;
+    const lineItemsLength = this.value.items.length;
+    const taxRate = lineItemsLength ? this.value.taxRate : TAX_RATE;
+    let tax = 0;
+    if (lineItemsLength && sum.forTax) {
+      tax = sum.forTax * this.value.taxRate / 100;
+    }
 
-    const shippingCost = this.value.shippingCost || 0;
+    const shippingCost = lineItemsLength ? this.value.shippingCost || 0 : 0;
     const totalAmount = tax + sum.subTotal + Number(shippingCost);
     const totalInUSD = totalAmount * this.value.exchangeRate;
 
     const value = {
       ...this.value,
+      taxRate,
       subTotal: this.formatCost(sum.subTotal),
       tax: this.formatCost(tax, 6),
       shippingCost: this.formatCost(shippingCost),
