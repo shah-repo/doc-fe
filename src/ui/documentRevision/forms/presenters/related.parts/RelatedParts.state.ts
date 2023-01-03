@@ -2,6 +2,7 @@ import { get, set } from "lodash";
 import { action, observable } from "mobx";
 import { DocumentRevisionStatus } from "../../../../../state/ducks/documentRevisions/types";
 import { RelatedPartsListItem } from "../../../../../state/ducks/relatedParts/types";
+import { Translation } from "../../../../translations/types";
 
 class RelatedPartsState {
 
@@ -13,7 +14,7 @@ class RelatedPartsState {
   @observable relatedPartsList: RelatedPartsListItem[] = [];
   @observable addActionVisible = true;
   @observable loadingState = false;
-  @observable docIdExists = false;
+  @observable docIdErrorMsg: string | Translation = "";
 
   @action setRelatedPartsList(list: RelatedPartsListItem[]) {
     this.relatedPartsList = list;
@@ -44,9 +45,28 @@ class RelatedPartsState {
     this.relatedPartsList.push(newRelatedPart);
   }
 
-  @action checkForDuplicateDocIds(docId) {
-    this.docIdExists = this.relatedPartsList.filter(
-      (listItem: RelatedPartsListItem) => listItem.rootDocId === docId).length > 0;
+  @action validateDocId(parentPartDocId, userEnteredDocIdPortion) {
+    this.docIdErrorMsg = "";
+
+    if (!userEnteredDocIdPortion) {
+      this.docIdErrorMsg = "relatedParts.docId.required.msg";
+
+    } else if (userEnteredDocIdPortion.length === 1) {
+      this.docIdErrorMsg = "relatedParts.docId.length.msg";
+
+    } else if (/\D/.test(userEnteredDocIdPortion)) {
+      this.docIdErrorMsg = "relatedParts.docId.onlyNumbers.msg";
+
+    } else {
+      const docIdExists = this.relatedPartsList.filter(
+        (listItem: RelatedPartsListItem) => listItem.rootDocId === `${parentPartDocId}-${userEnteredDocIdPortion}`)
+        .length > 0;
+      if (docIdExists) {
+        this.docIdErrorMsg = "relatedParts.docId.exists.msg";
+      }
+    }
+
+    return !this.docIdErrorMsg;
   }
 
   @action setAddActionVisible(isVisible = true) {

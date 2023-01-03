@@ -330,18 +330,20 @@ const RelatedPartEditRow: React.FunctionComponent<{
   };
 
   const confirmEdit = () => {
-    createNewDocument(relatedPartDetails);
+    if (validateDocId() && relatedPartDetails.name) {
+      createNewDocument(relatedPartDetails);
+    }
   };
 
-  const checkForDuplicateDocIds = () => {
-    relatedPartsState.checkForDuplicateDocIds(`${documentRevision?.document?.docId}-${relatedPartDetails.docId}`);
-  };
+  const validateDocId = () => (
+    relatedPartsState.validateDocId(documentRevision?.document?.docId, relatedPartDetails.docId)
+  );
 
   return useObserver(() => (
     <>
       <div className={cx(classes.editRowParentDiv, {
-        [classes.editRowParentNormal]: !relatedPartsState.docIdExists,
-        [classes.editRowParentError]: relatedPartsState.docIdExists,
+        [classes.editRowParentNormal]: !relatedPartsState.docIdErrorMsg,
+        [classes.editRowParentError]: Boolean(relatedPartsState.docIdErrorMsg),
       })}>
         <div className={classes.editRowChildDivOne}>
           <label >{documentRevision?.document?.docId} - </label>
@@ -350,10 +352,10 @@ const RelatedPartEditRow: React.FunctionComponent<{
             variant="outlined"
             onChange = {(e: ChangeEvent<HTMLInputElement>) =>
               setRelatedPartDetails({ ...relatedPartDetails, docId: e.target.value })}
-            onBlur = {checkForDuplicateDocIds}
+            onBlur = {validateDocId}
             value={relatedPartDetails.docId}
-            error = {relatedPartsState.docIdExists}
-            helperText={relatedPartsState.docIdExists ? <Text translation="relatedParts.docId.exists.msg"/> : ""}
+            error = {Boolean(relatedPartsState.docIdErrorMsg)}
+            helperText={relatedPartsState.docIdErrorMsg ? <Text message={relatedPartsState.docIdErrorMsg}/> : ""}
           />
         </div>
         <div
@@ -367,7 +369,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
               setRelatedPartDetails({ ...relatedPartDetails, name: e.target.value })}/>
         </div>
       </div>
-      {!relatedPartsState.docIdExists &&
+      {!relatedPartsState.docIdErrorMsg &&
         <div className={classes.actionButtonParentDiv}>
           <div className={classes.actionButtonChildDiv}>
             <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
