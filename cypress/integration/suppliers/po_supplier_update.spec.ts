@@ -4,7 +4,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -307,8 +306,8 @@ context("Purchase Supplier Update", () => {
           req.reply((res) => {
             if (res.body !== "") {
               const response = res.body;
-              supplierFieldName = response.formTemplate.schema[4].name;
-              poFieldName = response.formTemplate.schema[6].name;
+              supplierFieldName = response.formTemplate.schema.find((schemaList) => schemaList.label === "Supplier");
+              poFieldName = response.formTemplate.schema.find((schemaList) => schemaList.label === "Purchase Order");
             }
           });
         }).as("response");
@@ -327,32 +326,32 @@ context("Purchase Supplier Update", () => {
                <div>
                   <strong>Supplier</strong>                                                                             
                   <ul>
-                     <li>Name: {{autocompletes.${supplierFieldName}.name}}</li>
-                     <li>Description: {{{autocompletes.${supplierFieldName}.description}}}</li>
+                     <li>Name: {{autocompletes.${supplierFieldName.name}.name}}</li>
+                     <li>Description: {{{autocompletes.${supplierFieldName.name}.description}}}</li>
                   </ul>
                </div>
                <div>
                   <strong>Ordered</strong>                                                                             
                   <ul>
-                     {{#documentRevision.formInput.${poFieldName}.items}}                        
+                     {{#documentRevision.formInput.${poFieldName.name}.items}}                        
                      <li>Name: {{serviceId}}{{^serviceId}}{{/serviceId}}</li>
                      <li>Description: {{description}}{{^description}}{{/description}}</li>
                      <li>Ordered: {{order}} {{units}}</li>
                      <li>GL codes: {{glCode}} </li>
-                     {{/documentRevision.formInput.${poFieldName}.items}}                  
+                     {{/documentRevision.formInput.${poFieldName.name}.items}}                  
                   </ul>
                </div>
                <div>
                   <strong>Total cost</strong>
                   <ul>
-                     <li>Total amount: {{documentRevision.formInput.${poFieldName}.totalAmount}}</li>
+                     <li>Total amount: {{documentRevision.formInput.${poFieldName.name}.totalAmount}}</li>
                   </ul>
                </div>
                <div>
                <strong>Tax</strong>                                                                             
                <ul>
-                  <li>Tax Rate: {{documentRevision.formInput.${poFieldName}.taxRate}}</li>
-                  <li>Tax: {{documentRevision.formInput.${poFieldName}.tax}}</li>
+                  <li>Tax Rate: {{documentRevision.formInput.${poFieldName.name}.taxRate}}</li>
+                  <li>Tax: {{documentRevision.formInput.${poFieldName.name}.tax}}</li>
                </ul>
               </div>
                <div>
@@ -408,11 +407,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -456,11 +452,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -486,12 +479,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetDocRevStatusesCategory,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -539,11 +528,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -583,9 +569,10 @@ context("Purchase Supplier Update", () => {
   context("Verify POs 'Pending Approval' are updated when new version of Supplier is released", () => {
     context("for newly PO", () => {
       it("Click 'New Purchase order' button", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
-          cy.poClickCreatePO();
-        });
+        cy.poClickCreatePO();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -644,11 +631,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -680,6 +664,7 @@ context("Purchase Supplier Update", () => {
     context("for existing PO", () => {
       it(`Open existing PO and verify PO in ${STATUS_TYPES_LABEL.PENDING_APPROVAL} and verify Supplier`, () => {
         cy.navigToPurchaseOrder();
+        cy.wait(1000);
         cy.poClickOnSpecificPOFromList({ item: "PO-00002" });
         cy.poVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00001 - rev 3 - New suplier for PO123");
@@ -703,11 +688,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -742,9 +724,10 @@ context("Purchase Supplier Update", () => {
     context("for newly PO", () => {
       it("create 'New Purchase order'", () => {
         cy.navigToPurchaseOrder();
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
-          cy.poClickCreatePO();
-        });
+        cy.poClickCreatePO();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -819,6 +802,8 @@ context("Purchase Supplier Update", () => {
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description1" });
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApprovalWithoutAPI();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.poApproveWithoutApi();
@@ -833,11 +818,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -898,6 +880,8 @@ context("Purchase Supplier Update", () => {
         cy.cmpTurnOffAutosave();
         cy.drEnterDocumentDescription({ description: "Test description2" });
         cy.drClickCreateDocumentWithApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.poAddApproverOnApproverList({ approver: USERS[1].name });
         cy.pmSubmitForApprovalWithoutAPI();
         cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
         cy.poApproveWithoutApi();
@@ -912,11 +896,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -942,9 +923,10 @@ context("Purchase Supplier Update", () => {
   context("Verify the system does not update Supplier to the latest revision when PO is released", () => {
     context("for newly PO", () => {
       it("create 'New Purchase order'", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
-          cy.poClickCreatePO();
-        });
+        cy.poClickCreatePO();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Turn off autosave", () => {
@@ -960,9 +942,10 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Click on 'Add item' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.poAddNewFieldItem();
-        });
+        cy.poAddNewFieldItem();
+        cy.wait(2000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'Service' select option", () => {
@@ -1048,11 +1031,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1095,11 +1075,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1190,11 +1167,8 @@ context("Purchase Supplier Update", () => {
       });
 
       it("reload page", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.reload();
-          });
+        cy.reload();
+        cy.wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
