@@ -235,6 +235,7 @@ Cypress.Commands.add("lhrSubmitForApproval", () => {
 
 Cypress.Commands.add("lhrSubmitForApprovalWithoutApi", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+  cy.wait(1000);
   cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

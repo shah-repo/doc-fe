@@ -607,6 +607,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastErro
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
+  cy.wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
