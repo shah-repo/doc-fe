@@ -16,7 +16,6 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
   defaultValue,
   groups = {},
   autosave,
-  isChangeRequest,
   changeRequestApprovals,
 }) => (
   <FBInput {...{ name, gutter, disabled, autosave }} type="approvers">
@@ -42,7 +41,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
           </Box>
         )}
       </FBMapWrapper>
-      {isChangeRequest && changeRequestApprovals && changeRequestApprovals.length > 0
+      {changeRequestApprovals && changeRequestApprovals.length > 0
         && <Approvers dataProp={changeRequestApprovals}/>
       }
     </Box>

@@ -10,7 +10,6 @@ export type FBApproversProps =
   groups?: Record<string, FBRequiredApprover>;
   checkedGroups?: FBRequiredApprover[];
   value?: string[];
-  isChangeRequest?: boolean;
   changeRequestApprovals?: Approval[];
 };
 
