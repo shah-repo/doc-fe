@@ -698,6 +698,8 @@ context("Verify the user is able to create LHRT", () => {
 
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter quantity received", () => {
@@ -786,7 +788,7 @@ context("Verify the user is able to create LHRT", () => {
         cy.listLoadingElementShouldNotExist();
       });
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldNotExist().wait(2000);
     });
 
     it("Add 'Equipment one'", () => {
@@ -924,14 +926,17 @@ context("Verify the user is able to create LHRT", () => {
 
       it("Select Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Define parameter A", () => {
         cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
         cy.get(`[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall"]`)
           .eq(0).arrowClick();
-        cy.get("[data-cy=\"title\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"title\"]").autocompleteSelect(CSPartDocumentTitle);
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -941,8 +946,9 @@ context("Verify the user is able to create LHRT", () => {
         cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
         cy.get(`[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall"]`)
           .eq(1).arrowClick();
-        cy.get("[data-cy=\"title\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains(equipmentTitle).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[data-cy=\"title\"]").autocompleteSelect(equipmentTitle);
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1005,6 +1011,8 @@ context("Verify the user is able to create LHRT", () => {
 
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'LHR Step'", () => {
@@ -1135,6 +1143,8 @@ context("Verify the user is able to create LHRT", () => {
 
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify all LHR Steps added to the previous revision are present", () => {
@@ -1178,13 +1188,16 @@ context("Verify the user is able to create LHRT", () => {
       });
       cy.closeAllAlertMessages();
       cy.drCloseApproveAndReleaseDialog();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Define parameter A", () => {
       cy.get(`[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall"]`)
         .eq(2).arrowClick({ force: true });
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"title\"]").autocompleteSelect(CSPartDocumentTitle);
       cy.get("[name=\"quantity\"]").arrowType("3");
       cy.wait(500);
       cy.get("[data-cy=\"unit\"]").autocompleteSelect("1");
@@ -1196,9 +1209,9 @@ context("Verify the user is able to create LHRT", () => {
     it("Define parameter B", () => {
       cy.get(`[class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall"]`)
         .eq(3).arrowClick({ force: true });
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.wait(500);
-      cy.get("ul>li[role=option]").contains(equipmentTitle).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"title\"]").autocompleteSelect(equipmentTitle);
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1254,6 +1267,8 @@ context("Verify the user is able to create LHRT", () => {
 
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'LHR Step'", () => {
@@ -1323,6 +1338,7 @@ context("Verify the user is able to create LHRT", () => {
 
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'LHR Step'", () => {
