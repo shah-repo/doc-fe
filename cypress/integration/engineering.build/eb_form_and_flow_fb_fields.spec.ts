@@ -762,7 +762,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -787,7 +787,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -857,7 +857,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -905,7 +905,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -958,7 +958,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -1032,25 +1032,28 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Save the document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Add Approvers", () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+          cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
         });
 
         it("Submit for Approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Approve record button click", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
 
         it("Clone EB", () => {
           cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
           cy.ebClickCloneEB();
           cy.ebCloneClickContinue();
+          cy.wait(3000);
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add component", () => {
