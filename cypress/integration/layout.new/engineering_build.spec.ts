@@ -988,6 +988,8 @@ context("Verify New Layout for EB Document", () => {
     context("Verify Access Permissions tab", () => {
       it("Open access permissions tab", () => {
         cy.drSelectPermissionTab();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Add another user permission", () => {
@@ -1093,6 +1095,8 @@ context("Verify New Layout for EB Document", () => {
 
       it("Add material document", () => {
         cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy=\"title\"]").arrowClick();
         cy.wait(1000);
         cy.progressBarShouldNotExist();
@@ -1106,6 +1110,8 @@ context("Verify New Layout for EB Document", () => {
 
       it("Add equipment document", () => {
         cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy=\"title\"]").arrowClick();
         cy.wait(1000);
         cy.progressBarShouldNotExist();
@@ -1117,6 +1123,7 @@ context("Verify New Layout for EB Document", () => {
 
     context("Enter values for Procedure tab added fields", () => {
       it("Fill text field", () => {
+        cy.pause();
         cy.get("[name^=textfield-]").arrowType("EB Text Field");
         cy.unClick();
       });
@@ -1316,6 +1323,8 @@ context("Verify New Layout for EB Document", () => {
     context("Verify Access Permissions tab", () => {
       it("Open access permissions tab", () => {
         cy.drSelectPermissionTab();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Add another user permission", () => {
@@ -1565,6 +1574,8 @@ context("Verify New Layout for EB Document", () => {
       context("Verify Access Permissions tab", () => {
         it("Open access permissions tab", () => {
           cy.drSelectPermissionTab();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Add another user permission", () => {
