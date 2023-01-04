@@ -139,7 +139,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("'Approve and Release' the document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -209,10 +209,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Save document", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select Details tab", () => {
@@ -220,7 +217,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Approve and release document - create company", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         cy.wait(1000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -739,7 +736,7 @@ context("DAM approvals in LHR", () => {
     });
 
     it("Approve and release DAM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -798,7 +795,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click on sidebar permission icon to add Operators", () => {
-        cy.get("[data-cy='permission-icon']").arrowClick().wait(2000);
+        cy.drSelectPermissionTab();
       });
 
       it(`Assign operator '${USERS[3].name}'`, () => {
@@ -1066,7 +1063,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Approve and release DAM document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -1244,7 +1241,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Approve and release DAM document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -1285,7 +1282,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click on sidebar permission icon to add group", () => {
-        cy.get("[data-cy='permission-icon']").arrowClick();
+        cy.drSelectPermissionTab();
         cy.listLoadingElementShouldNotExist();
       });
 
