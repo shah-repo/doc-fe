@@ -917,6 +917,7 @@ context("Create new LHR and verify start step with and without selecting build t
     it("Navigate to LHR", () => {
       cy.navigToLHR();
       cy.get("tr.k-master-row").first().arrowClick();
+      cy.listLoadingElementShouldNotExist().wait(2000);
     });
 
     it("Select Approval", () => {
