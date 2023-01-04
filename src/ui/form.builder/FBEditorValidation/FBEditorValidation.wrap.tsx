@@ -1,9 +1,6 @@
 import { get, includes, isEmpty, map } from "lodash";
 import React from "react";
-import { useSelector } from "react-redux";
 import { FB, FBButton, FBDialogState, FBEditorValidationProps, FBSchemaProps, FBSchemaState } from "..";
-import { getHasPermission } from "../../../common/utils/selectors";
-import { Permission } from "../../../state/ducks/auth/types";
 import FBValidatorCustom from "../components/validation/FBValidatorCustom";
 import predefinedValidators from "../data/predefinedValidators.json";
 import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
@@ -20,9 +17,7 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
     ...props
   }: T) => {
 
-    customValidationEnabled = useSelector(
-      getHasPermission(Permission.FORM_BUILDER_CUSTOM_VALIDATORS_ENABLED),
-    );
+    customValidationEnabled = false;
 
     schema = map(predefinedValidators as FBSchemaProps[], (schemaItem: FBSchemaProps) => ({
       ...schemaItem,
