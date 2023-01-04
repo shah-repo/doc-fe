@@ -6,7 +6,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
@@ -292,16 +291,16 @@ context("Self training test", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Created document with training required and complete training", () => {
     it("Form with Released status", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drEnterDocumentTitle({ name: "released form" });
       cy.drEnterDocumentDescription({ description: "test description" });
       cy.drSelectDocumentType({ documentType: "Form" });
@@ -309,25 +308,24 @@ context("Self training test", () => {
       cy.drClickTrainingRequired();
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
 
     it("Check for training text inside dialog box and complete training", () => {
       cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCompleteTraining], () => {
-          cy.get("[data-cy=training-complete]").click();
-          cy.get("form>div").should("contain.text", "TRN ID");
-          cy.get("form>div").should("contain.text", "Doc ID Rev");
-          cy.get("form>div").should("contain.text", "Title");
-          cy.get("form>div").should("contain.text", "I acknowledge I am trained on");
-          cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
+      cy.get("[data-cy=training-complete]").click();
+      cy.get("form>div").should("contain.text", "TRN ID");
+      cy.get("form>div").should("contain.text", "Doc ID Rev");
+      cy.get("form>div").should("contain.text", "Title");
+      cy.get("form>div").should("contain.text", "I acknowledge I am trained on");
+      cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -337,6 +335,8 @@ context("Self training test", () => {
   context("Check data on training record", () => {
     it("Navigate to training", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select training record", () => {
@@ -405,6 +405,8 @@ context("Self training test", () => {
   context("Navigate to released document and revise it", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select released document", () => {
@@ -413,25 +415,28 @@ context("Self training test", () => {
 
     it("Revise document", () => {
       cy.drClickReviseDocument();
-      cy.drClickCreateDocumentWithApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check for training text inside dialog box and complete training", () => {
       cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCompleteTraining], () => {
-          cy.get("[data-cy=training-complete]").click();
-          cy.get("form>div").should("contain.text", "TRN ID");
-          cy.get("form>div").should("contain.text", "Doc ID Rev");
-          cy.get("form>div").should("contain.text", "Title");
-          cy.get("form>div").should("contain.text", "I acknowledge I am trained on");
-          cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
+      cy.get("[data-cy=training-complete]").click();
+      cy.get("form>div").should("contain.text", "TRN ID");
+      cy.get("form>div").should("contain.text", "Doc ID Rev");
+      cy.get("form>div").should("contain.text", "Title");
+      cy.get("form>div").should("contain.text", "I acknowledge I am trained on");
+      cy.get("[data-cy=\"training.acknowladge.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -441,16 +446,23 @@ context("Self training test", () => {
   context("Check data on training record", () => {
     it("Navigate to training", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if next available TRN ID added", () => {
       cy.trLandingPagetrId({ trId: "TRN-00002" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "TRN-00002");
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select training record", () => {
       cy.trFilterDocListByNameAndSelect({ title: "released form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Check if 'I completed training on' message is displayed", () => {

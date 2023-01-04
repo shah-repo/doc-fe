@@ -12,7 +12,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -38,6 +37,7 @@ const equimentDueDays = (31);
 const ADMIN_USER = USERS[11];
 const equipmentTitleForm = `Equipment-Form`;
 const equipmentDocId = "EQ-00001";
+const delay1 = 5000;
 
 context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
   before(() => {
@@ -64,7 +64,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
           payload: {
             companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[12], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
             ],
@@ -108,7 +108,14 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
         sessionId: adminSessionId,
         employeeId: adminEmployee.id,
         payload: {
-          employees: [{ id: adminEmployee.id }],
+          employees: [
+            {
+              id: adminEmployee.id,
+            },
+            {
+              id: coordinatorUser.id,
+            },
+          ],
         },
       });
     });
@@ -403,10 +410,14 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
   context("Create 'Equipment Form'", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter document title " + equipmentTitleForm, () => {
@@ -427,15 +438,19 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
 
     it("Select 'Equipment' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Equipment" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("EQUIPMENT SECTIONS FOR PM", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Equipment" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbEnterNameValue({ name: "label", value: "Preventative Maintenance" });
       cy.get("input[value=\"preventativeMaintenance\"]").arrowClick();
       cy.fbAddField();
@@ -450,8 +465,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
     });
 
     it("Click create document", () => {
-      cy.intercept({ method: "PATCH", pathname: "/api/v1/document_revisions/*" }).as("response");
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -460,7 +474,9 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -469,63 +485,75 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
       cy.drCreateNewDocumentFromForm();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Enter title 'Equipment document'", () => {
       cy.drEnterDocumentTitle({ name: "Equipment document" });
     });
 
     it("Enter description 'Equipment description'", () => {
-      cy.drEnterDocumentDescription({ description: "Equipment description" });
+      cy.drEnterDocumentDescription({ description: "Equipment description{enter}" });
     });
 
     it("Select 'Active' as EQ status", () => {
       cy.get("input[name=fb-default-eq-status][value=Active]").check({ force: true });
-    });
-
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Navigate to specification tab", () => {
       cy.drSelectSpecificationTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select '${USERS[11].name}' for Primary Owner`, () => {
       cy.get("input[data-cy=\"fb-primary-owner-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[11].name).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select '${USERS[12].name}' for Coordinator`, () => {
       cy.get("input[data-cy=\"fb-coordinator-eq\"]").arrowClick({ force: true });
       cy.get("ul>li[role=\"option\"]").contains(USERS[12].name).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document 'Yes' for preventative maintenance required", () => {
       cy.get("[value=\"Yes\"]").eq(0).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Preventative Maintenance form' for preventative maintenance required", () => {
       cy.get("[name$=\"preventativeForm\"] button").eq(2).arrowClick();
-      cy.listLoadingElementShouldNotExist();
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(0).arrowClick();
       cy.get("ul>li[role=\"option\"]").contains("Preventative Maintenance form").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select preventative maintenance frequency", () => {
       cy.get("[name*=\"frequency\"]").eq(0).arrowType(`${equimentDueDays}`);
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Type preventative maintenance instruction", () => {
@@ -533,53 +561,68 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
       cy.get("[data-cy^='preventative-maintenance'] div[contenteditable]").last()
         .click({ force: true }).clear().arrowType("Instructions for preventative maintenance");
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document 'Yes' for calibration required", () => {
       cy.get("[value=\"Yes\"]").eq(1).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Calibration form' for calibration required", () => {
       cy.get("[name$=\"preventativeForm\"] button").eq(5).arrowClick();
-      cy.listLoadingElementShouldNotExist();
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy*=\"preventativeForm\"]").eq(1).arrowClick();
       cy.get("ul>li[role=\"option\"]").contains("Calibration form").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select calibration frequency", () => {
       cy.get("[name*=\"frequency\"]").eq(1).arrowType(`${equimentDueDays}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Type calibration maintenance instruction", () => {
       cy.get(`[data-cy^="calibration"] div[contenteditable]`).last()
         .click({ force: true }).clear().arrowType("Instructions for calibration");
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.wait(delay1);
     });
   });
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.listLoadingElementShouldNotExist();
       cy.url().then((url: any) => {
         equipmentURL = url;
       });
+      cy.wait(delay1);
+      cy.progressBarShouldNotExist();
     });
   });
 
   context("Navig to released 'Equipment maintenance document'", () => {
     it("Navig to equipment", () => {
       cy.navigToEquipment();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
-      });
+      cy.get("tr.k-master-row").first().arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -589,16 +632,17 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
     it("Click 'NEW CAL' on calibration section", () => {
       cy.intercept({ method: "POST", pathname: "/api/v1/document_revisions" }).as("response");
       cy.get("[data-cy='form.builder.new.calibration']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.wait("@response").then((res) => {
         if (res.response) {
           const response = res.response.body;
           calDocId = response.documentId;
           calId = response.id;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -616,6 +660,8 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
 
     it("Navigate to details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
@@ -627,7 +673,8 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
     it("Fill 'Completion Date'", () => {
       const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
-
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("button.MuiPickersDay-day")
         .not(".MuiPickersDay-hidden")
         .each(($el) => {
@@ -635,41 +682,50 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
           if (dayOfTheMonth.toString() === dayNumber) {
             cy.wrap($el).arrowClick();
           }
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
     });
 
     it("Create 'Calibration document' and approve", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(delay1);
     });
 
     it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-        cy.ebApprove();
-      });
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
   });
 
   context("Fill PM form and release it", () => {
     it("Navigate to EQ document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+      cy.visit(equipmentURL);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
 
     it("Click 'NEW PM' on Preventative Maintenance section", () => {
@@ -680,11 +736,11 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
           const response = res.response.body;
           calDocId = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         }
+        cy.wait(delay1);
       });
       cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
@@ -701,12 +757,16 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
 
     it("Navigate to details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select maintainer '${ADMIN_USER.name}'`, () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"equipment_maintainer\"]").arrowClick();
       cy.get("ul>li[role=\"option\"]").contains(ADMIN_USER.name).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Fill 'Completion Date'", () => {
@@ -715,14 +775,16 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
       const day = dayOfTheMonth.format("D");
 
       cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
         const monthYearText = $el.text();
 
         if (!monthYearText.includes(month)) {
           cy.get("div.MuiPickersCalendarHeader-switchHeader>button").eq(0).arrowClick();
         }
-
-        cy.wait(500);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
 
         cy.get("button.MuiPickersDay-day")
           .not(".MuiPickersDay-hidden")
@@ -733,29 +795,43 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
               cy.wrap($el).arrowClick();
             }
           });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(delay1);
       });
     });
 
     it("Create 'Preventative Maintenance' and approve it", () => {
-      cy.drClickCreateDocumentWithApiCall({ requiredApproversDocRev: false });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
       cy.pmAddApproverOnApproverList({ approver: ADMIN_USER.name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
 
     it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-        cy.ebApprove();
-      });
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
   });
 
@@ -775,6 +851,7 @@ context("'Equipment' test with time tool", { tags: ["@timetool"] }, () => {
 
     it("Logout", () => {
       cy.authLogout();
+      cy.wait(delay1);
     });
   });
 

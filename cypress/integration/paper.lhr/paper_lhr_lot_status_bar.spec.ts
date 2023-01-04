@@ -5,6 +5,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -713,9 +714,8 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     context("Right side:", () => {
-      it(`Save → Verify it is functional and the last saved should be updated every time there is a “save” event 
-      (manual or auto)`, () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Last save should be present", () => {
@@ -729,9 +729,20 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
         cy.unClick();
       });
 
+      it(`Verify 'Auto-saving, please wait' exist in statusbar`, () => {
+        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end"]`)
+          .contains("Auto-saving, please wait");
+      });
+
       it("Check Last save should be present in autosave", () => {
         cy.get("header").contains("Last saved a few seconds ago").should("exist");
         cy.get("header").contains("Last saved a few seconds ago").should("be.visible");
+      });
+
+      it("Wait for 2 min. It should display “Last saved 2 min ago”", () => {
+        cy.wait(120000);
+        cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved 2 minutes ago");
       });
 
       it(`Send to email buttons → Verify it is functional and Verify popup message File will be sent to your 
@@ -784,35 +795,50 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     context("Fill the form content", () => {
+      it("Turn On autosave", () => {
+        cy.cmpTurnOnAutosave();
+      });
+
       it("Add some reference", () => {
-        cy.drSelectReferences("FM-00002");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.drSelectReferences("FM-00002");
+        });
       });
 
       it("Enter Intial Quantity field value", () => {
-        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+          cy.unClick();
+        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter End Quantity field value", () => {
-        cy.get("[name=\"lhr-end-quantity\"]").arrowType("20");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[name=\"lhr-end-quantity\"]").arrowType("20");
+          cy.unClick();
+        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("PRT-00001 - rev 1 - Part document");
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("PRT-00001 - rev 1 - Part document");
+        });
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
+          cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.wait(5000);
         cy.pmSubmitForApproval();
       });
     });
@@ -829,7 +855,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       context("Right Side:", () => {
-        it("Check Last save should be present in autosave", () => {
+        it("Check Last save is not present in header", () => {
           cy.contains("Last saved:").should("not.exist");
         });
 
@@ -883,8 +909,12 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
   });
 
   context("Check the status bar content", () => {
-    it("Check Last save should be present in autosave", () => {
+    it("Check Last save is not present in header", () => {
       cy.get("header").contains("Last saved").should("not.exist");
+    });
+
+    it("Update LHR button is visible", () => {
+      cy.get(`[data-cy="updateRecord"]`).should("exist");
     });
 
     it("Send to email button visible & functional", () => {
@@ -922,14 +952,15 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.wait(5000);
       cy.pmSubmitForApproval();
     });
 
@@ -958,7 +989,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     context("Right Side:", () => {
-      it("Check Last save should be present in autosave", () => {
+      it("Check Last save is not present in header", () => {
         cy.get("header").contains("Last saved").should("not.exist");
       });
 
@@ -1004,8 +1035,10 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1015,12 +1048,13 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Provide description & Click Yes", () => {
-      cy.get("[name='voidDescription']").arrowType("Voiding the document");
-      cy.get("button[data-cy='fb-control-btn']").arrowClick({ force: true });
+      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
+        cy.get("[name='voidDescription']").arrowType("Voiding the document");
+        cy.get("button[data-cy='fb-control-btn']").arrowClick({ force: true });
+      });
     });
 
     it("Approve Paper LHR for VOIDED", () => {
-      cy.wait(5000);
       cy.lhrApprove();
     });
   });
@@ -1037,7 +1071,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     context("Right Side:", () => {
-      it("Check Last save should be present in autosave", () => {
+      it("Check Last save is not present in header", () => {
         cy.get("header").contains("Last saved").should("not.exist");
       });
 

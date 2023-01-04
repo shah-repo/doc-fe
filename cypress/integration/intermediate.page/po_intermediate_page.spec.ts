@@ -605,6 +605,64 @@ context("Intermediate page validation", () => {
     });
   });
 
+  context("Verify predefined fields are not deletable in preview layout tab", () => {
+    it("Click 'Preview Layout' button", () => {
+      cy.intPageClickPreviewLayout();
+    });
+
+    it("Check 'PO Status' is not deletable", () => {
+      cy.get("[data-cy='PO Status']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Requestor' is not deletable", () => {
+      cy.get("[data-cy='Requestor']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Supplier ' is not deletable", () => {
+      cy.get("[data-cy^='Supplier']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Order Date' is not deletable", () => {
+      cy.get("[data-cy='Order Date']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'PO Table' is not deletable", () => {
+      cy.get("[data-cy='common.summary.total']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Check 'Approvals' is not deletable", () => {
+      cy.get("[data-cy='form.builder.approvers']").trigger("mouseover");
+      cy.get(`[data-cy="edit-schema-item"]`)
+        .should("not.exist");
+      cy.get(`[data-cy="remove-schema-item"]`)
+        .should("not.exist");
+    });
+
+    it("Close preview layout", () => {
+      cy.get(`[data-cy="dialog-close"]`).arrowClick();
+    });
+  });
+
   context("Click 'Preview Layout' button and verify predefined fields are displayed", () => {
     context("verify default tabs are displayed", () => {
       it("Click 'Preview Layout' button", () => {
@@ -691,29 +749,49 @@ context("Intermediate page validation", () => {
     });
   });
 
-  context("Click 'Create Document' button and verify predefined fields are displayed", () => {
+  context("Click 'Create Document' button and verify predefined fields are displayed and are not deletable", () => {
     it("Click on 'Create Document' button", () => {
       cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
     });
 
     it("Check 'PO Status' is displayed", () => {
       cy.intPageVerifyPoStatusExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "PO Status", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'Requestor' is displayed", () => {
       cy.intPageVerifyRequestorExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "Requestor", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'Supplier' is displayed", () => {
       cy.intPageVerifySupplierExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "Supplier", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'Order Date' is displayed", () => {
       cy.intPageVerifyOrderDateExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "Order Date", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'PO table' is displayed", () => {
       cy.intPageVerifyPoTableExist();
+      cy.fbVerifyElementClassByLabel({
+        label: "Summary of totals", el: "remove-schema-item",
+        class: "schema-delete-disabled",
+      });
     });
 
     it("Check 'Approvals' is displayed", () => {
