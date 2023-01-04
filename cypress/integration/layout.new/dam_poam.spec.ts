@@ -271,7 +271,9 @@ context("DAM and POAM", () => {
         });
 
         it("Click CREATE DOCUMENT", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("'Approve and Release' the DAM Form", () => {
@@ -1128,6 +1130,8 @@ context("DAM and POAM", () => {
           cy.poAMEnterLimit({ limit: "5000" });
           cy.get("[name=\"signatures.0.groups\"]").autocompleteSelect("Everyone");
           cy.poAddPOButtonClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it(`Fill in the fields - Level name: Level 2 / Limit 25000/ Signature 1 Can be approver / Signature 2 
@@ -1139,6 +1143,8 @@ context("DAM and POAM", () => {
           cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("Groups Management Unofficial");
           cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("User Management");
           cy.poAddPOButtonClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it(`Fill in the fields - Level name: Level 3 / Limit 100000/ Signature 1 Owner as approver / Signature 2 
@@ -1151,6 +1157,8 @@ context("DAM and POAM", () => {
           cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("Async Task");
           cy.get("[name=\"signatures.2.groups\"]").autocompleteSelect("Company admin");
           cy.poAddPOButtonClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Click on Save button", () => {
