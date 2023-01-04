@@ -492,13 +492,16 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
   context("Check PO exists & verify the official predefined schema", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
     });
 
     it("Check filters for document type management", () => {
       cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
+      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.filterDocTypeManagement({
         status: "Active", documentType: "Purchase Order", acronym: "PO-",
         privateNumber: "Yes", redline: "No", qms: "Yes", needsSignature: "Yes", training: "No",
@@ -894,12 +897,12 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
     });
   });
 
-  context("Verify that history tab is capturing requestor added and approver added", () => {
+  context("Verify that history tab is capturing requestor Added and approver Added", () => {
     it("Check history entry for 'Requestor Added'", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(1).should("contain", "Requestor added")
+      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(1).should("contain", "Requestor Added")
         .and("contain", USERS[11].name);
     });
 
