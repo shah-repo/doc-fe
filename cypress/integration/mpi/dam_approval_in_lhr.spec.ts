@@ -779,7 +779,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click on sidebar permission icon to add group", () => {
-        cy.get("[data-cy='permission-icon']").arrowClick();
+        cy.drSelectPermissionTab();
         cy.listLoadingElementShouldNotExist();
       });
 
