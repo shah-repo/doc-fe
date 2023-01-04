@@ -23,6 +23,7 @@ declare global {
       pmAddFreeTextEquipment(params: {equipment: string}): Chainable<Subject>;
       pmUploadAttachment(params: {fileName: string }): Chainable<Subject>;
       pmAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      pmAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       pmAddApproverOnApproverListNw(params: {approver: string }): Chainable<Subject>;
       lhrAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       lhrAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
@@ -148,6 +149,13 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
     cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver, { force: true });
   });
+  cy.unClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("pmAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver, { force: true });
   cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

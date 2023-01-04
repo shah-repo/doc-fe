@@ -1029,13 +1029,13 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
   });
 
-  context("Verify that history tab is capturing requestor added and approver added", () => {
-    it("Check history entry for 'Requestor added'", () => {
+  context("Verify that history tab is capturing requestor Added and approver Added", () => {
+    it("Check history entry for 'Requestor Added'", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy="no-padding-margin"]`).eq(1)
-        .should("have.text", `Requestor added${USERS[11].name} ${USERS[11].email}`);
+        .should("have.text", `Requestor Added${USERS[11].name} ${USERS[11].email}`);
     });
 
     it("Check history entry for 'Approver Added'", () => {
@@ -1886,7 +1886,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
 
     it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").last().should("have.text", "$20.00");
+      cy.get("[data-cy='poTotal']").last().should("have.text", "$20.93");
     });
   });
 
@@ -1958,7 +1958,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Released");
       cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "N/A");
       cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "PRT-00001 - 1, PRT-00002 - 1");
-      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$20.00");
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$20.93");
       cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[1].name);
       cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
     });

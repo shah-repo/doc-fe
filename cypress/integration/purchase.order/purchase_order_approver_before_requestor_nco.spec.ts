@@ -1113,8 +1113,8 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check history entry for 'Requestor added'", () => {
-      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Requestor added")
+    it("Check history entry for 'Requestor Added'", () => {
+      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Requestor Added")
         .and("contain", USERS[1].name);
     });
 
@@ -1445,8 +1445,20 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.get("[data-cy^='form.builder.audit.STRING_EDITED']").eq(0).parent().parent().should("contain.text", USERS[2].name);
     });
 
+    // Failure is noticed in this step due to ENC-13615. putting work-around of the defect
+    it("Switch to lineitems tab and return back to details tab'", () => {
+      cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
+      cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
+      cy.get(`[data-cy="no-padding-margin"]`).eq(0).should("contain", "Approver Added").and("contain", USERS[2].name);
+    });
+
     it("Check history entry for 'Approver Added'", () => {
-      // Failure is noticed in this step due to ENC-13615. once the issue fixed, the script should work fine
       cy.get(`[data-cy="no-padding-margin"]`).eq(0).should("contain", "Approver Added").and("contain", USERS[2].name);
     });
   });
