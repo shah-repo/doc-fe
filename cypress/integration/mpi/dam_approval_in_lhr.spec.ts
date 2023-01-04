@@ -775,7 +775,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click on sidebar permission icon to add group", () => {
@@ -905,11 +905,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
       });
 
       it("Complete step", () => {
@@ -1106,7 +1102,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click on sidebar permission icon to add group", () => {
@@ -1285,7 +1281,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click on sidebar permission icon to add group", () => {
@@ -1438,7 +1434,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Add owner which is part of DAM and verify checkmark should be ticked", () => {
@@ -1541,7 +1537,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click 'LHR Step 1'", () => {
@@ -1557,15 +1553,11 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select Procedure tab", () => {
@@ -1581,7 +1573,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Complete step", () => {
@@ -1604,15 +1596,11 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.lhrSaveWithoutApi();
       });
 
       it("Complete step", () => {
@@ -1674,11 +1662,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        cy.wait(1000);
-        cy.checkToastMessage({ exists: false });
-        cy.saveBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrSaveWithoutApi();
       });
 
       it("Submit for approval", () => {
@@ -1771,7 +1755,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Change owner of document", () => {
@@ -1822,7 +1806,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click 'LHR Step 1'", () => {
@@ -1838,15 +1822,11 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add an Approval", () => {
-        cy.get("[data-cy=\"fb-approvals-approvals-built-in\"]").arrowClick();
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select Procedure tab", () => {
@@ -1862,7 +1842,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drSaveDocumentWithoutaudit();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Complete step", () => {
@@ -1897,11 +1877,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        cy.checkToastMessage({ exists: false });
-        cy.wait(1000);
-        cy.saveBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrSaveWithoutApi();
       });
 
       it("Submit for approval", () => {
@@ -1933,11 +1909,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        cy.checkToastMessage({ exists: false });
-        cy.wait(1000);
-        cy.saveBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrSaveWithoutApi();
       });
 
       it("Verify no approver should be selected", () => {
