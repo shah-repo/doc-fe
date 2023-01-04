@@ -1123,7 +1123,6 @@ context("Verify New Layout for EB Document", () => {
 
     context("Enter values for Procedure tab added fields", () => {
       it("Fill text field", () => {
-        cy.pause();
         cy.get("[name^=textfield-]").arrowType("EB Text Field");
         cy.unClick();
       });
