@@ -3,11 +3,13 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
+import { receivingReleasedDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -22,8 +24,8 @@ const apiCreatedCompany: any = {
   employees: [],
   documentTypes: [],
 };
-const ownerName = USERS[1].name;
-const ownerEmail = USERS[1].email;
+
+const delayms1 = 5000;
 const ncoFormName = "NCO Form";
 const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
 const newCompanyName = "New company " + randomNumberForCompany;
@@ -66,7 +68,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: ownerEmail,
+            companyAdminEmail: USERS[1].email,
             importerEmail: IMPORTER_USER.email,
             users: [USERS[2], USERS[3], USERS[4]],
             documentTypes: [
@@ -78,7 +80,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ownerEmail);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           done();
         });
       });
@@ -86,7 +88,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
 
     it("[API]Login admin tester", (done: any) => {
       cy.authApiLogin({
-        email: ownerEmail,
+        email: USERS[1].email,
       }).then((response) => {
         loginResponse = response;
         done();
@@ -107,10 +109,14 @@ context("Create company with JSON's and verify Purchase Order", () => {
 
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Enters title '${ncoFormName}'`, () => {
@@ -127,6 +133,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
 
     it("Select 'New Company Record' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "New Company Record" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -134,21 +142,25 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Create NCO document from Form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select released NCO Form", () => {
       cy.drFilterDocListByNameAndStatus({ title: ncoFormName, status: "Released" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new document from form", () => {
@@ -165,6 +177,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
 
     it("Click on 'Details' tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Enters company name '${newCompanyName}'`, () => {
@@ -175,49 +189,69 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.get("[name^=company-abbreviation-]").arrowType(newCompanyAbbr);
     });
 
-    it(`Enters company email '${ownerEmail}'`, () => {
-      cy.get("[name^=company-admin-email-]").arrowType(ownerEmail);
+    it(`Enters company email '${USERS[1].email}'`, () => {
+      cy.get("[name^=company-admin-email-]").arrowType(USERS[1].email);
     });
 
     it("Select 'Yes' for 'Approved DAM json is used'", () => {
       cy.get("[name*=\"approved-dam-json-is-used-\"]").check("Yes");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload DOM JSON", () => {
       cy.atchUploadDOMJSONForNCO({ fileName: "po_dam.json", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved Page Details json is used'", () => {
       cy.get("[name*=\"approved-page-details-json-is-used-\"]").check("Yes");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Page Details JSON", () => {
       cy.atchUploadPageDetailsJSONForNCO({ fileName: "PageDetails.json", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Yes' for 'Approved Navigation json is used'", () => {
       cy.get("[name*=\"approved-navigation-json-is-used-\"]").check("Yes");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Navigation JSON", () => {
       cy.atchUploadNavigationJSONForNCO({ fileName: "doc_type_navigation.json", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload Users List JSON", () => {
       cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
       cy.get("[data-cy=\"albumMediaButton\"]").eq(0).arrowClick();
       cy.pmUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document - create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Log out user", () => {
@@ -228,7 +262,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
   context("Login admin user and intercept APIs", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: ownerEmail,
+        email: USERS[1].email,
       });
     });
 
@@ -239,10 +273,12 @@ context("Create company with JSON's and verify Purchase Order", () => {
             const response = res.body;
             apiCreatedCompany.employees = response.employees;
             createdCompany = response;
-            adminEmployee = createdCompany.employees.find((employee) => employee.user.email === ownerEmail);
+            adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           }
         });
       }).as("response");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
 
       cy.intercept({ method: "GET", pathname: "/api/v1/document_type" }, (req) => {
         req.reply((res) => {
@@ -251,6 +287,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
           }
         });
       }).as("response1");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
 
       cy.intercept({ method: "GET", pathname: "/api/v1/auth/sessionDetails" }, (req) => {
         req.reply((res) => {
@@ -395,7 +433,7 @@ context("Create company with JSON's and verify Purchase Order", () => {
 
     it("Logs user in", () => {
       cy.authLogin({
-        email: ownerEmail,
+        email: USERS[1].email,
       });
 
       cy.intercept({ method: "GET", pathname: "/api/v1/auth/sessionDetails" }, (req) => {
@@ -414,10 +452,14 @@ context("Create company with JSON's and verify Purchase Order", () => {
   context("Create and release PO Form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Create a document'", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Enter title ${poFormTitle}`, () => {
@@ -434,6 +476,8 @@ context("Create company with JSON's and verify Purchase Order", () => {
 
     it("Click on 'Purchase Order' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Purchase Order" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -441,31 +485,43 @@ context("Create company with JSON's and verify Purchase Order", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter html code into 'Render HTML' field", () => {
       cy.drEnterHtmlText({
         htmlText: renderHTMLContent,
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
-  context("Create PO from created PO form", () => {
+  context("Navigate to PO Landing page", () => {
     it("Turn off autosave", () => {
       cy.cmpTurnOffAutosave();
     });
 
     it("Navigate to Purchase Order list", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
+  });
 
-    it("Click create new PO", () => {
+  context("Click 'Add New Purchase Order'", () => {
+    it("Click 'Add New Purchase Order'", () => {
       cy.poClickCreatePO();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Enter description ${poDescription}`, () => {
@@ -476,106 +532,201 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.poSelectPOStatus({ status: "Open" });
     });
 
-    it(`Select '${ownerName}' for Requestor`, () => {
-      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick();
-      cy.get("ul>li[role=option]").contains(ownerName).arrowClick();
-    });
-
     it("Select Order Date", () => {
-      cy.get("input[name^=ordered]").parent().find("button").arrowClick();
-      cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+      cy.get(`[class*="MuiOutlinedInput"] > div > button[tabindex="0"]`).arrowClick();
+      cy.get("button.MuiPickersDay-daySelected").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Fill in Fields including field 'Requestor'", () => {
+    it(`Select '${USERS[1].name}' for Requestor`, () => {
+      cy.get("[data-cy='po-requestor-autocomplete']").arrowClick().wait(1000);
+      cy.get("[data-cy='po-requestor-autocomplete']").autocompleteSelect(USERS[1].name);
+      cy.unClick();
+      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.wait(delayms1);
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
+  });
 
+  context("Add a line items and select the 'Supplier Part Number' that does not exist in Enlil system", () => {
     it("navigate to Line Items", () => {
       cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add Line Item' button", () => {
       cy.poAddNewFieldItem();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enter Supplier Part Number", () => {
-      cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+    it("Enter 'Supplier Part Number' that does not exist in Enlil system", () => {
+      cy.poEnterSupplierPartNumber({ partNumber: "PRT-XXXXX" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Part Description", () => {
-      cy.poEnterPartDescription({ partDescription: "Part Description" });
+      cy.poEnterPartDescription({ partDescription: "PRT-XXXXX is a non-enlil part" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Quantity Ordered", () => {
       cy.poEnterQuantityOrdered({ quantity: "5" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Units", () => {
       cy.poSelectUnits();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Required Date", () => {
-      cy.get("[name=\"date\"]").next().find("button").arrowClick();
+      SystemRequirement("REQ-1410");
+      cy.get("[name='date']").next().find("button").arrowClick();
       cy.get(".MuiPickersDay-daySelected").arrowClick();
     });
 
-    it("Enter number of Units", () => {
+    it("Enter Unit Price", () => {
       cy.poNumberOfUnits({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check Tax option", () => {
       cy.poSelectTaxCheckbox();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
       cy.poAddPOButtonClick();
-    });
-
-    it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
-  context("Verify approver, approve and release PO", () => {
+  context("Click on 'Save' button", () => {
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  // eslint-disable-next-line max-len
+  context("Check the Approval field and verify that the system did NOT automatically added the requestor to the approval field", () => {
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Check the Approval field does not contain requestor ${ownerName}`, () => {
-      cy.get("[data-cy^=fb-po-approvals]").should("not.have.text", ownerName);
+    it(`Check the Approval field did NOT automatically added the requestor to the approval field`, () => {
+      cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("not.contain", `${USERS[1].name}`);
+    });
+  });
+
+  context(`Insert Approver`, () => {
+    it(`Add an Approval in Approver list`, () => {
+      cy.get(`[data-cy^="fb-po-approvals-"]`).scrollIntoView().arrowClick().wait(500);
+      cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[1].name);
+      cy.unClick();
+      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.wait(delayms1);
+    });
+  });
+
+  context("Click on 'Save' button", () => {
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delayms1);
+    });
+  });
+
+  context("Submit for Approval", () => {
+    it("Click on Submit for approval", () => {
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.wait(delayms1);
     });
 
-    it(`Add Approver '${ownerName}' for Approval`, () => {
-      cy.poAddApproverOnApproverList({ approver: ownerName });
-    });
-
-    context("Submit for Approval and verify PO can be released", () => {
-      it("Click on Submit for approval", () => {
-        cy.pmSubmitForApproval();
-      });
-
-      it(`Verify document header details and status is in ${STATUS_TYPES_LABEL.PENDING_APPROVAL}`, () => {
-        cy.verifyHeaderInfoContent({
-          status: STATUS_TYPES_LABEL.PENDING_APPROVAL,
-          title: "Purchase Orders",
-          docId: "PO-00001",
-          revision: "Rev 1",
-        });
-      });
-
-      it("Approve PO", () => {
-        cy.ebTryToApprove();
+    it(`Verify document header details and status is in ${STATUS_TYPES_LABEL.PENDING_APPROVAL}`, () => {
+      cy.verifyHeaderInfoContent({
+        status: STATUS_TYPES_LABEL.PENDING_APPROVAL,
+        title: "Purchase Orders",
+        docId: "PO-00001",
+        revision: "Rev 1",
       });
     });
   });
 
-  context("Verify released PO and it's data", () => {
+  context("Approve PO", () => {
+    it("Approve PO", () => {
+      cy.ebTryToApprove();
+    });
+  });
+
+  context("Verify PO can be released.", () => {
     it("Verify document header details", () => {
       cy.verifyHeaderInfoContent({
         title: "Purchase Orders",
         docId: "PO-00001",
         revision: "Rev 1",
       });
+    });
+
+    it(`Verify PO statusbar background-color as GREEN for Released document`, () => {
+      cy.verifyStatusbarBgcolor({ bcolor: "rgb(13, 183, 141)" });
+    });
+  });
+
+  context("Verify that data is saved", () => {
+    it("Navigate to PO", () => {
+      cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Select created PO", () => {
+      cy.dlFilterByDocId({ docId: "PO-00001" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("verify that PO landing page is pulling correct data", () => {
+      cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
+      cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "1");
+      cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Open");
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Released");
+      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "N/A");
+      cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "");
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$10.93");
+      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[1].name);
+      cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
+    });
+
+    it("Select the first created PO", () => {
+      cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify title is ${poDescription}`, () => {
@@ -586,16 +737,75 @@ context("Create company with JSON's and verify Purchase Order", () => {
       cy.get("#mui-component-select-po-status-built-in").should("contain.text", "Open");
     });
 
-    it(`Check the Requestor field contain ${ownerName} - ${ownerEmail}`, () => {
-      cy.get(`[data-cy^="po-requestor-autocomplete"]`).should("have.value", `${ownerName} - ${ownerEmail}`);
+    it(`Check the Requestor field contain ${USERS[1].name} - ${USERS[1].email}`, () => {
+      cy.get(`[data-cy^="po-requestor-autocomplete"]`).should("have.value", `${USERS[1].name} - ${USERS[1].email}`);
     });
 
     it(`Verify Order Date`, () => {
       cy.get(`[name^="ordered-"]`).should("not.have.value", "");
     });
 
-    it(`Check the Approval field contain ${ownerName} - ${ownerEmail}`, () => {
-      cy.get("div.Mui-disabled.MuiChip-deletable").should("contain", `${ownerName} - ${ownerEmail}`);
+    it(`Check the Approval field contain ${USERS[1].name} - ${USERS[1].email}`, () => {
+      cy.get("div.Mui-disabled.MuiChip-deletable").should("contain", `${USERS[1].name} - ${USERS[1].email}`);
+    });
+
+    it("navigate to Line Items", () => {
+      cy.drSelectLineItems();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify part number", () => {
+      cy.get("[data-cy='partNumberDocId']>span").last().should("have.text", "N/A");
+    });
+
+    it("Verify Supplier Part number", () => {
+      cy.poVerifyPartNumber({ partNo: "PRT-XXXXX" });
+    });
+
+    it("Verify description", () => {
+      cy.poCheckDescription({ description: "PRT-XXXXX is a non-enlil part" });
+    });
+
+    it("Verify ordered quantity", () => {
+      cy.poCheckQuantityOrdered({ quantity: "5" });
+    });
+
+    it("Verify Date Required", () => {
+      cy.poCheckDateRequired({ dateRequired: receivingReleasedDate });
+    });
+
+    it("Verify Received Quantity", () => {
+      cy.poCheckReceiptQty({ quantity: "00" });
+    });
+
+    it("Verify Unit", () => {
+      cy.poCheckUnits({ unit: "each" });
+    });
+
+    it("Verify Unit Price", () => {
+      cy.get("[data-cy='unitPrice']>span").last().should("have.text", "$2.00");
+    });
+
+    it("Check Subtotal value", () => {
+      cy.get(`[class*="MuiTableCell-root MuiTableCell-body FBTotal-root"]`).contains("Sub Total:").parent()
+        .contains("$10.00");
+    });
+
+    it("Check Tax Rate", () => {
+      cy.poCheckTaxRate({ taxRate: "9.25" });
+    });
+
+    it("Check Tax value", () => {
+      cy.get(`[name="po-items-built-in.tax"]`).contains("0.925000");
+    });
+
+    it(`Verify Shipping cost`, () => {
+      cy.poCheckShippingCost({ cost: "0.00" });
+    });
+
+    it("Check Total value", () => {
+      cy.poCheckTotalAmount({ number: "$10.93" });
     });
   });
 

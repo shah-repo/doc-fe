@@ -938,7 +938,7 @@ context("Create company with JSON's", () => {
       cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "PO-00001");
       cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "1");
       cy.get("tr.k-master-row").first().find("td").eq(2).should("have.text", "Cancelled");
-      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "RELEASED");
+      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Released");
       cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "New Supplier");
       cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "PRT-00001 - 1");
       cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$10.93");

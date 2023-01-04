@@ -2,6 +2,7 @@ import { Grid } from "@material-ui/core";
 import { Formik, FormikHelpers as FormikActions, FormikProps } from "formik";
 import { cloneDeep, filter, isEmpty } from "lodash";
 import { useObserver } from "mobx-react";
+import moment from "moment";
 import React, { useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { DocumentRevisionForm, SMFormHOCProps } from "../../../App";
@@ -144,8 +145,13 @@ DocumentRevisionFormContainerProps
   useObserver(() => {
     cleanInitialValues.formInput = FBDataStore?.refreshData?.formInput ?? cleanInitialValues.formInput;
     if (didMount) {
-
-      if (documentRevision?.updatedAt && FBDataStore?.refreshData?.updatedAt) {
+      if (
+        documentRevision?.updatedAt &&
+        FBDataStore?.refreshData?.updatedAt &&
+        moment(FBDataStore?.refreshData?.updatedAt).diff(
+          moment(documentRevision?.updatedAt)
+        ) >= 0
+      ) {
         documentRevision.updatedAt = FBDataStore?.refreshData?.updatedAt;
       }
 
@@ -173,7 +179,7 @@ DocumentRevisionFormContainerProps
       FBDataStore.clearPoApprovals();
       FBDataStore.clearInlineApprovals();
     };
-  }, []);
+  }, [documentRevision]);
 
   useEffect(() => {
     if (type !== "newVersion" && !docId && loadDocumentProposedId && documentTypeAcronym) {
@@ -280,7 +286,7 @@ DocumentRevisionFormContainerProps
     <>
       <Grid ref={bannerPortal} />
       {/* TODO Get rid of inline styles */}
-      <Grid style={{ background: Colors.alabaster, height: "100%" }} >
+      <Grid style={{ background: Colors.alabaster, height: "100%" }}>
         <Formik
           initialValues={cleanInitialValues}
           onSubmit={(values, helpers) => onSubmit(values, helpers, cleanInitialValues) }

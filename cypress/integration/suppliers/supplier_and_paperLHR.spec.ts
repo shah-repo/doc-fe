@@ -139,6 +139,8 @@ context("supplier_and_paperLHR", () => {
 
     it("Click on 'Create a document'", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter title 'New Supplier Form'", () => {
@@ -160,6 +162,8 @@ context("supplier_and_paperLHR", () => {
     it("Click on 'Supplier' document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Supplier" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -218,10 +222,15 @@ context("supplier_and_paperLHR", () => {
 
     it("Close Preview dialog", () => {
       cy.intPageClosePreviewDialog();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("verify form preview button in Overview Tab", () => {
@@ -244,6 +253,8 @@ context("supplier_and_paperLHR", () => {
 
     it("click on form preview button in Overview Tab", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approval is editable", () => {
@@ -251,10 +262,14 @@ context("supplier_and_paperLHR", () => {
         $el.trigger("click");
         cy.unClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Close Preview dialog", () => {
       cy.intPageClosePreviewDialog();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -266,6 +281,8 @@ context("supplier_and_paperLHR", () => {
       cy.fbGroupOptions("A", "B");
       cy.fbOpenValidation();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -286,13 +303,17 @@ context("supplier_and_paperLHR", () => {
       cy.fbOpenValidation();
       cy.get("input[value^=\"visibility\"]").check();
       cy.get("[data-cy='fb-control-required_if:anotherfield,value']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
       cy.get("input[value^='A']").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbAddNewFieldButton();
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -301,6 +322,9 @@ context("supplier_and_paperLHR", () => {
   context("Click on Form Preview and verify the fields", () => {
     it("Click 'Preview Layout' button", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify Approval tab", () => {
@@ -325,14 +349,20 @@ context("supplier_and_paperLHR", () => {
 
     it("Close Preview dialog", () => {
       cy.intPageClosePreviewDialog();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Edit the fields ", () => {
     it("Edit radio button field ", () => {
       cy.get("[data-cy=\"edit-schema-item\"]").eq(1).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='options']").clear();
       cy.fbGroupOptions("X", "Y");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbAddField();
     });
 
@@ -340,7 +370,11 @@ context("supplier_and_paperLHR", () => {
       cy.get("[data-cy=\"edit-schema-item\"]").last().arrowClick({ force: true });
       cy.fbOpenValidation();
       cy.get("input[value^=\"default\"]").check();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy='fb-control-required_if:anotherfield,value']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbAddField();
     });
 
@@ -359,6 +393,8 @@ context("supplier_and_paperLHR", () => {
   context("Click on Form Preview and verify the fields", () => {
     it("Click 'Preview Layout' button", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Approval tab", () => {
@@ -379,16 +415,22 @@ context("supplier_and_paperLHR", () => {
 
     it("Close Preview dialog", () => {
       cy.intPageClosePreviewDialog();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Create 'Paper LHR' form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Create a document'", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter title 'New Purchase Order Form'", () => {
@@ -405,6 +447,8 @@ context("supplier_and_paperLHR", () => {
 
     it("Click on 'Purchase Order' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Paper Lot History Record" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -492,7 +536,10 @@ context("supplier_and_paperLHR", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("verify form preview button in Overview Tab", () => {
@@ -509,10 +556,6 @@ context("supplier_and_paperLHR", () => {
   });
 
   context("Add fields", () => {
-    it("Navigate to detail tab", () => {
-      cy.drSelectDetailsTab();
-    });
-
     it("Add TextField", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
@@ -520,6 +563,8 @@ context("supplier_and_paperLHR", () => {
       cy.fbEnterPlaceholder({ placeholder: "fb-textfield placeholder" });
       cy.fbOpenValidation();
       cy.fbFieldRequiredIfNw({ name: "End Quantity", value: "1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbAddNewFieldButton();
     });
 
@@ -529,6 +574,8 @@ context("supplier_and_paperLHR", () => {
       cy.fbEnterNameValue({ name: "label", value: "fb-fileupload" });
       cy.fbOpenValidation();
       cy.get("[data-cy=\"fb-control-required\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbAddNewFieldButton();
     });
   });
@@ -536,6 +583,8 @@ context("supplier_and_paperLHR", () => {
   context("verify predefined fields are displayed", () => {
     it("Click 'Preview Layout' button", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check 'Part to be Manufactured' is displayed", () => {
@@ -569,6 +618,8 @@ context("supplier_and_paperLHR", () => {
 
     it("Enter End Quantity field value", () => {
       cy.get("[data-cy='lhr-end-quantity']").eq(1).arrowType("1");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify fb-text-editor validation tab", () => {
@@ -578,6 +629,8 @@ context("supplier_and_paperLHR", () => {
 
     it("Close Preview dialog", () => {
       cy.intPageClosePreviewDialog();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -586,6 +639,8 @@ context("supplier_and_paperLHR", () => {
       cy.get("[data-cy=\"edit-schema-item\"]").eq(5).arrowClick({ force: true });
       cy.fbOpenValidation();
       cy.get("[data-cy='fb-control-required_if:anotherfield,value']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.fbFieldRequiredIfNw({ name: "End Quantity", value: "2" });
       cy.fbAddNewFieldButton();
     });
@@ -594,6 +649,8 @@ context("supplier_and_paperLHR", () => {
   context("verify predefined fields are displayed", () => {
     it("Click 'Preview Layout' button", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check 'Part to be Manufactured' is displayed", () => {
@@ -627,6 +684,8 @@ context("supplier_and_paperLHR", () => {
 
     it("Enter End Quantity field value", () => {
       cy.get("[data-cy='lhr-end-quantity']").eq(1).arrowType("2");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify fb-text-editor validation tab", () => {

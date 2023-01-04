@@ -552,7 +552,7 @@ export function KendoPanel<T>({
           <Grid item>
             <Box display="flex">
               <UMExport gridData={dataState.group?.length ? getExportData(result) : result}
-                columns={columnDefinitions} />
+                columns={columnDefinitions} isGrouped={(dataState.group || []).length > 0}/>
               <AddEmployeeContainer addGroup={addNew} />
             </Box>
           </Grid>

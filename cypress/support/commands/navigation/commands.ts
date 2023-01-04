@@ -14,10 +14,12 @@ declare global {
       navigClickOnItem(params: { navigItem: NavigationItems }): Chainable<Subject>;
       navigToNestedItem(params: {navigItems: NavigationItems[]}): Chainable<Subject>;
       navigToDashboard(): Chainable<Subject>;
+      navigToDashboardWithoutApi(): Chainable<Subject>;
       navigToDocumentTypeManagement(): Chainable<Subject>;
       navigToPageDetailsManagement(): Chainable<Subject>;
       navigToDocumentList(): Chainable<Subject>;
       navigToApprovalRequestList(): Chainable<Subject>;
+      navigToApprovalRequestListWithoutApi(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
       navigToSuppliers(): Chainable<Subject>;
       navigToReceivableList(): Chainable<Subject>;
@@ -61,6 +63,11 @@ Cypress.Commands.add("navigToDashboard", () => {
       cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
     });
 
+  cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("navigToDashboardWithoutApi", () => {
+  cy.navigClickOnItem({ navigItem: NavigationItems.DASHBOARD });
   cy.progressBarShouldNotExist();
 });
 
@@ -221,6 +228,17 @@ Cypress.Commands.add("navigToApprovalRequestList", () => {
         NavigationItems.APPROVAL_REQUEST,
       ],
     });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToApprovalRequestListWithoutApi", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.DOCUMENT_CONTROL,
+      NavigationItems.APPROVAL_REQUEST,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });

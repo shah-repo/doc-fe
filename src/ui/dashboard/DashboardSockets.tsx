@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/quotes */
 import React, { useCallback } from "react";
 import { dashboardActions } from "../../state/ducks/dashboard";
 import useActionCreator from "../hooks/useActionCreator";

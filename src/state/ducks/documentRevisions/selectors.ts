@@ -137,6 +137,8 @@ const makeGetAudit = () => createSelector(
 
 const getLoadAsyncState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadAsyncInfo;
+const getLoadAsyncSecurityState = (state: ApplicationState): AsyncState =>
+  state.documentRevisions.loadAsyncSecurityInfo;
 const getLoadListAsyncState = (state: ApplicationState): AsyncState =>
   state.documentRevisions.loadListAsyncInfo;
 const getLoadDocumentAsyncState = (state: ApplicationState): AsyncState =>
@@ -149,6 +151,7 @@ export default {
   getDocumentRevisionsList,
   getDocumentRevision,
   getLoadAsyncState,
+  getLoadAsyncSecurityState,
   getLoadListAsyncState,
   getLoadDocumentAsyncState,
   getDocument,

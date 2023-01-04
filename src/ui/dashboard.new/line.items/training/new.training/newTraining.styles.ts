@@ -1,112 +1,51 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Colors from "../../../../layout/theme/utils/colors";
+import { grayDotStyles, lineItemStyles } from "../../common/styles";
 
-export const styles = makeStyles((theme: Theme) =>
-  createStyles({
-    inline: {
-      display: "inline",
-    },
-    listItemIcon: {
-      paddingLeft: "10px",
-    },
-    buttoncursor: {
-      cursor: "unset",
-    },
-    link: {
-      "color": Colors.black,
-      "textDecoration": "none",
-      "&:hover": {
-        textDecoration: "underline",
-      },
-    },
-    actionIcon: {
-      paddingLeft: theme.spacing(1.25),
-    },
-    actionIcons: {
-      /* Action Icons */
-      /* Auto Layout */
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      padding: "0px 10px",
-      position: "absolute",
-      width: "44px",
-      height: "62px",
-      right: "0px",
-      top: "0px",
-      /* Highlight */
-      // background: Colors.sky_blue,
-    },
-    typographyDueInfewDays: {
-      fontWeight: "bold",
-      fontSize: "13px",
-      color: Colors.latest_yellow_varient,
-    },
-    cursorPointer: {
-      cursor: "pointer",
-    },
-    typographyOverdue: {
-      fontWeight: "bold",
-      fontSize: "13px",
-      color: Colors.latest_red_varient,
-      letterSpacing: 0,
-    },
-    typography: {
-      fontSize: "14px",
-      fontWeight: 400,
-      letterSpacing: 0,
-    },
-    typographyBold: {
-      fontSize: "14px",
-      fontWeight: 600,
-      letterSpacing: 0,
-    },
-    typographyStatus: {
-      fontWeight: "bold",
-      fontSize: "14px",
-      lineHeight: "15px",
-      letterSpacing: 0,
-    },
-    marginRight: {
-      marginRight: theme.spacing(2.25),
-    },
-    timestampContainer: {
-      fontWeight: "normal",
-      fontSize: "12px",
-      lineHeight: "22px",
-      color: Colors.font_gray,
-      letterSpacing: 0,
-    },
-    truncateText: {
-      textOverflow: "ellipsis",
-      overflow: "hidden",
-    },
-    redDot: {
-      width: "4px",
-      height: "4px",
-      right: "4px",
-      position: "relative",
-      background: Colors.latest_red_varient,
-    },
-    yellowDot: {
-      width: "4px",
-      height: "4px",
-      right: "4px",
-      position: "relative",
-      background: Colors.latest_yellow_varient,
-    },
-    grayDot: {
-      width: "4px",
-      height: "4px",
-      position: "relative",
-      background: Colors.font_gray,
-    },
-    margin5: {
-      marginRight: "5px",
-    },
-    margin7: {
-      marginRight: "7px",
-    },
-  })
-);
+export default makeStyles((theme) => ({
+  ...lineItemStyles(theme),
+  ...grayDotStyles(theme, {
+    right: 4,
+    marginRight: 5,
+  }),
+  actionIcons: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: theme.spacing(0, 1.25),
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
+    background: "none",
+  },
+  typographyDueInfewDays: {
+    fontWeight: "bold",
+    fontSize: 13,
+    color: Colors.latest_yellow_varient,
+  },
+  typographyOverdue: {
+    fontWeight: "bold",
+    fontSize: 13,
+    color: Colors.latest_red_varient,
+    letterSpacing: 0,
+  },
+  marginRight: {
+    marginRight: theme.spacing(2.25),
+  },
+  redDot: {
+    width: 4,
+    height: 4,
+    right: 4,
+    position: "relative",
+    background: Colors.latest_red_varient,
+  },
+  yellowDot: {
+    width: 4,
+    height: 4,
+    right: 4,
+    position: "relative",
+    background: Colors.latest_yellow_varient,
+  },
+}));
