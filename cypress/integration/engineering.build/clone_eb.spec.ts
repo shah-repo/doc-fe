@@ -9,7 +9,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { Material } from "../../utils/constants/documentTypes/material";
 import { Part } from "../../utils/constants/documentTypes/part";
@@ -678,7 +677,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release the form", () => {
@@ -714,7 +713,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name});
       });
 
       it("Add attachment", () => {
@@ -736,7 +735,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -748,6 +747,9 @@ context("Clone EB Flow test", () => {
         cy.ebCloneClickNo();
         cy.ebCloneClickYes();
         cy.ebCloneClickContinue();
+        cy.wait(3000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -763,11 +765,11 @@ context("Clone EB Flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -826,26 +828,24 @@ context("Clone EB Flow test", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Add material document", () => {
+      it("Edit material document", () => {
+        cy.get(`[data-cy="form.builder.procedure.materials.title"]`).eq(0).next().find("svg").arrowClick();
+        cy.get(`[name="quantity"]`).clear().arrowType("4");
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebAddMaterialDocument({ title: "Materials document", value: "4", name: "Each" });
-      });
-
-      it("Add equipment document", () => {
-        cy.ebAddEquipmentDocument({ title: "Equipment document" });
       });
 
       it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name});
       });
 
       it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -899,7 +899,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release the form", () => {
@@ -935,12 +935,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add Approvers", () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick({force: true}).wait(500);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name});
       });
 
       it("Save the document", () => {
@@ -966,7 +961,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -977,6 +972,9 @@ context("Clone EB Flow test", () => {
         cy.ebClickCloneEB();
         cy.ebCloneClickNo();
         cy.ebCloneClickContinue();
+        cy.wait(3000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -1015,8 +1013,8 @@ context("Clone EB Flow test", () => {
 
     context("Make some changes in EB such as to add/remove Materials, Equipment, attachment", () => {
       it("Select a part in the Part field", () => {
-        cy.wait(2000);
         cy.get("[data-cy=\"childrenParts\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
         cy.get(`[data-cy="childrenParts"]`).autocompleteSelect("PRT-00005 - rev 1 - Part document");
       });
 
@@ -1035,18 +1033,16 @@ context("Clone EB Flow test", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Add material document", () => {
+      it("Edit material document", () => {
+        cy.get(`[data-cy="form.builder.procedure.materials.title"]`).eq(0).next().find("svg").arrowClick();
+        cy.get(`[name="quantity"]`).clear().arrowType("4");
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebAddMaterialDocument({ title: "Materials document", value: "4", name: "Each" });
-      });
-
-      it("Add equipment document", () => {
-        cy.ebAddEquipmentDocument({ title: "Equipment document" });
       });
 
       it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name});
       });
 
       it("Save doc", () => {
@@ -1054,11 +1050,11 @@ context("Clone EB Flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -1083,11 +1079,11 @@ context("Clone EB Flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });
@@ -1124,7 +1120,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release the form", () => {
@@ -1160,12 +1156,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Add Approvers", () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick({force: true}).wait(500);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name});
       });
 
       it("Add attachment", () => {
@@ -1187,7 +1178,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -1198,6 +1189,9 @@ context("Clone EB Flow test", () => {
         cy.ebClickCloneEB();
         cy.ebCloneClickNo();
         cy.ebCloneClickContinue();
+        cy.wait(3000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -1236,8 +1230,8 @@ context("Clone EB Flow test", () => {
 
     context("Make some changes in EB such as to add/remove Materials, Equipment, attachment", () => {
       it("Select a part in the Part field", () => {
-        cy.wait(2000);
         cy.get("[data-cy=\"childrenParts\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
         cy.get(`[data-cy="childrenParts"]`).autocompleteSelect("PRT-00006 - rev 1 - Part for EB document");
       });
 
@@ -1254,18 +1248,16 @@ context("Clone EB Flow test", () => {
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Add material document", () => {
+      it("Edit material document", () => {
+        cy.get(`[data-cy="form.builder.procedure.materials.title"]`).eq(0).next().find("svg").arrowClick();
+        cy.get(`[name="quantity"]`).clear().arrowType("4");
+        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.ebAddMaterialDocument({ title: "Materials document", value: "4", name: "Each" });
-      });
-
-      it("Add equipment document", () => {
-        cy.ebAddEquipmentDocument({ title: "Equipment document" });
       });
 
       it("Add Approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name});
       });
 
       it("Save the document", () => {
@@ -1273,11 +1265,11 @@ context("Clone EB Flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -1302,11 +1294,11 @@ context("Clone EB Flow test", () => {
       });
 
       it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });

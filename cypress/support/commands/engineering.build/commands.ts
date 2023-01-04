@@ -125,9 +125,9 @@ Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; val
 });
 
 Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
-  cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
-  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
-  cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
+  cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick().wait(1000);
+  cy.listLoadingElementShouldNotExist();
+  cy.get(".MuiDialogContent-root input[data-cy=\"title\"]").autocompleteSelect(params.title);
   cy.unClick();
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
 });
