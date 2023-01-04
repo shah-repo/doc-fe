@@ -1,30 +1,21 @@
-import { get, includes, isEmpty, map } from "lodash";
+import { get, map } from "lodash";
 import React from "react";
-import { FB, FBButton, FBDialogState, FBEditorValidationProps, FBSchemaProps, FBSchemaState } from "..";
-import FBValidatorCustom from "../components/validation/FBValidatorCustom";
+import { FB, FBEditorValidationProps, FBSchemaProps, FBSchemaState } from "..";
 import predefinedValidators from "../data/predefinedValidators.json";
-import FBDynamicValidatorStore from "../stores/ui/FBDynamicValidatorStore";
 
 export const withFBEditorValidation = <T extends FBEditorValidationProps>(
   Component: React.FunctionComponent<T>
 ) => {
   const Comp = ({
-    handleCustomValidation,
     schemaState,
-    dialogState,
-    customValidationEnabled,
     schema,
     ...props
   }: T) => {
-
-    customValidationEnabled = false;
-
     schema = map(predefinedValidators as FBSchemaProps[], (schemaItem: FBSchemaProps) => ({
       ...schemaItem,
       onChange: (ev: React.ChangeEvent<any>) => onChange && onChange(ev, schemaItem),
     }));
     schemaState = FB.useRef<FBSchemaState>(FBSchemaState, schema);
-    dialogState = FB.useRef<FBDialogState>(FBDialogState);
     const { formState } = FB.useStores();
 
     const onChange = (ev: React.ChangeEvent<any>, schemaItem: FBSchemaProps) => {
@@ -39,36 +30,10 @@ export const withFBEditorValidation = <T extends FBEditorValidationProps>(
       schemaSelectItem && schemaState && (schemaState.removeSchemaItem(schemaSelectItem));
     };
 
-    const commitCustomValidation = () => {
-      const customValidator = FBDynamicValidatorStore.dynamicValidator;
-      formState?.setFieldValue("customValidator", customValidator);
-      let rules = formState?.getFieldValue("rules") || "";
-      const customValidatorRule = customValidator && customValidator.name;
-      if (customValidatorRule && !includes(rules, customValidatorRule)) {
-        rules += `${!isEmpty(rules) ? "|" : ""}${customValidatorRule}`;
-      }
-      formState?.setFieldValue("rules", rules);
-      dialogState?.closeDialog();
-    };
-
-    handleCustomValidation = () => dialogState?.config({
-      open: true,
-      maxWidth: "xl",
-      content: <FBValidatorCustom/>,
-      actions: (
-        <>
-          <FBButton label="Commit" onClick={commitCustomValidation} />
-        </>
-      ),
-    });
-
     return Component({
       ...(props as T),
-      handleCustomValidation,
       initialValues: formState?.initialValues,
-      customValidationEnabled,
       schemaState,
-      dialogState,
       schema,
     });
   };
