@@ -75,7 +75,7 @@ Cypress.Commands.add("pmAddMaterialDocumentToProcedure", (params: {
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
-
+  cy.listLoadingElementShouldNotExist();
 
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.materialDoc).arrowClick({ force: true });
@@ -99,7 +99,7 @@ Cypress.Commands.add("pmAddFreeTextMaterial", (params: {
   numberOfMaterial: integerType;
   typeOfMaterial: string;}) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
-
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowType(params.material);
 
   if (params.partLot) {
@@ -128,6 +128,7 @@ Cypress.Commands.add("pmAddEquipmentDocument", (params: {equipmentDoc: string}) 
 
 Cypress.Commands.add("pmAddFreeTextEquipment", (params: {equipment: string}) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowType(params.equipment);
   cy.unClick();
 
