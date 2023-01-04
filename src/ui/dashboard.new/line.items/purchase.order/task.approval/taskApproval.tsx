@@ -8,12 +8,10 @@ import { ReactComponent as PinSolidIcon } from "../../../../../assets/images/pin
 import { ReactComponent as RejectIcon } from "../../../../../assets/images/reject.svg";
 import { ReactComponent as RejectSolidIcon } from "../../../../../assets/images/reject_solid.svg";
 import { approvalsActions } from "../../../../../state/ducks/approvals";
-import { ChangeRequestTransitionResponse } from "../../../../../state/ducks/changeRequest/types";
 import { Nullable } from "../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../state/ducks/dashboard.new/my.feeds";
-import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../../state/ducks/dashboard.new/my.feeds/constants";
+import { dashboardTodoActions } from "../../../../../state/ducks/dashboard.new/todo";
 import { getInitalsFromName } from "../../../../components/icons/avatar/helpers";
-import { toastError } from "../../../../components/notifications";
 import Text from "../../../../components/Text";
 import { documentVersionPath } from "../../../../document.revision/utils/paths";
 import useActionCreator from "../../../../hooks/useActionCreator";
@@ -113,25 +111,14 @@ const TaskApprovalPresenter: React.FC<Props> = ({
     onMouseHoverItem(id);
   };
   const transitionDialog = useDialog();
-  const async = useAsync<ChangeRequestTransitionResponse>({
-    onSuccess: () => {
-      transitionDialog.close();
-    },
-    onError: (error) => {
-      transitionDialog.close();
-    },
-  });
   const openApproveDialog = () => {
-    async.reset();
     transitionDialog.open();
   };
 
   const rejectDialogAsync = useAsync({
     onSuccess: () => {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
-    },
-    onError: (error) => {
-      toastError(error as string);
+      dispatch(dashboardTodoActions.loadMyFeedsList());
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
   });
   const applyTransition = useActionCreator(approvalsActions.applyTransition);
