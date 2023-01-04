@@ -13,7 +13,7 @@ import {
   TableRow,
   TextField,
   Tooltip,
-  Typography,
+  Typography
 } from "@material-ui/core";
 
 import cx from "classnames";
@@ -150,9 +150,9 @@ const RelatedPartGrid: React.FunctionComponent<{
   };
 
   useEffect(() => {
-    fetchRelatedParts(documentRevision.document.id);
+    fetchRelatedParts(documentRevision.id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentRevision.document.id]);
+  }, [documentRevision.id]);
 
 
   useEffect(() => reaction(

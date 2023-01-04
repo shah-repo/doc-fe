@@ -8,6 +8,7 @@ export enum RELATED_PARTS_STATUS {
 
 export interface RelatedPartsChoiceRequestBody {
   documentId: string;
+  documentRevisionId: string;
   rootDocId: string;
   relatedPartsStatus: RELATED_PARTS_STATUS;
 }

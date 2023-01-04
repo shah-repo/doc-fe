@@ -51,9 +51,9 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   });
 
 
-  const getRelatedParts = async (documentId, displayRevision) => {
+  const getRelatedParts = async (documentRevisionId, displayRevision) => {
     // get the related parts for this document.
-    documentDetailsApi.setUrl(`${RELATED_PARTS_ROOT_URL}/${documentId}`);
+    documentDetailsApi.setUrl(`${RELATED_PARTS_ROOT_URL}/${documentRevisionId}`);
     const relatedPartsResponse: RelatedPartsListItem[] = await documentDetailsApi.fetch();
     if (relatedPartsResponse.length > 0) {
       const childrenDetails = relatedPartsResponse.map((part: RelatedPartsListItem) => (
@@ -76,11 +76,11 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
       const documentTitleText = generateDocTitleText(document.docId, displayRevision, name);
       setDocTitle(documentTitleText);
       if (document.documentType?.group === DOC_TYPE_GROUP.PART) {
-        getRelatedParts(document.id, displayRevision);
+        getRelatedParts(docRevId, displayRevision);
       }
     } else {
       if (isPart) {
-        getRelatedParts(documentId, displayRevision);
+        getRelatedParts(docRevId, displayRevision);
       }
     }
   };

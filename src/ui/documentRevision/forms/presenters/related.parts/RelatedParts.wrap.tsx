@@ -124,8 +124,8 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     },
   });
 
-  const fetchRelatedParts = useCallback((documentId) => {
-    fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentId, fetchRelatedPartsAsync);
+  const fetchRelatedParts = useCallback((documentRevisionId) => {
+    fetchRelatedPartsAsync.start(fetchAllRelatedPartsAction, documentRevisionId, fetchRelatedPartsAsync);
   }, [fetchAllRelatedPartsAction, fetchRelatedPartsAsync]);
 
   const voidRelatedPartAction = useActionCreator(relatedPartsActions.voidRelatedPart);
@@ -175,7 +175,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       };
     }
 
-    createPartAsync.start(createRelatedPartAction, documentRevision.document.id, docDto,
+    createPartAsync.start(createRelatedPartAction, documentRevision.document.id, documentRevision.id, docDto,
       relatedPartDetails?.name, createPartAsync);
   };
 
@@ -185,6 +185,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
     if (value && documentRevision.documentId) {
       parentChoiceAsync.start(createParentPartChoiceAction, {
         documentId: documentRevision.documentId,
+        documentRevisionId: documentRevision.id,
         rootDocId: documentRevision.document?.docId,
         relatedStatus: value,
       }, parentChoiceAsync);
