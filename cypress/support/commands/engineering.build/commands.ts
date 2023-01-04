@@ -33,6 +33,7 @@ declare global {
       ebWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
       ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       ebAddApproverOnApproverListWithPatchCall(params: {approver: string }): Chainable<Subject>;
+      lhrSaveWithoutApi(): Chainable<Subject>;
     }
   }
 }
@@ -237,5 +238,13 @@ Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { appr
     cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
   });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrSaveWithoutApi", () => {
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+  cy.wait(1000);
+  cy.checkToastMessage({ exists: false });
+  cy.saveBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
