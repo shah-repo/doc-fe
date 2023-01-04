@@ -2,13 +2,13 @@
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { FBFormState } from "../../form.builder";
-import ChangeOrderEditGridItem from "./ChangeOrderEditGridItem";
-import ChangeOrderViewGridItem from "./ChangeOrderViewGridItem";
+import ApprovalRequestEditGridItem from "./ApprovalRequestEditGridItem";
+import ApprovalRequestViewGridItem from "./ApprovalRequestViewGridItem";
 import ItemsAndDetailsState from "./ItemsAndDetails.state";
-import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
+import { ApprovalRequestGridItem } from "./ItemsAndDetails.types";
 
-const ChangeOrderItem: React.FunctionComponent<{
-  entry: ChangeOrderGridItem;
+const ApprovalRequestItem: React.FunctionComponent<{
+  entry: ApprovalRequestGridItem;
   formState: FBFormState;
   disabledOptions: () => string[];
   handleRemove: (docRevId: string) => void;
@@ -54,7 +54,7 @@ const ChangeOrderItem: React.FunctionComponent<{
     <>
       {
         editMode &&
-          <ChangeOrderEditGridItem {...{ formState }}
+          <ApprovalRequestEditGridItem {...{ formState }}
             disabledOptions={disabledOptions()}
             addRevisionToChangeRequest={addRevisionToChangeRequest}
             resetAndCancelEdit={resetAndCancelEdit}
@@ -63,7 +63,7 @@ const ChangeOrderItem: React.FunctionComponent<{
           />
       }
       { !editMode &&
-        <ChangeOrderViewGridItem
+        <ApprovalRequestViewGridItem
           entry={entry}
           editItem={editItem}
           handleRemove={handleRemove}
@@ -73,4 +73,4 @@ const ChangeOrderItem: React.FunctionComponent<{
   ));
 };
 
-export default ChangeOrderItem;
+export default ApprovalRequestItem;

@@ -17,14 +17,14 @@ import useStyles from "./ChangeRequestEditDialog.styles";
 
 interface Props {
   changeRequestId: string;
-  changeOrderDialog: DialogHandler;
+  approvalRequestDialog: DialogHandler;
   closeDialog: () => void;
   currentDocRevId?: string;
 }
 
 const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
   changeRequestId,
-  changeOrderDialog,
+  approvalRequestDialog,
   closeDialog,
   currentDocRevId,
 }) => {
@@ -57,13 +57,13 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
         maxWidth={false}
         // fullWidth={true}
         // maxWidth="lg"
-        open={changeOrderDialog.isOpen}
+        open={approvalRequestDialog.isOpen}
         onSubmit={(event: React.FormEvent) => event.stopPropagation()}
-        id="ChangeOrder-dialog"
+        id="ApprovalRequest-dialog"
       >
         <DialogTitle style={{ display: "flex" }} disableTypography>
           <Typography className={classes.heading}>
-            <Text translation="changeorder.dialog.title" />
+            <Text translation="approvalRequest.dialog.title" />
           </Typography>
           <IconButton
             className={classes.close}
@@ -82,7 +82,7 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
         </DialogTitle>
         <DialogContent dividers
           // classes={{ root: classes.dialogContent }}
-          id="ChangeOrder-content"
+          id="ApprovalRequest-content"
         >
           <ChangeRequestUpdateContainer
             changeRequest={changeRequestDetails}

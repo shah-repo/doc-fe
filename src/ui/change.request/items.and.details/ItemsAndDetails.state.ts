@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { set, union } from "lodash";
 import { action, observable } from "mobx";
-import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
+import { ApprovalRequestGridItem } from "./ItemsAndDetails.types";
 
 class ItemsAndDetailsState {
 
@@ -11,17 +11,17 @@ class ItemsAndDetailsState {
     this.setSubmitList(false);
   }
 
-  @observable changeOrderItemsList: ChangeOrderGridItem[] = [];
+  @observable approvalRequestItemsList: ApprovalRequestGridItem[] = [];
   @observable viewItemActionsVisible = true;
   @observable loadingState = false;
   @observable submitList = false;
 
-  @action setChangeOrderItemsList(list: ChangeOrderGridItem[]) {
-    set(this, "changeOrderItemsList", list);
+  @action setApprovalRequestItemsList(list: ApprovalRequestGridItem[]) {
+    set(this, "approvalRequestItemsList", list);
   }
 
-  @action add(item: ChangeOrderGridItem) {
-    this.setChangeOrderItemsList(union(this.changeOrderItemsList || [], [item]));
+  @action add(item: ApprovalRequestGridItem) {
+    this.setApprovalRequestItemsList(union(this.approvalRequestItemsList || [], [item]));
   }
 
   @action setViewItemActionsVisibility(isVisible = true) {

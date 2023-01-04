@@ -7,12 +7,12 @@ import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import Text from "../../components/Text";
 import { FBFormState } from "../../form.builder";
-import ChangeOrderEditGridItem from "./ChangeOrderEditGridItem";
-import useStyles from "./ChangeOrderGrid.styles";
-import ChangeOrderGridHeader from "./ChangeOrderGridHeader";
-import ChangeOrderItem from "./ChangeOrderItem";
+import ApprovalRequestEditGridItem from "./ApprovalRequestEditGridItem";
+import useStyles from "./ApprovalRequestGrid.styles";
+import ApprovalRequestGridHeader from "./ApprovalRequestGridHeader";
+import ApprovalRequestItem from "./ApprovalRequestItem";
 import ItemsAndDetailsState from "./ItemsAndDetails.state";
-import { ChangeOrderGridItem } from "./ItemsAndDetails.types";
+import { ApprovalRequestGridItem } from "./ItemsAndDetails.types";
 
 
 const Loader = () => {
@@ -35,7 +35,7 @@ const TopSection: React.FunctionComponent<{
       <Grid className={classes.gridCenterAlign} container>
         <Grid item>
           <Typography variant="h6" id="sectionTitle" component="div">
-            <Text translation="changeorder.items.section.heading"/>
+            <Text translation="approvalRequest.items.section.heading"/>
           </Typography>
         </Grid>
 
@@ -48,7 +48,7 @@ const TopSection: React.FunctionComponent<{
                   startIcon={<AddCircleIcon color="primary" />}
                   onClick={showEditRow}
                 >
-                  <Text translation="changeorder.items.button.addText"/>
+                  <Text translation="approvalRequest.items.button.addText"/>
                 </Button>
               </Typography>
             </Grid>
@@ -82,7 +82,7 @@ const ItemsAndDetails: React.FunctionComponent<{
   };
 
   function disabledOptions(): string[] {
-    return map(itemsAndDetailsState?.changeOrderItemsList, "proposedDocumentRevision.id");
+    return map(itemsAndDetailsState?.approvalRequestItemsList, "proposedDocumentRevision.id");
   }
 
   function resetAndCancelEdit() {
@@ -102,16 +102,16 @@ const ItemsAndDetails: React.FunctionComponent<{
     })}>
       { itemsAndDetailsState.loadingState && <Loader /> }
       <TopSection showEditRow={showEditRow} showButton={itemsAndDetailsState.viewItemActionsVisible}/>
-      <ChangeOrderGridHeader />
-      { isEditRowVisible && <ChangeOrderEditGridItem
+      <ApprovalRequestGridHeader />
+      { isEditRowVisible && <ApprovalRequestEditGridItem
         {...{ formState }}
         disabledOptions={disabledOptions()}
         addRevisionToChangeRequest={addRevisionToChangeRequest}
         resetAndCancelEdit={resetAndCancelEdit}
       />}
       {
-        itemsAndDetailsState.changeOrderItemsList.map((entry: ChangeOrderGridItem) => (
-          <ChangeOrderItem
+        itemsAndDetailsState.approvalRequestItemsList.map((entry: ApprovalRequestGridItem) => (
+          <ApprovalRequestItem
             key={`fb-document-revision-${entry.id}`}
             entry={entry}
             {...{ formState }}

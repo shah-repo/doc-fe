@@ -112,7 +112,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const expressApprovalDialog = useDialog();
   const templateSelectionDialog = useDialog();
   const existingDraftCOSelectionDialog = useDialog();
-  const changeOrderDialog = useDialog();
+  const approvalRequestDialog = useDialog();
 
   const alertDialog = useDialog();
 
@@ -192,8 +192,8 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   // Existing Draft CO calls
-  const getDraftChangeOrdersAction = useActionCreator(changeRequestsActions.draftChangeOrdersList);
-  const asyncGetDraftChangeOrders = useAsync({
+  const getDraftApprovalRequestsAction = useActionCreator(changeRequestsActions.draftApprovalRequestsList);
+  const asyncGetDraftApprovalRequests = useAsync({
     onSuccess: (data: Pick<ChangeRequest, "crId" | "title" | "id">[] = []) => {
       const options = data.map((option) => ({
         label: `${option.crId} - ${option.title}`,
@@ -216,7 +216,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         setChangeRequestId(createdChangeRequest.id);
 
         templateSelectionDialog.close();
-        changeOrderDialog.open();
+        approvalRequestDialog.open();
       }
     },
     onError: (err) => {
@@ -239,7 +239,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   useEffect(() => {
     if (existingInDraftCOOptions.length > 0) {
       if (existingInDraftCOOptions.length === 1) {
-        processChosenChangeOrder(existingInDraftCOOptions[0]);
+        processChosenApprovalRequest(existingInDraftCOOptions[0]);
       } else {
         existingDraftCOSelectionDialog.open();
       }
@@ -260,15 +260,15 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     createCRAsync.start(createCRAction, data, createCRAsync);
   };
 
-  const processChosenChangeOrder = (changeOrderChosen: ExistingInDraftCOOption) => {
-    if (!changeOrderChosen) {
+  const processChosenApprovalRequest = (approvalRequestChosen: ExistingInDraftCOOption) => {
+    if (!approvalRequestChosen) {
       return;
     }
 
-    setChangeRequestId(changeOrderChosen.value);
+    setChangeRequestId(approvalRequestChosen.value);
 
     existingDraftCOSelectionDialog.close();
-    changeOrderDialog.open();
+    approvalRequestDialog.open();
   };
 
   const asyncAR = useAsync<ChangeRequest>({
@@ -349,9 +349,9 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     }
 
     if (option === ARActions.EXISTING) {
-      asyncGetDraftChangeOrders.start(
-        getDraftChangeOrdersAction,
-        asyncGetDraftChangeOrders);
+      asyncGetDraftApprovalRequests.start(
+        getDraftApprovalRequestsAction,
+        asyncGetDraftApprovalRequests);
     }
   };
 
@@ -363,7 +363,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   };
 
   const closeCRDialog = () => {
-    changeOrderDialog.close();
+    approvalRequestDialog.close();
     dispatch(documentRevisionsActions.reload(docRevId));
   };
 
@@ -496,7 +496,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             dialog: existingDraftCOSelectionDialog,
             existingInDraftCOOptions,
             labelTranslation: "change.request.select.existing.title",
-            handleExistingCOSelection: processChosenChangeOrder,
+            handleExistingCOSelection: processChosenApprovalRequest,
           }} />
         </Dialog>
       }
@@ -534,10 +534,10 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         </Dialog>
       }
       {
-        changeOrderDialog.isOpen &&
+        approvalRequestDialog.isOpen &&
         <ChangeRequestEditDialog
           changeRequestId={changeRequestId}
-          changeOrderDialog={changeOrderDialog}
+          approvalRequestDialog={approvalRequestDialog}
           closeDialog = {closeCRDialog}
           currentDocRevId = {docRevId}
         />

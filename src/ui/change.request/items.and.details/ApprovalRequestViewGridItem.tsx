@@ -9,16 +9,16 @@ import { RelatedPartsListItem } from "../../../state/ducks/relatedParts/types";
 import { FBAutocompleteAsyncOption } from "../../form.builder";
 import { FBEndpoint } from "../../form.builder/defaults/FBEndpoint";
 import FBRequest from "../../form.builder/FBApi/FBApi.request";
-import useStyles from "./ChangeOrderGrid.styles";
+import useStyles from "./ApprovalRequestGrid.styles";
 import { generateDocTitleText } from "./helpers";
-import { ChangeOrderGridItem, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
+import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from "./ItemsAndDetails.types";
 
 import { Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 
-const ChangeOrderViewGridItem: React.FunctionComponent<{
-  entry: ChangeOrderGridItem;
+const ApprovalRequestViewGridItem: React.FunctionComponent<{
+  entry: ApprovalRequestGridItem;
   editItem: () => void;
   handleRemove: (docRevId: string) => void;
   viewItemActionsVisible: boolean;
@@ -142,4 +142,4 @@ const ChangeOrderViewGridItem: React.FunctionComponent<{
   );
 };
 
-export default ChangeOrderViewGridItem;
+export default ApprovalRequestViewGridItem;

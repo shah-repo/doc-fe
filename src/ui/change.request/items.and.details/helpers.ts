@@ -1,13 +1,13 @@
 import { intl } from "../../../common/intl";
 import { FB } from "../../form.builder";
-import { ChangeOrderGridItem, FBDocumentRevisionsValue } from "./ItemsAndDetails.types";
+import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from "./ItemsAndDetails.types";
 
 export const generateDocTitleText = (docId: string, displayRevision: string, name: string) => (
   `${docId} # Rev ${displayRevision} - ${name}`
 );
 
-export const storeDataToFormData = (changeOrderItemsList: ChangeOrderGridItem[]): FBDocumentRevisionsValue[] => (
-  changeOrderItemsList.map((item: ChangeOrderGridItem) => (
+export const storeDataToFormData = (approvalRequestItemsList: ApprovalRequestGridItem[]): FBDocumentRevisionsValue[] => (
+  approvalRequestItemsList.map((item: ApprovalRequestGridItem) => (
     {
       justificationOfChange: item.justificationOfChange,
       descriptionOfChange: item.descriptionOfChange,

@@ -28,7 +28,7 @@ export interface FBDocumentRevisionsValue {
   descriptionOfChange: string;
 }
 
-export interface ChangeOrderGridItem {
+export interface ApprovalRequestGridItem {
   id: string;
   docRevId: string;
   documentId: string;

@@ -41,7 +41,7 @@ const load = (id: string): ApiAction<ChangeRequest> => apiAction({
   },
 });
 
-const draftChangeOrdersList = (handlers: Handlers): ApiAction<ChangeRequest> =>
+const draftApprovalRequestsList = (handlers: Handlers): ApiAction<ChangeRequest> =>
   apiActionWithCallbacks({
     url: `${CHANGE_REQUEST_ROOT_URL}/my_change_orders`,
     method: "get",
@@ -149,7 +149,7 @@ export default {
   loadList,
   loadListWithCallback,
   load,
-  draftChangeOrdersList,
+  draftApprovalRequestsList,
   create,
   save,
   applyTransition,

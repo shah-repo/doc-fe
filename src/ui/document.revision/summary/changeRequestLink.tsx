@@ -30,7 +30,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
 
   const classes = useStyles();
 
-  const changeOrderDialog = useDialog();
+  const approvalRequestDialog = useDialog();
   const dispatch = useDispatch();
   console.log("ChangeRequestLink", dataProp.changeRequest, changeRequest);
 
@@ -40,11 +40,11 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
   }
 
   const openChangeRequestDialog = () => {
-    changeOrderDialog.open();
+    approvalRequestDialog.open();
   };
 
   const closeCRDialog = () => {
-    changeOrderDialog.close();
+    approvalRequestDialog.close();
     dispatch(documentRevisionsActions.reload(dataProp?.id));
   };
 
@@ -71,10 +71,10 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
         </div>
       </Typography>
       {
-        changeOrderDialog.isOpen &&
+        approvalRequestDialog.isOpen &&
         <ChangeRequestEditDialog
           changeRequestId={changeRequest?.id}
-          changeOrderDialog={changeOrderDialog}
+          approvalRequestDialog={approvalRequestDialog}
           closeDialog = {closeCRDialog}
         />
       }

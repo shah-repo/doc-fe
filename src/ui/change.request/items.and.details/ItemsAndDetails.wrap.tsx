@@ -11,7 +11,7 @@ import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from "../../form.buil
 import { generateDocTitleText, newARDocRevToAdd, storeDataToFormData } from "./helpers";
 import ItemsAndDetails from "./ItemsAndDetails";
 import ItemsAndDetailsState from "./ItemsAndDetails.state";
-import { ChangeOrderGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
+import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
 
 const ItemsAndDetailsContainer: React.FunctionComponent<
   ItemsAndDetailsWrapperProps & {name: string}
@@ -46,15 +46,15 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     });
 
     const dataToSend: FBDocumentRevisionsValue[] =
-      storeDataToFormData(itemsAndDetailsState.changeOrderItemsList);
+      storeDataToFormData(itemsAndDetailsState.approvalRequestItemsList);
     dataToSend.push(formValue);
 
     submitData(dataToSend);
   };
 
   const handleRemove = (docRevId: string) => {
-    const orderItemsFiltered = itemsAndDetailsState.changeOrderItemsList
-      .filter((item: ChangeOrderGridItem) => item.docRevId !== docRevId);
+    const orderItemsFiltered = itemsAndDetailsState.approvalRequestItemsList
+      .filter((item: ApprovalRequestGridItem) => item.docRevId !== docRevId);
     const dataToSend: FBDocumentRevisionsValue[] =
       storeDataToFormData(orderItemsFiltered);
 
@@ -64,8 +64,8 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   const handleUpdate = () => {
     const { justificationOfChange, descriptionOfChange, proposedDocumentRevision }
       = formState?.getValues() as FBDocumentRevisionsValue;
-    const orderItemsUpdated = itemsAndDetailsState.changeOrderItemsList
-      .map((item: ChangeOrderGridItem) => {
+    const orderItemsUpdated = itemsAndDetailsState.approvalRequestItemsList
+      .map((item: ApprovalRequestGridItem) => {
         if (item.docRevId !== proposedDocumentRevision.id) {
           return item;
         }
@@ -98,7 +98,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
         console.log(submission, "submit data");
         if (currentDocRevId) {
           const dataToSend: FBDocumentRevisionsValue[] =
-            storeDataToFormData(itemsAndDetailsState.changeOrderItemsList);
+            storeDataToFormData(itemsAndDetailsState.approvalRequestItemsList);
           dataToSend.push(newARDocRevToAdd(currentDocRevId));
           submitData(dataToSend);
         }
@@ -168,7 +168,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       return entryInfo;
     });
 
-    itemsAndDetailsState.setChangeOrderItemsList(entries);
+    itemsAndDetailsState.setApprovalRequestItemsList(entries);
     if (!currentDocRevPresent && currentDocRevId) {
       // documentRevisionsAssigned.push(newARDocRevToAdd(currentDocRevId));
       setTimeout(() => {

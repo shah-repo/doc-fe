@@ -1,15 +1,13 @@
 /* eslint-disable no-console */
 import { Button } from "@material-ui/core";
+import ClearIcon from "@material-ui/icons/Clear";
+import DoneIcon from "@material-ui/icons/Done";
 import cx from "classnames";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBForm, FBFormState, FBTextField } from "../../form.builder";
-import useStyles from "./ChangeOrderGrid.styles";
+import useStyles from "./ApprovalRequestGrid.styles";
 
-import ClearIcon from "@material-ui/icons/Clear";
-import DoneIcon from "@material-ui/icons/Done";
-// import DeleteIcon from '@material-ui/icons/Delete';
-
-const ChangeOrderEditGridItem: React.FunctionComponent<{
+const ApprovalRequestEditGridItem: React.FunctionComponent<{
   disabledOptions: string[];
   formState: FBFormState;
   addRevisionToChangeRequest: () => void;
@@ -80,4 +78,4 @@ const ChangeOrderEditGridItem: React.FunctionComponent<{
   );
 };
 
-export default ChangeOrderEditGridItem;
+export default ApprovalRequestEditGridItem;
