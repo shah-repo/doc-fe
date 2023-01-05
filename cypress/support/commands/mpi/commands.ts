@@ -25,6 +25,7 @@ declare global {
       mpiAddEquipmentToStep(params: {checkParameter?: boolean; numbOfStep: integer; equipment: string}): Chainable;
       mpiAddEquipmentParameterToStep(params: {numbOfStep: integer; equipmentDescription: string}): Chainable;
       mpiStartStep(params: {stepNumber: number}): Chainable;
+      mpiStartStepWithoutApi(params: {stepNumber: number}): Chainable;
       mpiClickNotStarted(params: {stepNumber: number}): Chainable;
       selectLot(params: {lot: string}): Chainable;
     }
@@ -93,9 +94,7 @@ Cypress.Commands.add("lhrsAddMaterialDocumentToStep", (params: {
 Cypress.Commands.add("mpiAddMaterialParameterToStep", (params: {
   numbOfStep: integer;
   material: string;}) => {
-  cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-    cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
-  });
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(params.numbOfStep - 1).arrowClick();
   cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowType(params.material, { force: true });
   cy.get("[data-cy=\"form.builder.save\"]").arrowClick({ force: true });
@@ -135,6 +134,13 @@ Cypress.Commands.add("mpiStartStep", (params: {stepNumber: number}) => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.StartMpi, CyRoutes.GetRequiredApproversDocRev], () => {
     cy.get("[data-cy=\"form.builder.start.step\"]").eq(params.stepNumber - 1).arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+
+Cypress.Commands.add("mpiStartStepWithoutApi", (params: {stepNumber: number}) => {
+  cy.get("[data-cy=\"form.builder.start.step\"]").eq(params.stepNumber - 1).arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

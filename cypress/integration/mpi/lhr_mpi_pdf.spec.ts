@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import "moment-timezone";
-import moment from "moment-timezone";
 import path from "path";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
@@ -10,8 +9,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
-import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
+import { emailDateOffset, fileTimeFormat, lotDocumentIdRef, lotIdRef, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -51,8 +49,8 @@ let lotDocumentId;
 let emailsFromInbox;
 let createdLotsFormDocument;
 
-const lotDocumentIdRef = moment().tz("America/Los_Angeles").format("YYMMDD");
 const pages = ["", "", "", "", ""];
+const delay1 = 5000;
 
 context("Autosave LHR", () => {
   before(() => {
@@ -96,7 +94,7 @@ context("Autosave LHR", () => {
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification");
           mpiDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Manufacturing Process Instructions Test");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots");
+          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Component Specification Lot");
           done();
         });
       });
@@ -965,24 +963,27 @@ context("Autosave LHR", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Create lot document", () => {
     it("Navigate to Lots", () => {
       cy.navigToLots();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Create new", () => {
       cy.poClickCreatePO();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Select 'Lots' from the dropdown", () => {
+    it("Select 'Component Specification Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-        cy.get("div[id^=react-select]").contains("Lots").arrowClick();
-      });
+      cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -993,21 +994,27 @@ context("Autosave LHR", () => {
 
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter quantity received", () => {
       cy.get("[name=\"lot_quantity\"]").arrowType("12");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Usable Quantity", () => {
       cy.get("[name=\"lot_usable_quantity\"]").arrowType("13");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Material one' for Part lot", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"lot_part\"]").arrowType("Material one");
-      cy.get("ul>li[role=option]").contains("Material one").arrowClick();
-      cy.wait(2000);
+      cy.get("[data-cy=\"lot_part\"]").arrowClick();
+      cy.get("[data-cy=\"lot_part\"]").autocompleteSelect("Material one");
+      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1019,40 +1026,52 @@ context("Autosave LHR", () => {
     it("Add 'Expiry Date'", () => {
       cy.xpath("//input[@name]/ ../div/button").arrowClick();
       cy.get("button.MuiPickersDay-current").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      cy.unClick();
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
 
     it("Select Details tab", () => {
-      cy.wait(2000);
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Verify status is ${STATUS_TYPES_LABEL.ACCEPTED}`, () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.ACCEPTED });
+    it(`Verify status is ${STATUS_TYPES_LABEL.RELEASED}`, () => {
+      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
-
   });
 
   context("Create MPI document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'Create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -1067,49 +1086,61 @@ context("Autosave LHR", () => {
 
       it("Select 'Manufacturing Process Instructions Test' document type from dropdown", () => {
         cy.drSelectDocumentType({ documentType: "Manufacturing Process Instructions Test" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Numeric' revision stage", () => {
         cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Select Procedure tab", () => {
         cy.drSelectProcedureTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       context("Fill step #1", () => {
         it("Fill step #1 description", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-          });
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add 'Material one' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Material one" });
-          });
+          cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Material one" });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add 'Equipment one' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment one" });
-          });
+          cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment one" });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(delay1);
         });
       });
 
       context("Release MPI", () => {
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCall();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
@@ -1120,10 +1151,14 @@ context("Autosave LHR", () => {
       it("Navigate to Document list", () => {
         cy.unClick();
         cy.navigToDocumentList();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'Create a document' button", () => {
         cy.cmpClickCreateNewDocument();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -1146,22 +1181,30 @@ context("Autosave LHR", () => {
 
       it("Select 'Lot History Record Test' output document type", () => {
         cy.drSelectOutputDocumentType({ documentType: "Lot History Record Test" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Select field", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
         cy.fbEnterNameValue({ name: "label", value: "Select field" });
         cy.fbGroupOptions("option1", "option2", "option3");
@@ -1172,7 +1215,7 @@ context("Autosave LHR", () => {
       });
 
       it(`Give label to 'Text Field' as 'TEXT FIELD'`, () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
+        cy.get("[data-cy=\"form.builder.add.field\"]").eq(-2).arrowClick({ force: true });
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbEnterNameValue({ name: "label", value: "TEXT FIELD" });
         cy.get("button[data-cy=\"fb-editor-mode-validation-1\"]").arrowClick();
@@ -1187,34 +1230,46 @@ context("Autosave LHR", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Overview tab", () => {
         cy.drSelectOverviewTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Material one");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-          cy.get("ul>li[role=option]").contains("Material one").arrowClick();
-        });
+        cy.get("[data-cy=\"lhr-selected-part\"]").arrowClick();
+        cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect("Part document");
+        cy.unClick();
+        cy.wait(delay1);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("Select created MPI in LHR template", () => {
       it("Select Details tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Select MPI document for step #1 in LHRt", () => {
-        cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
-        cy.get("input[data-cy^=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
+        cy.get(`[name^="lhrstep-built-in"]`).arrowClick({ force: true });
+        cy.get(`[name^="lhrstep-built-in"]`).autocompleteSelect("MPI document");
+        cy.unClick();
+        cy.wait(delay1);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("Add another step with different MPI on document ", () => {
-
       it("Add LHR step", () => {
         cy.get("[data-cy=\"form.builder.add.step\"]").arrowClick();
         cy.progressBarShouldNotExist();
@@ -1222,8 +1277,9 @@ context("Autosave LHR", () => {
       });
 
       it("Select MPI document created with API for step #2 in LHRt", () => {
-        cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(1).arrowClick({ force: true });
+        cy.get(`[name^="lhr-step"]`).arrowClick({ force: true });
         cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
+        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1246,7 +1302,9 @@ context("Autosave LHR", () => {
 
   context("Save and send email notification", () => {
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify form Draft status and click on Send To Email", () => {
@@ -1392,7 +1450,7 @@ context("Autosave LHR", () => {
         expect(el).match(/Attachments/);
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/Part to be Manufactured\nMT-00004 - Material one/);
+        expect(el).match(/Part to be Manufactured\nCS-00005 - Part document/);
 
         expect(el).match(/Initial Quantity/);
 
@@ -1431,8 +1489,6 @@ context("Autosave LHR", () => {
 
         expect(el).match(/Equipment\nB: Equipment one/);
 
-        expect(el).match(/APPROVALS\nApprovers\nSelect field\nTEXT FIELD/);
-
         expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
 
         expect(el).match(/Materials\nMT-00004 - Material one \| Qty: 1 sets/);
@@ -1443,6 +1499,9 @@ context("Autosave LHR", () => {
 
         expect(el).match(/ET-00007 - Equipment two/);
 
+        expect(el).match(/Select field\nTEXT FIELD/);
+
+        expect(el).match(/APPROVALS\nApprovers/);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -1487,43 +1546,55 @@ context("Autosave LHR", () => {
   });
 
   context("Add parameter materials and equipment", () => {
-    it("Click 'LHR Step'", () => {
-      cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
-    });
     it("Add material parameter", () => {
       cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
         .eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Material one").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(delay1);
+      cy.get(`[data-cy="title"]`).arrowClick();
+      cy.get(`[data-cy="title"]`).autocompleteSelect("Material one");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("input[name=\"quantity\"]").arrowType("0.6");
       cy.unClick();
       cy.get("[data-cy=\"unit\"]").autocompleteSelect("Day(s)");
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-    });
-
-    it("Click 'LHR Step'", () => {
-      cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add equipment parameter", () => {
       cy.get("[class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeSmall']")
         .eq(1).arrowClick();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"title\"]").arrowClick();
-      cy.get("ul>li[role=option]").contains("Equipment one").arrowClick();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(delay1);
+      cy.get(`[data-cy="title"]`).arrowClick();
+      cy.get(`[data-cy="title"]`).autocompleteSelect("Equipment one");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Release LHRt", () => {
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release LHRt document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify form Released status and click on Send To Email", () => {
@@ -1673,7 +1744,7 @@ context("Autosave LHR", () => {
         expect(el).match(/Attachments/);
         expect(el).match(/image.jpg/);
 
-        expect(el).match(/Part to be Manufactured\nMT-00004 - Material one/);
+        expect(el).match(/Part to be Manufactured\nCS-00005 - Part document/);
 
         expect(el).match(/Initial Quantity/);
 
@@ -1761,31 +1832,40 @@ context("Autosave LHR", () => {
     });
   });
 
-  context("Create LHR", () => {
-    it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+  context("Create a new LHR", () => {
+    it("Click create a new LHR from LHRt", () => {
+      cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
 
     it("Verify LHR title", () => {
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDocumentIdRef + "02");
-      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "LHR-00004");
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `LHRLHR-00004${lotDocumentIdRef}02 Rev AWIP`,
+        breadcrump: true,
+      });
     });
 
     it("Verify current released part is 'rev 1'", () => {
       cy.get("[data-cy=\"lhr-selected-part\"]")
-        .should("have.attr", "value", "MT-00004 - rev 1 - Material one");
+        .should("have.attr", "value", "CS-00005 - rev 1 - Part document");
     });
 
     it("Upload attachment 'image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check lot number", () => {
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" +  lotDocumentIdRef + "02");
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `${lotDocumentIdRef}02`,
+        breadcrump: false,
+      });
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1796,7 +1876,7 @@ context("Autosave LHR", () => {
     });
 
     it("Select 'R&D' build type", () => {
-      // cy.unClick();
+      cy.unClick();
       cy.get("[value=\"R&D\"]").check();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1810,18 +1890,16 @@ context("Autosave LHR", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-
-    it("Check lot number", () => {
-      cy.url().then((url: any) => {
-        lhrDocUrl = url;
-      });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" +  lotDocumentIdRef + "02RD");
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(delay1);
+      cy.landingPageLoadingElementShouldNotExist();
     });
-  });
 
-  context("Start LHRs #1 and Save it", () => {
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select option1 checked", () => {
@@ -1831,28 +1909,54 @@ context("Autosave LHR", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click 'START MPI'", () => {
-      cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(0).arrowClick({ force: true });
-      cy.mpiStartStep({ stepNumber: 1 });
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(delay1);
       cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
+    it("Check lot number", () => {
+      cy.url().then((url: any) => {
+        lhrDocUrl = url;
+      });
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `${lotDocumentIdRef}02RD`,
+        breadcrump: false,
+      });
+    });
+  });
+
+  context("Start LHRs #1 and Save it", () => {
+    it("Click 'START MPI'", () => {
+      cy.get(`div[class^="MuiExpansionPanelSummary"]`).eq(0).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Upload attachment 'test_image.jpg'", () => {
       cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
 
     it("Verify LHRs title", () => {
-      cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
-        .should("have.text", "LHR-00004");
+      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center"]`).last()
+        .should("contain", lotIdRef + "02RD")
+        .and("contain", "LHR-00004")
+        .and("contain", "CS-00005.1")
+        .and("contain", "Part document");
     });
 
     it("Select Procedure tab", () => {
       cy.drSelectProcedureTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter 'Start quntity' for LHRs #1", () => {
@@ -1871,13 +1975,15 @@ context("Autosave LHR", () => {
       cy.get("[data-cy=\"form.builder.select\"]")
         .eq(0)
         .click({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Select lot 'LOT #${lotDocumentIdRef}01'`, () => {
+    it(`Select lot ${lotIdRef}01`, () => {
+      cy.get("input[data-cy=usedOverride]").autocompleteSelect(lotIdRef + "01");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
-      cy.get("input[data-cy=usedOverride]").arrowClick();
-      cy.get("ul>li[role=option]").contains(`LOT #${lotDocumentIdRef}01`).arrowClick();
     });
 
     it("Select quantity in lot dialog", () => {
@@ -1885,19 +1991,19 @@ context("Autosave LHR", () => {
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
-        cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
-          .eq(0)
-          .click();
-      });
+      cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+        .eq(0)
+        .click();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Click 'SELECT' for 'Equipment one' ", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("button[data-cy=\"fb-control-btn\"]")
-          .eq(1)
-          .click({ force: true });
-      });
+      cy.get("button[data-cy=\"fb-control-btn\"]")
+        .eq(1)
+        .click({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Equipment one'", () => {
@@ -1907,16 +2013,16 @@ context("Autosave LHR", () => {
     });
 
     it("Click 'SAVE' on select equipment dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
-        cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
-          .eq(0)
-          .click();
-      });
+      cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+        .eq(0)
+        .click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify LOT is selected for 'Material One'", () => {
       cy.get("div[data-cy=\"form.builder.lhrs.procedure.materials.title\"]").eq(0).parent()
-        .should("contain.text", lotDocumentIdRef + "01");
+        .should("contain.text", lotIdRef + "01");
     });
 
     it("Verify Equipment is selected for 'Equipment one'", () => {
@@ -1925,42 +2031,55 @@ context("Autosave LHR", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-      cy.wait(2000);
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.get("[data-cy^=\"fb-approvals-approvals\"]").autocompleteSelect(USERS[1].name);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigate back to LHR and Send to email", () => {
     it("Navig to LHR", () => {
       cy.get("[data-cy=\"navigation.lhr\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click open LHR", () => {
-      cy.get(`tr.k-master-row`).first().contains(lotDocumentIdRef + "02RD").arrowClick();
+      cy.get(`tr.k-master-row`).first().contains(lotIdRef + "02RD").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check doc status for WIP and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: "WIP" });
-      cy.get("#HeaderInfo-subtitle").should("contain.text",  lotDocumentIdRef + "02RD");
-      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("contain.text", "LHR-00004");
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `LHRLHR-00004${lotDocumentIdRef}02RD Rev AWIP`,
+        breadcrump: true,
+      });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").should("contain.text", "LHR").then(($docIdElement) => {
         lhrDocId = $docIdElement.text();
       });
@@ -2098,13 +2217,13 @@ context("Autosave LHR", () => {
       it("Verify page 1 for LHR", () => {
         const el = pages[0];
         if (el.includes("Page 1 of 3")) {
-          tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nMT-00004, REV 1, MATERIAL ONE`);
+          tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Attachments/);
           expect(el).match(/image.jpg/);
 
-          expect(el).match(/Part to be Manufactured\nMT-00004 - 1 Material one/);
+          expect(el).match(/Part to be Manufactured\nCS-00005 - 1 Part document/);
 
           expect(el).match(/Initial Quantity\n50.1/);
 
@@ -2143,12 +2262,12 @@ context("Autosave LHR", () => {
       it("Verify page 2 of LHR", () => {
         const el = pages[1];
         if (el.includes("Page 2 of 3")) {
-          tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nMT-00004, REV 1, MATERIAL ONE`);
+          tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/PI PROCEDURE\nMaterials/);
 
-          tmpRegex = new RegExp(`${lotDocumentIdRef}01 \\| MT-00004.1 \\| 0.5 days`);
+          tmpRegex = new RegExp(`${lotIdRef}01 \\| MT-00004.1 \\| 0.5 days`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
@@ -2166,6 +2285,8 @@ context("Autosave LHR", () => {
 
           tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.859999999999999 days`);
           expect(el).match(tmpRegex);
+
+          expect(el).match(/APPROVALS\nNone/);
 
           expect(el).match(/Select field\noption1/);
 
@@ -2185,7 +2306,7 @@ context("Autosave LHR", () => {
       it("Verify page 3 of LHR", () => {
         const el = pages[2];
         if (el.includes("Page 3 of 3")) {
-          tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nMT-00004, REV 1, MATERIAL ONE`);
+          tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
           expect(el).match(tmpRegex);
 
           expect(el).match(/LHR STEP #2\nPI-00008 - MPI created with API/);
@@ -2209,55 +2330,60 @@ context("Autosave LHR", () => {
 
   context("Navigate to LHR #1 and Complete it", () => {
     it("Navigate to LHR #1", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.visit(lhrDocUrl);
-      });
+      cy.visit(lhrDocUrl);
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Complete LHR Step #1 ", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve step", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
   });
 
   context("Start LHRs #2 'Save and Complete it'", () => {
     it("Navig to LHR", () => {
       cy.navigToLHR();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select created LHR record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
-      });
+      cy.get("tr.k-master-row").first().arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
     });
 
-
     it("Click 'START MPI'", () => {
-      cy.get("div[class^=\"MuiExpansionPanelSummary\"]").eq(1).arrowClick({ force: true });
-      cy.mpiStartStep({ stepNumber: 1 });
+      cy.get(`div[class^="MuiExpansionPanelSummary"]`).eq(1).arrowClick({ force: true });
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Verify LHRs title", () => {
-      cy.get("#HeaderInfo-subtitle", { timeout: 50000 })
-        .should("have.text", "LHR-00004");
+      cy.get(`div[class*="MuiGrid-root MuiGrid-container MuiGrid-wrap-xs-nowrap MuiGrid-align-items-xs-center"]`).last()
+        .should("contain", lotIdRef + "02RD")
+        .and("contain", "LHR-00004")
+        .and("contain", "CS-00005.1")
+        .and("contain", "Part document");
     });
 
     it("Upload attachment 'test.docx'", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Enter 'Start quntity' for LHRs #2", () => {
       cy.drSelectProcedureTab();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[name=\"lhrs-start-quantity\"]").arrowType("80.1");
     });
 
@@ -2269,14 +2395,16 @@ context("Autosave LHR", () => {
       cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("80.1");
     });
 
-    it("Click 'SELECT' for 'Material One' ", () => {
+    it("Click for 'Material One' ", () => {
       cy.get("[data-cy=\"form.builder.select\"]")
         .eq(0)
         .click({ force: true });
     });
 
-    it(`Select lot ${lotDocumentIdRef}01`, () => {
-      cy.get("input[data-cy=usedOverride]").autocompleteSelect(lotDocumentIdRef + "01");
+    it(`Select lot ${lotIdRef}01`, () => {
+      cy.get("input[data-cy=usedOverride]").autocompleteSelect(lotIdRef + "01");
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select quantity in lot dialog", () => {
@@ -2284,38 +2412,37 @@ context("Autosave LHR", () => {
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
-        cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
-          .eq(0)
-          .click();
-      });
+      cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+        .eq(0)
+        .click();
+      cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click 'SELECT' for 'Equipment one' ", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("button[data-cy=\"fb-control-btn\"]")
-          .eq(2)
-          .click({ force: true });
-      });
+    it("Click for 'Equipment one' ", () => {
+      cy.get("button[data-cy=\"fb-control-btn\"]")
+        .eq(2)
+        .click({ force: true });
+      cy.wait(delay1);
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Equipment one'", () => {
+      cy.get(`input[data-cy="usedOverride"]`).arrowClick();
+      cy.get(`input[data-cy="usedOverride"]`).autocompleteSelect("Equipment one");
+      cy.unClick();
       cy.listLoadingElementShouldNotExist();
-      cy.get("input[data-cy=\"usedOverride\"]").arrowClick();
-      cy.get("ul>li[role=\"option\"]").contains("Equipment one").arrowClick();
     });
 
     it("Click 'SAVE' on select equipment dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
-        cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
-          .eq(0)
-          .click();
-      });
+      cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+        .eq(0)
+        .click();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify LOT is selected for 'Material One'", () => {
       cy.get("div[data-cy=\"form.builder.lhrs.procedure.materials.title\"]").eq(0).parent()
-        .should("contain.text", lotDocumentIdRef + "01");
+        .should("contain.text", lotIdRef + "01");
     });
 
     it("Verify Equipment is selected for 'Equipment one'", () => {
@@ -2323,48 +2450,50 @@ context("Autosave LHR", () => {
         .should("have.text", "ET-00003");
     });
 
-    it("Select Details tab", () => {
+    it("Select Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-approvals-approvals\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.get("[data-cy^=\"fb-approvals-approvals\"]").autocompleteSelect(USERS[1].name);
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });
     });
 
     it("Complete step # 2", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Click 'Approve' button", () => {
       cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
       cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+      cy.wait(2000);
       cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Release LHR", () => {
     it("Navig to LHR", () => {
-      cy.wait(2000);
       cy.navigToLHR();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
 
     it("Click open LHR", () => {
-      cy.get(`[data-grid-row-index="0"]`).eq(0).contains(lotDocumentIdRef + "02RD").arrowClick();
+      cy.get(`[data-grid-row-index="0"]`).eq(0).contains(lotIdRef + "02RD").arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -2386,21 +2515,21 @@ context("Autosave LHR", () => {
 
     it("Add first Approver'", () => {
       cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick().wait(500);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().autocompleteSelect(USERS[1].name);
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add second Approver'", () => {
-      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick().wait(500);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
-      });
+      cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().autocompleteSelect(USERS[2].name);
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove second Approver'", () => {
       cy.pmDeleteApproverFromApproverList({ approver: `${USERS[2].name} - ${USERS[2].email}` });
       cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("check approvers", () => {
@@ -2425,30 +2554,38 @@ context("Autosave LHR", () => {
     it("check due date", () => {
       cy.get("[name=\"lhr-due-date\"]").invoke("val").should("be.exist");
     });
-
   });
 
-  context("Approve & Release Document and send email", () => {
+  context("Approve to Release Document", () => {
     it("Submit for approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.lhrSubmitForApprovalWithoutApi();
+      cy.wait(delay1);
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve' button", () => {
-      cy.get("[data-cy=\"form.builder.request.approve\"]").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetFieldLocks], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.lhrApproveWithoutApi();
+      cy.wait(delay1);
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
-    it("Check doc status for Released and click on Send To Email", () => {
-      cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
-      cy.get("#HeaderInfo-subtitle").should("have.text", " - LOT #" + lotDocumentIdRef + "02RD");
-      cy.get("[data-cy=\"HeaderInfo-docId\"]").should("have.text", "LHR-00004");
+    it("Check doc status for Released", () => {
+      cy.verifyListItemExistsOnHeader({
+        listItem:
+            `LHRLHR-00004${lotDocumentIdRef}02RD Rev ARELEASED`,
+        breadcrump: true,
+      });
+
+      cy.get("#HeaderInfo-subtitle").should("contain.text", "LOT").then(($docIdElement) => {
+        lotDocumentId = $docIdElement.text().replace("-", "").trim();
+      });
+    });
+  });
+
+  context("Send to email", () => {
+    it("Click on Send To Email", () => {
       cy.sendToEmail();
     });
 
@@ -2590,13 +2727,13 @@ context("Autosave LHR", () => {
     it("Verify page 1 for LHR", () => {
       const el = pages[0];
       if (el.includes("Page 1 of 4")) {
-        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nMT-00004, REV 1, MATERIAL ONE`);
+        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Attachments/);
         expect(el).match(/image\.jpg/);
 
-        expect(el).match(/Part to be Manufactured\nMT-00004 - 1 Material one/);
+        expect(el).match(/Part to be Manufactured\nCS-00005 - 1 Part document/);
 
         expect(el).match(/Initial Quantity\n50\.1/);
 
@@ -2635,12 +2772,15 @@ context("Autosave LHR", () => {
     it("Verify page 2 of LHR", () => {
       const el = pages[1];
       if (el.includes("Page 2 of 4")) {
-        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nMT-00004, REV 1, MATERIAL ONE`);
+        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/PI PROCEDURE\nMaterials/);
 
-        tmpRegex = new RegExp(`${lotDocumentIdRef}01 \\| MT-00004.1 \\| 0.5 days`);
+        tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.859999999999999 days`);
+        expect(el).match(tmpRegex);
+
+        tmpRegex = new RegExp(`${lotIdRef}01 \\| MT-00004.1 \\| 0.5 days`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Equipment\nET-00003 - Equipment one - rev 1/);
@@ -2656,13 +2796,12 @@ context("Autosave LHR", () => {
 
         expect(el).match(/Select field\noption1/);
 
+        expect(el).not.match(/TEXT FIELD/);
+
         tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${pdfDocRelDate}`);
         expect(el).match(tmpRegex);
 
         expect(el).match(/Released/);
-
-        tmpRegex = new RegExp(`MT-00004 - Material one - rev 1 \\| Qty: 4.859999999999999 days`);
-        expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
         expect(el).not.match(tmpRegex);
@@ -2680,22 +2819,22 @@ context("Autosave LHR", () => {
     it("Verify page 3 of LHR", () => {
       const el = pages[2];
       if (el.includes("Page 3 of 4")) {
-        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nMT-00004, REV 1, MATERIAL ONE`);
+        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp( `${lhrDocId}, Step #2 \\(PI-00008, MPI created with API, Rev 1\\)`);
-        expect(el).match(tmpRegex);
+        expect(el).match(/LHR STEP #2\nLHR-00004, Step #2 \(PI-00008, MPI created with API, Rev 1\)/);
 
         tmpRegex = new RegExp( `Step completed \\| ${pdfDocRelDate}`);
         expect(el).match(tmpRegex);
 
+        expect(el).match(/Attachments/);
         expect(el).match(/test.docx/);
 
         expect(el).match(/PI PROCEDURE\nMaterials/);
 
         expect(el).match(/MT-00004 - Material one - rev 1 \| Qty: 80\.1 sets/);
 
-        tmpRegex = new RegExp(`${lotDocumentIdRef}01 \\| MT-00004.1 \\| 10.5 sets`);
+        tmpRegex = new RegExp(`${lotIdRef}01 \\| MT-00004.1 \\| 10.5 sets`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`MT-00006 - Material two - rev 1 \\| Qty: 160\\.2 boxes`);
@@ -2728,10 +2867,10 @@ context("Autosave LHR", () => {
     it("Verify page 4 of LHR", () => {
       const el = pages[3];
       if (el.includes("Page 4 of 4")) {
-        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nMT-00004, REV 1, MATERIAL ONE`);
+        tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
         expect(el).match(tmpRegex);
 
-        tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- .*@.* \\| APPROVED \\| ${pdfDocRelDate}`);
+        tmpRegex = new RegExp(`APPROVALS\\n${USERS[1].name} \\- (.*) \\| APPROVED \\| ${pdfDocRelDate}`);
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp(`Doc status|Reference|Reference by|Training Required fields`, "gi");
