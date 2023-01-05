@@ -1100,7 +1100,7 @@ context("Autosave LHR", () => {
         cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.wait(2000);
+        cy.wait(delay1);
       });
 
       it("Select Procedure tab", () => {
@@ -1858,6 +1858,7 @@ context("Autosave LHR", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(delay1);
     });
 
     it("Check lot number", () => {
@@ -1903,8 +1904,9 @@ context("Autosave LHR", () => {
     });
 
     it("Select option1 checked", () => {
-      cy.get("[id^=\"mui-component-select-select-field\"]").arrowClick({ force: true });
-      cy.get("[data-value=\"option1\"]").arrowClick();
+      cy.get(`[id^="mui-component-select-select-field"]`).arrowClick({ force: true });
+      cy.get("[data-value=\"option1\"]").wait(1000).arrowClick();
+      cy.wait(delay1);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1913,6 +1915,19 @@ context("Autosave LHR", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.wait(delay1);
       cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Check lot number", () => {
+    it("Navig to LHR", () => {
+      cy.get("[data-cy=\"navigation.lhr\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click open LHR", () => {
+      cy.get(`tr.k-master-row`).first().contains(lotIdRef + "02RD").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check lot number", () => {
@@ -1928,6 +1943,11 @@ context("Autosave LHR", () => {
   });
 
   context("Start LHRs #1 and Save it", () => {
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Click 'START MPI'", () => {
       cy.get(`div[class^="MuiExpansionPanelSummary"]`).eq(0).arrowClick({ force: true });
       cy.progressBarShouldNotExist();
@@ -1940,6 +1960,7 @@ context("Autosave LHR", () => {
       cy.atchUploadAttachment({ fileName: "test_image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(delay1);
       cy.drClickCreateDocumentWithoutApiCall();
       cy.landingPageLoadingElementShouldNotExist();
       cy.wait(delay1);
