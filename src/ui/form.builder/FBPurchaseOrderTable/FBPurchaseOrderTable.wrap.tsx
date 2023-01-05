@@ -80,7 +80,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const approvalsFieldName = workspaceState?.schema?.find((item) => item.type === "poapprovals")?.name ?? "";
 
     const {
-      poApprovalsState,
       addApprover,
       updateApprovals,
       hasUserInApprovers,
