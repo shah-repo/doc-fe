@@ -5,7 +5,6 @@ import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -334,10 +333,14 @@ context("Add/Remove groups from Training Curriculum", () => {
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter document title 'test training form title'", () => {
@@ -359,22 +362,27 @@ context("Add/Remove groups from Training Curriculum", () => {
     it("Select 'Training Curriculum test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Create one document", () => {
     it("Doc1 with Released status", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.cmpClickCreateNewDocument();
       cy.drEnterDocumentTitle({ name: "released doc1" });
       cy.drEnterDocumentDescription({ description: "test description" });
@@ -382,10 +390,14 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedDoc1Id = x.text(); });
     });
@@ -394,19 +406,23 @@ context("Add/Remove groups from Training Curriculum", () => {
   context("Create Training Curriculum record", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'training title'", () => {
@@ -422,7 +438,10 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
@@ -430,63 +449,86 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Click Refresh on 'Document to trained on'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
-      });
+      cy.get("[name=training-document-to-be-trained-on]").find("button").eq(2).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document 'released doc1' to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc1");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select refresh training periodically 'Yes'", () => {
       cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training refresh period days", () => {
       cy.get("[name=training-validity]").arrowType("5");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Groups to train 'Group1 and Group2'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group2");
+      cy.unClick();
       cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Complete trainings", () => {
     it("Goto Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Open and complete training`, () => {
       cy.wait(2000);
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc` });
-      cy.trCompleteTraining();
+      cy.trCompleteTrainingWithoutApi();
     });
 
     it(`Login as ${USERS[13].name}`, () => {
@@ -500,7 +542,10 @@ context("Add/Remove groups from Training Curriculum", () => {
 
     it(`Open and complete training`, () => {
       cy.dashGoToListItemFromDashboard({ listItem: `${releasedDoc1Id}Rev 1 released doc` });
-      cy.trCompleteTraining();
+      cy.trCompleteTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Login as ${USERS[11].name}`, () => {
@@ -510,33 +555,42 @@ context("Add/Remove groups from Training Curriculum", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
   context("Revise training", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Select training", () => {
       cy.trSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Click on Revise Document`, () => {
       cy.get("#PreviewControlsContainer-revise").arrowClick();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRev, CyRoutes.DocPreview, CyRoutes.DocRevPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add new Group to train 'Group3'", () => {
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove group Group1", () => {
@@ -546,25 +600,35 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Save training", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -573,28 +637,48 @@ context("Add/Remove groups from Training Curriculum", () => {
       cy.get("[data-cy=\"navigation.documentControl\"]").arrowClick();
       cy.get("[data-cy=\"navigation.training\"]").should("be.exist");
       cy.get("[data-cy=\"navigation.trainingRecords\"]").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Training record for ${USERS[11].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
     });
 
     it(`Training record for ${USERS[12].name} should not be present`, () => {
-      cy.trLandingPageUsername({ username: USERS[12].name });
+      cy.get("[class=\"k-textbox\"]").eq(4).arrowType(`{backspace}`);
+      cy.get("[class=\"k-textbox\"]").eq(4).arrowType(USERS[12].name).wait(1000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[class="k-grid-norecords"]`).should("have.text", "No results found");
     });
 
     it(`Training record for ${USERS[13].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[13].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[13].name).and("not.contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -602,8 +686,13 @@ context("Add/Remove groups from Training Curriculum", () => {
 
     it(`Training record for ${USERS[14].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[14].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[14].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -611,8 +700,13 @@ context("Add/Remove groups from Training Curriculum", () => {
 
     it(`Training record for ${USERS[7].name} should be present`, () => {
       cy.trLandingPageUsername({ username: USERS[7].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", releasedDoc1Id)
         .and("contain", USERS[7].name).and("contain", "Pending");
       cy.get("tbody>tr").should("have.length", 1);
@@ -631,6 +725,8 @@ context("Add/Remove groups from Training Curriculum", () => {
 
       it("Selects company", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify training notification should not present", () => {
@@ -649,6 +745,8 @@ context("Add/Remove groups from Training Curriculum", () => {
 
       it("Selects company", () => {
         cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Verify training notification should be present`, () => {

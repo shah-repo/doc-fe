@@ -5,7 +5,6 @@ import "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -289,19 +288,19 @@ context("Training Flow test", () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter document title 'test training form title'", () => {
@@ -328,13 +327,16 @@ context("Training Flow test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -346,9 +348,13 @@ context("Training Flow test", () => {
       cy.drEnterDocumentDescription({ description: "test description" });
       cy.drSelectDocumentType({ documentType: "Form" });
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
     });
 
@@ -361,7 +367,7 @@ context("Training Flow test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[12].name}`]);
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.IN_REVIEW });
     });
@@ -375,7 +381,7 @@ context("Training Flow test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[12].name}`]);
       cy.authLogout();
       cy.authLogin({ email: USERS[12].email, password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
@@ -395,16 +401,20 @@ context("Training Flow test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drClickReviseDocument();
       cy.get("#RevisionTypeChange-obsolete").arrowClick();
       cy.recClickSaveBtn();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.OBSOLETE });
     });
 
@@ -417,10 +427,14 @@ context("Training Flow test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { releasedFormId = x.text(); });
     });
@@ -434,7 +448,9 @@ context("Training Flow test", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
       cy.drSelectOutputDocumentType({ documentType: "Clinical Protocol" });
       cy.unClick();
-      cy.drClickCreateDocumentWithApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => { approvedFormId = x.text(); });
       cy.navigToApprovalRequestList();
       cy.cmpClickCreateApprovalRequest();
@@ -449,7 +465,7 @@ context("Training Flow test", () => {
       cy.arAddApproverOnApproverList({ approver: USERS[11].email, noWait: true });
       cy.arSaveApiCall();
       cy.arClickSendToReview();
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });
   });
@@ -463,15 +479,15 @@ context("Training Flow test", () => {
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetAutocompleteOptions, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'training title'", () => {
@@ -487,11 +503,13 @@ context("Training Flow test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Periodic training should be displayed", () => {
@@ -510,14 +528,20 @@ context("Training Flow test", () => {
 
     it("Select document to be trained on", () => {
       cy.get(`[name="training-document-to-be-trained-on"]`).autocompleteSelect("released form");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select refresh training periodically 'Yes'", () => {
       cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training refresh period days", () => {
       cy.get("[name=training-validity]").arrowType("5");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Trainee Details should be present", () => {
@@ -529,14 +553,15 @@ context("Training Flow test", () => {
     });
 
     it("Select User to train", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
-        });
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
@@ -552,7 +577,9 @@ context("Training Flow test", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training status should be ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -560,17 +587,23 @@ context("Training Flow test", () => {
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Create One-Time Training form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter document title 'test training form title'", () => {
@@ -597,13 +630,16 @@ context("Training Flow test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -616,15 +652,15 @@ context("Training Flow test", () => {
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'One-Time Training test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("One-Time Training test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("One-Time Training test");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'One-Time training title'", () => {
@@ -641,6 +677,8 @@ context("Training Flow test", () => {
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Refresh training periodically should not exist for One-Time training", () => {
@@ -657,33 +695,43 @@ context("Training Flow test", () => {
 
     it("Select document to be trained on", () => {
       cy.get(`[name="training-document-to-be-trained-on"]`).autocompleteSelect("released form");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select force training option 'Yes'", () => {
       cy.get(`[name="training-force-retraining-for-everyone"]`).eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select training group 'Developers'", () => {
       cy.get(`[name="training-select-groups-to-train"]`).autocompleteSelect("Developers");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select User to train", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.PatchDocRev, () => {
-          cy.get(`[data-cy="training-select-users-to-train"]`).autocompleteSelect(`${USERS[11].name}`);
-        });
+      cy.get(`[data-cy="training-select-users-to-train"]`).autocompleteSelect(`${USERS[11].name}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
@@ -691,15 +739,15 @@ context("Training Flow test", () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -729,6 +777,8 @@ context("Training Flow test", () => {
   context("Verify Training Records with 'Pending' on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`${USERS[11].name} with Pending on 'Completed on' column should be present`, () => {
@@ -776,13 +826,17 @@ context("Training Flow test", () => {
     });
 
     it("click complete training button", () => {
-      cy.trCompleteTraining();
+      cy.trCompleteTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Verify Training Records with timestamp on 'Completed On' column", () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`${USERS[11].name} with timestamp on 'Completed on' column should be present`, () => {
@@ -799,19 +853,21 @@ context("Training Flow test", () => {
   context("Forced Training", () => {
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new Training Curriculum", () => {
       cy.recCreateRecordFromLandingPage();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'One-Time Training test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("One-Time Training test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("One-Time Training test");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training title 'One-Time training title'", () => {
@@ -828,21 +884,26 @@ context("Training Flow test", () => {
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select document to be trained on", () => {
       cy.get(`[name="training-document-to-be-trained-on"]`).autocompleteSelect("released form");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select force training option 'Yes'", () => {
       cy.get(`[name="training-force-retraining-for-everyone"]`).eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select User to train", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
-        });
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save training", () => {
@@ -851,26 +912,34 @@ context("Training Flow test", () => {
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview, CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.DocPreview, CyRoutes.GetFieldLocks], () => {
-        cy.contains("Submit for approval").arrowClick({ force: true });
-      });
+      cy.contains("Submit for approval").arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Training Curriculums", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("'One-Time training title1' should be present", () => {
@@ -880,6 +949,8 @@ context("Training Flow test", () => {
 
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify training notification`, () => {
@@ -902,11 +973,16 @@ context("Training Flow test", () => {
     });
 
     it("click complete training button", () => {
-      cy.trCompleteTraining();
+      cy.trCompleteTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`${USERS[11].name} with timestamp on 'Completed on' column should be present`, () => {

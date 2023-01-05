@@ -269,6 +269,11 @@ context(
             cy.fbClickButton({ el: "FBWorkspace-clickView" });
           });
 
+          it("navigate to Specification", () => {
+            cy.get(`[data-cy="tabId.specification"]`).last().arrowClick();
+            cy.listLoadingElementShouldNotExist();
+          });
+
           it("Add and check Date picker field", () => {
             cy.get("[data-cy='form.builder.form.preview']").parentsUntil(".MuiDialog-root")
               .find("input[name^=fb-datepicker-]").parent().find("button").arrowClick();

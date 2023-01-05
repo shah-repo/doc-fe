@@ -10,7 +10,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL, TrainingStatus } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate, trAssignedDate, trCompleteDate } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
@@ -333,7 +332,11 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
   context("Created document with training required", () => {
     it("Form with Released status", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drEnterDocumentTitle({ name: "released form" });
       cy.drEnterDocumentDescription({ description: "test description" });
       cy.drSelectDocumentType({ documentType: "Form" });
@@ -343,10 +346,12 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.RELEASED });
     });
   });
@@ -355,10 +360,14 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
   context("Create Training Curriculum form", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter document title 'Test Form-Training Curriculum Refresh-Repeat'", () => {
@@ -380,23 +389,25 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     it("Select 'Training Curriculum test' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Training Curriculum test" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-        cy.atchUploadAttachment({ fileName: "image.jpg" });
-      });
+      cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add Radio Button group", () => {
@@ -421,14 +432,12 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -665,12 +674,8 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Select 'Training Curriculum test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Training Curriculum test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Training Curriculum test");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -686,6 +691,8 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     it("Select 'Numeric' revision stage", () => {
       cy.get("[data-cy=\"common.Numeric\"]").first().arrowClick();
       cy.get("label").contains("Numeric").first().arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload logo picture 'image.jpg'", () => {
@@ -696,28 +703,41 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it("Navigate to Details tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("radio button group option 3 checked", () => {
       cy.get("[data-cy=\"Radio BTN req\"]").arrowClick();
       cy.get("label").contains("3").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify training options document types", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "AR Form");
     });
 
     it("Select document to be trained on", () => {
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("AR Form");
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select refresh training periodically 'Yes'", () => {
       cy.get("[name=training-refresh-training-periodically]").eq(0).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter training refresh period days", () => {
       cy.get("[name=training-validity]").arrowType("40");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Groups to train 'Owner as approver'", () => {
@@ -740,10 +760,13 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Approver", () => {
@@ -756,6 +779,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
@@ -767,6 +791,12 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
     });
   });
 
@@ -942,7 +972,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Click Approve", () => {
-      cy.trApproveTraining();
+      cy.trApproveTrainingWithoutApi();
     });
 
     it(`Check doc ${STATUS_TYPES_LABEL.RELEASED} status and click on Send To Email`, () => {
@@ -954,6 +984,12 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
       cy.sendToEmail();
+    });
+
+    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
+      cy.checkToastMessageContains({
+        message: "File will be sent to your email shortly.",
+      });
     });
   });
 
@@ -1191,7 +1227,9 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Click complete training button", () => {
-      cy.trCompleteTraining();
+      cy.trCompleteTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -1207,7 +1245,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
           }
         });
       }).as("response");
-      cy.wait(10000);
+      cy.wait(15000);
       cy.reload();
       cy.wait("@response");
     });
@@ -1240,6 +1278,8 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     it(`Verify ${USERS[11].name} with 'Completed on' column should have date as ${trCompleteDate}`, () => {
       cy.trLandingPageDocRevTitle({ title: "AR Form" });
       cy.trLandingPageUsername({ username: USERS[11].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name);
       cy.get(`[data-grid-row-index="0"]`).find(`[data-grid-col-index="7"]`).should("contain", trCompleteDate);
     });
@@ -1257,7 +1297,11 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     // eslint-disable-next-line max-len
     it(`Verify ${USERS[11].name} with 'Completed on' column should have date as ${trCompleteDate}`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[11].name }).wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageCompletedOn({ completed: "Last 30 days" });
       cy.get(`tr[data-grid-row-index="0"]`).should("contain", trainingFormId);
       cy.get(`[data-grid-row-index="0"]`).find(`[data-grid-col-index="7"]`).should("contain", trCompleteDate);
@@ -1265,7 +1309,11 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it(` Verify ${USERS[12].name} with'Completed on' column should have Pending item`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[12].name }).wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.get(`tr[data-grid-row-index="0"]`).should("contain", trainingFormId)
         .and("contain", USERS[12].name).and("contain", "Pending");
@@ -1273,8 +1321,14 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
     it(`Verify ${USERS[13].name} with 'Completed on' column should have Pending item`, () => {
       cy.trClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageUsername({ username: USERS[13].name }).wait(1000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.trLandingPageCompletedOn({ completed: "Pending" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`tr[data-grid-row-index="0"]`).should("contain", trainingFormId)
         .and("contain", USERS[13].name).and("contain", "Pending");
     });
@@ -1406,6 +1460,8 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       it(`Verify ${USERS[12].name} with 'Completed on' column should show Pending item`, () => {
         cy.trLandingPageDocRevTitle({ title: "AR Form" });
         cy.trLandingPageUsername({ username: USERS[12].name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[12].name).and("contain", "Pending");
       });
     });
@@ -1555,7 +1611,9 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Click complete training button", () => {
-      cy.trCompleteTraining();
+      cy.trCompleteTrainingWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -1817,7 +1875,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
   context(`Check first user has two notifications- ${TrainingStatus.DUE_IN_7_DAYS}, ${TrainingStatus.COMPLETED}`,
     () => {
       it("Goto Dashboard", () => {
-        cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+        cy.navigToDashboardWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.reload();
@@ -1871,7 +1929,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
       });
 
       it("Goto Dashboard", () => {
-        cy.get("[data-cy=\"navigation.dashboard\"]").arrowClick();
+        cy.navigToDashboardWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.reload();
