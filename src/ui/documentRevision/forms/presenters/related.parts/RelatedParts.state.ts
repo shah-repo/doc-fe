@@ -7,12 +7,12 @@ import { Translation } from "../../../../translations/types";
 class RelatedPartsState {
 
   constructor() {
-    this.setAddActionVisible(true);
+    this.setViewOnlyMode(true);
     this.setLoadingState(false);
   }
 
   @observable relatedPartsList: RelatedPartsListItem[] = [];
-  @observable addActionVisible = true;
+  @observable viewOnlyMode = false;
   @observable loadingState = false;
   @observable docIdErrorMsg: string | Translation = "";
 
@@ -69,8 +69,8 @@ class RelatedPartsState {
     return !this.docIdErrorMsg;
   }
 
-  @action setAddActionVisible(isVisible = true) {
-    set(this, "addActionVisible", isVisible);
+  @action setViewOnlyMode(viewOnly) {
+    set(this, "viewOnlyMode", viewOnly);
   }
 
   @action setLoadingState(isVisible = false) {
@@ -79,10 +79,3 @@ class RelatedPartsState {
 }
 
 export default RelatedPartsState;
-
-// export const relatedPartsStore = {
-//   relatedPartsStore: new RelatedPartsStore(),
-// };
-
-// export const RelatedPartsStoreContext = createContext(relatedPartsStore);
-// export const useRelatedPartsStore = () => useContext(RelatedPartsStoreContext);

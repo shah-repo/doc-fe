@@ -13,7 +13,7 @@ import {
   TableRow,
   TextField,
   Tooltip,
-  Typography
+  Typography,
 } from "@material-ui/core";
 
 import cx from "classnames";
@@ -151,17 +151,18 @@ const RelatedPartGrid: React.FunctionComponent<{
 
   useEffect(() => {
     fetchRelatedParts(documentRevision.id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentRevision.id]);
+    setShowButton(!relatedPartsState.viewOnlyMode);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentRevision.id, relatedPartsState.viewOnlyMode]);
 
   useEffect(() => reaction(
     () => relatedPartsState.relatedPartsList.length,
     () => {
       setIsEditRowVisible(false);
-      setShowButton(true);
+      setShowButton(true && !relatedPartsState.viewOnlyMode);
     }
-  ), [relatedPartsState.relatedPartsList.length]);
+  ), [relatedPartsState.relatedPartsList.length, relatedPartsState.viewOnlyMode]);
 
   const cancelEdit = () => {
     setIsEditRowVisible(false);
@@ -233,7 +234,7 @@ const RelatedPartList: React.FunctionComponent<{
   const classes = useStyles();
   return useObserver(() => (
     <div className={classes.fullWidth}>
-      <Table stickyHeader aria-label="related parts table">
+      <Table aria-label="related parts table">
         <TableHead className={classes.tableHeadHeight}>
           <TableRow>
             <TableCell className={cx(classes.tableCell, classes.tableCellOne)} align="left">
@@ -255,7 +256,7 @@ const RelatedPartList: React.FunctionComponent<{
         <TableBody>
           {relatedPartsState.relatedPartsList.map((listItem: RelatedPartsListItem) => (
             <RelatedPartViewRow listItem={listItem} voidRelatedPart={voidRelatedPart} viewRelatedPart={viewRelatedPart}
-              key={listItem.documentRevisionId} rootPartName={rootPartName}/>
+              key={listItem.documentRevisionId} rootPartName={rootPartName} relatedPartsState={relatedPartsState}/>
           ))}
         </TableBody>
       </Table>
@@ -269,11 +270,13 @@ const RelatedPartViewRow: React.FunctionComponent<{
   voidRelatedPart: (listItem: RelatedPartsListItem) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
   rootPartName: string;
+  relatedPartsState: RelatedPartsState;
 }> = ({
   listItem,
   voidRelatedPart,
   viewRelatedPart,
   rootPartName,
+  relatedPartsState,
 }) => {
   const classes = useStyles();
   const isVoided = listItem.status === DocumentRevisionStatus.Obsolete
@@ -293,7 +296,7 @@ const RelatedPartViewRow: React.FunctionComponent<{
       <TableCell align="center">
         <Checkbox
           checked={isVoided}
-          disabled={isVoided}
+          disabled={isVoided || relatedPartsState.viewOnlyMode}
           onChange={(e) => voidRelatedPart(listItem)}
         />
       </TableCell>
@@ -414,7 +417,7 @@ const RelatedParts: React.FunctionComponent<{
       documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER &&
       <div className={classes.mainDiv}>
         <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
-        {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && (
+        {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && !relatedPartsState.viewOnlyMode && (
           <Grid item xs={12}>
             <FBButton label="relatedParts.button.addText"
               onClick = {createNewDocument} />

@@ -19,7 +19,7 @@ import RelatedParts from "./RelatedParts";
 import RelatedPartsState from "./RelatedParts.state";
 
 interface Props {
-  isDisabled: boolean;
+  viewOnly: boolean;
   documentRevision: DocumentRevision;
   parentPartStatus: RELATED_PARTS_STATUS | undefined;
 }
@@ -62,14 +62,14 @@ const SuccessMsg: React.FunctionComponent<{
 const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   documentRevision,
   parentPartStatus,
-  isDisabled,
+  viewOnly,
 }) => {
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   const relatedPartsState = FB.useRef<RelatedPartsState>(RelatedPartsState);
-  relatedPartsState.setAddActionVisible(!isDisabled);
+  relatedPartsState.setViewOnlyMode(viewOnly);
 
   const [parentStatus, setParentStatus] = useState(parentPartStatus);
 
@@ -148,6 +148,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       description: "",
       name: "",
       suffixName: "",
+      revision: documentRevision.revision,
       attachments: [],
       referenceTo: [],
       revisionChangeType: get(documentRevision, "revisionChangeType"),
@@ -216,10 +217,10 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 const RelatedPartsWrapper: React.FunctionComponent<Props> = ({
   documentRevision,
   parentPartStatus,
-  isDisabled,
+  viewOnly,
 }) => (
   <RelatedPartsContainer
-    isDisabled = {isDisabled}
+    viewOnly = {viewOnly}
     documentRevision={documentRevision}
     parentPartStatus = {parentPartStatus}
   />

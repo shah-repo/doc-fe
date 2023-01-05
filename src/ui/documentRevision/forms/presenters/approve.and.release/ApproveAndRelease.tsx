@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Button, createStyles, Dialog, DialogContent, DialogTitle, makeStyles } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import { concat, filter, find, flatten, includes, sortBy, uniqBy } from "lodash";
@@ -98,6 +97,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
   const [checkedGroups, setCheckedGroups] = useState<Group[]>([]);
   const [changeRequestId, setChangeRequestId] = useState<string>("");
+  const [optionChosen, setOptionChosen] = useState<string>();
 
   // MARK: @config
   const isNewLayout = SM.isNewLayout;
@@ -181,7 +181,10 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         )
       );
       setTemplateOptions(options);
-      if (templateOptions.length > 0) {
+      // console.log(optionChosen);
+      if (!optionChosen) {
+        expressApprovalDialog.open();
+      } else if (templateOptions.length > 0) {
         if (templateOptions.length === 1) {
           processCreatingRevision(templateOptions[0]);
         } else {
@@ -331,6 +334,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // MARK: @methods
   const openDialog = (option?: any) => {
     async.reset();
+    setOptionChosen(option);
 
     if (!option && showApprovers && docRevId) {
       asyncGroups.start(
@@ -338,7 +342,11 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         docRevId,
         asyncGroups,
       );
-      expressApprovalDialog.open();
+
+      asyncGetDocTypeByGroup.start(
+        getDocTypeByGroupAction,
+        { docTypeGroupOption: "CHANGE_REQUEST" },
+        asyncGetDocTypeByGroup);
     }
 
     if (option === ARActions.NEW) {
