@@ -700,6 +700,7 @@ context("Verify the user is able to create LHRT", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter quantity received", () => {
@@ -928,6 +929,7 @@ context("Verify the user is able to create LHRT", () => {
         cy.drSelectDetailsTab();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Define parameter A", () => {
@@ -936,10 +938,12 @@ context("Verify the user is able to create LHRT", () => {
           .eq(0).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
         cy.get("[data-cy=\"title\"]").autocompleteSelect(CSPartDocumentTitle);
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Define parameter B", () => {
@@ -948,10 +952,12 @@ context("Verify the user is able to create LHRT", () => {
           .eq(1).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
         cy.get("[data-cy=\"title\"]").autocompleteSelect(equipmentTitle);
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Click save document", () => {
@@ -982,6 +988,7 @@ context("Verify the user is able to create LHRT", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter initial quantity", () => {
@@ -1013,6 +1020,7 @@ context("Verify the user is able to create LHRT", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click 'LHR Step'", () => {
@@ -1117,6 +1125,7 @@ context("Verify the user is able to create LHRT", () => {
       cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Verify LHRT is in DRAFT status", () => {
@@ -1145,6 +1154,7 @@ context("Verify the user is able to create LHRT", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Verify all LHR Steps added to the previous revision are present", () => {
@@ -1204,6 +1214,7 @@ context("Verify the user is able to create LHRT", () => {
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Define parameter B", () => {
@@ -1211,6 +1222,7 @@ context("Verify the user is able to create LHRT", () => {
         .eq(3).arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
       cy.get("[data-cy=\"title\"]").autocompleteSelect(equipmentTitle);
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       cy.progressBarShouldNotExist();
@@ -1238,6 +1250,7 @@ context("Verify the user is able to create LHRT", () => {
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter initial quantity", () => {
@@ -1269,6 +1282,7 @@ context("Verify the user is able to create LHRT", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click 'LHR Step'", () => {
@@ -1339,6 +1353,7 @@ context("Verify the user is able to create LHRT", () => {
     it("Select Details tab", () => {
       cy.drSelectDetailsTab();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click 'LHR Step'", () => {
