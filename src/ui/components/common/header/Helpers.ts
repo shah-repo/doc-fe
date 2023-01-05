@@ -1,3 +1,5 @@
+import { POStatusType } from "../../../../state/ducks/documentRevisions/types";
+
 export enum FormHeaderStatusClassMapping {
   "Pending Approval"="PENDING_STATUS",
   "In Review"="PENDING_STATUS",
@@ -28,3 +30,20 @@ export enum FormHeaderStatusClassMapping {
   "IMPLEMENTATION"="GREEN_STATUS",
   "Implementation"="GREEN_STATUS",
 }
+
+export const getPOStatusLabel = (poStatus) => {
+  let label = "form.builder.header.po.status.open";
+  switch (poStatus) {
+    case POStatusType.CLOSE:
+      label = "form.builder.header.po.status.close";
+      break;
+    case POStatusType.VOID:
+      label = "form.builder.header.po.status.void";
+      break;
+    case POStatusType.VOIDED:
+      label = "form.builder.header.po.status.voided";
+      break;
+    default:
+  }
+  return label;
+};

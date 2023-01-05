@@ -8,13 +8,16 @@ export default makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(1),
     borderRadius: "50%",
   },
-  openStatusIcon: {
+  OPEN: {
     backgroundColor: Colors.dodger_blue,
   },
-  closeStatusIcon: {
+  CLOSE: {
     backgroundColor: Colors.font_gray,
   },
-  voidStatusIcon: {
+  VOID: {
+    backgroundColor: Colors.latest_red_varient,
+  },
+  VOIDED: {
     backgroundColor: Colors.latest_red_varient,
   },
   menu: {
@@ -25,6 +28,7 @@ export default makeStyles((theme: Theme) => ({
   },
   menuItem: {
     backgroundColor: Colors.white,
+    color: Colors.almost_black,
     fontWeight: 400,
     fontSize: "14px",
     width: 160,

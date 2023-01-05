@@ -12,14 +12,15 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import useStyles from "./HeaderPOStatus.styles";
+import { getPOStatusLabel } from "./Helpers";
 
 interface Props {
-  status: string;
+  poStatus: POStatusType;
   docId: string;
 }
 
 const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
-  status, docId,
+  poStatus, docId,
 }) => {
   const classes = useStyles();
   const dialog = useDialog();
@@ -38,6 +39,12 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     dialog.open();
     handleClose();
   };
+
+  const handleOpen = () => {
+    dialog.open();
+    handleClose();
+  };
+
   const StyledMenu = withStyles({
     list: {
       padding: 0,
@@ -58,14 +65,34 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     />
   ));
 
-  const getStatusIcon = (status) => (
-    <div
-      className={classNames(classes.statusIcon, {
-        [classes.openStatusIcon]: status === POStatusType.OPEN,
-        [classes.closeStatusIcon]: status === POStatusType.CLOSE,
-        [classes.voidStatusIcon]: status === POStatusType.VOID,
-      })}
-    />
+
+  const getMenuOptions = () => (
+    <>
+      {poStatus === POStatusType.CLOSE && (
+        <MenuItem onClick={handleOpen} className={classes.menuItem}>
+          <div
+            className={classNames(classes.statusIcon, classes.OPEN)}
+          />
+          <Text message={getPOStatusLabel(POStatusType.OPEN)} />
+        </MenuItem>
+      )}
+      {poStatus === POStatusType.OPEN && (
+        <MenuItem onClick={handleClose} className={classes.menuItem}>
+          <div
+            className={classNames(classes.statusIcon, classes.CLOSE)}
+          />
+          <Text message={getPOStatusLabel(POStatusType.CLOSE)} />
+        </MenuItem>
+      )}
+      {poStatus === POStatusType.OPEN && (
+        <MenuItem onClick={handleVoid} className={classes.menuItem}>
+          <div
+            className={classNames(classes.statusIcon, classes.VOID)}
+          />
+          <Text message={getPOStatusLabel(POStatusType.VOID)} />
+        </MenuItem>
+      )}
+    </>
   );
 
   const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
@@ -90,8 +117,8 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
           disableRipple
           onClick={handleClick}
         >
-          <>{getStatusIcon("open")}</>
-          <Text message="Open" />
+          <div className={classNames(classes.statusIcon, classes[poStatus])}/>
+          <Text message={getPOStatusLabel(poStatus)} />
         </Button>
         <Button
           onClick={handleClick}
@@ -115,18 +142,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         }}
         className={classes.menu}
       >
-        <MenuItem onClick={handleClose} className={classes.menuItem}>
-          <div
-            className={classNames(classes.statusIcon, classes.closeStatusIcon)}
-          />
-          <Text message="Close" />
-        </MenuItem>
-        <MenuItem onClick={handleVoid} className={classes.menuItem}>
-          <div
-            className={classNames(classes.statusIcon, classes.voidStatusIcon)}
-          />
-          <Text message="Void" />
-        </MenuItem>
+        {getMenuOptions()}
       </StyledMenu>
       <AlertDialog
         confirmAction={voidDocument}

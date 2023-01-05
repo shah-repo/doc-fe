@@ -24,9 +24,10 @@ export enum DocumentRevisionStatus {
 }
 
 export enum POStatusType {
-  OPEN = "open",
-  CLOSE = "close",
-  VOID = "void",
+  OPEN = "OPEN",
+  CLOSE = "CLOSE",
+  VOID = "VOID",
+  VOIDED = "VOIDED"
 }
 
 

@@ -377,29 +377,37 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
-      <>{isPO && <HeaderPOStatus poStatus={documentRevision.poStatus}/>}</>
+      <>
+        {isPO && documentRevision.poStatus && (
+          <HeaderPOStatus poStatus={documentRevision.poStatus} />
+        )}
+      </>
       <Observer>
         {() => (
           <>
-            {<StyledSubmitButton
-              showNewButton={isNewLayout && !isCreateUrl}
-              asyncState={asyncState}
-              label={isDisabled ?
-                "common.save" :
-                "navigation.createDocument"
-              }
-              onClick={onFormClick}
-              id="DocumentRevisionForm-submit"
-              data-cy={"DocumentRevisionForm-submit"}
-              disabled={isCreateDocumentDisabled || _documentRevisionFormState?.disabledAction}
-            />}
+            {
+              <StyledSubmitButton
+                showNewButton={isNewLayout && !isCreateUrl}
+                asyncState={asyncState}
+                label={isDisabled ? "common.save" : "navigation.createDocument"}
+                onClick={onFormClick}
+                id="DocumentRevisionForm-submit"
+                data-cy={"DocumentRevisionForm-submit"}
+                disabled={
+                  isCreateDocumentDisabled ||
+                  _documentRevisionFormState?.disabledAction
+                }
+              />
+            }
           </>
         )}
       </Observer>
       {!redlineActive && (
         <>
           {renderActionItems(initialButtons, true)}
-          {restButtons.length > 0 && <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>}
+          {restButtons.length > 0 && (
+            <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>
+          )}
         </>
       )}
     </div>
