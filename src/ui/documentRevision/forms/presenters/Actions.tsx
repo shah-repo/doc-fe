@@ -377,7 +377,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div>
-      <>{isPO && <HeaderPOStatus/>}</>
+      <>{isPO && <HeaderPOStatus poStatus={documentRevision.poStatus}/>}</>
       <Observer>
         {() => (
           <>

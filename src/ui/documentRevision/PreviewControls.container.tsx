@@ -410,9 +410,19 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     <>
       <PDFSocket {...{ documentRevision }}/>
       {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
-      <>{isPO && (isDocumentInReview || isDocumentPendingApproval) &&  <HeaderPOStatus/>}</>
-      <>{isPO && (isDocumentApproved || isDocumentReleased) &&
-       <HeaderPOStatusOptions status={documentRevision?.status} docId= {documentRevision?.id || ""}/>}</>
+      <>
+        {isPO && (isDocumentInReview || isDocumentPendingApproval) && (
+          <HeaderPOStatus poStatus={documentRevision.poStatus} />
+        )}
+      </>
+      <>
+        {isPO && (isDocumentApproved || isDocumentReleased) && (
+          <HeaderPOStatusOptions
+            status={documentRevision?.status}
+            docId={documentRevision?.id || ""}
+          />
+        )}
+      </>
       {initialButtons.length > 0 && renderbuttons(initialButtons, true)}
       {restButtons.length > 0 && (
         <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>
