@@ -173,6 +173,7 @@ const Presenter: React.FunctionComponent<Props> = ({
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
+              noOfAttachments={attachments.length}
             />
           )
           : attachments && (
@@ -181,6 +182,7 @@ const Presenter: React.FunctionComponent<Props> = ({
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
+              noOfAttachments={attachments?.length}
             />
           )}
         {renderTrainingControl}
