@@ -115,7 +115,7 @@ context(testName, () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Verify revision", () => {
@@ -148,11 +148,11 @@ context(testName, () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.url().then((url: string) => { documentUrl = url; });
     });
 
@@ -183,7 +183,7 @@ context(testName, () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
     });
 
     it("Verify Revision 1", () => {
@@ -205,7 +205,7 @@ context(testName, () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
     });
 
     it("Verify Revision 2", () => {
@@ -229,7 +229,7 @@ context(testName, () => {
 
     it("Save document", () => {
       cy.url().then((url: string) => { record1Url = url; });
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -252,7 +252,7 @@ context(testName, () => {
 
     it("Save document", () => {
       cy.url().then((url) => record2Url = url);
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -272,7 +272,7 @@ context(testName, () => {
     });
 
     it("Save document", () => {
-      cy.get(`[data-cy=DocumentRevisionForm-submit]`).arrowClick();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Verify revision", () => {
@@ -289,7 +289,7 @@ context(testName, () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -307,6 +307,8 @@ context(testName, () => {
       cy.get("[data-cy=HeaderMenuButton]").arrowClick();
       cy.get("#UpgradeToLatest-upgrade").arrowClick();
       cy.get("#UpgradeToLatest-proceed").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select approvals", () => {
@@ -323,7 +325,7 @@ context(testName, () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
     });
 
     it("Verify revision", () => {
@@ -347,9 +349,13 @@ context(testName, () => {
       cy.get("[data-cy=HeaderMenuButton]").arrowClick();
       cy.get("#UpgradeToLatest-upgrade").arrowClick();
       cy.get("#UpgradeToLatest-proceed").arrowClick();
+      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select approvals", () => {
+      cy.get("[data-cy^=fb-approvals-]").should("exist");
       cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
     });
 
@@ -363,7 +369,7 @@ context(testName, () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
     });
 
     it("Verify revision", () => {
