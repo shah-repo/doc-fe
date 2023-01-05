@@ -3,7 +3,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import cx from "classnames";
 import React, { useEffect, useState } from "react";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { RELATED_PARTS_ROOT_URL } from "../../../state/ducks/relatedParts/constants";
 import { RelatedPartsListItem } from "../../../state/ducks/relatedParts/types";
 import { FBAutocompleteAsyncOption } from "../../form.builder";
@@ -56,13 +56,14 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
     documentDetailsApi.setUrl(`${RELATED_PARTS_ROOT_URL}/${documentRevisionId}`);
     const relatedPartsResponse: RelatedPartsListItem[] = await documentDetailsApi.fetch();
     if (relatedPartsResponse.length > 0) {
-      const childrenDetails = relatedPartsResponse.map((part: RelatedPartsListItem) => (
-        {
-          revId: part.documentRevisionId,
-          titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
-        }
-      ));
-      console.log(childrenDetails);
+      const childrenDetails = relatedPartsResponse
+        .filter((part: RelatedPartsListItem) => part.status !== DocumentRevisionStatus.Voided)
+        .map((part: RelatedPartsListItem) => (
+          {
+            revId: part.documentRevisionId,
+            titleText: generateDocTitleText(part.rootDocId, displayRevision, part.name),
+          }
+        ));
       setDocRelatedParts(childrenDetails);
     }
   };

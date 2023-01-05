@@ -1,3 +1,5 @@
+import { DocumentRevisionStatus } from "../documentRevisions/types";
+
 export enum RELATED_PARTS_STATUS {
   RELATED_SEPARATE = "related_separate",
   RELATED_TOGETHER = "related_together",
@@ -20,5 +22,5 @@ export interface RelatedPartsListItem {
   suffixName?: string;
   documentRevisionId: string;
   name: string;
-  status: string;
+  status: DocumentRevisionStatus;
 }
