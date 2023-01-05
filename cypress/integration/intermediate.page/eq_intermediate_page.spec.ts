@@ -359,17 +359,20 @@ context("Intermediate page validation", () => {
         cy.fbClickButton({ el: "FBWorkspace-clickView" });
       });
 
+      it("Navigate to Specification tab", () => {
+        cy.get(`[data-cy="tabId.specification"]`).last().arrowClick();
+      });
+
       it("Add and check Quantity field", () => {
-        cy.get(`[data-cy="form.builder.form.preview"]`).parentsUntil(".MuiDialog-root")
-          .find("input[name^=fb-quantity-]").clear().arrowType("1");
-        cy.get(`[data-cy="form.builder.form.preview"]`).parentsUntil(".MuiDialog-root")
-          .find("input[name^=fb-quantity-]").should("have.value", "1");
+        cy.get(".MuiDialogContent-root input[name^=fb-quantity-]").clear().arrowType("1");
+        cy.get(".MuiDialogContent-root input[name^=fb-quantity-]").should("have.value", "1");
       });
 
       it("Add and check Autocomplete field", () => {
-        cy.get(`input[data-cy^="fb-autocomplete-"]`).eq(1).arrowClick().autocompleteSelect("FM-00001");
-        // eslint-disable-next-line max-len
-        cy.get("[class='MuiChip-root MuiAutocomplete-tag MuiChip-deletable']").eq(0).contains("FM-00001 - rev 1 - AR Form");
+        cy.get(`.MuiDialogContent-root input[data-cy^="fb-autocomplete-"]`).arrowClick()
+          .autocompleteSelect("FM-00001");
+        cy.get("[class='MuiChip-root MuiAutocomplete-tag MuiChip-deletable']").eq(0)
+          .contains("FM-00001 - rev 1 - AR Form");
       });
 
       it("Close Preview dialog", () => {

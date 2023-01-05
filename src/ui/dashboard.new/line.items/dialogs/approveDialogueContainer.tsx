@@ -54,9 +54,6 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       dispatch(dashboardTodoActions.loadMyFeedsList());
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
-    onError: () => {
-      transitionDialog.close();
-    },
   });
 
   const onSubmit = (values: PasswordFormValues | EffectiveDateFormValues) => {

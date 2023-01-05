@@ -742,7 +742,7 @@ Cypress.Commands.add("intPageVerifySupplierExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifySupplierNotExist", () => {
-  cy.get(`[data-cy="Supplier "]`).should("not.exist");
+  cy.get(`[data-cy^="Supplier"]`).should("not.exist");
 });
 
 Cypress.Commands.add("intPageVerifyOrderDateExist", () => {
@@ -770,19 +770,19 @@ Cypress.Commands.add("intPageVerifyPeriodicTraningNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyDocumentsToBeTrainedOnExist", () => {
-  cy.get(`[data-cy="Documents to be trained on"]`).should("exist");
+  cy.get(`[data-cy="Documents to Train on"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifyDocumentsToBeTrainedOnNotExist", () => {
-  cy.get(`[data-cy="Documents to be trained on"]`).should("not.exist");
+  cy.get(`[data-cy="Documents to Train on"]`).should("not.exist");
 });
 
 Cypress.Commands.add("intPageVerifyTrainingFrequencyExist", () => {
-  cy.get(`[data-cy="Training refresh period (days)"]`).should("exist");
+  cy.get(`[data-cy="Training Frequency (in days)"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifyTrainingFrequencyNotExist", () => {
-  cy.get(`[data-cy="Training refresh period (days)"]`).should("not.exist");
+  cy.get(`[data-cy="Training Frequency (in days)"]`).should("not.exist");
 });
 
 Cypress.Commands.add("intPageVerifyTraineesDetailsExist", () => {
@@ -794,19 +794,19 @@ Cypress.Commands.add("intPageVerifyTraineesDetailsNotExist", () => {
 });
 
 Cypress.Commands.add("intPageVerifyGroupsToTrainExist", () => {
-  cy.get(`[data-cy="Select Groups to train"]`).should("exist");
+  cy.get(`[data-cy="Groups to Train"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifyGroupsToTrainNotExist", () => {
-  cy.get(`[data-cy="Select Groups to train"]`).should("not.exist");
+  cy.get(`[data-cy="Groups to Train"]`).should("not.exist");
 });
 
 Cypress.Commands.add("intPageVerifyUsersToTrainExist", () => {
-  cy.get(`[data-cy="Select Users to train (if applicable)"]`).should("exist");
+  cy.get(`[data-cy="Users to Train (if applicable)"]`).should("exist");
 });
 
 Cypress.Commands.add("intPageVerifyUsersToTrainNotExist", () => {
-  cy.get(`[data-cy="Select Users to train (if applicable)"]`).should("not.exist");
+  cy.get(`[data-cy="Users to Train (if applicable)"]`).should("not.exist");
 });
 
 Cypress.Commands.add("intPageVerifyDocumentTitleExist", () => {

@@ -822,7 +822,7 @@ context("Create new LHRT Layout Verification", () => {
 
     it("Verify Click details Tab, clicking on it should open that tab and close the other one", () => {
       cy.get("[data-cy='tabCon-tabId.overview']").should("have.attr", "aria-selected", "false");
-      cy.get("#sm-tabpanel-0").should("be.hidden");
+      cy.get("#sm-tabpanel-0").should("not.exist");
       cy.get("[data-cy='tabCon-tabId.details']").should("have.attr", "aria-selected", "true");
     });
 
