@@ -104,10 +104,8 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
 
         const requester = formState?.getFieldValue(PO_REQUESTOR_COMPONENT_NAME);
         const hasServiceOrProductPart = value?.items && checkServiceOrProductPartExists(value);
-        const shouldAddApprover =
-          hasServiceOrProductPart
-          && requester
-          && !hasUserInApprovers(requester, poApprovalsState?.activeApprovals);
+        const hasRequesterInAllApprovers = !hasUserInApprovers(requester);
+        const shouldAddApprover = hasServiceOrProductPart && requester && !hasRequesterInAllApprovers;
 
         if (shouldAddApprover) {
           addApprover(
