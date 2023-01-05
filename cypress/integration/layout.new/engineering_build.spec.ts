@@ -954,6 +954,7 @@ context("Verify New Layout for EB Document", () => {
         cy.get("[data-cy='common.confirm.change']").arrowClick().wait(2000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Turn off autosave", () => {
@@ -989,12 +990,14 @@ context("Verify New Layout for EB Document", () => {
       it("Open access permissions tab", () => {
         cy.drSelectPermissionTab();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
         cy.progressBarShouldNotExist();
       });
 
       it("Add another user permission", () => {
         cy.drAddUserFromPermissionTab(userOne);
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
         cy.progressBarShouldNotExist();
       });
 
@@ -1091,6 +1094,7 @@ context("Verify New Layout for EB Document", () => {
         cy.pmUploadAttachment({ fileName: "image.jpg" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Add material document", () => {
@@ -1112,10 +1116,12 @@ context("Verify New Layout for EB Document", () => {
         cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
         cy.get("[data-cy=\"title\"]").arrowClick();
         cy.wait(1000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
         cy.get("ul>li[role=option]").contains("Equipment document").arrowClick();
         cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       });
@@ -1324,12 +1330,14 @@ context("Verify New Layout for EB Document", () => {
         cy.drSelectPermissionTab();
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Add another user permission", () => {
         cy.drAddUserFromPermissionTab(userTwo);
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Add another group permission", () => {
@@ -1574,12 +1582,14 @@ context("Verify New Layout for EB Document", () => {
         it("Open access permissions tab", () => {
           cy.drSelectPermissionTab();
           cy.listLoadingElementShouldNotExist();
+          cy.wait(3000);
           cy.progressBarShouldNotExist();
         });
 
         it("Add another user permission", () => {
           cy.drAddUserFromPermissionTab(userThree);
           cy.listLoadingElementShouldNotExist();
+          cy.wait(3000);
           cy.progressBarShouldNotExist();
         });
 

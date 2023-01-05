@@ -1131,7 +1131,7 @@ context("DAM and POAM", () => {
           cy.get("[name=\"signatures.0.groups\"]").autocompleteSelect("Everyone");
           cy.poAddPOButtonClick();
           cy.listLoadingElementShouldNotExist();
-          cy.progressBarShouldNotExist();
+          cy.progressBarShouldNotExist().wait(3000);
         });
 
         it(`Fill in the fields - Level name: Level 2 / Limit 25000/ Signature 1 Can be approver / Signature 2 
@@ -1144,7 +1144,7 @@ context("DAM and POAM", () => {
           cy.get("[name=\"signatures.1.groups\"]").autocompleteSelect("User Management");
           cy.poAddPOButtonClick();
           cy.listLoadingElementShouldNotExist();
-          cy.progressBarShouldNotExist();
+          cy.progressBarShouldNotExist().wait(3000);
         });
 
         it(`Fill in the fields - Level name: Level 3 / Limit 100000/ Signature 1 Owner as approver / Signature 2 
@@ -1158,7 +1158,7 @@ context("DAM and POAM", () => {
           cy.get("[name=\"signatures.2.groups\"]").autocompleteSelect("Company admin");
           cy.poAddPOButtonClick();
           cy.listLoadingElementShouldNotExist();
-          cy.progressBarShouldNotExist();
+          cy.progressBarShouldNotExist().wait(3000);
         });
 
         it("Click on Save button", () => {
