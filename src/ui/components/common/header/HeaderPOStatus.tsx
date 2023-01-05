@@ -16,7 +16,7 @@ const HeaderPOStatus: React.FC<Props> = ({ status }) => {
     })} />;
 
   return (
-    <StyledPOStatusButton type="submit" color="primary">
+    <StyledPOStatusButton type="submit" color="primary" disableRipple>
       <>{statusIcon}</>
       <Text message="Open"/>
     </StyledPOStatusButton>

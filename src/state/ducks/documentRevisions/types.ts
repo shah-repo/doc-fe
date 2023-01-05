@@ -23,7 +23,7 @@ export enum DocumentRevisionStatus {
   Voided = "VOIDED",
 }
 
-export enum POStatus {
+export enum POStatusType {
   OPEN = "open",
   CLOSE = "close",
   VOID = "void",
@@ -184,6 +184,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   smartReferencesTo?: SmartReference[];
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
   redline?: boolean;
+  poStatus?: POStatusType;
 }
 
 export interface SmartReference {

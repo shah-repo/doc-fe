@@ -5,7 +5,7 @@ import { default as classNames, default as cx } from "classnames";
 import { default as React } from "react";
 import { ReactComponent as CaretIcon } from "../../../../assets/images/leftPanel/po_status_dd.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { POStatus } from "../../../../state/ducks/documentRevisions/types";
+import { POStatusType } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../../ui/components/Text";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -61,9 +61,9 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const getStatusIcon = (status) => (
     <div
       className={classNames(classes.statusIcon, {
-        [classes.openStatusIcon]: status === POStatus.OPEN,
-        [classes.closeStatusIcon]: status === POStatus.CLOSE,
-        [classes.voidStatusIcon]: status === POStatus.VOID,
+        [classes.openStatusIcon]: status === POStatusType.OPEN,
+        [classes.closeStatusIcon]: status === POStatusType.CLOSE,
+        [classes.voidStatusIcon]: status === POStatusType.VOID,
       })}
     />
   );

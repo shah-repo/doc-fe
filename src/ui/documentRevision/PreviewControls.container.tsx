@@ -17,6 +17,7 @@ import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutpu
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
+import HeaderPOStatus from "../components/common/header/HeaderPOStatus";
 import HeaderPOStatusOptions from "../components/common/header/HeaderPOStatusOptions";
 import HeaderMenu from "../components/common/header/Menu";
 import OwnerChangerContainer from "../components/common/owner.changer/container";
@@ -37,7 +38,7 @@ import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
-import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionPendingChange, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
@@ -338,6 +339,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
   const isDocumentApproved = isDocumentRevisionApproved(documentRevision.status);
   const isDocumentReleased = isDocumentRevisionReleased(documentRevision.status);
+  const isDocumentInReview = isDocumentRevisionInReview(documentRevision.status);
+  const isDocumentPendingApproval = isDocumentRevisionPendingChange(documentRevision.status);
 
   if (!(!isDocumentDraft || !canCreateInspection)) {
     accessableButtons.push("inspectionControl");
@@ -407,6 +410,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     <>
       <PDFSocket {...{ documentRevision }}/>
       {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
+      <>{isPO && (isDocumentInReview || isDocumentPendingApproval) &&  <HeaderPOStatus/>}</>
       <>{isPO && (isDocumentApproved || isDocumentReleased) &&
        <HeaderPOStatusOptions status={documentRevision?.status} docId= {documentRevision?.id || ""}/>}</>
       {initialButtons.length > 0 && renderbuttons(initialButtons, true)}
