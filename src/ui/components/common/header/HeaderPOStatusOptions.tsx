@@ -3,7 +3,7 @@ import Menu, { MenuProps } from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { default as classNames, default as cx } from "classnames";
 import { default as React } from "react";
-import { ReactComponent as CaretIcon } from "../../../../assets/images/leftPanel/po_status_dd.svg";
+import { ReactComponent as CaretIcon } from "../../../../assets/images/leftPanel/po_status_dropdown.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
 import { POStatusType } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../../ui/components/Text";
