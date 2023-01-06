@@ -677,11 +677,11 @@ context("Clone EB Flow test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and release the form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -735,7 +735,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -770,12 +770,18 @@ context("Clone EB Flow test", () => {
 
       it("Approve record button click", () => {
         cy.ebApproveWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("Go to a new/cloned EB and check", () => {
       it("Navigate to EB list", () => {
         cy.navigToEB();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Select EB document", () => {
@@ -840,6 +846,10 @@ context("Clone EB Flow test", () => {
         cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name});
       });
 
+      it("Save the document", () => {
+        cy.drClickSaveWithoutApiCall();
+      });
+
       it("Submit for Approval", () => {
         cy.pmSubmitForApprovalWithoutAPI();
       });
@@ -873,6 +883,10 @@ context("Clone EB Flow test", () => {
         cy.navigToDocumentList();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Click create document", () => {
         cy.cmpClickCreateNewDocument();
       });
@@ -899,11 +913,11 @@ context("Clone EB Flow test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and release the form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -939,7 +953,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Add attachment", () => {
@@ -961,7 +975,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -1046,7 +1060,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save doc", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Submit for Approval", () => {
@@ -1063,6 +1077,10 @@ context("Clone EB Flow test", () => {
         cy.navigToEB();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Select EB document", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "EB-00003" });
@@ -1072,10 +1090,6 @@ context("Clone EB Flow test", () => {
       it("Verify the next Build link", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]")
           .should('not.exist');
-      });
-
-      it("Save doc", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for Approval", () => {
@@ -1092,6 +1106,10 @@ context("Clone EB Flow test", () => {
     context("Create EB form", () => {
       it("Navigate to document list", () => {
         cy.navigToDocumentList();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click create document", () => {
@@ -1120,11 +1138,11 @@ context("Clone EB Flow test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and release the form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -1178,7 +1196,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -1261,7 +1279,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Submit for Approval", () => {
@@ -1278,6 +1296,10 @@ context("Clone EB Flow test", () => {
         cy.navigToEB();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Select EB document", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocId({ docId: "EB-00005" });
@@ -1287,10 +1309,6 @@ context("Clone EB Flow test", () => {
       it("Verify the next Build link", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]")
           .should('not.exist');
-      });
-
-      it("Save doc", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Submit for Approval", () => {

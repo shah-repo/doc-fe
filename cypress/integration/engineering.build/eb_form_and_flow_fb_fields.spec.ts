@@ -762,9 +762,7 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Edit Component", () => {
@@ -787,13 +785,11 @@ context("Procedure and parts flow test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Export and save the template", () => {
@@ -857,9 +853,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Edit Component", () => {
@@ -879,6 +873,10 @@ context("Procedure and parts flow test", () => {
     context("Go to Manufacturing and Select Engineering build", () => {
       it("Navigate to EB list", () => {
         cy.navigToEB();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click on create Engineering Build", () => {
@@ -905,9 +903,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Edit Component", () => {
@@ -958,7 +954,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -996,6 +992,10 @@ context("Procedure and parts flow test", () => {
         it("Add equipment document ", () => {
           cy.ebAddStep2EquipmentDocument({ title: "ET-00001 - rev 1 - Equipment document" });
         });
+
+        it("Save the document", () => {
+          cy.drClickSaveWithoutApiCall();
+        });
       });
 
       context("Clone step", () => {
@@ -1032,7 +1032,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Save the document", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Add Approvers", () => {

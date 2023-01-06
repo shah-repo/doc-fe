@@ -751,13 +751,11 @@ context("Procedure and parts flow test", () => {
 
   context("Save & Release", () => {
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -843,7 +841,7 @@ context("Procedure and parts flow test", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -905,7 +903,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Save the document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Add Approvers", () => {
@@ -917,7 +915,7 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Approve record button click", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
       });
 
