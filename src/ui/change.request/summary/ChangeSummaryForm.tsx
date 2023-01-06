@@ -65,14 +65,16 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   };
 
   const docTypeGroup = changeRequest.documentType.group ?? "OTHER";
-  let tabConfig = useSelector((state: ApplicationState) =>
+  const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
-  tabConfig = tabConfig && [...tabConfig, {
-    labelId: "tabId.items",
-    tabId: TabTypeOptions.ITEMS.toLowerCase(),
-    type: TabTypeOptions.ITEMS,
-  } ];
+  if (tabConfig.findIndex((tab: TabInfo) => tab.labelId === "tabId.items") === -1) {
+    tabConfig.splice(1, 0, {
+      labelId: "tabId.items",
+      tabId: TabTypeOptions.ITEMS.toLowerCase(),
+      type: TabTypeOptions.ITEMS,
+    });
+  }
 
   return (
     <SMForm
