@@ -87,7 +87,8 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
           <ChangeRequestUpdateContainer
             changeRequest={changeRequestDetails}
             hideSideBar
-            currentDocRevId={currentDocRevId} />
+            currentDocRevId={currentDocRevId}
+            inDialog={true}/>
         </DialogContent>
       </Dialog>
     </AsyncGate>

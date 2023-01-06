@@ -15,7 +15,7 @@ import { compareValuesToSubmit } from "../components/forms/helpers";
 import { FBFormStateContext } from "../form.builder/FBForm/FBForm.wrap";
 import useAsync from "../hooks/useAsync";
 import { canEditChangeRequest } from "./helpers";
-
+import ChangeRequestSummaryContainer from "./summary/container";
 
 interface StateProps {
   currentUserEmail: string;
@@ -29,6 +29,7 @@ interface DispatchProps {
 interface OwnProps {
   changeRequest: ChangeRequest;
   hideSideBar?: boolean;
+  inDialog?: boolean;
   currentDocRevId?: string;
 }
 
@@ -41,7 +42,7 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
 });
 
 const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateContainerProps> = (
-  { save, changeRequest, currentUserEmail, loadAudit, hideSideBar = false, currentDocRevId }) => {
+  { save, changeRequest, currentUserEmail, loadAudit, hideSideBar = false, inDialog = false, currentDocRevId }) => {
 
   const initialValues = useMemo(() => toChangeRequestFormValues(changeRequest), [changeRequest]);
   const [doNotPrompt, setDoNotPrompt] = React.useState(false);
@@ -53,6 +54,10 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
     },
   });
   if (!canEditChangeRequest(changeRequest, currentUserEmail)) {
+    if (inDialog) {
+      return <ChangeRequestSummaryContainer changeRequest={changeRequest}
+        currentUserEmail={currentUserEmail} />;
+    }
     return <Redirect to={changeRequestPreviewPath(changeRequest.id)} />;
   }
 

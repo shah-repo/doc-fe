@@ -12,7 +12,6 @@ import ChangeRequestEditDialog from "../../change.request/dialogs/ChangeRequestE
 import { changeRequestEditPath } from "../../change.request/utils/paths";
 import Text from "../../components/Text";
 import { FormHeaderContext } from "../../documentRevision/forms/DocumentRevisionForm.container";
-import { useCRLink } from "../../hooks/docCustomization/useCustomization";
 import useDialog from "../../hooks/useDialog";
 import useStyles from "./changeRequestLink.styles";
 
@@ -24,7 +23,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
 
   const { documentRevision } = React.useContext(FormHeaderContext) ?? {};
   let changeRequest = dataProp.changeRequest;
-  if (documentRevision) {
+  if (documentRevision && !changeRequest) {
     changeRequest = documentRevision.changeRequest;
   }
 
@@ -34,8 +33,7 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
   const dispatch = useDispatch();
   console.log("ChangeRequestLink", dataProp.changeRequest, changeRequest);
 
-  const { isVisible } = useCRLink(dataProp?.document?.documentType?.id);
-  if (!changeRequest || !isVisible) {
+  if (!changeRequest) {
     return null;
   }
 
