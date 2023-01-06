@@ -4,7 +4,7 @@ import Validator from "validatorjs";
 import FBStore from "./FBStore";
 import FBValidatorStore from "./FBValidatorStore";
 
-export class FormBuilderDynamicValidatorStore {
+class FormBuilderDynamicValidatorStore {
   @computed get Validator(): any {
     return get(window, "EnlilRemoteValidators.validator");
   }
