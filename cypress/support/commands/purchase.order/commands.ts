@@ -338,11 +338,11 @@ Cypress.Commands.add("poCheckForLineItemsAndTheirID", (params: {firstId: string;
 });
 
 Cypress.Commands.add("poAMEnterLevelName", (params: {name: string}) => {
-  cy.get("[name=\"name\"]").arrowType(params.name);
+  cy.get("[name=\"name\"]").clear().arrowType(params.name);
 });
 
 Cypress.Commands.add("poAMEnterLimit", (params: {limit: string}) => {
-  cy.get("[name=\"limit\"]").arrowType(params.limit);
+  cy.get("[name=\"limit\"]").clear().arrowType(params.limit);
 });
 
 Cypress.Commands.add("poAMSelectUsers", (...list: string[]) => {
