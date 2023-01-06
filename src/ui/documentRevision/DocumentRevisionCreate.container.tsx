@@ -98,9 +98,7 @@ const DocumentRevisionCreateContainer: React.FunctionComponent<DocumentRevisionC
   });
 
   const onSubmit = (values: DocumentRevisionFormValues) => {
-    const payload = toNewVersionRequestBody(values);
-    // PO case state should be update to open here
-    const promise = async.start(create, payload, async);
+    const promise = async.start(create, toNewVersionRequestBody(values), async);
 
     promise?.then(() => {
       FBDataStore?.setRefreshData({

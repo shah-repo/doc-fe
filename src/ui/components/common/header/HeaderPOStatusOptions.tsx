@@ -11,6 +11,7 @@ import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
+import { Translation } from "../../../translations/types";
 import useStyles from "./HeaderPOStatus.styles";
 import { getPOStatusLabel } from "./Helpers";
 
@@ -26,6 +27,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   const async = useAsync();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [action, setAction] = React.useState<POStatusType>(POStatusType.OPEN);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -36,11 +38,13 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   };
 
   const handleVoid = () => {
+    setAction(POStatusType.VOID);
     dialog.open();
     handleClose();
   };
 
   const handleOpen = () => {
+    setAction(POStatusType.OPEN);
     dialog.open();
     handleClose();
   };
@@ -65,31 +69,29 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     />
   ));
 
+  const getPOStatusMenuItem = (status) => <>
+    <div
+      className={classNames(classes.statusIcon, classes[status])}
+    />
+    <Text message={getPOStatusLabel(POStatusType[status])} />
+  </>;
+
 
   const getMenuOptions = () => (
     <>
       {poStatus === POStatusType.CLOSE && (
         <MenuItem onClick={handleOpen} className={classes.menuItem}>
-          <div
-            className={classNames(classes.statusIcon, classes.OPEN)}
-          />
-          <Text message={getPOStatusLabel(POStatusType.OPEN)} />
+          {getPOStatusMenuItem(POStatusType.OPEN)}
         </MenuItem>
       )}
       {poStatus === POStatusType.OPEN && (
         <MenuItem onClick={handleClose} className={classes.menuItem}>
-          <div
-            className={classNames(classes.statusIcon, classes.CLOSE)}
-          />
-          <Text message={getPOStatusLabel(POStatusType.CLOSE)} />
+          {getPOStatusMenuItem(POStatusType.CLOSE)}
         </MenuItem>
       )}
       {poStatus === POStatusType.OPEN && (
         <MenuItem onClick={handleVoid} className={classes.menuItem}>
-          <div
-            className={classNames(classes.statusIcon, classes.VOID)}
-          />
-          <Text message={getPOStatusLabel(POStatusType.VOID)} />
+          {getPOStatusMenuItem(POStatusType.VOID)}
         </MenuItem>
       )}
     </>
@@ -102,6 +104,21 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       docId,
       async,
     );
+  };
+  const confirmAction = () => {
+    if (action === POStatusType.VOID) {
+      voidDocument();
+    } else if (action === POStatusType.OPEN) {
+      // TODO integrate OPEN API here
+      dialog.close();
+    }
+  };
+  const getAlertDialogMessage = () => {
+    if (action === POStatusType.VOID) {
+      return "documentRevision.record.void.alert";
+    } else if (action === POStatusType.OPEN) {
+      return "documentRevision.record.open.alert";
+    }
   };
 
   return (
@@ -145,8 +162,8 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         {getMenuOptions()}
       </StyledMenu>
       <AlertDialog
-        confirmAction={voidDocument}
-        message={"documentRevision.record.void.alert"}
+        confirmAction={confirmAction}
+        message={getAlertDialogMessage() as Translation}
         {...{ dialog }}
       />
     </>
