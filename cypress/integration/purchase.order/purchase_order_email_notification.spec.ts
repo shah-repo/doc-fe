@@ -24,7 +24,7 @@ let purchaseOrderDocumentType;
 let createdPurchaseOrderFormDocument;
 let approvalRequestDocumentType;
 let initialArDocument;
-const dateAfterEmailShouldArrive = new Date();
+let dateAfterEmailShouldArrive;
 let emailsFromInbox: IMAPEmail[];
 
 context("Send PO Owner an email notification when a PO is approved", () => {
@@ -190,12 +190,8 @@ context("Send PO Owner an email notification when a PO is approved", () => {
         cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(5000);
       });
-
-      // it("Turn off autosave", () => {
-      //   cy.cmpTurnOffAutosave();
-      //   cy.unClick();
-      // });
 
       it("Go to Purchase Order module", () => {
         cy.navigToPurchaseOrder();
@@ -327,9 +323,11 @@ context("Send PO Owner an email notification when a PO is approved", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
+      dateAfterEmailShouldArrive = new Date(new Date().getTime());
       cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
   });
 
@@ -361,35 +359,37 @@ context("Send PO Owner an email notification when a PO is approved", () => {
         .should("contain.text", "APPROVED")
         .and("contain.text", "POT-00001");
     });
+  });
 
-    context("Verify email for approved PO", () => {
-      it("Verify emails", () => {
-        const getEmailSetting =  {
-          to: CONFIG.TEST_EMAIL,
-          after: dateAfterEmailShouldArrive,
-        };
+  context("Verify email for approved PO", () => {
+    it("Verify emails", () => {
+      const getEmailSetting =  {
+        to: CONFIG.TEST_EMAIL,
+        after: dateAfterEmailShouldArrive,
+        subject: `Purchase Order POT-00001 Approval Status`,
+      };
 
-        cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
-          emailsFromInbox = emails;
-        });
+      cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).then((emails) => {
+        emailsFromInbox = emails;
       });
+    });
 
-      it("Verify the emails that should be received", () => {
-        const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
-          {
-            sentToUser: USERS[1].email,
-            contains: [
-              `Hello <b>${USERS[1].name},</b><br /><br />`,
-              "Purchase Order <b>POT-00001</b> has been approved and released for company",
-            ],
-          }];
+    it("Verify the emails that should be received", () => {
+      const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
+        {
+          sentToUser: USERS[1].email,
+          contains: [
+            `Hello <b>${USERS[1].name},</b><br /><br />`,
+            "Purchase Order <b>POT-00001</b> has been approved and released for company",
+            createdCompany.id,
+          ],
+        }];
 
-        cy.imapVerifyEmailsInList({
-          receivedEmails: emailsFromInbox,
-          emailsToTest: emailsThatShouldBeReceived,
-          getEmailsSincedate: dateAfterEmailShouldArrive,
-          assertNumberOfEmailsFoundInList: 1,
-        });
+      cy.imapVerifyEmailsInList({
+        receivedEmails: emailsFromInbox,
+        emailsToTest: emailsThatShouldBeReceived,
+        getEmailsSincedate: dateAfterEmailShouldArrive,
+        assertNumberOfEmailsFoundInList: 1,
       });
     });
   });
