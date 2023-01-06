@@ -50,7 +50,7 @@ const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC ): ApiAction<D
   asyncType,
   onSuccess: (documentRevision, dispatch) => {
     // Remove at last
-    documentRevision.poStatus = POStatusType.CLOSE;
+    documentRevision.poStatus = POStatusType.OPENED;
     dispatch(documentRevisionSet(documentRevision));
   },
 });

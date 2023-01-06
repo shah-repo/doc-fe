@@ -34,11 +34,8 @@ export enum FormHeaderStatusClassMapping {
 export const getPOStatusLabel = (poStatus) => {
   let label = "form.builder.header.po.status.open";
   switch (poStatus) {
-    case POStatusType.CLOSE:
+    case POStatusType.CLOSED:
       label = "form.builder.header.po.status.close";
-      break;
-    case POStatusType.VOID:
-      label = "form.builder.header.po.status.void";
       break;
     case POStatusType.VOIDED:
       label = "form.builder.header.po.status.voided";

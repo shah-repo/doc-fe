@@ -8,14 +8,11 @@ export default makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(1),
     borderRadius: "50%",
   },
-  OPEN: {
+  OPENED: {
     backgroundColor: Colors.dodger_blue,
   },
-  CLOSE: {
+  CLOSED: {
     backgroundColor: Colors.font_gray,
-  },
-  VOID: {
-    backgroundColor: Colors.latest_red_varient,
   },
   VOIDED: {
     backgroundColor: Colors.latest_red_varient,

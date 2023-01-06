@@ -27,7 +27,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   const async = useAsync();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [action, setAction] = React.useState<POStatusType>(POStatusType.OPEN);
+  const [action, setAction] = React.useState<POStatusType>(POStatusType.OPENED);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -38,13 +38,13 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   };
 
   const handleVoid = () => {
-    setAction(POStatusType.VOID);
+    setAction(POStatusType.VOIDED);
     dialog.open();
     handleClose();
   };
 
   const handleOpen = () => {
-    setAction(POStatusType.OPEN);
+    setAction(POStatusType.OPENED);
     dialog.open();
     handleClose();
   };
@@ -79,19 +79,19 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
 
   const getMenuOptions = () => (
     <>
-      {poStatus === POStatusType.CLOSE && (
+      {poStatus === POStatusType.CLOSED && (
         <MenuItem onClick={handleOpen} className={classes.menuItem}>
-          {getPOStatusMenuItem(POStatusType.OPEN)}
+          {getPOStatusMenuItem(POStatusType.OPENED)}
         </MenuItem>
       )}
-      {poStatus === POStatusType.OPEN && (
+      {poStatus === POStatusType.OPENED && (
         <MenuItem onClick={handleClose} className={classes.menuItem}>
-          {getPOStatusMenuItem(POStatusType.CLOSE)}
+          {getPOStatusMenuItem(POStatusType.CLOSED)}
         </MenuItem>
       )}
-      {poStatus === POStatusType.OPEN && (
+      {poStatus === POStatusType.OPENED && (
         <MenuItem onClick={handleVoid} className={classes.menuItem}>
-          {getPOStatusMenuItem(POStatusType.VOID)}
+          {getPOStatusMenuItem(POStatusType.VOIDED)}
         </MenuItem>
       )}
     </>
@@ -106,17 +106,17 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     );
   };
   const confirmAction = () => {
-    if (action === POStatusType.VOID) {
+    if (action === POStatusType.VOIDED) {
       voidDocument();
-    } else if (action === POStatusType.OPEN) {
+    } else if (action === POStatusType.OPENED) {
       // TODO integrate OPEN API here
       dialog.close();
     }
   };
   const getAlertDialogMessage = () => {
-    if (action === POStatusType.VOID) {
+    if (action === POStatusType.VOIDED) {
       return "documentRevision.record.void.alert";
-    } else if (action === POStatusType.OPEN) {
+    } else if (action === POStatusType.OPENED) {
       return "documentRevision.record.open.alert";
     }
   };
