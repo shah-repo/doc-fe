@@ -960,12 +960,12 @@ context("PO Removes lineitems removes approver", () => {
     });
   });
 
-  context("Verify that history tab is capturing requestor Added and approver Added", () => {
-    it("Check history entry for 'Requestor Added'", () => {
+  context("Verify that history tab is capturing requestor added and approver Added", () => {
+    it("Check history entry for 'Requestor added'", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor Added")
+      cy.get(`[data-cy='no-padding-margin']`).eq(1).should("contain", "Requestor added")
         .and("contain", USERS[1].name);
     });
 
