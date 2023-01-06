@@ -714,6 +714,7 @@ context("Paper LHR tab Layout", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
         cy.get("[data-cy='References']").should("exist");
         cy.get("[data-cy='generalInfo']").should("be.visible");
+        cy.wait(3000);
       });
 
     });
