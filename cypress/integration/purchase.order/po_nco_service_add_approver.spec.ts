@@ -166,10 +166,12 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.wait(3000);
     });
   });
 
@@ -182,10 +184,13 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
 
     it("Select released NCO Form", () => {
       cy.drFilterDocListByNameAndStatus({ title: ncoFormName, status: "Released" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(3000);
     });
 
     it("Enters title 'New Company'", () => {

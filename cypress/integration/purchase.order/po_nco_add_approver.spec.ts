@@ -174,6 +174,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
   context("Create NCO and add required jsons and company details", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.wait(3000);
     });
 
     it("Select released NCO Form", () => {
@@ -182,6 +183,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(3000);
     });
 
     it("Enters title 'New Company'", () => {
