@@ -631,12 +631,6 @@ context("Create company with JSON's", () => {
     });
   });
 
-  context("Turn off autosave", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-  });
-
   context("Create Part & Supplier manually", () => {
     context("Create Form Part document to create Part", () => {
       it("Navigates to document list", () => {
@@ -1083,6 +1077,7 @@ context("Create company with JSON's", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
+
 
     it("Verify the Draft document", () => {
       cy.navigToPurchaseOrder();

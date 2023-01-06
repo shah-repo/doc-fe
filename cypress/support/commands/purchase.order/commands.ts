@@ -213,6 +213,7 @@ Cypress.Commands.add("poSelectGLCode", () => {
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
   cy.get("[name=\"supplierPartNumber\"]").arrowClick().arrowType(params.partNumber);
+  cy.unClick();
 });
 
 Cypress.Commands.add("poEnterPartDescription", (params: {partDescription: string}) => {
