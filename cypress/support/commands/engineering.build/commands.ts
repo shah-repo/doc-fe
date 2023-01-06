@@ -113,7 +113,7 @@ Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: s
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
   cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
@@ -124,7 +124,7 @@ Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; val
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
   cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
@@ -134,7 +134,7 @@ Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebAddStep2EquipmentDocument", (params: { title: string }) => {
@@ -144,7 +144,7 @@ Cypress.Commands.add("ebAddStep2EquipmentDocument", (params: { title: string }) 
   cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebSelectFirstDocument", () => {
