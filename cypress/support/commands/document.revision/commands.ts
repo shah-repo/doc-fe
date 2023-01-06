@@ -344,10 +344,8 @@ Cypress.Commands.add("drClearDocumentTitle", () => {
 });
 
 Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-    cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
-    cy.unClick();
-  });
+  cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
+  cy.unClick();
   cy.progressBarShouldNotExist();
 });
 
@@ -796,7 +794,7 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
 
 Cypress.Commands.add("drCreateNewDocumentFromFormRecord", () => {
   cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick({ force: true });
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });

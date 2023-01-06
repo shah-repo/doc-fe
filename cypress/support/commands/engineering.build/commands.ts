@@ -18,6 +18,7 @@ declare global {
       lhrApprove(): Chainable<Subject>;
       lhrApproveWithoutApi(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
+      ebClickCloneWithoutApi(): Chainable<Subject>;
       ebClickCloneEB(): Chainable<Subject>;
       ebCloneClickYes(): Chainable<Subject>;
       ebCloneClickNo(): Chainable<Subject>;
@@ -73,6 +74,14 @@ Cypress.Commands.add("ebClickClone", () => {
   });
   cy.checkToastMessage({ exists: false });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebClickCloneWithoutApi", () => {
+  cy.get("[data-cy=\"CloneEBButton\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
