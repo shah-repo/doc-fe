@@ -986,10 +986,14 @@ context("LHR: RD case specs", () => {
     it("Add approval", () => {
       cy.get(`[data-cy^="fb-approvals"]`).should("exist");
       cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Submit for approval", () => {
       cy.lhrSubmitForApproval();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Approve approval", () => {
