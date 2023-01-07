@@ -333,12 +333,14 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[3].email, noWait: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Save AR", () => {
       cy.arSaveApiCallWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
   });
 
@@ -369,10 +371,13 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.arClickCreateAnAR();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter AR title", () => {
       cy.arEnterApprovalRequestTitle({ title: "Second AR" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter description", () => {
@@ -381,7 +386,7 @@ context("Approval request form", { tags: ["@timetool"] },  () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Add document revision", () => {
+    it("Click on 'Add A Document'", () => {
       cy.arClickAddDocumentWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
