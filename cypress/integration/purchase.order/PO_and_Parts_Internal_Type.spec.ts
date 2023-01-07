@@ -497,6 +497,9 @@ context("PO and parts ", () => {
 
     it("Save document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
   });
 
@@ -1202,13 +1205,17 @@ context("PO and parts ", () => {
       cy.get(`[data-cy="common.summary.total"]`).scrollIntoView();
     });
 
-    it("Check Subtotal", () => {
+    it("Check Sub total", () => {
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(1).contains("$10.00");
     });
 
     it("Check Tax Total", () => {
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(3).contains("$0.93");
     });
+
+    // it("Check Shipping cost", () => {
+    //   cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$2.00");
+    // });
 
     it(`Verify Grand Total field`, () => {
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$12.93");
