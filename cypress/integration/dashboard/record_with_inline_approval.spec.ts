@@ -255,10 +255,13 @@ context("Records test with Inline approval", () => {
       cy.drCreateNewDocumentFromForm();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enters title 'Record title'", () => {
       cy.drEnterDocumentTitle({ name: "Record title" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open details tab", () => {
@@ -269,6 +272,8 @@ context("Records test with Inline approval", () => {
 
     it("Enter name", () => {
       cy.get("[name^=name-]").arrowType("test");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select approver", () => {
