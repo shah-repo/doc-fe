@@ -33,7 +33,7 @@ const CloneModal: React.FunctionComponent<CloneModalProps> = ({
 }) => {
   const classes = styles();
   const [value, setValue] = React.useState("false");
-  const cloneEB = useActionCreator(documentRevisionsActions.cloneEB);
+  const cloneEB = useActionCreator(documentRevisionsActions.cloneDoc);
   const history = useHistory();
 
   const handleChange = (event) => {

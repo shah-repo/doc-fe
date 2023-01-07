@@ -497,6 +497,7 @@
   "document.title": "Document Title",
   "documentRevision.revise": "Revise Document",
   "documentRevision.clone.eb": "Clone EB",
+  "documentRevision.clone": "Clone",
   "documentRevision.clone.modal.title": "Cloning EB",
   "documentRevision.clone.eb.title": "Link to Previous Build?",
   "documentRevision.revise.PO": "Revise PO",
