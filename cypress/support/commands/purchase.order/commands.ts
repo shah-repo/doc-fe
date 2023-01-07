@@ -372,9 +372,7 @@ Cypress.Commands.add("poAMEnterPassword", () => {
 });
 
 Cypress.Commands.add("poSaveDocument", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-    cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
-  });
+  cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 

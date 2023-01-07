@@ -713,7 +713,7 @@ context("Email popup modal for training due",  { tags: ["@timetool"] }, () => {
     });
 
     it("Click Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
