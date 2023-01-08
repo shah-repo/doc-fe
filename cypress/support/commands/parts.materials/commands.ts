@@ -190,6 +190,7 @@ Cypress.Commands.add("lhrAddApproverOnApproverListWithoutApi",
   (params: { approver: string; waitAggregatedAudit?: boolean }) => {
     cy.listLoadingElementShouldNotExist();
     cy.get("[data-cy^=\"fb-approvals\"]").click().autocompleteSelect(params.approver);
+    cy.unClick();
     cy.saveBarShouldNotExist();
     cy.listLoadingElementShouldNotExist();
   });
