@@ -406,6 +406,8 @@ context("Help Center custom content", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -415,14 +417,20 @@ context("Help Center custom content", () => {
     context("Get HelpCenter state to compare", () => {
       it("Navigate to Purchase Orders", () => {
         cy.navigToPurchaseOrder();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Open HelpCenter navigation", () => {
         cy.openHelpCenterNavigation();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Open HelpCenter content", () => {
         cy.openHelpCenterContent();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Remember HelpCenter content title", () => {
@@ -435,6 +443,8 @@ context("Help Center custom content", () => {
     context("Change help content for Purchase Orders", () => {
       it("Navigate to Page Details Management", () => {
         cy.navigToPageDetailsManagement();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Set custom help content for Purchase Order", () => {
@@ -448,6 +458,8 @@ context("Help Center custom content", () => {
     context("Verify HelpCenter state", () => {
       it("Navigate to Purchase Orders", () => {
         cy.navigToPurchaseOrder();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Open HelpCenter navigation", () => {
