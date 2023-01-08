@@ -423,9 +423,12 @@ context("E-signature test", () => {
 
     it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: emailOfFirstUserToSignUp });
+      cy.wait(1000);
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: emailOfSecondUserToSignUp });
+      cy.wait(1000);
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: emailOfThirdUserToSignUp });
       cy.unClick();
+      cy.wait(5000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -476,18 +479,21 @@ context("E-signature test", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click create new document from FORM", () => {
       cy.drCreateNewDocumentFromForm();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Enters title 'EB document'", () => {
@@ -619,7 +625,7 @@ context("E-signature test", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.get("#DialogContent-close").arrowClick();
-        cy.wait(2000);
+        cy.wait(3000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
@@ -659,8 +665,8 @@ context("E-signature test", () => {
       });
 
       it("Verify old names of approvers are present", () => {
-        cy.get("[data-cy=\"SummaryBaseProps-values\"]").contains(nameOfFirstUserToSignUp);
-        cy.get("[data-cy=\"SummaryBaseProps-values\"]").contains(nameOfSecondUserToSignUp);
+        cy.get(`[data-cy="SummaryBaseProps-values"]`).contains(nameOfFirstUserToSignUp);
+        cy.get(`[data-cy="SummaryBaseProps-values"]`).contains(nameOfSecondUserToSignUp);
       });
     });
 
@@ -685,8 +691,8 @@ context("E-signature test", () => {
 
       it("Verify old names of approvers are present", () => {
         SystemRequirement("REQ-4090");
-        cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfFirstUserToSignUp);
-        cy.get("[id=\"Presenter-FBWorkspace\"]").contains(nameOfSecondUserToSignUp);
+        cy.get(`[id="Presenter-FBWorkspace"]`).contains(nameOfFirstUserToSignUp);
+        cy.get(`[id="Presenter-FBWorkspace"]`).contains(nameOfSecondUserToSignUp);
       });
     });
 
@@ -711,7 +717,11 @@ context("E-signature test", () => {
         cy.get("[id=\"DialogContent-updateProfile\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
         cy.get("#DialogContent-close").arrowClick();
+        cy.wait(3000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -719,6 +729,9 @@ context("E-signature test", () => {
       it("Approve AR and EB", () => {
         cy.wait(3000);
         cy.grpNavigateToDashboard();
+        cy.wait(3000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get(`.MuiListItemText-root.MuiListItemText-dense`).first().trigger("mouseover");
         cy.get(`[data-cy="transition-approve"]`).first().trigger("mouseover");
         cy.get(`[data-cy="transition-approve"]`).first().arrowClick();
@@ -743,6 +756,8 @@ context("E-signature test", () => {
     context("Navigate to AR and confirm it's approved by thrid approver and that user and mail is correct", () => {
       it("Navigate to approval request list", () => {
         cy.navigToApprovalRequestListWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select AR document", () => {

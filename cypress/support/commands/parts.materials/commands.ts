@@ -154,6 +154,7 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
+// eslint-disable-next-line max-len
 Cypress.Commands.add("pmAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver, { force: true });
   cy.unClick();
@@ -182,6 +183,7 @@ Cypress.Commands.add("lhrAddApproverOnApproverList", (params: { approver: string
 Cypress.Commands.add("lhrAddApproverOnApproverListWithoutApi",
   (params: { approver: string; waitAggregatedAudit?: boolean }) => {
     cy.listLoadingElementShouldNotExist();
+    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick({ force: true });
     cy.get("[data-cy^=\"fb-approvals\"]").click().autocompleteSelect(params.approver);
     cy.unClick();
     cy.saveBarShouldNotExist();
