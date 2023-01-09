@@ -47,7 +47,6 @@ let createdLHRtDocument;
 let equipmentDocumentType;
 let equipmentDocument;
 let lhrUrl;
-let lhrsUrl;
 
 const ADMIN_USER = USERS[1];
 const trainingFormId = "FM-00002";
