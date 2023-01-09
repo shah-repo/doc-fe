@@ -39,7 +39,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const toggleBtn = () => {
     _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
     _documentRevisionFormState?.setDescriptionFocused(!_documentRevisionFormState?.isDescriptionFocused);
-    _documentRevisionFormState?.setExpanded(!_documentRevisionFormState?.expanded);
   };
   const onAway = () => {
     _documentRevisionFormState?.setExpanded(false);
@@ -85,11 +84,6 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                         onFocus={() => {
                           _textEditorState?.setPreviewMode(false);
                           _documentRevisionFormState?.setDescriptionFocused(true);
-                          setTimeout(() => {
-                            const moreThanTwoLines =
-                                Math.floor(_textEditorState?.editorReference.editorContainer.clientHeight / 24) > 2;
-                            _documentRevisionFormState?.setExpanded(moreThanTwoLines);
-                          });
                         }}
                         onChange={() => showToggleButton && showToggleButton()}
                         {...{ onBlur, editorRef, onEditorStateChange, toolbar }}
@@ -117,10 +111,10 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
               onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
               className={classes.moreOrLess}>{viewMore}</Button> : (
               !_textEditorState?.previewMode && !isTextClamped &&
-              _documentRevisionFormState?.expanded && <Button variant="text"
-                onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
-                className={classes.moreOrLess}
-              >{viewLess}</Button>)}
+               <Button variant="text"
+                 onClick={(ev) => { ev.stopPropagation(); toggleBtn(); }}
+                 className={classes.moreOrLess}
+               >{viewLess}</Button>)}
           </Box>
         )}</Observer>
     </Box>
