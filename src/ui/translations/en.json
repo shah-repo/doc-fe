@@ -993,6 +993,7 @@
   "form.builder.header.control.label": "Show customizable labels",
   "form.builder.header.po.status.open": "Open",
   "form.builder.header.po.status.close": "Close",
+  "form.builder.header.po.status.closed": "Closed",
   "form.builder.header.po.status.void": "Void",
   "form.builder.header.po.status.voided": "Voided",
   "form.builder.procedure.materials.title": "{title} | {lot} | Qty: {quantity} {unit}",

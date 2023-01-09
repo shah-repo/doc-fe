@@ -31,14 +31,14 @@ export enum FormHeaderStatusClassMapping {
   "Implementation"="GREEN_STATUS",
 }
 
-export const getPOStatusLabel = (poStatus) => {
+export const getPOStatusLabel = (poStatus: POStatusType, isActionBtn?: boolean) => {
   let label = "form.builder.header.po.status.open";
   switch (poStatus) {
     case POStatusType.CLOSED:
-      label = "form.builder.header.po.status.close";
+      label = isActionBtn ? "form.builder.header.po.status.close" : "form.builder.header.po.status.closed";
       break;
     case POStatusType.VOIDED:
-      label = "form.builder.header.po.status.voided";
+      label = isActionBtn ? "form.builder.header.po.status.void" : "form.builder.header.po.status.voided";
       break;
     default:
   }

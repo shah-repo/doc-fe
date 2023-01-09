@@ -73,7 +73,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     <div
       className={classNames(classes.statusIcon, classes[status])}
     />
-    <Text message={getPOStatusLabel(POStatusType[status])} />
+    <Text message={getPOStatusLabel(POStatusType[status], true)} />
   </>;
 
 
