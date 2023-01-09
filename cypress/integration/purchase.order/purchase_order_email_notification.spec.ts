@@ -25,7 +25,6 @@ let createdPurchaseOrderFormDocument;
 let approvalRequestDocumentType;
 let initialArDocument;
 let emailsFromInbox: IMAPEmail[];
-const dateOffset = (5 * 1000);
 const dateAfterEmailShouldArrive = new Date();
 
 context("Send PO Owner an email notification when a PO is approved", () => {
