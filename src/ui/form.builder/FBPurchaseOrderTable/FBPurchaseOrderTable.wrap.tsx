@@ -11,6 +11,7 @@ import { getReceivedQuantity } from "../FBPOReceive/utils";
 import FBStore from "../FBStore/FBStore";
 import FBPurchaseOrderClasses from "./FBPurchaseOrderTable.styles";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
+import { checkServiceOrProductPartExists } from "./helpers";
 
 export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
   Component: React.FunctionComponent<T>,
@@ -79,7 +80,6 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
     const approvalsFieldName = workspaceState?.schema?.find((item) => item.type === "poapprovals")?.name ?? "";
 
     const {
-      poApprovalsState,
       addApprover,
       updateApprovals,
       hasUserInApprovers,
@@ -102,7 +102,11 @@ export const withFBPurchaseOrderTable = <T extends FBPurchaseOrderTableProps>(
         FBStore?.setPurchaseOrderValue(value);
 
         const requester = formState?.getFieldValue(PO_REQUESTOR_COMPONENT_NAME);
-        if (requester && !hasUserInApprovers(requester, poApprovalsState?.activeApprovals) && value?.items.length) {
+        const hasServiceOrProductPart = value?.items && checkServiceOrProductPartExists(value);
+        const hasRequesterInAllApprovers = !hasUserInApprovers(requester);
+        const shouldAddApprover = hasServiceOrProductPart && requester && !hasRequesterInAllApprovers;
+
+        if (shouldAddApprover) {
           addApprover(
             [requester],
             { manually: false },
