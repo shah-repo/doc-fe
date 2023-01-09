@@ -473,7 +473,6 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Clicks on 'create a document' button", () => {
-      cy.pause();
       cy.cmpClickCreateNewDocument();
     });
 
