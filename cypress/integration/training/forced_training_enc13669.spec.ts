@@ -41,9 +41,9 @@ context("Forced training ENC-13669", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[11].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[12], USERS[13], USERS[14]],
             documentTypes: [
               ClinicalProtocolDocType,
               TrainingCurriculum,
@@ -52,8 +52,8 @@ context("Forced training ENC-13669", () => {
           }, sessionId: loginResponse.sessionId as unknown as string,
         }).then((response) => {
           createdCompany = response;
-          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[2].email);
+          adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
+          secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[12].email);
           done();
         });
       });
@@ -61,7 +61,7 @@ context("Forced training ENC-13669", () => {
 
     it("[API]Login first tester", (done: any) => {
       cy.authApiLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       }).then((response) => {
         loginResponse = response;
@@ -279,7 +279,7 @@ context("Forced training ENC-13669", () => {
   context("Login user", () => {
     it("Logs user in", () => {
       cy.authLogin({
-        email: USERS[1].email,
+        email: USERS[11].email,
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
     });
@@ -446,11 +446,11 @@ context("Forced training ENC-13669", () => {
     });
 
     it("Select Users to train", () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[2].name}`);
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -463,7 +463,7 @@ context("Forced training ENC-13669", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -504,8 +504,8 @@ context("Forced training ENC-13669", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Login user ${USERS[2].name} to dashboard`, () => {
-      cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+    it(`Login user ${USERS[12].name} to dashboard`, () => {
+      cy.authLoginToDashboard({ USER: USERS[12], employeeId: secondEmployee.id });
     });
 
     it("Verify training notifications", () => {
@@ -521,7 +521,7 @@ context("Forced training ENC-13669", () => {
     });
 
     it("Login user to dashboard", () => {
-      cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
 
     // it("Turn off autosave", () => {
@@ -529,7 +529,7 @@ context("Forced training ENC-13669", () => {
     // });
   });
 
-  context(`Verify Training Records with timestamp on 'Completed On' column for ${USERS[1].name}`, () => {
+  context(`Verify Training Records with timestamp on 'Completed On' column for ${USERS[11].name}`, () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
       cy.progressBarShouldNotExist();
@@ -542,15 +542,15 @@ context("Forced training ENC-13669", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`${USERS[1].name} with timestamp on 'Completed on' column for 'AR Form' should be present`, () => {
+    it(`${USERS[11].name} with timestamp on 'Completed on' column for 'AR Form' should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: doc1Name });
-      cy.trLandingPageUsername({ username: USERS[1].name });
+      cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocId({ docId: doc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", doc1Id)
-        .and("contain", USERS[1].name).and("not.contain", "Pending");
+        .and("contain", USERS[11].name).and("not.contain", "Pending");
       cy.get(`[data-grid-row-index="0"]`).should("contain", receivingReleasedDateMonth);
       cy.get(`[data-grid-row-index="0"]`).should("have.length", 1);
     });
@@ -560,7 +560,7 @@ context("Forced training ENC-13669", () => {
     });
   });
 
-  context(`Verify Training Records with timestamp on 'Completed On' column for ${USERS[2].name}`, () => {
+  context(`Verify Training Records with timestamp on 'Completed On' column for ${USERS[12].name}`, () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
       cy.progressBarShouldNotExist();
@@ -574,15 +574,15 @@ context("Forced training ENC-13669", () => {
     });
 
     // eslint-disable-next-line max-len
-    it(`${USERS[1].name} with timestamp on 'Completed on' column for 'AR Form' should be present`, () => {
+    it(`${USERS[11].name} with timestamp on 'Completed on' column for 'AR Form' should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: doc1Name });
-      cy.trLandingPageUsername({ username: USERS[2].name });
+      cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocId({ docId: doc1Id });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
       cy.get(`[data-grid-row-index="0"]`).should("contain", doc1Id)
-        .and("contain", USERS[2].name).and("not.contain", "Pending");
+        .and("contain", USERS[12].name).and("not.contain", "Pending");
       cy.get(`[data-grid-row-index="0"]`).should("contain", receivingReleasedDateMonth);
       cy.get(`[data-grid-row-index="0"]`).should("have.length", 1);
     });
@@ -622,7 +622,7 @@ context("Forced training ENC-13669", () => {
     });
 
     it("Select Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
@@ -646,8 +646,8 @@ context("Forced training ENC-13669", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Select Users to train ${USERS[1].name}`, () => {
-      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[1].name}`);
+    it(`Select Users to train ${USERS[11].name}`, () => {
+      cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -677,7 +677,7 @@ context("Forced training ENC-13669", () => {
     });
   });
 
-  context(`Verify no 'Pending' training other than ${USERS[2].name} in training records`, () => {
+  context(`Verify no 'Pending' training other than ${USERS[12].name} in training records`, () => {
     it("Navigate to Training Records", () => {
       cy.navigToTrainingRecords();
       cy.progressBarShouldNotExist();
@@ -693,13 +693,13 @@ context("Forced training ENC-13669", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`${USERS[1].name} with one Pending on 'Completed on' column should be present`, () => {
+    it(`${USERS[11].name} with one Pending on 'Completed on' column should be present`, () => {
       cy.trLandingPageDocRevTitle({ title: doc1Name });
-      cy.trLandingPageUsername({ username: USERS[1].name }).wait(500);
+      cy.trLandingPageUsername({ username: USERS[11].name }).wait(500);
       cy.trLandingPageCompletedOn({ completed: "Pending" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[1].name).and("contain", "Pending");
+      cy.get(`[data-grid-row-index="0"]`).should("contain", USERS[11].name).and("contain", "Pending");
       cy.get("tr.k-master-row").should("have.length", 1);
     });
 
@@ -709,9 +709,9 @@ context("Forced training ENC-13669", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Verify ${USERS[2].name} does not have more than one row present`, () => {
+    it(`Verify ${USERS[12].name} does not have more than one row present`, () => {
       cy.trLandingPageDocRevTitle({ title: doc1Name });
-      cy.trLandingPageUsername({ username: USERS[2].name }).wait(500);
+      cy.trLandingPageUsername({ username: USERS[12].name }).wait(500);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("tr.k-master-row").should("have.length", 1);
