@@ -165,6 +165,9 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
           id: get(documentRevision, "document.documentType.id"),
         },
       },
+      formInput: documentRevision.formInput,
+      changeRequestId: documentRevision.changeRequest?.id ?? null,
+      status: documentRevision.status,
     };
 
     if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
