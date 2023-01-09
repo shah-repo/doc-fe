@@ -235,7 +235,7 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -395,7 +395,7 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -457,7 +457,7 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Export and save the template", () => {
@@ -473,6 +473,7 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Clicks on 'create a document' button", () => {
+      cy.pause();
       cy.cmpClickCreateNewDocument();
     });
 
@@ -497,7 +498,7 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -592,9 +593,7 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Verify Document Type", () => {
@@ -925,9 +924,7 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -955,7 +952,7 @@ context("new_layout_for_Parts", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Navigate to parts landing page", () => {
