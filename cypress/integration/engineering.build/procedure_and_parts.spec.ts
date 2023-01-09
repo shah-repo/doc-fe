@@ -1014,10 +1014,6 @@ context("Procedure and parts flow test", () => {
         cy.pmAddFreeTextEquipment({ equipment: "Free text equipment" });
       });
 
-      // it("Save document", () => {
-      //   cy.drClickSaveWithoutApiCall();
-      // });
-
       it("Add approver to approvals", () => {
         cy.pmAddApproverOnApproverListNw({ approver: USERS[1].email });
       });

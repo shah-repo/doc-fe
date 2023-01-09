@@ -78,6 +78,7 @@ Cypress.Commands.add("ebClickClone", () => {
 });
 
 Cypress.Commands.add("ebClickCloneWithoutApi", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
   cy.get("[data-cy=\"CloneEBButton\"]").arrowClick({ force: true });
   cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
