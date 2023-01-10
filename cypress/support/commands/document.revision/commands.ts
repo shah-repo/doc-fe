@@ -47,6 +47,7 @@ declare global {
       drClickCreateSupplierWithApiCallAudit(): Chainable<Subject>;
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
+      drClickSaveWithoutApiCall(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drGetDocIdElementFromUI(): Chainable<JQuery<HTMLElement>>;
       drGetChangeRequestLinkElementFromUI(): Chainable<JQuery<HTMLElement>>;
@@ -208,6 +209,7 @@ Cypress.Commands.add("drClickOnSpecificDocFromList", (params: {item: string}) =>
 Cypress.Commands.add("drSelectReferences", (...list: string[]) => {
   list.forEach((item) => {
     cy.get(`[data-cy="referenceTo"]`).arrowClick().wait(500);
+    cy.listLoadingElementShouldNotExist();
     cy.get(`[data-cy="referenceTo"]`).autocompleteSelect(item);
     cy.unClick();
   });
@@ -357,10 +359,8 @@ Cypress.Commands.add("drClearDocumentTitle", () => {
 });
 
 Cypress.Commands.add("drEnterDocumentTitleWithWait", (params: { name: string }) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-    cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
-    cy.unClick();
-  });
+  cy.get("[data-cy=\"field-name\"]").arrowType(params.name);
+  cy.unClick();
   cy.progressBarShouldNotExist();
 });
 
@@ -612,6 +612,14 @@ Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("drClickSaveWithoutApiCall", () => {
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.get("div.MuiLinearProgress-root", { timeout: 10000 }).should("be.visible");
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {
   cy.get(`div[data-cy="HeaderInfo-status"]>span`).should("contain", params.status);
 });
@@ -802,7 +810,7 @@ Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
 
 Cypress.Commands.add("drCreateNewDocumentFromFormRecord", () => {
   cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick({ force: true });
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });

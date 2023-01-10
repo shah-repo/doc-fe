@@ -98,7 +98,7 @@ context("Export Other internal doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -110,7 +110,7 @@ context("Export Other internal doc", () => {
 
   context("CP with Released status", () => {
     it("Approve and release the form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify export", () => {
@@ -122,8 +122,8 @@ context("Export Other internal doc", () => {
     it("Revise document with 'Obsolete' option", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Obsolete" });
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drClickSaveWithoutApiCall();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify export", () => {
@@ -177,7 +177,7 @@ context("Export Other internal doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click Void button", () => {
@@ -221,7 +221,7 @@ context("Export Other internal doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
       cy.url().then((url: any) => {
         recordUrl = url;
       });
@@ -260,7 +260,7 @@ context("Export Other internal doc", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
       cy.url().then((url: any) => {
         arUrl = url;
       });
@@ -268,6 +268,7 @@ context("Export Other internal doc", () => {
 
     it("Navigate to CP", () => {
       cy.visit(recordUrl);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -283,6 +284,7 @@ context("Export Other internal doc", () => {
   context("CP with In Review status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -293,6 +295,7 @@ context("Export Other internal doc", () => {
 
     it("Navigate to CP", () => {
       cy.visit(recordUrl);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -305,6 +308,7 @@ context("Export Other internal doc", () => {
   context("CP with Approved status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -315,6 +319,7 @@ context("Export Other internal doc", () => {
 
     it("Navigate to CP", () => {
       cy.visit(recordUrl);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

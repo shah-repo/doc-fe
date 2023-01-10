@@ -18,6 +18,7 @@ declare global {
       lhrApprove(): Chainable<Subject>;
       lhrApproveWithoutApi(): Chainable<Subject>;
       ebClickClone(): Chainable<Subject>;
+      ebClickCloneWithoutApi(): Chainable<Subject>;
       ebClickCloneEB(): Chainable<Subject>;
       ebCloneClickYes(): Chainable<Subject>;
       ebCloneClickNo(): Chainable<Subject>;
@@ -77,6 +78,15 @@ Cypress.Commands.add("ebClickClone", () => {
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("ebClickCloneWithoutApi", () => {
+  cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
+  cy.get("[data-cy=\"CloneEBButton\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"CloneContinue\"]").arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.progressBarShouldAppear();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("ebClickCloneFromMenu", () => {
   cy.get("[data-cy=\"HeaderMenuButton\"]").arrowClick();
   cy.wrapWithWaitOnApiCalls([
@@ -107,38 +117,41 @@ Cypress.Commands.add("ebCloneClickContinue", () => {
 
 Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: string; name: string }) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
-  cy.listLoadingElementShouldNotExist();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.progressBarShouldNotExist();
-  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
+  cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
   cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick();
-  cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
+  cy.listLoadingElementShouldAppear().wait(500);
+  cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
   cy.get("[data-cy=\"unit\"]").autocompleteSelect(params.name);
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebAddStep2EquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").last().arrowClick();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
-  cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+  cy.get("[data-cy=\"form.builder.save\"]").arrowClick().wait(500);
 });
 
 Cypress.Commands.add("ebSelectFirstDocument", () => {
