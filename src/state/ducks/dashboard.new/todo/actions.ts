@@ -1,5 +1,5 @@
-import { apiAction } from "../../../factories";
-import { ApiAction } from "../../../types";
+import { apiAction, apiActionWithCallbacks } from "../../../factories";
+import { ApiAction, Handlers } from "../../../types";
 import { DASHBOARD_MY_FEEDS_URL_SEARCH, MY_FEEDS_INITIAL_PAYLOAD, MY_FEEDS_LIST, MY_FEEDS_LIST_ASYNC, MY_FEEDS_LIST_INITIAL_STATE } from "./constants";
 import { MyFeedsListAction, MyFeedsListApiResponse } from "./types";
 
@@ -24,7 +24,15 @@ const loadMyFeedsList = (
   })
 );
 
+const dismissLineItem = (id: string, handlers: Handlers) => apiActionWithCallbacks({
+  url: `/dashboard_feed/${id}`,
+  method: "patch",
+  data: { active: false },
+  handlers,
+});
+
 export default {
   myFeedsList,
   loadMyFeedsList,
+  dismissLineItem,
 };
