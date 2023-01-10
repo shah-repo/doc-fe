@@ -587,6 +587,8 @@ context("Record inline Flow", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get("[name^='first-textfield-for-inline']").arrowType("First entry2");
         cy.get(`input[type="checkbox"][value="B"]`).scrollIntoView().last().check({ force: true });
+        cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Verify Inline Approval needs to be Approved", () => {
@@ -595,12 +597,15 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
+        cy.pause();
         cy.drClickCreateDocumentWithApiCall();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Approve Second Inline Approval", () => {
         cy.inlineApprovalWithoutApi();
+        cy.wait(3000);
       });
 
       it("Navigate to Details tab", () => {
@@ -612,12 +617,11 @@ context("Record inline Flow", () => {
       });
 
       it("Select approver for  inline 3", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name*='fb-ia-firstd-inline-field'] input")
-              .autocompleteSelect(`${USERS[1].name}`, { force: true });
-          });
+        cy.get("[name*='fb-ia-firstd-inline-field'] input")
+          .autocompleteSelect(`${USERS[1].name}`, { force: true });
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Checkbox option 1 checked", () => {
@@ -735,6 +739,7 @@ context("Record inline Flow", () => {
         });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
 
@@ -852,6 +857,7 @@ context("Record inline Flow", () => {
       cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Approve first Inline Approval", () => {
@@ -866,6 +872,7 @@ context("Record inline Flow", () => {
       cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Send request for approval", () => {
@@ -876,16 +883,16 @@ context("Record inline Flow", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
   });
 
   context("Verify Scroll", () => {
     it("Navigate to history tab", () => {
+      cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAggregatedAudit], () => {
-        cy.drSelectHistoryTab();
-      });
+      cy.wait(3000);
     });
 
     it("Click and drag the scroll bar and verify that user can scroll history tab", () => {

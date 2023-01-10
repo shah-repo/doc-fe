@@ -1102,6 +1102,7 @@ context("Released_lots_verify_in_lhr", () => {
       cy.lhrSubmitForApproval();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click on Details", () => {
@@ -1207,6 +1208,7 @@ context("Released_lots_verify_in_lhr", () => {
       cy.lhrSubmitForApproval();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click on Details", () => {

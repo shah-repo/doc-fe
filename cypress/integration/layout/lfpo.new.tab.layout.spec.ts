@@ -1005,12 +1005,15 @@ context("LFPO new layout verification", () => {
       cy.drSelectDetailsTab().wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select Purchase order", () => {
       cy.get("[data-cy='porec-receivable-test']").autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Save the form data", () => {
@@ -1050,6 +1053,9 @@ context("LFPO new layout verification", () => {
 
     it("Create lot", () => {
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Verify Lot should be created and displayed in the table for that part", () => {
