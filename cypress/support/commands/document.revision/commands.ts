@@ -102,6 +102,8 @@ declare global {
       drClickDAMEditBtn(): Chainable<Subject>;
       drEditAddApprovingGroups(params: {eq: number}, ...groups: string[]): Chainable<Subject>;
       drEditRemoveApprovingGroups(params: {eq: number}, ...groups: string[]): Chainable<Subject>;
+      drEditAddApprovingUsers(params: {eq: number}, ...users: string[]): Chainable<Subject>;
+      drEditRemoveApprovingUsers(params: {eq: number}, ...users: string[]): Chainable<Subject>;
 
       /* Document Approval Matrix End */
       drCreateNewDocumentFromForm(): Chainable<Subject>;
@@ -224,6 +226,19 @@ Cypress.Commands.add("drEditAddApprovingGroups", (params: {eq: number}, ...group
 Cypress.Commands.add("drEditRemoveApprovingGroups", (params: {eq: number}, ...groups: string[]) => {
   groups.forEach((item) => {
     cy.get(`[data-cy="dar-built-in.${params.eq}.groups"]`).parent()
+      .contains(item).parent().parent().find("svg").arrowClick();
+  });
+});
+
+Cypress.Commands.add("drEditAddApprovingUsers", (params: {eq: number}, ...users: string[]) => {
+  users.forEach((item) => {
+    cy.get(`[data-cy="dar-built-in.${params.eq}.employees"]`).autocompleteSelect(item);
+  });
+});
+
+Cypress.Commands.add("drEditRemoveApprovingUsers", (params: {eq: number}, ...users: string[]) => {
+  users.forEach((item) => {
+    cy.get(`[data-cy="dar-built-in.${params.eq}.employees"]`).parent()
       .contains(item).parent().parent().find("svg").arrowClick();
   });
 });
@@ -592,6 +607,7 @@ Cypress.Commands.add("drClickCreateDocumentWithApiCallForFormsExpectingToastErro
 Cypress.Commands.add("drClickCreateDocumentWithoutApiCall", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
+  cy.wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
