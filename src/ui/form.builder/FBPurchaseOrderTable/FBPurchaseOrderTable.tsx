@@ -2,7 +2,7 @@ import { TableBody } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableRow from "@material-ui/core/TableRow";
 import React from "react";
-import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBSection, FBTableCell } from "..";
+import { FBButton, FBPurchaseOrderTableDetails, FBPurchaseOrderTableSum, FBPurchaseOrderTableTotal, FBTableCell } from "..";
 import { ReactComponent as PlusIcon } from "../../../assets/images/plus_icon_add_btn.svg";
 import { FBPurchaseOrderTableProps } from "./FBPurchaseOrderTable.types";
 import { withFBPurchaseOrderTable } from "./FBPurchaseOrderTable.wrap";
@@ -24,11 +24,8 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
   mode,
   name,
   isReceivable,
-  gutter,
 }) => (
-  <><FBSection
-    name={`fb-approvals-section-${name}`}
-    label="form.purchare.order.table.headline" /><Table className={classes?.root}>
+  <Table className={classes?.root}>
     <TableBody>
       <TableRow>
         <FBTableCell colSpan={8} className={classes?.list}>
@@ -69,7 +66,7 @@ const FBPurchaseOrderTable: React.FunctionComponent<FBPurchaseOrderTableProps> =
         }} />
       )}
     </TableBody>
-  </Table></>
+  </Table>
 );
 
 export default withFBPurchaseOrderTable(FBPurchaseOrderTable);
