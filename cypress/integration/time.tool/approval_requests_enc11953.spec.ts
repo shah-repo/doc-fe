@@ -10,7 +10,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { momentInPST } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -22,9 +21,6 @@ let clinicalProtocolDocumentType;
 let group;
 let adminEmployee;
 let asyncTasksGroup;
-let formDocumentType;
-let maintenanceRecordDocumentType;
-let approvalRequestDocumentType;
 
 const approvalRequestName = "Approval request form";
 const aRID = "AR-00001";
@@ -67,9 +63,6 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
           secondEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[1].email);
-          formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
-          maintenanceRecordDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Maintenance Record");
-          approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           clinicalProtocolDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Clinical Protocol");
           done();
         });
@@ -160,19 +153,19 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
     });
-
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
   });
 
   context("Create approval request", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter title AR title", () => {
@@ -185,36 +178,52 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
 
     it("Add document revision", () => {
       cy.arSelectDocumentTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.arClickAddDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Create Approval Request", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to approval request on approver list", () => {
       cy.drSelectChangeDetailsTab();
-      cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email, noWait: true });
-      cy.arAddApproverOnApproverList({ approver: USERS[3].email, noWait: true });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[3].email });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save AR", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Send to review", () => {
       cy.arClickSendToReview();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context(`Verify ${USERS[1].name} received notification as 'needs your approval for'`, () => {
     it("Goto dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -239,27 +248,39 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
 
   context(`Verify ${USERS[1].name} AR list for status as 'IN_REVIEW'`, () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clear filters", () => {
       cy.alClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter AR by title as 'Approval request form'", () => {
       cy.alFilterByTitle({ title: "Approval request form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter list by STATUS as IN_REVIEW", () => {
       cy.alFilterByStatus({ status: "IN_REVIEW" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify filter by STATUS as IN_REVIEW", () => {
       cy.alVerifyFilterByStatus({ status: "IN_REVIEW" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -271,6 +292,8 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify for ${USERS[2].name} notification as '${USERS[1].name} needs your approval for'`, () => {
@@ -283,27 +306,39 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
 
   context(`Verify ${USERS[2].name} AR list for status as 'IN_REVIEW'`, () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clear filters", () => {
       cy.alClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter AR by title as 'Approval request form'", () => {
       cy.alFilterByTitle({ title: "Approval request form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter list by STATUS as IN_REVIEW", () => {
       cy.alFilterByStatus({ status: "IN_REVIEW" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify filter by STATUS as IN_REVIEW", () => {
       cy.alVerifyFilterByStatus({ status: "IN_REVIEW" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -327,23 +362,33 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
 
   context(`Verify ${USERS[3].name} AR list for status as 'IN_REVIEW'`, () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clear filters", () => {
       cy.alClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter AR by title as 'Approval request form'", () => {
       cy.alFilterByTitle({ title: "Approval request form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Filter list by OWNER as ${USERS[1].name}`, () => {
       cy.alFilterByOwner({ owner: USERS[1].name });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter list by STATUS as IN_REVIEW", () => {
       cy.alFilterByStatus({ status: "IN_REVIEW" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify filter by STATUS as IN_REVIEW", () => {
@@ -359,20 +404,25 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 5 day to time travel", () => {
       cy.arSetTimeTravelInDays({ days: 5 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(60000);
     });
 
     it("Goto dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it(`Have ${USERS[1].name} approve the AR`, () => {
-      cy.arApproveARFromDashboard();
+      cy.arApproveARFromDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -398,6 +448,9 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
   context("Set time travel to Day 10", () => {
     it("Select 5 days to time travel", () => {
       cy.arSetTimeTravelInDays({ days: 5 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(60000);
     });
 
     it(`Login as ${USERS[2].name}`, () => {
@@ -407,10 +460,12 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Have ${USERS[2].name} approve the AR`, () => {
-      cy.arApproveARFromDashboard();
+      cy.arApproveARFromDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -423,6 +478,8 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
@@ -455,10 +512,15 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 20 days to time travel", () => {
       cy.arSetTimeTravelInDays({ days: 20 });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(60000);
     });
 
     it(`Login as ${USERS[3].name}`, () => {
@@ -468,10 +530,12 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Approve the AR by ${USERS[3].name}`, () => {
-      cy.arApproveARFromDashboard();
+      cy.arApproveARFromDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -484,6 +548,8 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
@@ -510,35 +576,51 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
 
   context("close AR and set effective date to 40 days", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clear filters", () => {
       cy.alClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Filter list by status", () => {
       cy.alFilterByStatus({ status: "APPROVED" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify filter by TITLE", () => {
       cy.alVerifyFilterByTitle({ title: approvalRequestName });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Verify AR ID as ${aRID}`, () => {
       cy.dlVerifyFilterByDocId({ docId: aRID });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Open AR filtered request`, () => {
       cy.get("#root").contains(approvalRequestName).arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Close button", () => {
       cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select option No", () => {
       cy.get("button[id=\"AlertDialog-cancelButton\"]").contains("No").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Advance Effective Date to 10 days from now", () => {
@@ -547,6 +629,8 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       const day = effectiveDate.format("D");
 
       cy.get("[aria-label=\"change date\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
 
       cy.get("div.MuiPickersCalendarHeader-transitionContainer").then(($el) => {
         const monthYearText = $el.text();
@@ -565,11 +649,9 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
             }
           });
       });
-
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR, CyRoutes.ARPreview], () => {
-          cy.get("#confirmEffectiveDate").arrowClick();
-        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("#confirmEffectiveDate").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -581,10 +663,11 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.arSetTimeTravelInDays({ days: 1 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(60000);
     });
 
     it("Goto dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -623,15 +706,11 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.arSetTimeTravelInDays({ days: 9 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(20000);
+      cy.wait(60000);
     });
 
     it("Reload the page and Check status as COMPLETE", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.reload();
-        });
+      cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
@@ -641,11 +720,19 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Check that the AR was CLOSED", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
       cy.arClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.alFilterByArId({ arId: `${aRID}` });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.alFilterByTitle({ title: "Approval request form" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.alVerifyFilterByStatus({ status: "CLOSED" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("verify that Doc is released", () => {
@@ -657,7 +744,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("You should get a dashboard notification as CLOSED", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.dashVerifyListItemExistsOnDashboard({
@@ -672,15 +759,11 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.arSetTimeTravelInDays({ days: 2 });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(30000);
+      cy.wait(60000);
     });
 
     it("Reload the page and Check status as COMPLETE", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetDocumentTypes, CyRoutes.GroupsGetClearFilter,
-          CyRoutes.GetAvailableApprovers], () => {
-          cy.reload();
-        });
+      cy.reload();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get(`td[data-grid-col-index="0"]`).eq(0).should("contain.text", "TIME_TRAVEL_COMPANY");
@@ -690,7 +773,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Goto dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

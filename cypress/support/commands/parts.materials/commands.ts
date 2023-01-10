@@ -23,6 +23,7 @@ declare global {
       pmAddFreeTextEquipment(params: {equipment: string}): Chainable<Subject>;
       pmUploadAttachment(params: {fileName: string }): Chainable<Subject>;
       pmAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      pmAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       pmAddApproverOnApproverListNw(params: {approver: string }): Chainable<Subject>;
       lhrAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       lhrAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
@@ -160,6 +161,14 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
+// eslint-disable-next-line max-len
+Cypress.Commands.add("pmAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver, { force: true });
+  cy.unClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("pmAddApproverOnApproverListNw", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick({ force: true }).wait(500);
@@ -181,7 +190,9 @@ Cypress.Commands.add("lhrAddApproverOnApproverList", (params: { approver: string
 Cypress.Commands.add("lhrAddApproverOnApproverListWithoutApi",
   (params: { approver: string; waitAggregatedAudit?: boolean }) => {
     cy.listLoadingElementShouldNotExist();
+    cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().arrowClick({ force: true });
     cy.get("[data-cy^=\"fb-approvals\"]").click().autocompleteSelect(params.approver);
+    cy.unClick();
     cy.saveBarShouldNotExist();
     cy.listLoadingElementShouldNotExist();
   });
