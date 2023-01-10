@@ -228,13 +228,19 @@ context("Autosave EB test", () => {
 
       cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
       cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Add 'Material' to step #1 and check autosave", () => {
       cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
       });
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
       cy.get("[data-cy=\"title\"]").autocompleteSelect("Part document");
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
       cy.get("[data-cy=\"partLot\"]").arrowType("test");
       cy.get("[name=\"quantity\"]").arrowType("2");
       cy.get("[data-cy=\"unit\"]").autocompleteSelect("Day");
@@ -249,6 +255,8 @@ context("Autosave EB test", () => {
         });
       }).as("response");
       cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
       cy.get("[data-cy=\"title\"]").arrowType("Equipment");
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
