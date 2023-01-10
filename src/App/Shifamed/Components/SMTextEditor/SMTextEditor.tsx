@@ -47,8 +47,8 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
     showToggleButton && showToggleButton();
   };
 
-  const toggleButton = (el) => {
-    el.stopPropagation();
+  const toggleButton = (el: React.MouseEvent<HTMLButtonElement>) => {
+    el?.stopPropagation();
     toggleBtn();
   };
 
@@ -114,11 +114,11 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
               </Box>
             </ClickAwayListener>
             {isTextClamped ? <Button variant="text"
-              onClick={(ev) => { toggleButton(ev); }}
+              onClick={ toggleButton }
               className={classes.moreOrLess}>{viewMore}</Button> : (
               !_textEditorState?.previewMode && !isTextClamped &&
                <Button variant="text"
-                 onClick={(ev) => { toggleButton(ev); }}
+                 onClick={ toggleButton }
                  className={classes.moreOrLess}
                >{viewLess}</Button>)}
           </Box>
