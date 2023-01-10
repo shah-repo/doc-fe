@@ -105,7 +105,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                           className={classes.iconBtn}
                           onClick={
                             openEditor &&
-                            openEditor({ type: picker.key, index })
+                            openEditor({ type: picker.key, index, isAddAction: true })
                           }
                         >
                           {FBEditorState.editorTypeIconMapping[
@@ -123,7 +123,7 @@ const ListPanel: React.FunctionComponent<FBControlPickerProps> = ({
                         <ListItemText key={index} data-cy={picker.label}
                           onClick={
                             openEditor &&
-                            openEditor({ type: picker.key, index })
+                            openEditor({ type: picker.key, index, isAddAction: true })
                           }
                         >
                           <Typography className={classes.listSubItem}>
