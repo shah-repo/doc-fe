@@ -945,6 +945,9 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Click on 'Details' tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select PO Receivable from dropdown for 'RC-00001'", () => {

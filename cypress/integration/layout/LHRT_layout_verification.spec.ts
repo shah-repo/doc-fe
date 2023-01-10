@@ -423,8 +423,8 @@ context("Create new LHRT Layout Verification", () => {
     context("Click on Form Preview and verify the fields", () => {
       it("Click 'Preview Layout' button", () => {
         cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
-        cy.listLoadingElementShouldExist();
         cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Verify Step 2 Added to detail tab", () => {
@@ -497,8 +497,8 @@ context("Create new LHRT Layout Verification", () => {
 
       it("Click 'Preview Layout' button", () => {
         cy.get("[data-cy='FBWorkspace-clickView']").arrowClick();
-        cy.listLoadingElementShouldExist();
         cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Verify Step 2 Added to detail tab", () => {

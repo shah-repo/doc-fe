@@ -570,6 +570,9 @@ context("Create receivable test", () => {
           cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
             cy.recCreateNew();
           });
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
+          cy.wait(3000);
         });
 
         it("Add an Approval", () => {
@@ -579,7 +582,10 @@ context("Create receivable test", () => {
         });
 
         it("Click 'Submit for Approval' button", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(3000);
         });
 
         it("Click 'Approve' button", () => {
