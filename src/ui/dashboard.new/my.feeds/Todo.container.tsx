@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   dashboardTodoActions,
   dashboardTodoSelectors,
@@ -12,6 +12,7 @@ import { scrollToBottom } from "../line.items/common/Utils";
 import LineItemsPresenter from "./LineItems.presenter";
 
 const TodoContainer: React.FunctionComponent = () => {
+  const dispatch = useDispatch();
   const [hoverItemId, setHoverItemId] = React.useState("");
   const [offset, setOffset] = React.useState(MY_FEEDS_INITIAL_OFFSET);
   const [overallLimit, setOverallLimit] = React.useState(MY_FEEDS_LIMIT);
@@ -34,6 +35,18 @@ const TodoContainer: React.FunctionComponent = () => {
   );
   const feedItems = useSelector(dashboardTodoSelectors.myFeedsList);
 
+  const dismissAction = useActionCreator(dashboardTodoActions.dismissLineItem);
+  const dismissAsync = useAsync({
+    onSuccess: () => {
+      setOffset(MY_FEEDS_INITIAL_OFFSET);
+      setOverallLimit(MY_FEEDS_LIMIT);
+      dispatch(dashboardTodoActions.loadMyFeedsList());
+    },
+  });
+  const dismissLineItem = (id: string) => {
+    dismissAsync.start(dismissAction, id, dismissAsync);
+  };
+
   const async = useAsync();
   const onLoadMoreData = () => {
     const nextOffset = offset + MY_FEEDS_LIMIT;
@@ -48,12 +61,13 @@ const TodoContainer: React.FunctionComponent = () => {
       scrollToBottom("#myFeedBoxLoadMore");
     }, 2000);
   };
+
   return (
     <LineItemsPresenter
       {...{
         loadMyFeeds, loadMyFeedsListAsyncState, feedItems,
         hoverItemId, onMouseHoverItem, onMouseLeaveItem, overallLimit,
-        dialogPDF,
+        dialogPDF, dismissLineItem,
       }}
       onLoadMoreData={onLoadMoreData}
     />
