@@ -1292,14 +1292,15 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Add 'Part document' to step #1", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.mpiAddMaterialDocumentToStep({
-            numbOfStep: 1,
-            material: "Part document",
-            quntity: "3",
-            unit: "Each",
-          });
+        cy.mpiAddMaterialDocumentToStep({
+          numbOfStep: 1,
+          material: "Part document",
+          quntity: "3",
+          unit: "Each",
         });
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Add 'Equipment one' to step #1", () => {
