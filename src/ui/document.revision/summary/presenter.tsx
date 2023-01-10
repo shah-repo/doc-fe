@@ -72,7 +72,7 @@ const Presenter: React.FunctionComponent<Props> = ({
   };
 
   const { isVisible: isTrainingVisible } = useTraining(docTypeId);
-
+  const isDownloadAllVisible = attachments?.length > 1;
   const isRecord = checkIsDocumentRecord(document?.documentType?.groupOptions);
   const isEB = checkIsDocumentEB(document.documentType.groupOptions);
   const isPO = checkIsDocumentPO(document.documentType.groupOptions);
@@ -169,18 +169,20 @@ const Presenter: React.FunctionComponent<Props> = ({
         {isPO || includes(outputDocumentTypeName, "Purchase Order")
           ? attachments && !_tabsState?.isTabActive("details") && (
             <Attachment
-              isAttachmentEmpty={attachments.length < 1}
+              isAttachmentEmpty={attachments?.length < 1}
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
+              {...{ isDownloadAllVisible }}
             />
           )
           : attachments && (
             <Attachment
-              isAttachmentEmpty={attachments.length < 1}
+              isAttachmentEmpty={attachments?.length < 1}
               docRevId={id}
               containsRedline={containsRedline()}
               docRevStatus={status}
+              {...{ isDownloadAllVisible }}
             />
           )}
         {renderTrainingControl}

@@ -93,6 +93,7 @@ context(testName, () => {
 
     it("Click on 'create a document'", () => {
       cy.cmpClickCreateNewDocument();
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -121,6 +122,8 @@ context(testName, () => {
 
     it("Click create document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
@@ -159,6 +162,8 @@ context(testName, () => {
 
     it("Save document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
@@ -174,6 +179,8 @@ context(testName, () => {
   context(`Create ${record1Name}`, () => {
     it("Create new", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Type a title", () => {
@@ -199,6 +206,8 @@ context(testName, () => {
 
     it("Approve inline approval", () => {
       cy.inlineApprovalWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Revision 1", () => {
@@ -231,6 +240,8 @@ context(testName, () => {
 
     it("Approve inline approval", () => {
       cy.inlineApprovalWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Revision 2", () => {
@@ -268,6 +279,8 @@ context(testName, () => {
     it("Save document", () => {
       cy.url().then((url: string) => { record1Url = url; });
       cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -281,6 +294,8 @@ context(testName, () => {
 
     it("Create new", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
@@ -294,12 +309,15 @@ context(testName, () => {
     it("Save document", () => {
       cy.url().then((url) => record2Url = url);
       cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Revise and remove approvals", () => {
     it("Go to document", () => {
       cy.visit(documentUrl);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -313,6 +331,7 @@ context(testName, () => {
 
     it("Save document", () => {
       cy.get(`[data-cy=DocumentRevisionForm-submit]`).arrowClick();
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -327,9 +346,10 @@ context(testName, () => {
     });
 
     it("Save document", () => {
-      cy.get(`[data-cy=DocumentRevisionForm-submit]`).arrowClick();
+      cy.drClickCreateDocumentWithApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Verify revision", () => {
@@ -354,13 +374,16 @@ context(testName, () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context(`Verify ${record1Name}`, () => {
     it("Go to the record", () => {
       cy.visit(record1Url);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -404,6 +427,8 @@ context(testName, () => {
 
     it("Approve inline approval", () => {
       cy.inlineApprovalWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {
@@ -447,7 +472,7 @@ context(testName, () => {
 
     it("Click Approve And Release", () => {
       cy.drApproveAndReleaseDialog();
-      cy.wait(2000);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -458,6 +483,9 @@ context(testName, () => {
 
     it("Approve inline approval", () => {
       cy.inlineApprovalWithoutApi();
+      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify revision", () => {

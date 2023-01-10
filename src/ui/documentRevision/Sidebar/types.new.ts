@@ -11,4 +11,5 @@ interface SidebarDetails {
   component: Nullable<JSX.Element>;
   dataCy?: string;
   shouldShow?: boolean;
+  tooltip?: string;
 }

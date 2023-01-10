@@ -223,7 +223,9 @@ context("records_data_with_correct_font", () => {
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -387,6 +389,8 @@ context("records_data_with_correct_font", () => {
       it("Enter title 'Record Document Revision'", () => {
         cy.drEnterDocumentTitle({ name: "Record Document Revision" });
         cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Navigate to Details tab", () => {
@@ -400,6 +404,7 @@ context("records_data_with_correct_font", () => {
         cy.get("[name*=\"fb-ia-inline-approval-\"] input")
           .autocompleteSelect(`${USERS[1].name}`, { force: true });
         cy.unClick();
+        cy.wait(3000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
@@ -413,13 +418,14 @@ context("records_data_with_correct_font", () => {
       });
 
       it("Click on ‘Approve & Release’", () => {
-        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(1000);
+        cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(5000);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
         cy.get("[data-cy=\"AlertDialog-continueButton\"]").contains("Yes, I'm sure").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
     });
 
@@ -458,8 +464,10 @@ context("records_data_with_correct_font", () => {
 
     context("Verify The side bar options Revision's fonts", () => {
       it(`Verify Revisions font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
-        cy.get("[data-cy=\"note-icon\"]").arrowClick();
-        cy.get("[data-cy=\"document.revision.docVersion\"]")
+        cy.drClickRevisionsSidePanel();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.get(`[data-cy="Revisions"]`)
           .checkStylePropExists({
             content: "Revisions",
             props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
