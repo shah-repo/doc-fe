@@ -134,6 +134,9 @@ const DocumentRevisionSidebar: React.FunctionComponent<DocumentRevisionSidebarPr
                   title: intl?.formatMessage({
                     id: "document.access.permissions",
                   }) || "",
+                  tooltip: intl?.formatMessage({
+                    id: "document.access.permissions.tooltip",
+                  }) || "",
                   component: (documentRevisionId && canAccess && !isNewOutput) ? (
                     <AccessPermissionsContainer
                       documentRevisionId={documentRevisionId}
