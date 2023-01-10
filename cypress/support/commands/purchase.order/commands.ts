@@ -70,6 +70,7 @@ declare global {
       poAPICreatePO(params: {payload: DocumentRevisionEditRequestBody; employeeId: string; sessionId: string }): Chainable<Subject>;
       poSelectPoForm(params: {nameOfPoForm: string}): Chainable<Subject>;
       poAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
+      poAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       poSelectPoFormFromMultiSelect(params: {poType: string; poForm?: string}): Chainable<Subject>;
       poSelectPOStatus(params: {status: string}): Chainable<Subject>;
       poCheckTax(params: {number: string}): Chainable<Subject>;
@@ -112,6 +113,14 @@ Cypress.Commands.add("poAddApproverOnApproverList", (params: { approver: string;
   });
   cy.unClick();
 
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("poAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy^=\"fb-po-approvals\"]").scrollIntoView().arrowClick().wait(500);
+  cy.get("[data-cy^=\"fb-po-approvals\"]").autocompleteSelect(params.approver).wait(500);
+  cy.unClick();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -204,6 +213,7 @@ Cypress.Commands.add("poSelectGLCode", () => {
 
 Cypress.Commands.add("poEnterSupplierPartNumber", (params: {partNumber: string}) => {
   cy.get("[name=\"supplierPartNumber\"]").arrowClick().arrowType(params.partNumber);
+  cy.unClick();
 });
 
 Cypress.Commands.add("poEnterPartDescription", (params: {partDescription: string}) => {
@@ -362,9 +372,7 @@ Cypress.Commands.add("poAMEnterPassword", () => {
 });
 
 Cypress.Commands.add("poSaveDocument", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-    cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
-  });
+  cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.checkToastMessage({ exists: false });
 });
 
