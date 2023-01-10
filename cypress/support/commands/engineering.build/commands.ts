@@ -116,8 +116,7 @@ Cypress.Commands.add("ebCloneClickContinue", () => {
 
 Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: string; name: string }) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick();
-  cy.get("div.MuiCircularProgress-root", { timeout: 10000 }).should("be.visible");
-  cy.listLoadingElementShouldNotExist();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.progressBarShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
@@ -128,8 +127,7 @@ Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: s
 
 Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
   cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick();
-  cy.get("div.MuiCircularProgress-root", { timeout: 10000 }).should("be.visible");
-  cy.listLoadingElementShouldNotExist();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
@@ -139,8 +137,7 @@ Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; val
 
 Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").eq(0).arrowClick();
-  cy.get("div.MuiCircularProgress-root", { timeout: 10000 }).should("be.visible");
-  cy.listLoadingElementShouldNotExist();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
@@ -149,8 +146,7 @@ Cypress.Commands.add("ebAddEquipmentDocument", (params: { title: string }) => {
 
 Cypress.Commands.add("ebAddStep2EquipmentDocument", (params: { title: string }) => {
   cy.get("[data-cy=\"form.builder.equipment.btn\"]").last().arrowClick();
-  cy.get("div.MuiCircularProgress-root", { timeout: 10000 }).should("be.visible");
-  cy.listLoadingElementShouldNotExist();
+  cy.listLoadingElementShouldAppear().wait(500);
   cy.get("[data-cy=\"title\"]").arrowClick().wait(1000);
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.unClick();
