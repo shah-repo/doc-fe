@@ -597,7 +597,6 @@ context("Record inline Flow", () => {
       });
 
       it("Click on Save", () => {
-        cy.pause();
         cy.drClickCreateDocumentWithApiCall();
         cy.listLoadingElementShouldNotExist();
         cy.wait(3000);
