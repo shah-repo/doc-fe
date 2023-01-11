@@ -165,7 +165,7 @@ context(testName, () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.url().then((url: string) => { documentUrl = url; });
     });
 
@@ -444,6 +444,7 @@ context(testName, () => {
     });
 
     it("Select approvals", () => {
+      cy.get("[data-cy^=fb-approvals-]").should("exist");
       cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${ADMIN_USER.email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

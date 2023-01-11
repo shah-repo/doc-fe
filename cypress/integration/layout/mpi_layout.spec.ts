@@ -407,9 +407,7 @@ context("Mpi Layout", () => {
 
         it("Upload attachment 'video.mp4'", () => {
           cy.get("[data-cy='albumMediaButton']").arrowClick({ force: true });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-            cy.pmUploadAttachment({ fileName: "video.mp4" });
-          });
+          cy.pmUploadAttachment({ fileName: "video.mp4" });
           cy.progressBarShouldNotExist();
         });
 
@@ -418,9 +416,7 @@ context("Mpi Layout", () => {
         });
 
         it("Upload attachment 'image.jpg'", () => {
-          cy.wrapWithWaitOnApiCalls([ CyRoutes.GetAttachmentsAttached], () => {
-            cy.pmUploadAttachment({ fileName: "image.jpg" });
-          });
+          cy.pmUploadAttachment({ fileName: "image.jpg" });
           cy.progressBarShouldNotExist();
         });
 
@@ -429,9 +425,7 @@ context("Mpi Layout", () => {
         });
 
         it("Upload attachment 'test.docx'", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-            cy.pmUploadAttachment({ fileName: "test.docx" });
-          });
+          cy.pmUploadAttachment({ fileName: "test.docx" });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -498,9 +492,7 @@ context("Mpi Layout", () => {
 
           it("Upload attachment 'video.mp4'", () => {
             cy.get("[data-cy='albumMediaButton']").arrowClick();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-              cy.pmUploadAttachment({ fileName: "video.mp4" });
-            });
+            cy.pmUploadAttachment({ fileName: "video.mp4" });
             cy.progressBarShouldNotExist();
           });
 
@@ -509,9 +501,7 @@ context("Mpi Layout", () => {
           });
 
           it("Upload attachment 'image.jpg'", () => {
-            cy.wrapWithWaitOnApiCalls([ CyRoutes.GetAttachmentsAttached], () => {
-              cy.pmUploadAttachment({ fileName: "image.jpg" });
-            });
+            cy.pmUploadAttachment({ fileName: "image.jpg" });
             cy.progressBarShouldNotExist();
           });
 
@@ -520,9 +510,7 @@ context("Mpi Layout", () => {
           });
 
           it("Upload attachment 'test.docx'", () => {
-            cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-              cy.pmUploadAttachment({ fileName: "test.docx" });
-            });
+            cy.pmUploadAttachment({ fileName: "test.docx" });
             cy.progressBarShouldNotExist();
           });
 
@@ -718,9 +706,9 @@ context("Mpi Layout", () => {
 
       context("Release MPI", () => {
         it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
       });
 
@@ -829,15 +817,7 @@ context("Mpi Layout", () => {
 
     it("Check for training text inside dialog box and complete training", () => {
       cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCompleteTraining], () => {
-          cy.get("[data-cy='training-complete']").arrowClick();
-          cy.get("[data-cy='training.acknowladge.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='passwordConfirm']").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+      cy.trCompleteTrainingWithoutApi();
     });
 
     it("Verify Form opens to the overview tab by default", () => {
