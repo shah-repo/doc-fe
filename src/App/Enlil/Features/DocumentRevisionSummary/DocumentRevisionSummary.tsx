@@ -67,6 +67,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   }
 
   const isAttachmentEmpty = !(documentRevision?.attachments?.length > 1);
+  const isDownloadAllVisible = (documentRevision?.attachments?.length > 1);
   const onSubmit = () => void 0;
 
   if (isLHR) {
@@ -169,6 +170,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                                         containsRedline={false}
                                         label={"Supporting Documents"}
                                         docRevStatus={documentRevision.status}
+                                        {...{ isDownloadAllVisible }}
                                       />
                                     </>
                                   </Formik>

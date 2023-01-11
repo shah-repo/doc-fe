@@ -6,7 +6,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -213,10 +212,7 @@ context("Parts from EB flow test", () => {
         });
 
         it("Clicks on 'Add new part' button", () => {
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.DocPreview], () => {
-            cy.ptClickCreateNewPart();
-          });
+          cy.ptClickCreateNewPart();
         });
       });
 
@@ -230,7 +226,7 @@ context("Parts from EB flow test", () => {
         });
 
         it("Save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickSaveWithoutApiCall();
         });
       });
     });
@@ -261,11 +257,13 @@ context("Parts from EB flow test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save the EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -277,15 +275,13 @@ context("Parts from EB flow test", () => {
       });
 
       it("Choose an existing part from the list of available parts", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect(EXISTING_PART_NAME);
-        });
+        cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect(EXISTING_PART_NAME);
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.progressBarShouldAppear();
       });
 
       it("Check if the part is displayed in the document summary", () => {
@@ -341,19 +337,19 @@ context("Parts from EB flow test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save the EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
     context("Add a new part via EB", () => {
       it("Open Create a New Part dialog", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[data-cy=\"form.builder.create.new.part\"]").arrowClick();
-        });
+        cy.get("[data-cy=\"form.builder.create.new.part\"]").arrowClick();
       });
 
       context("Fill in the required attributes and create the part", () => {
@@ -366,40 +362,32 @@ context("Parts from EB flow test", () => {
         });
 
         it("Choose a document type", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.GetSpecificDocumentType], () => {
-            cy.ebChoosePartType({ partName: PART_DOCUMENT_TYPE_NAME });
-          });
+          cy.ebChoosePartType({ partName: PART_DOCUMENT_TYPE_NAME });
         });
 
         it("Create the part", () => {
           SystemRequirement("REQ-2950");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev, CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-          });
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
     });
 
     context("Submit for Approval", () =>  {
-      it("Save EB", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
-
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.progressBarShouldAppear();
       });
 
       it("Check if Part is displayed in summary", () => {
         cy.ebCheckIfPartIsInSummary({ partName: NEW_PART_NAME });
       });
-
     });
 
     context("Approve and release the EB", () => {
       it("Click on the Approve button", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       it("Check if Approved date exists", () => {
@@ -418,7 +406,7 @@ context("Parts from EB flow test", () => {
     context("Create the next build of EB", () => {
       it("Click Clone EB button", () => {
         SystemRequirement("REQ-3000");
-        cy.ebClickClone();
+        cy.ebClickCloneWithoutApi();
       });
 
       it("Verify that the selected part is copied to the new build", () => {
@@ -429,13 +417,14 @@ context("Parts from EB flow test", () => {
 
     context("Submit for Approval", () => {
       it("Add an Approval", () => {
-        cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Submit for Approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+        cy.progressBarShouldAppear();
       });
 
       it("Check if the part is displayed in the document summary", () => {
@@ -445,9 +434,7 @@ context("Parts from EB flow test", () => {
 
     context("Verify that EB cannot be released unless 1st revision of part is released", () => {
       it("Try approving the EB", () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
-        cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+        cy.ebTryToApprove();
       });
 
       it("Check for a toast error", () => {
@@ -469,7 +456,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Approve and release the part", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -477,29 +464,23 @@ context("Parts from EB flow test", () => {
       it("Navigate to the EB", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-common.part.of\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.GetRequiredApproversDocRev,
-            CyRoutes.GetAvailableApprovers,
-            CyRoutes.DocPreview], () =>
-          {
-            cy.visit(CONFIG.FE_URL + link);
-          });
+          cy.visit(CONFIG.FE_URL + link);
+          cy.wait(3000);
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         cy.get("[data-cy=\"BuildsPresenter-link-common.next.build\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([
-            CyRoutes.GetRequiredApproversDocRev,
-            CyRoutes.GetAvailableApprovers,
-            CyRoutes.DocPreview], () =>
-          {
-            cy.visit(CONFIG.FE_URL + link);
-          });
+          cy.visit(CONFIG.FE_URL + link);
+          cy.wait(3000);
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       it("Check if Approved date exists", () => {
@@ -517,13 +498,11 @@ context("Parts from EB flow test", () => {
       it("Navigate to the part document", () => {
         cy.get("[data-cy=\"BuildsPresenter-link-form.builder.part\"]").then(($el) => {
           const link = $el.attr("href");
-          cy.wrapWithWaitOnApiCalls([], () => {
-            cy.visit(CONFIG.FE_URL + link);
-          });
+          cy.visit(CONFIG.FE_URL + link);
+          cy.wait(3000);
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
-
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify that a new revision has been created", () => {

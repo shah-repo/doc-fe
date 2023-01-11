@@ -154,6 +154,8 @@ context("User Creation Flow", () => {
   context("Navigate to document list", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -428,6 +430,8 @@ context("User Creation Flow", () => {
   context("Create a document", () => {
     it("Doc1 with Released status", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drEnterDocumentTitle({ name: "released doc1" });
       cy.drEnterDocumentDescription({ description: "test description" });
       cy.drSelectDocumentType({ documentType: "Form" });
@@ -733,11 +737,11 @@ context("User Creation Flow", () => {
   });
 
   context("Verify The side bar options Access Permissions fonts", () => {
-    it(`Verify 'Access Permissions' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Permissions' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
       cy.get("[data-cy=\"permission-icon\"]").arrowClick();
-      cy.get(`[data-cy="Access Permissions"]`)
+      cy.get(`[data-cy="Permissions"]`)
         .checkStylePropExists({
-          content: "Access Permissions",
+          content: "Permissions",
           props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
         });
     });
@@ -935,11 +939,11 @@ context("User Creation Flow", () => {
     it("Click on confirm after entering correct password", () => {
       cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
       cy.unClick();
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ReleaseDocRev,
-        () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-        });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.poApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 

@@ -38,6 +38,7 @@ declare global {
       arApproveARWithoutApi(): Chainable<Subject>;
       arSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
       arApproveARFromDashboard(): Chainable<Subject>;
+      arApproveARFromDashboardWithoutApi(): Chainable<Subject>;
       arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
@@ -455,6 +456,16 @@ Cypress.Commands.add("arApproveARFromDashboard", () => {
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arApproveARFromDashboardWithoutApi", () => {
+  cy.contains("needs your approval for").trigger("mouseover");
+  cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+  cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });

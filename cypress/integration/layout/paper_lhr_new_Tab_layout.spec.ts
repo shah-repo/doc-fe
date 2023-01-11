@@ -714,7 +714,7 @@ context("Paper LHR tab Layout", () => {
       it("Verify that right side panel opens by default to the References tab", () => {
         cy.get("[data-cy='References']").should("exist");
         cy.get("[data-cy='generalInfo']").should("be.visible");
-        cy.wait(3000);
+        cy.wait(2000);
       });
 
     });
@@ -1211,15 +1211,7 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Approve and Release", () => {
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
-          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
+        cy.ebApproveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

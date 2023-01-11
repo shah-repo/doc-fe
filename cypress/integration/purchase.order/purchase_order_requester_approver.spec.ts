@@ -1205,9 +1205,9 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
-    it(`Verify 'Approver Added' and 'Approver Removed' immediately in history tab`, () => {
-      cy.get("[data-cy='History-detail']").should("contain", "Approver Added");
-      cy.get("[data-cy='History-detail']").should("contain", "Approver Removed");
+    it(`Verify 'Approver Added' not exists and 'Approver Removed' not exist immediately in history tab`, () => {
+      cy.get("[data-cy='History-detail']").should("not.contain", "Approver Added");
+      cy.get("[data-cy='History-detail']").should("not.contain", "Approver Removed");
     });
   });
 

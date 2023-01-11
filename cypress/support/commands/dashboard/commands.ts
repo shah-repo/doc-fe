@@ -15,6 +15,7 @@ declare global {
       dashRejectApprovalForListItem(params: {listItem: string}): Chainable<Subject>;
       dashVerifyNoPendingActions(): Chainable<Subject>;
       dashApproverFirstFromList(): Chainable<Subject>;
+      dashApproverFirstFromListWithoutApi(): Chainable<Subject>;
       checkStylePropExists(params: {content: string; props: any; elem?: string; index?: integer}): Chainable<Subject>;
     }
   }
@@ -69,6 +70,17 @@ Cypress.Commands.add("dashApproverFirstFromList", () => {
       cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
       cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
     });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("dashApproverFirstFromListWithoutApi", () => {
+  cy.contains("needs your approval for").eq(0).trigger("mouseover");
+  cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+  cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+  cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
