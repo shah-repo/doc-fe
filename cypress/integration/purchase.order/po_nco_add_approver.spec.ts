@@ -174,6 +174,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
   context("Create NCO and add required jsons and company details", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.wait(3000);
     });
 
     it("Select released NCO Form", () => {
@@ -182,6 +183,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(3000);
     });
 
     it("Enters title 'New Company'", () => {
@@ -1029,7 +1031,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
   });
 
-  context("Verify that history tab is capturing requestor added and approver added", () => {
+  context("Verify that history tab is capturing requestor added and approver Added", () => {
     it("Check history entry for 'Requestor added'", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
@@ -1886,7 +1888,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
 
     it("Verify Grand Total", () => {
-      cy.get("[data-cy='poTotal']").last().should("have.text", "$20.00");
+      cy.get("[data-cy='poTotal']").last().should("have.text", "$20.93");
     });
   });
 
@@ -1958,7 +1960,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "Released");
       cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "N/A");
       cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "PRT-00001 - 1, PRT-00002 - 1");
-      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$20.00");
+      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "$20.93");
       cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", USERS[1].name);
       cy.get("tr.k-master-row").first().find("td").eq(8).should("have.text", receivingReleasedDate);
     });

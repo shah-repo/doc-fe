@@ -424,9 +424,8 @@ context("Layout Verification of maintainance records", () => {
 
   context("Release MR Form", () => {
     it("Approve and release  document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -550,10 +549,9 @@ context("Layout Verification of maintainance records", () => {
             const calDocId = response.documentId;
             const calId = response.id;
             const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${calId}`;
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              CyRoutes.GetAvailableApprovers], () => {
-              cy.visit(newUrl);
-            });
+            cy.visit(newUrl);
+            cy.listLoadingElementShouldExist();
+            cy.progressBarShouldNotExist();
           }
         });
         cy.checkToastMessage({ exists: false });
@@ -636,9 +634,9 @@ context("Layout Verification of maintainance records", () => {
 
     context("Fill the form", () => {
       it("Fill the record details'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.drEnterDocumentTitle({ name: "MR Test title" });
-        });
+        cy.drEnterDocumentTitle({ name: "MR Test title" });
+        cy.listLoadingElementShouldExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Navigate to overview tab", () => {
@@ -672,43 +670,40 @@ context("Layout Verification of maintainance records", () => {
 
       it("Fill 'Completion Date'", () => {
         const dayOfTheMonth = moment().tz("America/Los_Angeles").date();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
-
-          cy.get("button.MuiPickersDay-day")
-            .not(".MuiPickersDay-hidden")
-            .each(($el) => {
-              const dayNumber = $el.text();
-              if (dayOfTheMonth.toString() === dayNumber) {
-                cy.wrap($el).arrowClick();
-              }
-            });
-        });
+        cy.xpath("//input[@name='fb-equipment_due_date']/../div/button").arrowClick();
+        cy.get("button.MuiPickersDay-day")
+          .not(".MuiPickersDay-hidden")
+          .each(($el) => {
+            const dayNumber = $el.text();
+            if (dayOfTheMonth.toString() === dayNumber) {
+              cy.wrap($el).arrowClick();
+            }
+          });
+        cy.listLoadingElementShouldExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify add FB Field Checked chebox", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get(`input[type="checkbox"][value="1"]`).should("exist");
-          cy.get(`input[type="checkbox"][value="1"]`).check();
-        });
+        cy.get(`input[type="checkbox"][value="1"]`).should("exist");
+        cy.get(`input[type="checkbox"][value="1"]`).check();
+        cy.progressBarShouldNotExist();
         cy.wait(1000);
       });
 
       it("Verify add FB Field textfield", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name^='maintainance-record-textfield']").should("exist");
-          cy.get("[name^='maintainance-record-textfield']").arrowType("Test");
-          cy.unClick();
-        });
+        cy.get("[name^='maintainance-record-textfield']").should("exist");
+        cy.get("[name^='maintainance-record-textfield']").arrowType("Test");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select Approval", () => {
         cy.drSelectOverviewTab();
         cy.progressBarShouldNotExist();
         cy.wait(3000);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
-        });
+        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
+        cy.listLoadingElementShouldExist();
+        cy.progressBarShouldNotExist();
       });
     });
 

@@ -487,7 +487,8 @@
   "document.revision.cr.history": "Revision History",
   "document.revision.tpl.invalid": "Approval request has additional fields to fill in. Click on Confirm to Create Approval Request for the document.",
   "document.security.warning": "You do not have access to this document.",
-  "document.access.permissions": "Permissions",
+  "document.access.permissions": "Access Permissions",
+  "document.access.permissions.tooltip": "Permissions",
   "document.request.access": "Request access",
   "document.email.sent": "An email with your request has been sent.",
   "document.title": "Document Title",
@@ -1345,6 +1346,5 @@
   "help.popular.resources": "Other Popular Resources",
   "help.didnt.find.what.you.need": "Didn’t find exactly what you needed?",
   "help.view.full.guide": "View full guide",
-  "help.view.all.guides": "View All Guides",
-  "form.purchare.order.table.headline": "Receiving Details"
+  "help.view.all.guides": "View All Guides"
 }

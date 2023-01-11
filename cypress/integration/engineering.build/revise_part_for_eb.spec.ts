@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -182,7 +181,7 @@ context("Revise Part from EB and release cloned EB test", () => {
 
     context("Create the form and release it", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Verify that Approvals field is automatically added", () => {
@@ -190,7 +189,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Approve and release the form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -206,10 +205,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Clicks on 'Add new part' button", () => {
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.DocPreview], () => {
-          cy.ptClickCreateNewPart();
-        });
+        cy.ptClickCreateNewPart();
       });
 
       it(`Enter title '${PART_NAME}'`, () => {
@@ -221,11 +217,11 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and Release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Revise document", () => {
@@ -233,7 +229,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Click on 'Cancel Draft'", () => {
@@ -265,15 +261,14 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Save the EB", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
     context("Choose a part", () => {
       it("Choose an released part from the list of available parts", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-          cy.get("[data-cy=\"childrenParts\"]").arrowType(PART_NAME + "{downarrow}{enter}");
-        });
+        cy.get("[data-cy=\"childrenParts\"]").arrowType(PART_NAME + "{downarrow}{enter}");
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -301,11 +296,13 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Check if the part is displayed in the document summary", () => {
@@ -313,7 +310,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -329,11 +326,13 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Check if the part is displayed in the document summary", () => {
@@ -341,7 +340,7 @@ context("Revise Part from EB and release cloned EB test", () => {
       });
 
       it("Approve record button click", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });

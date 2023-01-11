@@ -8,7 +8,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { purchaseOrderDefaultSchema } from "../../fixtures/default_po_schema";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -79,266 +78,25 @@ context("All regular users on new dashboard", () => {
         });
       });
     });
+  });
 
-    context("[API]Create documents", () => {
-      it("[API]Login first tester", (done: any) => {
-        cy.authApiLogin({
-          email: USERS[1].email,
-        }).then((response) => {
-          loginResponse = response;
-          done();
-        });
+  context("[API]Create documents", () => {
+    it("[API]Login first tester", (done: any) => {
+      cy.authApiLogin({
+        email: USERS[1].email,
+      }).then((response) => {
+        loginResponse = response;
+        done();
       });
+    });
 
-      it("[API]Create a form document in IN REVIEW", (done: any) => {
-        cy.grpGetGroupByName({
-          sessionId: loginResponse.sessionId,
-          employeeId: adminEmployee.id,
-          groupName: "Everyone",
-        }).then((response) => {
-          group = response;
-          cy.arGetArDocumentByName({
-            sessionId: loginResponse.sessionId,
-            employeeId: adminEmployee.id,
-            name: "AR Form",
-          }).then((response) => {
-            initialArDocument = response;
-            cy.drCreateDocumentRevision({
-              payload: {
-                attachments: [],
-                description: "<p>IN REVIEW document</p>",
-                document: {
-                  docId: "FM-00005",
-                  documentType: {
-                    id: formDocumentType[0].id,
-                  },
-                  securityList: {
-                    operators: [],
-                    securityEmployees: [],
-                    securityGroups: [
-                      {
-                        id: group.body[0].id,
-                      },
-                    ],
-                  },
-                },
-                name: "In review document",
-                referenceTo: [],
-                retrain: false,
-                revisionChangeType: RevisionChangeType.NextRevision,
-                revisionStage: 1,
-                formTemplate: {
-                  outputDocumentTypes: [{
-                    id: testDocumentType[0].id,
-                  }],
-                  schema: [],
-                },
-              },
-              employeeId: adminEmployee.id as unknown as string,
-              sessionId: loginResponse.sessionId as unknown as string,
-            }).then((response) => {
-              createdInReviewDocument = response;
-              cy.arCreateApprovalRequest({
-                payload: {
-                  title: "Equipment form",
-                  description: "test description",
-                  documentType: { id: approvalRequestDocumentType[0].id },
-                  formDocument: { id: initialArDocument[0].id },
-                  formInput: {
-                    documentRevisions: [{
-                      proposedDocumentRevision: { id: createdInReviewDocument.id },
-                      descriptionOfChange: "ar test",
-                      justificationOfChange: "ar test",
-                      id: faker.random.uuid(),
-                    }],
-                    approvers: [{
-                      id: adminEmployee.id,
-                    }],
-                  },
-                },
-                employeeId: adminEmployee.id,
-                sessionId: loginResponse.sessionId,
-              }).then((response) => {
-                createdArForDocInReview = response;
-                cy.arPatchAR({
-                  payload: {
-                    formInput: {
-                      documentRevisions: [{
-                        proposedDocumentRevision: { id: createdInReviewDocument.id },
-                        descriptionOfChange: "ar test",
-                        justificationOfChange: "ar test",
-                        id: faker.random.uuid(),
-                      }],
-                      approvers: [
-                        {
-                          approver: {
-                            id: secondEmployee.id,
-                          },
-                          signatureGroupId: {
-                            id: null,
-                          },
-                        },
-                      ],
-                    },
-                  },
-                  arID: createdArForDocInReview.id,
-                  employeeId: adminEmployee.id,
-                  sessionId: loginResponse.sessionId,
-                }).then(() => {
-                  cy.arInReview({
-                    employeeId: adminEmployee.id,
-                    sessionId: loginResponse.sessionId,
-                    arID: createdArForDocInReview.id,
-                  }).then(() => done());
-                });
-              });
-            });
-          });
-        });
-      });
-
-      it("[API]Create equipment document", () => {
-        cy.grpGetGroupByName({
-          sessionId: loginResponse.sessionId,
-          employeeId: adminEmployee.id,
-          groupName: "Everyone",
-        }).then((response) => {
-          group = response;
-          cy.arGetArDocumentByName({
-            sessionId: loginResponse.sessionId,
-            employeeId: adminEmployee.id,
-            name: "AR Form",
-          }).then((response) => {
-            initialArDocument = response;
-            cy.drCreateDocumentRevision({
-              payload: {
-                attachments: [],
-                description: "<p>Equipment document</p>",
-                document: {
-                  docId: "ET-00003",
-                  documentType: {
-                    id: equipmentDocumentType[0].id,
-                  },
-                  securityList: {
-                    operators: [],
-                    securityEmployees: [],
-                    securityGroups: [
-                      {
-                        id: group.body[0].id,
-                      },
-                    ],
-                  },
-                },
-                name: "Equipment document",
-                referenceTo: [],
-                retrain: false,
-                revisionChangeType: RevisionChangeType.NextRevision,
-                revisionStage: 1,
-              },
-              employeeId: adminEmployee.id as unknown as string,
-              sessionId: loginResponse.sessionId as unknown as string,
-            }).then((response) => {
-              equipmentDocument = response;
-              cy.arCreateApprovalRequest({
-                payload: {
-                  title: "For first equipment",
-                  description: "Approval for equipment",
-                  documentType: { id: approvalRequestDocumentType[0].id },
-                  formDocument: { id: initialArDocument[0].id },
-                  formInput: {
-                    documentRevisions: [{
-                      proposedDocumentRevision: { id: equipmentDocument.id },
-                      descriptionOfChange: "ar test",
-                      justificationOfChange: "ar test",
-                      id: faker.random.uuid(),
-                    }],
-                    approvers: [{
-                      id: adminEmployee.id,
-                    }],
-                  },
-                },
-                employeeId: adminEmployee.id,
-                sessionId: loginResponse.sessionId,
-              }).then((response) => {
-                createdArForDocInReview = response;
-                cy.arPatchAR({
-                  payload: {
-                    formInput: {
-                      documentRevisions: [{
-                        proposedDocumentRevision: { id: equipmentDocument.id },
-                        descriptionOfChange: "ar test",
-                        justificationOfChange: "ar test",
-                        id: faker.random.uuid(),
-                      }],
-                      approvers: [
-                        {
-                          approver: {
-                            id: secondEmployee.id,
-                          },
-                          signatureGroupId: {
-                            id: null,
-                          },
-                        },
-                      ],
-                    },
-                  },
-                  arID: createdArForDocInReview.id,
-                  employeeId: adminEmployee.id,
-                  sessionId: loginResponse.sessionId,
-                }).then(() => {
-                  cy.arInReview({
-                    employeeId: adminEmployee.id,
-                    sessionId: loginResponse.sessionId,
-                    arID: createdArForDocInReview.id,
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-
-      it("[API]Creates suplier document for PO", (done: any) => {
-        cy.grpGetGroupByName({
-          sessionId: loginResponse.sessionId,
-          employeeId: adminEmployee.id,
-          groupName: "Everyone",
-        }).then((response) => {
-          group = response;
-          cy.drCreateDocumentRevision({
-            payload: {
-              attachments: [],
-              description: "<p>Test Supplier Document</p>",
-              document: {
-                docId: "SUP-00003",
-                documentType: {
-                  id: supplierDocumentType[0].id,
-                },
-                securityList: {
-                  operators: [],
-                  securityEmployees: [],
-                  securityGroups: [
-                    {
-                      id: group.body[0].id,
-                    },
-                  ],
-                },
-              },
-              name: "API supplier",
-              referenceTo: [],
-              retrain: false,
-              revisionChangeType: RevisionChangeType.NextRevision,
-              revisionStage: 1,
-            },
-            employeeId: adminEmployee.id as unknown as string,
-            sessionId: loginResponse.sessionId as unknown as string,
-          }).then(() => {
-            done();
-          });
-        });
-      });
-
-      it("[API] Create PO record form", (done: any) => {
+    it("[API]Create a form document in IN REVIEW", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
         cy.arGetArDocumentByName({
           sessionId: loginResponse.sessionId,
           employeeId: adminEmployee.id,
@@ -348,9 +106,9 @@ context("All regular users on new dashboard", () => {
           cy.drCreateDocumentRevision({
             payload: {
               attachments: [],
-              description: "<p>Purchase order form record</p>",
+              description: "<p>IN REVIEW document</p>",
               document: {
-                docId: "FM-00004",
+                docId: "FM-00005",
                 documentType: {
                   id: formDocumentType[0].id,
                 },
@@ -364,39 +122,279 @@ context("All regular users on new dashboard", () => {
                   ],
                 },
               },
-              name: "Purchase Order form",
-              renderHTML: "<html><body><h1>Purchase order</h1></body></html>",
+              name: "In review document",
               referenceTo: [],
               retrain: false,
               revisionChangeType: RevisionChangeType.NextRevision,
               revisionStage: 1,
               formTemplate: {
                 outputDocumentTypes: [{
-                  id: purchaseOrderDocumentType[0].id,
+                  id: testDocumentType[0].id,
                 }],
-                schema: purchaseOrderDefaultSchema,
+                schema: [],
               },
-
             },
             employeeId: adminEmployee.id as unknown as string,
             sessionId: loginResponse.sessionId as unknown as string,
           }).then((response) => {
-            createdPurchaseOrderFormDocument = response;
-            cy.drAPIApproveAndRelease({
-              documentId: createdPurchaseOrderFormDocument.id,
+            createdInReviewDocument = response;
+            cy.arCreateApprovalRequest({
               payload: {
-                effectiveDate: (new Date()).toISOString(),
+                title: "Equipment form",
+                description: "test description",
                 documentType: { id: approvalRequestDocumentType[0].id },
                 formDocument: { id: initialArDocument[0].id },
-                approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+                formInput: {
+                  documentRevisions: [{
+                    proposedDocumentRevision: { id: createdInReviewDocument.id },
+                    descriptionOfChange: "ar test",
+                    justificationOfChange: "ar test",
+                    id: faker.random.uuid(),
+                  }],
+                  approvers: [{
+                    id: adminEmployee.id,
+                  }],
+                },
               },
               employeeId: adminEmployee.id,
               sessionId: loginResponse.sessionId,
-            }).then(() => done());
+            }).then((response) => {
+              createdArForDocInReview = response;
+              cy.arPatchAR({
+                payload: {
+                  formInput: {
+                    documentRevisions: [{
+                      proposedDocumentRevision: { id: createdInReviewDocument.id },
+                      descriptionOfChange: "ar test",
+                      justificationOfChange: "ar test",
+                      id: faker.random.uuid(),
+                    }],
+                    approvers: [
+                      {
+                        approver: {
+                          id: secondEmployee.id,
+                        },
+                        signatureGroupId: {
+                          id: null,
+                        },
+                      },
+                    ],
+                  },
+                },
+                arID: createdArForDocInReview.id,
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then(() => {
+                cy.arInReview({
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                  arID: createdArForDocInReview.id,
+                }).then(() => done());
+              });
+            });
           });
         });
       });
+    });
 
+    it("[API]Create equipment document", () => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.arGetArDocumentByName({
+          sessionId: loginResponse.sessionId,
+          employeeId: adminEmployee.id,
+          name: "AR Form",
+        }).then((response) => {
+          initialArDocument = response;
+          cy.drCreateDocumentRevision({
+            payload: {
+              attachments: [],
+              description: "<p>Equipment document</p>",
+              document: {
+                docId: "ET-00003",
+                documentType: {
+                  id: equipmentDocumentType[0].id,
+                },
+                securityList: {
+                  operators: [],
+                  securityEmployees: [],
+                  securityGroups: [
+                    {
+                      id: group.body[0].id,
+                    },
+                  ],
+                },
+              },
+              name: "Equipment document",
+              referenceTo: [],
+              retrain: false,
+              revisionChangeType: RevisionChangeType.NextRevision,
+              revisionStage: 1,
+            },
+            employeeId: adminEmployee.id as unknown as string,
+            sessionId: loginResponse.sessionId as unknown as string,
+          }).then((response) => {
+            equipmentDocument = response;
+            cy.arCreateApprovalRequest({
+              payload: {
+                title: "For first equipment",
+                description: "Approval for equipment",
+                documentType: { id: approvalRequestDocumentType[0].id },
+                formDocument: { id: initialArDocument[0].id },
+                formInput: {
+                  documentRevisions: [{
+                    proposedDocumentRevision: { id: equipmentDocument.id },
+                    descriptionOfChange: "ar test",
+                    justificationOfChange: "ar test",
+                    id: faker.random.uuid(),
+                  }],
+                  approvers: [{
+                    id: adminEmployee.id,
+                  }],
+                },
+              },
+              employeeId: adminEmployee.id,
+              sessionId: loginResponse.sessionId,
+            }).then((response) => {
+              createdArForDocInReview = response;
+              cy.arPatchAR({
+                payload: {
+                  formInput: {
+                    documentRevisions: [{
+                      proposedDocumentRevision: { id: equipmentDocument.id },
+                      descriptionOfChange: "ar test",
+                      justificationOfChange: "ar test",
+                      id: faker.random.uuid(),
+                    }],
+                    approvers: [
+                      {
+                        approver: {
+                          id: secondEmployee.id,
+                        },
+                        signatureGroupId: {
+                          id: null,
+                        },
+                      },
+                    ],
+                  },
+                },
+                arID: createdArForDocInReview.id,
+                employeeId: adminEmployee.id,
+                sessionId: loginResponse.sessionId,
+              }).then(() => {
+                cy.arInReview({
+                  employeeId: adminEmployee.id,
+                  sessionId: loginResponse.sessionId,
+                  arID: createdArForDocInReview.id,
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+
+    it("[API]Creates suplier document for PO", (done: any) => {
+      cy.grpGetGroupByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        groupName: "Everyone",
+      }).then((response) => {
+        group = response;
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Test Supplier Document</p>",
+            document: {
+              docId: "SUP-00003",
+              documentType: {
+                id: supplierDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "API supplier",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then(() => {
+          done();
+        });
+      });
+    });
+
+    it("[API] Create PO record form", (done: any) => {
+      cy.arGetArDocumentByName({
+        sessionId: loginResponse.sessionId,
+        employeeId: adminEmployee.id,
+        name: "AR Form",
+      }).then((response) => {
+        initialArDocument = response;
+        cy.drCreateDocumentRevision({
+          payload: {
+            attachments: [],
+            description: "<p>Purchase order form record</p>",
+            document: {
+              docId: "FM-00004",
+              documentType: {
+                id: formDocumentType[0].id,
+              },
+              securityList: {
+                operators: [],
+                securityEmployees: [],
+                securityGroups: [
+                  {
+                    id: group.body[0].id,
+                  },
+                ],
+              },
+            },
+            name: "Purchase Order form",
+            renderHTML: "<html><body><h1>Purchase order</h1></body></html>",
+            referenceTo: [],
+            retrain: false,
+            revisionChangeType: RevisionChangeType.NextRevision,
+            revisionStage: 1,
+            formTemplate: {
+              outputDocumentTypes: [{
+                id: purchaseOrderDocumentType[0].id,
+              }],
+              schema: purchaseOrderDefaultSchema,
+            },
+
+          },
+          employeeId: adminEmployee.id as unknown as string,
+          sessionId: loginResponse.sessionId as unknown as string,
+        }).then((response) => {
+          createdPurchaseOrderFormDocument = response;
+          cy.drAPIApproveAndRelease({
+            documentId: createdPurchaseOrderFormDocument.id,
+            payload: {
+              effectiveDate: (new Date()).toISOString(),
+              documentType: { id: approvalRequestDocumentType[0].id },
+              formDocument: { id: initialArDocument[0].id },
+              approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
+            },
+            employeeId: adminEmployee.id,
+            sessionId: loginResponse.sessionId,
+          }).then(() => done());
+        });
+      });
     });
   });
 
@@ -410,6 +408,8 @@ context("All regular users on new dashboard", () => {
 
     it("Selects company", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -495,6 +495,8 @@ context("All regular users on new dashboard", () => {
         password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD,
       });
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`For ${USERS[1].name}, verify each line contain icon, doc detail & datetime`, () => {
@@ -564,91 +566,100 @@ context("All regular users on new dashboard", () => {
   context("Create purchase order", () => {
     it("Click on 'Purchase Order' on sidebar", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Create PO' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-      });
+      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Fill form fields", () => {
       it("Enter description 'New Purchase Order'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.drEnterDocumentDescription({ description: "New Purchase Order" });
-        });
+        cy.drEnterDocumentDescription({ description: "New Purchase Order" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Open' for PO status", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.poSelectPOStatus({ status: "Open" });
-        });
+        cy.poSelectPOStatus({ status: "Open" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Select '${USERS[1].name}' for Requestor`, () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy^=po-requestor]").arrowClick();
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
+        cy.get("[data-cy^=po-requestor]").arrowClick();
+        cy.get("[data-cy^=po-requestor]").autocompleteSelect(USERS[1].name);
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it(`Select 'Quality' for Department`, () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("div[id*=department]").arrowClick();
-          cy.get("ul>li[role=option]").contains("Quality").arrowClick();
-        });
+        cy.get("div[id*=department]").arrowClick();
+        cy.get("ul>li[role=option]").contains("Quality").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'SUP-00003' Supplier ", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00003");
-        });
+        cy.get("[data-cy=\"po-supplier-built-in\"]").arrowClick();
+        cy.get("[data-cy=\"po-supplier-built-in\"]").autocompleteSelect("SUP-00003");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Third party Company' for Ship To", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name^=\"ship-to\"]").eq(1).arrowClick();
-        });
+        cy.get("[name^=\"ship-to\"]").eq(1).arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Third party Company Address", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("input[data-cy^=third-party-company]").arrowClick();
-          cy.get("ul>li[role=option]").contains("API supplier").arrowClick();
-        });
+        cy.get("input[data-cy^=third-party-company]").arrowClick();
+        cy.get("input[data-cy^=third-party-company]").autocompleteSelect("API supplier");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'FedEx 449260805' for Shipping Information", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("div[id*=select-shipping]").arrowClick();
-          cy.get("ul>li[role=option]").contains("FedEx").arrowClick();
-        });
+        cy.get(`[data-cy="Shipping Information"]`).scrollIntoView();
+        cy.get("div[id*=select-shipping]").arrowClick();
+        cy.get("ul>li[role=option]").contains("FedEx").arrowClick();
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select 'Credit Card' for Terms", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("div[id*=terms]").arrowClick();
-          cy.get("ul>li[role=option]").contains("Credit Card").arrowClick();
-        });
+        cy.get("div[id*=terms]").arrowClick();
+        cy.get("ul>li[role=option]").contains("Credit Card").arrowClick();
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter '1' for Quotation Number", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("input[name^=quotation-number]").arrowType("1");
-          cy.unClick();
-        });
+        cy.get("input[name^=quotation-number]").arrowType("1");
+        cy.unClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Order Date", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("input[name^=ordered]").parent().find("button").arrowClick();
-          cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
-        });
+        cy.get("input[name^=ordered]").parent().find("button").arrowClick();
+        cy.get("button.MuiPickersDay-day[tabindex=\"0\"]").last().arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Save PO", () => {
-        cy.wait(2000);
-        cy.get("[id=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -657,6 +668,8 @@ context("All regular users on new dashboard", () => {
     context("Add purchase order item", () => {
       it("Open line items tab", () => {
         cy.drSelectLineItems();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Upload attachments", () => {
@@ -670,35 +683,51 @@ context("All regular users on new dashboard", () => {
 
       it("Click on 'Add item' button to add item without Part Number", () => {
         cy.get(`button[data-cy="fb-control-btn"]`).eq(0).arrowClick({ multiple: true, force: true }).wait(1000);
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter Quantity Ordered", () => {
         cy.poEnterQuantityOrdered({ quantity: "10" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Units", () => {
         cy.poSelectUnits();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter Supplier Part Number", () => {
         cy.poEnterSupplierPartNumber({ partNumber: "PRT-0004" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter number of Units", () => {
         cy.poNumberOfUnits({ number: "2" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Required Date", () => {
         cy.get("input[name^=date]").parent().find("button").arrowClick();
         cy.get(".MuiPickersDay-daySelected").arrowClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Check Tax box", () => {
         cy.poSelectTaxCheckbox();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Click on 'Add' inside PO dialog box", () => {
         cy.poAddPOButtonClick();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Save PO", () => {
@@ -711,23 +740,21 @@ context("All regular users on new dashboard", () => {
     context("Finish PO", () => {
       it("Click on 'Details' tab", () => {
         cy.drSelectDetailsTab();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Enter 'Nothing to comment' inside PO dialog box", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
-          cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
-          cy.get("[data-cy=Comments]").arrowClick();
-          cy.unClick();
-        });
+        cy.get("div[style=\"width: 100%; height: 100%;\"]").arrowClick();
+        cy.get("div[contenteditable=true]").eq(1).arrowType("Nothing to comment");
+        cy.get("[data-cy=Comments]").arrowClick();
+        cy.unClick();
         cy.progressBarShouldNotExist();
       });
 
       it("Enter 'contact.us@gmail.com' inside Contact Email", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name^=contact-email]").arrowType("contact.us@gmail.com");
-          cy.unClick();
-        });
+        cy.get("[name^=contact-email]").arrowType("contact.us@gmail.com");
+        cy.unClick();
         cy.progressBarShouldNotExist();
       });
 
@@ -745,9 +772,9 @@ context("All regular users on new dashboard", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
+        cy.pmSubmitForApprovalWithoutAPI();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -755,6 +782,8 @@ context("All regular users on new dashboard", () => {
   context("Owner should see pending PO in My Feed", () => {
     it("Goto Dashboard", () => {
       cy.navigToDashboard();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`${USERS[1].name} should see pending PO on dashboard`, () => {
@@ -778,7 +807,6 @@ context("All regular users on new dashboard", () => {
   });
 
   context("Verify line item for PO", () => {
-
     it(`Login as ${USERS[2].name}`, () => {
       cy.authLogout();
       cy.authLogin({
@@ -868,9 +896,9 @@ context("All regular users on new dashboard", () => {
 
     it("Click withdraw submission button", () => {
       cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-        cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Update description", () => {
@@ -879,27 +907,26 @@ context("All regular users on new dashboard", () => {
 
     it("Add an Approval", () => {
       cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-      });
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[1].name);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Save PO document", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-        });
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
-
+      cy.wait(2000);
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Verify updated info on PO notification", () => {
@@ -928,14 +955,11 @@ context("All regular users on new dashboard", () => {
 
   context("Update notification on approve PO", () => {
     it("Click approve for PO", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostApprovalsApprove], () => {
-          cy.contains("needs your approval for").eq(0).trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
+      cy.contains("needs your approval for").eq(0).trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -962,14 +986,11 @@ context("All regular users on new dashboard", () => {
     });
 
     it("Click approve for PO", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostApprovalsApprove], () => {
-          cy.contains("needs your approval for").eq(0).trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-          cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-          cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-        });
+      cy.contains("needs your approval for").eq(0).trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
+      cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+      cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -994,3 +1015,5 @@ context("All regular users on new dashboard", () => {
     });
   });
 });
+
+export { };

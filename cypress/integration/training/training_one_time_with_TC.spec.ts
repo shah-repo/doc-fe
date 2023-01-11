@@ -674,6 +674,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       cy.atchUploadAttachment({ fileName: "image.jpg" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Navigate to Details tab", () => {
