@@ -10,7 +10,7 @@ import { Group } from "../auth/types";
 import { documentsActions } from "../documents";
 import { DOCUMENT_GET_ASYNC, DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_FAI_INSPECTION_URL, DOCUMENT_REVISION_FORMS_URL, DOCUMENT_REVISION_GET_ASYNC, DOCUMENT_REVISION_GET_AUDIT_ASYNC, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_LIST_ASYNC, DOCUMENT_REVISION_PARTS_URL, DOCUMENT_REVISION_ROOT_URL, DOCUMENT_REVISION_SET, DOCUMENT_REVISION_UPGRADE_URL, DOCUMENT_ROOT_URL, DOCUMENT_SET } from "./constants";
 import { DocRevQueryParam, DocumentGroupOptionsType, DOC_TYPE_GROUP_OPTION } from "./documentType/types";
-import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FBDocumentRevisionProps, FinalizeAndReleaseRequest, POStatusType, SecurityList, UpdateFormRequestBody } from "./types";
+import { ApproveAndReleaseRequest, CreateAndReleaseRequest, Document, DocumentRevision, DocumentRevisionAuditSetAction, DocumentRevisionEditRequestBody, DocumentRevisionSetAction, DocumentRevisionsListAction, DocumentRevisionStatus, DocumentRevisionTransition, DocumentRevisionTransitionRequestBody, DocumentRevisionTransitionResponse, DocumentSetAction, FBDocumentRevisionProps, FinalizeAndReleaseRequest, SecurityList, UpdateFormRequestBody } from "./types";
 
 const documentRevisionsList = (documentRevisions: DocumentRevision[]): DocumentRevisionsListAction => ({
   type: DOCUMENT_REVISION_LIST,
@@ -50,7 +50,7 @@ const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC ): ApiAction<D
   asyncType,
   onSuccess: (documentRevision, dispatch) => {
     // Remove at last
-    documentRevision.poStatus = POStatusType.OPENED;
+    // documentRevision.poStatus = POStatusType.OPENED;
     dispatch(documentRevisionSet(documentRevision));
   },
 });
@@ -309,6 +309,22 @@ const voidDocument = (id: string): ApiAction<DocumentRevision> => apiAction({
   },
 });
 
+const openPO = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/open/${id}`,
+  method: "patch",
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+});
+
+const closePO = (id: string): ApiAction<DocumentRevision> => apiAction({
+  url: `${DOCUMENT_REVISION_ROOT_URL}/close/${id}`,
+  method: "patch",
+  onSuccess: (documentRevision, dispatch) => {
+    dispatch(documentRevisionSet(documentRevision));
+  },
+});
+
 const setPrimaryAttachment = (
   docRevId: string,
   attachmentId: string,
@@ -457,6 +473,8 @@ export default {
   reload,
   setPrimaryAttachment,
   voidDocument,
+  openPO,
+  closePO,
   cloneEB,
   finalizeAndRelease,
   getDocRevStatuses,

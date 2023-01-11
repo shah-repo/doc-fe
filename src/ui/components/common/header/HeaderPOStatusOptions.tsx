@@ -26,6 +26,9 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const classes = useStyles();
   const dialog = useDialog();
   const async = useAsync();
+  const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
+  const openPOAction = useActionCreator(documentRevisionsActions.openPO);
+  const closePOAction = useActionCreator(documentRevisionsActions.closePO);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [action, setAction] = React.useState<POStatusType>(POStatusType.OPENED);
 
@@ -35,6 +38,11 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const closePO = () => {
+    dialog.close();
+    async.start(closePOAction, docId, async);
   };
 
   const handleVoid = () => {
@@ -85,7 +93,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         </MenuItem>
       )}
       {poStatus === POStatusType.OPENED && (
-        <MenuItem onClick={handleClose} className={classes.menuItem}>
+        <MenuItem onClick={closePO} className={classes.menuItem}>
           {getPOStatusMenuItem(POStatusType.CLOSED)}
         </MenuItem>
       )}
@@ -97,20 +105,12 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     </>
   );
 
-  const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
-  const voidDocument = () => {
-    async.start(
-      voidAction,
-      docId,
-      async,
-    );
-  };
   const confirmAction = () => {
+    dialog.close();
     if (action === POStatusType.VOIDED) {
-      voidDocument();
+      async.start(voidAction, docId, async);
     } else if (action === POStatusType.OPENED) {
-      // TODO integrate OPEN API here
-      dialog.close();
+      async.start(openPOAction, docId, async);
     }
   };
   const getAlertDialogMessage = () => {
