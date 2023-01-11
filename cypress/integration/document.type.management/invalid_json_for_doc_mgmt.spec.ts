@@ -102,8 +102,8 @@ context("Error Validations", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Upload JSON file", () => {
@@ -118,7 +118,7 @@ context("Error Validations", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
+      cy.drClickSaveWithoutApiCallExpectingToastError();
     });
 
     it("Verify error message", () => {
@@ -159,7 +159,7 @@ context("Error Validations", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Click on 'Save' button", () => {
+    it("Click on 'Create Document' button", () => {
       cy.drClickCreateDocumentWithApiCall();
     });
 
@@ -175,7 +175,7 @@ context("Error Validations", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall({ toastifyExists: true });
+      cy.drClickSaveWithoutApiCallExpectingToastError();
     });
 
     it("Verify error message", () => {

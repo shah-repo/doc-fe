@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -108,11 +107,11 @@ context("NCO document type management", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -127,6 +126,7 @@ context("NCO document type management", () => {
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(1000);
     });
 
     it("Enters title 'New Company'", () => {
@@ -182,13 +182,11 @@ context("NCO document type management", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {
@@ -310,10 +308,8 @@ context("NCO document type management", () => {
     });
 
     it("Create Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
     });
   });
 
@@ -332,9 +328,7 @@ context("NCO document type management", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -346,9 +340,9 @@ context("NCO document type management", () => {
 
     it("Set file name of exported details", () => {
       cy.get("#ExportDAMDetails-fileName").arrowType("ExportDAM");
-      cy.wrapWithWaitOnApiCall(CyRoutes.ExportApprovaMatrixNCO, () => {
-        cy.get("[data-cy='ExportDAMDetails-downloadButton']").arrowClick();
-      });
+      cy.get("[data-cy='ExportDAMDetails-downloadButton']").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -371,10 +365,8 @@ context("NCO document type management", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.wait(1500);
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span>span>button").eq(0).arrowClick();
-      });
+      cy.wait(1500);
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span>span>button").eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -414,7 +406,7 @@ context("NCO document type management", () => {
       cy.drFilterDocListByNameAndStatus({ title: "New company", status: "Released" });
     });
 
-    it("Save document", () => {
+    it("Revise document", () => {
       cy.drClickReviseDocument();
     });
 
@@ -423,11 +415,11 @@ context("NCO document type management", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document - create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {
