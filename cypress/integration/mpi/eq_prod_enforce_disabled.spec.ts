@@ -1524,6 +1524,8 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
   context("Verify that default value for Equipment Prod Enforce is unchecked", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocTypeManagement();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Expand information for Equipment doc type", () => {
@@ -1540,6 +1542,8 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
   context("Verify user can select EQ if due date is past when Equipment Enforce Prod is unchecked", () => {
     it("Navigate to LHR", () => {
       cy.navigToLHR();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Enter LHR document 2", () => {
@@ -1659,6 +1663,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Click change button to switch to expired equipment", () => {
         cy.get(`div[data-cy="form.builder.change"]`).arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
 
       it("Select expired equipment", () => {
@@ -1894,6 +1899,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Click change button to switch to expired equipment", () => {
         cy.get(`div[data-cy="form.builder.change"]`).arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist().wait(2000);
       });
 
       it("Select expired equipment", () => {
