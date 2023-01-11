@@ -1278,17 +1278,21 @@ context("LHR & LHRS Flow", () => {
 
       it("Navigate to Procedure Tab", () => {
         cy.drSelectProcedureTab();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
     });
 
     context("Fill step #1", () => {
       it("Fill step #1 description", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.mpiEnterDescriptionToStep({
-            numbOfStep: 1,
-            description: "Description of step one",
-          });
+        cy.mpiEnterDescriptionToStep({
+          numbOfStep: 1,
+          description: "Description of step one",
         });
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Add 'Part document' to step #1", () => {

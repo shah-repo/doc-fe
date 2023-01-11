@@ -904,10 +904,7 @@ context("Email format Verification after LHR released", () => {
     });
 
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-      ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
-      });
+      cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
     });
 
     it("Select build type Prod", () => {
@@ -966,7 +963,7 @@ context("Email format Verification after LHR released", () => {
     });
 
     it("Complete the step", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve  Inline Approval", () => {
@@ -996,9 +993,8 @@ context("Email format Verification after LHR released", () => {
     });
 
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
-      });
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(3000);
     });
 
     it("Approve  Inline Approval", () => {

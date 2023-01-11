@@ -822,7 +822,7 @@ context("LFPO new layout verification", () => {
       });
 
       it("Approve and released", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
