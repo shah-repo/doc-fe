@@ -1781,9 +1781,6 @@ context("Layout Verification of EQ", () => {
           cy.visit(equipmentURL);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          // cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-          //   cy.visit(equipmentURL);
-          // });
         });
 
         it("Navigate to specification tab", () => {
@@ -1802,10 +1799,6 @@ context("Layout Verification of EQ", () => {
               cy.visit(newUrl);
               cy.listLoadingElementShouldNotExist();
               cy.progressBarShouldNotExist();
-              // cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-              //   CyRoutes.GetAvailableApprovers], () => {
-              //   cy.visit(newUrl);
-              // });
             }
           });
           cy.checkToastMessage({ exists: false });
