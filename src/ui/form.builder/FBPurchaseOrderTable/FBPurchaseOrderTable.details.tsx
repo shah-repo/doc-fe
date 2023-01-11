@@ -7,7 +7,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { keys, truncate, values } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell, FBTooltip } from "..";
+import { FBMapWrapper, FBPurchaseOrderItem, FBPurchaseOrderModeOptions, FBTableCell, FBTooltip } from "..";
 import { ReactComponent as InfoIcon } from "../../../../src/assets/images/information_icon.svg";
 import Text from "../../components/Text";
 import { FBTableCellStyles } from "../styles/FBTableCell.styles";
@@ -44,7 +44,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
             </FBTableCell>
           </TableRow>}
           <TableRow>
-            {mode === "form" && (<FBTableCell />)}
+            {mode === FBPurchaseOrderModeOptions.FORM && (<FBTableCell />)}
             <FBMapWrapper<string[]> collection={values(FBPurchaseOrderDetailsProduct)}>
               {(head, index) => (
                 <FBTableCell
@@ -65,7 +65,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 data-cy="poItems"
                 className={cellStyle.cell}
               >
-                {mode === "form" && (
+                {mode === FBPurchaseOrderModeOptions.FORM && (
                   <FBTableCell>
                     <FBTooltip title="form.builder.delete">
                       <DeleteIcon
@@ -110,7 +110,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}
                             className={`${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}
-                             ${cellStyle.cellFont} ${cellStyle.cellPadding} 
+                             ${cellStyle.cellFont} ${cellStyle.cellPadding}
                              ${label < 1 ? cellStyle.cellWithZeroVal : ""}`}
                           />
                         )}
