@@ -290,8 +290,7 @@ context("Export Engineering Build doc", () => {
 
     it("Select the EB inline form", () => {
       cy.dlFilterByDocTitle({ docTitle: "EB inline form" });
-
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on Create New button", () => {
@@ -313,7 +312,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -491,7 +490,7 @@ context("Export Engineering Build doc", () => {
       it("Select the EB form", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocTitle({ docTitle: "EB form" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Click on Create New button", () => {
@@ -503,7 +502,7 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -513,7 +512,7 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -541,7 +540,7 @@ context("Export Engineering Build doc", () => {
       it("Select the EB form", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocTitle({ docTitle: "EB form" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Click on Create New button", () => {
@@ -557,7 +556,7 @@ context("Export Engineering Build doc", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 

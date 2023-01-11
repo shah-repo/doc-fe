@@ -40,7 +40,8 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       leftPanelState?.closeDialog();
     };
     openEditor = (props?: Partial<FBInputProps>) => () => {
-      const { type, index } = props || {};
+      const { type, index,  isAddAction } = props || {};
+      delete props?.isAddAction;
       if (!type) {
         return;
       }
@@ -59,7 +60,7 @@ export const withFBEditorHelper = <T extends FBEditorHelperProps>(
       if (!_documentRevisionFormState?.leftPanelOpen) { _documentRevisionFormState?.setLeftPanelOpen(); }
       if (leftPanelState) {
         leftPanelState.setIndex(index || 0);
-        if (_tabsState?.activeTabId) {
+        if (_tabsState?.activeTabId && !isAddAction) {
         _documentRevisionFormState?.setTabIdForSchemaAddition(_tabsState?.activeTabId);
         }
         leftPanelState.config({

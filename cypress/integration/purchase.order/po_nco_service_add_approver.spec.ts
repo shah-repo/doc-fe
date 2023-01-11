@@ -166,10 +166,12 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("'Approve and Release' the document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.wait(3000);
     });
   });
 
@@ -182,10 +184,13 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
 
     it("Select released NCO Form", () => {
       cy.drFilterDocListByNameAndStatus({ title: ncoFormName, status: "Released" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(3000);
     });
 
     it("Enters title 'New Company'", () => {
@@ -492,13 +497,16 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
   context("Check PO exists & verify the official predefined schema", () => {
     it("Navigate to document type management", () => {
       cy.navigToDocumentTypeManagement();
+      cy.wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
     });
 
     it("Check filters for document type management", () => {
       cy.get("[class='k-grid-content k-virtual-content']").scrollTo("left");
+      cy.wait(3000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.filterDocTypeManagement({
         status: "Active", documentType: "Purchase Order", acronym: "PO-",
         privateNumber: "Yes", redline: "No", qms: "Yes", needsSignature: "Yes", training: "No",
@@ -894,8 +902,8 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
     });
   });
 
-  context("Verify that history tab is capturing requestor added and approver added", () => {
-    it("Check history entry for 'Requestor Added'", () => {
+  context("Verify that history tab is capturing requestor added and approver Added", () => {
+    it("Check history entry for 'Requestor added'", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

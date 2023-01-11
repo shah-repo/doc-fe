@@ -7,7 +7,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { keys, truncate, values } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
-import { FBMapWrapper, FBPurchaseOrderItem, FBTableCell, FBTooltip } from "..";
+import { FBMapWrapper, FBPurchaseOrderItem, FBPurchaseOrderModeOptions, FBTableCell, FBTooltip } from "..";
 import { ReactComponent as InfoIcon } from "../../../../src/assets/images/information_icon.svg";
 import Text from "../../components/Text";
 import { FBTableCellStyles } from "../styles/FBTableCell.styles";
@@ -33,7 +33,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
       <Table className={classes?.table}>
         <TableHead>
           {isReceivable && <TableRow>
-            <FBTableCell />
+            {mode === FBPurchaseOrderModeOptions.FORM && (<FBTableCell />)}
             <FBTableCell colSpan={10}>
               <Box display="flex">
                 <InfoIcon />
@@ -44,7 +44,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
             </FBTableCell>
           </TableRow>}
           <TableRow>
-            <FBTableCell />
+            {mode === FBPurchaseOrderModeOptions.FORM && (<FBTableCell />)}
             <FBMapWrapper<string[]> collection={values(FBPurchaseOrderDetailsProduct)}>
               {(head, index) => (
                 <FBTableCell
@@ -65,8 +65,8 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                 data-cy="poItems"
                 className={cellStyle.cell}
               >
-                <FBTableCell>
-                  {mode === "form" && (
+                {mode === FBPurchaseOrderModeOptions.FORM && (
+                  <FBTableCell>
                     <FBTooltip title="form.builder.delete">
                       <DeleteIcon
                         className="FBIcon-root"
@@ -74,8 +74,8 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                         onClick={handleDelete?.(index)}
                       />
                     </FBTooltip>
-                  )}
-                </FBTableCell>
+                  </FBTableCell>
+                )}
                 <FBMapWrapper<string[]> collection={keys(FBPurchaseOrderCollection[item.type])}>
                   {(key, index) => {
                     let label = item[key];
@@ -97,13 +97,21 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
                     }
                     return (
                       <React.Fragment  key={`fb-po-item-${key}-${index}`}>
-                        {index === 0 && <TableCell data-cy = "poItemIndex">{item.index + 1}</TableCell>}
+                        {index === 0 &&
+                         <TableCell
+                           className={`${cellStyle.cellFont} ${cellStyle.cellPadding}`}
+                           data-cy = "poItemIndex"
+                         >
+                           {item.index + 1}
+                         </TableCell>}
                         {index > 0 && (
                           <FBTableCell
                             data-cy = {dataCy}
                             loading={key === "received" ? loading : false}
                             {...{ label, tooltipTitle }}
-                            className={`${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}`}
+                            className={`${cellStyle.cellFontWeightHigh} ${cellStyle.cellFontWeightLow}
+                             ${cellStyle.cellFont} ${cellStyle.cellPadding}
+                             ${label < 1 ? cellStyle.cellWithZeroVal : ""}`}
                           />
                         )}
                       </React.Fragment>

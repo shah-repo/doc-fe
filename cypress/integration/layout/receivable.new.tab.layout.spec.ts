@@ -918,21 +918,19 @@ context("Receiving landing page test", () => {
     it("Navigate to detail tab", () => {
       cy.drSelectDetailsTab();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist().wait(2000);
     });
 
     it("Select Purchase order", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.GetReceivableQuantity], () => {
-        cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
-          .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
-      });
+      cy.get("[data-cy='porec-receivable-test']").autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Save the form", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PatchDocRev], () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.listLoadingElementShouldNotExist();
-        });
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify Po ,Requestor, suplier, Receiving table,Receive all button should be exist", () => {
@@ -945,12 +943,9 @@ context("Receiving landing page test", () => {
     });
 
     it("Click on receive all", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
-        CyRoutes.GetReceivableQuantity, CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy='fb-control-btn']").contains("Receive All").arrowClick();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
+      cy.get("[data-cy='fb-control-btn']").contains("Receive All").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to detail tab", () => {
@@ -971,10 +966,10 @@ context("Receiving landing page test", () => {
     });
 
     it("Insert Receipt Quantity and click on save ", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetReceivableQuantity], () => {
-        cy.get("[data-cy='received'] input").clear().arrowType("180");
-        cy.get("[data-cy='form.builder.save']").arrowClick().wait(2000);
-      });
+      cy.get("[data-cy='received'] input").clear().arrowType("180");
+      cy.get("[data-cy='form.builder.save']").arrowClick().wait(2000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to detail tab", () => {
@@ -992,11 +987,9 @@ context("Receiving landing page test", () => {
     });
 
     it("Insert Receipt Quantity and click on save ", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetReceivableQuantity], () => {
-        cy.get("[data-cy='received'] input").clear().arrowType("100");
-        cy.get("[data-cy='form.builder.save']").arrowClick();
-        cy.listLoadingElementShouldNotExist().wait(2000);
-      });
+      cy.get("[data-cy='received'] input").clear().arrowType("100");
+      cy.get("[data-cy='form.builder.save']").arrowClick();
+      cy.listLoadingElementShouldNotExist().wait(2000);
     });
 
     it("Verify form option should appear in this tab", () => {
@@ -1309,18 +1302,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Approve the record", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get("button[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostApprovalsApprove,
-        CyRoutes.SessionDetails,
-        CyRoutes.GetRequiredApproversDocRev,
-      ], () => {
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
+      cy.ebApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1373,6 +1355,7 @@ context("Receiving landing page test", () => {
     it("Navigate to details Tab", () => {
       cy.drSelectDetailsTab();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist().wait(2000);
       cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
         .autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
     });

@@ -10,7 +10,7 @@ import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { emailDateOffset, equimentCALDueDays, equimentPMDueDays, momentInPST } from "../../utils/constants/dateHandler";
+import { equimentCALDueDays, equimentPMDueDays, momentInPST } from "../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -39,6 +39,7 @@ const ADMIN_USER = USERS[1];
 const equipmentTitleForm = "Equipment-Form";
 const equipmentDocId = "EQ-00001";
 const delay1 = 5000;
+const emailDateOffsetNew = 10000;
 
 context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
   before(() => {
@@ -934,7 +935,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
       dueDateInEmailCal = momentInPST().add(`${equimentCALDueDays}`, "days")
         .subtract(1, "days").format("MM/DD/YYYY");
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffsetNew);
       cy.wait(10000);
     });
   });
@@ -1079,7 +1080,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
       dueDateInEmailPm = momentInPST().add(`${equimentPMDueDays}`, "days")
         .subtract(11, "days").format("MM/DD/YYYY");
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffsetNew);
       cy.wait(10000);
     });
   });
@@ -1223,7 +1224,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       dueDateInEmailCal = momentInPST().add(`${equimentCALDueDays}`, "days").subtract(25, "days").format("MM/DD/YYYY");
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffsetNew);
       cy.wait(10000);
     });
   });
@@ -1414,7 +1415,7 @@ context("Autocomplete 'Equipment' test", { tags: ["@timetool"] }, () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       dueDateInEmailPm = momentInPST().add(`${equimentPMDueDays}`, "days").subtract(34, "days").format("MM/DD/YYYY");
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffsetNew);
       cy.wait(10000);
     });
   });

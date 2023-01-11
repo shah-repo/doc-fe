@@ -795,9 +795,9 @@ context("LFPO new layout verification", () => {
       });
 
       it("Creat form", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Add textfield", () => {
@@ -986,12 +986,10 @@ context("LFPO new layout verification", () => {
     });
 
     it("Create Receiving Record", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Receivable test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Receivable test");
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify receiving should get created", () => {
@@ -1012,8 +1010,8 @@ context("LFPO new layout verification", () => {
 
     it("Select Purchase order", () => {
       cy.get("[data-cy='porec-receivable-test']").autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
-      cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
     });
 
@@ -1042,9 +1040,8 @@ context("LFPO new layout verification", () => {
     });
 
     it("Select document type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
-        cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
-      });
+      cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -1191,9 +1188,10 @@ context("LFPO new layout verification", () => {
         cy.wait(2000);
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Developers");
-        });
+        cy.drAddGroupFromPermissionTab("Developers");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+
       });
 
     });
@@ -1276,7 +1274,6 @@ context("LFPO new layout verification", () => {
       cy.get("[id^='react-select']").eq(7).autocompleteSelect("form.builder.approvals");
     });
 
-
     it("Mapped Checkbox field", () => {
       cy.get("[data-cy^='field-checkbox']" ).arrowClick();
       cy.get("[id^='react-select']").eq(8).autocompleteSelect("Checkbox");
@@ -1339,24 +1336,15 @@ context("LFPO new layout verification", () => {
     });
 
     it("Approve and Release", () => {
-      cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
-      cy.listLoadingElementShouldNotExist();
-      cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PostApprovalsApprove,
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.SessionDetails], () => {
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.ebApproveWithoutApi();
     });
   });
 
   context("Verify After release", () => {
     it("Navigate to Lot landing page", () => {
       cy.navigToLots();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click to open that LOT", () => {

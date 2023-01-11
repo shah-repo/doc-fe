@@ -360,9 +360,7 @@ context("Receiving landing page test", () => {
 
   context("Create receiving  form", () => {
     it("Navigate to document list", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-        cy.navigToDocumentList();
-      });
+      cy.navigToDocumentList();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
@@ -475,9 +473,7 @@ context("Receiving landing page test", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for Receiving" });
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.fbAddField();
-      });
+      cy.fbAddField();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -528,9 +524,7 @@ context("Receiving landing page test", () => {
 
   context("Create Another receiving  form", () => {
     it("Navigate to document list", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-        cy.navigToDocumentList();
-      });
+      cy.navigToDocumentList();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
@@ -639,9 +633,7 @@ context("Receiving landing page test", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for new receiving" });
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.fbAddField();
-      });
+      cy.fbAddField();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
@@ -920,9 +912,9 @@ context("Receiving landing page test", () => {
     });
 
     it("Import the template", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("#fb-import-schema").attachFile("../downloads/LFPO_Import.json");
-      });
+      cy.get("#fb-import-schema").attachFile("../downloads/LFPO_Import.json");
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify imported field", () => {
@@ -1651,9 +1643,9 @@ context("Receiving landing page test", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1841,19 +1833,17 @@ context("Receiving landing page test", () => {
     });
 
     it("Create Receiving Record", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocPreview,
-        CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
-      });
+      cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approver", () => {
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy^=\"fb-approvals-fb-po-approvals\"]").scrollIntoView().arrowClick().wait(500);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.get("[data-cy^=\"fb-approvals-fb-po-approvals\"]").autocompleteSelect(USERS[1].name).wait(500);
-      });
+      cy.get("[data-cy^=\"fb-approvals-fb-po-approvals\"]").autocompleteSelect(USERS[1].name).wait(500);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.unClick();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1866,15 +1856,18 @@ context("Receiving landing page test", () => {
 
     it("Navigate to detail tab", () => {
       cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist().wait(2000);
     });
 
     it("Select Purchase order", () => {
-      cy.get("[data-cy='porec-receivable-test']").arrowClick({ force: true })
-        .autocompleteSelect("PO-00001 - rev A - New Purchase Order");
+      cy.get("[data-cy='porec-receivable-test']").autocompleteSelect("PO-00001 - rev A - New Purchase Order");
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Save the form", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
@@ -1888,11 +1881,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Save", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.PatchDocRev,
-      ], () => {
-        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
@@ -1900,7 +1889,7 @@ context("Receiving landing page test", () => {
     it("Navigate to detail tab", () => {
       cy.drSelectDetailsTab();
       cy.listLoadingElementShouldNotExist();
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldNotExist().wait(2000);
     });
 
     it("Select Receive All", () => {
@@ -1909,21 +1898,19 @@ context("Receiving landing page test", () => {
     });
 
     it("Click on create lot", () => {
-
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
-        cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
-      });
+      cy.get("[name='po-items-built-in'] button").contains("Create Lot").first().arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist().wait(2000);
     });
 
     it("Fill the lot form", () => {
-      cy.get("[name^='received']").arrowType("100");
+      cy.get("[name^='received']").clear().arrowType("100");
       cy.listLoadingElementShouldNotExist();
       cy.wrapWithWaitOnApiCall(CyRoutes.GetSpecificDocumentType, () => {
         cy.get("[data-cy='lotType']").autocompleteSelect("Lots");
       });
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy='lotForm']").arrowClick({ force: true })
-        .autocompleteSelect("New Lot from Purchase Order Form");
+      cy.get("[data-cy='lotForm']").arrowClick({ force: true }).autocompleteSelect("New Lot from Purchase Order Form");
       cy.get("[data-cy='fb-control-btn']").contains("Create Lot").first().arrowClick();
     });
 
