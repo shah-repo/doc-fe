@@ -6,7 +6,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { PurchaseOrderItem } from "../../support/commands/purchase.order/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -471,7 +470,7 @@ context("Create receivable test", () => {
       });
 
       it("Click create receivable", () => {
-        cy.recCreateNew();
+        cy.recCreateNewWithoutApi();
       });
     });
 
@@ -567,19 +566,20 @@ context("Create receivable test", () => {
         });
 
         it("Click 'Add new receiving'", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
-            cy.recCreateNew();
-          });
+          cy.recCreateNewWithoutApi();
         });
 
         it("Add an Approval", () => {
+          cy.get("[data-cy^='fb-approvals-fb-po-approvals']").should("exist");
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Click 'Submit for Approval' button", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Click 'Approve' button", () => {

@@ -518,6 +518,8 @@ Cypress.Commands.add("verifyFieldRequiredDocumentType", () => {
 Cypress.Commands.add("fbFieldRequiredIf", (params: { name: string; value: string }) => {
   cy.get("input[name=\"validators.required_if\"]").arrowClick();
   cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect(params.name);
+  cy.unClick();
+  cy.listLoadingElementShouldNotExist();
   cy.get(`[data-cy="validators.required_if.value"]`).autocompleteSelect(params.value);
 });
 
