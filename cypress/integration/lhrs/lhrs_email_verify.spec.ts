@@ -1015,7 +1015,6 @@ context("Email format Verification after LHR released", () => {
       cy.get("#HeaderInfo-subtitle").then(($docIdElement: JQuery<HTMLElement>) => {
         lotId = $docIdElement.text().replace("-", "").trim();
       });
-      // cy.progressBarShouldNotExist();
       cy.wait(3000);
     });
   });
