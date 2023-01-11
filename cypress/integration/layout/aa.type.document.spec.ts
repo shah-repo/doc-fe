@@ -161,9 +161,9 @@ context("AA Document Layout verification", () => {
     });
 
     it("Create Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -231,9 +231,9 @@ context("AA Document Layout verification", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -742,6 +742,8 @@ context("AA Document Layout verification", () => {
     it("Verify References selection", () => {
       cy.get("[data-cy='referenceTo']").arrowClick({ force: true });
       cy.drSelectReferences( "FM-00001" );
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.drRemoveReferences({ reference: "FM-00001" });
     });
   });
@@ -791,10 +793,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Save Record'", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [], () => {
-          cy.get("[data-cy='DocumentRevisionForm-submit']").arrowClick();
-        });
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Status is 'In Draft'", () => {
@@ -1014,9 +1013,9 @@ context("AA Document Layout verification", () => {
     });
 
     it("Create Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
