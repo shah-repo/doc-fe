@@ -48,6 +48,7 @@ declare global {
       drSaveDocumentWithoutaudit(): Chainable<Subject>;
       drClickCreateDocumentWithoutApiCall(): Chainable<Subject>;
       drClickSaveWithoutApiCall(): Chainable<Subject>;
+      drClickSaveWithoutApiCallExpectingToastError(): Chainable<Subject>;
       drCheckDocumentStatus(params: { status: string }): Chainable<Subject>;
       drGetDocIdElementFromUI(): Chainable<JQuery<HTMLElement>>;
       drGetChangeRequestLinkElementFromUI(): Chainable<JQuery<HTMLElement>>;
@@ -618,6 +619,12 @@ Cypress.Commands.add("drClickSaveWithoutApiCall", () => {
   cy.get("div.MuiLinearProgress-root", { timeout: 10000 }).should("be.visible");
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("drClickSaveWithoutApiCallExpectingToastError", () => {
+  cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+  cy.progressBarShouldAppear();
+  cy.checkToastMessage({ exists: true });
 });
 
 Cypress.Commands.add("drCheckDocumentStatus", (params: { status: string }) => {

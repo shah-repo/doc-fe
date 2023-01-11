@@ -13,8 +13,7 @@ const styles = makeStyles((theme) => ({
     "fontWeight": 600,
     "fontSize": 12,
     "&:hover": {
-      background: Colors.navy,
-      color: Colors.white,
+      background: Colors.background_white,
     },
   },
 }

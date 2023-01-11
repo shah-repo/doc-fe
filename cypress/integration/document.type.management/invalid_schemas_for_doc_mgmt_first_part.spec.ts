@@ -294,7 +294,6 @@ context("document type management error validations", () => {
           message: "Please Enter Valid Schema",
         });
         cy.closeAllAlertMessages();
-        cy.closeAllAlertMessages();
       });
 
       it("Click on close button", () => {

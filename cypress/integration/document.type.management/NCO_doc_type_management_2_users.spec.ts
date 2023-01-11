@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -86,6 +85,7 @@ context("NCO document type management multiple users", () => {
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.wait(1000);
     });
 
     it(`Enters title '${ncoFormName}'`, () => {
@@ -108,12 +108,12 @@ context("NCO document type management multiple users", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -128,6 +128,7 @@ context("NCO document type management multiple users", () => {
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(1000);
     });
 
     it("Enters title 'New Company'", () => {
@@ -183,13 +184,11 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {
@@ -283,10 +282,8 @@ context("NCO document type management multiple users", () => {
     // });
 
     it("Create Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
     });
   });
 
@@ -297,6 +294,7 @@ context("NCO document type management multiple users", () => {
 
     it("Click on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.wait(1000);
     });
 
     it("Enters title 'New Document Revision'", () => {
@@ -327,8 +325,8 @@ context("NCO document type management multiple users", () => {
       cy.get("[data-cy=\"field-securityGroups\"]").contains("All Users");
     });
 
-    it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Clicks on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check if 'Rev 1' revision is displayed", () => {
@@ -354,7 +352,7 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {
@@ -385,6 +383,7 @@ context("NCO document type management multiple users", () => {
 
     it("Click on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.wait(1000);
     });
 
     it("Check that 'Blue' document type is not in the dropdown", () => {
@@ -429,9 +428,7 @@ context("NCO document type management multiple users", () => {
       });
 
       it("Confirm Edit added Doc Type", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-          cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-        });
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
@@ -458,9 +455,7 @@ context("NCO document type management multiple users", () => {
       });
 
       it("Confirm Edit added Doc Type", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-          cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-        });
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
@@ -521,9 +516,7 @@ context("NCO document type management multiple users", () => {
 
       it("Confirm Edit added Doc Type", () => {
         SystemRequirement("REQ-5130");
-        cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-          cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-        });
+        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
         cy.landingPageLoadingElementShouldNotExist();
       });
     });
@@ -536,6 +529,7 @@ context("NCO document type management multiple users", () => {
 
     it("Click on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.wait(1000);
     });
 
     it("Enters title 'New Document Revision'", () => {
@@ -613,6 +607,7 @@ context("NCO document type management multiple users", () => {
 
     it("Click on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.wait(1000);
     });
 
     it("Selects 'Blue' document type from dropdown", () => {
@@ -672,9 +667,7 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -733,7 +726,7 @@ context("NCO document type management multiple users", () => {
       cy.drFilterDocListByNameAndStatus({ title: "New company", status: "Released" });
     });
 
-    it("Save document", () => {
+    it("Revise document", () => {
       cy.drClickReviseDocument();
     });
 
@@ -742,11 +735,11 @@ context("NCO document type management multiple users", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document - create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {
