@@ -377,7 +377,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -421,7 +421,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Remove Field 2 Validations", () => {
@@ -434,7 +434,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Remove Field 2", () => {
@@ -443,7 +443,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Edit Field 3 and make it required", () => {
@@ -455,7 +455,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 

@@ -295,7 +295,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -385,7 +385,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -430,7 +430,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Remove Field 1", () => {
@@ -439,7 +439,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("component 3 exists", () => {
@@ -462,7 +462,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Add Checkpoint Field 4", () => {
@@ -474,7 +474,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 

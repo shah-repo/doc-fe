@@ -201,7 +201,7 @@ context(
           });
 
           it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.drClickSaveWithoutApiCall();
           });
         });
 
@@ -324,7 +324,7 @@ context(
           });
 
           it("Click save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.drClickSaveWithoutApiCall();
             cy.reload();
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();

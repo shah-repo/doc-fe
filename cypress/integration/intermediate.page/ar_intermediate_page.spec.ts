@@ -324,7 +324,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Add Field-2 File Upload", () => {
@@ -343,7 +343,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Add Field-3 Date picker", () => {
@@ -368,7 +368,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -418,7 +418,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Remove Field 1", () => {
@@ -441,7 +441,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
