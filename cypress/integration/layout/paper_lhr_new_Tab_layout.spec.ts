@@ -715,7 +715,6 @@ context("Paper LHR tab Layout", () => {
         cy.get("[data-cy='References']").should("exist");
         cy.get("[data-cy='generalInfo']").should("be.visible");
         cy.wait(2000);
-        cy.pause();
       });
 
     });
