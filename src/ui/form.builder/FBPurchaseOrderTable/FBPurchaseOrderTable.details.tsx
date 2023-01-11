@@ -33,7 +33,7 @@ const FBPurchaseOrderTableDetails: React.FunctionComponent<FBPurchaseOrderTableD
       <Table className={classes?.table}>
         <TableHead>
           {isReceivable && <TableRow>
-            {mode === "form" && (<FBTableCell />)}
+            {mode === FBPurchaseOrderModeOptions.FORM && (<FBTableCell />)}
             <FBTableCell colSpan={10}>
               <Box display="flex">
                 <InfoIcon />
