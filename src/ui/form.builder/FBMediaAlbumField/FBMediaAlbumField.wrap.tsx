@@ -5,7 +5,7 @@ import { reaction, toJS } from "mobx";
 import { useObserver } from "mobx-react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FB, FBDialogState, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from "..";
+import { FB, FBMediaAlbumFieldProps, FBMediaAlbumFieldState, FBWorkspaceModeOptions } from "..";
 import { companySelectors } from "../../../state/ducks/company";
 import { toastError } from "../../components/notifications";
 
@@ -33,8 +33,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     ...props
   }: T) => {
 
-    const { workspaceState, formState, mediaAlbumState, dialogState: existsDialogState } = FB.useStores();
-    const dialogState = FB.useRef<FBDialogState>(FBDialogState);
+    const { workspaceState, formState, mediaAlbumState, dialogState } = FB.useStores();
     const { document: { id = "" } = {} } = workspaceState || {};
     const formValue = formState?.getFieldValue(name) || editorConfig;
     const ids = map(formValue, "id");
@@ -57,7 +56,6 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
     // Handle mode
     setMediaFieldMode = () => {
       const mode = mediaAlbumFieldState?.mode === "qr" ? "media" : "qr";
-      dialogState?.setDialog(true);
       mediaAlbumFieldState?.setMode(mode);
     };
 
@@ -141,7 +139,7 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
       () => mediaAlbumFieldState?.attachmentApi.data,
       (data) => {
         if (!data) { return; }
-        mediaAlbumFieldState?.download(data, dialogState?.open || existsDialogState?.open);
+        mediaAlbumFieldState?.download(data, dialogState?.open);
         mediaAlbumFieldState!.fromUpload = true;
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
