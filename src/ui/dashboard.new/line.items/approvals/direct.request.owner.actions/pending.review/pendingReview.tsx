@@ -7,7 +7,6 @@ import { ReactComponent as PinIcon } from "../../../../../../assets/images/pin.s
 import { ReactComponent as PinSolidIcon } from "../../../../../../assets/images/pin_solid.svg";
 import { Nullable } from "../../../../../../state/ducks/common/types";
 import { dashboardMyFeedsActions } from "../../../../../../state/ducks/dashboard.new/my.feeds";
-import { MY_FEEDS_INITIAL_PAYLOAD } from "../../../../../../state/ducks/dashboard.new/my.feeds/constants";
 import Text from "../../../../../components/Text";
 import { documentVersionPath } from "../../../../../document.revision/utils/paths";
 import Colors from "../../../../../layout/theme/utils/colors";
@@ -104,7 +103,7 @@ const PendingReviewItemPresenter: React.FC<Props> = ({
   const onClose = () => {
     handleEmailModelClose();
     if (lastEmailSent) {
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     }
   };
 
