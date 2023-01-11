@@ -570,7 +570,7 @@ context("Create receivable test", () => {
         });
 
         it("Add an Approval", () => {
-          cy.get("[data-cy^='fb-approvals-fb-po-approvals']").should('exist');
+          cy.get("[data-cy^='fb-approvals-fb-po-approvals']").should("exist");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
           cy.get("[data-cy^='fb-approvals-fb-po-approvals']").autocompleteSelect(USERS[1].name);
