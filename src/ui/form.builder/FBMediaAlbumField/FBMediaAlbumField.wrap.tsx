@@ -124,12 +124,15 @@ export const withFBMediaAlbumField = <T extends FBMediaAlbumFieldProps>(
         }
       );
       return () => {
+        if (!mediaAlbumFieldState?.previewOnlyIds.length) {
+          return;
+        }
         map(mediaAlbumFieldState?.previewOnlyIds, (id) => {
           mediaAlbumFieldState?.removeFile(id);
           mediaAlbumState?.setActiveMedia(0);
-          if (!workspaceState?.autosave) { return; }
-          workspaceState?.saveDocRev(formState?.getValues());
         });
+        if (!workspaceState?.autosave) { return; }
+        workspaceState?.saveDocRev(formState?.getValues());
       };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
