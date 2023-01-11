@@ -1278,7 +1278,7 @@ context("LHR steps verification", () => {
   context("Verify The side bar options Revision's fonts", () => {
     it(`Verify Revisions font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
       cy.get("[data-cy=\"note-icon\"]").arrowClick();
-      cy.get("[data-cy=\"document.revision.docVersion\"]")
+      cy.get("[data-cy=\"Revisions\"]")
         .checkStylePropExists({
           content: "Revisions",
           props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
@@ -1300,6 +1300,11 @@ context("LHR steps verification", () => {
           content: "Owner",
           props: { "font-size": FONT_SIZE_14, "font-family": sora, "line-height": LINE_HT_24, "font-weight": FONT_WT_400 },
         });
+    });
+
+    it("Save the document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.wait(3000);
     });
   });
 
