@@ -20,6 +20,7 @@ declare global {
       recClickUpdateRecord(): Chainable<Subject>;
       recClickSaveBtn(): Chainable<Subject>;
       recCreateNew(): Chainable<Subject>;
+      recCreateNewWithoutApi(): Chainable<Subject>;
       recVerifyFilterByReceivableId(params: {recId: string}): Chainable<Subject>;
       recFilterByOwner(params: {owner: string}): Chainable<Subject>;
       recVerifyFilterByOwner(params: {owner: string}): Chainable<Subject>;
@@ -63,6 +64,12 @@ Cypress.Commands.add("recCreateNew", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("recCreateNewWithoutApi", () => {
+  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick({ force: true });
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
