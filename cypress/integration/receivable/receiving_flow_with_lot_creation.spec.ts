@@ -945,6 +945,9 @@ context("Create receivable test with PO, Lot and Supplier", () => {
 
     it("Click on 'Details' tab", () => {
       cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select PO Receivable from dropdown for 'RC-00001'", () => {
@@ -977,11 +980,10 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Select 'Lots test' document type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
-        cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
-      });
+      cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select 'Lots form document' form", () => {
@@ -989,11 +991,10 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Create Lot' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostReceivable], () => {
-        cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
-      });
+      cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
       cy.unClick();
     });
   });
@@ -1009,10 +1010,9 @@ context("Create receivable test with PO, Lot and Supplier", () => {
   context("Create a Lot for second line item", () => {
     it("Click 'Create a Lot' on second line item", () => {
       SystemRequirement("REQ-1820", "REQ-2010");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetDocumentType], () => {
-        cy.get("tr>td>button").eq(1).arrowClick();
-      });
+      cy.get("tr>td>button").eq(1).arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Add 'Receipt Quantity'", () => {
@@ -1030,11 +1030,10 @@ context("Create receivable test with PO, Lot and Supplier", () => {
     });
 
     it("Click 'Create Lot' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostReceivable], () => {
-        cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
-      });
+      cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
   });
 
@@ -1043,6 +1042,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.get("tr[data-cy='poItems']").eq(0).arrowClick({ force: true }).wait(2000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Add quantity received", () => {
@@ -1063,6 +1063,7 @@ context("Create receivable test with PO, Lot and Supplier", () => {
       cy.drSelectOverviewTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Add an Approval", () => {
