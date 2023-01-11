@@ -1205,7 +1205,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on approve and submit", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
