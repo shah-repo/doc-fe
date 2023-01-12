@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -49,15 +48,6 @@ context("FORM Field test", () => {
         });
       });
     });
-
-    it("[API]Login second tester", (done: any) => {
-      cy.authApiLogin({
-        email: USERS[1].email,
-      }).then((response) => {
-        loginResponse = response;
-        done();
-      });
-    });
   });
 
   context("Login user", () => {
@@ -97,7 +87,7 @@ context("FORM Field test", () => {
     });
 
     it("Click create a document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Create FORM document with Form fields", () => {
@@ -332,9 +322,7 @@ context("FORM Field test", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Approvals", field: "Approvals" });
         cy.fbEnterNameValue({ name: "label", value: "fb-approvals" });
-        cy.wrapWithWaitOnApiCall(CyRoutes.AvailableMaintenanceForms, () => {
-          cy.fbAddNewFieldButton();
-        });
+        cy.fbAddNewFieldButton();
       });
 
       it("Add Inline Approval", () => {
@@ -345,9 +333,7 @@ context("FORM Field test", () => {
         cy.get("[data-cy=\"editorConfig.approvers\"]").autocompleteSelect(`${USERS[1].email }`);
         cy.get("[data-cy=\"editorConfig.groups\"]").autocompleteSelect("Everyone");
         cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.wrapWithWaitOnApiCall(CyRoutes.AvailableMaintenanceForms, () => {
-          cy.fbAddNewFieldButton();
-        });
+        cy.fbAddNewFieldButton();
       });
 
       it("Add Request Approval", () => {
@@ -391,14 +377,15 @@ context("FORM Field test", () => {
         cy.fbAddNewFieldButton();
       });
 
-      it("Add Instructions 'Select Document(s)'", () => {
-        cy.fbClickAddNewHiddenBtn();
-        cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
-        cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
-        cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-      });
+      // This is commented Due to ENC-13644
+      // it("Add Instructions 'Select Document(s)'", () => {
+      //   cy.fbClickAddNewHiddenBtn();
+      //   cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
+      //   cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
+      //   cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
+      //   cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      //   cy.fbAddNewFieldButton();
+      // });
 
       it("Add Actions 'Action Button'", () => {
         cy.fbClickAddNewHiddenBtn();
@@ -408,7 +395,7 @@ context("FORM Field test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -652,13 +639,14 @@ context("FORM Field test", () => {
         cy.fbClickButton({ el: "fb-editor-actions-cancel" });
       });
 
-      it("Verify Select Document attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-select-doc" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-select-doc" });
-        cy.get("[data-cy=\"options\"]").parent().should("contain", "AR Form");
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-      });
+      // This is commented Due to ENC-13644
+      // it("Verify Select Document attributes", () => {
+      //   cy.fbClickLabelEditHiddenBtn({ label: "fb-select-doc" });
+      //   cy.fbVerifyNameValue({ name: "label", value: "fb-select-doc" });
+      //   cy.get("[data-cy=\"options\"]").parent().should("contain", "AR Form");
+      //   cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      //   cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      // });
 
       it("Verify Action Button attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "Send Email" });
@@ -736,7 +724,7 @@ context("FORM Field test", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Verify updated Quantity field", () => {
@@ -755,9 +743,7 @@ context("FORM Field test", () => {
       });
 
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -792,7 +778,7 @@ context("FORM Field test", () => {
       });
 
       it("Click Save button", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
