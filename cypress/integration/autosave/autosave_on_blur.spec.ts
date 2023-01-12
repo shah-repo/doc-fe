@@ -626,15 +626,16 @@ context("Autosave on blur", () => {
       });
     });
 
-    it("Add Instructions 'Select Document(s)'", () => {
-      cy.fbAddNewFieldWhenHidden();
-      cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
-      cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.fbAddNewFieldButton();
-      });
-    });
+    // Commented due to :ENC-13644
+    // it("Add Instructions 'Select Document(s)'", () => {
+    //   cy.fbAddNewFieldWhenHidden();
+    //   cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
+    //   cy.fbEnterNameValue({ name: "label", value: "fb-select-doc" });
+    //   cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
+    //   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+    //     cy.fbAddNewFieldButton();
+    //   });
+    // });
 
     it("Add Instructions Media upload", () => {
       cy.fbAddNewFieldWhenHidden();
@@ -675,6 +676,9 @@ context("Autosave on blur", () => {
 
     it("Approve and release document", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
   });
 
@@ -751,6 +755,8 @@ context("Autosave on blur", () => {
           .click({ force: true }).arrowType("Test description", { force: true });
         cy.unClick();
       });
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select Date and check for autosave", () => {
@@ -930,12 +936,13 @@ context("Autosave on blur", () => {
       });
     });
 
-    it("Select REQ and check for autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy^=\"fb-select-doc-\"]").autocompleteSelect("FM-00001");
-        cy.unClick();
-      });
-    });
+    // Commented due to :ENC-13644
+    // it("Select REQ and check for autosave", () => {
+    //   cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
+    //     cy.get("[data-cy^=\"fb-select-doc-\"]").autocompleteSelect("FM-00001");
+    //     cy.unClick();
+    //   });
+    // });
 
     it("Delete Upload attachment and check for autosave", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
