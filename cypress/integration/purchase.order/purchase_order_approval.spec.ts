@@ -225,6 +225,7 @@ context("PO approval test", () => {
       cy.drCreateNewDocumentFromForm();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Enter title 'New POAM'", () => {

@@ -1492,7 +1492,7 @@ context("PO and parts ", () => {
       cy.get("[data-cy=\"attachment.title\"]").contains("image.jpg").should("exist");    });
 
     it("Remove attachment image.jpg", () => {
-      cy.get("[id=\"AttachmentIconPresenter-handleRemove\"]").eq(1).arrowClick({ force: true });
+      cy.get("[id=\"AttachmentIconPresenter-handleRemove\"]").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1515,14 +1515,16 @@ context("PO and parts ", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Add approver", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick().wait(1000);
       cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[2].name);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Submit for approval", () => {
