@@ -289,6 +289,7 @@ export const withFBInput = <T extends FBInputProps>(
     useEffect(() => {
       if (!formState && !inputState) { return; }
       // Input states
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       formState?.inputState.set(name, inputState!);
       // Validation settings
       let attr = validationAttribute || (label as string) || placeholder || name;

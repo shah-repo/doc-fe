@@ -141,6 +141,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   useEffect(() => {
     workspaceState?.setIsPreview(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

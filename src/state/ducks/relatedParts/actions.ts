@@ -6,7 +6,8 @@ import { RelatedPartsChoiceRequestBody } from "./types";
 
 
 const createRelatedPart =
-  (parentDocumentId: string, parentDocumentRevisionId: string, body: DocumentRevisionEditRequestBody, suffixName, async) => apiAction({
+  (parentDocumentId: string, parentDocumentRevisionId: string, body: DocumentRevisionEditRequestBody,
+    suffixName, async) => apiAction({
     url: `${RELATED_PARTS_ROOT_URL}/${parentDocumentId}/${parentDocumentRevisionId}/child`,
     method: "post",
     data: body,
