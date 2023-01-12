@@ -414,15 +414,7 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.ebTryToApprove();
       cy.progressBarShouldAppear();
-      // cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
-      // cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      // cy.unClick();
     });
-
-    // it("Confirm password", () => {
-    //   cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-    //   cy.progressBarShouldAppear();
-    // });
 
     it(`Logout as current user`, () => {
       cy.authLogout();
@@ -445,9 +437,6 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.ebTryToApprove();
       cy.progressBarShouldAppear();
-      // cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
-      // cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      // cy.get("[data-cy=\"common.confirm\"]").arrowClick();
     });
 
     it(`Logout as current user`, () => {
@@ -471,9 +460,6 @@ context("Document Operators Access Test", () => {
     it("Approve record button click", () => {
       cy.ebTryToApprove();
       cy.progressBarShouldAppear();
-      // cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
-      // cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      // cy.get("[data-cy=\"common.confirm\"]").arrowClick();
     });
 
     it("Verify status is released", () => {
