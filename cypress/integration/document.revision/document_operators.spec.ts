@@ -4,7 +4,6 @@
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { Categories } from "../../utils/constants/categories";
 import { FormOperatorsType } from "../../utils/constants/documentTypes/form";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -92,6 +91,10 @@ context("Document Operators Access Test", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   // TODO: Create form for Parts with API, not through document list creation!
@@ -125,11 +128,11 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -151,14 +154,11 @@ context("Document Operators Access Test", () => {
     });
 
     it("Enter description 'Test Part description'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drEnterDocumentDescription({ description: "Test Part description" });
-      });
+      cy.drEnterDocumentDescription({ description: "Test Part description" });
     });
 
     it("Select 'Numeric' revision stage", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-      cy.wait(2000);
     });
   });
 
@@ -194,11 +194,11 @@ context("Document Operators Access Test", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -224,7 +224,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click on 'Add a field'", () => {
@@ -260,14 +260,13 @@ context("Document Operators Access Test", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("reload page", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
-        cy.reload();
-        cy.progressBarShouldAppear();
-      });
+      cy.reload();
+      cy.wait(5000);
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -336,7 +335,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it(`Logout as current user`, () => {
@@ -372,7 +371,7 @@ context("Document Operators Access Test", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it(`Logout as current user`, () => {
@@ -396,34 +395,34 @@ context("Document Operators Access Test", () => {
     });
 
     it("Add Owner as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Add first colaborator as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[3].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
     });
 
     it("Add second colaborator as Approver on document", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[4].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[4].name });
     });
 
     it("Submit for Approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.progressBarShouldAppear();
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.unClick();
+      cy.ebTryToApprove();
+      cy.progressBarShouldAppear();
+      // cy.get("[data-cy=\"fb-control-btn\"]").eq(1).arrowClick();
+      // cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      // cy.unClick();
     });
 
-    it("Confirm password", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
-    });
+    // it("Confirm password", () => {
+    //   cy.get("[data-cy=\"common.confirm\"]").arrowClick();
+    //   cy.progressBarShouldAppear();
+    // });
 
     it(`Logout as current user`, () => {
       cy.authLogout();
@@ -444,11 +443,11 @@ context("Document Operators Access Test", () => {
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.ebTryToApprove();
+      cy.progressBarShouldAppear();
+      // cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+      // cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      // cy.get("[data-cy=\"common.confirm\"]").arrowClick();
     });
 
     it(`Logout as current user`, () => {
@@ -470,11 +469,11 @@ context("Document Operators Access Test", () => {
     });
 
     it("Approve record button click", () => {
-      cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
-      cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-      });
+      cy.ebTryToApprove();
+      cy.progressBarShouldAppear();
+      // cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").arrowClick();
+      // cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      // cy.get("[data-cy=\"common.confirm\"]").arrowClick();
     });
 
     it("Verify status is released", () => {

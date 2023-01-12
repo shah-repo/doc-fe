@@ -503,14 +503,11 @@ Cypress.Commands.add("drApproveAndReleaseNonQMSDocument", () => {
 });
 
 Cypress.Commands.add("drApproveAndReleaseNonQMSDocumentWithoutSelectingFrom", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
-    cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(500);
-  });
+  cy.get(`[data-cy="ApproveAndRelease-button"]`).arrowClick().wait(500);
   cy.progressBarShouldNotExist();
-  cy.get(`[data-cy="ApproveAndRelease-submit"]`).arrowClick().wait(500);
+  cy.get(`[data-cy="ApproveAndRelease-submit"]`).arrowClick();
+  cy.progressBarShouldAppear();
   cy.checkToastMessage({ exists: false });
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("drCloseApproveAndReleaseDialog", () => {
@@ -807,10 +804,8 @@ Cypress.Commands.add("closeAllAlertMessages", () => {
 });
 
 Cypress.Commands.add("drCreateNewDocumentFromForm", () => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRev], () => {
-    cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick({ force: true });
-  });
-  cy.progressBarShouldNotExist();
+  cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick({ force: true });
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
@@ -872,11 +867,8 @@ Cypress.Commands.add("drReleaseDocAfterRoleExistsAndChecked", (params: { group: 
   cy.get(`[data-cy="group-${params.group}"]`).contains(params.role);
   cy.get(`[data-cy="checked-${params.group}"]`).should("be.visible");
   cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-  cy.wrapWithWaitOnApiCall(
-    CyRoutes.ReleaseDocRev,
-    () => {
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-    });
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+  cy.progressBarShouldAppear();
   cy.checkToastMessage({ exists: false });
 });
 

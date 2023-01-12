@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 import "moment-timezone";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 Cypress.Screenshot.defaults({
@@ -152,7 +151,7 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Upload attachment 'image.jpg'", () => {
@@ -160,19 +159,17 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
 
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Create New Document out of the Form", () => {
     it("Open new document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
   });
 
@@ -190,24 +187,21 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
 
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
   context(`Add New Role: ${roleOne}`, () => {
     it("Open approval roles tab", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetFieldLocks,
-      ],
-      () => {
-        cy.drSelectApprovalRolesTab();
-      });
+      cy.drSelectApprovalRolesTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open 'Add Role' dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.drAddAnotherRoleBtn();
-      });
+      cy.drAddAnotherRoleBtn();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -227,9 +221,9 @@ context("Document Approver Requirement on DAM with the groups", () => {
       cy.get("[name^=\"groups\"]").should("contain", `${groupName}`);
     });
     it("Save role", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -251,9 +245,9 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
 
     it("Save role", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -287,9 +281,9 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
-      });
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -319,19 +313,19 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
-      });
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
   context("'Approve and Release' the document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Revise document", () => {
@@ -344,11 +338,11 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
 
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -380,9 +374,9 @@ context("Document Approver Requirement on DAM with the groups", () => {
     });
   });
 
-  context("Save document.", () => {
-    it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+  context("Create document", () => {
+    it("Clicks on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 

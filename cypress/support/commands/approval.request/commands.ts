@@ -29,6 +29,7 @@ declare global {
       arAddApproverOnApproverListWithoutApiCall(params: { approver: string; noWait?: bool  }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
+      arClickSendToReviewWithoutApi(): Chainable<Subject>;
       arVerifyStatus(params: { status: string }): Chainable<Subject>;
       arCheckImplementationTaskStatus(params: { status: string }): Chainable<Subject>;
       arClickOnFirstAddedDocument(): Chainable<Subject>;
@@ -351,7 +352,7 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string;
 
 Cypress.Commands.add("arAddApproverOnApproverListWithoutApiCall", (params: { approver: string; noWait?: bool  }) => {
   cy.get(`[data-cy="fb-approvers-approvers"]`).arrowClick({ force: true });
-  cy.get(`[data-cy=\"fb-approvers-approvers"]`).autocompleteSelect(params.approver);
+  cy.get(`[data-cy="fb-approvers-approvers"]`).autocompleteSelect(params.approver);
   cy.unClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
@@ -374,6 +375,13 @@ Cypress.Commands.add("arClickSendToReview", () => {
     cy.get("[data-cy=\"transitionButton\"]").arrowClick({ force: true });
   });
   cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("arClickSendToReviewWithoutApi", () => {
+  cy.get("[data-cy=\"transitionButton\"]").arrowClick({ force: true });
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });
