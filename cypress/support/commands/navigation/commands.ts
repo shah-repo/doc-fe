@@ -22,6 +22,7 @@ declare global {
       navigToApprovalRequestListWithoutApi(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
       navigToSuppliers(): Chainable<Subject>;
+      navigToSuppliersWithoutApi(): Chainable<Subject>;
       navigToReceivableList(): Chainable<Subject>;
       navigToWorkOrders(): Chainable<Subject>;
       navigToRecords(): Chainable<Subject>;
@@ -270,6 +271,17 @@ Cypress.Commands.add("navigToSuppliers", () => {
         NavigationItems.SUPPLIER_LIST,
       ],
     });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToSuppliersWithoutApi", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.SUPPLIER_MANAGEMENT,
+      NavigationItems.SUPPLIER_LIST,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });

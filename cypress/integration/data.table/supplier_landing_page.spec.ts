@@ -226,7 +226,9 @@ context("Suppliers landing page", () => {
 
   context("Create supplier document", () => {
     it("Navigate to supplier list", () => {
-      cy.navigToSuppliers();
+      cy.navigToSuppliersWithoutApi();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Click create new to create supplier", () => {
