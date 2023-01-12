@@ -330,6 +330,11 @@ context("Intermediate page validation", () => {
         cy.fbClickButton({ el: "FBWorkspace-clickView" });
       });
 
+      it("Click on 'Details' tab", () => {
+        cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+        cy.listLoadingElementShouldNotExist();
+      });
+
       it("Add and check Quantity field", () => {
         cy.get(`[data-cy="form.builder.form.preview"]`).parentsUntil(".MuiDialog-root")
           .find("input[name^=fb-quantity-]").clear().arrowType("1");
@@ -398,6 +403,11 @@ context("Intermediate page validation", () => {
   context("Verify Form fields in preview mode", () => {
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Click on 'Details' tab", () => {
+      cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify 'Checkbox' field is displayed", () => {
@@ -482,10 +492,9 @@ context("Intermediate page validation", () => {
         cy.get(`[name^="fb-textfield-"]`).eq(1).should("exist");
       });
 
-      // it("Verify quantity field does not exist", () => {
-      //   // cy.get(`[name^="fb-quantity-"]`).should("not.exist"); orginal spec line
-      //   cy.get(`[name^="fb-quantity-"]`).should("exist"); // for bypass added this line
-      // });
+      it("Verify quantity field does not exist", () => {
+        cy.get(`.MuiDialogContent-root [name^="fb-quantity-"]`).should("not.exist");
+      });
     });
   });
 });

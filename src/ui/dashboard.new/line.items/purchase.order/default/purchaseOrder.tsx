@@ -305,7 +305,7 @@ const PurchaseOrderItemPresenter: React.FC<Props> = ({
                 placement="top"
                 arrow
               >
-                <span onMouseLeave={onMouseLeaveActionIcons}>
+                <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
                   <DownloadHtmlPreview
                     id={docRevId}
                     data-cy="transition-download-pdf"

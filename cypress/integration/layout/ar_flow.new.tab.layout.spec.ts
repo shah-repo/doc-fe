@@ -250,7 +250,7 @@ context("Approval Request form layout verification", () => {
 
       it("Verify Click Documents Tab, clicking on it should open that tab and close the other one", () => {
         cy.get("[data-cy='tabCon-tabId.changedetails']").should("have.attr", "aria-selected", "false");
-        cy.get("#sm-tabpanel-0").should("be.hidden");
+        cy.get("#sm-tabpanel-0").should("not.exist");
         cy.get("[data-cy='tabCon-tabId.documents']").should("have.attr", "aria-selected", "true");
       });
 
@@ -345,7 +345,7 @@ context("Approval Request form layout verification", () => {
 
         it("Verify Click Documents Tab, clicking on it should open that tab and close the other one", () => {
           cy.get("[data-cy='tabCon-tabId.changedetails']").should("have.attr", "aria-selected", "false");
-          cy.get("#sm-tabpanel-0").should("be.hidden");
+          cy.get("#sm-tabpanel-0").should("not.exist");
           cy.get("[data-cy='tabCon-tabId.documents']").should("have.attr", "aria-selected", "true");
         });
 

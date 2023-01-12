@@ -40,6 +40,7 @@ declare global {
       dlVerifyDocCounter(params: {docCounterNumber: integerType }): Chainable<Subject>;
       dlVerifyDescriptionOnHover(params: {description: string }): Chainable<Subject>;
       dlSelectFirstDocument(): Chainable<Subject>;
+      dlSelectFirstDocumentWithoutApi(): Chainable<Subject>;
       dlSelectFirstDocumentItem(): Chainable<Subject>;
     }
   }
@@ -196,6 +197,12 @@ Cypress.Commands.add("dlSelectFirstDocument", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
     cy.get("tr.k-master-row").first().arrowClick();
   });
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("dlSelectFirstDocumentWithoutApi", () => {
+  cy.get("tr.k-master-row").first().arrowClick();
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
 });

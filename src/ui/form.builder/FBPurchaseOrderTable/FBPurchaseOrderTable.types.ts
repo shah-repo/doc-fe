@@ -15,7 +15,6 @@ export type FBPurchaseOrderTableProps =
   calculation?: FBPurchaseOrderCalculation;
   loading?: boolean;
   isReceivable?: boolean;
-  gutter?: boolean;
 };
 
 export type FBPurchaseOrderTableDetailsProps =

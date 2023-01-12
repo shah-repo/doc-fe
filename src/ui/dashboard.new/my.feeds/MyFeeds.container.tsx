@@ -4,7 +4,7 @@ import {
   dashboardMyFeedsActions,
   dashboardMyFeedsSelectors,
 } from "../../../state/ducks/dashboard.new/my.feeds";
-import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_INITIAL_PAYLOAD, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
+import { MY_FEEDS_INITIAL_OFFSET, MY_FEEDS_LIMIT } from "../../../state/ducks/dashboard.new/my.feeds/constants";
 import useActionCreator from "../../hooks/useActionCreator";
 import useAsync from "../../hooks/useAsync";
 import useDialog from "../../hooks/useDialog";
@@ -38,7 +38,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     onSuccess: () => {
       setOffset(MY_FEEDS_INITIAL_OFFSET);
       setOverallLimit(MY_FEEDS_LIMIT);
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
   });
   const pinnedLineItem = useActionCreator(dashboardMyFeedsActions.pinnedLineItem
@@ -57,7 +57,7 @@ const MyFeedsLineItemsContainer: React.FunctionComponent = () => {
     onSuccess: () => {
       setOffset(MY_FEEDS_INITIAL_OFFSET);
       setOverallLimit(MY_FEEDS_LIMIT);
-      dispatch(dashboardMyFeedsActions.loadMyFeedsList(MY_FEEDS_INITIAL_PAYLOAD));
+      dispatch(dashboardMyFeedsActions.loadMyFeedsList());
     },
   });
   const dismissLineItem = (id: string) => {

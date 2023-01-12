@@ -382,7 +382,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
                 placement="top"
                 arrow
               >
-                <span onMouseLeave={onMouseLeaveActionIcons}>
+                <span onMouseLeave={onMouseLeaveActionIcons} className={classes.cursorPointer}>
                   <DownloadHtmlPreview
                     id={docRevId}
                     data-cy="transition-download-pdf"
@@ -396,7 +396,7 @@ const ApproverActionItemPresenter: React.FC<Props> = ({
               {!pinHover && isPinShown && (
                 <PinIcon onMouseEnter={onMouseHoverPinIcon} className={classes.cursorPointer} />
               )}
-              {pinHover && !isPinShown && (
+              {pinHover && isPinShown && (
                 <StyleTooltip
                   title={<Text translation="common.pin" />}
                   placement="top"

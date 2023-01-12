@@ -428,24 +428,30 @@ context("Intermediate page validation", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
     });
 
+    it("Select 'Procedure' tab", () => {
+      cy.get(`[data-cy="tabId.procedure"]`).last().arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Verify Checkbox group should not exist", () => {
-      cy.get(`[data-cy="Checkbox"]`).eq(1).should("not.exist");
+      cy.get(`.MuiDialogContent-root [data-cy="Checkbox"]`).should("not.exist");
     });
 
     it("Verify EB Procedure", () => {
-      cy.get(`[data-cy="form.builder.step.number"]`).eq(1).should("exist");
+      cy.get(`.MuiDialogContent-root [data-cy="form.builder.step.number"]`).should("exist");
     });
 
     it("Verify Autocomplete", () => {
-      cy.get(`[data-cy="fb-autocomplete-2"]`).eq(1).should("exist");
+      cy.get(`.MuiDialogContent-root [data-cy="fb-autocomplete-2"]`).should("exist");
     });
 
     it("Select autocomplete", () => {
-      cy.get(`[name^="fb-autocomplete-2"]`).eq(1).autocompleteSelect("FM-00001" );
+      cy.get(`.MuiDialogContent-root [name^="fb-autocomplete-2"]`).autocompleteSelect("FM-00001" );
     });
 
     it("Verify Checkbox group should display now", () => {
-      cy.get(`[data-cy="Checkbox"]`).eq(1).should("exist");
+      cy.get(`.MuiDialogContent-root [data-cy="Checkbox"]`).should("exist");
     });
 
     it("Close Preview dialog", () => {
@@ -467,6 +473,12 @@ context("Intermediate page validation", () => {
 
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+    });
+
+    it("Select 'Procedure' tab", () => {
+      cy.get(`[data-cy="tabId.procedure"]`).last().arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify text with range in preview mode", () => {
