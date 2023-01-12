@@ -926,7 +926,7 @@ context("Checkboxes test", () => {
     });
 
     it("Click to Create document", () => {
-      cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick({ force: true });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter eb document title 'eb-doc-title'", () => {
