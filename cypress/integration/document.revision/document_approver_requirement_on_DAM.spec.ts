@@ -986,7 +986,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Check doc rev 1 released status", () => {
-      cy.pause();
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.drVerifyTitle({ title: DAMDocument });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
@@ -1003,7 +1002,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Navigate to matrix details tab", () => {
-      cy.pause();
       cy.drSelectMatrixDetailsTab();
       cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
