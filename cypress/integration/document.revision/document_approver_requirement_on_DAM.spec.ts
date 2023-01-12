@@ -6,7 +6,6 @@ import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -106,6 +105,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: ADMIN_USER, employeeId: employeeLoginAdmin.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create DAM", () => {
@@ -138,7 +141,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Upload attachment 'image.jpg'", () => {
@@ -174,7 +177,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Save DAM form", () => {
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -356,7 +359,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("'Approve and Release' the document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -550,6 +553,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Open new document", () => {
       cy.drCreateNewDocumentFromForm();
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Fills in Title and Description", () => {
@@ -579,9 +586,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it(`Open 'Add Role' dialog`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.drAddAnotherRoleBtn();
-      });
+      cy.drAddAnotherRoleBtn();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -593,9 +600,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Save role", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -613,9 +620,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Save role", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -633,9 +640,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Save role", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -693,9 +700,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
-      });
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -749,9 +756,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
-      });
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -975,10 +982,11 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("'Approve and Release' the document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Check doc rev 1 released status", () => {
+      cy.pause();
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.RELEASED });
       cy.drVerifyTitle({ title: DAMDocument });
       cy.get("[data-cy=\"HeaderInfo-docId\"]").contains("DAM-").then((x) => {
@@ -995,16 +1003,17 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Navigate to matrix details tab", () => {
+      cy.pause();
       cy.drSelectMatrixDetailsTab();
       cy.get("span[data-cy=documentTypeApprovalMatrix]").eq(0).should("exist");
     });
 
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Check revised doc released status and click on Send To Email", () => {
@@ -1238,6 +1247,10 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
       cy.navigToDocumentList();
     });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click on 'create a document'", () => {
       cy.cmpClickCreateNewDocument();
     });
@@ -1261,9 +1274,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  context("Save document", () => {
-    it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+  context("Create document", () => {
+    it("Clicks on 'Create Document' button", () => {
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -1295,9 +1308,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
   });
 
-  context("Save document", () => {
-    it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+  context("Create document", () => {
+    it("Clicks on 'Create Document' button", () => {
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -1347,7 +1360,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Add first approver to approval request on approver list", () => {
@@ -1378,7 +1391,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Clicks on 'Save' button", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Check approval request document draft status and click on Send To Email", () => {
@@ -1699,10 +1712,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Confirm password", () => {
       cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
+      cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1726,9 +1738,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     it("Confirm password", () => {
       SystemRequirement("REQ-0910");
       cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew, () => {
-        cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-      });
+      cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
     });
   });
@@ -1752,10 +1764,9 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
     it("Confirm password", () => {
       cy.get(`[data-cy="transition.action.password"]`).arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-      cy.wrapWithWaitOnApiCall(CyRoutes.ChangeRequestApproveNew,
-        () => {
-          cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
-        });
+      cy.get(`[data-cy="passwordConfirm"]`).arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 

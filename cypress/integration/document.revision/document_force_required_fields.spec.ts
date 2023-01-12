@@ -3,7 +3,6 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -134,7 +133,7 @@ context("Document force required fields", () => {
 
   context("Creates document", () => {
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -209,20 +208,18 @@ context("Document force required fields", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Revise the document and modify fields", () => {
     it("Click 'Revise Document' button", () => {
       cy.drClickReviseDocument();
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("remove description", () => {
@@ -237,13 +234,13 @@ context("Document force required fields", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
   context("Verify user is forced to fill required fields", () => {
     it("Click on 'Approve and release' button", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ toastifyExists: true });
     });
 
     it("Verify title and description required message should be displayed", () => {
@@ -277,11 +274,11 @@ context("Document force required fields", () => {
     });
 
     it("Click 'Save' button", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click on 'Approve and release' button", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Click 'Create New' button", () => {
@@ -315,7 +312,7 @@ context("Document force required fields", () => {
 
   context("Verify user is forced to fill required fields", () => {
     it("Click on 'Approve and release' button", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ toastifyExists: true });
     });
 
     it("Verify title and description required message should be displayed", () => {
