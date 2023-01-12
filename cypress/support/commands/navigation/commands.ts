@@ -21,6 +21,7 @@ declare global {
       navigToApprovalRequestList(): Chainable<Subject>;
       navigToApprovalRequestListWithoutApi(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
+      navigToPurchaseOrderWithoutApi(): Chainable<Subject>;
       navigToSuppliers(): Chainable<Subject>;
       navigToReceivableList(): Chainable<Subject>;
       navigToWorkOrders(): Chainable<Subject>;
@@ -258,6 +259,11 @@ Cypress.Commands.add("navigToPurchaseOrder", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocRevStatusesCategory, () => {
     cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
   });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToPurchaseOrderWithoutApi", () => {
+  cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
   cy.landingPageLoadingElementShouldNotExist();
 });
 
