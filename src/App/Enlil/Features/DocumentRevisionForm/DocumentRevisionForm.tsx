@@ -16,7 +16,7 @@ import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.
 import RedlineBanner from "../../../../ui/documentRevision/forms/presenters/redline/Redline.banner";
 import UpgradeToLatestContainer from "../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { checkIsDocumentLHR, checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
+import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -226,12 +226,10 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             <>
                               {tabInfo.tabId === "lineitems" && (
                                 <Box pb={3.75}>
-                                  {mode === FBWorkspaceModeOptions.FORM && (
-                                    <FBSection
-                                      name={`fb-po-section-po-items-built-in`}
-                                      label="form.builder.po.details"
-                                    />
-                                  )}
+                                  <FBSection
+                                    name={`fb-po-section-po-items-built-in`}
+                                    label="form.builder.po.details"
+                                  />
                                   <AttachmentsField
                                     isDisabled={isDisabledInput}
                                     isNewVersion={false}
