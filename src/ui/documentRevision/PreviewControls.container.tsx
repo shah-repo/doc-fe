@@ -22,6 +22,7 @@ import HeaderPOStatusOptions from "../components/common/header/HeaderPOStatusOpt
 import HeaderMenu from "../components/common/header/Menu";
 import OwnerChangerContainer from "../components/common/owner.changer/container";
 import { RequestType } from "../components/common/owner.changer/helpers/types";
+import ClonePOButton from "../components/forms/ClonePOButton";
 import CopyEBButton from "../components/forms/CopyEBButton";
 import { toastInfo } from "../components/notifications";
 import Text from "../components/Text";
@@ -36,7 +37,7 @@ import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
 import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
-import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
+import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
 import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
@@ -84,8 +85,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isStatusReleased = isDocumentRevisionReleased(documentRevision.status);
   const isStatusInDraft = isDocumentRevisionInDraft(documentRevision.status);
   const canCopy = checkCanBeCopied(groupOptions);
+  const isPO = checkIsDocumentPO(groupOptions);
+  const isEB = checkIsDocumentEB(groupOptions);
   const hasOutput = checkIsTypeHaveOutput(groupOptions);
-  const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
   const isExportable = !documentRevision.renderHTML && checkIsDocumentExportable(groupOptions);
   const isDirectApproval = checkIsDocumentDirectApproved(groupOptions);
   const isLastVersionObsolete = () => {
@@ -321,8 +323,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (!isLastVersionObsolete() && hasAccess && canCreate() && showRevise) {
     accessableButtons.push("cloneButton");
   }
-  if ((isStatusReleased || isStatusInDraft) && canCopy) {
+  if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
     accessableButtons.push("newcloneButton");
+  }
+
+  if ((isStatusReleased || isStatusInDraft || isStatusInReview) && canCopy && isPO) {
+    accessableButtons.push("newclonePOButton");
   }
 
   if (hasAccess && canCreateOutput(documentRevision) && !isAR && hasOutput) {
@@ -357,12 +363,16 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   let restButtons: string[] = [];
 
   function ownerOrEmail(ele: string) {
-    if (["changeowner", "exportToEmail", "newcloneButton", "inspectionControl", "pdf" ].includes(ele)) {
+    if (["changeowner",
+      "exportToEmail",
+      "newcloneButton",
+      "newclonePOButton", "inspectionControl", "pdf" ].includes(ele))
+    {
       return ele;
     }
   }
   if (accessableButtons.length >= 1) {
-    const elementsList = ["changeowner", "exportToEmail", "newcloneButton", "inspectionControl" ];
+    const elementsList = ["changeowner", "exportToEmail", "newcloneButton", "newclonePOButton", "inspectionControl" ];
     const initialFilteredButtons = accessableButtons.filter((ele: string) => !elementsList.includes(ele));
     const restFilteredButtons = accessableButtons.filter((ownerOrEmail));
     initialButtons = initialFilteredButtons.length >= 2 ? initialFilteredButtons.slice(0, 2) : initialFilteredButtons;
@@ -376,6 +386,9 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {buttons.includes("cloneButton") && renderCloneButton(renderAsButton)}
       {buttons.includes("newcloneButton") && (
         <CopyEBButton {...{ documentRevision, renderAsButton }} />
+      )}
+      {buttons.includes("newclonePOButton") && (
+        <ClonePOButton {...{ documentRevision, renderAsButton }} />
       )}
       {buttons.includes("outputButton") && renderOutputButton(renderAsButton)}
       {buttons.includes("requestAccess") && requestAccessSentButton(renderAsButton)}
