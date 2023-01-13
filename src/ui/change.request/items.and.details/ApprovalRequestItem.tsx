@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import { FBFormState } from "../../form.builder";

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { BoxProps } from "@material-ui/core";
 import { FormikProps } from "formik";
 import { cloneDeep, map } from "lodash";
@@ -60,8 +59,6 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
 
   _formState?.setMode(mode);
   _formState?.setAutosave(autosave);
-
-  console.log(_documentRevisionFormState, currentDocRevId);
 
   const [isDrawerOpen, setOpen] = React.useState(true);
 

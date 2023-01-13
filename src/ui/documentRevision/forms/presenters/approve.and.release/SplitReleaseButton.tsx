@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Button, ClickAwayListener, Grid, Grow, MenuItem, MenuList, Paper, Popper } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React from "react";
@@ -20,8 +19,6 @@ const SplitReleaseButton: React.FunctionComponent<{
 }> = ({
   onClick,
 }) => {
-
-  // const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);

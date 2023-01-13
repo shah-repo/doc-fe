@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Button, Divider, Grid, Typography } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import cx from "classnames";

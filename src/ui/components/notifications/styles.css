@@ -27,7 +27,7 @@
 .Toastify__toast--info {
   background-color: #FFF3CD !important;
   border: 1px solid #FFEEBA !important;
-  color: #856404
+  color: #856404;
 }
 
 .Toastify__toast--info a {

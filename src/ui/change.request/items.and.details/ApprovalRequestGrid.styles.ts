@@ -167,8 +167,6 @@ export default makeStyles((theme) =>
       backgroundColor: Colors.dodger_blue,
       position: "absolute",
       right: 0,
-      // right: `calc(${theme.spacing(-1.5)}px - 1px)`,
-      // bottom: `calc(${theme.spacing(-6.5)}px - 1px)`,
       borderRadius: theme.spacing(0, 0, .5, .5),
       zIndex: 100,
       display: "flex",

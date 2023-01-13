@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Box, ListItem, Tooltip, Typography } from "@material-ui/core";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import React from "react";
@@ -31,7 +30,6 @@ const ChangeRequestLink: React.FunctionComponent<Props> = ({
 
   const approvalRequestDialog = useDialog();
   const dispatch = useDispatch();
-  console.log("ChangeRequestLink", dataProp.changeRequest, changeRequest);
 
   if (!changeRequest) {
     return null;

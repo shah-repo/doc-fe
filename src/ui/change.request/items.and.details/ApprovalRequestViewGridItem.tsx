@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import cx from "classnames";
 import React, { useEffect, useState } from "react";
@@ -32,13 +31,6 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   const {
     docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange,
   } = entry;
-
-  // console.log(docRevId,
-  //   titleText,
-  //   id,
-  //   isPart,
-  //   justificationOfChange,
-  //   descriptionOfChange);
 
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string}[]>([]);

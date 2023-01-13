@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { cloneDeep, map } from "lodash";
 import { reaction } from "mobx";
 import { useObserver } from "mobx-react";
@@ -25,13 +24,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
 }) => {
 
   const { formState: parentFormState } = FB.useStores();
-  // const parentFormValue = parentFormState?.getFieldValue(name);
-  // console.log(parentFormState, parentFormState?.getValues(), parentFormValue, name, autosave, mode);
-
   const formState = FB.useRef(FBFormState, {});
-  // console.log(formState, formState?.getValues());
-
-  console.log(asyncState);
 
   const { submitForm } = useFormContext();
 
@@ -75,16 +68,11 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
 
     const dataToSend: FBDocumentRevisionsValue[] =
       storeDataToFormData(orderItemsUpdated);
-    console.log(dataToSend);
-
     submitData(dataToSend);
   };
 
   const submitData = (dataToSend) => {
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
-    // Submit the form - and once that returns, add this item to the store
-    // itemsAndDetailsState.add(formValue);
-
     if (autosave) {
       submitForm();
       itemsAndDetailsState.setLoadingState(true);
@@ -95,7 +83,6 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     () => itemsAndDetailsState.submitList,
     (submission) => {
       if (submission) {
-        console.log(submission, "submit data");
         if (currentDocRevId) {
           const dataToSend: FBDocumentRevisionsValue[] =
             storeDataToFormData(itemsAndDetailsState.approvalRequestItemsList);
@@ -105,13 +92,12 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), []);
+  ), [itemsAndDetailsState.submitList]);
 
   useEffect(() => {
     if ((asyncState.status === AsyncStatus.Success ||
       asyncState.status === AsyncStatus.Error)) {
       // i.e. processing completed
-      console.log("Processing Complete");
       itemsAndDetailsState.setLoadingState(false);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
     }
@@ -136,8 +122,6 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     if (currentDocRevId) {
       currentDocRevPresent = documentRevisionsAssigned.findIndex(
         (docRev: FBDocumentRevisionsValue) => (docRev.proposedDocumentRevision.id === currentDocRevId)) !== -1;
-
-      console.log(currentDocRevPresent);
     }
 
     const entries = documentRevisionsAssigned.map((item: FBDocumentRevisionsValue) => {
@@ -170,7 +154,6 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
 
     itemsAndDetailsState.setApprovalRequestItemsList(entries);
     if (!currentDocRevPresent && currentDocRevId) {
-      // documentRevisionsAssigned.push(newARDocRevToAdd(currentDocRevId));
       setTimeout(() => {
         itemsAndDetailsState.setSubmitList(true);
       }, 100);

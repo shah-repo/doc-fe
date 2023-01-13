@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { set, union } from "lodash";
 import { action, observable } from "mobx";
 import { ApprovalRequestGridItem } from "./ItemsAndDetails.types";
@@ -38,10 +37,3 @@ class ItemsAndDetailsState {
 }
 
 export default ItemsAndDetailsState;
-
-// export const itemsAndDetailsStore = {
-//   itemsAndDetailsStore: new ItemsAndDetailsStore(),
-// };
-
-// export const ItemsAndDetailsStoreContext = createContext(itemsAndDetailsStore);
-// export const useItemsAndDetailsStore = () => useContext(ItemsAndDetailsStoreContext);

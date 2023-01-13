@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Button } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import DoneIcon from "@material-ui/icons/Done";
