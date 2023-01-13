@@ -5,29 +5,29 @@ import AutocompleteField from "../../../components/forms/fields/Autocomplete/Aut
 import { FormContext } from "../../../components/forms/FormContext";
 import { DialogHandler } from "../../../hooks/useDialog";
 import { Translation } from "../../../translations/types";
-import { ExistingInDraftCOOption, SelectTemplateFormValues, TemplateOption } from "../../form/types";
+import { InDraftAROption, SelectTemplateFormValues, TemplateOption } from "../../form/types";
 import { styles } from "../FormList.styles";
 import FormListActions from "./FormListActions";
 
 interface Props {
   dialog: DialogHandler;
   templateOptions?: TemplateOption[];
-  existingInDraftCOOptions? : ExistingInDraftCOOption[];
+  inDraftAROptions? : InDraftAROption[];
   handleTemplateSelection?: (option: TemplateOption) => void;
-  handleExistingCOSelection?: (option: ExistingInDraftCOOption) => void;
+  handleExistingARSelection?: (option: InDraftAROption) => void;
   labelTranslation?: Translation;
 }
 
 const FormListContent: React.FunctionComponent<Props> = ({
   dialog,
   templateOptions,
-  existingInDraftCOOptions,
+  inDraftAROptions,
   handleTemplateSelection,
-  handleExistingCOSelection,
+  handleExistingARSelection,
   labelTranslation,
 }) => {
   const classes = styles();
-  const [chosenOption, setChosenOption] = useState<TemplateOption | ExistingInDraftCOOption>();
+  const [chosenOption, setChosenOption] = useState<TemplateOption | InDraftAROption>();
 
   const renderForm = (props: FormikProps<SelectTemplateFormValues>) => (
     <DialogContent classes={{ root: classes.dialogContent }}>
@@ -37,7 +37,7 @@ const FormListContent: React.FunctionComponent<Props> = ({
         size="sm"
         label={labelTranslation ?? "common.choose.template"}
         autocompleteProps={{ id: "FormList-selectForm" }}
-        options={templateOptions ?? existingInDraftCOOptions ?? []}
+        options={templateOptions ?? inDraftAROptions ?? []}
         onClick={(option) => { setFormValues(option); }}
       />
       <FormListActions {...{ dialog, confirm }}/>
@@ -49,8 +49,8 @@ const FormListContent: React.FunctionComponent<Props> = ({
       handleTemplateSelection(chosenOption as TemplateOption);
     }
 
-    if (handleExistingCOSelection) {
-      handleExistingCOSelection(chosenOption as ExistingInDraftCOOption);
+    if (handleExistingARSelection) {
+      handleExistingARSelection(chosenOption as InDraftAROption);
     }
   };
 

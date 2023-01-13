@@ -25,7 +25,7 @@ import ChangeRequestEditDialog from "../../../../change.request/dialogs/ChangeRe
 import FormListContent from "../../../../change.request/form.list/dialog/FormListContent";
 import FormListHeader from "../../../../change.request/form.list/dialog/FormListHeader";
 import { templateOptionToChangeRequestCreateBody, toChangeRequestEditRequestBody } from "../../../../change.request/form/transform";
-import { ApproverPayload, ExistingInDraftCOOption, TemplateOption } from "../../../../change.request/form/types";
+import { ApproverPayload, InDraftAROption, TemplateOption } from "../../../../change.request/form/types";
 import { newARDocRevToAdd } from "../../../../change.request/items.and.details/helpers";
 import { changeRequestEditPath } from "../../../../change.request/utils/paths";
 import { FormContext } from "../../../../components/forms/FormContext";
@@ -91,7 +91,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   // MARK: @state
   const [documentTypeGroups, setDocTypeGroups] = useState<Group[]>([]);
   const [templateOptions, setTemplateOptions] = useState<TemplateOption[]>([]);
-  const [existingInDraftCOOptions, setExistingInDraftCOOptions] = useState<ExistingInDraftCOOption[]>([]);
+  const [inDraftAROptions, setInDraftAROptions] = useState<InDraftAROption[]>([]);
   const [formDocument, setFormDocument] = useState<string>("");
   const [documentType, setDocumentType] = useState<string>("");
   const [selectedInvalid, setSelectedInvalid] = useState<boolean>(false);
@@ -111,7 +111,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
   const expressApprovalDialog = useDialog();
   const templateSelectionDialog = useDialog();
-  const existingDraftCOSelectionDialog = useDialog();
+  const existingDraftARSelectionDialog = useDialog();
   const approvalRequestDialog = useDialog();
 
   const alertDialog = useDialog();
@@ -208,7 +208,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         return;
       }
 
-      setExistingInDraftCOOptions(options);
+      setInDraftAROptions(options);
     },
   });
 
@@ -240,15 +240,15 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
 
 
   useEffect(() => {
-    if (existingInDraftCOOptions.length > 0) {
-      if (existingInDraftCOOptions.length === 1) {
-        processChosenApprovalRequest(existingInDraftCOOptions[0]);
+    if (inDraftAROptions.length > 0) {
+      if (inDraftAROptions.length === 1) {
+        processChosenApprovalRequest(inDraftAROptions[0]);
       } else {
-        existingDraftCOSelectionDialog.open();
+        existingDraftARSelectionDialog.open();
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [existingInDraftCOOptions]);
+  }, [inDraftAROptions]);
 
 
   const processCreatingRevision = (templateChosen) => {
@@ -263,14 +263,14 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     createCRAsync.start(createCRAction, data, createCRAsync);
   };
 
-  const processChosenApprovalRequest = (approvalRequestChosen: ExistingInDraftCOOption) => {
+  const processChosenApprovalRequest = (approvalRequestChosen: InDraftAROption) => {
     if (!approvalRequestChosen) {
       return;
     }
 
     setChangeRequestId(approvalRequestChosen.value);
 
-    existingDraftCOSelectionDialog.close();
+    existingDraftARSelectionDialog.close();
     approvalRequestDialog.open();
   };
 
@@ -489,20 +489,20 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
         </Dialog>
       }
       {
-        existingDraftCOSelectionDialog.isOpen &&
+        existingDraftARSelectionDialog.isOpen &&
         <Dialog
-          open={existingDraftCOSelectionDialog.isOpen}
-          onClose={existingDraftCOSelectionDialog.close}
+          open={existingDraftARSelectionDialog.isOpen}
+          onClose={existingDraftARSelectionDialog.close}
           classes={{ paper: classes.dialogPaper }}
         >
           <FormListHeader {...{
-            dialog: existingDraftCOSelectionDialog,
+            dialog: existingDraftARSelectionDialog,
             subtitle1Translation: "change.request.select.existing.title",
             subtitle2Translation: "change.request.select.existing.content",
           }} />
           <FormListContent {...{
-            dialog: existingDraftCOSelectionDialog,
-            existingInDraftCOOptions,
+            dialog: existingDraftARSelectionDialog,
+            inDraftAROptions,
             labelTranslation: "change.request.select.existing.title",
             handleExistingCOSelection: processChosenApprovalRequest,
           }} />

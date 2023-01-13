@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable arrow-body-style */
 import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
@@ -55,8 +54,6 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
         disableEscapeKeyDown={true}
         style={{ maxWidth: "none" }}
         maxWidth={false}
-        // fullWidth={true}
-        // maxWidth="lg"
         open={approvalRequestDialog.isOpen}
         onSubmit={(event: React.FormEvent) => event.stopPropagation()}
         id="ApprovalRequest-dialog"
@@ -81,7 +78,6 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
           </IconButton>
         </DialogTitle>
         <DialogContent dividers
-          // classes={{ root: classes.dialogContent }}
           id="ApprovalRequest-content"
         >
           <ChangeRequestUpdateContainer

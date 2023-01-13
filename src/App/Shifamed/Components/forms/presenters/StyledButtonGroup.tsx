@@ -18,8 +18,6 @@ const styles = () => ({
     },
   },
   contained: {
-    // padding: "10.5px 20px",
-    fontFamily: "Sora",
     fontStyle: "normal",
     fontWeight: 600,
     fontSize: "12px",

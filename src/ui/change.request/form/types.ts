@@ -44,7 +44,7 @@ export interface TemplateOption {
   formInput?: Record<string, any>;
 }
 
-export interface ExistingInDraftCOOption {
+export interface InDraftAROption {
   label: string;
   value: string;
   crId: string;
