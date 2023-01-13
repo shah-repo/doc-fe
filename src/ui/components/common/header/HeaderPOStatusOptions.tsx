@@ -12,6 +12,7 @@ import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { Translation } from "../../../translations/types";
+import { openPOToast } from "../../notifications/POStatus";
 import useStyles from "./HeaderPOStatus.styles";
 import { getPOStatusLabel } from "./Helpers";
 
@@ -108,9 +109,10 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const confirmAction = () => {
     dialog.close();
     if (action === POStatusType.VOIDED) {
-      async.start(voidAction, docId, async);
+      openPOToast("Show me ");
     } else if (action === POStatusType.OPENED) {
       async.start(openPOAction, docId, async);
+      async.start(voidAction, docId, async);
     }
   };
   const getAlertDialogMessage = () => {

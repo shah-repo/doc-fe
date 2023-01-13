@@ -7,6 +7,7 @@ enum Colors {
   lily_white="#F8F9F9",
   water="#EEF3FF",
   titan_white="#EBEFF7",
+  zircon = "#F2F9FF",
   // black
   black = "#000",
   almost_black = "#080B11", // font_black

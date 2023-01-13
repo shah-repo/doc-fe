@@ -501,6 +501,7 @@
   "documentRevision.clone.modal.title": "Cloning EB",
   "documentRevision.clone.eb.title": "Link to Previous Build?",
   "documentRevision.revise.PO": "Revise PO",
+  "documentRevision.update.PO": "Update PO",
   "documentRevision.revise.RC": "Update Record",
   "documentRevision.revise.SUP": "Update Record",
   "documentRevision.form.references": "References",

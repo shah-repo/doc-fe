@@ -31,7 +31,7 @@ import PDFSocket from "../document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../document.revision/utils/paths";
 import { useHandleCreateDoc } from "../documentType/list/CreateDocumentByType";
 import CustomLabelTooltip from "../hooks/docCustomization/CustomLabelTooltip";
-import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
+import { useReviseDocument, useUpdateDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
@@ -70,6 +70,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     label: reviseLabel,
     tooltipConfig,
   } = useReviseDocument(documentRevision.document?.documentType?.id);
+
+  const {
+    isVisible: showUpdate,
+    label: updateLabel,
+    tooltipConfig: updateRecordtooltipConfig,
+  } = useUpdateDocument(documentRevision.document?.documentType?.id);
+
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
@@ -172,6 +179,48 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               id="PreviewControlsContainer-revise"
               data-cy="updateRecord" >
               <Text message={reviseLabel} />
+            </Button>
+          )}
+        </CustomLabelTooltip>
+      );
+    }
+  };
+  const renderUpdateButton = (renderAsButton) => {
+    if (hasAccess && canCreate() && showUpdate) {
+      return (
+        <CustomLabelTooltip {...{ tooltipConfig: updateRecordtooltipConfig }}>
+          {isNewLayout ? (
+            renderAsButton ? (
+              <StyledButton
+                color="primary"
+                onClick={cloneDocument}
+                id="PreviewControlsContainer-revise"
+                data-cy="updateRecord"
+              >
+                <Text message={updateLabel} />
+              </StyledButton>
+            ) : (
+              <StyledMenuListItem button alignItems="flex-start">
+                <StyledMenuListIcon>
+                  <WithDrawSubmissionIcon />
+                </StyledMenuListIcon>
+                <StyledMenuListItemText
+                  id="PreviewControlsContainer-revise"
+                  data-cy="updateRecord"
+                  primary={<Text message={updateLabel} />}
+                  onClick={cloneDocument}
+                />
+              </StyledMenuListItem>
+            )
+          ) : (
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={cloneDocument}
+              id="PreviewControlsContainer-revise"
+              data-cy="updateRecord"
+            >
+              <Text message={updateLabel} />
             </Button>
           )}
         </CustomLabelTooltip>
@@ -320,8 +369,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   );
 
   const accessableButtons: string[] = [];
-  if (!isLastVersionObsolete() && hasAccess && canCreate() && showRevise) {
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise) {
     accessableButtons.push("cloneButton");
+  }
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && isPO && showUpdate) {
+    accessableButtons.push("updateButton");
   }
   if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
     accessableButtons.push("newcloneButton");
@@ -384,6 +436,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
     <>
       {buttons.includes("cloneButton") && renderCloneButton(renderAsButton)}
+      {buttons.includes("updateButton") && renderUpdateButton(renderAsButton)}
       {buttons.includes("newcloneButton") && (
         <CopyEBButton {...{ documentRevision, renderAsButton }} />
       )}
