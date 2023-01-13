@@ -535,7 +535,7 @@ context("Paper new process LHR", () => {
 
   context("Approve and release form", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 

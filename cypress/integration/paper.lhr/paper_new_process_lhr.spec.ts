@@ -545,6 +545,9 @@ context("Paper new process LHR", () => {
       cy.get(`div[data-cy^="field-selectType"]`).click().focused()
         .arrowType("Paper Lot History Record{downarrow}{enter}", { force: true });
       cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it(`Select ${partDocumentTitle} for Part to be Manufactured`, () => {
@@ -653,7 +656,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Verify error message for selecting Manufactured parts", () => {
@@ -683,7 +686,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Verify error message for Intial Quantity", () => {
@@ -711,7 +714,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Verify error message for End Quantity", () => {
@@ -736,7 +739,7 @@ context("Paper new process LHR", () => {
 
   context("Approve and released LHR", () => {
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
