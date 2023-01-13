@@ -9,10 +9,8 @@ export enum ARActions {
   EXISTING = "existing"
 }
 
-
-// TODO: move to translations
-const options = [{ label: "New AR", value: ARActions.NEW },
-  { label: "Existing AR", value: ARActions.EXISTING }];
+const options = [{ label: "releaseButton.option.newAR", value: ARActions.NEW },
+  { label: "releaseButton.option.existingAR", value: ARActions.EXISTING }];
 
 const SplitReleaseButton: React.FunctionComponent<{
   onClick: (value?: string) => void;
@@ -53,7 +51,7 @@ const SplitReleaseButton: React.FunctionComponent<{
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
           >
-            <Text message={"Express AR"} />
+            <Text translation="releaseButton.option.expressAR" />
           </Button>
           <Button
             color="primary"
@@ -83,7 +81,7 @@ const SplitReleaseButton: React.FunctionComponent<{
                         key={option.value}
                         onClick={(event) => handleMenuItemClick(event, index)}
                       >
-                        {option.label}
+                        <Text message={option.label} />
                       </MenuItem>
                     ))}
                   </MenuList>
