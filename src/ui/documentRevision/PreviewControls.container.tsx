@@ -395,6 +395,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
+  const isDocumentInReview = isDocumentRevisionInReview(documentRevision.status);
   const isDocumentApproved = isDocumentRevisionApproved(documentRevision.status);
   const isDocumentReleased = isDocumentRevisionReleased(documentRevision.status);
 
@@ -476,12 +477,12 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       <>
         {isPO &&
           documentRevision.poStatus &&
-          !(isDocumentApproved || isDocumentReleased) && (
+          (isDocumentInReview || isDocumentDraft) && (
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
         )}
       </>
       <>
-        {isPO &&
+        {hasAccess && canCreate() && isPO &&
           documentRevision?.id &&
           documentRevision?.poStatus &&
           (isDocumentApproved || isDocumentReleased) && (
