@@ -133,7 +133,7 @@ context("Check inline approval Record flow", () => {
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Open details tab", () => {
@@ -174,11 +174,11 @@ context("Check inline approval Record flow", () => {
 
       it("Save the form", () => {
         cy.fbAddNewFieldButton();
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and Release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -220,7 +220,7 @@ context("Check inline approval Record flow", () => {
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Open details tab", () => {
@@ -257,11 +257,11 @@ context("Check inline approval Record flow", () => {
 
       it("Save the form", () => {
         cy.fbAddNewFieldButton();
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and Release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -288,6 +288,11 @@ context("Check inline approval Record flow", () => {
 
     it("Check status should be Draft", () => {
       cy.drCheckDocumentStatus({ status: STATUS_TYPES_LABEL.DRAFT });
+    });
+
+    it("Verify inline approver Group displayed", () => {
+      cy.get("[data-cy^=fb-ia-inline-approval-]").arrowClick();
+      cy.get(".MuiAutocomplete-listbox").should("contain.text", groupName);
     });
 
     it("Select inline approver members", () => {

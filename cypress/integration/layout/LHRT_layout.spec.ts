@@ -7,7 +7,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -835,10 +834,8 @@ context("Create new LHRT Layout Verification", () => {
       cy.get("input[data-cy='lhrstep-built-in']").then(($el) => {
         $el.trigger("click");
       });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
-      });
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -865,10 +862,8 @@ context("Create new LHRT Layout Verification", () => {
       cy.get("input[data-cy^='lhr-step']").then(($el) => {
         $el.trigger("click");
       });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[data-cy^='lhr-step']").autocompleteSelect("PI-00009");
-      });
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[data-cy^='lhr-step']").autocompleteSelect("PI-00009");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -942,9 +937,9 @@ context("Create new LHRT Layout Verification", () => {
 
   context("Release LHRT", () => {
     it("Approve and release MPI document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 

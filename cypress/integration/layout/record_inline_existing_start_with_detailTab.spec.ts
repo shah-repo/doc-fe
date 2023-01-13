@@ -3,7 +3,6 @@
 
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -195,9 +194,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Create document", () => {
-        cy.wrapWithWaitOnApiCalls([], () => {
-          cy.drClickCreateDocumentWithApiCall();
-        });
+        cy.drClickCreateDocumentWithApiCall();
       });
 
       it("Verify Predefiend Tabs Exist", () => {
@@ -402,16 +399,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Approve First Inline Approval", () => {
-        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.SessionDetails], () => {
-          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
+        cy.lhrApproveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist().wait(2000);
       });
@@ -447,28 +435,10 @@ context("Record inline existing Flow with detail ", () => {
         cy.get("[data-cy='form.builder.request.approve']").first().should("exist");
       });
 
-      // it("Select approver for Second inline", () => {
-      //   cy.get("[data-cy^='fb-ia-second-inline-field']")
-      //     .autocompleteSelect(`${USERS[1].name}`, { force: true });
-      // });
-
-      // it("Click on Save", () => {
-      //   cy.drClickCreateDocumentWithApiCall();
-      //   cy.pause();
-      // });
 
       it("Approve first Inline Approval", () => {
         cy.drSelectDetailsTab().wait(2000);
-        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
+        cy.lhrApproveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -482,32 +452,21 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Approve all the Inlines", () => {
-        cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
+        cy.lhrApproveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Send request for approval", () => {
         cy.get("[data-cy='ApproveAndRelease-button']").first().arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.ReleaseDocRevWithoutAr], () => {
-          cy.get("[data-cy='AlertDialog-continueButton']").arrowClick();
-        });
+        cy.progressBarShouldNotExist();
+        cy.get("[data-cy='AlertDialog-continueButton']").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Revise record / update record ", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy='updateRecord']").click();
-        });
+        cy.get("[data-cy='updateRecord']").click();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -549,16 +508,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Approve and Release", () => {
-        cy.get("[data-cy='form.builder.request.approve']").arrowClick({ force: true });
-        cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.SessionDetails], () => {
-          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
+        cy.lhrApproveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

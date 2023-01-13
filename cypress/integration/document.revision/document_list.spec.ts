@@ -171,7 +171,7 @@ context("Document list test", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Navigate to document list", () => {
@@ -395,7 +395,6 @@ context("Document list test", () => {
 
       it("Verify filter by effective date", () => {
         SystemRequirement("REQ-0060");
-        // cy.dlVerifyFilterByEffectiveDate({ effectiveDate: (new Date()).toLocaleDateString("en-US") });
         cy.dlVerifyFilterByEffectiveDate({ effectiveDate: currentDate });
       });
     });

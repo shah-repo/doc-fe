@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -86,6 +85,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.wait(1000);
     });
 
     it(`Enters title '${ncoFormName}'`, () => {
@@ -108,12 +108,12 @@ context("NCO document type management with record doc type", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -128,6 +128,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Create new document from form", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.wait(1000);
     });
 
     it("Enters title 'New Company'", () => {
@@ -184,13 +185,11 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document - create company", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {
@@ -258,9 +257,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Create Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -294,9 +291,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Confirm Edit added Doc Type", () => {
       SystemRequirement("REQ-5120");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -308,6 +303,7 @@ context("NCO document type management with record doc type", () => {
 
     it("Click on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.wait(1000);
     });
 
     it("Enter title 'Green Form'", () => {
@@ -334,11 +330,11 @@ context("NCO document type management with record doc type", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -346,6 +342,10 @@ context("NCO document type management with record doc type", () => {
   context("Check Records creation for new doc type", () => {
     it("Navigate to document list", () => {
       cy.navigToRecords();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Click Create a Record button", () => {
@@ -371,16 +371,16 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Save record", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     context("Create bulk records", () => {
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });
@@ -409,9 +409,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -439,9 +437,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -471,9 +467,7 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Confirm Edit added Doc Type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocType, () => {
-        cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
-      });
+      cy.get("[data-grid-row-index='0']>td[data-grid-col-index='16']>span").eq(0).arrowClick();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -516,7 +510,7 @@ context("NCO document type management with record doc type", () => {
       cy.drFilterDocListByNameAndStatus({ title: "New company", status: "Released" });
     });
 
-    it("Save document", () => {
+    it("Revise document", () => {
       cy.drClickReviseDocument();
     });
 
@@ -525,11 +519,11 @@ context("NCO document type management with record doc type", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document - create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {

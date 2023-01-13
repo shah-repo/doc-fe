@@ -97,12 +97,16 @@ context("Group Creation Flow", () => {
   context("Login company admin", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Navigates to Group management", () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -248,6 +252,8 @@ context("Group Creation Flow", () => {
   context("Create second official group and click cancel", () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'Add Group'", () => {
@@ -320,6 +326,8 @@ context("Group Creation Flow", () => {
   context("Edit Group A and click save", () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click edit button of Group A", () => {
@@ -341,6 +349,8 @@ context("Group Creation Flow", () => {
 
     it("Remove one existing permission from the group", () => {
       cy.grpEditRemovePermissions("GROUP_CREATE_UNOFFICIAL");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add one new permission in the group", () => {
@@ -532,10 +542,14 @@ context("Group Creation Flow", () => {
     context("Check history in user managment page", () => {
       it("Navigates to user management", () => {
         cy.usrNavigateToUserManagement();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Open history panel", () => {
         cy.usrHistoryClickOpenButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify no new record is added", () => {
@@ -544,6 +558,8 @@ context("Group Creation Flow", () => {
 
       it("Close history panel", () => {
         cy.usrHistoryClickCloseButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -551,6 +567,8 @@ context("Group Creation Flow", () => {
   context("Edit existing group 'API group' and save", () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click edit button of 'API group'", () => {

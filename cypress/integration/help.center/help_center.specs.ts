@@ -1257,6 +1257,8 @@ context("Help Center behaviour", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1276,6 +1278,8 @@ context("Help Center behaviour", () => {
   context("Scenario 2 - Document List", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1291,7 +1295,9 @@ context("Help Center behaviour", () => {
 
   context("Scenario 3 - Approval Request", () => {
     it("Open the module / landing page that you need to test", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1308,6 +1314,8 @@ context("Help Center behaviour", () => {
   context("Scenario 4 - Records", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToRecords();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1324,6 +1332,8 @@ context("Help Center behaviour", () => {
   context("Scenario 5 - Purchase Order", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToPurchaseOrder();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1372,6 +1382,8 @@ context("Help Center behaviour", () => {
   context("Scenario 8 - Receiving", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToReceivableList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1388,6 +1400,8 @@ context("Help Center behaviour", () => {
   context("Scenario 9 - Parts", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToParts();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1404,6 +1418,8 @@ context("Help Center behaviour", () => {
   context("Scenario 10 - Engineering Builds", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToEB();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1420,6 +1436,8 @@ context("Help Center behaviour", () => {
   context("Scenario 11 - LHR", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToLHR();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1436,6 +1454,8 @@ context("Help Center behaviour", () => {
   context("Scenario 12 - Lots", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToLots();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1452,6 +1472,8 @@ context("Help Center behaviour", () => {
   context("Scenario 13 - Training", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.navigToTrainingCurriculums();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1468,6 +1490,8 @@ context("Help Center behaviour", () => {
   context("Scenario 14 - User Management", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.usrNavigateToUserManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {
@@ -1484,6 +1508,8 @@ context("Help Center behaviour", () => {
   context("Scenario 15 - Group Management", () => {
     it("Open the module / landing page that you need to test", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     context("Verify module", () => {

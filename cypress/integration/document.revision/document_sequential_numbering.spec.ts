@@ -133,7 +133,7 @@ context("Document sequential numbering test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -170,7 +170,7 @@ context("Document sequential numbering test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -207,7 +207,7 @@ context("Document sequential numbering test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -244,7 +244,7 @@ context("Document sequential numbering test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -281,7 +281,7 @@ context("Document sequential numbering test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 });
