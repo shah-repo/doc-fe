@@ -232,7 +232,7 @@ context("Record inline history Flow", () => {
 
       it("Select approver for first inline", () => {
         SystemRequirement("REQ-4340");
-        cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick();
+        cy.get("[name*=\"fb-ia-inline-field\"] input").arrowClick({ force: true }).wait(500);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.get("[name*=\"fb-ia-inline-field\"] input").autocompleteSelect(USERS[2].email);
@@ -255,15 +255,19 @@ context("Record inline history Flow", () => {
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
+          cy.get(`[data-cy^="textfield-for-inline"]`).scrollIntoView();
           cy.get(`[data-cy^="textfield-for-inline"]`).arrowClick();
           cy.get(`[data-cy^="textfield-for-inline"]`).arrowType(", <b> Second entry </b>");
           cy.unClick();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
+          cy.landingPageLoadingElementShouldNotExist();
         });
 
         it("Enter description 'History Test Inline Record description'", () => {
           cy.drEnterDocumentDescription({ description: "History Test Inline Record description" });
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Verify system asks for another approval afer changing section", () => {
@@ -304,6 +308,7 @@ context("Record inline history Flow", () => {
 
         it("Select 'SelectTwo' value on select field", () => {
           cy.fbSelectFieldValue({ value: "SelectTwo" });
+          cy.unClick();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
