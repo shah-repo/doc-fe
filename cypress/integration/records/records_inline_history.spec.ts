@@ -249,13 +249,14 @@ context("Record inline history Flow", () => {
     context("Approve Inline Approval", () => {
       it("Approve first Inline Approval", () => {
         cy.inlineApprovalWithoutApi();
+        cy.wait(5000);
       });
 
       context("Change textfield and approve again", () => {
         it("Enter text 'Second entry' in textfield for inline with bold tag to check if tags shows in history", () => {
           SystemRequirement("REQ-1080");
-          cy.unClick();
-          cy.get("[data-cy^=\"textfield-for-inline\"]").arrowType(", <b> Second entry </b>");
+          cy.get(`[data-cy^="textfield-for-inline"]`).arrowClick();
+          cy.get(`[data-cy^="textfield-for-inline"]`).arrowType(", <b> Second entry </b>");
           cy.unClick();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
