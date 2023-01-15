@@ -241,7 +241,6 @@ context("Record inline history Flow", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("[name*=\"fb-ia-inline-field\"] input").autocompleteSelect(USERS[2].email);
-      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -296,12 +295,14 @@ context("Record inline history Flow", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.fbUnSelectCheckboxValue( "Green" );
+      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Check 'Blue' value on checkbox", () => {
       cy.fbSelectCheckboxValue( "Blue" );
+      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -321,11 +322,11 @@ context("Record inline history Flow", () => {
     });
 
     it("Save record", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Count number of elements in approval history", () => {
-      cy.get("[data-cy*=\"fb-approval-history\"]").should("have.length", 6);
+      cy.get(`[data-cy*="fb-approval-history"]`).should("have.length", 6);
     });
 
     it("Check Inline approval history values", () => {
