@@ -242,7 +242,7 @@ context("Record inline history Flow", () => {
       });
 
       it("Save record", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -302,6 +302,7 @@ context("Record inline history Flow", () => {
 
         it("Select 'Two' value on radiobutton", () => {
           cy.fbSelectRadioButtonValue({ value: "Two" });
+          cy.unClick();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
