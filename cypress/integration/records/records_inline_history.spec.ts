@@ -244,10 +244,6 @@ context("Record inline history Flow", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
-
-    it("Save record", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-    });
   });
 
   context("Approve Inline Approval", () => {
@@ -273,6 +269,7 @@ context("Record inline history Flow", () => {
       cy.drEnterDocumentDescription({ description: "History Test Inline Record description" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Verify system asks for another approval afer changing section", () => {
@@ -286,37 +283,38 @@ context("Record inline history Flow", () => {
 
     it("Approve first Inline Approval", () => {
       SystemRequirement("REQ-4400");
-      cy.wait(3000);
       cy.inlineApprovalWithoutApi();
+      cy.wait(3000);
     });
 
     it("Uncheck 'Red' and 'Green' value on checkbox", () => {
       cy.fbUnSelectCheckboxValue( "Red" );
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.fbUnSelectCheckboxValue( "Green" );
-      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
+      cy.listLoadingElementShouldNotExist();
+      cy.fbUnSelectCheckboxValue( "Green" );
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Check 'Blue' value on checkbox", () => {
       cy.fbSelectCheckboxValue( "Blue" );
-      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Select 'Two' value on radiobutton", () => {
       cy.fbSelectRadioButtonValue({ value: "Two" });
-      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'SelectTwo' value on select field", () => {
       cy.fbSelectFieldValue({ value: "SelectTwo" });
-      cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
