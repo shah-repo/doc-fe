@@ -109,7 +109,7 @@ context("Document Revising Flow", () => {
     });
 
     it("Approves and releases document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Clicks on revise document", () => {
@@ -181,7 +181,7 @@ context("Document Revising Flow", () => {
     });
 
     it("Clicks Save button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 });
