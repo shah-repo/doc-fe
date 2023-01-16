@@ -725,9 +725,10 @@ context("Create company with JSON's", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("PO table field labeled 'Purchase Order'", () => {
-      cy.get(`[data-cy="Purchase Order"]`).should("have.text", "Purchase Order");
-    });
+    // The following code is commented as per the ENC-13706
+    // it("PO table field labeled 'Purchase Order'", () => {
+    //   cy.get(`[data-cy="Purchase Order"]`).should("have.text", "Purchase Order");
+    // });
 
     it("PO table field cannot be deleted", () => {
       cy.get(".fb-field-wrapper-po-items-built-in>div>div>div>[data-cy='remove-schema-item']")
