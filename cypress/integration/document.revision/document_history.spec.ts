@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -213,71 +212,55 @@ context("Check Document History", () => {
 
   context("Create document", () => {
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Edit document attributes", () => {
     it("edit the title", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
-      });
-      cy.progressBarShouldNotExist();
+      cy.drEnterDocumentTitle({ name: `${formTitle.newChunk}` });
+      cy.progressBarShouldAppear();
     });
 
     it("edit the description", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drEnterDocumentDescription({ description: formDescription.newValue });
-      });
-      cy.progressBarShouldNotExist();
+      cy.drEnterDocumentDescription({ description: formDescription.newValue });
+      cy.progressBarShouldAppear();
     });
 
-
     it("Select reference for document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drSelectReferences( reference.value );
-      });
-      cy.progressBarShouldNotExist();
+      cy.drSelectReferences( reference.value );
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 
-
     it("Remove reference for document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.contains(reference.valueCode).arrowClick();
-        cy.contains(reference.valueCode).parent().parent().parent().find("svg").arrowClick({ force: true });
-      });
-      cy.progressBarShouldNotExist();
+      cy.contains(reference.valueCode).arrowClick();
+      cy.contains(reference.valueCode).parent().parent().parent().find("svg").arrowClick({ force: true });
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Unmark 'Training Required'", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drClickTrainingRequired();
-      });
+      cy.drClickTrainingRequired();
+      cy.progressBarShouldAppear();
     });
 
     it("Uploads test_image.jpg", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.atchUploadAttachment({ fileName: "test_image.jpg" });
-      });
-      cy.progressBarShouldNotExist();
+      cy.atchUploadAttachment({ fileName: "test_image.jpg" });
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Remove attachment test_image.jpg", () => {
       cy.atchRemoveAttachment({ fileName: "test_image.jpg" });
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Upload test.docx", () => {
       cy.atchUploadAttachment({ fileName: "test.docx" });
-      cy.wait(1000);
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
   });
@@ -351,25 +334,24 @@ context("Check Document History", () => {
     });
 
     it(`select '${formTitle.newValue}'`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocRevPreview], () => {
-        cy.get("#root").contains(formTitle.newValue).arrowClick();
-      });
+      cy.get("#root").contains(formTitle.newValue).arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Approve and Release document", () => {
     it("Approves and releases document", () => {
       SystemRequirement("REQ-4020", "REQ-4040");
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Check document history", () => {
     it("Open history drawer and compare history values", () => {
       SystemRequirement("REQ-0360", "REQ-2670", "REQ-4000", "REQ-4250");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-        cy.drSelectHistoryTab();
-      });
+      cy.drSelectHistoryTab();
+      cy.progressBarShouldAppear();
     });
 
     history.forEach((element, groupIndex) => {

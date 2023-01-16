@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -190,20 +189,23 @@ context("Document Approval Matrix Flow", () => {
   });
 
   context("Save DAM And Approve & Release Document", () => {
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("clicks on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Create New Document out of the Form", () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("open new document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
+      cy.progressBarShouldAppear();
     });
   });
 
@@ -241,7 +243,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -251,9 +253,9 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Open 'Add Role' dialog", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.drAddAnotherRoleBtn();
-      });
+      cy.drAddAnotherRoleBtn();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Fill role name: ${roleOne}`, () => {
@@ -266,9 +268,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save role", () => {
       SystemRequirement("REQ-0590");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -312,13 +314,13 @@ context("Document Approval Matrix Flow", () => {
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
       SystemRequirement("REQ-4360");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
-      });
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save document", () => {
-      cy.drClickCreateSupplierWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -344,21 +346,19 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save Approval Matrix Item", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
-      });
-      cy.progressBarShouldNotExist();
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Approve & Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -424,7 +424,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("'Training Required' should be checked because of DAM", () => {
@@ -473,7 +473,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save document, Check Roles are enforced and 'Approve & Release' Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("'Training Required' should not be checked because of DAM", () => {
@@ -488,7 +488,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -509,7 +509,7 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Navigate to matrix details tab", () => {
@@ -536,9 +536,9 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("Save role", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -557,9 +557,9 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save role", () => {
       SystemRequirement("REQ-0600");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -625,15 +625,15 @@ context("Document Approval Matrix Flow", () => {
 
     it("Save Approval Matrix Item", () => {
       SystemRequirement("REQ-0630", "REQ-0640", "REQ-0650");
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
-      });
+      cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").click();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("'Approve & Release' Document", () => {
     it("Approve and Release the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -695,7 +695,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Save document, Check Group Role is enforced and Release Document", () => {
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it(`Check ${roleOne} exists and is checked - Approve & Release`, () => {
@@ -714,13 +714,15 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
   context("'Approve & Release' Document", () => {
     it("click on 'Approve and Release' button", () => {
       cy.drApproveAndReleaseDialog();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Enforce user rule, Add ${INDIVIDUAL_USER.name} to approvers`, () => {
@@ -733,11 +735,9 @@ context("Document Approval Matrix Flow", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ReleaseDocRev,
-        () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-        });
+      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+      cy.progressBarShouldAppear();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -760,7 +760,7 @@ context("Document Approval Matrix Flow", () => {
 
   context("Approve document in review", () => {
     it(`approve document`, () => {
-      cy.arApproveARFromDashboard();
+      cy.arApproveARFromDashboardWithoutApi();
     });
   });
 

@@ -7,7 +7,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordDocumentType, TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -306,7 +305,7 @@ context("Document form upgrade", () => {
 
     context("Save document", () => {
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
   });
@@ -344,7 +343,7 @@ context("Document form upgrade", () => {
 
     context("Save document", () => {
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
   });
@@ -364,7 +363,7 @@ context("Document form upgrade", () => {
 
     it("Click on Revise button", () => {
       cy.drClickReviseDocument();
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     context("Add a new fields to the form", () => {
@@ -385,11 +384,11 @@ context("Document form upgrade", () => {
 
     context("Release updated form", () => {
       it("Save the form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and release", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -409,7 +408,7 @@ context("Document form upgrade", () => {
 
     it("Click on Revise button", () => {
       cy.drClickReviseDocument();
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     context("Add a new fields to the form", () => {
@@ -430,11 +429,11 @@ context("Document form upgrade", () => {
 
     context("Release updated form", () => {
       it("Save the form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and release", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -477,11 +476,11 @@ context("Document form upgrade", () => {
 
     context("Release updated document", () => {
       it("Save the form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and release", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Verify released upgraded document", () => {
@@ -533,19 +532,19 @@ context("Document form upgrade", () => {
 
       context("Release updated record", () => {
         it("Add approvals", () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+          cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
         });
 
         it("Save upgraded record", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Submit for an approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Approve the record", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
       });
 
@@ -563,10 +562,8 @@ context("Document form upgrade", () => {
 
   context("Revise record and check for banner", () => {
     it("Revise record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"updateRecord\"]").click();
-      });
-      cy.progressBarShouldNotExist();
+      cy.get("[data-cy=\"updateRecord\"]").click();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 
