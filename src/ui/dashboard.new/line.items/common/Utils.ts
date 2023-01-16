@@ -26,7 +26,8 @@ export const toFixed = (value: string | number) => {
     return value;
   }
   if (!Number.isInteger(toNumber(value)) && value?.toString()?.split(".")[1]?.length > 10) {
-    return toNumber(toNumber(value).toFixed(10));
+    const arr = value?.toString()?.split(".");
+    return toNumber(`${arr[0]}.${arr[1].slice(0, 10)}`);
   }
   else { return toNumber(value); }
 };

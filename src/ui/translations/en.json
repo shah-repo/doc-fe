@@ -556,7 +556,7 @@
   "documentRevision.audit.childrenParts.ARRAY_DELETED": "Part removed",
   "documentRevision.audit.childrenParts.ARRAY_NEW": "Part added",
   "document.revision.audit.download.s3link.error": "Attachment can't be downloaded",
-  "document.revision.quntity.error": "You cannot exceed more than 10 numbers after the decimal in the \"Quantity\" field.",
+  "document.revision.quntity.error": "You cannot exceed more than 10 numbers after the decimal in the \"{name}\" field.",
   "document.revision.quntity.positive.error": "\"Quantity\" field must be a positive number.",
   "documentRevision.void.alert": "Are you sure you want to void this document?\nThis action cannot be undone.",
   "documentRevision.record.void.alert": "Are you sure you want to void this record?\nThis action cannot be undone.",

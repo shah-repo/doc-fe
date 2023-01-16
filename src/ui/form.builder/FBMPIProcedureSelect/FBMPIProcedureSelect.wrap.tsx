@@ -181,7 +181,8 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         return;
       }
       if (isMaterial && quantity && quantity.toString().split(".")[1]?.length > 10) {
-        toastError(intl.formatMessage({ id: "document.revision.quntity.error" }));
+        toastError(intl.formatMessage({ id: "document.revision.quntity.error" },
+          { name: intl.formatMessage({ id: "form.builder.quantity" } ) }));
         return;
       }
       const part = {

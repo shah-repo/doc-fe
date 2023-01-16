@@ -140,6 +140,8 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     // MARK: @helpers
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
+      const { quantity } = formValue;
+      const isMaterial = type === "materials";
 
       if (mode === "lhr") {
         lhrStepState?.editItem(formValue, type);
@@ -158,6 +160,11 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
         }
         workspaceState?.saveDocRev();
         return handleCancel?.();
+      }
+      if (isMaterial && quantity && quantity.toString().split(".")[1]?.length > 10) {
+        toastError(intl.formatMessage({ id: "document.revision.quntity.error" },
+          { name: intl.formatMessage({ id: "form.builder.quantity" } ) }));
+        return;
       }
       const allSteps = workspaceState?.schema?.filter((item) => item.type === "mpiprocedure");
       if (isDocumentMPI && !formValue.LHRTparameter && !FB.isUUID(formValue.title)) {
