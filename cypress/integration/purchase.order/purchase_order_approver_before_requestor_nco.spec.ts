@@ -1113,8 +1113,8 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check history entry for 'Requestor added'", () => {
-      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Requestor added")
+    it("Check history entry for 'Requestor Added'", () => {
+      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Requestor Added")
         .and("contain", USERS[1].name);
     });
 

@@ -321,6 +321,7 @@ context("PO approval test", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
   });
 

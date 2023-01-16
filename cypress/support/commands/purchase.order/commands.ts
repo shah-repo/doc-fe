@@ -235,7 +235,7 @@ Cypress.Commands.add("poCheckDateRequired", (params: { dateRequired: string }) =
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
-  cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick();
+  cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick({ force: true }).wait(1000);
   cy.get(`[name*="po-items-built-in.shippingCost"]`).arrowType("{leftarrow}{leftarrow}{leftarrow}" + params.number);
   cy.unClick();
 });

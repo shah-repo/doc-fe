@@ -385,6 +385,7 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
     it("Click 'Save' document", () => {
       cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.wait(5000);
     });
 
     it("Approve and release document", () => {
