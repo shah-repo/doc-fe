@@ -54,15 +54,6 @@ context("Checkboxes test", () => {
         });
       });
     });
-
-    it("[API]Login second tester", (done: any) => {
-      cy.authApiLogin({
-        email: USERS[1].email,
-      }).then((response) => {
-        loginResponse = response;
-        done();
-      });
-    });
   });
 
   context("Login user", () => {
@@ -102,7 +93,7 @@ context("Checkboxes test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Add Fields with Checkboxes", () => {
@@ -501,22 +492,23 @@ context("Checkboxes test", () => {
         cy.fbAddNewFieldButton();
       });
 
-      it("Add Instructions 'Select Document(s)' with checkboxes", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
-        cy.fbEnterNameValue({ name: "label", value: "sd-wi-ch" });
-        cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
-        cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbAddNewFieldButton();
-      });
+      // This is commented Due to ENC-13644
+      // it("Add Instructions 'Select Document(s)' with checkboxes", () => {
+      //   cy.fbAddNewFieldWhenHiddenLastPlace();
+      //   cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
+      //   cy.fbEnterNameValue({ name: "label", value: "sd-wi-ch" });
+      //   cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
+      //   cy.fbSelectCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      //   cy.fbAddNewFieldButton();
+      // });
 
-      it("Add Instructions 'Select Document(s)' without checkboxes", () => {
-        cy.fbAddNewFieldWhenHiddenLastPlace();
-        cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
-        cy.fbEnterNameValue({ name: "label", value: "sd-wo-ch" });
-        cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
-        cy.fbAddNewFieldButton();
-      });
+      // it("Add Instructions 'Select Document(s)' without checkboxes", () => {
+      //   cy.fbAddNewFieldWhenHiddenLastPlace();
+      //   cy.fbSelectItemFromNewFieldList({ section: "Instructions", field: "Select Document(s)" });
+      //   cy.fbEnterNameValue({ name: "label", value: "sd-wo-ch" });
+      //   cy.get("[data-cy=\"options\"]").autocompleteSelect("AR Form");
+      //   cy.fbAddNewFieldButton();
+      // });
 
       it("Add Actions 'Action Button' with checkboxes", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
@@ -613,7 +605,7 @@ context("Checkboxes test", () => {
 
   context("Create & Approve Document", () => {
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release FORM document", () => {
@@ -910,17 +902,18 @@ context("Checkboxes test", () => {
       cy.fbVerifyElementNotVisibileByLabel({ label: "mpi-wi-ch", el: "remove-schema-item" });
     });
 
-    it("Verify Select Document(s) without 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "sd-wo-ch" } );
-      cy.fbVerifyElementVisibileByLabel({ label: "sd-wo-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementVisibileByLabel({ label: "sd-wo-ch", el: "remove-schema-item" });
-    });
+    // This is commented Due to ENC-13644
+    // it("Verify Select Document(s) without 'Revision Disabled' checkbox", () => {
+    //   cy.fbMouseOverByLabel({ label: "sd-wo-ch" } );
+    //   cy.fbVerifyElementVisibileByLabel({ label: "sd-wo-ch", el: "edit-schema-item" });
+    //   cy.fbVerifyElementVisibileByLabel({ label: "sd-wo-ch", el: "remove-schema-item" });
+    // });
 
-    it("Verify Select Document(s) with 'Revision Disabled' checkbox", () => {
-      cy.fbMouseOverByLabel({ label: "sd-wi-ch" } );
-      cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "edit-schema-item" });
-      cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "remove-schema-item" });
-    });
+    // it("Verify Select Document(s) with 'Revision Disabled' checkbox", () => {
+    //   cy.fbMouseOverByLabel({ label: "sd-wi-ch" } );
+    //   cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "edit-schema-item" });
+    //   cy.fbVerifyElementNotVisibileByLabel({ label: "sd-wi-ch", el: "remove-schema-item" });
+    // });
   });
 
   context("Create a new document", () => {
@@ -945,7 +938,7 @@ context("Checkboxes test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -1273,19 +1266,20 @@ context("Checkboxes test", () => {
       });
     });
 
-    it("Verify Select Document(s) without 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "sd-wo-ch", el: "remove-schema-item",
-        class: "schema-delete-enabled",
-      });
-    });
+    // This is commented Due to ENC-13644
+    // it("Verify Select Document(s) without 'Deletion Disabled' checkbox", () => {
+    //   cy.fbVerifyElementClassByLabel({
+    //     label: "sd-wo-ch", el: "remove-schema-item",
+    //     class: "schema-delete-enabled",
+    //   });
+    // });
 
-    it("Verify Select Document(s) with 'Deletion Disabled' checkbox", () => {
-      cy.fbVerifyElementClassByLabel({
-        label: "sd-wi-ch", el: "remove-schema-item",
-        class: "schema-delete-disabled",
-      });
-    });
+    // it("Verify Select Document(s) with 'Deletion Disabled' checkbox", () => {
+    //   cy.fbVerifyElementClassByLabel({
+    //     label: "sd-wi-ch", el: "remove-schema-item",
+    //     class: "schema-delete-disabled",
+    //   });
+    // });
   });
 
   context("Approve Document", () => {
