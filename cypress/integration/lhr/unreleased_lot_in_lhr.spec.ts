@@ -678,6 +678,7 @@ context("Unreleased LOT in LHR", () => {
 
     it("Click on LOT", () => {
       cy.get("[data-grid-col-index=\"0\"]").arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist().wait(2000);
     });
 
     it("Add an Approval", () => {

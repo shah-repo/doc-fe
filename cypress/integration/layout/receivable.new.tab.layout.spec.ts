@@ -1252,6 +1252,7 @@ context("Receiving landing page test", () => {
       it("Navigate to details Tab", () => {
         cy.drSelectDetailsTab();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist().wait(2000);
       });
 
       it("Verify Fields in Detail Tab PO Receivable, supplier,Requestor,Receiving table", () => {

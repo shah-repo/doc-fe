@@ -146,12 +146,12 @@ context("Document Access Rights", () => {
   });
 
   context("Save document And Approve & Release Document", () => {
-    it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Clicks on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -195,12 +195,12 @@ context("Document Access Rights", () => {
   });
 
   context("Save document And Approve & Release Document", () => {
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("clicks on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -244,12 +244,12 @@ context("Document Access Rights", () => {
   });
 
   context("Save document And Approve & Release Document", () => {
-    it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("clicks on 'Create Document' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
