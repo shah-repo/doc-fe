@@ -8,7 +8,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { CSLDocType } from "../../utils/constants/documentTypes/csl";
 import { EForm } from "../../utils/constants/documentTypes/efm";
 import { CSPart } from "../../utils/constants/documentTypes/part";
@@ -703,12 +702,11 @@ context("LHR: RD case specs", () => {
 
     it("Select Procedure tab", () => {
       cy.drSelectProcedureTab();
+      cy.progressBarShouldNotExist();
     });
 
     it("Add 'CS Part' as Material to step #1", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
-      });
+      cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -719,9 +717,7 @@ context("LHR: RD case specs", () => {
       });
 
       it("Approve and release MPI document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -781,19 +777,16 @@ context("LHR: RD case specs", () => {
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
-        });
+        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       context("Select created MPI in LHR template", () => {
         it("Select Details tab", () => {
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.GetAutocompleteOptions, CyRoutes.GetFieldLocks], () => {
-              cy.drSelectDetailsTab();
-            });
+          cy.drSelectDetailsTab();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Click 'LHR Step'", () => {
@@ -814,7 +807,7 @@ context("LHR: RD case specs", () => {
         });
 
         it("Approve and release LHRt document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
     });
@@ -822,37 +815,30 @@ context("LHR: RD case specs", () => {
 
   context("Create & Release LHR", () => {
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-        cy.url().then((url: any) => {
-          lhrDocUrl1 = url;
-        });
+      cy.drCreateNewDocumentFromForm();
+      cy.url().then((url: any) => {
+        lhrDocUrl1 = url;
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter initial quantity", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
-        cy.unClick();
-      });
+      cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+      cy.unClick();
+      cy.saveBarShouldNotExist();
     });
 
     it("Select 'Production' build type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[value=\"Production\"]").check();
-        cy.unClick();
-      });
+      cy.get("[value=\"Production\"]").check();
+      cy.unClick();
+      cy.saveBarShouldNotExist();
     });
 
     it("Add 'Due Date'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.poAddDateRequired();
-        cy.unClick();
-      });
+      cy.poAddDateRequired();
+      cy.unClick();
+      cy.saveBarShouldNotExist();
     });
 
     it("Click save document", () => {
@@ -920,12 +906,8 @@ context("LHR: RD case specs", () => {
     });
 
     it("visit the LHR", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType,
-      ], () => {
-        cy.visit(lhrDocUrl1);
-      });
+      cy.visit(lhrDocUrl1);
+      cy.progressBarShouldNotExist();
       cy.wait(3000);
     });
 
@@ -940,11 +922,11 @@ context("LHR: RD case specs", () => {
 
     it("Submit for approval", () => {
       cy.wait(2000);
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Approve approval", () => {
-      cy.lhrApprove();
+      cy.lhrApproveWithoutApi();
     });
 
     it(`Verify status is '${STATUS_TYPES_LABEL.RELEASED}'`, () => {
@@ -954,9 +936,7 @@ context("LHR: RD case specs", () => {
 
   context("Revise LHR ", () => {
     it("Click Revise document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"updateRecord\"]").arrowClick();
       cy.wait(5000);
     });
 
@@ -976,9 +956,8 @@ context("LHR: RD case specs", () => {
     });
 
     it("Verify history tab is capturing the changes to R&D Build Type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-        cy.drSelectHistoryTab();
-      });
+      cy.drSelectHistoryTab();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"form.builder.audit.STRING_EDITED\"]").should("have.text", "Build Type Updated");
       cy.get("[data-cy=\"change-value-0-0\"]").should("have.text", "R&D");
     });
@@ -991,13 +970,13 @@ context("LHR: RD case specs", () => {
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
     });
 
     it("Approve approval", () => {
-      cy.lhrApprove();
+      cy.lhrApproveWithoutApi();
     });
 
     it(`Verify status is '${STATUS_TYPES_LABEL.RELEASED}'`, () => {

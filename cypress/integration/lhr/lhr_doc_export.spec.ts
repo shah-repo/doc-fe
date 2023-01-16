@@ -7,7 +7,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat } from "../../utils/constants/dateHandler";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
@@ -1060,10 +1059,7 @@ context("LHR Export Verification", () => {
     });
 
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-      ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
-      });
+      cy.get("[data-cy^='fb-approvals']").autocompleteSelect(`${USERS[1].name}`);
     });
 
     it("Save the document", () => {
@@ -1158,21 +1154,11 @@ context("LHR Export Verification", () => {
     });
 
     it("Complete the step", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve  Inline Approval", () => {
-      cy.get("[data-cy='form.builder.request.approve']").arrowClick({ force: true });
-      cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.SessionDetails], () => {
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify LHRS is in completed state", () => {

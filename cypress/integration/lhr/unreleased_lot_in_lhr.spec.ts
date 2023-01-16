@@ -5,7 +5,6 @@ import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -301,11 +300,9 @@ context("Unreleased LOT in LHR", () => {
         it("Approve and release Lots document", () => {
           cy.drApproveAndReleaseDialog();
           cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCall(
-            CyRoutes.ReleaseDocRev,
-            () => {
-              cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-            });
+          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
       });
     });
@@ -325,9 +322,8 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Enter description 'Test Part description'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.drEnterDocumentDescription({ description: "Test Part description" });
-      });
+      cy.drEnterDocumentDescription({ description: "Test Part description" });
+      cy.saveBarShouldNotExist();
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -338,11 +334,9 @@ context("Unreleased LOT in LHR", () => {
       it("Approve and release Part document", () => {
         cy.drApproveAndReleaseDialog();
         cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.wrapWithWaitOnApiCall(
-          CyRoutes.ReleaseDocRev,
-          () => {
-            cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-          });
+        cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
     });
   });
@@ -387,11 +381,9 @@ context("Unreleased LOT in LHR", () => {
         it("Approve and release Lots document", () => {
           cy.drApproveAndReleaseDialog();
           cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCall(
-            CyRoutes.ReleaseDocRev,
-            () => {
-              cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-            });
+          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
       });
     });
@@ -408,10 +400,8 @@ context("Unreleased LOT in LHR", () => {
 
     it("Select 'Lot' from the dropdown", () => {
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-        cy.get("div[id^=react-select]").contains("Lots").arrowClick();
-        cy.wait(1000);
-      });
+      cy.get("div[id^=react-select]").contains("Lots").arrowClick();
+      cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -509,9 +499,7 @@ context("Unreleased LOT in LHR", () => {
 
       context("Release MPI", () => {
         it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -558,9 +546,7 @@ context("Unreleased LOT in LHR", () => {
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-        });
+        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       });
 
       context("Select created MPI in LHR template", () => {
@@ -577,10 +563,8 @@ context("Unreleased LOT in LHR", () => {
           cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
             $el.trigger("click");
           });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
-          });
+          cy.listLoadingElementShouldNotExist();
+          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
           cy.wait(1000);
@@ -596,11 +580,7 @@ context("Unreleased LOT in LHR", () => {
         it("Approve and release LHRt document", () => {
           cy.drApproveAndReleaseDialog();
           cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.wrapWithWaitOnApiCall(
-            CyRoutes.ReleaseDocRev,
-            () => {
-              cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-            });
+          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
           cy.wait(1000);
         });
       });
@@ -609,10 +589,7 @@ context("Unreleased LOT in LHR", () => {
 
   context("Create LHR", () => {
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -691,7 +668,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click on approve", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Record is in Accepted status", () => {
@@ -705,14 +682,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Select created LHR record", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.DocRevPreview,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-          cy.get("tr.k-master-row").first().arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
-      });
+      cy.get("tr.k-master-row").first().arrowClick();
       cy.wait(2000);
       cy.listLoadingElementShouldNotExist();
     });
@@ -726,10 +696,10 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Click View step", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.SessionDetails, () => {
-        cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
-      });
+      cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click on Procedure", () => {

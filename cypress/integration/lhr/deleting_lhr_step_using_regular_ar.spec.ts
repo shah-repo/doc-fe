@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -440,9 +439,8 @@ context("Deleting LHR Step using regular AR test", () => {
 
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-      });
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Details tab", () => {
@@ -450,9 +448,7 @@ context("Deleting LHR Step using regular AR test", () => {
     });
 
     it("Remove 'LHR Step'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
-      });
+      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
       cy.progressBarShouldNotExist();
     });
   });
@@ -528,9 +524,8 @@ context("Deleting LHR Step using regular AR test", () => {
     });
 
     it("Select MPI document for step #1 in LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("input[data-cy^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
-      });
+      cy.get("input[data-cy^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
+      cy.listLoadingElementShouldExist();
     });
 
     it("Check materials step 1", () => {
@@ -587,10 +582,7 @@ context("Deleting LHR Step using regular AR test", () => {
 
     it("Close AR", () => {
       cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR], () => {
-          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-        });
+      cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });

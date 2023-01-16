@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -426,7 +425,7 @@ context("LHRt required fields test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify LHRT is in DRAFT status", () => {
@@ -475,9 +474,8 @@ context("LHRt required fields test", () => {
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.drCloseApproveAndReleaseDialog();
       cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-      });
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
@@ -510,9 +508,8 @@ context("LHRt required fields test", () => {
         cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
           $el.trigger("click");
         });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI created with API");
-        });
+        cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI created with API");
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -522,7 +519,7 @@ context("LHRt required fields test", () => {
       });
 
       it("Approve and release LHRt document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Verify LHRT is in RELEASED status", () => {
@@ -586,10 +583,9 @@ context("LHRt required fields test", () => {
     });
 
     it("Select MPI document for step #2 in LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("[name^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
-        cy.unClick();
-      });
+      cy.get("[name^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
@@ -597,7 +593,7 @@ context("LHRt required fields test", () => {
     });
 
     it("Approve and release LHRt document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify LHRT is in RELEASED status", () => {
@@ -607,11 +603,7 @@ context("LHRt required fields test", () => {
 
   context("Create LHR from LHRT", () => {
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

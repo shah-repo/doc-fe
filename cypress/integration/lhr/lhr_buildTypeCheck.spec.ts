@@ -6,7 +6,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -788,12 +787,8 @@ context("Create new LHR and verify start step with and without selecting build t
       cy.get("input[data-cy='lhrstep-built-in']").then(($el) => {
         $el.trigger("click");
       });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
-        });
-      });
+      cy.get("input[data-cy='lhrstep-built-in']").autocompleteSelect("PI-00008");
+      cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -805,9 +800,8 @@ context("Create new LHR and verify start step with and without selecting build t
 
   context("Release LHRT", () => {
     it("Approve and release document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -835,9 +829,8 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select build type Prod", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
-      });
+      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
+      cy.saveBarShouldNotExist();
     });
 
     it("Save the document", () => {
@@ -876,18 +869,15 @@ context("Create new LHR and verify start step with and without selecting build t
 
     it("Fill the start accepted and rejected quantity", () => {
       cy.get("[name='lhrs-start-quantity']").scrollIntoView();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name='lhrs-start-quantity']").arrowType("12");
-        cy.unClick();
-      });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name='lhrs-accepted-quantity']").arrowType("11");
-        cy.unClick();
-      });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[name='lhrs-rejected-quantity']").arrowType("1").wait(2000);
-        cy.unClick();
-      });
+      cy.get("[name='lhrs-start-quantity']").arrowType("12");
+      cy.unClick();
+      cy.saveBarShouldNotExist();
+      cy.get("[name='lhrs-accepted-quantity']").arrowType("11");
+      cy.unClick();
+      cy.saveBarShouldNotExist();
+      cy.get("[name='lhrs-rejected-quantity']").arrowType("1").wait(2000);
+      cy.unClick();
+      cy.saveBarShouldNotExist();
     });
 
     it("Save the document", () => {
@@ -899,17 +889,7 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Approve  Inline Approval", () => {
-      cy.get("[data-cy='form.builder.request.approve']").arrowClick({ force: true });
-      cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.SessionDetails], () => {
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.ebApproveWithoutApi();
     });
   });
 
@@ -929,14 +909,7 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Approve  Inline Approval", () => {
-      cy.get("[data-cy='form.builder.request.approve']").arrowClick({ force: true });
-      cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-      ], () => {
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
+      cy.ebApproveWithoutApi();
     });
   });
 });
