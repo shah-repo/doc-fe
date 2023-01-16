@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -227,29 +226,24 @@ context("Autosave LHR", () => {
 
       context("Fill step #1", () => {
         it("Fill step #1 description", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-          });
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+          cy.saveBarShouldNotExist();
         });
 
         it("Add 'Part document' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Part document", quntity: "3", unit: "Each" });
-          });
+          cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Part document", quntity: "3", unit: "Each" });
+          cy.saveBarShouldNotExist();
         });
 
         it("Add 'Equipment one' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-          });
+          cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+          cy.saveBarShouldNotExist();
         });
       });
 
       context("Release MPI", () => {
         it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
     });
@@ -289,14 +283,14 @@ context("Autosave LHR", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-        });
+        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Navigate to Detail Tab", () => {
@@ -319,11 +313,8 @@ context("Autosave LHR", () => {
 
   context("Create LHR", () => {
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter initial quantity", () => {
@@ -369,11 +360,11 @@ context("Autosave LHR", () => {
 
   context("Add/remove approver and check autosave", () => {
     it("Add first Approver'", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Add second Approver'", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
     });
 
     it("Remove second Approver'", () => {
@@ -410,9 +401,9 @@ context("Autosave LHR", () => {
   context("Complete first step in LHR", () => {
     context("Start LHRs #1", () => {
       it("Navigate to LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(lhrDocUrl);
-        });
+        cy.visit(lhrDocUrl);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Navigate to Detail Tab", () => {
@@ -421,7 +412,7 @@ context("Autosave LHR", () => {
 
       it("Click 'START MPI'", () => {
         cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
-        cy.mpiStartStep({ stepNumber: 1 });
+        cy.mpiStartStepWithoutApi({ stepNumber: 1 });
       });
 
       it("Navigate to Procedure Tab", () => {
@@ -478,11 +469,11 @@ context("Autosave LHR", () => {
       });
 
       it("Add first Approver'", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
       });
 
       it("Add second Approver'", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       });
 
       it("Remove second Approver'", () => {
