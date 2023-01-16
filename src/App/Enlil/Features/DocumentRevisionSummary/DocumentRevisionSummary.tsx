@@ -14,7 +14,7 @@ import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader
 import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
-import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -36,6 +36,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
+  const isMPI = checkIsDocumentMPI(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom =
   documentRevision?.smartReferencesFrom?.filter(
@@ -122,6 +123,16 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%", overflow: "auto" }}
+              contentBoxProps={{
+                minHeight: _documentRevisionFormState?.expanded ?
+                  (isMPI ? "100%" :  (((!isLHR && !isTypeMpiDoc) || isLHR) ? "100%" : "0px" )) : "unset",
+                height: "auto",
+              }}
+              boxProps={{
+                overflow: (_documentRevisionFormState?.expanded ? "auto" :
+                  ((( _documentRevisionFormState?.isDescriptionFocused) ||
+                    (_documentRevisionFormState?.isDescriptionFocused)) ? "auto" : "")),
+              }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
