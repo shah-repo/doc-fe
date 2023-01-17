@@ -671,15 +671,18 @@ context("Released_lots_verify_in_lhr", () => {
           cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
             .autocompleteSelect(USERS[1].name);
           cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
           cy.wait(2000);
         });
 
         it("Click Request Approval button", () => {
           cy.contains("Request approval").arrowClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Approve inline approval", () => {
-          cy.inlineApprovalWithoutApi();
+          cy.inlineApproval();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
           cy.wait(3000);
@@ -727,7 +730,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select Procedure tab", () => {
@@ -742,7 +745,7 @@ context("Released_lots_verify_in_lhr", () => {
 
     context("Release MPI", () => {
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release MPI document", () => {
@@ -806,8 +809,7 @@ context("Released_lots_verify_in_lhr", () => {
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType(CSPartDocumentTitle);
-        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect(CSPartDocumentTitle);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -881,7 +883,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click 'START MPI'", () => {
-      cy.mpiStartStep({ stepNumber: 1 });
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
     });
 
     it("Select Procedure tab", () => {
@@ -943,7 +945,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Approve inline approval", () => {
-      cy.inlineApprovalWithoutApi();
+      cy.inlineApproval();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(2000);
@@ -982,9 +984,13 @@ context("Released_lots_verify_in_lhr", () => {
     it("Click View step", () => {
       cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click on Procedure", () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.drSelectProcedureTab();
     });
 
@@ -1063,12 +1069,12 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Select approvals", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.unClick();
     });
 
     it("Click on approve and submit", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
@@ -1079,7 +1085,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on approve", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Record is in RELEASED status", () => {
@@ -1109,6 +1115,8 @@ context("Released_lots_verify_in_lhr", () => {
     it("Click View step", () => {
       cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click on Procedure", () => {
@@ -1160,7 +1168,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Select approvals", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.unClick();
     });
 
@@ -1176,7 +1184,7 @@ context("Released_lots_verify_in_lhr", () => {
     });
 
     it("Click on approve", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Record is in RELEASED status", () => {
@@ -1206,6 +1214,8 @@ context("Released_lots_verify_in_lhr", () => {
     it("Click View step", () => {
       cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click on Procedure", () => {

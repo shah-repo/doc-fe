@@ -997,7 +997,7 @@ context("LHR steps verification", () => {
     });
 
     it("Complete the step", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve  Inline Approval", () => {

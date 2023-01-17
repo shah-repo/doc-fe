@@ -425,7 +425,7 @@ context("Deleting LHR Step test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify LHRT is in DRAFT status", () => {
@@ -448,7 +448,7 @@ context("Deleting LHR Step test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release LHRt document", () => {
@@ -482,7 +482,7 @@ context("Deleting LHR Step test", () => {
 
     context("Release LHRT", () => {
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release LHRt document", () => {

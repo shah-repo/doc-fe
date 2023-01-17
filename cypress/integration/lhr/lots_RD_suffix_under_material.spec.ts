@@ -696,7 +696,8 @@ context("Lots RD suffix under Materials", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Procedure tab", () => {
@@ -711,11 +712,12 @@ context("Lots RD suffix under Materials", () => {
 
     context("Release MPI", () => {
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release MPI document", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.progressBarShouldNotExist();
       });
     });
 
@@ -768,12 +770,11 @@ context("Lots RD suffix under Materials", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
-        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect(CSPartDocumentTitle);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -804,7 +805,7 @@ context("Lots RD suffix under Materials", () => {
 
       context("Release LHRt", () => {
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Approve and release LHRt document", () => {
@@ -896,15 +897,15 @@ context("Lots RD suffix under Materials", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Complete step", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve step", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("visit the LHR", () => {
@@ -978,7 +979,7 @@ context("Lots RD suffix under Materials", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select Procedure tab", () => {
@@ -1037,7 +1038,7 @@ context("Lots RD suffix under Materials", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
@@ -1110,7 +1111,7 @@ context("Lots RD suffix under Materials", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Select Details tab", () => {
@@ -1142,6 +1143,9 @@ context("Lots RD suffix under Materials", () => {
     it("Select Lot with RD suffix and enter quantity", () => {
       cy.get("[data-cy=\"usedOverride\"]").autocompleteSelect(`LOT #${currentDate}02RD`);
       cy.get("[name=\"quantity\"]").arrowType("1");
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Save the Lot", () => {

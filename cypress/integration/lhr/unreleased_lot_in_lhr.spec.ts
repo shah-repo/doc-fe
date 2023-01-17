@@ -293,7 +293,7 @@ context("Unreleased LOT in LHR", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       context("Release Parts", () => {
@@ -374,7 +374,7 @@ context("Unreleased LOT in LHR", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       context("Release Lots", () => {
@@ -424,8 +424,7 @@ context("Unreleased LOT in LHR", () => {
 
     it("Select 'Part document' for Part lot", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy=\"lot_part\"]").arrowType("Part document");
-      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+      cy.get("[data-cy=\"lot_part\"]").autocompleteSelect("Part document");
     });
 
     it("Record is in WIP status", () => {
@@ -541,12 +540,11 @@ context("Unreleased LOT in LHR", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
-        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+        cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect("Part document");
       });
 
       context("Select created MPI in LHR template", () => {
@@ -659,7 +657,7 @@ context("Unreleased LOT in LHR", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[5].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[5].email });
       cy.unClick();
     });
 

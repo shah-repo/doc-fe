@@ -430,7 +430,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it(`Verify LHRT is in ${STATUS_TYPES_LABEL.DRAFT} status`, () => {
@@ -516,7 +516,6 @@ context("LHRt using regular AR test", () => {
 
   context("Update LHRT", () => {
     it("Open LHRT", () => {
-
       cy.visit(lhrtUrl);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -536,7 +535,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -584,7 +583,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -764,7 +763,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 

@@ -655,15 +655,15 @@ context("LHR: RD case specs", () => {
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Click 'Approve' button", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });
@@ -697,7 +697,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select Procedure tab", () => {
@@ -772,12 +772,13 @@ context("LHR: RD case specs", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
-        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
+        cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect(CSPartDocumentTitle);
+        // cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
+        // cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -854,7 +855,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Click 'START MPI'", () => {
-      cy.mpiStartStep({ stepNumber: 1 });
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
     });
 
     it("Turn off autosave", () => {
@@ -881,7 +882,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
       cy.wait(2000);
     });
 
@@ -890,7 +891,7 @@ context("LHR: RD case specs", () => {
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 
     it("Click save document", () => {
@@ -898,11 +899,11 @@ context("LHR: RD case specs", () => {
     });
 
     it("Complete step", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve step", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("visit the LHR", () => {

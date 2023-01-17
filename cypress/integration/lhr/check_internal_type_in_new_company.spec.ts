@@ -123,11 +123,11 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -222,10 +222,14 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
 
     it("Save document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document for create company", () => {
       cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.wait(3000);
     });
 
@@ -621,7 +625,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify if exist LHR fields", () => {
@@ -693,7 +697,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
       });
 
       it("Approve and release LHRt document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Verify LHRT is in RELEASED status", () => {
@@ -807,11 +811,11 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Approve approval", () => {
-      cy.lhrApprove();
+      cy.lhrApproveWithoutApi();
     });
 
     it(`Verify status is 'RELEASED'`, () => {
