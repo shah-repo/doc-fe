@@ -221,7 +221,8 @@ Cypress.Commands.add("poEnterPartDescription", (params: {partDescription: string
 });
 
 Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {
-  cy.get("[name=\"unitPrice\"]").arrowClick().arrowType(params.number);
+  cy.get(`[name="unitPrice"]`).arrowClick({ force: true }).wait(500);
+  cy.get(`[name="unitPrice"]`).arrowType(params.number);
 });
 
 Cypress.Commands.add("poAddDateRequired", () => {
