@@ -417,7 +417,7 @@ context("Intermediate page validation", () => {
   context("Edit the fields", () => {
     it("Edit Field 1 by adding a new option", () => {
       cy.get("[class*='fb-field-wrapper-fb-checkbox-group-']").trigger("mouseover");
-      cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true });
+      cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true }).wait(500);
       cy.fbGroupOptions("\noption3");
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
     });

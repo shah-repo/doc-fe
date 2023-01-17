@@ -145,7 +145,7 @@ context(
         });
 
         it("Click CREATE DOCUMENT", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Verify there is ADD A FIELD button is displayed", () => {

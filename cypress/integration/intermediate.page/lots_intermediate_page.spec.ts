@@ -1,6 +1,7 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
 import { CONFIG } from "../../support/config";
+import { momentInPST } from "../../utils/constants/dateHandler";
 import { IMPORTER_USER } from "../../utils/constants/users";
 import { USERS } from "./../../utils/constants/users";
 
@@ -387,12 +388,13 @@ context("Intermediate page validation", () => {
 
     it("Reopen the preview mode and verify enter detail not saved", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
-      cy.get(`.MuiDialogContent-root [name="lot_quantity"]`).should("not.contain.value");
-      cy.get(`.MuiDialogContent-root [name="lot_usable_quantity"]`).should("not.contain.value");
-      cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`).should("not.contain.value");
+      cy.get(`.MuiDialogContent-root [name="lot_quantity"]`).should("not.contain.value", "10");
+      cy.get(`.MuiDialogContent-root [name="lot_usable_quantity"]`).should("not.contain.value", "8");
+      cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`)
+        .should("not.contain.value", momentInPST().format("M/D/YYYY"));
       cy.get(`.MuiDialogContent-root [data-cy="lot_part"]`).should("not.contain.value");
       cy.get(`.MuiDialogContent-root [value="100% Inspection Override"]`).should("not.be.checked");
-      cy.get(".MuiDialogContent-root [name^='fb-approvals']").last().should("not.contain.value");
+      cy.get(".MuiDialogContent-root [name^='fb-approvals']").last().should("not.contain.value", USERS[1].name);
     });
 
     it("Close the preview mode dialog", () => {

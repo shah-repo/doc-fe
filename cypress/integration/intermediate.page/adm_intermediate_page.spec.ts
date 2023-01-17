@@ -239,7 +239,7 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyOutputDocTypeExist();
       });
 
-      it("Click 'Preview Layout' button", () => {
+      it("Close 'Preview Layout'", () => {
         cy.intPageClosePreviewDialog();
       });
     });
@@ -320,6 +320,7 @@ context("Intermediate page validation", () => {
     context("Verify Form fields in preview mode", () => {
       it("Open Preview dialog", () => {
         cy.fbClickButton({ el: "FBWorkspace-clickView" });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add and check Quantity field", () => {

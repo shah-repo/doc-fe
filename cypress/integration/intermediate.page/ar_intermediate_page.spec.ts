@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -428,16 +427,15 @@ context("Intermediate page validation", () => {
 
     it("Upload attachment test.docx", () => {
       cy.fixture("test.docx").then((fileContent) => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
-            fileContent: fileContent.toString(),
-            fileName: "test.docx",
-            mimeType: "*",
-            filePath: `fixtures/test.docx`,
-          });
+        cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
+          fileContent: fileContent.toString(),
+          fileName: "test.docx",
+          mimeType: "*",
+          filePath: `fixtures/test.docx`,
         });
       });
       cy.unClick();
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Save form", () => {

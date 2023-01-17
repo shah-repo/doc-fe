@@ -486,7 +486,7 @@ context("Part Lot Preview mode validation", () => {
       cy.get("input[value^='disabled']").check(); // validators.required_if_in
       cy.get(`input[name="validators.required_if_in"]`).check();
       cy.get(`[data-cy="validators.required_if_in.name"]`).autocompleteSelect("Checkbox");
-      cy.get(`[name="validators.required_if_in.value"]`).parent().find("input").check();
+      cy.get(`[name="validators.required_if_in.value"]`).parent().find("input").check().wait(500);
       cy.fbAddNewFieldButton();
     });
 
