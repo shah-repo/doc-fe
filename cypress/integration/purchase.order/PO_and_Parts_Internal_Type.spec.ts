@@ -803,22 +803,22 @@ context("PO and parts ", () => {
     });
 
     it("Verify Summary of totals", () => {
-      cy.get("[data-cy=\"common.summary.total\"]").contains("Summary of totals")
+      cy.get(`[data-cy="common.summary.total"]`).contains("Summary of totals")
         .should("exist");
     });
 
     it("Verify SubTotal", () => {
-      cy.get("[data-cy=\"SubTotal\"]").contains("SubTotal")
+      cy.get(`[data-cy="common.summary.sub.total"]`).contains("SubTotal")
         .should("exist");
     });
 
     it("Verify Tax Total", () => {
-      cy.get("[data-cy=\"Tax Total\"]").contains("Tax Total")
+      cy.get(`[data-cy="common.summary.tax"]`).contains("Tax Total")
         .should("exist");
     });
 
     it("Verify Grand Total", () => {
-      cy.get("[data-cy=\"form.builder.grand.total\"]").contains("Grand Total")
+      cy.get(`[data-cy="form.builder.grand.total"]`).contains("Grand Total")
         .should("exist");
     });
 
@@ -1169,12 +1169,6 @@ context("PO and parts ", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Enter Shipping Cost", () => {
-      cy.poShippingCost({ number: "2" });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
     it("Check Subtotal value", () => {
       cy.poCheckAmount({ number: "$10.00" });
       cy.progressBarShouldNotExist();
@@ -1187,7 +1181,14 @@ context("PO and parts ", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check Total value", () => {
+    it("Enter Shipping Cost", () => {
+      cy.poShippingCost({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
+    });
+
+    it("Check Grand Total", () => {
       cy.poCheckTotalAmount({ number: "$12.93" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1213,12 +1214,12 @@ context("PO and parts ", () => {
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(3).contains("$0.93");
     });
 
-    // it("Check Shipping cost", () => {
-    //   cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$2.00");
-    // });
+    it("Check Shipping cost", () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$2.00");
+    });
 
     it(`Verify Grand Total field`, () => {
-      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$12.93");
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(7).contains("$12.93");
     });
 
     it("navigate to Line Items", () => {
@@ -1341,8 +1342,12 @@ context("PO and parts ", () => {
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(3).contains("$0.00");
     });
 
-    it(`Verify Grand Total field`, () => {
-      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$20.00");
+    it(`Verify Shipping Cost`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$0.00");
+    });
+
+    it(`Verify Grand Total`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(7).contains("$20.00");
     });
   });
 
@@ -1407,14 +1412,7 @@ context("PO and parts ", () => {
       cy.poAddPOButtonClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Enter Shipping Cost", () => {
-      cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick();
-      cy.get(`[name*="po-items-built-in.shippingCost"]`).arrowType("{selectAll}{backspace}{2}");
-      cy.unClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Check Subtotal value", () => {
@@ -1427,6 +1425,18 @@ context("PO and parts ", () => {
       cy.poCheckTax({ number: "0.925000" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter Shipping Cost", () => {
+      cy.poShippingCost({ number: "2" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      // cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick();
+      // cy.get(`[name*="po-items-built-in.shippingCost"]`).arrowType("{selectAll}{backspace}{2}");
+      // cy.unClick();
+      // cy.progressBarShouldNotExist();
+      // cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Check Total value", () => {
@@ -1458,8 +1468,12 @@ context("PO and parts ", () => {
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(3).contains("$0.93");
     });
 
-    it(`Verify Grand Total field`, () => {
-      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$32.92");
+    it(`Verify Shipping Cost`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(5).contains("$2.00");
+    });
+
+    it(`Verify Grand Total`, () => {
+      cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(7).contains("$32.92");
     });
   });
 
@@ -1492,7 +1506,7 @@ context("PO and parts ", () => {
       cy.get("[data-cy=\"attachment.title\"]").contains("image.jpg").should("exist");    });
 
     it("Remove attachment image.jpg", () => {
-      cy.get("[id=\"AttachmentIconPresenter-handleRemove\"]").eq(1).arrowClick({ force: true });
+      cy.get("[id=\"AttachmentIconPresenter-handleRemove\"]").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1515,24 +1529,27 @@ context("PO and parts ", () => {
       cy.drSelectDetailsTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Add approver", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick().wait(1000);
       cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[2].name);
       cy.unClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Submit for approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(5000);
     });
 
     it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1627,10 +1644,12 @@ context("PO and parts ", () => {
       cy.dlSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Add approver", () => {
-      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView().arrowClick();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").scrollIntoView();
+      cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick().wait(1000);
       cy.get("[data-cy^=\"fb-po-approvals-\"]").autocompleteSelect(USERS[1].name);
       cy.unClick();
       cy.progressBarShouldNotExist();
@@ -1641,12 +1660,14 @@ context("PO and parts ", () => {
       cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Approve PO", () => {
       cy.ebApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Navigate to PO", () => {
@@ -1693,6 +1714,7 @@ context("PO and parts ", () => {
       cy.dlSelectFirstDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("navigate to Line Items", () => {
@@ -1788,7 +1810,8 @@ context("PO and parts ", () => {
     it("Add approver", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get("[data-cy^='fb-po-approvals-']").arrowClick({ force: true });
+      cy.get("[data-cy^='fb-po-approvals-']").scrollIntoView();
+      cy.get("[data-cy^='fb-po-approvals-']").arrowClick();
       cy.get("[data-cy^='fb-po-approvals-']").autocompleteSelect(USERS[1].name);
       cy.unClick();
       cy.progressBarShouldNotExist();

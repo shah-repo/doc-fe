@@ -903,11 +903,11 @@ context("Add Requestor as an approver of the PO ENC-12703", () => {
   });
 
   context("Verify that history tab is capturing requestor added and approver Added", () => {
-    it("Check history entry for 'Requestor added'", () => {
+    it("Check history entry for 'Requestor Added'", () => {
       cy.drSelectHistoryTab();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(1).should("contain", "Requestor added")
+      cy.get(`[data-cy="History-detail"] [data-cy="no-padding-margin"]`).eq(1).should("contain", "Requestor Added")
         .and("contain", USERS[11].name);
     });
 

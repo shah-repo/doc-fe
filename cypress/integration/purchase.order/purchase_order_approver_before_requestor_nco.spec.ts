@@ -999,12 +999,14 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.get(".MuiPickersDay-daySelected").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter number of Units", () => {
       cy.poNumberOfUnits({ number: "100" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Check Tax option", () => {
@@ -1060,13 +1062,14 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.get(".MuiPickersDay-daySelected").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter Unit Price", () => {
       cy.poNumberOfUnits({ number: "10" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
@@ -1113,8 +1116,8 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Check history entry for 'Requestor added'", () => {
-      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Requestor added")
+    it("Check history entry for 'Requestor Added'", () => {
+      cy.get(`[data-cy='no-padding-margin']`).eq(0).should("contain", "Requestor Added")
         .and("contain", USERS[1].name);
     });
 
@@ -1362,13 +1365,14 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.get(".MuiPickersDay-daySelected").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter Unit Price", () => {
       cy.poNumberOfUnits({ number: "80" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click on 'Add' inside PO dialog box", () => {
@@ -1392,7 +1396,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Add Approver '${USERS[2].name}' for Approval`, () => {
+    it(`Add Approver user 2 (${USERS[2].name}) for Approval`, () => {
       cy.poAddApproverOnApproverList({ approver: USERS[2].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1400,15 +1404,15 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
   });
 
   context("Navigate to 'Requestor' field and add same User 2 as the Requestor", () => {
-    it(`Remove requestor user 1`, () => {
+    it(`Remove requestor user 1 (${USERS[1].name})`, () => {
       cy.get("[data-cy='po-requestor-autocomplete']").arrowClick({ force: true }).arrowType(`{backspace}`);
       cy.unClick();
-      cy.wait(8000);
+      cy.wait(5000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Select Requestor user 2`, () => {
+    it(`Select Requestor user 2 (${USERS[2].name})`, () => {
       cy.get("[name^=po-requestor-]").click().autocompleteSelect(`${USERS[2].name} - ${USERS[2].email}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
