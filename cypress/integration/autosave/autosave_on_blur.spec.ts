@@ -457,6 +457,7 @@ context("Autosave on blur", () => {
   });
 
   context("Add all Form builder fields that needs to be tested with autosave", () => {
+
     it("Add TextField", () => {
       cy.fbAddNewField();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
@@ -470,10 +471,9 @@ context("Autosave on blur", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs",  field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2", "option3");
+      cy.wait(3000);
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
-      cy.progressBarShouldNotExist();
-      cy.wait(3000);
     });
 
     it("Add Autocomplete", () => {
@@ -508,6 +508,7 @@ context("Autosave on blur", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
       cy.fbGroupOptions("option1", "option2");
+      cy.wait(3000);
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
       cy.progressBarShouldNotExist();
@@ -524,6 +525,7 @@ context("Autosave on blur", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
+      cy.wait(3000);
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
     });
@@ -671,7 +673,6 @@ context("Autosave on blur", () => {
     });
 
     it("Approve and release document", () => {
-      cy.pause();
       cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();

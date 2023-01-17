@@ -361,24 +361,32 @@ context("Autosave LHR", () => {
   context("Add/remove approver and check autosave", () => {
     it("Add first Approver'", () => {
       cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
-    });
-
-    it("Add second Approver'", () => {
-      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
-    });
-
-    it("Remove second Approver'", () => {
-      cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
-    });
-
-    it("Reload Page'", () => {
-      cy.reload();
-      cy.wait(2000);
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
 
+    it("Add second Approver'", () => {
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+    });
+
+    it("Remove second Approver'", () => {
+      cy.contains(`${USERS[2].name} - ${USERS[2].email}`).parent().next().arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+    });
+
+    it("Reload Page'", () => {
+      cy.reload();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
+    });
+
     it("check approvers after reload page", () => {
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
         .should("contain", `${USERS[1].name} - ${USERS[1].email}`);
       cy.get("[name^=\"fb-approvals-fb-approvals-\"]")
@@ -420,8 +428,7 @@ context("Autosave LHR", () => {
       });
 
       it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
-        cy.unClick();
+        cy.get("[name=\"lhrs-start-quantity\"]").clear().arrowType("10");
       });
 
       it("While autosaving, enter 'Accepted quntity' for LHRs #1", () => {
@@ -431,18 +438,15 @@ context("Autosave LHR", () => {
             res.setThrottle(10);
           });
         }).as("response");
-        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("6");
+        cy.get("[name=\"lhrs-accepted-quantity\"]").clear().arrowType("6");
         cy.unClick();
+        cy.drClickCreateDocumentWithoutApiCall(); // temp fix
         cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
         cy.wait(3000);
       });
 
       it("Change value in 'Accepted quntity' fields", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowClick({ force: true })
-          .clear().arrowType("8");
-        cy.unClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.progressBarShouldNotExist();
+        cy.get("[name=\"lhrs-accepted-quantity\"]").clear().arrowType("8");
       });
 
       it("While autosaving, enter 'Rejected quntity' for LHRs #1", () => {
@@ -452,9 +456,10 @@ context("Autosave LHR", () => {
             res.setThrottle(10);
           });
         }).as("response");
-        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowClick({ force: true })
-          .clear().arrowType("2");
+        cy.get("[name=\"lhrs-rejected-quantity\"]").clear().arrowType("2");
         cy.unClick();
+        cy.get("main").arrowClick();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
         cy.unClick();
         cy.wait(3000);

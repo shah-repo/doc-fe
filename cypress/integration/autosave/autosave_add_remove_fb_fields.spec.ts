@@ -118,6 +118,7 @@ context("Autosave on add and remove FB fields", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Checkbox group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-checkbox-group" });
       cy.fbGroupOptions("option1", "option2");
+      cy.wait(3000);
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
       cy.progressBarShouldNotExist();
@@ -171,6 +172,7 @@ context("Autosave on add and remove FB fields", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Select" });
       cy.fbEnterNameValue({ name: "label", value: "fb-select-field" });
       cy.fbGroupOptions("option1", "option2");
+      cy.wait(3000);
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
       cy.progressBarShouldNotExist();
@@ -181,6 +183,7 @@ context("Autosave on add and remove FB fields", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Radio Button group" });
       cy.fbEnterNameValue({ name: "label", value: "fb-radiobutton-group" });
       cy.fbGroupOptions("option1", "option2");
+      cy.wait(3000);
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
       cy.progressBarShouldNotExist();
