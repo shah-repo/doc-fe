@@ -98,8 +98,7 @@ export const usePoApprovals = (
     const requester = formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
     const autoApprovers = poApprovalsState?.activeApprovals.filter((item) => !item.manually);
 
-    const administativeRevisionTypes = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
-    const isAdministrativeChange = administativeRevisionTypes.includes(revisionChangeType as RevisionChangeType);
+    const isAdministrativeChange = revisionChangeType === RevisionChangeType.AdministrativeChange;
 
     const hasServiceOrProductPart = checkServiceOrProductPartExists(poItems);
     const hasRequesterInAllApprovers = hasUserInApprovers(requester);
