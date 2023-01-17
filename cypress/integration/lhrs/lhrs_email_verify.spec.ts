@@ -6,7 +6,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
@@ -887,7 +886,7 @@ context("Email format Verification after LHR released", () => {
 
   context("Navigate to LHR and Start Step", () => {
     it("Navigate to LHR", () => {
-      cy.navigToLHR();
+      cy.navigToLHRWithoutAPI();
     });
 
     it("Click 'Initiate New LHR'", () => {
@@ -895,12 +894,10 @@ context("Email format Verification after LHR released", () => {
     });
 
     it("Select a document type Lot History Record and select a Form released", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Lot History Record Test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Lot History Record Test");
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select Approval", () => {
@@ -967,17 +964,7 @@ context("Email format Verification after LHR released", () => {
     });
 
     it("Approve  Inline Approval", () => {
-      cy.get("[data-cy='form.builder.request.approve']").arrowClick({ force: true });
-      cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.SessionDetails], () => {
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify LHRS is in completed state", () => {
@@ -988,26 +975,17 @@ context("Email format Verification after LHR released", () => {
   // navigate back to lhr flow
   context("Navigate to LHR and verify  the Step", () => {
     it("Navigate to LHR", () => {
-      cy.navigToLHR();
+      cy.navigToLHRWithoutAPI();
       cy.get("tr.k-master-row").first().arrowClick();
     });
 
     it("Submit for Approval", () => {
-      cy.pmSubmitForApprovalWithoutAPI();
+      cy.lhrSubmitForApprovalWithoutApi();
       cy.wait(3000);
     });
 
     it("Approve  Inline Approval", () => {
-      cy.get("[data-cy='form.builder.request.approve']").arrowClick({ force: true });
-      cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.SessionDetails], () => {
-        cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-        cy.get("[data-cy='common.confirm']").arrowClick();
-      });
-      cy.checkToastMessage({ exists: false });
-      cy.listLoadingElementShouldNotExist();
+      cy.ebApproveWithoutApi();
       cy.get("#HeaderInfo-subtitle").then(($docIdElement: JQuery<HTMLElement>) => {
         lotId = $docIdElement.text().replace("-", "").trim();
       });

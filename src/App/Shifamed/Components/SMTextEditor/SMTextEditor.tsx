@@ -39,6 +39,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const toggleBtn = () => {
     _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
     _documentRevisionFormState?.setDescriptionFocused(!_documentRevisionFormState?.isDescriptionFocused);
+    _documentRevisionFormState?.setExpanded(!_documentRevisionFormState?.expanded);
   };
   const onAway = () => {
     _documentRevisionFormState?.setExpanded(false);

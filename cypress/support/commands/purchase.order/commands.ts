@@ -221,7 +221,8 @@ Cypress.Commands.add("poEnterPartDescription", (params: {partDescription: string
 });
 
 Cypress.Commands.add("poNumberOfUnits", (params: {number: string}) => {
-  cy.get("[name=\"unitPrice\"]").arrowClick().arrowType(params.number);
+  cy.get(`[name="unitPrice"]`).arrowClick({ force: true }).wait(500);
+  cy.get(`[name="unitPrice"]`).arrowType(params.number);
 });
 
 Cypress.Commands.add("poAddDateRequired", () => {
@@ -235,7 +236,7 @@ Cypress.Commands.add("poCheckDateRequired", (params: { dateRequired: string }) =
 });
 
 Cypress.Commands.add("poShippingCost", (params: {number: string}) => {
-  cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick();
+  cy.get(`[name="po-items-built-in.shippingCost"]`).arrowClick({ force: true }).wait(1000);
   cy.get(`[name*="po-items-built-in.shippingCost"]`).arrowType("{leftarrow}{leftarrow}{leftarrow}" + params.number);
   cy.unClick();
 });

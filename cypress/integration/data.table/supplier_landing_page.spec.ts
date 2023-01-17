@@ -6,7 +6,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -227,13 +226,15 @@ context("Suppliers landing page", () => {
 
   context("Create supplier document", () => {
     it("Navigate to supplier list", () => {
-      cy.navigToSuppliers();
+      cy.navigToSuppliersWithoutApi();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Click create new to create supplier", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.supCreateNew();
-      });
+      cy.supCreateNew();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("turnoff autosave", () => {
