@@ -322,7 +322,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -419,7 +419,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 

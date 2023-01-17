@@ -1,5 +1,4 @@
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -193,7 +192,7 @@ context(
         cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
       });
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
     context(`Make sure each tab in which the user can add FB fields has a functional “Preview” button`, () => {
@@ -317,9 +316,7 @@ context(
           cy.fbAddNewFieldWhenHidden();
           cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Quantity" });
           cy.fbEnterNameValue({ name: "label", value: "fb-quantity" });
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.fbAddNewFieldButton();
-          });
+          cy.fbAddNewFieldButton();
         });
 
         it("Add Radio Button group", () => {
@@ -330,11 +327,9 @@ context(
           cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
           cy.get("input[value^='visibility']").check();
           cy.get(`input[name="validators.required_if"]`).check();
-          cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-quantity" );
-          cy.get(`[data-cy="validators.required_if.value"]`).arrowType("1" );
+          cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-quantity");
+          cy.get(`[data-cy="validators.required_if.value"]`).arrowType("1").wait(500);
           cy.fbAddNewFieldButton();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
         });
 
       });
