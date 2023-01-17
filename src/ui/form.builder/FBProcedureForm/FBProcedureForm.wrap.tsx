@@ -141,7 +141,7 @@ export const withFBProcedureForm = <T extends FBProcedureFormProps>(
     function handleAdd() {
       const formValue = formState?.getValues() as FBProcedureItemConfig;
       const { quantity } = formValue;
-      const isMaterial = type === "materials";
+      const isMaterial = type === FBProcedureItemType.materials;
 
       if (mode === "lhr") {
         lhrStepState?.editItem(formValue, type);
