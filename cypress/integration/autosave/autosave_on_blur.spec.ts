@@ -472,6 +472,8 @@ context("Autosave on blur", () => {
       cy.fbGroupOptions("option1", "option2", "option3");
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Add Autocomplete", () => {
@@ -497,6 +499,8 @@ context("Autosave on blur", () => {
       cy.fbEnterNameValue({ name: "label", value: "fb-datepicker" });
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Add Select", () => {
@@ -506,6 +510,8 @@ context("Autosave on blur", () => {
       cy.fbGroupOptions("option1", "option2");
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Save the document", () => {
@@ -665,6 +671,7 @@ context("Autosave on blur", () => {
     });
 
     it("Approve and release document", () => {
+      cy.pause();
       cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
