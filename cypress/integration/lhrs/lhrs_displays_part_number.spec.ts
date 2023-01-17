@@ -6,7 +6,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { CSLDocType } from "../../utils/constants/documentTypes/csl";
 import { EForm } from "../../utils/constants/documentTypes/efm";
 import { CSPart } from "../../utils/constants/documentTypes/part";
@@ -400,9 +399,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Add 'CS Part' as Material to step #1", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
-      });
+      cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -413,9 +410,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       });
 
       it("Approve and release MPI document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
       });
     });
 
@@ -472,9 +467,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
-        });
+        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -510,11 +503,10 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
   context("Create LHR", () => {
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter initial quantity", () => {
@@ -571,11 +563,9 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
-        cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
-          .eq(0)
-          .click();
-      });
+      cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+        .eq(0)
+        .click();
     });
 
     context(`Lot is displayed under CS '${CSPartDocumentTitle}'`, () => {
@@ -604,9 +594,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Approve and release revised EFM-10605", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     context("Create CSL revision from revised EFM-10605", () => {
@@ -709,9 +697,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Add 'CS Part' as Material to step #1", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
-      });
+      cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: CSPartDocumentTitle, quntity: "3", unit: "Each" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -722,9 +708,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
       });
 
       it("Approve and release MPI document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -783,9 +767,7 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
-        });
+        cy.get("ul>li[role=option]").contains(CSPartDocumentTitle).arrowClick({ force: true });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -821,11 +803,10 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
 
   context("Create LHR", () => {
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Enter initial quantity", () => {
@@ -882,11 +863,11 @@ context("LHRS displays part number and rev for Lot created out of EFM-01065", ()
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostLHRs], () => {
-        cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
-          .eq(0)
-          .click();
-      });
+      cy.get("div[role=dialog] button[data-cy=\"fb-control-btn\"]")
+        .eq(0)
+        .click();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     context(`Lot is displayed under CS '${CSPartDocumentTitle}'`, () => {

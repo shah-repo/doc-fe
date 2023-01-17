@@ -33,6 +33,7 @@ declare global {
       navigToParts(): Chainable<Subject>;
       navigToLots(): Chainable<Subject>;
       navigToLHR(): Chainable<Subject>;
+      navigToLHRWithoutAPI(): Chainable<Subject>;
       navigToEB(): Chainable<Subject>;
       navigToDocumentListWithUnsavedChanges(params: { confirmPopup: boolean }): Chainable<Subject>;
       navigToTrainingRecords(): Chainable<Subject>;
@@ -125,6 +126,17 @@ Cypress.Commands.add("navigToLHR", () => {
         NavigationItems.LHR,
       ],
     });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToLHRWithoutAPI", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.LHR,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
