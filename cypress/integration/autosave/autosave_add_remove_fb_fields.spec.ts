@@ -110,6 +110,7 @@ context("Autosave on add and remove FB fields", () => {
       cy.fbAddNewFieldButton();
       cy.saveBarShouldNotExist();
       cy.progressBarShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Add Checkbox group", () => {
