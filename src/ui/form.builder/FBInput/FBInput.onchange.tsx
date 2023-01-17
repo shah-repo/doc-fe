@@ -4,6 +4,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
 import { toastError } from "../../components/notifications";
+import { isMoreDigitsAfterDecimal } from "../../dashboard.new/line.items/common/Utils";
 import { FBFieldName } from "../helpers/FBFieldName";
 
 export const withFBOnChange = <T extends FBInputProps>(
@@ -165,7 +166,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         if (type === "number" && value !== "") {
           if (["lhrs-start-quantity",
             "lhrs-accepted-quantity",
-            "lhrs-rejected-quantity"].includes(name) && value.toString().split(".")[1]?.length > 10) {
+            "lhrs-rejected-quantity"].includes(name) && isMoreDigitsAfterDecimal(value, 10)) {
             toastError(intl.formatMessage({ id: "document.revision.quntity.error" }, { name: getFieldName(name) }));
             return;
           }

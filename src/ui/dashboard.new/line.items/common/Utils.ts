@@ -25,12 +25,13 @@ export const toFixed = (value: string | number) => {
   if (Number.isNaN(toNumber(value))) {
     return value;
   }
-  if (!Number.isInteger(toNumber(value)) && value?.toString()?.split(".")[1]?.length > 10) {
+  if (!Number.isInteger(toNumber(value)) && isMoreDigitsAfterDecimal(value, 10)) {
     const arr = value?.toString()?.split(".");
     return toNumber(`${arr[0]}.${arr[1].slice(0, 10)}`);
   }
   else { return toNumber(value); }
 };
+export const isMoreDigitsAfterDecimal = (value: string | number, length: number) => value?.toString()?.split(".")[1]?.length > length;
 export const linearScale = (domain: number[], range: number[]) => {
   const scale = (value: number) => {
     const [minValue, maxValue] = [...domain];
