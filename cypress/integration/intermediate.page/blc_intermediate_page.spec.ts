@@ -192,6 +192,7 @@ context("Intermediate page validation", () => {
     context("verify default tabs are displayed", () => {
       it("Click 'Preview Layout' button", () => {
         cy.intPageClickPreviewLayout();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify 'Overview' tab is displayed", () => {
@@ -384,6 +385,7 @@ context("Intermediate page validation", () => {
   context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy="fb-checkbox-group"]`).eq(1).scrollIntoView();
     });
 
@@ -462,6 +464,7 @@ context("Intermediate page validation", () => {
   context("Open the Preview mode and make sure it was updated accordingly with changes in step 12 and 13", () => {
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Make sure Field1 is displayed as 'Required' → As the user, enter a value that is different than 'X'", () => {

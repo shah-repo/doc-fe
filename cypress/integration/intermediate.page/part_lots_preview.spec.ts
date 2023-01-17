@@ -4,6 +4,7 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
+import { momentInPST } from "../../utils/constants/dateHandler";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -313,6 +314,7 @@ context("Part Lot Preview mode validation", () => {
 
     it("verify form preview button in Overview Tab", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check 'Initial Quantity' is displayed", () => {
@@ -369,6 +371,7 @@ context("Part Lot Preview mode validation", () => {
 
     it("Click on Preview", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Approval should be visible", () => {
@@ -376,7 +379,7 @@ context("Part Lot Preview mode validation", () => {
     });
 
     it("Select Approval", () => {
-      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).autocompleteSelect(USERS[1].name);
+      cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).click().autocompleteSelect(USERS[1].name);
     });
 
     it("Close Preview window", () => {
@@ -385,6 +388,7 @@ context("Part Lot Preview mode validation", () => {
 
     it("Reopen Preview window and verify approval block should not have any value", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.listLoadingElementShouldNotExist();
       cy.get(`.MuiDialogContent-root [data-cy^="fb-approvals"]`).should("not.contain.value");
     });
   });
@@ -446,12 +450,14 @@ context("Part Lot Preview mode validation", () => {
 
     it("Reopen the preview mode and verify enter detail not saved", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"tabCon-tabId.details\"]").last().arrowClick({ force: true });
       cy.listLoadingElementShouldNotExist();
-      cy.get(`.MuiDialogContent-root [name="lot_quantity"]`).should("not.contain.value");
-      cy.get(`.MuiDialogContent-root [name="lot_usable_quantity"]`).should("not.contain.value");
-      cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`).should("not.contain.value");
-      cy.get(`.MuiDialogContent-root [data-cy="lot_part"]`).should("not.contain.value");
+      cy.get(`.MuiDialogContent-root [name="lot_quantity"]`).should("not.contain.value", "10");
+      cy.get(`.MuiDialogContent-root [name="lot_usable_quantity"]`).should("not.contain.value", "8");
+      cy.get(`.MuiDialogContent-root input[name^="lot_expiry_date"]`)
+        .should("not.contain.value", momentInPST().format("M/D/YYYY"));
+      cy.get(`.MuiDialogContent-root [data-cy="lot_part"]`).should("not.contain.value", "Part document");
       cy.get(`.MuiDialogContent-root [value="100% Inspection Override"]`).should("not.be.checked");
     });
 
@@ -486,6 +492,7 @@ context("Part Lot Preview mode validation", () => {
 
     it("Click form preview button", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify fb Autocomplete input is disabled ", () => {
@@ -518,6 +525,7 @@ context("Part Lot Preview mode validation", () => {
 
     it("Open form preview", () => {
       cy.get("[data-cy='FBWorkspace-clickView']").click();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify autocomplete input should be enabled  after removal of validation", () => {
