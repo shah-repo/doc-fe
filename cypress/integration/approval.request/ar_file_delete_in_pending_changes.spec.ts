@@ -3,7 +3,6 @@
 
 import { LINE_ITEMS_STATUS_TYPES } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -98,7 +97,7 @@ context("File delete in Pending Change", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Upload test.docx and image.jpg files", () => {
@@ -110,24 +109,26 @@ context("File delete in Pending Change", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[3].name}`]);
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({approverName: `${USERS[3].name}`});
     });
 
     context("Withdraw submission and check attachments on document", () => {
       it("Navigates to Approval Request list", () => {
-        cy.navigToApprovalRequestList();
+        cy.navigToApprovalRequestListWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Filters document by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatus({ title: "test title", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
+        cy.arFilterARListByNameAndStatusWithoutApi({ title: "test title", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       });
 
       it("Withdraw Submission", () => {
-        cy.arWithdrawSubmission();
+        cy.arWithdrawSubmissionWithoutApi();
+        cy.wait(2000);
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.checkToastMessage({ exists: false });
       });
 
       it("Navigate to document list", () => {

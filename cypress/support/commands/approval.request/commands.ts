@@ -26,6 +26,7 @@ declare global {
       arEnterJustificationAddDocumentsDialog(params: { justification: string }): Chainable<Subject>;
       arClickAddBtnOnAddDocumentsDialog(): Chainable<Subject>;
       arAddApproverOnApproverList(params: { approver: string; noWait?: bool }): Chainable<Subject>;
+      arAddApproverOnApproverListWithoutApi(params: { approver: string; noWait?: bool }): Chainable<Subject>;
       arAddApproverOnApproverListWithoutApiCall(params: { approver: string; noWait?: bool  }): Chainable<Subject>;
       arClickCreateApprovalRequestAfterCompletingForm(): Chainable<Subject>;
       arClickSendToReview(): Chainable<Subject>;
@@ -43,10 +44,12 @@ declare global {
       arClearFilters(): Chainable<Subject>;
       arCheckTitleInEditableAndMatches(params: { name: string }): Chainable<Subject>;
       arWithdrawSubmission(): Chainable<Subject>;
+      arWithdrawSubmissionWithoutApi(): Chainable<Subject>;
       arIsProposedDocumentEmpty(): Chainable<Subject>;
       arRejectComfirmationAR(): Chainable<Subject>;
       arRejectComfirmationARNew(): Chainable<Subject>;
       arSelectFirstDocument(): Chainable<Subject>;
+      arSelectFirstDocumentWithoutApi(): Chainable<Subject>;
       arCreateApprovalRequest(params: {payload: ChangeRequestEditRequestBody; employeeId: string; sessionId: string}): Chainable<Subject>;
       arGetArDocumentByName(params: {employeeId: string; sessionId: string; name: string}): Chainable<Subject>;
       arCloseAR(): Chainable<Subject>;
@@ -55,6 +58,7 @@ declare global {
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
       arSaveApiCallWithoutApi(): Chainable<Subject>;
+      arApproveARWithoutApi(): Chainable<Subject>;
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
       arVerifySignatureIsNotMet(): Chainable<Subject>;
       arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
@@ -350,6 +354,16 @@ Cypress.Commands.add("arAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("arAddApproverOnApproverListWithoutApi", (params: { approver: string; noWait?: bool }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get("[data-cy=\"fb-approvers-approvers\"]").arrowClick({ force: true });
+  cy.get("ul>li[role=option]").contains(params.approver).arrowClick({ force: true });
+  cy.unClick().wait(500);
+  cy.wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("arAddApproverOnApproverListWithoutApiCall", (params: { approver: string; noWait?: bool  }) => {
   cy.get(`[data-cy="fb-approvers-approvers"]`).arrowClick({ force: true });
   cy.get(`[data-cy="fb-approvers-approvers"]`).autocompleteSelect(params.approver);
@@ -479,6 +493,15 @@ Cypress.Commands.add("arApproveARFromDashboardWithoutApi", () => {
   cy.checkToastMessage({ exists: false });
 });
 
+Cypress.Commands.add("arApproveARWithoutApi", () => {
+  cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
+  cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
 Cypress.Commands.add("arCheckTitleInEditableAndMatches", (params: { name: string }) => {
   cy.get("[id=\"field-name\"]").should("have.text", params.name);
 });
@@ -492,6 +515,14 @@ Cypress.Commands.add("arWithdrawSubmission", () => {
     CyRoutes.DocRevPreview], () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   });
+});
+
+Cypress.Commands.add("arWithdrawSubmissionWithoutApi", () => {
+  cy.get("div[class=\"MuiGrid-root MuiGrid-container MuiGrid-align-items-xs-center MuiGrid-justify-xs-flex-end\"]")
+    .find("button[data-cy=\"change.request.withdraw.alert\"]").arrowClick();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("arCloseARFromMenu", () => {
@@ -541,6 +572,12 @@ Cypress.Commands.add("arSelectFirstDocument", () => {
 
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("arSelectFirstDocumentWithoutApi", () => {
+  cy.get("tr.k-master-row").first().arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("arApproverRoleStatus", (params: {roleName: string; enabled: boolean}) => {
