@@ -272,10 +272,14 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
   context("Create Form PO Approval matrix", () => {
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Clicks on 'create a document' button", () => {
       cy.cmpClickCreateNewDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enters title 'POAM Form'", () => {
@@ -296,14 +300,18 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
     it("Selects 'PO Approval Matrix' document type from dropdown", () => {
       cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click create document after filling document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.landingPageLoadingElementShouldNotExist();
     });
   });
 
@@ -315,81 +323,114 @@ context("po_requestor_as_an_approver - ENC-12724", () => {
 
     it("Enters title 'POAM Document'", () => {
       cy.drEnterDocumentTitle({ name: "POAM Document" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enters description 'POAM Doc description'", () => {
       cy.drEnterDocumentDescription({ description: "POAM Doc description" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to MatrixDetails tab", () => {
       cy.drSelectMatrixDetailsTab();
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
-    });
-
-    it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on 'Add Item'", () => {
       cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
     it("Enter Level Name value to be '1'", () => {
       cy.poAMEnterLevelName({ name: "1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Limit value to be '5000'", () => {
       cy.poAMEnterLimit({ limit: "5000" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select Users '${USERS[1].name}'`, () => {
       cy.poAMSelectUsers(USERS[1].name);
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
       cy.wait(1000);
       cy.poAMSelectUsers(USERS[3].name);
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
     it("Add first POAM level", () => {
       cy.poAddPOButtonClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
     });
 
     it("Click on 'Add Item'", () => {
       cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.wait(3000);
     });
 
     it("Enter Level Name value to be '2'", () => {
       cy.poAMEnterLevelName({ name: "2" });
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter Limit value to be '25000'", () => {
       cy.poAMEnterLimit({ limit: "25000" });
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Select Users '${USERS[2].name}'`, () => {
       cy.poAMSelectUsers(USERS[2].name);
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add second POAM level", () => {
       cy.poAddPOButtonClick();
-      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.wait(3000);
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.drCheckProgressBarAndListLoaderShouldNotExists();
+      cy.wait(2000);
     });
   });
 

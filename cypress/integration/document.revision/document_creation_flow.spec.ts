@@ -107,6 +107,10 @@ context("Document Creation Flow", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeToDevs.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Start document creation flow", () => {
@@ -156,7 +160,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select reference for document", () => {
@@ -271,10 +275,6 @@ context("Document Creation Flow", () => {
     });
 
     context("Uploads attachments", () => {
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Uploads test_image.jpg", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -305,7 +305,7 @@ context("Document Creation Flow", () => {
 
     context("Check primary attachment function", () => {
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Set attachment as primary", () => {
@@ -330,11 +330,11 @@ context("Document Creation Flow", () => {
 
     context("Check training for next revision", () => {
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and Release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Revise document", () => {
@@ -376,7 +376,7 @@ context("Document Creation Flow", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Check document type redLine option", () => {
@@ -447,7 +447,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Approves and releases document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Clicks on revise document", () => {
@@ -456,7 +456,7 @@ context("Document Creation Flow", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Cancel draft document", () => {

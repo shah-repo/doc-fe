@@ -151,8 +151,8 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
               contentBoxProps={{
-                minHeight: _documentRevisionFormState?.expanded ? "unset"
-                  :  (isMPI ? "100%" :  (((!isLHR && !isTypeMpiDoc) || isLHR) ? "80%" : "0px" )),
+                minHeight: _documentRevisionFormState?.expanded ?
+                  (isMPI ? "100%" :  (((!isLHR && !isTypeMpiDoc) || isLHR) ? "100%" : "0px" )) : "unset",
                 height: "auto",
               }}
               boxProps={{

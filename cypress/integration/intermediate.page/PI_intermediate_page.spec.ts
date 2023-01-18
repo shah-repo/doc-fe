@@ -281,7 +281,7 @@ context("Intermediate page validation", () => {
           cy.get(`input[value^="visibility"]`).check();
           cy.get(`input[name="validators.required_if"]`).check();
           cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-quantity" );
-          cy.get(`[data-cy="validators.required_if.value"]`).arrowType("1");
+          cy.get(`[data-cy="validators.required_if.value"]`).arrowType("1").wait(500);
           cy.fbAddNewFieldButton();
         });
 
