@@ -14,7 +14,7 @@ export default makeStyles((theme) => ({
   close: {
     height: "24px",
     width: "24px",
-    backgroundColor: "#F4F4F4",
+    backgroundColor: Colors.athens_gray,
     borderRadius: "6px",
     margin: theme.spacing(0, 1.25),
   },

@@ -38,7 +38,7 @@ import RelatedPartsState from "./RelatedParts.state";
 
 
 const ParentPartSelector: React.FunctionComponent<{
-  status: RELATED_PARTS_STATUS | undefined;
+  status: RELATED_PARTS_STATUS;
   parentStatusChanged: (value: string) => void;
 }> = ({
   status,
@@ -59,9 +59,9 @@ const ParentPartSelector: React.FunctionComponent<{
 
   const disableOptions = (value: string) => {
     switch (value) {
-      case RELATED_PARTS_STATUS.PARENT_NO:
-        setDisable({ disable1: false, disable2: true, disable3: true });
-        break;
+      // case RELATED_PARTS_STATUS.PARENT_NO:
+      //   setDisable({ disable1: false, disable2: true, disable3: true });
+      //   break;
       case RELATED_PARTS_STATUS.PARENT_TOGETHER:
         setDisable({ disable1: true, disable2: false, disable3: true });
         break;
@@ -391,7 +391,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
 
 const RelatedParts: React.FunctionComponent<{
   documentRevision: DocumentRevision;
-  parentStatus: RELATED_PARTS_STATUS | undefined;
+  parentStatus?: RELATED_PARTS_STATUS;
   parentStatusChanged: (value: any) => void;
   createNewDocument: (relatedPartDetails?: any) => void;
   viewRelatedPart: (docRevId: string, documentId: string) => void;
@@ -400,7 +400,7 @@ const RelatedParts: React.FunctionComponent<{
   relatedPartsState: RelatedPartsState;
 }> = ({
   documentRevision,
-  parentStatus,
+  parentStatus = RELATED_PARTS_STATUS.PARENT_NO,
   parentStatusChanged,
   createNewDocument,
   viewRelatedPart,
@@ -411,10 +411,12 @@ const RelatedParts: React.FunctionComponent<{
 
   const classes = useStyles();
 
+  const isRelatedPartsParent = ![RELATED_PARTS_STATUS.RELATED_SEPARATE,
+    RELATED_PARTS_STATUS.RELATED_TOGETHER].includes(parentStatus);
+
   return (
     <>
-      {documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_SEPARATE &&
-      documentRevision.relatedPartsStatus !== RELATED_PARTS_STATUS.RELATED_TOGETHER &&
+      {isRelatedPartsParent &&
       <div className={classes.mainDiv}>
         <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && !relatedPartsState.viewOnlyMode && (

@@ -34,7 +34,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
 
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string}[]>([]);
-  const [expanded, setExpanded] = useState(false);
+  const [isExpanded, setExpanded] = useState(false);
 
   const documentDetailsApi: FBRequest<DocumentRevision, null> = new FBRequest();
   documentDetailsApi.setUrl({
@@ -84,12 +84,12 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   }, []);
 
   const toggleItem = () => {
-    setExpanded(!expanded);
+    setExpanded(!isExpanded);
   };
 
   return (
     <div className={cx(classes.enclosingDiv, classes.enclosingDivViewItem, {
-      [classes.enclosingDivOpened]: expanded,
+      [classes.enclosingDivOpened]: isExpanded,
     })}>
       <div className={classes.itemRow}>
         <div className={classes.cellOne}>
@@ -109,7 +109,7 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         </div>
       </div>
       {
-        docRelatedParts.length > 0 && expanded &&
+        docRelatedParts.length > 0 && isExpanded &&
         <div className={cx(classes.moreDetails, classes.fullWidth)}>
           <hr className={classes.separator}/>
           <h4 className={classes.moreDetailsHeader}>Related Parts</h4>

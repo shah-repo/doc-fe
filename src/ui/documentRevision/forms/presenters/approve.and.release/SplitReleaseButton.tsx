@@ -18,7 +18,7 @@ const SplitReleaseButton: React.FunctionComponent<{
   onClick,
 }) => {
 
-  const [open, setOpen] = React.useState(false);
+  const [isOpened, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
@@ -56,8 +56,8 @@ const SplitReleaseButton: React.FunctionComponent<{
           <Button
             color="primary"
             size="small"
-            aria-controls={open ? "split-button-menu" : undefined}
-            aria-expanded={open ? "true" : undefined}
+            aria-controls={isOpened ? "split-button-menu" : undefined}
+            aria-expanded={isOpened}
             aria-label="Select AR strategy"
             aria-haspopup="menu"
             onClick={handleToggle}
@@ -65,7 +65,7 @@ const SplitReleaseButton: React.FunctionComponent<{
             <ArrowDropDownIcon />
           </Button>
         </StyledButtonGroup>
-        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+        <Popper open={isOpened} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
           {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}

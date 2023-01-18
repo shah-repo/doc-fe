@@ -329,7 +329,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               <RelatedPartsWrapper
                 viewOnly={isDisabledInputInPreview}
                 documentRevision={documentRevision}
-                parentPartStatus= {documentRevision?.relatedPartsStatus} />
+                relatedPartsStatus= {documentRevision?.relatedPartsStatus} />
             </Grid>
           }
           {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&

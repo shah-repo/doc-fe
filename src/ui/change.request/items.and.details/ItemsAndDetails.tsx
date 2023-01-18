@@ -22,10 +22,10 @@ const Loader = () => {
 };
 
 const TopSection: React.FunctionComponent<{
-  showButton?: boolean;
+  isButtonShown?: boolean;
   showEditRow: () => void;
 }> = ({
-  showButton = true,
+  isButtonShown = true,
   showEditRow,
 }) => {
   const classes = useStyles();
@@ -38,7 +38,7 @@ const TopSection: React.FunctionComponent<{
           </Typography>
         </Grid>
 
-        { showButton &&
+        { isButtonShown &&
             <Grid item>
               <Typography>
                 <Button
@@ -100,7 +100,7 @@ const ItemsAndDetails: React.FunctionComponent<{
       [classes.tabContentInactive]: itemsAndDetailsState.loadingState,
     })}>
       { itemsAndDetailsState.loadingState && <Loader /> }
-      <TopSection showEditRow={showEditRow} showButton={itemsAndDetailsState.viewItemActionsVisible}/>
+      <TopSection showEditRow={showEditRow} isButtonShown={itemsAndDetailsState.viewItemActionsVisible}/>
       <ApprovalRequestGridHeader />
       { isEditRowVisible && <ApprovalRequestEditGridItem
         {...{ formState }}

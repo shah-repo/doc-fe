@@ -40,7 +40,7 @@ export interface ApprovalRequestGridItem {
 }
 
 export interface ItemsAndDetailsWrapperProps {
-  currentDocRevId?: string | undefined;
+  currentDocRevId?: string;
   changeRequest: ChangeRequest;
   initialValues: Pick<FBFormProps, "initialValues">;
   autosave: boolean;

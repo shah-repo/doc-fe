@@ -21,7 +21,7 @@ import RelatedPartsState from "./RelatedParts.state";
 interface Props {
   viewOnly: boolean;
   documentRevision: DocumentRevision;
-  parentPartStatus: RELATED_PARTS_STATUS | undefined;
+  relatedPartsStatus?: RELATED_PARTS_STATUS;
 }
 
 const SuccessMsg: React.FunctionComponent<{
@@ -61,7 +61,7 @@ const SuccessMsg: React.FunctionComponent<{
 
 const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   documentRevision,
-  parentPartStatus,
+  relatedPartsStatus,
   viewOnly,
 }) => {
 
@@ -71,7 +71,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const relatedPartsState = FB.useRef<RelatedPartsState>(RelatedPartsState);
   relatedPartsState.setViewOnlyMode(viewOnly);
 
-  const [parentStatus, setParentStatus] = useState(parentPartStatus);
+  const [parentPartStatus, setParentPartStatus] = useState(relatedPartsStatus);
 
   const createRelatedPartAction = useActionCreator(relatedPartsActions.createRelatedPart);
 
@@ -81,11 +81,11 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
         return;
       }
 
-      if (parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
+      if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE) {
         // Show a toast
         showSuccessToast(createdDocumentRevision as DocumentRevision, viewRelatedPart);
 
-      } else if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
+      } else if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
         // populate the list with the new added part
         relatedPartsState.addNewRelatedPart(createdDocumentRevision, suffixName);
       }
@@ -110,7 +110,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   const parentChoiceAsync = useAsync<any>({
     onSuccess: (data) => {
       if (data) {
-        setParentStatus(data.relatedStatus);
+        setParentPartStatus(data.relatedStatus);
         dispatch(documentRevisionsActions.reload(documentRevision.id));
       }
     },
@@ -155,9 +155,9 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       document: {
         docId: "",
         securityList: {
-          securityEmployees: (get(documentRevision, "document.securityEmployees") || [])
+          securityEmployees: (get(documentRevision, "document.securityEmployees", []))
             .map((employee) => ({ id: employee.value })),
-          securityGroups: (get(documentRevision, "document.securityGroups") || [])
+          securityGroups: (get(documentRevision, "document.securityGroups", []))
             .map((group) => ({ id: group.id })),
           operators: get(documentRevision, "document.operators"),
         },
@@ -170,7 +170,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       status: documentRevision.status,
     };
 
-    if (parentStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
+    if (parentPartStatus === RELATED_PARTS_STATUS.PARENT_TOGETHER) {
       docDto = {
         ...docDto,
         name: `${documentRevision.name}-${relatedPartDetails?.name}`,
@@ -184,7 +184,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
   };
 
 
-  const parentStatusChanged = (value) => {
+  const parentPartStatusChanged = (value) => {
     // Make an API call to persist the parent row.
     if (value && documentRevision.documentId) {
       parentChoiceAsync.start(createParentPartChoiceAction, {
@@ -205,8 +205,8 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
   return useObserver(() => (
     <RelatedParts documentRevision={documentRevision}
-      parentStatus = {parentStatus}
-      parentStatusChanged = {parentStatusChanged}
+      parentStatus = {parentPartStatus}
+      parentStatusChanged = {parentPartStatusChanged}
       createNewDocument = {createNewDocument}
       viewRelatedPart = {viewRelatedPart}
       fetchRelatedParts = {fetchRelatedParts}
@@ -219,13 +219,13 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
 
 const RelatedPartsWrapper: React.FunctionComponent<Props> = ({
   documentRevision,
-  parentPartStatus,
+  relatedPartsStatus,
   viewOnly,
 }) => (
   <RelatedPartsContainer
     viewOnly = {viewOnly}
     documentRevision={documentRevision}
-    parentPartStatus = {parentPartStatus}
+    relatedPartsStatus = {relatedPartsStatus}
   />
 );
 

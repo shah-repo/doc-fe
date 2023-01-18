@@ -24,7 +24,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
   itemsAndDetailsState,
 }) => {
 
-  const [editMode, setEditMode] = useState(false);
+  const [isEditMode, setEditMode] = useState(false);
 
   function resetAndCancelEdit() {
     setEditMode(false);
@@ -52,7 +52,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
   return useObserver(() => (
     <>
       {
-        editMode &&
+        isEditMode &&
           <ApprovalRequestEditGridItem {...{ formState }}
             disabledOptions={disabledOptions()}
             addRevisionToChangeRequest={addRevisionToChangeRequest}
@@ -61,7 +61,7 @@ const ApprovalRequestItem: React.FunctionComponent<{
             titleText={entry.titleText}
           />
       }
-      { !editMode &&
+      { !isEditMode &&
         <ApprovalRequestViewGridItem
           entry={entry}
           editItem={editItem}
