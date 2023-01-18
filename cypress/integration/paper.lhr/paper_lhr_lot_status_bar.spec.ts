@@ -670,7 +670,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -724,7 +724,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
 
       it("Enter initial quantity", () => {
         cy.get("[name=\"lhr_initial_quantity\"]").should("be.exist");
-        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.get("[name=\"lhr_initial_quantity\"]").clear().arrowType("10");
         cy.unClick();
       });
 
@@ -805,7 +805,7 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       });
 
       it("Enter Intial Quantity field value", () => {
-        cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.get("[name=\"lhr_initial_quantity\"]").clear().arrowType("10");
         cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -827,12 +827,16 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       it("Add an Approval", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").arrowClick();
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+        cy.lhrSaveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Click 'Submit for Approval' button", () => {
         cy.pmSubmitForApprovalWithoutAPI();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
     });
 
@@ -949,14 +953,19 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.pmSubmitForApprovalWithoutAPI();
+      cy.lhrSubmitForApprovalWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve Paper LHR", () => {
       cy.lhrApproveWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open the Superseded revision", () => {
@@ -1033,12 +1042,16 @@ context(`Scenario 2.5.2 New Paper LHR, LHRS and LOT Status bar design`, () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Provide description & Click Yes", () => {
       cy.get("[name='voidDescription']").arrowType("Voiding the document");
-      cy.get("button[data-cy='fb-control-btn']").arrowClick({ force: true });
+      cy.wait(1000);
+      cy.get("button[data-cy='fb-control-btn']").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.saveBarShouldNotExist();
     });
 
     it("Approve Paper LHR for VOIDED", () => {

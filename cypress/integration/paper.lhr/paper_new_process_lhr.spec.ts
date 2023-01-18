@@ -522,7 +522,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -578,7 +578,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -621,11 +621,11 @@ context("Paper new process LHR", () => {
     });
 
     it("Add approver", () => {
-      cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Save document", () => {
-      cy.lhrClickSaveDocument();
+      cy.lhrSaveWithoutApi();
     });
   });
 
@@ -682,7 +682,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Save document", () => {
-      cy.lhrClickSaveDocument();
+      cy.lhrSaveWithoutApi();
     });
 
     it("Submit for approval", () => {
@@ -710,7 +710,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Save document", () => {
-      cy.lhrClickSaveDocument();
+      cy.lhrSaveWithoutApi();
     });
 
     it("Submit for approval", () => {
@@ -733,7 +733,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Save document", () => {
-      cy.lhrClickSaveDocument();
+      cy.lhrSaveWithoutApi();
     });
   });
 
@@ -746,7 +746,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Approve and Release document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it(`Check doc in ${STATUS_TYPES_LABEL.RELEASED} status and subtitle contains LOT#YYMMDDXX`, () => {
