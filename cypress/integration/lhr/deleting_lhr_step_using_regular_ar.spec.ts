@@ -429,7 +429,7 @@ context("Deleting LHR Step using regular AR test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify LHRT is in DRAFT status", () => {
@@ -480,15 +480,21 @@ context("Deleting LHR Step using regular AR test", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Click on Save", () => {
       cy.arClickCreateApprovalRequestAfterCompletingForm();
       cy.url().then((url: any) => { arUrl = url; });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Click 'Send To Review'", () => {
+      cy.wait(2000);
       cy.get("[data-cy=\"transitionButton\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -562,10 +568,13 @@ context("Deleting LHR Step using regular AR test", () => {
   context("Approve AR", () => {
     it("Login as second user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: secondEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Approve AR", () => {
-      cy.arApproveARFromDashboard();
+      cy.arApproveARFromDashboardWithoutApi();
     });
 
     it("Login as owner to dashboard", () => {

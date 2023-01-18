@@ -761,7 +761,7 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Select 'Part document' for Part to be Manufactured", () => {
@@ -851,8 +851,10 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Click on start step", () => {
-      cy.get("[data-cy=\"LHR Step 1\"]").arrowClick();
-      cy.mpiStartStep({ stepNumber: 1 });
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Select Overview Tab", () => {
@@ -860,7 +862,7 @@ context("Create new LHR and verify start step with and without selecting build t
     });
 
     it("Select Approval", () => {
-      cy.ebAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Navigate to procedure tab", () => {
