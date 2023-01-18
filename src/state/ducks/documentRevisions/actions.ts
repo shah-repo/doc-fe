@@ -321,7 +321,7 @@ const setPrimaryAttachment = (
     handlers,
   });
 
-const cloneEB = (id: string, payload: PasswordType, handlers: Handlers): ApiAction<DocumentRevision> =>
+const cloneDoc = (id: string, payload: PasswordType, handlers: Handlers): ApiAction<DocumentRevision> =>
   apiActionWithCallbacks({
     url: `${DOCUMENT_REVISION_ROOT_URL}/copy/${id}`,
     method: "post",
@@ -455,7 +455,7 @@ export default {
   reload,
   setPrimaryAttachment,
   voidDocument,
-  cloneEB,
+  cloneDoc,
   finalizeAndRelease,
   getDocRevStatuses,
   fetchAvailableForms,

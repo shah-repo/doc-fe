@@ -32,9 +32,9 @@ context("Document revise test", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[2].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[1], USERS[3], USERS[4]],
             acctCodes: ["code 1"],
             addresses: ["Address 1"],
             documentTypes: [
@@ -137,11 +137,11 @@ context("Document revise test", () => {
     it("Revise document with 'Administrative Change' option", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Administrative Change" });
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Navigate to document list", () => {
@@ -153,7 +153,6 @@ context("Document revise test", () => {
       cy.dlFilterByDocTitle({ docTitle: documentRevisionName });
 
       cy.dlVerifyFilterByRev({ revision: "1.1" });
-
     });
   });
 
@@ -165,11 +164,11 @@ context("Document revise test", () => {
     it("Revise document with 'Next Revision' option", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Next Revision" });
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Navigate to document list", () => {
@@ -197,13 +196,17 @@ context("Document revise test", () => {
       it("Revise document with 'Next Revision' option", () => {
         cy.drClickReviseDocument();
         cy.drChooseTypeOfRevisionChangeOption({ option: "Upgrade to Next Revision Level" });
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
     context("Create AR for reviseed document to 'Upgrade to Next Revision Level'", () => {
       it("Navigate to Approval Request list", () => {
         cy.navigToApprovalRequestList();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click Create a Approval Request button", () => {
@@ -229,22 +232,22 @@ context("Document revise test", () => {
 
       // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
-      it("Click Create Approval Request", () => {
-        cy.arSaveApiCall();
+      it("Add first approver to approval request on approver list", () => {
+        cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
       });
 
-      it("Add first approver to Approval Request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      it("Click Save button", () => {
+        cy.arSaveApiCallWithoutApi();
       });
 
       it("Click send to review", () => {
-        cy.arClickSendToReview();
+        cy.arClickSendToReviewWithoutApi();
       });
     });
 
     context("Approve submission and close AR", () => {
       it("Click approve submission", () => {
-        cy.arApproveAR();
+        cy.arApproveARWithoutApi();
       });
 
       it("Click close AR", () => {
@@ -277,7 +280,7 @@ context("Document revise test", () => {
       it("Revise document with 'Obsolete' option", () => {
         cy.drClickReviseDocument();
         cy.drChooseTypeOfRevisionChangeOption({ option: "Obsolete" });
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -307,22 +310,22 @@ context("Document revise test", () => {
         cy.arClickAddBtnOnAddDocumentsDialog();
       });
 
-      it("Click Create Approval Request", () => {
-        cy.arSaveApiCall();
+      it("Add first approver to approval request on approver list", () => {
+        cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
       });
 
-      it("Add first approver to Approval Request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+      it("Click Save button", () => {
+        cy.arSaveApiCallWithoutApi();
       });
 
       it("Click send to review", () => {
-        cy.arClickSendToReview();
+        cy.arClickSendToReviewWithoutApi();
       });
     });
 
     context("Approve submission and close AR", () => {
       it("Click approve submission", () => {
-        cy.arApproveAR();
+        cy.arApproveARWithoutApi();
       });
 
       it("Click close AR", () => {

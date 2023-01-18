@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 Cypress.Screenshot.defaults({
@@ -63,6 +62,8 @@ context("Document Approval Matrix Revise", () => {
   context("Create DAM", () => {
     it("Navigate to document list", () => {
       cy.navigToDocumentList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -91,22 +92,30 @@ context("Document Approval Matrix Revise", () => {
 
     it("fill in output document type: Document Approval Matrix", () => {
       cy.drSelectOutputDocumentType({ documentType: "Document Approval Matrix" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Save DAM And Approve & Release Document", () => {
     it("clicks on 'Create Document' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Create New Document out of the Form", () => {
     it("open new document", () => {
       cy.drCreateNewDocumentFromForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -120,33 +129,39 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Add New Role: Role One", () => {
     it("Open approval roles tab", () => {
       cy.drSelectApprovalRolesTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open 'Add Role' dialog", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.drAddAnotherRoleBtn();
-      });
+      cy.drAddAnotherRoleBtn();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Fill role name: ${roleOne}`, () => {
       cy.drEnterApprovalRole({ name: roleOne });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Add approving groups`, () => {
       cy.drEnterApprovingGroups("User Management", "Developers");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Save role", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.drAddApprovalRole();
-      });
+      cy.drAddApprovalRole();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -154,17 +169,23 @@ context("Document Approval Matrix Revise", () => {
 
   context("Approve & Release Document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context(`Check history is not created in group management page`, () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open history panel", () => {
       cy.grpHistoryClickOpenButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check history is not created", () => {
@@ -173,16 +194,22 @@ context("Document Approval Matrix Revise", () => {
 
     it("Close history panel", () => {
       cy.grpHistoryClickCloseButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context(`Check history is not created in user management page`, () => {
     it("Navigates to User management", () => {
       cy.usrNavigateToUserManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open history panel", () => {
       cy.usrHistoryClickOpenButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check history is not created", () => {
@@ -207,6 +234,8 @@ context("Document Approval Matrix Revise", () => {
 
     it("Revise document", () => {
       cy.drClickReviseDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Navigate to matrix details tab", () => {
@@ -215,29 +244,41 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open approval roles tab", () => {
       cy.drSelectApprovalRolesTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Remove one existing approving group`, () => {
       cy.drEditRemoveApprovingGroups({ eq: 0 }, "User Management");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Add one new approving group`, () => {
       cy.drEditAddApprovingGroups({ eq: 0 }, "Company Admin");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Revised document 'Approve and Release'", () => {
     it("click on 'Approve and Release' button", () => {
       cy.drApproveAndReleaseDialog();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Type password in Approve and Release dialog", () => {
@@ -245,11 +286,7 @@ context("Document Approval Matrix Revise", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.wrapWithWaitOnApiCall(
-        CyRoutes.ReleaseDocRev,
-        () => {
-          cy.get("[data-cy=\"ApproveAndRelease-submit\"]").click();
-        });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -258,10 +295,14 @@ context("Document Approval Matrix Revise", () => {
   context(`Check history is not created in group management page`, () => {
     it("Navigates to Group management", () => {
       cy.grpNavigateToGroupManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open history panel", () => {
       cy.grpHistoryClickOpenButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check history is not created", () => {
@@ -276,10 +317,14 @@ context("Document Approval Matrix Revise", () => {
   context(`Check history is not created in user management page`, () => {
     it("Navigates to User management", () => {
       cy.usrNavigateToUserManagement();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Open history panel", () => {
       cy.usrHistoryClickOpenButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check history is not created", () => {
@@ -288,6 +333,8 @@ context("Document Approval Matrix Revise", () => {
 
     it("Close history panel", () => {
       cy.usrHistoryClickCloseButton();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 });

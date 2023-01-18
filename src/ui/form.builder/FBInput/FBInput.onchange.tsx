@@ -1,8 +1,10 @@
 import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, toNumber, union } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
+import { useIntl } from "react-intl";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
-import { toFixed } from "../../dashboard.new/line.items/common/Utils";
+import { toastError } from "../../components/notifications";
+import { isMoreDigitsAfterDecimal } from "../../dashboard.new/line.items/common/Utils";
 import { FBFieldName } from "../helpers/FBFieldName";
 
 export const withFBOnChange = <T extends FBInputProps>(
@@ -26,6 +28,7 @@ export const withFBOnChange = <T extends FBInputProps>(
     const inputValue =
     formState?.getFieldValue(name) ||
     formState?.getInputState(name || "")?.value;
+    const intl = useIntl();
 
     inputState = FB.useRef<FBInputState>(FBInputState, {
       value: cloneDeep(inputValue),
@@ -153,19 +156,21 @@ export const withFBOnChange = <T extends FBInputProps>(
         isDefault();
       }
 
+      function getFieldName(name: string) {
+        return intl.formatMessage({ id: `form.builder.${name.split("-").slice(1).join(".")}` });
+      }
+
       function isDefault() {
-        const { type } = ev.target;
+        const { type, name } = ev.target;
         let { value } = ev.target;
         if (type === "number" && value !== "") {
           if (["lhrs-start-quantity",
             "lhrs-accepted-quantity",
-            "lhrs-rejected-quantity",
-            "quantity"].includes(ev.target.name)) {
-            value = toFixed(value);
+            "lhrs-rejected-quantity"].includes(name) && isMoreDigitsAfterDecimal(value, 10)) {
+            toastError(intl.formatMessage({ id: "document.revision.quntity.error" }, { name: getFieldName(name) }));
+            return;
           }
-          else {
-            value = toNumber(value);
-          }
+          value = toNumber(value);
         }
         if (type === "number" && value === "") {
           value = null;

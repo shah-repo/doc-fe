@@ -4,7 +4,6 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -165,16 +164,16 @@ context("Autosave EB test", () => {
 
     context("Create the form and release it", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Add EB Procedure", () => {
         cy.drSelectProcedureTab();
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "EB Procedure" });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.fbAddNewFieldButton();
-        });
+        cy.fbAddNewFieldButton();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify that Approvals field is automatically added", () => {
@@ -183,7 +182,7 @@ context("Autosave EB test", () => {
       });
 
       it("Approve and release the form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -203,19 +202,19 @@ context("Autosave EB test", () => {
 
     it("Fill step #1 description and check autosave", () => {
       cy.drSelectProcedureTab();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
-      });
+      cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add attachment and check autosave", () => {
       cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.elUploadAttachment({
-          fileName: "image.jpg",
-          el: "fb-mediaalbum-upload-",
-        });
+      cy.elUploadAttachment({
+        fileName: "image.jpg",
+        el: "fb-mediaalbum-upload-",
       });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("While autosaving fill step #1 description and check autosave", () => {
@@ -228,13 +227,18 @@ context("Autosave EB test", () => {
 
       cy.mpiEnterDescriptionToStep({ numbOfStep: 1, description: "Description of step one" });
       cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Add 'Material' to step #1 and check autosave", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.get("[data-cy=\"form.builder.materials.btn\"]").arrowClick();
-      });
-      cy.get("[data-cy=\"title\"]").autocompleteSelect("Part document");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[data-cy=\"form.builder.materials.btn\"]").eq(0).arrowClick().wait(1000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.get("[data-cy=\"title\"]").arrowClick({ force: true }).wait(1000);
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick({ force: true });
       cy.get("[data-cy=\"partLot\"]").arrowType("test");
       cy.get("[name=\"quantity\"]").arrowType("2");
       cy.get("[data-cy=\"unit\"]").autocompleteSelect("Day");
@@ -249,6 +253,8 @@ context("Autosave EB test", () => {
         });
       }).as("response");
       cy.get("[data-cy=\"form.builder.equipment.btn\"]").arrowClick();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
       cy.get("[data-cy=\"title\"]").arrowType("Equipment");
       cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
       cy.wait("@response", { requestTimeout: 60000, responseTimeout: 60000 });
@@ -268,21 +274,29 @@ context("Autosave EB test", () => {
     });
 
     it("Delete attachment and check autosave", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[id^=\"fb-mediaalbum-upload-\"]").parent()
-          .find("button").eq(3).arrowClick({ force: true });
-      });
+      cy.get("[id^=\"fb-mediaalbum-upload-\"]").parent()
+        .find("button").eq(3).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Add/remove approver and check autosave", () => {
     it("Add first Approver'", () => {
       cy.drSelectOverviewTab();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Add second Approver'", () => {
       cy.pmAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(5000);
       cy.reload();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
@@ -320,9 +334,7 @@ context("Autosave EB test", () => {
 
   context("Submit EB for approval", () => {
     it("Click 'Submit for Approval' button", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PostDocRevInReview, () => {
-        cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-      });
+      cy.pmSubmitForApprovalWithoutAPI();
     });
   });
 });

@@ -41,9 +41,9 @@ context("Document Attachment Flow", () => {
         cy.cmpCreateCompany({
           specFilePath: __filename,
           payload: {
-            companyAdminEmail: USERS[1].email,
+            companyAdminEmail: USERS[2].email,
             importerEmail: IMPORTER_USER.email,
-            users: [USERS[2], USERS[3], USERS[4]],
+            users: [USERS[1], USERS[3], USERS[4]],
             documentTypes: [
               ClinicalProtocolDocType,
               TestDocumentType,
@@ -70,6 +70,10 @@ context("Document Attachment Flow", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[2], employeeId: employeeLogin.id });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -115,7 +119,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Test download of uploaded attachments", () => {
@@ -171,11 +175,11 @@ context("Document Attachment Flow", () => {
         });
 
         it("Clicks Save button", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Approves and releases document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
 
         it("Download all attachments with redline document", () => {
@@ -192,11 +196,11 @@ context("Document Attachment Flow", () => {
         });
 
         it("Clicks Save button", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Approves and releases document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
 
         it("Revise document", () => {
@@ -204,11 +208,11 @@ context("Document Attachment Flow", () => {
         });
 
         it("Clicks Save button", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Approves and releases document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
 
         it("Select Superseded version of document without redline attachments", () => {
@@ -235,11 +239,11 @@ context("Document Attachment Flow", () => {
         });
 
         it("Clicks Save button", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Approves and releases document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
 
         });
 
@@ -255,6 +259,10 @@ context("Document Attachment Flow", () => {
     it("Navigates to document list", () => {
       // SystemRequirement("REQ-0140");
       cy.navigToDocumentList();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Clicks on 'create a document' button", () => {
@@ -279,7 +287,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Uploads redline attachment 'image.jpg'", () => {
@@ -291,7 +299,7 @@ context("Document Attachment Flow", () => {
     });
 
     it("Clicks Save button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Navigate to Approval Request list", () => {
@@ -321,7 +329,7 @@ context("Document Attachment Flow", () => {
 
     it("Click Create Approval Request", () => {
       SystemRequirement("REQ-0730");
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Navigates to document list", () => {
@@ -349,12 +357,16 @@ context("Document Attachment Flow", () => {
       cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "DRAFT" });
     });
 
-    it("Add first approver to Approval Request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+    it("Add first approver to approval request on approver list", () => {
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
+    });
+
+    it("Clicks Save button", () => {
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Navigates to document list", () => {
@@ -394,11 +406,15 @@ context("Document Attachment Flow", () => {
 
     it("Approve AR", () => {
       SystemRequirement("REQ-0920");
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
     });
 
     it("Navigates to document list", () => {
       cy.navigToDocumentList();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Click on specific document 'CP-00003'", () => {

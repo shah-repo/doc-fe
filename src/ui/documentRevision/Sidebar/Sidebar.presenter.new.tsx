@@ -45,7 +45,7 @@ const SidebarPresenter: React.FunctionComponent<Props> = ({
         {sidebarList.map((item, index) =>
           item.details.shouldShow && (
             <Box key={item.details.title}>
-              <FBTooltip placement="left" title={item.details.title}>
+              <FBTooltip placement="left" title={item.details.tooltip || item.details.title}>
                 <IconButton
                   data-cy={item.details.dataCy !== undefined ? item.details.dataCy : `${item.type}-icon`}
                   ref={sidebarList[indexNumber].details.title === item.details.title ? inputRef : null}

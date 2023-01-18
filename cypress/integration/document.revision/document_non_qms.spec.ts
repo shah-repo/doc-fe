@@ -108,7 +108,7 @@ context("Non-QMS Document Creation Flow", () => {
 
   context("Creates document", () => {
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 

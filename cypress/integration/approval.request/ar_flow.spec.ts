@@ -208,7 +208,7 @@ context("Approval request form", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -244,7 +244,7 @@ context("Approval request form", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -483,7 +483,7 @@ context("Approval request form", () => {
     });
 
     it("Add created document revision", () => {
-      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
+      cy.drSelectDocumentTab();
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
@@ -496,7 +496,7 @@ context("Approval request form", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Click Create Approval Request", () => {
@@ -505,12 +505,16 @@ context("Approval request form", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.get(`[data-cy="tabCon-tabId.changedetails"]`).arrowClick();
+      cy.arSelectChangeDetailsTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].name });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Add second Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove second Approver'", () => {
@@ -527,7 +531,7 @@ context("Approval request form", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
   });
 
@@ -770,7 +774,7 @@ context("Approval request form", () => {
 
     it("Approve AR", () => {
       SystemRequirement("REQ-0920", "REQ-4150", "REQ-4140", "REQ-4170");
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
     });
 
     it(`Check Approval Request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
@@ -991,7 +995,7 @@ context("Approval request form", () => {
 
     it("Add created document revision with description", () => {
       SystemRequirement("REQ-4290", "REQ-4280");
-      cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
+      cy.arSelectDocumentTab();
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });

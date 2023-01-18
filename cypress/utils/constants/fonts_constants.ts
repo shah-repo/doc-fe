@@ -40,6 +40,7 @@ export const LINE_HT_20 = "20px";
 export const LINE_HT_20_02 = "20.02px";
 export const LINE_HT_1 = "20.02px";
 export const LINE_HT_2 = "20.592px";
+export const LINE_HT_13_2 = "13.2px";
 export const LINE_HT_3 = "15px";
 export const LINE_HT_4 = "21.6px";
 export const LINE_HT_21 = "21px";
