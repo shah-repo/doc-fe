@@ -144,8 +144,8 @@ Cypress.Commands.add("mpiStartStep", (params: {stepNumber: number}) => {
 
 Cypress.Commands.add("mpiStartStepWithoutApi", (params: {stepNumber: number}) => {
   cy.get("[data-cy=\"form.builder.start.step\"]").eq(params.stepNumber - 1).arrowClick();
+  cy.listLoadingElementShouldAppear();
   cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("mpiClickNotStarted", (params: {stepNumber: number}) => {

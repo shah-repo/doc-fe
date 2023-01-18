@@ -9,7 +9,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -988,7 +987,7 @@ context("LHR allow non integer in quantity.", () => {
 
   context("Navigate to LHR and Start Step", () => {
     it("Navigate to LHR", () => {
-      cy.navigToLHR();
+      cy.navigToLHRWithoutAPI();
     });
 
     it("Click 'Initiate New LHR'", () => {
@@ -996,28 +995,21 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it("Select a document type Lot History Record and select a Form released", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Lot History Record");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Lot History Record");
+      cy.progressBarShouldAppear();
     });
 
     it("Select build type R&D", () => {
-      cy.get("[value='R&D']").arrowClick({ force: true }).wait(2000);
+      cy.get("[value='R&D']").arrowClick({ force: true });
+      cy.progressBarShouldAppear();
     });
 
-
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-      ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(USERS[1].name);
-      });
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
       cy.url().then((url: any) => {
         lhrDocUrl = url;
       });
@@ -1040,10 +1032,7 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-      ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(USERS[1].name);
-      });
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 
     it("Select Procedure tab", () => {
@@ -1051,78 +1040,31 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it("Click 'SELECT' for `Material`", () => {
-      cy.get("[data-cy=\"form.builder.select\"]")
-        .eq(0)
-        .click({ force: true });
+      cy.lhrSelectMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.1`,
+      });
     });
 
-    it("Select lot `LOT`", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
-      cy.get("input[data-cy=usedOverride]").arrowClick();
-      cy.get("ul>li[role=option]").contains(`LOT #${lotDateSuffix}01 | MT-00004.1`).arrowClick();
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.2`,
+      });
     });
 
-    it("Select quantity in lot dialog `0.1`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.1");
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.345`,
+      });
     });
 
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.2`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.2");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.345`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.345");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.0345`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.0345");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.0345`,
+      });
     });
 
     it("Verify that  error message “Quantity must be an integer number” is not displayed.", () => {
@@ -1149,62 +1091,28 @@ context("LHR allow non integer in quantity.", () => {
       cy.get("[data-cy=\"form.builder.mpi.part.selection.materials\"]")
         .should("contain.text", `LOT #${lotDateSuffix}01 | MT-00004.1 | 0.0345 inch`);
     });
-
   });
 
   context("Enter a non-integer value up to 10 numbers after decimal", () => {
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.1856767676`,
+      });
     });
 
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.2898767885`,
+      });
     });
 
-    it("Select quantity in lot dialog `0.1856767676`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.1856767676");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.2898767885`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.2898767885");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.8989765434`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.8989765434");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.8989765434`,
+      });
     });
 
     it("Verify that  error message “Quantity must be an integer number” is not displayed.", () => {
@@ -1241,22 +1149,11 @@ context("LHR allow non integer in quantity.", () => {
   });
 
   context("Enter a non-integer value with more then 10 numbers after the decimal ", () => {
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.8999999990111`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.8999999990111");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.8999999990111`,
+      });
     });
 
     it("Error Message should display", () => {
@@ -1264,21 +1161,20 @@ context("LHR allow non integer in quantity.", () => {
       cy.get(`[class="Toastify__toast-body"]`)
         .should("be.visible")
         .should("contain.text", errorStr);
+      cy.closeAllAlertMessages();
     });
   });
 
-
   context("Enter a non-integer value with 10 numbers after the decimal ", () => {
     it("Select quantity in lot dialog `0.8123333334`", () => {
-      cy.get("[data-cy='quantity']").clear().arrowType("0.8123333334");
+      cy.get("[data-cy='quantity']").clear().arrowType("0.8123333334").wait(500);
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+      cy.get("[data-cy='form.builder.save']").arrowClick().wait(500);
     });
 
     it("Verify that the quantity that is non-integer for any unit (inch, kg, gallon, etc.) selected.", () => {
-      cy.wait(3000);
       cy.get("[data-cy=\"form.builder.mpi.part.selection.materials\"]")
         .should("contain.text", `LOT #${lotDateSuffix}01 | MT-00004.1 | 0.8123333334 inch`);
     });
@@ -1303,7 +1199,7 @@ context("LHR allow non integer in quantity.", () => {
 
   context("Navigate and export LHR.", () => {
     it("Navigate to LHR Landing page", () => {
-      cy.navigToLHR();
+      cy.navigToLHRWithoutAPI();
     });
 
     it("Search for the LHR ", () => {
@@ -1332,9 +1228,9 @@ context("LHR allow non integer in quantity.", () => {
 
   context("Navigate to LHR #1 and Complete it", () => {
     it("Navigate to LHR #1", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.visit(lhrDocUrl);
-      });
+      cy.visit(lhrDocUrl);
+      cy.listLoadingElementShouldAppear();
+      cy.saveBarShouldNotExist();
     });
 
     it("Click details Tab", () => {
@@ -1347,18 +1243,17 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click View step", () => {
       cy.get(`[data-cy="form.builder.view.step"]`).arrowClick();
+      cy.listLoadingElementShouldAppear();
     });
 
     it("Complete step", () => {
-      cy.wait(3000);
-      cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Approve step", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
-
 
   context("Revise LHR ", () => {
     it("Click Revise on LHRs #1", () => {
@@ -1366,87 +1261,39 @@ context("LHR allow non integer in quantity.", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^='fb-approvals-approvals-built-in']").autocompleteSelect(USERS[1].name);
-    });
-
-    it("Save the document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 
     it("Select Procedure tab", () => {
       cy.drSelectProcedureTab();
     });
 
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.63`,
+      });
     });
 
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.46`,
+      });
     });
 
-    it("Select quantity in lot dialog `0.63`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.63");
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.451`,
+      });
     });
 
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.46`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.46");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.451`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.451");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.0451`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.0451");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.0451`,
+      });
     });
 
     it("Verify that  error message “Quantity must be an integer number” is not displayed.", () => {
@@ -1476,58 +1323,25 @@ context("LHR allow non integer in quantity.", () => {
   });
 
   context("Enter a non-integer value up to 10 numbers after decimal", () => {
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.1856767677`,
+      });
     });
 
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.2898767888`,
+      });
     });
 
-    it("Select quantity in lot dialog `0.1856767677`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.1856767677");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.2898767888`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.2898767888");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.8989765433`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.8989765433");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.8989765433`,
+      });
     });
 
     it("Verify that  error message “Quantity must be an integer number” is not displayed.", () => {
@@ -1564,22 +1378,11 @@ context("LHR allow non integer in quantity.", () => {
   });
 
   context("Enter a non-integer value with more then 10 numbers after the decimal ", () => {
-    it("Click 'CHANGE' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.change\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.selectLot({ lot: `LOT #${lotDateSuffix}01 | MT-00004.1` });
-    });
-
-    it("Select quantity in lot dialog `0.8999999990111`", () => {
-      cy.get("[data-cy='quantity']").arrowType("0.8999999990111");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+    it("Click 'Change' for `Material`", () => {
+      cy.lhrChangeMaterial({
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `0.8999999990111`,
+      });
     });
 
     it("Error Message should display", () => {
@@ -1587,16 +1390,17 @@ context("LHR allow non integer in quantity.", () => {
       cy.get(`[class="Toastify__toast-body"]`)
         .should("be.visible")
         .should("contain.text", errorStr);
+      cy.closeAllAlertMessages();
     });
   });
 
   context("Enter a non-integer value with 10 numbers after the decimal ", () => {
     it("Select quantity in lot dialog `0.8999999999`", () => {
-      cy.get("[data-cy='quantity']").clear().arrowType("0.8999999999");
+      cy.get("[data-cy='quantity']").clear().arrowType("0.8999999999").wait(500);
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+      cy.get("[data-cy='form.builder.save']").arrowClick().wait(500);
     });
 
     it("Enter a non-integer value up to 10 numbers in the “Quantity” section.", () => {
@@ -1625,13 +1429,11 @@ context("LHR allow non integer in quantity.", () => {
     it("Add Rejected quantity exists", () => {
       cy.get("[name=\"lhrs-rejected-quantity\"]").clear().arrowType("12");
     });
-
   });
-
 
   context("Navigate and export LHR.", () => {
     it("Navigate to LHR Landing page", () => {
-      cy.navigToLHR();
+      cy.navigToLHRWithoutAPI();
     });
 
     it("Search for the LHR ", () => {

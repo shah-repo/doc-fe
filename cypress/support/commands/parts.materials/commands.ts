@@ -59,6 +59,8 @@ declare global {
       lhrSelectBuildTypeRnD(): Chainable<Subject>;
       lhrSelectBuildTypeProduction(): Chainable<Subject>;
       lhrChangeBuildTypeToRnd(): Chainable<Subject>;
+      lhrSelectMaterial(params: { lot: string; quantity: string });
+      lhrChangeMaterial(params: { lot: string; quantity: string });
     }
   }
 }
@@ -225,6 +227,7 @@ Cypress.Commands.add("pmSubmitForApproval", () => {
 
 Cypress.Commands.add("pmSubmitForApprovalWithoutAPI", () => {
   cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick({ force: true });
+  cy.wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -348,3 +351,24 @@ Cypress.Commands.add("lhrChangeBuildTypeToRnd", () => {
   cy.get(`[data-cy="form.builder.lhr.build.switch"]`).arrowClick();
 });
 
+Cypress.Commands.add("lhrSelectMaterial", (params: { lot: string; quantity: string }) => {
+  cy.get("[data-cy=\"form.builder.select\"]").eq(0).arrowClick({ force: true }).wait(500);
+
+  cy.get("input[data-cy=usedOverride]").arrowClick();
+  cy.get("ul>li[role=option]").contains(params.lot).arrowClick();
+
+  cy.get("[data-cy='quantity']").arrowType(params.quantity).wait(500);
+
+  cy.get("[data-cy='form.builder.save']").arrowClick().wait(500);
+});
+
+Cypress.Commands.add("lhrChangeMaterial", (params: { lot: string; quantity: string }) => {
+  cy.get("[data-cy=\"form.builder.change\"]").eq(0).arrowClick({ force: true }).wait(500);
+
+  cy.get("input[data-cy=usedOverride]").arrowClick();
+  cy.get("ul>li[role=option]").contains(params.lot).arrowClick();
+
+  cy.get("[data-cy='quantity']").arrowType(params.quantity).wait(500);
+
+  cy.get("[data-cy='form.builder.save']").arrowClick().wait(500);
+});
