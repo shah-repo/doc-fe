@@ -689,12 +689,16 @@ context("LHRT Pending Change", () => {
     it("Click on Clear Filters", () => {
       cy.dlClearFilters();
     });
+
     it("LHRT status should change to Pending Change", () => {
       cy.get(".k-master-row").eq(0).click();
+      cy.listLoadingElementShouldNotExist().wait(2000);
     });
+
     it("Select 'Part document' for Part to be Manufactured", () => {
-      cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("CS-00005 - Part document").arrowClick();
+      cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect("CS-00005 - Part document");
     });
+
     context("Select a different MPI", () => {
       it("Select Details tab", () => {
         cy.drSelectDetailsTab();

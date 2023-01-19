@@ -240,6 +240,7 @@ Cypress.Commands.add("cmpVerifyCompanyAvatar", (params: { name: string; avatarSo
 
 Cypress.Commands.add("cmpClickCreateNewDocument", () => {
   cy.get("[data-cy=\"document.revision.create\"]").arrowClick();
+  cy.wait(1000);
 });
 
 Cypress.Commands.add("cmpVerifyNoPendingActions", () => {

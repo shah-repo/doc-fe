@@ -171,16 +171,22 @@ context("Approval request email popup modal", () => {
   context("Login user", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: FIRST_USER, employeeId: secondEmployee.id });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
   context("Create approval request from existing form", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Enter title AR title: " + approvalRequestTitle, () => {
@@ -194,6 +200,8 @@ context("Approval request email popup modal", () => {
     it("Add first created document revision", () => {
       cy.arClickAddDocument();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
       cy.arClickAddBtnOnAddDocumentsDialog();
@@ -208,16 +216,16 @@ context("Approval request email popup modal", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Add approvers to approval request on approver list", () => {
       cy.wait(2000);
-      cy.arAddApproverOnApproverList({ approver: FIRST_USER.email });
-      cy.arAddApproverOnApproverList({ approver: SECOND_USER.email });
-      cy.arAddApproverOnApproverList({ approver: THIRD_USER.email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: FIRST_USER.email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: SECOND_USER.email });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: THIRD_USER.email });
       cy.wait(2000);
     });
 
@@ -234,7 +242,9 @@ context("Approval request email popup modal", () => {
 
   context("Navigate to dashboard and send email to all approvers", () => {
     it("Navigate to dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check if approval request is 'In Review'", () => {
@@ -326,7 +336,9 @@ context("Approval request email popup modal", () => {
     });
 
     it("Approve AR", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -437,7 +449,9 @@ context("Approval request email popup modal", () => {
     });
 
     it("Approve AR", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -463,7 +477,9 @@ context("Approval request email popup modal", () => {
     });
 
     it("Approve AR", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it(`Check if AR has status ${STATUS_TYPES_LABEL.APPROVED}`, () => {

@@ -2135,7 +2135,7 @@ context("Autocomplete 'Equipment' test", () => {
         expect(el).match(tmpRegex);
 
         // eslint-disable-next-line @typescript-eslint/camelcase
-        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftMonth} [\n]?${pdfDocDraftDay},[\n]?${pdfDocDraftyear}`, "gi" );
+        tmpRegex = new RegExp( `MR-00002 Preventative Maintenance \\| ${USERS[1].name} \\| RELEASED \\| ${pdfDocDraftMonth}[ |\n]?${pdfDocDraftDay},[ |\n]?${pdfDocDraftyear}`, "gi" );
         expect(el).match(tmpRegex);
 
         tmpRegex = new RegExp( `Preventative Maintenance Done - Due Date: ${equimentDueDaysFmt}`, "gi" );

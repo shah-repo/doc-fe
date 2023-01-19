@@ -1023,7 +1023,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Approve and Release document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
@@ -1090,10 +1090,11 @@ context("Paper new process LHR", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Approve and Release document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it(`Check doc in ${STATUS_TYPES_LABEL.RELEASED} status and subtitle contains same lot number`, () => {

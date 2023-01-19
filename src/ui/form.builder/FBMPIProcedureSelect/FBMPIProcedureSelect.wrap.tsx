@@ -11,6 +11,7 @@ import { documentRevisionsActions } from "../../../state/ducks/documentRevisions
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, SmartReferenceType } from "../../../state/ducks/documentRevisions/types";
 import { toastError } from "../../components/notifications";
+import { isMoreDigitsAfterDecimal } from "../../dashboard.new/line.items/common/Utils";
 import Colors from "../../layout/theme/utils/colors";
 import FBAutocompleteAsyncStore from "../FBAutocompleteAsync/FBAutocompleteAsync.store";
 
@@ -180,8 +181,9 @@ export const withFBMPIProcedureSelect = <T extends FBMPIProcedureSelectProps>(
         toastError(intl.formatMessage({ id: "document.revision.quntity.positive.error" }));
         return;
       }
-      if (isMaterial && quantity && quantity.toString().split(".")[1]?.length > 10) {
-        toastError(intl.formatMessage({ id: "document.revision.quntity.error" }));
+      if (isMaterial && quantity && isMoreDigitsAfterDecimal(quantity, 10)) {
+        toastError(intl.formatMessage({ id: "document.revision.quntity.error" },
+          { name: intl.formatMessage({ id: "form.builder.quantity" } ) }));
         return;
       }
       const part = {

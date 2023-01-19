@@ -204,6 +204,7 @@ export type FBInputProps =
      * @cfg {Bool} MUI Box props that can be passed to input section.
      */
     labelProps?: BoxProps;
+    isAddAction?: boolean;
   };
 
 export const OmitInputClones: FBInputType[] = [
