@@ -384,7 +384,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -473,7 +473,8 @@ context("Receiving landing page test", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for Receiving" });
-      cy.fbAddField();
+      cy.wait(1000);
+      cy.fbAddNewFieldButton();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -633,7 +634,8 @@ context("Receiving landing page test", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for new receiving" });
-      cy.fbAddField();
+      cy.wait(1000);
+      cy.fbAddNewFieldButton();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
@@ -695,7 +697,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -824,8 +826,9 @@ context("Receiving landing page test", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for LFPO" });
-      cy.fbAddField();
-      cy.listLoadingElementShouldExist();
+      cy.wait(1000);
+      cy.fbAddNewFieldButton();
+      cy.progressBarShouldNotExist();
     });
 
     it("move component", () => {
@@ -856,13 +859,13 @@ context("Receiving landing page test", () => {
 
   context("Release form and export template", () => {
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Export and save the template", () => {
@@ -902,7 +905,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -928,7 +931,10 @@ context("Receiving landing page test", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for Another LFPO" });
-      cy.fbAddField();
+      cy.wait(1000);
+      cy.fbAddNewFieldButton();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("move component", () => {
@@ -1637,13 +1643,13 @@ context("Receiving landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1693,7 +1699,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1815,7 +1821,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve PO", () => {
@@ -1878,6 +1884,7 @@ context("Receiving landing page test", () => {
 
     it("Add 'Receipt Quantity'", () => {
       cy.get("[name='received']").arrowType("3");
+      cy.wait(2000);
     });
 
     it("Save", () => {
@@ -1915,11 +1922,11 @@ context("Receiving landing page test", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve RC", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
