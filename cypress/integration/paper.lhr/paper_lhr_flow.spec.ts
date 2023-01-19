@@ -9,7 +9,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, lotIdRef, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { MPITestProcedureDeletable } from "../../utils/constants/documentTypes/mpi";
 import { QPITest } from "../../utils/constants/documentTypes/qpi";
@@ -506,7 +505,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.lhrSaveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1168,10 +1167,9 @@ context("Paper Lot History Record", () => {
 
   context("Fill the document", () => {
     it("Select 'Part document' for Part to be Manufactured", () => {
-      cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-      });
+      cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect("Part document");
+      // cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Part document");
+      // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"Part to be Manufactured\"]")
@@ -1229,13 +1227,11 @@ context("Paper Lot History Record", () => {
 
     it("Upload attachment test.docx", () => {
       cy.fixture("test.docx").then((fileContent) => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.UploadAttachment, () => {
-          cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
-            fileContent: fileContent.toString(),
-            fileName: "test.docx",
-            mimeType: "*",
-            filePath: `fixtures/test.docx`,
-          });
+        cy.get(`[id^="fb-attachment-field-fb-fileupload-"]`).attachFile({
+          fileContent: fileContent.toString(),
+          fileName: "test.docx",
+          mimeType: "*",
+          filePath: `fixtures/test.docx`,
         });
       });
       cy.progressBarShouldNotExist();
@@ -1243,9 +1239,10 @@ context("Paper Lot History Record", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.lhrSaveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
   });
 
@@ -1289,9 +1286,7 @@ context("Paper Lot History Record", () => {
 
   context("Click on 'Paper LHR' document and insert the Approval", () => {
     it("Select first LHR", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
-      });
+      cy.get("tr.k-master-row").first().arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1512,13 +1507,13 @@ context("Paper Lot History Record", () => {
     });
 
     it("Add approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.lhrSaveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1530,7 +1525,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Approve record", () => {
-      cy.lhrApprove();
+      cy.lhrApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1783,9 +1778,7 @@ context("Paper Lot History Record", () => {
 
   context("Select on 'Paper LHR' document", () => {
     it("Select first LHR", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
-      });
+      cy.get("tr.k-master-row").first().arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1805,7 +1798,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Add approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1826,7 +1819,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
@@ -1896,9 +1889,7 @@ context("Paper Lot History Record", () => {
 
   context("Select on 'Paper LHR' document", () => {
     it("Select first LHR", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
-      });
+      cy.get("tr.k-master-row").first().arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1918,7 +1909,7 @@ context("Paper Lot History Record", () => {
     });
 
     it("Add approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1940,15 +1931,15 @@ context("Paper Lot History Record", () => {
     });
 
     it("Click on Yes button", () => {
-      cy.get(`button[data-cy="fb-control-btn"]`).contains("Yes").arrowClick();
       cy.wait(2000);
+      cy.get(`button[data-cy="fb-control-btn"]`).contains("Yes").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
