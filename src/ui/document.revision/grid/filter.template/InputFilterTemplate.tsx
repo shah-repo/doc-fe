@@ -35,7 +35,7 @@ export const InputFilterTemplate = ({
   let sEvent: React.SyntheticEvent<any, Event>;
   const [inputValue, setInputValue] = useState(defaultItem || "");
   const [filterValue, setFilterValue] = useState("contains");
-  const [open, setOpen] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
 
   const intl = useIntl();
   React.useEffect(() => {
@@ -67,10 +67,12 @@ export const InputFilterTemplate = ({
   const onDropdownChange = (syntheticEvent: React.ChangeEvent<{ value: unknown }>) => {
     const { target } = syntheticEvent;
     setFilterValue(String(target.value));
-    setOpen(false);
+    setIsOpened(false);
+
     if (isEmpty(inputValue)) {
       return;
     }
+
     onChange({
       value: inputValue,
       operator: String(target.value),
@@ -84,12 +86,12 @@ export const InputFilterTemplate = ({
         value={inputValue}
         onChange={onChangeEvent}
         style={{ width: "100%", marginRight: "5px" }}/>
-      <ClickAwayListener onClickAway={() => setOpen(false)}>
+      <ClickAwayListener onClickAway={() => setIsOpened(false)}>
         <Box>
           <FormControl style={{ display: "flex", flexDirection: "row" }}>
             <button
               className="k-button k-button-icon k-clear-button-visible"
-              onClick={() => setOpen(true)}
+              onClick={() => setIsOpened(true)}
             >
               <span className="k-icon k-i-filter" />
             </button>
@@ -103,7 +105,7 @@ export const InputFilterTemplate = ({
                 getContentAnchorEl: null,
               }}
               style={{ width: "0px" }}
-              open={open}
+              open={isOpened}
               onChange={(e) => onDropdownChange(e)}
             >
               {map(filterList, (item) =>
