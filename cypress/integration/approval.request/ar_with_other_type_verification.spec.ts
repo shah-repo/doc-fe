@@ -174,7 +174,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {
@@ -271,7 +271,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -306,7 +306,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {
@@ -379,7 +379,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click on Save", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -442,7 +442,7 @@ context("Approval request implementation tasks", () => {
 
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -465,7 +465,7 @@ context("Approval request implementation tasks", () => {
 
     it("Add created document revision", () => {
       cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
-      cy.arClickAddDocument();
+      cy.arClickAddDocumentWithoutApi();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -473,7 +473,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Switch to ChangeDetails tab", () => {
@@ -487,15 +487,15 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Approve AR", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -531,7 +531,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {
