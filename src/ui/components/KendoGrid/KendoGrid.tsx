@@ -33,6 +33,7 @@ import { DocumentTypeFilterTemplate } from "../../document.revision/grid/filter.
 import { DueOnDateFilterTemplate } from "../../document.revision/grid/filter.template/DueOnDateFilterTemplate";
 import { EffectiveDateFilterTemplate } from "../../document.revision/grid/filter.template/EffectiveDateFilterTemplate";
 import { StatusFilterTemplate } from "../../document.revision/grid/filter.template/StatusFilterTemplate";
+import { poStatusOptions } from "../../document.revision/utils/helpers";
 import useDidMount from "../../hooks/useDidMount";
 import { RenderCustomCell } from "../common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../common/kendo/ColumnHeader";
@@ -166,6 +167,16 @@ export function KendoGrid<T extends any>({
       })}
     />
   );
+
+  const POStatusFilter = (props: GridFilterCellProps) => (
+    <StatusFilterTemplate
+      {...props}
+      data={poStatusOptions}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
   const TypeFilter = (props: GridFilterCellProps) => (
     <DocumentTypeFilterTemplate
       {...props}
@@ -233,6 +244,7 @@ export function KendoGrid<T extends any>({
 
   const filterCellMapping = {
     [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
+    [KendoGridFilterCell.PO_STATUS]: POStatusFilter,
     [KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM]: TypeFilter,
     [KendoGridFilterCell.EFFECTIVE_DATE]: EffectiveDate,
     [KendoGridFilterCell.COMPLETED_AT]: CompletedDate,

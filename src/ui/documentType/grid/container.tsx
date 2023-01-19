@@ -1,5 +1,5 @@
 import { GridRowClickEvent } from "@progress/kendo-react-grid";
-import { isEmpty } from "lodash";
+import { each, isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,6 +56,13 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
   if ((!isByCategory && !documentType) || (isByCategory && !documentCategory)) {
     return <Redirect to={HOME_URL} />;
   }
+  // Remove once column value modified on BE
+  each(documentCategory.columns, (col) => {
+    const label = col?.label as string;
+    if (col && label === "PO Status") {
+      col.valuePath = "poStatus";
+    }
+  });
   const pageDetailColumns = (isByCategory ? documentCategory.columns : documentType?.pageDetails?.columns) || [];
 
   const columns: TableColumnProps<DocumentRevision>[] = pageDetailColumns
@@ -139,6 +146,9 @@ const DocumentByTypeListContainer: React.FunctionComponent<RouteComponentProps<R
       dynamicCellGroupable = false;
     } else if (columnDetails.searchOptions?.ownerTemplate) {
       dynamicCellTemplate = KendoCellTemplates.USER_AVATAR;
+    }  else if (columnDetails.searchOptions?.poStatusTemplate) {
+      filterCellTemplate = KendoGridFilterCell.PO_STATUS;
+      dynamicCellTemplate = KendoCellTemplates.STATUS;
     } else if (columnDetails.searchOptions?.statusTemplate) {
       filterCellTemplate = KendoGridFilterCell.DISPLAY_STATUS;
       dynamicCellTemplate = KendoCellTemplates.STATUS;

@@ -28,8 +28,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const dialog = useDialog();
   const async = useAsync();
   const voidAction = useActionCreator(documentRevisionsActions.voidDocument);
-  const openPOAction = useActionCreator(documentRevisionsActions.openPO);
-  const closePOAction = useActionCreator(documentRevisionsActions.closePO);
+  const updatePOAction = useActionCreator(documentRevisionsActions.updatePO);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [action, setAction] = React.useState<POStatusType>(POStatusType.OPENED);
 
@@ -43,7 +42,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
 
   const closePO = () => {
     dialog.close();
-    async.start(closePOAction, docId, async);
+    async.start(updatePOAction, docId, { poStatus: POStatusType.CLOSED }, async);
   };
 
   const handleVoid = () => {
@@ -110,9 +109,9 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
     dialog.close();
     if (action === POStatusType.VOIDED) {
       openPOToast("Show me ");
-    } else if (action === POStatusType.OPENED) {
-      async.start(openPOAction, docId, async);
       async.start(voidAction, docId, async);
+    } else if (action === POStatusType.OPENED) {
+      async.start(updatePOAction, docId, { poStatus: POStatusType.CLOSED }, async);
     }
   };
   const getAlertDialogMessage = () => {
