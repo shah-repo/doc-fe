@@ -58,7 +58,6 @@ declare global {
       arVoidAR(): Chainable<Subject>;
       arSaveApiCall(): Chainable<Subject>;
       arSaveApiCallWithoutApi(): Chainable<Subject>;
-      arApproveARWithoutApi(): Chainable<Subject>;
       arCheckDashboardARNotificationExistance(params: {shouldExist: boolean}): Chainable<Subject>;
       arVerifySignatureIsNotMet(): Chainable<Subject>;
       arApproverRoleStatus(params: {roleName: string; enabled: boolean}): Chainable<Subject>;
@@ -485,15 +484,6 @@ Cypress.Commands.add("arApproveARFromDashboard", () => {
 
 Cypress.Commands.add("arApproveARFromDashboardWithoutApi", () => {
   cy.contains("needs your approval for").trigger("mouseover");
-  cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-  cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-  cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-  cy.progressBarShouldNotExist();
-  cy.listLoadingElementShouldNotExist();
-  cy.checkToastMessage({ exists: false });
-});
-
-Cypress.Commands.add("arApproveARWithoutApi", () => {
   cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
   cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();

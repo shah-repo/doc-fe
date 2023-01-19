@@ -9,7 +9,7 @@ import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/cli
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
-let createdCompany
+let createdCompany;
 let loginResponse;
 
 const intDocType = "Clinical Protocol";

@@ -109,7 +109,7 @@ context("File delete in Pending Change", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({approverName: `${USERS[3].name}`});
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ approverName: `${USERS[3].name}` });
     });
 
     context("Withdraw submission and check attachments on document", () => {
