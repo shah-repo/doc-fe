@@ -23,17 +23,8 @@ const useStyles = makeStyles({
   },
 });
 
-const filterList = [{ key: "Contains", value: "contains" },
-  { key: "Does not contain", value: "doesnotcontain" },
-  { key: "Is equal to", value: "isequalto" },
-  { key: "Is not equal to", value: "isnotequalto" },
-  { key: "Starts with", value: "startswith" },
-  { key: "Ends with", value: "endswith" },
-  { key: "Is null", value: "isnull" },
-  { key: "Is not null", value: "isnotnull" },
-  { key: "Is empty", value: "isempty" },
-  { key: "Is not empty", value: "isnotempty" }];
-
+const filterList = ["contains", "doesnotcontain",  "isequalto", "isnotequalto",
+  "startswith", "endswith", "isnull", "isnotnull", "isempty", "isnotempty" ];
 
 export const InputFilterTemplate = ({
   defaultItem,
@@ -115,7 +106,11 @@ export const InputFilterTemplate = ({
               open={open}
               onChange={(e) => onDropdownChange(e)}
             >
-              {map(filterList, (item) => <MenuItem value={item.value}>{item.key}</MenuItem>)}
+              {map(filterList, (item) =>
+                <MenuItem value={item}>
+                  {intl.formatMessage({ id: `dropdown.filter.${item}` })}
+                </MenuItem>
+              )}
             </Select>
           </FormControl>
         </Box>
@@ -124,7 +119,7 @@ export const InputFilterTemplate = ({
         className="k-button k-button-icon k-clear-button-visible"
         title={intl.formatMessage({ id: TranslatedText[DisplayText.CLEAR] })}
         onClick={onClearButtonClick}
-        hidden={Boolean(inputValue === "")}
+        hidden={(inputValue === "")}
       >
         <span className="k-icon k-i-filter-clear" />
       </button>
