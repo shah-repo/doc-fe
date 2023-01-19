@@ -55,8 +55,10 @@ const ChangeRequestUpdateContainer: React.FunctionComponent<ChangeRequestUpdateC
   });
   if (!canEditChangeRequest(changeRequest, currentUserEmail)) {
     if (inDialog) {
-      return <ChangeRequestSummaryContainer changeRequest={changeRequest}
-        currentUserEmail={currentUserEmail} />;
+      return (
+        <ChangeRequestSummaryContainer changeRequest={changeRequest}
+          currentUserEmail={currentUserEmail} />
+      );
     }
     return <Redirect to={changeRequestPreviewPath(changeRequest.id)} />;
   }

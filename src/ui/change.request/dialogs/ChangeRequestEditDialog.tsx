@@ -52,7 +52,6 @@ const ChangeRequestEditDialog: React.FunctionComponent<Props> = ({
         }}
         scroll="paper"
         disableEscapeKeyDown={true}
-        style={{ maxWidth: "none" }}
         maxWidth={false}
         open={approvalRequestDialog.isOpen}
         onSubmit={(event: React.FormEvent) => event.stopPropagation()}
