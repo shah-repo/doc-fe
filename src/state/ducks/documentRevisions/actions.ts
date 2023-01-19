@@ -49,8 +49,6 @@ const load = (id: string, asyncType = DOCUMENT_REVISION_GET_ASYNC ): ApiAction<D
   method: "get",
   asyncType,
   onSuccess: (documentRevision, dispatch) => {
-    // Remove at last
-    documentRevision.poStatus = POStatusType.OPENED;
     dispatch(documentRevisionSet(documentRevision));
   },
 });
@@ -311,10 +309,10 @@ const voidDocument = (id: string): ApiAction<DocumentRevision> => apiAction({
 
 const updatePO = (id: string, body: {poStatus: POStatusType}): ApiAction<DocumentRevision> => apiAction({
   url: `${PO_ROOT_URL}/${id}/status`,
-  method: "patch",
+  method: "put",
   data: body,
-  onSuccess: (documentRevision, dispatch) => {
-    dispatch(documentRevisionSet(documentRevision));
+  onSuccess: (response, dispatch) => {
+    dispatch(load(id));
   },
 });
 

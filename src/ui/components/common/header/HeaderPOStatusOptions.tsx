@@ -111,7 +111,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       openPOToast("Show me ");
       async.start(voidAction, docId, async);
     } else if (action === POStatusType.OPENED) {
-      async.start(updatePOAction, docId, { poStatus: POStatusType.CLOSED }, async);
+      async.start(updatePOAction, docId, { poStatus: POStatusType.OPENED }, async);
     }
   };
   const getAlertDialogMessage = () => {
