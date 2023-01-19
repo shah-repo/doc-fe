@@ -52,13 +52,10 @@ export const approversById = (
 ): ChangeRequestsApproversByIdState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST_APPROVERS:
-      return {
-        ...state,
-        ...keyBy<ChangeRequestAvailableApprovers>(
-          action.payload,
-          (approver) => approver.user.id,
-        ),
-      };
+      return keyBy<ChangeRequestAvailableApprovers>(
+        action.payload,
+        (approver) => approver.user.id,
+      );
     default:
       return state;
   }
@@ -69,10 +66,7 @@ export const approversAllIds = (
 ): ChangeRequestsApproversAllIdsState => {
   switch (action.type) {
     case CHANGE_REQUEST_LIST_APPROVERS:
-      return uniq([
-        ...state,
-        ...action.payload.map((approver) => approver.user.id),
-      ]);
+      return action.payload.map((approver) => approver.user.id);
     default:
       return state;
   }
