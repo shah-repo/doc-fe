@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -426,7 +425,7 @@ context("Deleting LHR Step test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify LHRT is in DRAFT status", () => {
@@ -435,9 +434,8 @@ context("Deleting LHR Step test", () => {
 
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-      });
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select Details tab", () => {
@@ -445,14 +443,12 @@ context("Deleting LHR Step test", () => {
     });
 
     it("Remove 'LHR Step'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
-      });
-      cy.progressBarShouldNotExist();
+      cy.get("[data-cy=\"remove-schema-item\"]").last().arrowClick({ force: true });
+      cy.saveBarShouldNotExist();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release LHRt document", () => {
@@ -479,15 +475,14 @@ context("Deleting LHR Step test", () => {
       });
 
       it("Select MPI document for step #1 in LHRt", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("input[data-cy^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
-        });
+        cy.get("input[data-cy^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
     context("Release LHRT", () => {
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release LHRt document", () => {

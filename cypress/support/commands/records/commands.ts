@@ -38,6 +38,7 @@ declare global {
         sessionId: string;}): Chainable<Subject>;
       equipSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
       recFinalizeAndReleaseRecord(): Chainable<Subject>;
+      recFinalizeAndReleaseRecordWithoutApi(): Chainable<Subject>;
     }
   }
 }
@@ -260,6 +261,14 @@ Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {
   () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   });
+});
+
+
+Cypress.Commands.add("recFinalizeAndReleaseRecordWithoutApi", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("recFinalizeAndReleaseRecord", () => {
