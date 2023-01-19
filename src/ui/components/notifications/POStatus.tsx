@@ -65,13 +65,16 @@ const POToast: React.FC<Props> = (props) => {
   );
 };
 
+const closeButton = ({ closeToast }) => (
+  <div id="poStatusCloseButton" onClick={closeToast}>{<CloseIcon />} </div>
+);
+
 export const openPOToast = (myProps, options = {}) =>
   toast(<POToast {...myProps} />, {
     ...{
       toastId: "poStatusToast",
       bodyClassName: "poStatusToastrBody",
       position: "top-center",
-      autoClose: 5000,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: true,
@@ -80,7 +83,7 @@ export const openPOToast = (myProps, options = {}) =>
       timeout: 0,
       extendedTimeout: 0,
       theme: "Light",
-      closeButton: <div id="poStatusCloseButton">{<CloseIcon />} </div>,
+      closeButton,
     },
     ...options,
   });
