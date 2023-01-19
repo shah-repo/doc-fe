@@ -972,7 +972,7 @@ context("Email format Verification after LHR released", () => {
     });
 
     it("Complete the step", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve", () => {
