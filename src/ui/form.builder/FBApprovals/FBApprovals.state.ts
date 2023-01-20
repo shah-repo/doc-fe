@@ -2,7 +2,6 @@ import { filter, isEmpty, map } from "lodash";
 import { action, computed, observable, set } from "mobx";
 import { FBApprovalsConstructor, FBInlineApprovalBody, FBInlineApprovalTransition, FBInlineApprovalTransitionBody, FBJoinedEmployee, FBRequiredApprover } from "..";
 import { Approval } from "../../../state/ducks/common/types";
-import { POStatusType } from "../../../state/ducks/documentRevisions/types";
 import { FBEndpoint } from "../defaults/FBEndpoint";
 import FBRequest from "../FBApi/FBApi.request";
 
@@ -98,10 +97,6 @@ class FBApprovalsState extends FBRequest<Approval, {"ids[]": string[]} | Approva
     }, (data, error) => {
       if (error) {
         return this.transitionApi.onError(error);
-      }
-      // TODO compare prev and current poStatus
-      if (data?.documentRevision?.poStatus === POStatusType.OPENED) {
-        localStorage.setItem("showAutoReopenPopup", "true");
       }
       this.transitionApi.data = data;
       this.transitionApi.onSuccess();

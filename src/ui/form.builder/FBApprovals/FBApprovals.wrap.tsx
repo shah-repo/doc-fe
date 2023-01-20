@@ -10,9 +10,10 @@ import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Approval } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus, POStatusType } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
+import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentAlphaReleased } from "../../documentRevision/helpers/revisionStage";
 import FBStore from "../FBStore/FBStore";
 import { FBApprovalsProps, FBApprovalsStatusEndpoint } from "./FBApprovals.types";
@@ -61,6 +62,7 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       name: `${owner?.user?.name} (${owner?.user?.email})`,
       id: owner.id,
     }));
+    const isReceivable = checkIsDocumentReceivable(document?.document?.documentType?.groupOptions);
 
     const {
       owner: { user: { id: userId = "" } = {} } = {},
@@ -131,6 +133,17 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
     React.useEffect(() => reaction(
       () => approvalsState?.transitionApi.data,
       (data) => {
+        if (
+          isReceivable && [
+            DocumentStatus.Draft,
+            DocumentStatus.Rejected,
+            DocumentStatus.Approved,
+          ].includes(data?.status as DocumentStatus) &&
+          document?.poStatus !== data?.documentRevision?.poStatus &&
+          data?.documentRevision?.poStatus === POStatusType.OPENED
+        ) {
+          localStorage.setItem("showAutoReopenPopup", "true");
+        }
         concatApprovals(data);
         if (data?.status === DocumentStatus.Draft) {
           window.location.reload();
