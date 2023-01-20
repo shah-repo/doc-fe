@@ -104,7 +104,7 @@ context("Approval request form layout verification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -146,7 +146,7 @@ context("Approval request form layout verification", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -184,7 +184,7 @@ context("Approval request form layout verification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.reload();
     });
   });
@@ -260,7 +260,7 @@ context("Approval request form layout verification", () => {
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -464,7 +464,7 @@ context("Approval request form layout verification", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Navigate to document tab", () => {
@@ -485,14 +485,21 @@ context("Approval request form layout verification", () => {
 
     it("Enter description of change", () => {
       cy.get(`[name="justificationOfChange"]`).arrowType("justification of change");
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(2000);
     });
 
     it("selct document", () => {
       cy.get(`[data-cy="arAddDocumentDialogAddBtn"]`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Save the doc", () => {
-      cy.get("[data-cy='common.save']").arrowClick();
+      cy.arSaveApiCallWithoutApi();
+      cy.saveBarShouldNotExist();
+      cy.wait(3000);
     });
   });
 

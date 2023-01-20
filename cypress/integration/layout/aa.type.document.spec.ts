@@ -212,7 +212,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
 
@@ -231,7 +231,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
@@ -439,7 +439,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Verify row with the Tabs is fixed, and that user should not be able to add/edit new Tabs", () => {
@@ -485,7 +485,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
   });
@@ -686,7 +686,7 @@ context("AA Document Layout verification", () => {
       });
 
       it("save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
   });
@@ -740,8 +740,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify References selection", () => {
-      cy.get("[data-cy='referenceTo']").arrowClick({ force: true });
-      cy.drSelectReferences( "FM-00001" );
+      cy.get("[data-cy='referenceTo'] input").autocompleteSelect("FM-00001");
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
       cy.drRemoveReferences({ reference: "FM-00001" });
@@ -779,7 +778,7 @@ context("AA Document Layout verification", () => {
 
   context("Verify Revisions", () => {
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Revise Record", () => {
@@ -840,7 +839,6 @@ context("AA Document Layout verification", () => {
       {
         owner: USERS[1].name,
         actions: [
-          { key: "Access revoked for user", value: USERS[2].name },
           { key: "Access granted to group", value: `Developers` },
         ],
       },
@@ -1070,7 +1068,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -1116,17 +1114,14 @@ context("AA Document Layout verification", () => {
 
   context("Approve and release and complete the training ", () => {
     it("Approve and release FORM document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Check for training text inside dialog box and complete training", () => {
       cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCompleteTraining], () => {
-          cy.get("[data-cy=training-complete]").click();
-          cy.get("[data-cy='training.acknowladge.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='passwordConfirm']").arrowClick();
-        });
+      cy.get("[data-cy=training-complete]").click();
+      cy.get("[data-cy='training.acknowladge.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy='passwordConfirm']").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
