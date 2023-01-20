@@ -10,7 +10,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { lotDateSuffix } from "../../utils/constants/dateHandler";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
@@ -43,8 +42,6 @@ const LHRTTitle = "LHRt document";
 const CSPartDocumentTitle = "Part Document";
 const MPIDocumentTitle =  "MPI document";
 
-const dataCyFbApprovals = "[data-cy^=\"fb-approvals-fb-approvals\"]";
-const dataCyOptions = "ul>li[role=option]";
 const lhrInitialQuantityName = "[name=\"lhr_initial_quantity\"]";
 
 const dateAfterEmailShouldArrive = new Date();
@@ -170,11 +167,14 @@ context("LHRs email notifications", () => {
     });
   });
 
-
   context("Create MPI document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
         cy.navigToDocumentList();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click on 'Create a document' button", () => {
@@ -202,23 +202,24 @@ context("LHRs email notifications", () => {
       it("Click create document", () => {
         cy.drClickCreateDocumentWithApiCall();
       });
+    });
 
-      context("Release MPI", () => {
-        it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
-        });
+    context("Release MPI", () => {
+      it("Approve and release MPI document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
-
 
   context("Create LHRt document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
         cy.unClick();
         cy.navigToDocumentList();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click on 'Create a document' button", () => {
@@ -248,51 +249,53 @@ context("LHRs email notifications", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy=\"lhr-selected-part\"]").arrowType(CSPartDocumentTitle);
-        cy.get(dataCyOptions).contains(CSPartDocumentTitle).arrowClick();
+        cy.get(`[data-cy="lhr-selected-part"]`).click().autocompleteSelect(CSPartDocumentTitle);
       });
 
-      context("Select created MPI in LHR template", () => {
-        it("Select Details tab", () => {
-          cy.drSelectDetailsTab();
-        });
+      it("Click save document", () => {
+        cy.drClickSaveWithoutApiCall();
+      });
+    });
 
-        it("Click 'LHR Step'", () => {
-          cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
-        });
+    context("Select created MPI in LHR template", () => {
+      it("Select Details tab", () => {
+        cy.drSelectDetailsTab();
+      });
 
-        it("Select MPI document for step #1 in LHRt", () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect(MPIDocumentTitle, { force: true });
+      it("Click 'LHR Step'", () => {
+        cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+      });
+
+      it("Select MPI document for step #1 in LHRt", () => {
+        cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect(MPIDocumentTitle, { force: true });
+      });
+    });
+
+    context("Release LHRt", () => {
+      it("Click save document", () => {
+        cy.drClickSaveWithoutApiCall();
+        cy.url().then((url: any) => {
+          lhrtDocUrl = url;
         });
       });
 
-      context("Release LHRt", () => {
-        it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
-          cy.url().then((url: any) => {
-            lhrtDocUrl = url;
-          });
-        });
-
-        it("Approve and release LHRt document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+      it("Approve and release LHRt document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
 
-
   context(`Create LHR A - Build Type '${BUILD_TYPE.Production}'`, () => {
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter initial quantity", () => {
@@ -309,103 +312,111 @@ context("LHRs email notifications", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
       cy.url().then((url: any) => {
         lhr1DocUrl = url;
       });
     });
+  });
 
-    context("Start and Release LHRs #1", () => {
-      it("Select Details tab", () => {
-        cy.drSelectDetailsTab();
-      });
-
-      it("Click 'LHR Step'", () => {
-        cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
-      });
-      it("Click 'START MPI'", () => {
-        cy.mpiStartStep({ stepNumber: 1 });
-      });
-      it("Select Procedure tab", () => {
-        cy.drSelectProcedureTab();
-      });
-      it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
-      });
-      it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
-      });
-      it("Enter 'Rejected quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
-      });
-      it("Save changes in LHRs", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-      it("Select Overview tab", () => {
-        cy.drSelectOverviewTab();
-      });
-      it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-      it("Click 'Submit for Approval' button", () => {
-        cy.wait(5000);
-        cy.pmSubmitForApproval();
-      });
-      it("Click 'Approve' button", () => {
-        cy.ebApprove();
-      });
+  context("Start and Release LHRs #1", () => {
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
-    context("Add approvers to LHR A", () => {
-      it("Navigate to LHR A Document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(lhr1DocUrl);
-        });
-        cy.listLoadingElementShouldNotExist();
-      });
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+    });
 
-      it("Add a first Approval", () => {
-        cy.get(dataCyFbApprovals).scrollIntoView().arrowClick({ force: true });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
-        });
-      });
+    it("Click 'START MPI'", () => {
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
+    });
 
-      it("Add a second Approval", () => {
-        cy.get(dataCyFbApprovals).arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
-        });
-      });
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
 
-      it("Click 'Submit for Approval' button", () => {
-        cy.wait(5000);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
-      });
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Enter 'Start quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10").unClick();
+    });
+
+    it("Enter 'Accepted quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8").unClick();
+    });
+
+    it("Enter 'Rejected quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2").unClick();
+    });
+
+    it("Save changes in LHRs", () => {
+      cy.drClickSaveWithoutApiCall();
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+    });
+
+    it("Click save document", () => {
+      cy.drClickSaveWithoutApiCall();
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.pmSubmitForApprovalWithoutAPI();
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.ebApproveWithoutApi();
     });
   });
 
+  context("Add approvers to LHR A", () => {
+    it("Navigate to LHR A Document", () => {
+      cy.visit(lhr1DocUrl);
+      cy.wait(3000);
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Add a first Approval", () => {
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
+    });
+
+    it("Add a second Approval", () => {
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
+    });
+
+    it("Click save document", () => {
+      cy.lhrSaveWithoutApi();
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.lhrSubmitForApprovalWithoutApi();
+    });
+  });
 
   context(`Create LHR B - Build Type '${BUILD_TYPE.RD}'`, () => {
     it("Navigate to LHRt Document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-        cy.visit(lhrtDocUrl);
-      });
-      cy.listLoadingElementShouldNotExist();
+      cy.visit(lhrtDocUrl);
+      cy.listLoadingElementShouldAppear();
+      cy.saveBarShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter initial quantity", () => {
@@ -422,101 +433,104 @@ context("LHRs email notifications", () => {
     });
 
     it("Click save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.lhrSaveWithoutApi();
       cy.url().then((url: any) => {
         lhr2DocUrl = url;
       });
     });
+  });
 
-    context("Start and Release LHRs #1", () => {
-      it("Select Details tab", () => {
-        cy.drSelectDetailsTab();
-      });
-
-      it("Click 'LHR Step'", () => {
-        cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
-      });
-
-      it("Click 'START MPI'", () => {
-        cy.mpiStartStep({ stepNumber: 1 });
-      });
-      it("Select Procedure tab", () => {
-        cy.drSelectProcedureTab();
-      });
-      it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
-      });
-      it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
-      });
-      it("Enter 'Rejected quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
-      });
-      it("Save changes in LHRs", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-      it("Select Overview tab", () => {
-        cy.drSelectOverviewTab();
-      });
-      it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
-      it("Click 'Submit for Approval' button", () => {
-        cy.wait(5000);
-        cy.pmSubmitForApproval();
-      });
-      it("Click 'Approve' button", () => {
-        cy.ebApprove();
-      });
+  context("Start and Release LHRs #1", () => {
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
-    context("Add approvers to LHR B", () => {
-      it("Navigate to LHR B Document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(lhr2DocUrl);
-        });
-        cy.listLoadingElementShouldNotExist();
-      });
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+    });
 
-      it("Add a first Approval", () => {
-        cy.get(dataCyFbApprovals).arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
-        });
-      });
+    it("Click 'START MPI'", () => {
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
+    });
 
-      it("Add a second Approval", () => {
-        cy.get(dataCyFbApprovals).arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
-        });
-      });
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
 
-      it("Click 'Submit for Approval' button", () => {
-        cy.wait(5000);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
-      });
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Enter 'Start quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10").unClick();
+    });
+
+    it("Enter 'Accepted quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8").unClick();
+    });
+
+    it("Enter 'Rejected quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2").unClick();
+    });
+
+    it("Save changes in LHRs", () => {
+      cy.lhrSaveWithoutApi();
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.pmSubmitForApprovalWithoutAPI();
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.ebApproveWithoutApi();
     });
   });
 
+  context("Add approvers to LHR B", () => {
+    it("Navigate to LHR B Document", () => {
+      cy.visit(lhr2DocUrl);
+      cy.listLoadingElementShouldAppear();
+      cy.saveBarShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
+
+    it("Add a first Approval", () => {
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
+    });
+
+    it("Add a second Approval", () => {
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.lhrSubmitForApprovalWithoutApi();
+    });
+  });
 
   context(`Create LHR C - Build Type '${BUILD_TYPE.Production}' switch to Build Type '${BUILD_TYPE.RD}'`, () => {
     it("Navigate to LHRt Document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-        cy.visit(lhrtDocUrl);
-      });
-      cy.listLoadingElementShouldNotExist();
+      cy.visit(lhrtDocUrl);
+      cy.listLoadingElementShouldAppear();
+      cy.saveBarShouldNotExist();
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter initial quantity", () => {
@@ -533,7 +547,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Click save document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it(`Select '${BUILD_TYPE.RD}' build type`, () => {
@@ -542,86 +556,86 @@ context("LHRs email notifications", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
       cy.url().then((url: any) => {
         lhr3DocUrl = url;
       });
     });
+  });
 
-    context("Start and Release LHRs #1", () => {
-      it("Select Details tab", () => {
-        cy.drSelectDetailsTab();
-      });
-
-      it("Click 'LHR Step'", () => {
-        cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
-      });
-
-      it("Click 'START MPI'", () => {
-        cy.mpiStartStep({ stepNumber: 1 });
-      });
-      it("Select Procedure tab", () => {
-        cy.drSelectProcedureTab();
-      });
-      it("Enter 'Start quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10");
-      });
-      it("Enter 'Accepted quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8");
-      });
-      it("Enter 'Rejected quntity' for LHRs #1", () => {
-        cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2");
-      });
-      it("Save changes in LHRs", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-      });
-      it("Select Overview tab", () => {
-        cy.drSelectOverviewTab();
-      });
-      it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
-      });
-      it("Click 'Submit for Approval' button", () => {
-        cy.wait(5000);
-        cy.pmSubmitForApproval();
-      });
-      it("Click 'Approve' button", () => {
-        cy.ebApprove();
-      });
+  context("Start and Release LHRs #1", () => {
+    it("Select Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
-    context("Add approvers to LHR C", () => {
-      it("Navigate to LHR C Document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(lhr3DocUrl);
-        });
-        cy.listLoadingElementShouldNotExist();
-      });
+    it("Click 'LHR Step'", () => {
+      cy.get("[data-cy^=\"LHR Step\"]").arrowClick();
+    });
 
-      it("Add a first Approval", () => {
-        cy.get(dataCyFbApprovals).arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
-        });
-      });
+    it("Click 'START MPI'", () => {
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
+    });
 
-      it("Add a second Approval", () => {
-        cy.get(dataCyFbApprovals).arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
-        });
-      });
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
 
-      it("Click 'Submit for Approval' button", () => {
-        cy.wait(5000);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-        cy.listLoadingElementShouldNotExist();
-      });
+    it("Select Procedure tab", () => {
+      cy.drSelectProcedureTab();
+    });
+
+    it("Enter 'Start quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-start-quantity\"]").arrowType("10").unClick();
+    });
+
+    it("Enter 'Accepted quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-accepted-quantity\"]").arrowType("8").unClick();
+    });
+
+    it("Enter 'Rejected quntity' for LHRs #1", () => {
+      cy.get("[name=\"lhrs-rejected-quantity\"]").arrowType("2").unClick();
+    });
+
+    it("Save changes in LHRs", () => {
+      cy.drClickSaveWithoutApiCall();
+    });
+
+    it("Select Overview tab", () => {
+      cy.drSelectOverviewTab();
+    });
+
+    it("Add an Approval", () => {
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.pmSubmitForApprovalWithoutAPI();
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.ebApproveWithoutApi();
     });
   });
 
+  context("Add approvers to LHR C", () => {
+    it("Navigate to LHR C Document", () => {
+      cy.visit(lhr3DocUrl);
+      cy.wait(3000);
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Add a first Approval", () => {
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
+    });
+
+    it("Add a second Approval", () => {
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.lhrSubmitForApprovalWithoutApi();
+    });
+  });
 
   context("Verify emails for submitted LHR", () => {
     it("Verify emails", () => {
@@ -652,7 +666,6 @@ context("LHRs email notifications", () => {
             `<b>${LHR4}, LOT #${lotDateSuffix()}01</b> is in review and you are an approver.`,
           ],
         },
-
       ];
 
       cy.imapVerifyEmailsInList({
@@ -726,14 +739,7 @@ context("LHRs email notifications", () => {
       ["C", "B", "A"].forEach((lhrName) => {
         it(`Click approve for the LHR ${lhrName}`, () => {
           cy.wait(2000);
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove], () => {
-              cy.contains("needs your approval for").eq(0).trigger("mouseover");
-              cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-              cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-              cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-              cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-            });
+          cy.arApproveARFromDashboardWithoutApi();
 
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -751,14 +757,7 @@ context("LHRs email notifications", () => {
       ["C", "B", "A"].forEach((lhrName) => {
         it(`Click approve for the LHR ${lhrName}`, () => {
           cy.wait(2000);
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove], () => {
-              cy.contains("needs your approval for").eq(0).trigger("mouseover");
-              cy.get("[data-cy=\"transition-approve\"]").first().trigger("mouseover");
-              cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-              cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-              cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-            });
+          cy.arApproveARFromDashboardWithoutApi();
 
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
@@ -776,16 +775,13 @@ context("LHRs email notifications", () => {
 
     context(`Submit for approval revised LHR A - Build Type: ${BUILD_TYPE.RD}`, () => {
       it("Navigate to LHR A Document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(lhr1DocUrl);
-        });
+        cy.visit(lhr1DocUrl);
+        cy.wait(3000);
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Revise LHR", () => {
-        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.checkToastMessage({ exists: false });
+        cy.lhrClickReviseDocument();
       });
 
       it(`Select '${BUILD_TYPE.RD}' build type`, () => {
@@ -794,76 +790,47 @@ context("LHRs email notifications", () => {
       });
 
       it("Click save document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.checkToastMessage({ exists: false });
-        cy.listLoadingElementShouldNotExist();
+        cy.lhrClickSaveDocument();
+      });
+    });
+
+    context("Add approvers to LHR A", () => {
+      it("Add a first Approval", () => {
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
       });
 
-      context("Add approvers to LHR A", () => {
-        it("Add a first Approval", () => {
-          cy.get(dataCyFbApprovals).arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
-          });
-        });
+      it("Add a second Approval", () => {
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
+      });
 
-        it("Add a second Approval", () => {
-          cy.get(dataCyFbApprovals).arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
-          });
-        });
-
-        it("Click 'Submit for Approval' button", () => {
-          cy.wait(5000);
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          });
-          cy.listLoadingElementShouldNotExist();
-        });
+      it("Click 'Submit for Approval' button", () => {
+        cy.lhrSubmitForApprovalWithoutApi();
       });
     });
 
     context(`Submit for approval revised LHR B - Build Type: ${BUILD_TYPE.RD}`, () => {
       it("Navigate to LHR B Document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.visit(lhr2DocUrl);
-        });
+        cy.visit(lhr2DocUrl);
+        cy.wait(3000);
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Revise LHR", () => {
-        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.checkToastMessage({ exists: false });
-        cy.wait(5000);
+        cy.lhrClickReviseDocument();
+      });
+    });
+
+    context("Add approvers to LHR B", () => {
+      it("Add a first Approval", () => {
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
       });
 
-      context("Add approvers to LHR B", () => {
-        it("Add a first Approval", () => {
-          cy.get(dataCyFbApprovals).arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get(dataCyOptions).contains(USERS[2].name).arrowClick();
-          });
-        });
+      it("Add a second Approval", () => {
+        cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
+      });
 
-        it("Add a second Approval", () => {
-          cy.get(dataCyFbApprovals).arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-            cy.get(dataCyOptions).contains(USERS[3].name).arrowClick();
-          });
-        });
-
-        it("Click 'Submit for Approval' button", () => {
-          cy.wait(5000);
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-            cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-          });
-          cy.listLoadingElementShouldNotExist();
-        });
+      it("Click 'Submit for Approval' button", () => {
+        cy.lhrSubmitForApprovalWithoutApi();
       });
     });
 
