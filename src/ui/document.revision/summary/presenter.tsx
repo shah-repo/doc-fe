@@ -168,7 +168,7 @@ const Presenter: React.FunctionComponent<Props> = ({
               <RelatedPartsWrapper
                 viewOnly={true}
                 documentRevision={dataProp}
-                parentPartStatus= {dataProp?.relatedPartsStatus} />
+                relatedPartsStatus= {dataProp?.relatedPartsStatus} />
             </Grid>
         }
         {isEB && displayChildrenParts && (

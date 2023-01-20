@@ -36,6 +36,7 @@ type ChangeRequestFormProps =
   canChangeOwnership: boolean;
   displayLastSaved: boolean;
   errors: any;
+  hideSideBar?: boolean;
 };
 
 const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -53,6 +54,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   displayLastSaved,
   errors,
   _documentRevisionFormState,
+  hideSideBar = false,
 }) => {
   const { _tabsState } = SM.useStores();
   _formState?.setMode(mode);
@@ -93,7 +95,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {...changeRequest && changeRequest.crId && {
+        {...changeRequest && changeRequest.crId && !hideSideBar && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
