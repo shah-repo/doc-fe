@@ -53,11 +53,11 @@ const ParentPartSelector: React.FunctionComponent<{
   const classes = useStyles();
 
   useEffect(() => {
-    disableOptions(status as string);
+    disableOptions(status);
   }, [status]);
 
 
-  const disableOptions = (value: string) => {
+  const disableOptions = (value: RELATED_PARTS_STATUS) => {
     switch (value) {
       // case RELATED_PARTS_STATUS.PARENT_NO:
       //   setDisable({ disable1: false, disable2: true, disable3: true });
@@ -74,7 +74,7 @@ const ParentPartSelector: React.FunctionComponent<{
   };
 
   const parentStatusHandler = (
-    value: string
+    value: RELATED_PARTS_STATUS
   ) => {
     disableOptions(value);
     parentStatusChanged(value);
@@ -97,7 +97,7 @@ const ParentPartSelector: React.FunctionComponent<{
         </Tooltip>
       </div>
       <FormControl>
-        <RadioGroup row value={status} onChange={(e) => parentStatusHandler(e.target.value)}>
+        <RadioGroup row value={status} onChange={(e) => parentStatusHandler(e.target.value as RELATED_PARTS_STATUS)}>
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_NO}
             control={<Radio color="primary" disableRipple={true} />}
