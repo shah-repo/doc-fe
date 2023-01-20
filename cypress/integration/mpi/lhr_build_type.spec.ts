@@ -1107,7 +1107,6 @@ context("LHR Build type flow", () => {
 
   context("Create LHR with 'Production' build type", () => {
     it("Click create new document from LHRt", () => {
-      cy.pause();
       cy.visit(lhrtUrl);
       cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
