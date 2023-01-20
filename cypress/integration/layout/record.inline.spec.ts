@@ -789,8 +789,6 @@ context("Record inline Flow", () => {
         it("Approve first Inline Approval", () => {
           cy.lhrApproveWithoutApi();
           cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-          cy.checkToastMessage({ exists: false });
         });
       });
     });

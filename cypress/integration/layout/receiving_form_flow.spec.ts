@@ -1842,6 +1842,8 @@ context("Receiving landing page test", () => {
       cy.get("#DocumentByTypeListPresenter-openDocRev").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Add approver", () => {

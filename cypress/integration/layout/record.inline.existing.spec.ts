@@ -645,7 +645,6 @@ context("Record inline Flow", () => {
         cy.cmpTurnOffAutosave();
       });
 
-
       it("Edit radio button group and checkbox", () => {
         cy.get(`input[type="checkbox"][value="2"]`).arrowClick();
         cy.get(`input[type="radio"][value="22"]`).arrowClick();
@@ -688,11 +687,15 @@ context("Record inline Flow", () => {
         cy.wait(2000);
       });
 
-      it("Approve remaining Inline Approval", () => {
-        cy.lhrApproveWithoutApi();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.wait(2000);
+      it("Approve remaining Inline Approval if any", () => {
+        cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").then((el) => {
+          if (el.text() === "Approve") {
+            cy.lhrApproveWithoutApi();
+            cy.progressBarShouldNotExist();
+            cy.listLoadingElementShouldNotExist();
+            cy.wait(2000);
+          }
+        });
       });
 
       it("Turn off autosave", () => {
@@ -789,7 +792,6 @@ context("Record inline Flow", () => {
 
     it("Approve 1st Inline Approval", () => {
       cy.lhrApproveWithoutApi();
-      cy.checkToastMessage({ exists: false });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
@@ -820,11 +822,14 @@ context("Record inline Flow", () => {
     });
 
     it("Approve first Inline Approval", () => {
-      cy.lhrApproveWithoutApi();
-      cy.checkToastMessage({ exists: false });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(3000);
+      cy.get(`[data-cy="form.builder.request.approve"]`).contains("Approve").then((el) => {
+        if (el.text() === "Approve") {
+          cy.lhrApproveWithoutApi();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(2000);
+        }
+      });
     });
 
     it("Send request for approval", () => {

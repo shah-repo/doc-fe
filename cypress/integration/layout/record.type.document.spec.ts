@@ -572,9 +572,11 @@ context("Record type Document Layout verification", () => {
         it("release button click'", () => {
           cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
         });
+
         it("Approve record button click", () => {
-          cy.ebApproveWithoutApi();
+          cy.lhrApproveWithoutApi();
         });
+
       });
     });
   });
