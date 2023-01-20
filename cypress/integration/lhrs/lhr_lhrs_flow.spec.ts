@@ -1272,7 +1272,7 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Navigate to Procedure Tab", () => {
@@ -1355,7 +1355,7 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -1402,12 +1402,12 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get("[data-cy='lhr-selected-part']").arrowType("Part document");
-        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+        cy.get("[data-cy='lhr-selected-part']").autocompleteSelect("Part document");
+        // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
         cy.saveBarShouldNotExist();
       });
 
@@ -1452,7 +1452,9 @@ context("LHR & LHRS Flow", () => {
 
     context("Release LHRt", () => {
       it("Approve and release LHRt document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
     });
   });
@@ -1591,6 +1593,7 @@ context("LHR & LHRS Flow", () => {
       context(`If LHR step has not been started yet,the operators should be empty`, () => {
         it("Navigate to Detail Tab", () => {
           cy.drSelectDetailsTab();
+          cy.progressBarShouldNotExist();
         });
 
         it(`verify operators should be empty`, () => {
@@ -1843,7 +1846,7 @@ context("LHR & LHRS Flow", () => {
 
     it("Click 'START MPI'", () => {
       cy.get("[data-cy='LHR Step 1']").arrowClick();
-      cy.mpiStartStep({ stepNumber: 1 });
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
       cy.wait(1000);
       cy.landingPageLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
@@ -2038,6 +2041,7 @@ context("LHR & LHRS Flow", () => {
     it("Enter 'Rejected quntity' for LHRs #1", () => {
       cy.get("[name='lhrs-rejected-quantity']").arrowType("2");
       cy.unClick();
+      cy.lhrSaveWithoutApi();
       cy.saveBarShouldNotExist();
     });
 
@@ -2050,17 +2054,18 @@ context("LHR & LHRS Flow", () => {
     it(`Select lot 'LOT'`, () => {
       cy.listLoadingElementShouldNotExist();
       cy.wait(2000);
-      cy.get("input[data-cy=usedOverride]").arrowClick();
-      cy.get("ul>li[role=option]").contains(lotNumber).arrowClick();
+      cy.get("input[data-cy=usedOverride]").autocompleteSelect(lotNumber);
     });
 
     it("Select quantity in lot dialog", () => {
       cy.get("input[name='quantity']").arrowType("0.5");
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(2000);
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
       cy.get("div[role=dialog] button[data-cy='fb-control-btn']")
-        .eq(0)
+        .contains("Save")
         .click();
       cy.wait(1000);
       cy.progressBarShouldNotExist();
@@ -2075,8 +2080,7 @@ context("LHR & LHRS Flow", () => {
 
     it("Select CAL/PM 'Equipment document'", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("input[data-cy='usedOverride']").arrowClick();
-      cy.get("ul>li[role='option']").contains("Equipment document").arrowClick();
+      cy.get("input[data-cy='usedOverride']").autocompleteSelect("Equipment document");
     });
 
     it("Click 'SAVE' on select equipment dialog", () => {
@@ -2093,13 +2097,11 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Add an Approval User1", () => {
-      cy.get("[data-cy^='fb-approvals-approvals']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[2].name).arrowClick();
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[2].name });
     });
 
     it("Add an Approval User2", () => {
-      cy.get("[data-cy^='fb-approvals-approvals']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
       cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -2199,7 +2201,7 @@ context("LHR & LHRS Flow", () => {
 
   context("Complete LHRs with operator", () => {
     it("Approve step", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
       cy.wait(1000);
       cy.saveBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -2220,7 +2222,7 @@ context("LHR & LHRS Flow", () => {
 
   context("Complete LHRs with operator", () => {
     it("Approve step", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
       cy.wait(1000);
       cy.saveBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -2396,7 +2398,7 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Click 'START MPI'", () => {
-      cy.mpiStartStep({ stepNumber: 1 });
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
       cy.wait(3000);
       cy.reload();
     });
@@ -2691,7 +2693,7 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Click save document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.lhrSaveWithoutApi();
       cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -2706,8 +2708,7 @@ context("LHR & LHRS Flow", () => {
     it(`Select lot 'LOT'`, () => {
       cy.listLoadingElementShouldNotExist();
       cy.wait(2000);
-      cy.get("input[data-cy=usedOverride]").arrowClick();
-      cy.get("ul>li[role=option]").contains(lotNumber).arrowClick();
+      cy.get("input[data-cy=usedOverride]").autocompleteSelect(lotNumber);
     });
 
     it("Select quantity in lot dialog", () => {
@@ -2715,10 +2716,10 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Click 'SAVE' on select lot dialog", () => {
+      cy.wait(2000);
       cy.get("div[role=dialog] button[data-cy='fb-control-btn']")
-        .eq(0)
-        .click();
-      cy.wait(1000);
+        .contains("Save")
+        .arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -2731,8 +2732,7 @@ context("LHR & LHRS Flow", () => {
 
     it("Select CAL/PM 'Equipment document'", () => {
       cy.listLoadingElementShouldNotExist();
-      cy.get("input[data-cy='usedOverride']").arrowClick();
-      cy.get("ul>li[role='option']").contains("Equipment document").arrowClick();
+      cy.get("input[data-cy='usedOverride']").autocompleteSelect("Equipment document");
     });
 
     it("Click 'SAVE' on select equipment dialog", () => {
@@ -2748,16 +2748,14 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Add an Approval User1", () => {
-      cy.get("[data-cy^='fb-approvals-approvals']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Add an Approval User2", () => {
-      cy.get("[data-cy^='fb-approvals-approvals']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[3].name).arrowClick();
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[3].name });
       cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -2775,7 +2773,7 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Click save document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.lhrSaveWithoutApi();
       cy.wait(1000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -3004,8 +3002,7 @@ context("LHR & LHRS Flow", () => {
 
   context("Assign approvers and submit for approval", () => {
     it("Add an Approval User1", () => {
-      cy.get("[data-cy^='fb-approvals']").arrowClick();
-      cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.wait(1000);
       cy.saveBarShouldNotExist();
     });

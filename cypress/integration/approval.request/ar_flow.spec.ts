@@ -460,7 +460,7 @@ context("Approval request form", () => {
   context("Create approval request with newly created form", () => {
     it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0680");
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -484,7 +484,7 @@ context("Approval request form", () => {
 
     it("Add created document revision", () => {
       cy.drSelectDocumentTab();
-      cy.arClickAddDocument();
+      cy.arClickAddDocumentWithoutApi();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -506,6 +506,7 @@ context("Approval request form", () => {
 
     it("Add first Approver'", () => {
       cy.arSelectChangeDetailsTab();
+      cy.wait(1000);
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].name });
       cy.unClick();
       cy.listLoadingElementShouldNotExist();
@@ -537,7 +538,7 @@ context("Approval request form", () => {
 
   context("Click Send To Review", () => {
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -565,7 +566,7 @@ context("Approval request form", () => {
 
   context("Reject AR and verify email notification", () => {
     it("Navigate to Dashboard", () => {
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
     });
 
     it("Reject AR from dashboard", () => {
@@ -740,7 +741,7 @@ context("Approval request form", () => {
 
   context("Add approvers to approval request on approver list", () => {
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -765,11 +766,11 @@ context("Approval request form", () => {
 
   context("Approve created AR", () => {
     it("Navigate to added document in AR", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Filter approval by name and status, and select it", () => {
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: "IN_REVIEW" });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestTitle, status: "IN_REVIEW" });
     });
 
     it("Approve AR", () => {
@@ -798,12 +799,12 @@ context("Approval request form", () => {
     });
 
     it("Navigate to AR list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Filter approval by name and status, and select it", () => {
       cy.alClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestTitle, status: STATUS_TYPES_LABEL.APPROVED });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestTitle, status: STATUS_TYPES_LABEL.APPROVED });
     });
 
     it("Close AR and confirm pop-up for effective date", () => {
@@ -972,8 +973,8 @@ context("Approval request form", () => {
   context("Create AR and move it to 'Void'", () => {
     it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0680");
-      cy.navigToDashboard();
-      cy.navigToApprovalRequestList();
+      cy.navigToDashboardWithoutApi();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -996,7 +997,7 @@ context("Approval request form", () => {
     it("Add created document revision with description", () => {
       SystemRequirement("REQ-4290", "REQ-4280");
       cy.arSelectDocumentTab();
-      cy.arClickAddDocument();
+      cy.arClickAddDocumentWithoutApi();
       cy.arChoseSpecificProposedDocument({ name: "CP-00005" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -1010,6 +1011,8 @@ context("Approval request form", () => {
 
     it("Click 'Void'", () => {
       cy.arVoidAR();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it(`Verify AR status is ${STATUS_TYPES_LABEL.VOIDED}`, () => {

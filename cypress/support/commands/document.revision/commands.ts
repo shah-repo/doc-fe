@@ -660,18 +660,6 @@ Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string;
   cy.dlSelectFirstDocument();
 });
 
-Cypress.Commands.add("drFilterDocListByNameAndStatus", (params: { title: string; status: string }) => {
-  cy.dlClearFilters();
-  cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="3"] input`).arrowType(params.title).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
-  cy.get(`[aria-colindex="7"] [class="k-input"]`).arrowClick();
-  cy.landingPageLoadingElementShouldNotExist();
-  cy.get("li").contains(params.status).arrowClick().wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
-  cy.dlSelectFirstDocument();
-});
-
 Cypress.Commands.add("drFilterDocListByDocIdAndStatus", (params: { docId: string; status: string }) => {
   cy.dlClearFilters();
   cy.listLoadingElementShouldNotExist();
@@ -756,7 +744,7 @@ Cypress.Commands.add("drCheckTypeOfRevisionChangeOptions", () => {
 });
 
 Cypress.Commands.add("drSelectRevisionStageOptions", (params: {revisionStageOption: string}) => {
-  cy.get("[data-cy^=\"common.\"]");
+  cy.get("[data-cy^=\"common.\"]", { timeout: 10000 });
   cy.get("label").contains(new RegExp("^" + params.revisionStageOption + "$", "g")).arrowClick({ force: true });
 });
 

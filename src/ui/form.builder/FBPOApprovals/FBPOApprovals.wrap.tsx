@@ -5,7 +5,6 @@ import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from "..";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
-import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
@@ -31,7 +30,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     dialogState,
     disabled,
     disabledOptions,
-    disableChipDelete,
     ...props
   }: T) => {
     const { workspaceState, formState } = FB.useStores();
@@ -40,10 +38,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
     const authUser = store.getState().auth.user;
     currentUser = authUser.id;
     dialogState = FB.useRef(FBDialogState);
-    const administativeRevisionTypes = [RevisionChangeType.AdministrativeChange, RevisionChangeType.Obsolete];
-    const isAdministrativeChange = administativeRevisionTypes.includes(
-      workspaceState?.revisionChangeType as RevisionChangeType
-    );
 
     const {
       poApprovalsState,
@@ -105,7 +99,7 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-      const disableRequestorApproval = checkServiceOrProductPartExists(poItems) && !isAdministrativeChange;
+      const disableRequestorApproval = checkServiceOrProductPartExists(poItems);
       disabledOptions = disableRequestorApproval ? [requestor] : [];
     });
 
@@ -206,7 +200,6 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
       dialogState,
       disabled,
       disabledOptions,
-      disableChipDelete: !isAdministrativeChange,
     });
   };
 
