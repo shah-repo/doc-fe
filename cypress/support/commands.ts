@@ -135,11 +135,11 @@ Cypress.Commands.add("checkIfInputHasValue", (params: {inputSelector}) => {
 
 Cypress.Commands.add("saveBarShouldNotExist", () => {
   cy.get(`[data-cy="Document-Save-Progress-Bar"]`, { timeout: 40000 }).should("not.exist");
-  cy.saveBarShouldNotExist();
 });
 
 Cypress.Commands.add("saveBarShouldAppear", () => {
   cy.get(`[data-cy="Document-Save-Progress-Bar"]`, { timeout: 40000 }).should("exist");
+  cy.saveBarShouldNotExist();
 });
 
 Cypress.Commands.add("progressBarShouldNotExist", () => {

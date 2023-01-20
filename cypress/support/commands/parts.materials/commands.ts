@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-namespace */
 
+import { integer } from "aws-sdk/clients/cloudfront";
 import { integerType } from "aws-sdk/clients/iam";
 import { CyRoutes } from "../../routes";
 
@@ -59,8 +60,10 @@ declare global {
       lhrSelectBuildTypeRnD(): Chainable<Subject>;
       lhrSelectBuildTypeProduction(): Chainable<Subject>;
       lhrChangeBuildTypeToRnd(): Chainable<Subject>;
-      lhrSelectMaterial(params: { lot: string; quantity: string });
-      lhrChangeMaterial(params: { lot: string; quantity: string });
+      lhrSelectMaterial(params: { selectElement: integer; lot: string; quantity: string });
+      lhrChangeMaterial(params: { changeElement: integer; lot: string; quantity: string });
+      lhrSelectEquipment(params: { selectElement: integer; equipment: string });
+      lhrChangeEquipment(params: { changeElement: integer; equipment: string });
     }
   }
 }
@@ -160,6 +163,7 @@ Cypress.Commands.add("pmAddApproverOnApproverList", (params: { approver: string;
 Cypress.Commands.add("pmAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver, { force: true });
   cy.unClick();
+  cy.wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -351,8 +355,8 @@ Cypress.Commands.add("lhrChangeBuildTypeToRnd", () => {
   cy.get(`[data-cy="form.builder.lhr.build.switch"]`).arrowClick();
 });
 
-Cypress.Commands.add("lhrSelectMaterial", (params: { lot: string; quantity: string }) => {
-  cy.get("[data-cy=\"form.builder.select\"]").eq(0).arrowClick({ force: true }).wait(500);
+Cypress.Commands.add("lhrSelectMaterial", (params: { selectElement: integer; lot: string; quantity: string }) => {
+  cy.get("[data-cy=\"form.builder.select\"]").eq(params.selectElement).arrowClick({ force: true }).wait(500);
 
   cy.get("input[data-cy=usedOverride]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.lot).arrowClick();
@@ -362,8 +366,8 @@ Cypress.Commands.add("lhrSelectMaterial", (params: { lot: string; quantity: stri
   cy.get("[data-cy='form.builder.save']").arrowClick().wait(500);
 });
 
-Cypress.Commands.add("lhrChangeMaterial", (params: { lot: string; quantity: string }) => {
-  cy.get("[data-cy=\"form.builder.change\"]").eq(0).arrowClick({ force: true }).wait(500);
+Cypress.Commands.add("lhrChangeMaterial", (params: { changeElement: integer; lot: string; quantity: string }) => {
+  cy.get("[data-cy=\"form.builder.change\"]").eq(params.changeElement).arrowClick({ force: true }).wait(500);
 
   cy.get("input[data-cy=usedOverride]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.lot).arrowClick();
@@ -372,3 +376,22 @@ Cypress.Commands.add("lhrChangeMaterial", (params: { lot: string; quantity: stri
 
   cy.get("[data-cy='form.builder.save']").arrowClick().wait(500);
 });
+
+Cypress.Commands.add("lhrSelectEquipment", (params: { selectElement: integer; equipment: string }) => {
+  cy.get("[data-cy=\"form.builder.select\"]").eq(params.selectElement).arrowClick({ force: true }).wait(500);
+
+  cy.get("input[data-cy=usedOverride]").arrowClick().wait(500);
+  cy.get("ul>li[role=option]").contains(params.equipment).arrowClick();
+
+  cy.get("[data-cy='form.builder.save']").arrowClick().wait(500);
+});
+
+Cypress.Commands.add("lhrChangeEquipment", (params: { changeElement: integer; equipment: string }) => {
+  cy.get("[data-cy=\"form.builder.change\"]").eq(params.changeElement).arrowClick({ force: true }).wait(500);
+
+  cy.get("input[data-cy=usedOverride]").arrowClick().wait(500);
+  cy.get("ul>li[role=option]").contains(params.equipment).arrowClick();
+
+  cy.get("[data-cy='form.builder.save']").arrowClick().wait(500);
+});
+

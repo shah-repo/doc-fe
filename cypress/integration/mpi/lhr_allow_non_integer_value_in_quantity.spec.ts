@@ -1041,6 +1041,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'SELECT' for `Material`", () => {
       cy.lhrSelectMaterial({
+        selectElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.1`,
       });
@@ -1048,6 +1049,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.2`,
       });
@@ -1055,6 +1057,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.345`,
       });
@@ -1062,6 +1065,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.0345`,
       });
@@ -1096,6 +1100,7 @@ context("LHR allow non integer in quantity.", () => {
   context("Enter a non-integer value up to 10 numbers after decimal", () => {
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.1856767676`,
       });
@@ -1103,6 +1108,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.2898767885`,
       });
@@ -1110,6 +1116,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.8989765434`,
       });
@@ -1151,6 +1158,7 @@ context("LHR allow non integer in quantity.", () => {
   context("Enter a non-integer value with more then 10 numbers after the decimal ", () => {
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.8999999990111`,
       });
@@ -1270,6 +1278,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.63`,
       });
@@ -1277,6 +1286,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.46`,
       });
@@ -1284,6 +1294,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.451`,
       });
@@ -1291,6 +1302,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.0451`,
       });
@@ -1325,6 +1337,7 @@ context("LHR allow non integer in quantity.", () => {
   context("Enter a non-integer value up to 10 numbers after decimal", () => {
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.1856767677`,
       });
@@ -1332,6 +1345,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.2898767888`,
       });
@@ -1339,6 +1353,7 @@ context("LHR allow non integer in quantity.", () => {
 
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.8989765433`,
       });
@@ -1380,6 +1395,7 @@ context("LHR allow non integer in quantity.", () => {
   context("Enter a non-integer value with more then 10 numbers after the decimal ", () => {
     it("Click 'Change' for `Material`", () => {
       cy.lhrChangeMaterial({
+        changeElement: 0,
         lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
         quantity: `0.8999999990111`,
       });
