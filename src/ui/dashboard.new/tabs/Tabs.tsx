@@ -1,14 +1,14 @@
 import { Box, Typography } from "@material-ui/core";
 import cx from "classnames";
-import React, { FC, ComponentProps, useState, useCallback } from "react";
-import { useSelector } from "react-redux";
+import React, { FC, ComponentProps, useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as TodoIcon } from "../../../assets/images/todo.svg";
 import { ReactComponent as MyFeedIcon } from "../../../assets/images/my_feed.svg";
 import { ReactComponent as TrainingIcon } from "../../../assets/images/training_tab.svg";
 import { ReactComponent as RecentIcon } from "../../../assets/images/recent.svg";
 import { GroupTag } from "../../../state/ducks/auth/types";
 import { dashboardTodoSelectors } from "../../../state/ducks/dashboard.new/todo";
-import { dashboardMyFeedsSelectors } from "../../../state/ducks/dashboard.new/my.feeds";
+import { dashboardMyFeedsActions, dashboardMyFeedsSelectors } from "../../../state/ducks/dashboard.new/my.feeds";
 import Text from "../../components/Text";
 import useGetHasTag from "../../hooks/useGetHasTag";
 import useStyles from "./Tabs.styles";
@@ -68,10 +68,21 @@ const Tab: FC<TabProps> = (props) => {
 
 const Tabs: FC = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const isDashboardAdmin = useGetHasTag(GroupTag.DASHBOARD_ADMIN);
   const todoItems: any = useSelector(dashboardTodoSelectors.myFeedsList);
   const feedItems: any = useSelector(dashboardMyFeedsSelectors.myFeedsList);
+
+  useEffect(
+    () => {
+      if (!feedItems.total) {
+        dispatch(dashboardMyFeedsActions.loadMyFeedsList());
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   const [value, setValue] = useState<DashboardTabValues>(DashboardTabValues.Todo);
 

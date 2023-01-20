@@ -1360,5 +1360,15 @@
   "help.popular.resources": "Other Popular Resources",
   "help.didnt.find.what.you.need": "Didn’t find exactly what you needed?",
   "help.view.full.guide": "View full guide",
-  "help.view.all.guides": "View All Guides"
+  "help.view.all.guides": "View All Guides",
+  "dropdown.filter.contains": "Contains",
+  "dropdown.filter.doesnotcontain": "Does not contain",
+  "dropdown.filter.isequalto": "Is equal to",
+  "dropdown.filter.isnotequalto": "Is not equal to",
+  "dropdown.filter.startswith": "Starts with",
+  "dropdown.filter.endswith": "Ends with",
+  "dropdown.filter.isnull": "Is null",
+  "dropdown.filter.isnotnull": "Is not null",
+  "dropdown.filter.isempty": "Is empty",
+  "dropdown.filter.isnotempty": "Is not empty"
 }

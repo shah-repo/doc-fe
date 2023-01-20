@@ -32,6 +32,7 @@ import { CompletedDateFilterTemplate } from "../../document.revision/grid/filter
 import { DocumentTypeFilterTemplate } from "../../document.revision/grid/filter.template/DocumentTypeFilterTemplate";
 import { DueOnDateFilterTemplate } from "../../document.revision/grid/filter.template/DueOnDateFilterTemplate";
 import { EffectiveDateFilterTemplate } from "../../document.revision/grid/filter.template/EffectiveDateFilterTemplate";
+import { InputFilterTemplate } from "../../document.revision/grid/filter.template/InputFilterTemplate";
 import { StatusFilterTemplate } from "../../document.revision/grid/filter.template/StatusFilterTemplate";
 import { poStatusOptions } from "../../document.revision/utils/helpers";
 import useDidMount from "../../hooks/useDidMount";
@@ -241,6 +242,13 @@ export function KendoGrid<T extends any>({
       {...props}
     />
   );
+  const InputFilter = (props: GridFilterCellProps) => (
+    <InputFilterTemplate
+      {...props}
+      defaultItem={props.value}
+      value={props.value}
+    />
+  );
 
   const filterCellMapping = {
     [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
@@ -286,7 +294,7 @@ export function KendoGrid<T extends any>({
             filterCell={
               filterCellMapping[column.filterCell as string]
                 ? filterCellMapping[column.filterCell as string]
-                : undefined
+                : InputFilter
             }
             columnMenu={
               column.showColumnMenu
