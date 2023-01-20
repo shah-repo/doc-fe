@@ -9,17 +9,16 @@ import React from "react";
 import { Slide, toast } from "react-toastify";
 import { ReactComponent as CloseIcon } from "../../../assets/images/po_status_close.svg";
 import { ReactComponent as InfoIcon } from "../../../assets/images/po_status_info.svg";
+import Text from "../Text";
 import POStatusToastrStyles from "./POStatus.styles";
 import "./styles.css";
 
-export declare type ToastType = "info" | "success" | "error";
-
 interface Props {
-  message: string;
-  type: ToastType;
+  id?: string;
+  revId?: string;
 }
 
-const POToast: React.FC<Props> = (props) => {
+const POToastr: React.FC<Props> = (props) => {
   const classes = POStatusToastrStyles();
 
   return (
@@ -34,7 +33,7 @@ const POToast: React.FC<Props> = (props) => {
       <ListItemText
         primary={
           <Typography data-cy="po-status-info" className={classes.primaryText}>
-            Info
+            <Text translation="common.info" />
           </Typography>
         }
         secondary={
@@ -52,11 +51,14 @@ const POToast: React.FC<Props> = (props) => {
               className={classes.secondaryLinkText}
             >
               <span style={{ display: "inline-block" }}>
-                PO-00728
-                <div className={classes.blackDot} /> Rev 1
+                { props?.id }
+                <div className={classes.blackDot} />
+                <Text
+                  translation="form.builder.header.rev"
+                  values={{ revision: props?.revId }}/>
               </span>
             </Link>{" "}
-            has been reopened
+            <Text translation="documentRevision.po.reopen"/>
           </Typography>
         }
         className={classes.listItemText}
@@ -69,8 +71,8 @@ const closeButton = ({ closeToast }) => (
   <div id="poStatusCloseButton" onClick={closeToast}>{<CloseIcon />} </div>
 );
 
-export const openPOToast = (myProps, options = {}) =>
-  toast(<POToast {...myProps} />, {
+export const openPOToastr = (myProps, options = {}) =>
+  toast(<POToastr {...myProps} />, {
     ...{
       toastId: "poStatusToast",
       bodyClassName: "poStatusToastrBody",
