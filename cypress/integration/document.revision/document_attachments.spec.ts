@@ -11,7 +11,7 @@ let createdCompany;
 let loginResponse;
 let employeeLogin;
 
-const approvalRequestTitle = "Approval request from newly created form";
+const approvalRequestTitle = "Approval Request from newly created form";
 const saveFileNameOne = (Math.round(Math.random() * 100000)) % 100000;
 const saveFileNameTwo = (Math.round(Math.random() * 100000)) % 100000;
 const saveFileNameThree = (Math.round(Math.random() * 100000)) % 100000;
@@ -302,7 +302,7 @@ context("Document Attachment Flow", () => {
       cy.drClickSaveWithoutApiCall();
     });
 
-    it("Navigate to approval request list", () => {
+    it("Navigate to Approval Request list", () => {
       SystemRequirement("REQ-0680");
       cy.navigToApprovalRequestList();
     });
@@ -315,8 +315,8 @@ context("Document Attachment Flow", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    it("Enter description 'AR from New form template for Approval Request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for Approval Request" });
     });
 
     it("Add created document revision", () => {

@@ -227,7 +227,7 @@ context("Export Other internal doc", () => {
       });
     });
 
-    it("Navigate to approval request list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 

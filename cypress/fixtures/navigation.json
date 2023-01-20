@@ -1,4 +1,5 @@
-{"navigationItems": [
+{
+  "navigationItems": [
     {
       "icon": "/navigation_icons/dashboard.svg",
       "path": "/",
@@ -121,23 +122,23 @@
       ]
     },
     {
-  "icon": "/navigation_icons/receipt_list.svg",
-  "menu": [
-    {
-      "icon": "/navigation_icons/computer.svg",
-      "path": "/training",
-      "type": "LINK",
-      "label": "Training Records"
-    },
-    {
       "icon": "/navigation_icons/receipt_list.svg",
-      "type": "CATEGORY",
-      "label": "Training Curriculum",
-      "category": "Training Curriculums"
+      "menu": [
+        {
+          "icon": "/navigation_icons/computer.svg",
+          "path": "/training",
+          "type": "LINK",
+          "label": "Training Records"
+        },
+        {
+          "icon": "/navigation_icons/receipt_list.svg",
+          "type": "CATEGORY",
+          "label": "Training Curriculum",
+          "category": "Training Curriculums"
+        }
+      ],
+      "type": "MENU",
+      "label": "Training"
     }
-  ],
-  "type": "MENU",
-  "label": "Training"
-}
   ]
 }

@@ -777,7 +777,7 @@ context("Approval request form", () => {
       cy.arApproveARWithoutApi();
     });
 
-    it(`Check approval request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
+    it(`Check Approval Request status is ${STATUS_TYPES_LABEL.APPROVED}`, () => {
       SystemRequirement("REQ-0020", "REQ-0730", "REQ-4050");
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.APPROVED });
     });

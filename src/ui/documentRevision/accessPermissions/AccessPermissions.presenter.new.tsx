@@ -104,6 +104,7 @@ const AccessPermissionsPresenter: React.FunctionComponent<AccessPermissionsPrese
   useEffect(() => {
     if (accessElement?.value)
     { handleUpdate(null); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessElement]);
 
   const handleUpdate = (e) => {

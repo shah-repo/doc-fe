@@ -453,7 +453,7 @@ context("Document list test", () => {
       cy.get(`div[role="grid"]`).should("have.class", "k-grid");
     });
 
-    it("Verify approval request landing page default column headers", () => {
+    it("Verify Approval Request landing page default column headers", () => {
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${arId}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${arTitle}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${owner}`);
@@ -490,7 +490,7 @@ context("Document list test", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Verify when navigating away from and back to the approval request list", () => {
+    it("Verify when navigating away from and back to the Approval Request list", () => {
       cy.dlClearFilters();
       cy.alVerifyFilterByArId({ arId: "AR-00001" });
       cy.navigToDocumentList();

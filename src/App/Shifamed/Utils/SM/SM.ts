@@ -55,7 +55,9 @@ export default class SM {
   }
 
   public static get isNewCRLayout(): boolean {
-    return SM.pathname.includes("change_request/");
+    // return SM.pathname.includes("change_request/");
+    // Since now everything uses the new layout.
+    return true;
   }
   public static get isHomeURL(): boolean {
     return SM.pathname === HOME_URL;

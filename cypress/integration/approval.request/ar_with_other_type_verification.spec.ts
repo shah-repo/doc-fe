@@ -16,10 +16,10 @@ let group;
 let asyncTasksGroup;
 
 const documentRevisionName = "New document for testing AR";
-const approvalRequestTitle = "Approval request from newly created form";
-const approvalRequestFormName = "New Approval request form template";
+const approvalRequestTitle = "Approval Request from newly created form";
+const approvalRequestFormName = "New Approval Request form template";
 
-context("Approval request implementation tasks", () => {
+context("Approval Request implementation tasks", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -153,19 +153,19 @@ context("Approval request implementation tasks", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Approval request form template'", () => {
+    it("Enter title 'New Approval Request form template'", () => {
       cy.drEnterDocumentTitle({ name: approvalRequestFormName });
     });
 
-    it("Enter description 'New form template for approval request'", () => {
-      cy.drEnterDocumentDescription({ description: "New form template for approval request" });
+    it("Enter description 'New form template for Approval Request'", () => {
+      cy.drEnterDocumentDescription({ description: "New form template for Approval Request" });
     });
 
     it("Click on 'Form' document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval request' outputdocument type", () => {
+    it("Click on 'Approval Request' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
@@ -402,7 +402,7 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Select document template as 'AR form'", () => {
-      cy.get(`[data-cy="field-formDocument"]`).autocompleteSelect("New Approval request form template");
+      cy.get(`[data-cy="field-formDocument"]`).autocompleteSelect("New Approval Request form template");
     });
 
     it("Enter password", () => {
@@ -440,8 +440,8 @@ context("Approval request implementation tasks", () => {
     });
   });
 
-  context("Create approval request with newly created form", () => {
-    it("Navigate to approval request list", () => {
+  context("Create Approval Request with newly created form", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -459,8 +459,8 @@ context("Approval request implementation tasks", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    it("Enter description 'AR from New form template for Approval Request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for Approval Request" });
     });
 
     it("Add created document revision", () => {
@@ -480,7 +480,7 @@ context("Approval request implementation tasks", () => {
       cy.arSelectChangeDetailsTab();
     });
 
-    it("Add approvers to approval request on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

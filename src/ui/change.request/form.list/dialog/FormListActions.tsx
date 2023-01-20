@@ -6,9 +6,9 @@ import { styles } from "../FormList.styles";
 
 interface Props {
   dialog: DialogHandler;
-  createChangeRequest: () => void;
+  confirm: () => void;
 }
-const FormListActions: React.FunctionComponent<Props> = ({ dialog, createChangeRequest }) => {
+const FormListActions: React.FunctionComponent<Props> = ({ dialog, confirm }) => {
   const classes = styles();
 
   return (
@@ -32,7 +32,7 @@ const FormListActions: React.FunctionComponent<Props> = ({ dialog, createChangeR
           fullWidth
           id="FormList-continueButton"
           data-cy="create.approval.request.continue"
-          onClick={createChangeRequest}
+          onClick={confirm}
         >
           <Text translation="common.continue" />
         </Button>

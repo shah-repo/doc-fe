@@ -17,7 +17,7 @@ let group;
 let approvalRequestDocumentType;
 let createdDocumentRevResponse;
 let initialArDocument;
-const documentRevisionName = "New document for testing approval request list";
+const documentRevisionName = "New document for testing Approval Request list";
 const newNameFirstApprover = "Approver One";
 const newNameSecondApprover = "Approver Two";
 const newNameThirdApprover = "User Three";
@@ -126,7 +126,7 @@ context("E-signature test", () => {
       });
     });
 
-    it("[API]Create approval requests for created document revisions", () => {
+    it("[API]Create Approval Requests for created document revisions", () => {
       cy.arGetArDocumentByName({
         sessionId: loginResponse.sessionId,
         employeeId: companyAdmin.id,
@@ -136,7 +136,7 @@ context("E-signature test", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: "Approval for esignature",
-            description: "Description for approval request",
+            description: "Description for Approval Request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -390,7 +390,7 @@ context("E-signature test", () => {
   });
 
   context("Add approvers to AR", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -645,7 +645,7 @@ context("E-signature test", () => {
     });
 
     context("Navigate to AR and confirm old names of approver one and two are present", () => {
-      it("Navigate to approval request list", () => {
+      it("Navigate to Approval Request list", () => {
         cy.wait(3000);
         cy.navigToApprovalRequestList();
         cy.progressBarShouldNotExist();

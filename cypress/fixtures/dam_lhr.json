@@ -3587,26 +3587,22 @@
           }
         }
       },
-      "approvalRoles":
-      {
+      "approvalRoles": {
         "stage1": [
           true,
           true,
           true
         ],
-
         "stage2": [
           true,
           true,
           true
         ],
-
         "stage3": [
           true,
           true,
           true
         ],
-
         "admStage": [
           true,
           true,

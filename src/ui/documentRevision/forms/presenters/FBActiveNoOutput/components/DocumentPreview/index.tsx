@@ -72,6 +72,12 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     ?? templateOutputDocumentTypes?.id
   ) as string;
   const outputType = documentTypesById[outputTypeId];
+
+  // By default the documentType points to being a Form, but while previewing, it needs to
+  // behave as if it is the documentType that was selected as an output.
+  if (documentRevision && outputType) {
+    documentRevision.document.documentType = outputType;
+  }
   const outputTypeGroup = get(outputType, "group");
 
   const group: DocumentGroupType = docTypeGroup === DocTypeGroups.FORM ? outputTypeGroup : docTypeGroup;
@@ -135,6 +141,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
 
   useEffect(() => {
     workspaceState?.setIsPreview(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

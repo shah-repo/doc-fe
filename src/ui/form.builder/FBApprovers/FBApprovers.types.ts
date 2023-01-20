@@ -1,4 +1,5 @@
 import { FBAutocompleteAsyncProps, FBProviderProps } from "..";
+import { Approval } from "../../../state/ducks/common/types";
 
 export type FBApproversProps =
 & Pick<FBProviderProps, "approversState">
@@ -9,6 +10,7 @@ export type FBApproversProps =
   groups?: Record<string, FBRequiredApprover>;
   checkedGroups?: FBRequiredApprover[];
   value?: string[];
+  changeRequestApprovals?: Approval[];
 };
 
 export interface FBId {

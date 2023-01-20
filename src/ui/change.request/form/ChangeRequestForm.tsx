@@ -14,6 +14,7 @@ import { AsyncState } from "../../../state/types";
 import { FBSchemaProps, FBWorkspace, FBWorkspaceModeOptions } from "../../form.builder";
 import { FBWorkspaceMode } from "../../form.builder/types/workspace";
 import Colors from "../../layout/theme/utils/colors";
+import ItemsAndDetailsWrapper from "../items.and.details/ItemsAndDetails.wrap";
 import FormHeader from "./assessmentForm/FormHeader";
 import ChangeRequestSidebar from "./ChangeRequest.sidebar";
 import ChangeRequestFormHeader from "./ChangeRequestFormHeader";
@@ -34,6 +35,8 @@ type ChangeRequestFormProps =
   withoutBottomBar: boolean;
   autosave: boolean;
   formInput?: Record<string, any>;
+  hideSideBar: boolean;
+  currentDocRevId?: string;
 };
 
 const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -49,6 +52,8 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   _formState,
   formInput,
   _documentRevisionFormState,
+  hideSideBar = false,
+  currentDocRevId,
 }) => {
   const { _tabsState } = SM.useStores();
 
@@ -66,6 +71,14 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
 
+  if (tabConfig.findIndex((tab: TabInfo) => tab.labelId === "tabId.items") === -1) {
+    tabConfig.splice(1, 0, {
+      labelId: "tabId.items",
+      tabId: TabTypeOptions.ITEMS.toLowerCase(),
+      type: TabTypeOptions.ITEMS,
+    });
+  }
+
   return (
     <SMForm
       templateBoxProps={{ stretchY: "100%", width: "100%" }}
@@ -80,7 +93,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {...changeRequest && changeRequest.crId && {
+        {...changeRequest && changeRequest.crId && !hideSideBar && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
@@ -125,6 +138,18 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                                 mode={mode}
                               />
                           }
+                          {tabType === TabTypeOptions.ITEMS &&
+                            _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
+                            changeRequest && (
+                            <ItemsAndDetailsWrapper
+                              currentDocRevId={currentDocRevId}
+                              changeRequest={cloneDeep(changeRequest)}
+                              initialValues={formInput ?? {}}
+                              autosave={autosave}
+                              mode={mode}
+                              asyncState={asyncState}
+                            />
+                          )}
                           {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
                             _formState?.mode !== FBWorkspaceModeOptions.NONE &&
                             <FBWorkspace

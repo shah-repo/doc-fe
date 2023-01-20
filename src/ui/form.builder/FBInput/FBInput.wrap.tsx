@@ -287,9 +287,9 @@ export const withFBInput = <T extends FBInputProps>(
     }
 
     useEffect(() => {
-      if (!formState && !inputState) { return; }
+      if (!formState || !inputState) { return; }
       // Input states
-      formState?.inputState.set(name, inputState!);
+      formState?.inputState.set(name, inputState);
       // Validation settings
       let attr = validationAttribute || (label as string) || placeholder || name;
       isTranslation(attr) && (attr = intl.formatMessage({ id: attr }));

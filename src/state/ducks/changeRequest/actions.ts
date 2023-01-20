@@ -41,6 +41,13 @@ const load = (id: string): ApiAction<ChangeRequest> => apiAction({
   },
 });
 
+const draftApprovalRequestsList = (handlers: Handlers): ApiAction<ChangeRequest> =>
+  apiActionWithCallbacks({
+    url: `${CHANGE_REQUEST_ROOT_URL}/my_draft_approval_requests`,
+    method: "get",
+    handlers,
+  });
+
 const availableApproversList = (
   availableApprovers: ChangeRequestAvailableApprovers[],
 ): ChangeRequestListApproversAction => ({
@@ -142,6 +149,7 @@ export default {
   loadList,
   loadListWithCallback,
   load,
+  draftApprovalRequestsList,
   create,
   save,
   applyTransition,

@@ -1668,7 +1668,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify zip file downloaded", () => {
-    it("Download zip file containing approval request notification", () => {
+    it("Download zip file containing Approval Request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

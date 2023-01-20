@@ -95,7 +95,7 @@ const exportPdfVerification = (stepInfo) => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    it("Download zip file containing Approval request form", () => {
+    it("Download zip file containing Approval Request form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {

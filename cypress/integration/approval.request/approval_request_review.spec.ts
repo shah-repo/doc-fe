@@ -17,15 +17,15 @@ let companyId: string;
 let emailsFromInbox: IMAPEmail[];
 let employeeLogin;
 
-const approvalRequestFormName = "Approval request form template";
-const approvalRequestDocumentTitle = "Approval request from newly created form";
+const approvalRequestFormName = "Approval Request form template";
+const approvalRequestDocumentTitle = "Approval Request from newly created form";
 const sampleDocOneTitle = "Sample Document One";
 
 const dateOffset = (5 * 1000);
 const dateAfterEmailShouldArrive = new Date();
 dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
-context("Approval request form scenario", () => {
+context("Approval Request form scenario", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -109,7 +109,7 @@ context("Approval request form scenario", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Click on 'Approval request' outputdocument type", () => {
+    it("Click on 'Approval Request' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
@@ -159,8 +159,8 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Create approval request with newly created form", () => {
-    it("Navigate to approval request list", () => {
+  context("Create Approval Request with newly created form", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -196,7 +196,7 @@ context("Approval request form scenario", () => {
       cy.arSaveApiCall();
     });
 
-    it("Add approvers to approval request on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       SystemRequirement("REQ-0940");
       cy.arSelectChangeDetailsTab();
       cy.wait(1000);
@@ -252,7 +252,7 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Verify owner can withdraw approval request and that dashboard notifications are not shown", () => {
+  context("Verify owner can withdraw Approval Request and that dashboard notifications are not shown", () => {
     context("Withdraw AR", () => {
       it("Withdraw Submission", () => {
         SystemRequirement("REQ-0890");
@@ -310,8 +310,8 @@ context("Approval request form scenario", () => {
     });
   });
 
-  context("Prevent the addition of documents that are already included on another approval request", () => {
-    it("Navigate to approval request list", () => {
+  context("Prevent the addition of documents that are already included on another Approval Request", () => {
+    it("Navigate to Approval Request list", () => {
       SystemRequirement("REQ-0860");
       cy.navigToApprovalRequestList();
     });
@@ -402,7 +402,7 @@ context("Approval request form scenario", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigate to approval request list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -461,7 +461,7 @@ context("Approval request form scenario", () => {
   });
 
   context("Record the date and time stamp for approval and rejections", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -517,11 +517,11 @@ context("Approval request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[20].email,
-          contains: ["Your approval request <b>ARID: AR-00002</b> is in review.", companyId],
+          contains: ["Your Approval Request <b>ARID: AR-00002</b> is in review.", companyId],
         },
         {
           sentToUser: USERS[22].email,
-          contains: ["Your approval request <b>ARID: AR-00002</b> is in review.", companyId],
+          contains: ["Your Approval Request <b>ARID: AR-00002</b> is in review.", companyId],
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -538,7 +538,7 @@ context("Approval request form scenario", () => {
           sentToUser: USERS[21].email,
           contains: [
             "Your request has been approved!",
-            `AR-00002\r\n                                          Approval request from newly created form`,
+            `AR-00002\r\n                                          Approval Request from newly created form`,
             companyId,
           ],
         },
@@ -557,7 +557,7 @@ context("Approval request form scenario", () => {
           sentToUser: USERS[21].email,
           contains: [
             "Your request has been rejected!",
-            `AR-00002\r\n                                          Approval request from newly created form`,
+            `AR-00002\r\n                                          Approval Request from newly created form`,
             companyId,
           ],
         },

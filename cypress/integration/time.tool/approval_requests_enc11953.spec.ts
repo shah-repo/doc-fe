@@ -22,11 +22,11 @@ let group;
 let adminEmployee;
 let asyncTasksGroup;
 
-const approvalRequestName = "Approval request form";
+const approvalRequestName = "Approval Request form";
 const aRID = "AR-00001";
 const documentRevisionName = "New document for testing AR";
 
-context("Approval request form", { tags: ["@timetool"] }, () => {
+context("Approval Request form", { tags: ["@timetool"] }, () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -169,11 +169,11 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     });
 
     it("Enter title AR title", () => {
-      cy.arEnterApprovalRequestTitle({ title: "Approval request form" });
+      cy.arEnterApprovalRequestTitle({ title: "Approval Request form" });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+    it("Enter description 'AR from New form template for Approval Request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for Approval Request" });
     });
 
     it("Add document revision", () => {
@@ -199,7 +199,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Add approvers to approval request on approver list", () => {
+    it("Add approvers to Approval Request on approver list", () => {
       cy.drSelectChangeDetailsTab();
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
@@ -231,14 +231,14 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} notification as 'needs your approval for'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[1].name}needs your approval for${aRID}Approval request form`,
+        `${USERS[1].name}needs your approval for${aRID}Approval Request form`,
       });
     });
 
     it(`Verify 'IN REVIEW' notification received for all 3 users`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${aRID}Approval request formIN REVIEWpending approvals from`,
+          `${aRID}Approval Request formIN REVIEWpending approvals from`,
       });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[1].name}` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[2].name}` });
@@ -299,7 +299,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[2].name} notification as '${USERS[1].name} needs your approval for'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[1].name}needs your approval for${aRID}Approval request form`,
+        `${USERS[1].name}needs your approval for${aRID}Approval Request form`,
       });
     });
   });
@@ -355,7 +355,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[3].name} notification as '${USERS[1].name} needs your approval for'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${USERS[1].name}needs your approval for${aRID}Approval request form`,
+        `${USERS[1].name}needs your approval for${aRID}Approval Request form`,
       });
     });
   });
@@ -431,14 +431,14 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it("Verify AR notification status as 'APPROVED'", () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[1].name}APPROVED${aRID}Approval request form`,
+          `${USERS[1].name}APPROVED${aRID}Approval Request form`,
       });
     });
 
     it(`Verify for ${USERS[2].name} and ${USERS[3].name} notifications as 'pending approvals from'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${aRID}Approval request formIN REVIEWpending approvals from`,
+        `${aRID}Approval Request formIN REVIEWpending approvals from`,
       });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[2].name}` });
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${USERS[3].name}` });
@@ -485,21 +485,21 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[1].name}APPROVED${aRID}Approval request form`,
+          `${USERS[1].name}APPROVED${aRID}Approval Request form`,
       });
     });
 
     it(`Verify for ${USERS[2].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[2].name}APPROVED${aRID}Approval request form`,
+          `${USERS[2].name}APPROVED${aRID}Approval Request form`,
       });
     });
 
     it(`Verify for ${USERS[3].name} notifications as 'pending approvals from'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-        `${aRID}Approval request formIN REVIEWpending approvals from${USERS[3].name}`,
+        `${aRID}Approval Request formIN REVIEWpending approvals from${USERS[3].name}`,
       });
     });
   });
@@ -555,21 +555,21 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[1].name}APPROVED${aRID}Approval request form`,
+          `${USERS[1].name}APPROVED${aRID}Approval Request form`,
       });
     });
 
     it(`Verify for ${USERS[2].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[2].name}APPROVED${aRID}Approval request form`,
+          `${USERS[2].name}APPROVED${aRID}Approval Request form`,
       });
     });
 
     it(`Verify for ${USERS[3].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-          `${USERS[3].name}APPROVED${aRID}Approval request form`,
+          `${USERS[3].name}APPROVED${aRID}Approval Request form`,
       });
     });
   });
@@ -675,28 +675,28 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${USERS[1].name}APPROVED${aRID}Approval request form`,
+            `${USERS[1].name}APPROVED${aRID}Approval Request form`,
       });
     });
 
     it(`Verify for ${USERS[2].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${USERS[2].name}APPROVED${aRID}Approval request form`,
+            `${USERS[2].name}APPROVED${aRID}Approval Request form`,
       });
     });
 
     it(`Verify for ${USERS[3].name} AR notification status as 'APPROVED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${USERS[3].name}APPROVED${aRID}Approval request form`,
+            `${USERS[3].name}APPROVED${aRID}Approval Request form`,
       });
     });
 
     it(`Verify for notification for 'APPROVED' AR will appear`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${aRID}Approval request formisAPPROVED`,
+            `${aRID}Approval Request formisAPPROVED`,
       });
     });
   });
@@ -749,7 +749,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
       cy.listLoadingElementShouldNotExist();
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${aRID}Approval request formisCLOSED`,
+            `${aRID}Approval Request formisCLOSED`,
       });
     });
   });
@@ -781,7 +781,7 @@ context("Approval request form", { tags: ["@timetool"] }, () => {
     it(`Verify for ${USERS[1].name} AR notification status as 'CLOSED'`, () => {
       cy.dashVerifyListItemExistsOnDashboard({
         listItem:
-            `${aRID}Approval request formisCLOSED`,
+            `${aRID}Approval Request formisCLOSED`,
       });
     });
   });

@@ -7,6 +7,7 @@ import { Group } from "../auth/types";
 import { ChangeRequest } from "../changeRequest/types";
 import { Approval, Id, Nullable, Owner, User } from "../common/types";
 import { Employee } from "../company/types";
+import { RELATED_PARTS_STATUS } from "../relatedParts/types";
 import { TrainingRecord } from "../training/types";
 import { DOCUMENT_REVISION_AUDIT_SET, DOCUMENT_REVISION_LIST, DOCUMENT_REVISION_SET, DOCUMENT_SET } from "./constants";
 import { DocumentGroupOptionsType, DocumentGroupType, DocumentType } from "./documentType/types";
@@ -97,6 +98,12 @@ interface Part{
   label: string;
 }
 
+export interface RelatedParentPartDetails {
+  parentDocId: string;
+  documentId: string;
+  docRevId: string;
+}
+
 interface LSHS{
   lhr: LHR;
   lot: LOT;
@@ -178,6 +185,8 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   smartReferencesTo?: SmartReference[];
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
   redline?: boolean;
+  relatedPartsStatus?: RELATED_PARTS_STATUS;
+  relatedParentPartDetails?: RelatedParentPartDetails;
 }
 
 export interface SmartReference {

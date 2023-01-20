@@ -275,8 +275,8 @@ context("Export for Approval Request", () => {
     });
   });
 
-  context("Create approval request with newly created form", () => {
-    it("Navigate to approval request list", () => {
+  context("Create Approval Request with newly created form", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -317,7 +317,7 @@ context("Export for Approval Request", () => {
     it("Verify export", () => {
       cy.exportVerifyEmail({
         status: STATUS_TYPES_LABEL.DRAFT, filename: "-AR-title",
-        pdfStatus: STATUS_TYPES_LABEL.DRAFT, type: "approval request",
+        pdfStatus: STATUS_TYPES_LABEL.DRAFT, type: "Approval Request",
       });
     });
   });
@@ -331,7 +331,7 @@ context("Export for Approval Request", () => {
       it("Verify export", () => {
         cy.exportVerifyEmail({
           status: STATUS_TYPES_LABEL.IN_REVIEW, filename: "-AR-title",
-          pdfStatus: "In Review", type: "approval request",
+          pdfStatus: "In Review", type: "Approval Request",
         });
       });
     });
@@ -354,7 +354,7 @@ context("Export for Approval Request", () => {
       it("Verify export", () => {
         cy.exportVerifyEmail({
           status: STATUS_TYPES_LABEL.APPROVED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.APPROVED,
-          type: "approval request",
+          type: "Approval Request",
         });
       });
     });
@@ -376,7 +376,7 @@ context("Export for Approval Request", () => {
       it("Verify export", () => {
         cy.exportVerifyEmail({
           status: STATUS_TYPES_LABEL.CLOSED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.CLOSED,
-          type: "approval request",
+          type: "Approval Request",
         });
       });
     });
@@ -384,7 +384,7 @@ context("Export for Approval Request", () => {
 
   context(`AR with ${STATUS_TYPES_LABEL.VOIDED} status`, () => {
     context("Create a AR from form", () => {
-      it("Navigate to approval request list", () => {
+      it("Navigate to Approval Request list", () => {
         cy.navigToApprovalRequestList();
       });
 
@@ -427,7 +427,7 @@ context("Export for Approval Request", () => {
       it("Verify export", () => {
         cy.exportVerifyEmail({
           status: STATUS_TYPES_LABEL.VOIDED, filename: "-AR-title", pdfStatus: STATUS_TYPES_LABEL.VOIDED,
-          type: "approval request",
+          type: "Approval Request",
         });
       });
     });
