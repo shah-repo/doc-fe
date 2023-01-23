@@ -26,7 +26,6 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   const documentTypeId = match.params.documentTypeId;
   const { workspaceState, formState } = FB.useStores();
   const formik = useFormikContext();
-  // const isNewLayout = SM.isNewCRLayout;
 
   function setFBValue() {
     switch (workspaceState?.getMode()) {
