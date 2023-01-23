@@ -34,6 +34,7 @@ declare global {
       ebWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
       ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       ebAddApproverOnApproverListWithPatchCall(params: {approver: string }): Chainable<Subject>;
+      ebAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       lhrSaveWithoutApi(): Chainable<Subject>;
     }
   }
@@ -250,6 +251,15 @@ Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { appr
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get(`[data-cy^="fb-approvals-"]`).arrowClick();
+  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+  cy.wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
