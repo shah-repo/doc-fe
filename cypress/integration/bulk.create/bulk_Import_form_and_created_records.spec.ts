@@ -507,6 +507,7 @@ context("Export Bulk", () => {
 
   context("Move & Edit & Remove component", () => {
     it("Navigate to Details tab", () => {
+      // cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
@@ -542,7 +543,7 @@ context("Export Bulk", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Navigate to Details tab", () => {
+    it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
     });
 
@@ -556,19 +557,23 @@ context("Export Bulk", () => {
 
   context("Release Bulk Import form", () => {
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Export and save the template", () => {
       cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").eq(0).arrowClick();
       cy.get("[data-cy=\"fb-template-name\"]").arrowType("Bulk_Import");
-      cy.get("[data-cy=\"common.add\"]").arrowClick();
+      cy.get("[data-cy=\"common.add\"]").arrowClick({ force: true });
     });
   });
 
@@ -652,7 +657,7 @@ context("Export Bulk", () => {
     });
 
     it("Save Record'", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Details tab", () => {
@@ -672,7 +677,7 @@ context("Export Bulk", () => {
     });
 
     it("Save Record'", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Download excel template file", () => {
@@ -684,15 +689,15 @@ context("Export Bulk", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Add Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Navigate to Details tab", () => {
@@ -700,7 +705,7 @@ context("Export Bulk", () => {
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Navigate to records list", () => {
