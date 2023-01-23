@@ -110,8 +110,8 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider --max_old_space_size=4096 build",
-    "test": "react-scripts --openssl-legacy-provider --max_old_space_size=500 --expose-gc test --logHeapUsage",
+    "build": "react-scripts --openssl-legacy-provider build",
+    "test": "react-scripts --openssl-legacy-provider --expose-gc test --logHeapUsage",
     "eject": "react-scripts eject",
     "lint": "eslint -c .eslintrc.js --ext .ts --ext .tsx  src",
     "lint_cypress": "eslint -c cypress/.eslintrc.js --ext .ts --ext .tsx cypress/integration",
