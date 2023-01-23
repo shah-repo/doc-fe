@@ -106,8 +106,9 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
           {() => (
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
-              contentBoxProps={{ minHeight: _documentRevisionFormState?.expanded ? "100%" : "0px", height: "auto" }}
-              boxProps={{ overflow: "auto" }}
+              contentBoxProps={{
+                overflow: _documentRevisionFormState?.expanded ? "unset" : "auto",
+              }}
               header={<ChangeRequestFormHeader
                 title={changeRequest?.title}
                 description = {changeRequest?.description}
@@ -118,7 +119,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                 {() => (
                   <SMTabs
                     tabs={tabConfig}
-                    boxProps={{ px: 3.75, py: 2, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                    boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
                     panelProps={{ flex: 1 }}
                   >
                     {map(tabConfig, (tabInfo: TabInfo, index: number) => {
@@ -126,7 +127,7 @@ const ChangeRequestForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
-                        <SMBox key={index} {...{ py: 2 }}>
+                        <SMBox key={index} pt={.25}>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
                               <FBWorkspace
                                 isPortal={false}
