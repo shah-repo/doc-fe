@@ -10,10 +10,11 @@ import { companySelectors } from "../../../../state/ducks/company";
 import { STATUS_TYPES_LABEL } from "../../../../state/ducks/dashboard.new/my.feeds/types";
 import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions/documentType";
 import { DocumentGroupOptionsType } from "../../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus, RelatedParentPartDetails, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
 import { DocCategories, DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
+import { documentPreviewPath } from "../../../document.revision/utils/paths";
 import { checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
@@ -36,6 +37,7 @@ interface Props {
   displayStatus?: string;
   subtitle?: any;
   displayRevision?: string;
+  relatedParentPartDetails?: RelatedParentPartDetails;
 }
 
 const HeaderInfo: React.FunctionComponent<Props> = ({
@@ -46,6 +48,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   displayStatus,
   subtitle,
   displayRevision,
+  relatedParentPartDetails,
 }) => {
 
   const intl = useIntl();
@@ -93,7 +96,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   }
   if (SM.isNewCRLayout) {
     url = `${CHANGE_REQUEST_LIST_URL}`;
-    iconLink = "/navigation_icons/cr.svg";
+    iconLink = "/navigation_icons/change-order.svg";
   } else if (isTypeMpiOutput) {
     url = `${DOCUMENT_BY_CATEGORY_ROOT_URL}/${DocCategories.LHR}`;
     iconLink = "/navigation_icons/lhr_icon.svg";
@@ -161,6 +164,17 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const returnToList = () => {
     history.push(url);
   };
+
+  const viewDocument = () => {
+    if (!relatedParentPartDetails?.docRevId || !relatedParentPartDetails?.documentId) {
+      return;
+    }
+
+    const urlPath = documentPreviewPath(
+      relatedParentPartDetails?.docRevId, relatedParentPartDetails?.documentId);
+    history.push(urlPath);
+  };
+
   const newHeaderRenderer = () => (
     <Grid item xs={6} className={classes.itemWrap}>
       <Grid item>
@@ -177,7 +191,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                   <div data-cy="Header-listIcon" className={classes.icon} />
                 </Grid>
                 {
-                  !isTypeMpiOutput && <Link
+                  !isTypeMpiOutput && !relatedParentPartDetails && <Link
                     underline="hover"
                     onClick={returnToList}
                     className={classes.link}
@@ -185,7 +199,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     <Grid item={true} data-cy="Header-listTitle" className={classes.title}>
                       {title}
                     </Grid>
-                  </Link>
+                  </Link>   // need to remove this link for Approval Request modal
                 }
                 {
                   isTypeMpiOutput &&
@@ -199,7 +213,17 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                     </Grid>
                   </Link>
                 }
-
+                {
+                  relatedParentPartDetails && relatedParentPartDetails.parentDocId && <Link
+                    underline="hover"
+                    onClick={viewDocument}
+                    className={classes.link}
+                  >
+                    <Grid item={true} className={classes.title}>
+                      {relatedParentPartDetails.parentDocId}
+                    </Grid>
+                  </Link>
+                }
               </Grid>
             </Typography>
             <Typography data-cy="HeaderInfo" className={classes.breadcrumbId} component="div">

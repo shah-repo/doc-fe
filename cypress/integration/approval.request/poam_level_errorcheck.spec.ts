@@ -19,7 +19,7 @@ let poamDocumentType;
 let createdPOAMform;
 let createdPOAMdoc;
 
-context("Approval request landing page test", () => {
+context("Approval Request landing page test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });

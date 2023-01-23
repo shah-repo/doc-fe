@@ -109,6 +109,7 @@ const DocumentRevisionDisplayContainer: React.FunctionComponent<DocumentRevision
       currentEmployeeId,
       documentRevision.owner.id,
       hasChangeOwnershipPermission,
+      documentRevision.relatedPartsStatus,
     );
   }, [currentEmployeeId, documentRevision, hasChangeOwnershipPermission]);
 

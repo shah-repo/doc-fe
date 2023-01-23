@@ -907,7 +907,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
     });
   });
 
-  context("Ask for approvals on record, approval request, PO and TC", () => {
+  context("Ask for approvals on record, Approval Request, PO and TC", () => {
     context("Ask for approvals on record", () => {
       it("Navigate to records list", () => {
         cy.navigToRecords();
@@ -963,7 +963,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Check if approval request is 'In Review'", () => {
+      it("Check if Approval Request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").arrowClick();
       });
 
@@ -1053,7 +1053,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Check if approval request is 'In Review'", () => {
+      it("Check if Approval Request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").eq(0).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1125,7 +1125,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Check if approval request is 'In Review'", () => {
+      it("Check if Approval Request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").eq(0).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -1204,7 +1204,7 @@ context("Approval dates for AR and approval block", { tags: ["@timetool"] }, () 
         cy.listLoadingElementShouldNotExist();
       });
 
-      it("Check if approval request is 'In Review'", () => {
+      it("Check if Approval Request is 'In Review'", () => {
         cy.get("[data-cy='dashboardFeedList']").contains("IN REVIEW").eq(0).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();

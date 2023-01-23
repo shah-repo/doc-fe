@@ -2,6 +2,7 @@ import { Box } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import React from "react";
 import { FBApproversProps, FBAutocompleteAsync, FBAutocompleteAsyncOption, FBInput, FBMapWrapper, FBRequiredApprover, FBText } from "..";
+import Approvers from "../../change.request/summary/approvers";
 import { withFBApprovers } from "./FBApprovers.wrap";
 
 const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
@@ -15,6 +16,7 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
   defaultValue,
   groups = {},
   autosave,
+  changeRequestApprovals,
 }) => (
   <FBInput {...{ name, gutter, disabled, autosave }} type="approvers">
     <FBAutocompleteAsync
@@ -39,6 +41,9 @@ const FBApprovers: React.FunctionComponent<FBApproversProps> = ({
           </Box>
         )}
       </FBMapWrapper>
+      {changeRequestApprovals && changeRequestApprovals.length > 0
+        && <Approvers dataProp={changeRequestApprovals}/>
+      }
     </Box>
   </FBInput>
 );

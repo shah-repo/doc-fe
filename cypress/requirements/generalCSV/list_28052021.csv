@@ -60,9 +60,9 @@ UN-0011,REQ-0640,Change Control,Document Approval Matrix,The system shall allow 
 UN-0011,REQ-0650,Change Control,Document Approval Matrix,"The system shall allow separate assignment of approval requirements for a 3-level document system with revision types: Numeric, Numeric-Alpha and Alpha "
 UN-0011,REQ-0660,Change Control,Document Approval Matrix,The system shall allow the assignment of approval requirements for an Administrative change
 UN-0011,REQ-0670,Change Control,Document Approval Matrix,The system shall allow the assignment of approval requirements for a Admin Revision change
-UN-0011,REQ-0680,Change Control,Approval Request Creation ,The system shall allow users to create and submit approval requests for approval/obsolescence of documents.
-UN-0011,REQ-0690,Change Control,Approval Request Creation,The system shall automatically issue a unique approval request ID when a new change request is initiated
-UN-0011,REQ-0700,Change Control,Approval Request Creation,The system shall support the customer to define one or more custom forms to be used for approval requests
+UN-0011,REQ-0680,Change Control,Approval Request Creation ,The system shall allow users to create and submit Approval Requests for approval/obsolescence of documents.
+UN-0011,REQ-0690,Change Control,Approval Request Creation,The system shall automatically issue a unique Approval Request ID when a new change request is initiated
+UN-0011,REQ-0700,Change Control,Approval Request Creation,The system shall support the customer to define one or more custom forms to be used for Approval Requests
 UN-0003,REQ-0710,Change Control,Approval Request Form,"The system shall support addition of one or more implemenation tasks to the AR form, including a task title, task description, task assignement to user, due data, and status tracking, that are required to complete before an AR is closed"
 UN-0011,REQ-0730,Change Control,Approval Request Status,"The system shall automatically maintain the status of a change request:
 Draft - the default state when created
@@ -70,30 +70,30 @@ In Review - the state where the change request is in review by the approvers
 Approved - the state where the change request has been approved by all reviewers
 Implementation - the state where the change request has pending Implementation Task(s)
 Closed - the state when an approved change request has been fully implemented by doc control"
-UN-0011,REQ-0740,Change Control,Approval Request Status,"The system shall automatically update the status attribute of all documents/parts on the approval request when the state of the approval request changes:
+UN-0011,REQ-0740,Change Control,Approval Request Status,"The system shall automatically update the status attribute of all documents/parts on the Approval Request when the state of the Approval Request changes:
 Pending Change when the AR is in Draft State
 In Review when the AR is in In Review State
 Approved when the AR is in Approved State 
 Approved when the AR is in Implementation State
 Released when the AR is in Closed State"
 UN-0011,REQ-0750,Change Control,Landing Page,"The system shall diplay the following default columns on the landing page for the approvals list: AR Id, AR Title, AR Owner, and AR  State (e.g. this list defines content, not column header names)"
-UN-0011,REQ-0760,Change Control,Landing Page,The system shall only display document approval requests in the approval requests list (e.g. approvals for other items like PO's can be found in their respective modules)
-UN-0011,REQ-0770,Change Control,Landing Page,The system shall allow the user to filter the displayed approval request list for each of the columns displayed on the landing page
-UN-0011,REQ-0780,Change Control,Landing Page,The system shall default the approval request list filter to display AR's with latest edited displaying on top when starting a new Enlil session
-UN-0011,REQ-0790,Change Control,Landing Page,The system shall maintain approval request list filter settings during an Enlil session when navigating away from and back to the approval request list landing page
-UN-0011,REQ-0800,Change Control,Landing Page,The system shall default to the approval request list being sorted by most recent edited first
-UN-0011,REQ-0810,Change Control,Landing Page,The system shall provide a mechanism to clear all approval request list filters with a single click
-UN-0011,REQ-0820,Change Control,Landing Page,The system shall display the number of approval requests displayed that match the filter settings
+UN-0011,REQ-0760,Change Control,Landing Page,The system shall only display document Approval Requests in the Approval Requests list (e.g. approvals for other items like PO's can be found in their respective modules)
+UN-0011,REQ-0770,Change Control,Landing Page,The system shall allow the user to filter the displayed Approval Request list for each of the columns displayed on the landing page
+UN-0011,REQ-0780,Change Control,Landing Page,The system shall default the Approval Request list filter to display AR's with latest edited displaying on top when starting a new Enlil session
+UN-0011,REQ-0790,Change Control,Landing Page,The system shall maintain Approval Request list filter settings during an Enlil session when navigating away from and back to the Approval Request list landing page
+UN-0011,REQ-0800,Change Control,Landing Page,The system shall default to the Approval Request list being sorted by most recent edited first
+UN-0011,REQ-0810,Change Control,Landing Page,The system shall provide a mechanism to clear all Approval Request list filters with a single click
+UN-0011,REQ-0820,Change Control,Landing Page,The system shall display the number of Approval Requests displayed that match the filter settings
 UN-0011,REQ-0830,Change Control,Landing Page,The system shall allow the user to open an AR from the AR list with a single click
-UN-0011,REQ-0840,Change Control,Landing Page,The system should display the AR description when the mouse hovers over the AR title in the approval request list
-UN-0011,REQ-0850,Change Control,Approval Request Rules,The system shall allow the originator to edit the approval request and any documents associated with the approval request only while it is in draft or rejected states
-UN-0011,REQ-0860,Change Control,Approval Request,The system shall prevent the addition of documents that are already included on another approval request
+UN-0011,REQ-0840,Change Control,Landing Page,The system should display the AR description when the mouse hovers over the AR title in the Approval Request list
+UN-0011,REQ-0850,Change Control,Approval Request Rules,The system shall allow the originator to edit the Approval Request and any documents associated with the Approval Request only while it is in draft or rejected states
+UN-0011,REQ-0860,Change Control,Approval Request,The system shall prevent the addition of documents that are already included on another Approval Request
 UN-0011,REQ-0870,Change Control,Approval Request,The system shall determine the approver requirements based on the document approval matrix for all documents contained on an AR.
 UN-0011,REQ-0880,Change Control,Approval Request,"The system shall enforce approval requirements prior to document release if the Document Type requires e-signature. If not met, an exception shall be visible"
 UN-0011,REQ-0890,Change Control,Approval Request,The system shall allow the owner of an AR to withdraw an AR that is in In Review State
 UN-0011,REQ-0900,Change Control,Approval Request,"For ""no e-signature required"" documents, approvals shall be enforced based on the users invited to approve the document by the document owner."
 UN-0011,REQ-0910,Change Control,Approval Request Approvals,"The system shall provide a mechanism for electronic approvals (e.g. PO's, change requests, training forms, NCMR, CAPA, user profiles)"
-UN-0011,REQ-0920,Change Control,Approval Request Approvals,The system shall require the user to enter their user password when approving or rejecting an approval request that is assigned to them
+UN-0011,REQ-0920,Change Control,Approval Request Approvals,The system shall require the user to enter their user password when approving or rejecting an Approval Request that is assigned to them
 UN-0011,REQ-0940,Change Control,Approval Request Approvals,"The system shall allow the owner of an AR to change an approver on the AR to another user, provided that user meets the criteria of the approval matrix"
 UN-0011,REQ-2700,Change Control,Approval Request Approvals,"The system shall automatically change the stataus of a document to ""Release"" when the AR is approved and the effective date is met "
 UN-0011,REQ-2710,Change Control,Approval Request Approvals,"The system shall automatically change the stataus of an AR to Closed, when all document(s) have been Released (once the effective date is met) and all implementation task(s) have benen closed"
@@ -237,12 +237,12 @@ UN-0040,REQ-2100,Receiving,Revising a Receiving record,The system shall capture 
 UN-0040,REQ-2110,Receiving,Revising a Receiving record,The system shall maintain version history of the Receivable when modified
 UN-0040,REQ-2120,Receiving,Voiding a Receivable,"The system should allow a user with Receiving permission to void a Receiving record, after confirming with a dialog."
 UN-0080,REQ-2140,Notifications,General,The system shall notify the user by email when an item that requires an electronic approvals is assigned to them
-UN-0080,REQ-2150,Notifications,Approval Requests,The system shall display a notification in the dashboard for users that are on an approval request that has been submitted for approval.  
-UN-0080,REQ-2160,Notifications,Approval Requests,"The system shall display the following in the approval notification (AR ID, name of the submitter, date of approval request).  "
+UN-0080,REQ-2150,Notifications,Approval Requests,The system shall display a notification in the dashboard for users that are on an Approval Request that has been submitted for approval.  
+UN-0080,REQ-2160,Notifications,Approval Requests,"The system shall display the following in the approval notification (AR ID, name of the submitter, date of Approval Request).  "
 UN-0080,REQ-2170,Notifications,Approval Requests,The system should indicate an AR notificaiton as overdue 3 days after submission.
 UN-0080,REQ-2180,Notifications,Approval Requests,The system should display the description of the AR in the approval notification
-UN-0080,REQ-2190,Notifications,Approval Request,The system shall remove the approval request from the to do list of all users who have not yet approved an approval request upon rejection by another approver or withdrawal by the AR owner
-UN-0080,REQ-2200,Notifications,Approval Request,The system shall remove the approval request from the to do list of all approvers upon approving the AR being fully approved
+UN-0080,REQ-2190,Notifications,Approval Request,The system shall remove the Approval Request from the to do list of all users who have not yet approved an Approval Request upon rejection by another approver or withdrawal by the AR owner
+UN-0080,REQ-2200,Notifications,Approval Request,The system shall remove the Approval Request from the to do list of all approvers upon approving the AR being fully approved
 UN-0080,REQ-2210,Notifications,Purchase Orders,"The approval of a PO shall be available in the User's dashboard, including the PO number, name of submitter, PO amount"
 UN-0080,REQ-2220,Notifications,Purchase Orders,The notification of a PO shall allow for single click opening of the pdf version of the PO 
 UN-0060,REQ-2230,Supplier,Supplier Landing Page,The system shall display the list of supplier created by the user on the Supplier Landing page

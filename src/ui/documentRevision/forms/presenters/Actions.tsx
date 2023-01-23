@@ -385,7 +385,7 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
     </>);
 
   return (
-    <div>
+    <div style={{ display: "flex", alignItems: "center" }}>
       <>
         {isPO && documentRevision.poStatus && (
           <HeaderPOStatus poStatus={documentRevision.poStatus} />

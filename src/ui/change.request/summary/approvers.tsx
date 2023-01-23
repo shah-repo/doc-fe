@@ -56,7 +56,7 @@ const Approvers: React.FunctionComponent<Props> = ({ dataProp }) => {
     });
 
   return (
-    <Box p={2} mt={-2}>
+    <Box p={2}>
       <Typography variant="h6">
         <Text translation="common.approvers" />
       </Typography>

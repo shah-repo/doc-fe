@@ -458,7 +458,7 @@ context("Deleting LHR Step using regular AR test", () => {
   });
 
   context("Create AR", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -471,7 +471,7 @@ context("Deleting LHR Step using regular AR test", () => {
       cy.unClick();
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
+    it("Enter description 'AR from New form template for Approval Request'", () => {
       cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 

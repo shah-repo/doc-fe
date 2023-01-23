@@ -15,7 +15,7 @@ import { FBWorkspaceMode } from "../../form.builder/types/workspace";
 import Colors from "../../layout/theme/utils/colors";
 import ChangeRequestSidebar from "../form/ChangeRequest.sidebar";
 import { toChangeRequestFormValues } from "../form/transform";
-import Approvers from "./approvers";
+import ItemsAndDetailsWrapper from "../items.and.details/ItemsAndDetails.wrap";
 import ChangeSummaryFormHeader from "./ChangeSummaryFormHeader";
 import SummaryHeader from "./SummaryHeader";
 
@@ -36,6 +36,7 @@ type ChangeRequestFormProps =
   canChangeOwnership: boolean;
   displayLastSaved: boolean;
   errors: any;
+  hideSideBar?: boolean;
 };
 
 const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
@@ -53,6 +54,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   displayLastSaved,
   errors,
   _documentRevisionFormState,
+  hideSideBar = false,
 }) => {
   const { _tabsState } = SM.useStores();
   _formState?.setMode(mode);
@@ -67,6 +69,14 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
   const docTypeGroup = changeRequest.documentType.group ?? "OTHER";
   const tabConfig = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getTabConfiguration(state, docTypeGroup));
+
+  if (tabConfig.findIndex((tab: TabInfo) => tab.labelId === "tabId.items") === -1) {
+    tabConfig.splice(1, 0, {
+      labelId: "tabId.items",
+      tabId: TabTypeOptions.ITEMS.toLowerCase(),
+      type: TabTypeOptions.ITEMS,
+    });
+  }
 
   return (
     <SMForm
@@ -85,7 +95,7 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
         templateBoxProps={{ stretchY: "100%" }}
         contentBoxProps={{ stretchY: "100%" }}
         rightSidebarBoxProps={{ zIndex: 2, marginBottom: 1 }}
-        {...changeRequest && changeRequest.crId && {
+        {...changeRequest && changeRequest.crId && !hideSideBar && {
           rightSidebar: (
             <Observer>
               {() => <ChangeRequestSidebar changeRequest={changeRequest} isDrawerOpen={isDrawerOpen}
@@ -122,22 +132,6 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                       return (
                         <SMBox key={index} {...{ py: 2 }}>
                           {tabType === TabTypeOptions.MIXED && showTabContent && changeRequest &&
-                            <>
-                              <FBWorkspace
-                                isPortal={false}
-                                initialValues={cloneDeep(changeRequest?.formInput)}
-                                changeRequest={cloneDeep(changeRequest)}
-                                autosave={autosave}
-                                withoutBottomBar={withoutBottomBar}
-                                schema={schema}
-                                mode={mode}
-                              />
-                              <Approvers dataProp={changeRequest.approvals}/>
-                            </>
-
-                          }
-                          {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
-                            _formState?.mode !== FBWorkspaceModeOptions.NONE &&
                             <FBWorkspace
                               isPortal={false}
                               initialValues={cloneDeep(changeRequest?.formInput)}
@@ -147,6 +141,29 @@ const ChangeSummaryForm: React.FunctionComponent<ChangeRequestFormProps> = ({
                               schema={schema}
                               mode={mode}
                             />
+                          }
+                          {tabType === TabTypeOptions.ITEMS &&
+                            _tabsState?.isTabActive(TabTypeOptions.ITEMS) &&
+                            changeRequest && (
+                            <ItemsAndDetailsWrapper
+                              changeRequest={cloneDeep(changeRequest)}
+                              initialValues={cloneDeep(changeRequest?.formInput) ?? {}}
+                              autosave={autosave}
+                              mode={mode}
+                              asyncState={asyncState}
+                            />
+                          )}
+                          {tabType === TabTypeOptions.DYNAMIC && showTabContent &&
+                            _formState?.mode !== FBWorkspaceModeOptions.NONE &&
+                              <FBWorkspace
+                                isPortal={false}
+                                initialValues={cloneDeep(changeRequest?.formInput)}
+                                changeRequest={cloneDeep(changeRequest)}
+                                autosave={autosave}
+                                withoutBottomBar={withoutBottomBar}
+                                schema={schema}
+                                mode={mode}
+                              />
                           }
                         </SMBox>
                       );

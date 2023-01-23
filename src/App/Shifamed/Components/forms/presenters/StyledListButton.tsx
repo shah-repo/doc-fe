@@ -19,6 +19,7 @@ const styles = () => ({
     backgroundColor: Colors.white,
     color: Colors.navy,
     borderRadius: "100px",
+    minWidth: "72px",
   },
 });
 

@@ -15,7 +15,7 @@ const approvalRequestTitle = `ApprovalRequest${moment().format("X")}`;
 let arDocCount = 0;
 let initialArDocument;
 
-context("Autocomplete 'Approval requests' test", () => {
+context("Autocomplete 'Approval Requests' test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -70,8 +70,8 @@ context("Autocomplete 'Approval requests' test", () => {
     });
   });
 
-  context("Autocomplete 'Approval requests' test", () => {
-    context("Create 'Approval requests'", () => {
+  context("Autocomplete 'Approval Requests' test", () => {
+    context("Create 'Approval Requests'", () => {
       it("Navigate to document list", () => {
         cy.navigToApprovalRequestList();
       });
@@ -84,20 +84,20 @@ context("Autocomplete 'Approval requests' test", () => {
         cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
       });
 
-      it("Enter description 'AR from New form template for approval request'", () => {
-        cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
+      it("Enter description 'AR from New form template for Approval Request'", () => {
+        cy.arEnterApprovalRequestDescription({ description: "CR from New form template for Approval Request" });
       });
 
       it("Click Create Approval Request", () => {
         cy.arSaveApiCall();
       });
 
-      it("Add first approver to approval request on approver list", () => {
+      it("Add first approver to Approval Request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[2].email });
       });
     });
 
-    context("Add Autocomplete 'Approval requests'", () => {
+    context("Add Autocomplete 'Approval Requests'", () => {
       context("Create FORM document", () => {
         it("Navigate to document list", () => {
           cy.navigToDocumentList();
@@ -143,8 +143,8 @@ context("Autocomplete 'Approval requests' test", () => {
             cy.fbEnterNameValue({ name: "label", value: "test label" });
           });
 
-          it("Select 'Approval requests' as options", () => {
-            cy.fbAutocompleteType({ autocompleteOption: "Approval requests" });
+          it("Select 'Approval Requests' as options", () => {
+            cy.fbAutocompleteType({ autocompleteOption: "Approval Requests" });
           });
 
           it("Click 'Add' button", () => {
@@ -179,8 +179,8 @@ context("Autocomplete 'Approval requests' test", () => {
         });
       });
 
-      context("Verify Autocomplete 'Approval requests'", () => {
-        it("Verify autocomplete 'Approval requests'", () => {
+      context("Verify Autocomplete 'Approval Requests'", () => {
+        it("Verify autocomplete 'Approval Requests'", () => {
           cy.request({
             method: "GET",
             url: `${CONFIG.BE_URL}/api/v1/change_requests`,
@@ -207,7 +207,7 @@ context("Autocomplete 'Approval requests' test", () => {
           });
         });
 
-        it("Verify created 'Approval requests' in the list", () => {
+        it("Verify created 'Approval Requests' in the list", () => {
           cy.get(".MuiAutocomplete-popper ul li").should("contain", approvalRequestTitle);
         });
 

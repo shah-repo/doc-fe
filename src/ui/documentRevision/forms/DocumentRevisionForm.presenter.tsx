@@ -16,6 +16,7 @@ import PromptIfDirty from "../../components/forms/PromptIfDirty";
 import ScrollToError from "../../components/forms/ScrollToError";
 import AttachmentsField from "../../document.revision/form/attachments";
 import BuildsContainer from "../../document.revision/summary/builds.container";
+import ChangeRequestLink from "../../document.revision/summary/changeRequestLink";
 import { FB, FBEBPart, FBWorkspaceMode, FBWorkspaceModeOptions } from "../../form.builder";
 import { useDocId, useDocumentTypeSelect, useRevisionStageSelect } from "../../hooks/docCustomization/useCustomization";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
@@ -29,6 +30,7 @@ import DocumentSecurity from "./presenters/DocumentSecurity";
 import DocumentTypeSelect from "./presenters/DocumentTypeSelect";
 import FBActiveNoOutput from "./presenters/FBActiveNoOutput";
 import GenerateHtmlPreview from "./presenters/GenerateHtmlPreview";
+import RelatedPartsWrapper from "./presenters/related.parts/RelatedParts.wrap";
 import RetrainField from "./presenters/RetrainField";
 import RevisionStage from "./presenters/RevisionStage";
 import RevisionTypeChange from "./presenters/RevisionTypeChange";
@@ -228,7 +230,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {!isDCO && (<>{isVisible && <Grid item xs={6}>
             <DocumentTypeSelect
               outputDocumentTypes={outputDocumentTypes as unknown as FBOutputDocumentType[]}
-              isDisabled={isDisabledInputInPreview}
+              isDisabled={isDisabledInputInPreview || isDocRevStatusInPendingChange}
               {...{
                 type,
                 isDocRevStatusDraft,
@@ -248,6 +250,12 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               }}
             />
           </Grid>}
+          {
+            type !== "newOutput" && _documentRevisionFormState?.documentRevision &&
+            <Grid item xs={12}>
+              <ChangeRequestLink dataProp={_documentRevisionFormState?.documentRevision} />
+            </Grid>
+          }
           {enableRevision && <Grid item xs={6}>
             {/* hack for rerender revision stage */}
             <Observer>
@@ -316,6 +324,14 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
+          {isPart &&
+            <Grid item xs={12}>
+              <RelatedPartsWrapper
+                viewOnly={isDisabledInputInPreview}
+                documentRevision={documentRevision}
+                relatedPartsStatus= {documentRevision?.relatedPartsStatus} />
+            </Grid>
+          }
           {!isDCO && (showRevisionTypeChange && !isRevisionChangeHidden && !isDocRevFirstDraft &&
             <Grid item xs={12}>
               <RevisionTypeChange

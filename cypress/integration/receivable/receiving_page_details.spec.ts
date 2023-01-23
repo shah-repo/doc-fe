@@ -1186,7 +1186,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval request form", () => {
+      it("Download zip file containing Approval Request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1400,7 +1400,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval request form", () => {
+      it("Download zip file containing Approval Request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1779,7 +1779,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval request form", () => {
+      it("Download zip file containing Approval Request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1959,7 +1959,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval request form", () => {
+      it("Download zip file containing Approval Request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

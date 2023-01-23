@@ -1568,7 +1568,7 @@ context("Layout Verification of EQ", () => {
     });
 
     context("Create AR and select document", () => {
-      it("Navigate to Approval request", () => {
+      it("Navigate to Approval Request", () => {
         cy.navigToApprovalRequestList();
       });
 
@@ -1595,7 +1595,7 @@ context("Layout Verification of EQ", () => {
         cy.arClickAddBtnOnAddDocumentsDialog();
       });
 
-      it("Add approvers to approval request on approver list", () => {
+      it("Add approvers to Approval Request on approver list", () => {
         cy.arAddApproverOnApproverList({ approver: USERS[1].email, noWait: true });
       });
 

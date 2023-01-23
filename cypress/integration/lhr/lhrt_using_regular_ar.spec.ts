@@ -464,7 +464,7 @@ context("LHRt using regular AR test", () => {
   });
 
   context("Create AR", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -477,7 +477,7 @@ context("LHRt using regular AR test", () => {
       cy.unClick();
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
+    it("Enter description 'AR from New form template for Approval Request'", () => {
       cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 
@@ -688,7 +688,7 @@ context("LHRt using regular AR test", () => {
   });
 
   context("Create new AR", () => {
-    it("Navigate to approval request list", () => {
+    it("Navigate to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -700,7 +700,7 @@ context("LHRt using regular AR test", () => {
       cy.arEnterApprovalRequestTitle({ title: "LHRT AR 2" });
     });
 
-    it("Enter description 'AR from New form template for approval request'", () => {
+    it("Enter description 'AR from New form template for Approval Request'", () => {
       cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 
