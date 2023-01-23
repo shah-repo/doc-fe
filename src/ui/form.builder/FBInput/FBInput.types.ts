@@ -76,8 +76,7 @@ export type FBInputType =
   | "poapprovals"
   | "lhrbuild"
   | "purchaseordersummary"
-  | "downloadsheet"
-  | "itemsAndDetails";
+  | "downloadsheet";
 
 export type FBInputProps =
   & FBLabelProps

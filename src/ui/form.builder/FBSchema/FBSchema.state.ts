@@ -11,7 +11,6 @@ import {
   FBInputType,
   FBSchemaProps,
 } from "..";
-import ItemsAndDetails from "../../change.request/items.and.details/ItemsAndDetails";
 import FBApprovalMatrixField from "../FBApprovalMatrixField/FBApprovalMatrixField";
 import FBApprovalMatrixFieldRoles from "../FBApprovalMatrixField/FBApprovalMatrixFieldRoles";
 import FBApprovals from "../FBApprovals/FBApprovals";
@@ -135,7 +134,6 @@ class FBSchemaState {
     poapprovals: FBPOApprovals,
     lhrbuild: FBLHRBuild,
     downloadsheet: FBDownloadSheetTpl,
-    itemsAndDetails: ItemsAndDetails,
   };
 
   @observable public schema?: FBSchemaProps[];

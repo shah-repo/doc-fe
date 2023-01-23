@@ -268,7 +268,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                               docRevStatus={documentRevision?.status}
                             />
                           )}
-                          // Added for when a new formDocument whose output is AR is created
                           {tabType === TabTypeOptions.ITEMS && (
                             <ItemsAndDetailsWrapper
                               currentDocRevId={documentRevision?.id}
