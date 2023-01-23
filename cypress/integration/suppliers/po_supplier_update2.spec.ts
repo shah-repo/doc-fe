@@ -524,9 +524,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click 'Create A New Supplier'", () => {
-        // cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
         cy.get("[data-cy=\"form.builder.create.new.supplier\"]").arrowClick();
-        // });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
