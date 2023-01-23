@@ -1,6 +1,6 @@
 export type ModuleOrSubModule = "Module" | "Sub-Module";
 export const REQ_HEADER_TEXT = "REQ #";
-export const utf8Encoding = { encoding: "UTF-8" };
+export const utf8Encoding = { encoding: "utf-8" } as const;
 export const GENERATED_SPECS_PREFIX = "generated_specs";
 export const GENERATED_REQUIREMENTS_JSON = "generated_requirements.json";
 export const GENERATED_INFO_JSON = "generated_info.json";
