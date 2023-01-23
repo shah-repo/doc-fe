@@ -93,7 +93,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
 
   return (
     <SMForm
-      templateBoxProps={{ stretchY: "100%" }}
+      templateBoxProps={{ stretchY: "100%", width: "100%" }}
       headerBoxProps={{ maxHeight: "30%", minHeight: 84 }}
       contentBoxProps={{ bgcolor: Colors.alabaster }}
       values={documentRevision}
@@ -121,13 +121,20 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
         <Observer>
           {() => (
             <SMTemplate
-              templateBoxProps={{ stretchY: "100%", overflow: "auto" }}
+              templateBoxProps={{ stretchY: "100%" }}
+              contentBoxProps={{
+                overflow: _documentRevisionFormState?.expanded ? "unset" : "auto",
+              }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionSummaryHeader {...{ documentRevision }} />}
               lhrSteps={isLHR && <DocumentRevisionFormProgressBar smartReferencesFrom={smartReferencesFrom} />}
             >
               <Observer>
                 {() => (
-                  <SMTabs tabs={tabConfig} boxProps={{ px: 4.25 }}>
+                  <SMTabs
+                    tabs={tabConfig}
+                    boxProps={{ px: 3.75, stretchY: "100%", display: "flex", flexDirection: "column" }}
+                    panelProps={{ flex: 1 }}
+                  >
                     {map(tabConfig, (tabInfo: TabInfo) => {
                       const tabType = tabInfo.type;
                       const { tabId } = tabInfo || {};
