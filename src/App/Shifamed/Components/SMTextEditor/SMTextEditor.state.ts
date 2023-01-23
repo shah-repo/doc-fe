@@ -29,5 +29,8 @@ export default class SMTextEditorState implements SMTextEditorStateProps {
   @action public setPreviewMode = (previewMode?: boolean) =>
     set(this, "previewMode", previewMode);
 
+  @action public togglePreviewMode = () =>
+    this.setPreviewMode(!this.previewMode);
+
   // MARK: @helpers
 }
