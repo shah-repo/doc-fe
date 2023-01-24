@@ -30,6 +30,12 @@ export enum POStatusType {
   VOIDED = "VOIDED"
 }
 
+export enum POStatusLabelMapping {
+  OPENED = "Open",
+  CLOSED = "Closed",
+  VOIDED = "Voided"
+}
+
 
 export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",

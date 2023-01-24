@@ -21,7 +21,7 @@ import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncFilterTemplate } from "../../async.tasks/grid/filter.template/AsyncFilterTemplate";
 import { DateFilterTemplate } from "../../async.tasks/grid/filter.template/DateFilterTemplate";
@@ -34,7 +34,6 @@ import { DueOnDateFilterTemplate } from "../../document.revision/grid/filter.tem
 import { EffectiveDateFilterTemplate } from "../../document.revision/grid/filter.template/EffectiveDateFilterTemplate";
 import { InputFilterTemplate } from "../../document.revision/grid/filter.template/InputFilterTemplate";
 import { StatusFilterTemplate } from "../../document.revision/grid/filter.template/StatusFilterTemplate";
-import { poStatusOptions } from "../../document.revision/utils/helpers";
 import useDidMount from "../../hooks/useDidMount";
 import { RenderCustomCell } from "../common/kendo.column.templates/RenderCellTemplate";
 import ColumnHeader from "../common/kendo/ColumnHeader";
@@ -168,6 +167,12 @@ export function KendoGrid<T extends any>({
       })}
     />
   );
+
+  const poStatusOptions = [
+    POStatusLabelMapping.OPENED,
+    POStatusLabelMapping.CLOSED,
+    POStatusLabelMapping.VOIDED,
+  ];
 
   const POStatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate

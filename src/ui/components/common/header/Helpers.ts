@@ -1,4 +1,3 @@
-import { POStatusType } from "../../../../state/ducks/documentRevisions/types";
 
 export enum FormHeaderStatusClassMapping {
   "Pending Approval"="PENDING_STATUS",
@@ -30,17 +29,3 @@ export enum FormHeaderStatusClassMapping {
   "IMPLEMENTATION"="GREEN_STATUS",
   "Implementation"="GREEN_STATUS",
 }
-
-export const getPOStatusLabel = (poStatus: POStatusType, isActionBtn?: boolean) => {
-  let label = "form.builder.header.po.status.open";
-  switch (poStatus) {
-    case POStatusType.CLOSED:
-      label = isActionBtn ? "form.builder.header.po.status.close" : "form.builder.header.po.status.closed";
-      break;
-    case POStatusType.VOIDED:
-      label = isActionBtn ? "form.builder.header.po.status.void" : "form.builder.header.po.status.voided";
-      break;
-    default:
-  }
-  return label;
-};

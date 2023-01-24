@@ -5,7 +5,7 @@ import { default as classNames, default as cx } from "classnames";
 import { default as React } from "react";
 import { ReactComponent as CaretIcon } from "../../../../assets/images/po_status_dropdown.svg";
 import { documentRevisionsActions } from "../../../../state/ducks/documentRevisions";
-import { POStatusType } from "../../../../state/ducks/documentRevisions/types";
+import { POStatusLabelMapping, POStatusType } from "../../../../state/ducks/documentRevisions/types";
 import Text from "../../../../ui/components/Text";
 import AlertDialog from "../../../app/alert.dialog/AlertDialog";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -13,7 +13,6 @@ import useAsync from "../../../hooks/useAsync";
 import useDialog from "../../../hooks/useDialog";
 import { Translation } from "../../../translations/types";
 import useStyles from "./HeaderPOStatus.styles";
-import { getPOStatusLabel } from "./Helpers";
 
 interface Props {
   poStatus: POStatusType;
@@ -75,12 +74,25 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       {...props}
     />
   ));
+  const getPOStatusMenuItemLabel = (poStatus) => {
+    let label = "form.builder.header.po.status.open";
+    switch (poStatus) {
+      case POStatusType.CLOSED:
+        label = "form.builder.header.po.status.close";
+        break;
+      case POStatusType.VOIDED:
+        label = "form.builder.header.po.status.void";
+        break;
+      default:
+    }
+    return label;
+  };
 
   const getPOStatusMenuItem = (status) => <>
     <div
       className={classNames(classes.statusIcon, classes[status])}
     />
-    <Text message={getPOStatusLabel(POStatusType[status], true)} />
+    <Text message={getPOStatusMenuItemLabel(POStatusType[status])} />
   </>;
 
 
@@ -134,7 +146,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
           onClick={handleClick}
         >
           <div className={classNames(classes.statusIcon, classes[poStatus])}/>
-          <Text message={getPOStatusLabel(poStatus)} />
+          <Text message={POStatusLabelMapping[poStatus]} />
         </Button>
         <Button
           onClick={handleClick}

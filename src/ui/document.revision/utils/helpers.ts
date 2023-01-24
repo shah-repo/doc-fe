@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import moment from "moment";
 import "moment-timezone";
-import { DocumentRevision, DocumentRevisionStatus, POStatusType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevision, DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
 import { checkIsDocumentRecord } from "../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionInDraft, isDocumentRevisionPendingChange } from "../../documentRevision/helpers/documentRevisionStatus";
@@ -67,8 +67,6 @@ export const trainingCompletedOnDateOption = () => [
     value: moment().add(7, "d").startOf("day").toISOString(),
   },
 ];
-
-export const poStatusOptions = [POStatusType.OPENED, POStatusType.CLOSED, POStatusType.VOIDED];
 
 export const getVersionNumber = (documentRevisionId) => {
   const {
