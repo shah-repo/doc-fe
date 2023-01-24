@@ -1,4 +1,4 @@
-import { at, cloneDeep, debounce, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, toNumber, union } from "lodash";
+import { at, cloneDeep, get, has, isArray, isEmpty, isNumber, isObject, isString, map, remove, toNumber, union } from "lodash";
 import { useObserver } from "mobx-react";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -73,8 +73,6 @@ export const withFBOnChange = <T extends FBInputProps>(
         });
       }
     }
-
-    const debouncedSetValue = debounce(setValue, 200);
 
     function checkboxGroupValue(ev: React.ChangeEvent<HTMLInputElement>) {
       const [valueName, checked] = at(ev.target, ["value", "checked"]);
@@ -179,7 +177,7 @@ export const withFBOnChange = <T extends FBInputProps>(
         if (type === "number" && value === "") {
           value = null;
         }
-        debouncedSetValue(value);
+        setValue(value);
       }
 
       const changedValue = {
