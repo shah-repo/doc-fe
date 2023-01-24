@@ -356,7 +356,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -489,7 +489,7 @@ context("Intermediate page validation", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.fbClickLabelEditHiddenBtn({ label: "fb-radiobutton-group" });
-      cy.get(`[data-cy="options"]`).arrowType("{enter}option3");
+      cy.fbGroupOptions("\noption3");
       cy.fbAddNewFieldButton();
     });
 

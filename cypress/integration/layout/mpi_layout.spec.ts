@@ -235,7 +235,7 @@ context("Mpi Layout", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       context("Verify Layout of document", () => {
@@ -411,23 +411,20 @@ context("Mpi Layout", () => {
           cy.progressBarShouldNotExist();
         });
 
-        it("Save document", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-        });
-
         it("Upload attachment 'image.jpg'", () => {
           cy.pmUploadAttachment({ fileName: "image.jpg" });
           cy.progressBarShouldNotExist();
-        });
-
-        it("Save document", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Upload attachment 'test.docx'", () => {
           cy.pmUploadAttachment({ fileName: "test.docx" });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
+        });
+
+        it("Save document", () => {
+          cy.drClickCreateDocumentWithoutApiCall();
+          cy.wait(3000);
         });
 
         it("Click 'Clone Step'", () => {
@@ -706,7 +703,7 @@ context("Mpi Layout", () => {
 
       context("Release MPI", () => {
         it("Approve and release MPI document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
         });

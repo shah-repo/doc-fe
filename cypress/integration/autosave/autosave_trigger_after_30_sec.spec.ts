@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -98,7 +97,9 @@ context.skip("Autosave trigger after 30 sec", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -125,9 +126,8 @@ context.skip("Autosave trigger after 30 sec", () => {
     });
 
     it("Autosave should trigger after changing Revision Stage", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetDocAggregatedAudit, CyRoutes.GetDocAudit], () => {
-        cy.drSelectRevisionStageOptions({ revisionStageOption: "Alpha" });
-      });
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Alpha" });
+      cy.saveBarShouldNotExist();
     });
 
     it("Last save should be present", () => {

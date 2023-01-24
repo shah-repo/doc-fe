@@ -9,11 +9,11 @@ import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 let createdCompany;
 let loginResponse;
 let adminEmployee;
-const approvalRequestTitle = "Approval Request from newly created form";
-const approvalRequestFormName = "New Approval Request form template";
+const approvalRequestTitle = "Approval request from newly created form";
+const approvalRequestFormName = "New Approval request form template";
 
 
-context("Approval Request form layout verification", () => {
+context("Approval request form layout verification", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -104,7 +104,7 @@ context("Approval Request form layout verification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -121,19 +121,19 @@ context("Approval Request form layout verification", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Approval Request form template'", () => {
+    it("Enter title 'New Approval request form template'", () => {
       cy.drEnterDocumentTitle({ name: approvalRequestFormName });
     });
 
-    it("Enter description 'New form template for Approval Request'", () => {
-      cy.drEnterDocumentDescription({ description: "New form template for Approval Request" });
+    it("Enter description 'New form template for approval request'", () => {
+      cy.drEnterDocumentDescription({ description: "New form template for approval request" });
     });
 
     it("Click on 'Form' document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval Request' outputdocument type", () => {
+    it("Click on 'Approval request' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
@@ -146,7 +146,7 @@ context("Approval Request form layout verification", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -174,7 +174,7 @@ context("Approval Request form layout verification", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it(`Add section field Approval Request details`, () => {
+    it(`Add section field Approval request details`, () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Section", field: "Section" });
       cy.fbEnterNameValue({ name: "label", value: "Approval Request" });
@@ -184,13 +184,13 @@ context("Approval Request form layout verification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.reload();
     });
   });
 
-  context("Verify `Approval Request form`", () => {
-    it("Verify Form for Approval Request has two tabs Change Details and Documents", () => {
+  context("Verify `Approval request form`", () => {
+    it("Verify Form for Approval request has two tabs Change Details and Documents", () => {
       cy.verifyTabs("changedetails", "documents");
     });
 
@@ -207,7 +207,7 @@ context("Approval Request form layout verification", () => {
         cy.isTabActive({ name: "changedetails", index: 0 });
       });
 
-      it("predefine schema fields except Approval Request details", () => {
+      it("predefine schema fields except Approval request details", () => {
         cy.verifyPredefiendFields();
         cy.get("#AttachmentFieldPresenter-field").should("exist");
       });
@@ -226,7 +226,7 @@ context("Approval Request form layout verification", () => {
         cy.drSelectDocumentTab();
       });
 
-      it("Verify that predefined fields for Document tab is only Approval Request details", () => {
+      it("Verify that predefined fields for Document tab is only Approval request details", () => {
         cy.get("[data-cy='fb.add.document']").should("exist");
       });
 
@@ -240,7 +240,7 @@ context("Approval Request form layout verification", () => {
         cy.get("[data-cy^='text-field']").should("exist");
       });
 
-      it("Verify section field Approval Request", () => {
+      it("Verify section field Approval request", () => {
         cy.get("[data-cy='Approval Request']").should("exist");
       });
 
@@ -260,13 +260,13 @@ context("Approval Request form layout verification", () => {
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
 
-  context("Create Approval Request from released  form", () => {
-    it("Navigate to Approval Request list", () => {
+  context("Create approval request from released  form", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -284,13 +284,13 @@ context("Approval Request form layout verification", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for Approval Request'", () => {
+    it("Enter description 'AR from New form template for approval request'", () => {
       cy.get("[data-cy='description']").first().arrowClick({ force: true }).wait(1000);
       cy.get(`[data-cy="description"] [contenteditable]`).first().clear().arrowType("AR form description");
     });
 
-    context("Verify `Approval Request form`", () => {
-      it("Verify Form for Approval Request has two tabs Change Details and Documents", () => {
+    context("Verify `Approval request form`", () => {
+      it("Verify Form for Approval request has two tabs Change Details and Documents", () => {
         cy.verifyTabs("changedetails", "documents");
       });
 
@@ -331,11 +331,11 @@ context("Approval Request form layout verification", () => {
           cy.get("[data-cy='dialog-close']").arrowClick();
         });
 
-        it("Verify that predefined fields for Document tab is only Approval Request details", () => {
+        it("Verify that predefined fields for Document tab is only Approval request details", () => {
           cy.get("[data-cy='fb.add.document']").should("exist");
         });
 
-        it("Verify section field Approval Request", () => {
+        it("Verify section field Approval request", () => {
           cy.get("[data-cy='Approval Request']").should("exist");
         });
 
@@ -464,7 +464,7 @@ context("Approval Request form layout verification", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Navigate to document tab", () => {
@@ -485,14 +485,21 @@ context("Approval Request form layout verification", () => {
 
     it("Enter description of change", () => {
       cy.get(`[name="justificationOfChange"]`).arrowType("justification of change");
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(2000);
     });
 
     it("selct document", () => {
       cy.get(`[data-cy="arAddDocumentDialogAddBtn"]`).arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Save the doc", () => {
-      cy.get("[data-cy='common.save']").arrowClick();
+      cy.arSaveApiCallWithoutApi();
+      cy.saveBarShouldNotExist();
+      cy.wait(3000);
     });
   });
 

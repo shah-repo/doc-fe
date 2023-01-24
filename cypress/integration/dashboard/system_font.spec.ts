@@ -737,11 +737,11 @@ context("User Creation Flow", () => {
   });
 
   context("Verify The side bar options Access Permissions fonts", () => {
-    it(`Verify 'Permissions' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
+    it(`Verify 'Access Permissions' font-size ${FONT_SIZE_14} font-family ${soraSansserif} line-height ${LINE_HT_18} font-weight ${FONT_WT_600}`, () => {
       cy.get("[data-cy=\"permission-icon\"]").arrowClick();
-      cy.get(`[data-cy="Permissions"]`)
+      cy.get(`[data-cy="Access Permissions"]`)
         .checkStylePropExists({
-          content: "Permissions",
+          content: "Access Permissions",
           props: { "font-size": FONT_SIZE_14, "font-family": soraSansserif, "line-height": LINE_HT_18, "font-weight": FONT_WT_600 },
         });
     });

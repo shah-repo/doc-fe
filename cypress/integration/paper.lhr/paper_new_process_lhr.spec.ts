@@ -522,7 +522,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -545,6 +545,9 @@ context("Paper new process LHR", () => {
       cy.get(`div[data-cy^="field-selectType"]`).click().focused()
         .arrowType("Paper Lot History Record{downarrow}{enter}", { force: true });
       cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it(`Select ${partDocumentTitle} for Part to be Manufactured`, () => {
@@ -575,7 +578,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -618,11 +621,11 @@ context("Paper new process LHR", () => {
     });
 
     it("Add approver", () => {
-      cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Save document", () => {
-      cy.lhrClickSaveDocument();
+      cy.lhrSaveWithoutApi();
     });
   });
 
@@ -653,7 +656,7 @@ context("Paper new process LHR", () => {
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Verify error message for selecting Manufactured parts", () => {
@@ -679,11 +682,11 @@ context("Paper new process LHR", () => {
     });
 
     it("Save document", () => {
-      cy.lhrClickSaveDocument();
+      cy.lhrSaveWithoutApi();
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Verify error message for Intial Quantity", () => {
@@ -707,11 +710,11 @@ context("Paper new process LHR", () => {
     });
 
     it("Save document", () => {
-      cy.lhrClickSaveDocument();
+      cy.lhrSaveWithoutApi();
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Verify error message for End Quantity", () => {
@@ -730,20 +733,20 @@ context("Paper new process LHR", () => {
     });
 
     it("Save document", () => {
-      cy.lhrClickSaveDocument();
+      cy.lhrSaveWithoutApi();
     });
   });
 
   context("Approve and released LHR", () => {
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
     it("Approve and Release document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it(`Check doc in ${STATUS_TYPES_LABEL.RELEASED} status and subtitle contains LOT#YYMMDDXX`, () => {

@@ -201,7 +201,7 @@ context("Document revise test", () => {
     });
 
     context("Create AR for reviseed document to 'Upgrade to Next Revision Level'", () => {
-      it("Navigate to Approval Request list", () => {
+      it("Navigate to approval request list", () => {
         cy.navigToApprovalRequestList();
       });
 
@@ -217,7 +217,7 @@ context("Document revise test", () => {
         cy.arEnterApprovalRequestTitle({ title: "AR for Upgrade to Next Revision Level" });
       });
 
-      it("Enter description 'AR from New form template for Approval Request'", () => {
+      it("Enter description 'AR from New form template for approval request'", () => {
         cy.arEnterApprovalRequestDescription(
           { description: "AR for testing document that has been revised to 'Upgrade to Next Revision Level'" });
       });
@@ -285,7 +285,7 @@ context("Document revise test", () => {
     });
 
     context("Create AR for reviseed document to 'Obsolete'", () => {
-      it("Navigate to Approval Request list", () => {
+      it("Navigate to approval request list", () => {
         cy.navigToApprovalRequestList();
       });
 
@@ -297,7 +297,7 @@ context("Document revise test", () => {
         cy.arEnterApprovalRequestTitle({ title: "AR for Upgrade to Obsolete" });
       });
 
-      it("Enter description 'AR from New form template for Approval Request'", () => {
+      it("Enter description 'AR from New form template for approval request'", () => {
         cy.arEnterApprovalRequestDescription(
           { description: "AR for testing document that has been revised to 'Obsolete'" });
       });

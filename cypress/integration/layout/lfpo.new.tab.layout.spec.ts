@@ -6,7 +6,6 @@ import { DOC_TYPE_GROUP } from "../../../src/state/ducks/documentRevisions/docum
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { lotIdRef } from "../../utils/constants/dateHandler";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
@@ -795,7 +794,7 @@ context("LFPO new layout verification", () => {
       });
 
       it("Creat form", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
       });
@@ -873,7 +872,7 @@ context("LFPO new layout verification", () => {
       });
 
       it("Save the form data", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
   });
@@ -961,7 +960,7 @@ context("LFPO new layout verification", () => {
       });
 
       it("Submit for approval", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Verify form is created and released", () => {
@@ -1012,7 +1011,6 @@ context("LFPO new layout verification", () => {
       cy.get("[data-cy='porec-receivable-test']").autocompleteSelect("POT-00001 - rev 1 - PO for receiving");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.progressBarShouldNotExist();
       cy.wait(3000);
     });
 
@@ -1151,14 +1149,11 @@ context("LFPO new layout verification", () => {
       const docId = "FM-00001";
       cy.get("[data-cy=\"referenceTo\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-        cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
-      });
-      cy.drClickCreateDocumentWithApiCall();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-        cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
-          .parent().parent().parent().find("svg").arrowClick({ force: true });
-      });
+      cy.get("[data-cy=\"referenceTo\"] input").autocompleteSelect(docId);
+      cy.progressBarShouldNotExist();
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.get(`div[data-cy="field-referenceTo"]`).contains(docId)
+        .parent().parent().parent().find("svg").arrowClick({ force: true });
     });
 
     it("Verify Referenced By,and Release date Item exist or not", () => {
@@ -1274,7 +1269,6 @@ context("LFPO new layout verification", () => {
       cy.get("[data-cy^='field-fb-approvals']" ).arrowClick();
       cy.get("[id^='react-select']").eq(7).autocompleteSelect("form.builder.approvals");
     });
-
 
     it("Mapped Checkbox field", () => {
       cy.get("[data-cy^='field-checkbox']" ).arrowClick();

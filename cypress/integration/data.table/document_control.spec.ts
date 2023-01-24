@@ -7,7 +7,6 @@ import { LINE_ITEMS_STATUS_TYPES } from "../../../src/state/ducks/dashboard.new/
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -283,9 +282,9 @@ context("Document list test", () => {
     });
 
     it("Approve and release document with selecting approver", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[1].name}`]);
-      });
+      cy.drApproveAndReleaseDocumentWithSelectingApprover([`${USERS[1].name}`]);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify that the system displays only documents in the documents list with corresponding data", () => {
@@ -453,7 +452,7 @@ context("Document list test", () => {
       cy.get(`div[role="grid"]`).should("have.class", "k-grid");
     });
 
-    it("Verify Approval Request landing page default column headers", () => {
+    it("Verify approval request landing page default column headers", () => {
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${arId}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${arTitle}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${owner}`);
@@ -490,7 +489,7 @@ context("Document list test", () => {
       cy.navigToApprovalRequestList();
     });
 
-    it("Verify when navigating away from and back to the Approval Request list", () => {
+    it("Verify when navigating away from and back to the approval request list", () => {
       cy.dlClearFilters();
       cy.alVerifyFilterByArId({ arId: "AR-00001" });
       cy.navigToDocumentList();
@@ -783,11 +782,7 @@ context("Document list test", () => {
       });
 
       it("release button click'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-          cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
     });
 
@@ -806,9 +801,7 @@ context("Document list test", () => {
       });
 
       it("Clicks on 'create New' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetProposedDocId, CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.drCreateNewDocumentFromFormRecord();
-        });
+        cy.drCreateNewDocumentFromFormRecord();
       });
 
       it("Enters title as Approval Record title", () => {

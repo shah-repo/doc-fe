@@ -192,6 +192,7 @@ context("Intermediate page validation", () => {
     context("verify default tabs are displayed", () => {
       it("Click 'Preview Layout' button", () => {
         cy.intPageClickPreviewLayout();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify 'Overview' tab is displayed", () => {
@@ -377,13 +378,14 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
   context("Click on Form Preview >> The preview option must display all tabs and all fields per tab", () => {
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      cy.listLoadingElementShouldNotExist();
       cy.get(`[data-cy="fb-checkbox-group"]`).eq(1).scrollIntoView();
     });
 
@@ -415,13 +417,13 @@ context("Intermediate page validation", () => {
   context("Edit the fields", () => {
     it("Edit Field 1 by adding a new option", () => {
       cy.get("[class*='fb-field-wrapper-fb-checkbox-group-']").trigger("mouseover");
-      cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true });
+      cy.get("[data-cy='edit-schema-item']").eq(1).arrowClick({ force: true }).wait(500);
       cy.fbGroupOptions("\noption3");
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Remove Field 2 Validations", () => {
@@ -434,7 +436,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Remove Field 2", () => {
@@ -443,7 +445,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Edit Field 3 and make it required", () => {
@@ -455,13 +457,14 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
   context("Open the Preview mode and make sure it was updated accordingly with changes in step 12 and 13", () => {
     it("Open Preview dialog", () => {
       cy.fbClickButton({ el: "FBWorkspace-clickView" });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Make sure Field1 is displayed as 'Required' → As the user, enter a value that is different than 'X'", () => {

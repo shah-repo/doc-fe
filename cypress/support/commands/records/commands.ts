@@ -38,6 +38,7 @@ declare global {
         sessionId: string;}): Chainable<Subject>;
       equipSetTimeTravelInDays(params: { days: number }): Chainable<Subject>;
       recFinalizeAndReleaseRecord(): Chainable<Subject>;
+      recFinalizeAndReleaseRecordWithoutApi(): Chainable<Subject>;
     }
   }
 }
@@ -148,20 +149,18 @@ Cypress.Commands.add("recCheckIfMultilpeFormsAreAvailable", (params: {recordType
   cy.get("[data-cy=\"suggestFormCancelBtn\"]").arrowClick();
 });
 
+
 Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType: string; recordForm: string}) => {
   cy.landingPageLoadingElementShouldNotExist();
-  cy.wrapWithWaitOnApiCalls([
-    CyRoutes.DocPreview,
-    CyRoutes.GetRequiredApproversDocRev], () => {
-    cy.get("[data-cy=\"field-selectType\"]").arrowClick().wait(2000);
-    cy.get("div[id^=react-select]").contains(params.recordType).arrowClick().wait(2000);
+  cy.get("[data-cy=\"field-selectType\"]").arrowClick().wait(500);
+  cy.get("div[id^=react-select]").contains(params.recordType).arrowClick().wait(500);
 
-    if (params.recordForm) {
-      cy.get("[data-cy=\"field-selectForm\"]").arrowClick().wait(2000);
-      cy.get("div[id^=react-select]").contains(params.recordForm).arrowClick();
-    }
-  });
+  if (params.recordForm) {
+    cy.get("[data-cy=\"field-selectForm\"]").arrowClick().wait(500);
+    cy.get("div[id^=react-select]").contains(params.recordForm).arrowClick();
+  }
   cy.unClick();
+  cy.progressBarShouldAppear();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
@@ -260,6 +259,14 @@ Cypress.Commands.add("recApproveAndReleaseInlineRecord", () => {
   () => {
     cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
   });
+});
+
+
+Cypress.Commands.add("recFinalizeAndReleaseRecordWithoutApi", () => {
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
+  cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+  cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("recFinalizeAndReleaseRecord", () => {

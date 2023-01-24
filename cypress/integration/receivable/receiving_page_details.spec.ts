@@ -5,7 +5,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate, receivingReleasedDate, receivingReleasedDateMonth } from "../../utils/constants/dateHandler";
 import { LotsTest } from "../../utils/constants/documentTypes/lot";
 import { Part } from "../../utils/constants/documentTypes/part";
@@ -712,16 +711,14 @@ context("Receivable test with Page Details", () => {
 
     context("Create Purchase Order document with three Products", () => {
       it("Click on 'Purchase Order' on sidebar", () => {
-        cy.navigToPurchaseOrder();
+        cy.navigToPurchaseOrderWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Click on 'Create PO' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-        });
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1104,13 +1101,13 @@ context("Receivable test with Page Details", () => {
 
     it(`select value for ${CHECKBOX_LABEL}`, () => {
       cy.get(`input[type="checkbox"][value="2"]`).check();
+      cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Search for API PO document and select it", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-        cy.recSelectPo({ poTitle: "New Purchase Order" });
-        cy.unClick();
-      });
+      cy.recSelectPo({ poTitle: "New Purchase Order" });
+      cy.unClick();
     });
 
     it("Verify requester is present on receivable", () => {
@@ -1186,7 +1183,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval Request form", () => {
+      it("Download zip file containing Approval request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1308,25 +1305,28 @@ context("Receivable test with Page Details", () => {
     it("Update received quantity for first line items", () => {
       cy.get("td[data-cy=\"poItemIndex\"]").eq(0).arrowClick();
       cy.poEnterQuantityReceipt({ quantity: "50" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetReceivableQuantity], () => {
-        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Update received quantity for second line items", () => {
       cy.get(`tr[data-cy="poItems"]`).eq(1).arrowClick();
       cy.poEnterQuantityReceipt({ quantity: "25" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetReceivableQuantity], () => {
-        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Update received quantity for third line items", () => {
       cy.get("td[data-cy=\"poItemIndex\"]").eq(2).arrowClick();
       cy.poEnterQuantityReceipt({ quantity: "1" });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetReceivableQuantity], () => {
-        cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"form.builder.save\"]").arrowClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
   });
 
@@ -1400,7 +1400,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval Request form", () => {
+      it("Download zip file containing Approval request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1522,23 +1522,18 @@ context("Receivable test with Page Details", () => {
 
   context("Click on “Receive all“", () => {
     it("Click on “Receive all”", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev, CyRoutes.GetReceivableQuantity], () => {
-        cy.get("[data-cy=\"form.builder.receive\"]").arrowClick();
-      });
+      cy.get("[data-cy=\"form.builder.receive\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Create a Lot' on first line item", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocumentType, CyRoutes.GetDocumentType], () => {
-        cy.get("tr>td>button").first().arrowClick();
-      });
+      cy.get("tr>td>button").first().arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Lots test' document type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetSpecificDocumentType], () => {
-        cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
-      });
+      cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Select 'Lots form document' form", () => {
@@ -1546,19 +1541,11 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Click 'Create Lot' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostReceivable], () => {
-        cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
-      });
+      cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.unClick();
     });
-
-    // it("Extract the lot id created", () => {
-    //   cy.get("[data-cy=\"lots\"]").then((el) => {
-    //     lotId = el.text().split(" ");
-    //   });
-    // });
   });
 
   context("Patch page details and verify receiving landing page", () => {
@@ -1779,7 +1766,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval Request form", () => {
+      it("Download zip file containing Approval request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1959,7 +1946,7 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      it("Download zip file containing Approval Request form", () => {
+      it("Download zip file containing Approval request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -2133,14 +2120,14 @@ context("Receivable test with Page Details", () => {
       cy.landingPageLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Search for API PO document and select it", () => {
       cy.drSelectDetailsTab();
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.DocRevPreview], () => {
-          cy.get("input[data-cy^=\"porec-rece\"]").click().focused().autocompleteSelect("New Purchase Order");
-        });
+      cy.get("input[data-cy^=\"porec-rece\"]").click().focused().autocompleteSelect("New Purchase Order");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify requester is present on receivable", () => {

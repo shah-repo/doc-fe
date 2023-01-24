@@ -6,7 +6,6 @@ import moment from "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -1319,12 +1318,10 @@ context("Test Supplier Landing Page for Supira", () => {
     });
 
     it("Select 'Receivable test' as document type", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Receivable test");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Receivable test");
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to Details tab", () => {

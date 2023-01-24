@@ -311,7 +311,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it(`Select the item as ${otherFormDocId1} created in last step`, () => {
-        cy.arClickAddDocument();
+        cy.arClickAddDocumentWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.arChoseSpecificProposedDocument({ name: otherFormDocId1 });
@@ -660,7 +660,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Go back to the AR - Submit for approval and approve it", () => {
       it("Navigate to approval request list", () => {
-        cy.navigToApprovalRequestList();
+        cy.navigToApprovalRequestListWithoutApi();
       });
 
       it("Clear Filter", () => {
@@ -670,7 +670,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatus({ title: otherArName, status: "DRAFT" });
+        cy.arFilterARListByNameAndStatusWithoutApi({ title: otherArName, status: "DRAFT" });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1029,7 +1029,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Add first document revision", () => {
-        cy.arClickAddDocument();
+        cy.arClickAddDocumentWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.arChoseSpecificProposedDocument({ name: otherFormDocId2 });
@@ -1067,7 +1067,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Navigate back to AR list and Approve AR and Close AR", () => {
       it("Navigate to approval request list", () => {
-        cy.navigToApprovalRequestList();
+        cy.navigToApprovalRequestListWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1348,7 +1348,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Go to Approval Requests and create an AR and Select the item created in last step", () => {
       it("Navigate to approval request list", () => {
-        cy.navigToApprovalRequestList();
+        cy.navigToApprovalRequestListWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1371,7 +1371,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it(`Select the item as ${bulkId1} created in last step`, () => {
-        cy.arClickAddDocument();
+        cy.arClickAddDocumentWithoutApi();
         cy.arChoseSpecificProposedDocument({ name: bulkId1 });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -1710,7 +1710,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Filter approval by name and status, and select it", () => {
-        cy.arFilterARListByNameAndStatus({ title: bulkArName, status: "DRAFT" });
+        cy.arFilterARListByNameAndStatusWithoutApi({ title: bulkArName, status: "DRAFT" });
       });
 
       it("Send AR to review", () => {
@@ -1826,7 +1826,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
 
     context("Go to the AR and close it (select effective date today)", () => {
       it("Navigate to approval request list", () => {
-        cy.navigToApprovalRequestList();
+        cy.navigToApprovalRequestListWithoutApi();
       });
 
       it("Clear Filter", () => {
@@ -2074,7 +2074,7 @@ context("Status Bar of New Enlil items approved via regular AR", () => {
       });
 
       it("Add first document revision", () => {
-        cy.arClickAddDocument();
+        cy.arClickAddDocumentWithoutApi();
         cy.arChoseSpecificProposedDocument({ name: bulkId2 });
         cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
         cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });

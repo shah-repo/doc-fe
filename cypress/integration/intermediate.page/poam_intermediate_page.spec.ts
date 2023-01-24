@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { DesignDocument } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -280,9 +279,7 @@ context("Intermediate page validation", () => {
 
   context("Approve & Release POAM Form", () => {
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -292,7 +289,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -332,7 +329,7 @@ context("Intermediate page validation", () => {
     });
 
     it("Save form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 

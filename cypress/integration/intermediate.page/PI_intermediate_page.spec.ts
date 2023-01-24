@@ -281,7 +281,7 @@ context("Intermediate page validation", () => {
           cy.get(`input[value^="visibility"]`).check();
           cy.get(`input[name="validators.required_if"]`).check();
           cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-quantity" );
-          cy.get(`[data-cy="validators.required_if.value"]`).arrowType("1");
+          cy.get(`[data-cy="validators.required_if.value"]`).arrowType("1").wait(500);
           cy.fbAddNewFieldButton();
         });
 
@@ -417,7 +417,7 @@ context("Intermediate page validation", () => {
       context("Change the order of the fields", () => {
         it("Make autocomplete field as required field", () => {
           cy.fbClickLabelEditHiddenBtn({ label: "fb-autocomplete" });
-          cy.get(`[data-cy="optionId"]`).clear().autocompleteSelect("Approval Requests");
+          cy.get(`[data-cy="optionId"]`).clear().autocompleteSelect("Approval requests");
           cy.get(`button[data-cy="fb-editor-mode-validation-1"]`).arrowClick();
           cy.fbFieldRequired();
           cy.fbAddNewFieldButton();

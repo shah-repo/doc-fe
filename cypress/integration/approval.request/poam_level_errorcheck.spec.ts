@@ -19,7 +19,7 @@ let poamDocumentType;
 let createdPOAMform;
 let createdPOAMdoc;
 
-context("Approval Request landing page test", () => {
+context("Approval request landing page test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -267,7 +267,7 @@ context("Approval Request landing page test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to Matrix Details Tab", () => {
@@ -298,7 +298,7 @@ context("Approval Request landing page test", () => {
     });
 
     it("Save document and verify document saved without error", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add another level", () => {
@@ -325,7 +325,7 @@ context("Approval Request landing page test", () => {
     });
 
     it("Save document and verify document saved without error", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click on the First level", () => {
@@ -380,7 +380,7 @@ context("Approval Request landing page test", () => {
     });
 
     it("Save document and verify document saved without error", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -408,11 +408,11 @@ context("Approval Request landing page test", () => {
     });
 
     it("Navigates to Approval Requests", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Choose AR", () => {
-      cy.arFilterARListByNameAndStatus({ title: "POAM doc", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: "POAM doc", status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
     });
 
     it("Click 'Approve Submission' button", () => {
@@ -434,12 +434,12 @@ context("Approval Request landing page test", () => {
     });
 
     it("Navigates to Approval Requests", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Choose AR", () => {
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: "POAM doc", status: LINE_ITEMS_STATUS_TYPES.APPROVED });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: "POAM doc", status: LINE_ITEMS_STATUS_TYPES.APPROVED });
     });
 
     it("Close AR and verify AR closed without throwing any error message", () => {
