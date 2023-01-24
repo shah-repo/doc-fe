@@ -16,7 +16,7 @@ import DocumentRevisionFormPresenter from "../../../../ui/documentRevision/forms
 import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
 import RedlineBanner from "../../../../ui/documentRevision/forms/presenters/redline/Redline.banner";
 import UpgradeToLatestContainer from "../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
-import { checkIsDocumentLHR, checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -60,7 +60,6 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
   const outputTypeGroup = get(documentRevision?.formTemplate?.outputDocumentTypes[0], "group");
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
-  const isMPI = checkIsDocumentMPI(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
   const smartReferencesFrom = documentRevision?.smartReferencesFrom?.filter((ref) =>
     ref.active && ref.type === SmartReferenceType.HiddenPiInstance &&
@@ -152,14 +151,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
             <SMTemplate
               templateBoxProps={{ stretchY: "100%" }}
               contentBoxProps={{
-                minHeight: _documentRevisionFormState?.expanded ? "unset"
-                  :  (isMPI ? "100%" :  (((!isLHR && !isTypeMpiDoc) || isLHR) ? "80%" : "0px" )),
-                height: "auto",
-              }}
-              boxProps={{
-                overflow: (_documentRevisionFormState?.expanded ? "auto" :
-                  (((isCreateUrl && _documentRevisionFormState?.isDescriptionFocused) ||
-                    (_documentRevisionFormState?.isDescriptionFocused) || isCreateUrl) ? "auto" : "")),
+                overflow: _documentRevisionFormState?.expanded ? "unset" : "auto",
               }}
               header={(!isLHR && !isTypeMpiDoc) && <DocumentRevisionFormHeader
                 type={type}
@@ -179,9 +171,7 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                       const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                       return (
-                        <SMBox
-                          key={index}
-                        >
+                        <SMBox key={index}>
                           {tabType === "MIXED" && (
                             <>
                               <DocumentRevisionFormPresenter
