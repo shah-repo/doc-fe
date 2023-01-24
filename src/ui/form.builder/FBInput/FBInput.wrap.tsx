@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isString, isUndefined, last, map, size, union, uniqWith } from "lodash";
+import { Dictionary, find, first, get, includes, isArray, isBoolean, isEmpty, isEqual, isNull, isString, isUndefined, last, map, size, union, uniqWith } from "lodash";
 import { autorun, reaction } from "mobx";
 import { useLocalStore } from "mobx-react";
 import React, { cloneElement, useEffect } from "react";
@@ -170,7 +170,7 @@ export const withFBInput = <T extends FBInputProps>(
         const formStateFieldValue = formState?.getFieldValue(fieldName);
 
         if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
-          if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue)) {
+          if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue) && !isNull(formStateFieldValue)) {
             showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue) :
               String(formStateFieldValue) === String(fieldValue);
           }
