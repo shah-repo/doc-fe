@@ -54,9 +54,9 @@ ENC-4783",,,,,,
 UN-0011,REQ-0650,Document Approval Matrix,Document Approval Matrix,"The system shall allow separate assignment of approval requirements for a 3-level document system with revision types: Numeric, Numeric-Alpha and Alpha ",,ENC-4812,Should Automate (4),,,,,
 UN-0011,REQ-0660,Document Approval Matrix,Document Approval Matrix,The system shall allow the assignment of approval requirements for an Administrative change,"This exists, we should implement in tests",,Should Automate (4),,,,,
 UN-0011,REQ-0670,Document Approval Matrix,Document Approval Matrix,The system shall allow the assignment of approval requirements for admin changes in a document and record correction.,,,,,,,,
-UN-0011,REQ-0680,Document Approval Matrix,Approval Request Creation ,The system shall allow users to create and submit Approval Requests for approval/obsolescence of documents.,,,,,Tomislav Cajbert,,,
-UN-0011,REQ-0690,Document Approval Matrix,Approval Request Creation ,The system shall automatically issue a unique Approval Request ID when a new change request is initiated,,,,,,,,
-UN-0011,REQ-0700,Document Approval Matrix,Approval Request Creation ,The system shall support the customer to define one or more custom forms to be used for Approval Requests,,,Should Automate (3),,,,,
+UN-0011,REQ-0680,Document Approval Matrix,Approval Request Creation ,The system shall allow users to create and submit approval requests for approval/obsolescence of documents.,,,,,Tomislav Cajbert,,,
+UN-0011,REQ-0690,Document Approval Matrix,Approval Request Creation ,The system shall automatically issue a unique approval request ID when a new change request is initiated,,,,,,,,
+UN-0011,REQ-0700,Document Approval Matrix,Approval Request Creation ,The system shall support the customer to define one or more custom forms to be used for approval requests,,,Should Automate (3),,,,,
 UN-0003,REQ-0710,Document Approval Matrix,Approval Request Form,"The system shall support addition of one or more implemenation tasks to the AR form, including a task title, task description, task assignement to user, due data, and status tracking.",,,,,Tomislav Cajbert,,,
 UN-0011,REQ-0730,Change Control,Approval Request Creation ,"The system shall automatically maintain the status of a change request:
 Draft - the default state when created
@@ -65,7 +65,7 @@ Approved - the state where the change request has been approved by all reviewers
 Implementation - the state where the change request has been approved but being implemented and tasks are getting completed
 Closed - the state when an approved change request has been fully implemented by doc control
 Voided - the state where the change request is voided and have no impact on the quality system.",,,,,,,,
-UN-0011,REQ-0740,Change Control,Approval Request Status,"The system shall automatically update the status attribute of all documents/parts on the Approval Request when the state of the Approval Request changes:
+UN-0011,REQ-0740,Change Control,Approval Request Status,"The system shall automatically update the status attribute of all documents/parts on the approval request when the state of the approval request changes:
 
 Pending Change when the AR is in Draft State
 In Review when the AR is in In Review State
@@ -73,16 +73,16 @@ Approved when the AR is in Approved State
 Pending Change when the AR is in Rejected State
 Released when the AR is in Closed State",,,,,,,,
 UN-0011,REQ-0750,Change Control,Landing Page,"The system shall diplay the following default columns on the landing page for the approvals list: AR Id, AR Title, AR Owner, and AR State (e.g. this list defines content, not column header names)",,ENC-4703,,,Tomislav Cajbert,,,
-UN-0011,REQ-0760,Change Control,Landing Page,"The system shall only display document Approval Requests in the Approval Requests list (e.g. approvals for other items like PO's can be found in their respective modules, AR for records will not be included in this list)",,ENC-4704,,,,,,
-UN-0011,REQ-0770,Change Control,Landing Page,The system shall allow the user to filter the displayed Approval Request list for each of the columns displayed on the landing page,,ENC-4705,,,,,,
-UN-0011,REQ-0790,#REF!,#REF!,The system shall maintain Approval Request list filter settings during an Enlil session when navigating away from and back to the Approval Request list landing page,,ENC-4707,,,,,,
-UN-0011,REQ-0800,#REF!,#REF!,The system shall default to the Approval Request list being sorted by most recent edited first,,ENC-4708,,,,,,
-UN-0011,REQ-0810,#REF!,#REF!,The system shall provide a mechanism to clear all Approval Request list filters with a single click,,ENC-4709,,,,,,
-UN-0011,REQ-0820,#REF!,#REF!,The system shall display the number of Approval Requests displayed that match the filter settings,,ENC-4710,,,,,,
+UN-0011,REQ-0760,Change Control,Landing Page,"The system shall only display document approval requests in the approval requests list (e.g. approvals for other items like PO's can be found in their respective modules, AR for records will not be included in this list)",,ENC-4704,,,,,,
+UN-0011,REQ-0770,Change Control,Landing Page,The system shall allow the user to filter the displayed approval request list for each of the columns displayed on the landing page,,ENC-4705,,,,,,
+UN-0011,REQ-0790,#REF!,#REF!,The system shall maintain approval request list filter settings during an Enlil session when navigating away from and back to the approval request list landing page,,ENC-4707,,,,,,
+UN-0011,REQ-0800,#REF!,#REF!,The system shall default to the approval request list being sorted by most recent edited first,,ENC-4708,,,,,,
+UN-0011,REQ-0810,#REF!,#REF!,The system shall provide a mechanism to clear all approval request list filters with a single click,,ENC-4709,,,,,,
+UN-0011,REQ-0820,#REF!,#REF!,The system shall display the number of approval requests displayed that match the filter settings,,ENC-4710,,,,,,
 UN-0011,REQ-0830,#REF!,#REF!,The system shall allow the user to open an AR from the AR list with a single click,,ENC-4711,,,,,,
-UN-0011,REQ-0840,#REF!,#REF!,The system should display the AR description when the mouse hovers over the AR title in the Approval Request list,,ENC-4712,,,,,,
-UN-0011,REQ-0850,#REF!,Approval Request Rules,The system shall allow the owner to edit the Approval Request and any documents associated with the Approval Request only while it is in draft.,,ENC-4701,Should automate (4),,,,,
-UN-0011,REQ-0860,#REF!,Approval Request,The system shall prevent the addition of documents that are already included on another Approval Request,,ENC-4701,Should automate (4),,,,,
+UN-0011,REQ-0840,#REF!,#REF!,The system should display the AR description when the mouse hovers over the AR title in the approval request list,,ENC-4712,,,,,,
+UN-0011,REQ-0850,#REF!,Approval Request Rules,The system shall allow the owner to edit the approval request and any documents associated with the approval request only while it is in draft.,,ENC-4701,Should automate (4),,,,,
+UN-0011,REQ-0860,#REF!,Approval Request,The system shall prevent the addition of documents that are already included on another approval request,,ENC-4701,Should automate (4),,,,,
 UN-0011,REQ-0870,#REF!,Approval Request,The system shall determine the approver requirements based on the document approval matrix for all documents contained on an AR.,"This exists, we should implement in tests",,Should automate (4),,,,,
 UN-0011,REQ-0880,#REF!,Approval Request,"The system shall enforce approval requirements prior to document release if the Document Type requires e-signature. If not met, an exception shall be visible","This exists, we should implement in tests",,Should automate (4),,,,,
 UN-0011,REQ-0890,#REF!,Approval Request,The system shall allow the owner of an AR to withdraw an AR that is in In Review State,,ENC-4701,Should automate (4),,,,,
@@ -114,12 +114,12 @@ UN-0020,REQ-1080,Record approval,Record approval,The owner of a record should be
 UN-0020,REQ-1100,Record approval,The owner of a record should be able to correct an existing approved section at any time before closing the record.,All updates to an approved section of a record have to stay visible until the section is re-approved.,,,,,,,,
 UN-0020,REQ-1110,Record approval,General,The system shall only display the latest signed revision of the record or released revision of the record or the work in progress revision of the record in the records landing page.,,,UI requirement and not system requirements,,,,,
 UN-0080,REQ-2140,Notifications,General,The system shall notify the user by email when an item that requires an electronic approvals is assigned to them,We should implement emails in tests,,-,,,,,
-UN-0080,REQ-2150,Notifications,Approval Requests,An approver should have a notification on his Dashboard to review the contents of the assigned Approval Request.,We should implement emails in tests,,"Not implemented and we need a system wide notification strategy
+UN-0080,REQ-2150,Notifications,Approval Requests,An approver should have a notification on his Dashboard to review the contents of the assigned approval request.,We should implement emails in tests,,"Not implemented and we need a system wide notification strategy
 ",,,,,
-UN-0080,REQ-2160,Notifications,Approval Requests,"The system shall display the following in the approval notification (AR ID, name of the submitter, date of Approval Request).  ",We should implement in tests,,UI Requirements,,,,,
-UN-0080,REQ-2180,Approval Requests,An approver should have a notification on his Dashboard to review the contents of the assigned Approval Request.,exsisting,Not implemented (only document title is shown) should we open ticket?,,UI Requirements,,,,,
-UN-0080,REQ-2190,Notifications,Approval Request,The system shall remove the Approval Request (and notify approvers) from the to do list of all users who have not yet approved an Approval Request upon rejection by another approver or withdrawal by the AR owner,,,except for notification,,,,,
-UN-0080,REQ-2200,Notifications,Approval Request,The system shall remove the Approval Request from the to do list of all approvers upon approving the AR being fully approved,We should implement in tests,,,,,,,
+UN-0080,REQ-2160,Notifications,Approval Requests,"The system shall display the following in the approval notification (AR ID, name of the submitter, date of approval request).  ",We should implement in tests,,UI Requirements,,,,,
+UN-0080,REQ-2180,Approval Requests,An approver should have a notification on his Dashboard to review the contents of the assigned approval request.,exsisting,Not implemented (only document title is shown) should we open ticket?,,UI Requirements,,,,,
+UN-0080,REQ-2190,Notifications,Approval Request,The system shall remove the approval request (and notify approvers) from the to do list of all users who have not yet approved an approval request upon rejection by another approver or withdrawal by the AR owner,,,except for notification,,,,,
+UN-0080,REQ-2200,Notifications,Approval Request,The system shall remove the approval request from the to do list of all approvers upon approving the AR being fully approved,We should implement in tests,,,,,,,
 UN-0070,REQ-2410,Training,Training matrix spreadsheet,The system shall maintain a training requirements matrix for every user and the training frequency required per document,,,Design Details,,,,,
 UN-0070,REQ-2450,#REF!,Training matrix spreadsheet,The system shall assign training to the user within 24 hours of assigning a user to train to a document on the training matrix spreadsheet.,,,is this necessary to be that fast?,,,,,
 UN-0080,REQ-2460,Notifications,Training,The system shall display a notification in the dashboard for when the user is assigned training,,,Not implemented and we need a system wide notification strategy,,,,,

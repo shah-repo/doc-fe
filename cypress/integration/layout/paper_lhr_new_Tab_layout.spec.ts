@@ -511,7 +511,7 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Approve and released", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -652,7 +652,7 @@ context("Paper LHR tab Layout", () => {
       });
 
       it("Submit for approval", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -752,10 +752,6 @@ context("Paper LHR tab Layout", () => {
 
       it("Save the document", () => {
         cy.drClickCreateDocumentWithoutApiCall();
-      });
-
-      it("Approve and release Record", () => {
-        cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
       });
     });
   });
@@ -1017,17 +1013,9 @@ context("Paper LHR tab Layout", () => {
 
     context("Approve and released", () => {
       it("Approve and Release", () => {
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.PostApprovalsApprove,
-          CyRoutes.GetRequiredApproversDocRev,
-          CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy='fb-control-btn']").contains("Approve").first().arrowClick();
-          cy.get("input[name='password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='common.confirm']").arrowClick();
-        });
-        cy.checkToastMessage({ exists: false });
-        cy.progressBarShouldNotExist();
+        cy.lhrApproveWithoutApi();
         cy.listLoadingElementShouldNotExist();
+        cy.saveBarShouldNotExist();
       });
     });
   });
@@ -1037,13 +1025,17 @@ context("Paper LHR tab Layout", () => {
   context("Verify Layout for Draft state", () => {
     it("Navigate to Record landing Page", () => {
       cy.navigToLHR();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
       cy.dlClearFilters();
     });
 
     it("Select the LHR", () => {
       cy.get(`[aria-colindex="9"] input`).arrowType("LHR-00001").wait(500);
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
       cy.dlSelectFirstDocument();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     context("Verify Created LHR Doc", () => {
@@ -1153,9 +1145,8 @@ context("Paper LHR tab Layout", () => {
         it("Add another group permission", () => {
           cy.wait(2000);
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Developers");
-          });
+          cy.drAddGroupFromPermissionTab("Developers");
+          cy.saveBarShouldNotExist();
         });
 
       });
@@ -1222,12 +1213,15 @@ context("Paper LHR tab Layout", () => {
     it("Navigate to Record landing Page", () => {
       cy.navigToLHR();
       cy.dlClearFilters();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select the LHR", () => {
       cy.get(`[aria-colindex="9"] input`).arrowType("LHR-00002").wait(500);
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
       cy.dlSelectFirstDocument();
+      cy.landingPageLoadingElementShouldNotExist();
     });
 
     context("Verify Created LHR Doc", () => {
@@ -1387,4 +1381,3 @@ context("Paper LHR tab Layout", () => {
 });
 
 export { };
-

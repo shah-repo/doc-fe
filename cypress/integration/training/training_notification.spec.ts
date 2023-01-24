@@ -1033,8 +1033,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
   });
 
-  context("Navigate to Approval Request list and set effective date to 23 days from now", () => {
-    it("Navigate to Approval Request list", () => {
+  context("Navigate to approval request list and set effective date to 23 days from now", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 

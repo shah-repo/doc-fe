@@ -16,10 +16,10 @@ let group;
 let asyncTasksGroup;
 
 const documentRevisionName = "New document for testing AR";
-const approvalRequestTitle = "Approval Request from newly created form";
-const approvalRequestFormName = "New Approval Request form template";
+const approvalRequestTitle = "Approval request from newly created form";
+const approvalRequestFormName = "New Approval request form template";
 
-context("Approval Request implementation tasks", () => {
+context("Approval request implementation tasks", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -153,19 +153,19 @@ context("Approval Request implementation tasks", () => {
       cy.cmpClickCreateNewDocument();
     });
 
-    it("Enter title 'New Approval Request form template'", () => {
+    it("Enter title 'New Approval request form template'", () => {
       cy.drEnterDocumentTitle({ name: approvalRequestFormName });
     });
 
-    it("Enter description 'New form template for Approval Request'", () => {
-      cy.drEnterDocumentDescription({ description: "New form template for Approval Request" });
+    it("Enter description 'New form template for approval request'", () => {
+      cy.drEnterDocumentDescription({ description: "New form template for approval request" });
     });
 
     it("Click on 'Form' document type", () => {
       cy.drSelectDocumentType({ documentType: "Form" });
     });
 
-    it("Click on 'Approval Request' outputdocument type", () => {
+    it("Click on 'Approval request' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
@@ -174,7 +174,7 @@ context("Approval Request implementation tasks", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {
@@ -271,7 +271,7 @@ context("Approval Request implementation tasks", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -306,7 +306,7 @@ context("Approval Request implementation tasks", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {
@@ -379,7 +379,7 @@ context("Approval Request implementation tasks", () => {
     });
 
     it("Click on Save", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.listLoadingElementShouldNotExist();
     });
 
@@ -402,7 +402,7 @@ context("Approval Request implementation tasks", () => {
     });
 
     it("Select document template as 'AR form'", () => {
-      cy.get(`[data-cy="field-formDocument"]`).autocompleteSelect("New Approval Request form template");
+      cy.get(`[data-cy="field-formDocument"]`).autocompleteSelect("New Approval request form template");
     });
 
     it("Enter password", () => {
@@ -440,9 +440,9 @@ context("Approval Request implementation tasks", () => {
     });
   });
 
-  context("Create Approval Request with newly created form", () => {
-    it("Navigate to Approval Request list", () => {
-      cy.navigToApprovalRequestList();
+  context("Create approval request with newly created form", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -459,13 +459,13 @@ context("Approval Request implementation tasks", () => {
       cy.arEnterApprovalRequestTitle({ title: approvalRequestTitle });
     });
 
-    it("Enter description 'AR from New form template for Approval Request'", () => {
-      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for Approval Request" });
+    it("Enter description 'AR from New form template for approval request'", () => {
+      cy.arEnterApprovalRequestDescription({ description: "CR from New form template for approval request" });
     });
 
     it("Add created document revision", () => {
       cy.get(`[data-cy="tabCon-tabId.documents"]`).arrowClick();
-      cy.arClickAddDocument();
+      cy.arClickAddDocumentWithoutApi();
       cy.arChoseSpecificProposedDocument({ name: "CP-00004" });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "added document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "justification for added document" });
@@ -473,29 +473,29 @@ context("Approval Request implementation tasks", () => {
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Switch to ChangeDetails tab", () => {
       cy.arSelectChangeDetailsTab();
     });
 
-    it("Add approvers to Approval Request on approver list", () => {
+    it("Add approvers to approval request on approver list", () => {
       cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[1].email });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Approve AR", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
       cy.landingPageLoadingElementShouldNotExist();
     });
   });
@@ -531,7 +531,7 @@ context("Approval Request implementation tasks", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {

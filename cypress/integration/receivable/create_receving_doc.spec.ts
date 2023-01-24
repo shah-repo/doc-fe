@@ -580,6 +580,9 @@ context("Create receivable test", () => {
 
         it("Click 'Submit for Approval' button", () => {
           cy.pmSubmitForApprovalWithoutAPI();
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
+          cy.wait(3000);
         });
 
         it("Click 'Approve' button", () => {

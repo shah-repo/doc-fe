@@ -948,7 +948,7 @@ context("Equipment due date calculation while changing frequency", () => {
           cy.cmpTurnOnAutosave();
         });
 
-        it("Navigate to Approval Request list", () => {
+        it("Navigate to approval request list", () => {
           cy.navigToApprovalRequestList();
         });
 
@@ -976,7 +976,7 @@ context("Equipment due date calculation while changing frequency", () => {
           cy.arSaveApiCall();
         });
 
-        it("Add approvers to Approval Request on approver list", () => {
+        it("Add approvers to approval request on approver list", () => {
           cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
         });
 
@@ -1204,7 +1204,7 @@ context("Equipment due date calculation while changing frequency", () => {
             cy.cmpTurnOnAutosave();
           });
 
-          it("Navigate to Approval Request list", () => {
+          it("Navigate to approval request list", () => {
             cy.navigToApprovalRequestList();
           });
 
@@ -1232,7 +1232,7 @@ context("Equipment due date calculation while changing frequency", () => {
             cy.arSaveApiCall();
           });
 
-          it("Add approvers to Approval Request on approver list", () => {
+          it("Add approvers to approval request on approver list", () => {
             cy.arAddApproverOnApproverList({ approver: ADMIN_USER.email });
           });
 

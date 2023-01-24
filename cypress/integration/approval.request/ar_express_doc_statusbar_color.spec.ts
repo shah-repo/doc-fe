@@ -5,7 +5,6 @@ import "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -395,9 +394,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Release the item by clicking 'Approve And Release'`, () => {
       it("Approve And Release the document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -466,7 +463,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it(`Check doc Draft status as ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -476,7 +473,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context("Approve and release the new revision", () => {
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -495,10 +492,10 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context("Open the Superseded revision and check the content of the status bar", () => {
       it("Open revisions tab, click and verify revision 1", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drClickRevisionsSidePanel();
-          cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
-        });
+        cy.drClickRevisionsSidePanel();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
     });
 
@@ -572,13 +569,13 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
     context("Approve and release the new 'OBS' revision", () => {
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -652,7 +649,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -761,11 +758,11 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it(`Verify form ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
@@ -803,7 +800,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Click on Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -984,9 +981,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context(`Release the item by clicking 'Approve And Release'`, () => {
       it("Approve and release the document", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -1055,7 +1050,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it(`Check doc Draft status as ${STATUS_TYPES_LABEL.DRAFT}`, () => {
@@ -1065,7 +1060,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context("Approve and release the new revision", () => {
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -1084,10 +1079,10 @@ context("Status Bar of New Enlil items approved via express AR", () => {
 
     context("Open the Superseded revision and check the content of the status bar", () => {
       it("Open revisions tab, click and verify revision 1", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drClickRevisionsSidePanel();
-          cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
-        });
+        cy.drClickRevisionsSidePanel();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
     });
 
@@ -1161,13 +1156,13 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
     context("Approve and release the new 'OBS' revision", () => {
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -1238,7 +1233,7 @@ context("Status Bar of New Enlil items approved via express AR", () => {
       });
 
       it("Click on Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 

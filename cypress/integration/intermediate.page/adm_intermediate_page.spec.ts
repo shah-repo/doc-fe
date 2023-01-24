@@ -239,7 +239,7 @@ context("Intermediate page validation", () => {
         cy.intPageVerifyOutputDocTypeExist();
       });
 
-      it("Click 'Preview Layout' button", () => {
+      it("Close 'Preview Layout'", () => {
         cy.intPageClosePreviewDialog();
       });
     });
@@ -295,7 +295,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -320,6 +320,7 @@ context("Intermediate page validation", () => {
     context("Verify Form fields in preview mode", () => {
       it("Open Preview dialog", () => {
         cy.fbClickButton({ el: "FBWorkspace-clickView" });
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add and check Quantity field", () => {
@@ -385,7 +386,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -430,7 +431,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Remove Field 1", () => {
@@ -439,7 +440,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("component 3 exists", () => {
@@ -462,7 +463,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Add Checkpoint Field 4", () => {
@@ -474,7 +475,7 @@ context("Intermediate page validation", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 

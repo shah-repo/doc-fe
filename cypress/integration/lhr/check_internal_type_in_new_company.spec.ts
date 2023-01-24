@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -116,6 +115,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
 
     it("Select 'New Company Record' output document type", () => {
       cy.drSelectOutputDocumentType({ documentType: "New Company Record" });
+      cy.wait(3000);
     });
 
     it("Select 'Numeric' revision stage", () => {
@@ -123,11 +123,11 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -222,10 +222,15 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
 
     it("Save document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document for create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Log out user", () => {
@@ -620,7 +625,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify if exist LHR fields", () => {
@@ -659,9 +664,8 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
 
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-      });
+      cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
@@ -682,9 +686,8 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
         cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
           $el.trigger("click");
         });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("API MPI");
-        });
+        cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("API MPI");
+        cy.listLoadingElementShouldNotExist();
       });
     });
 
@@ -694,7 +697,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
       });
 
       it("Approve and release LHRt document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Verify LHRT is in RELEASED status", () => {
@@ -706,13 +709,9 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
 
   context("Create & Release LHR", () => {
     it("Click create new document from LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev,
-        CyRoutes.GetAutocompleteOptions], () => {
-        cy.drCreateNewDocumentFromForm();
-        cy.url().then((url: any) => {
-          lhrDocUrl1 = url;
-        });
+      cy.drCreateNewDocumentFromForm();
+      cy.url().then((url: any) => {
+        lhrDocUrl1 = url;
       });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -782,7 +781,7 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Add an Approval", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].email });
     });
 
     it("Click save document", () => {
@@ -790,20 +789,16 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Complete step", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve step", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Visit the LHR", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType,
-      ], () => {
-        cy.visit(lhrDocUrl1);
-      });
+      cy.visit(lhrDocUrl1);
+      cy.progressBarShouldNotExist();
     });
 
     it("Add approval", () => {
@@ -816,11 +811,11 @@ context("Create new company and verify Internal Type for LHR Template is LHRT", 
     });
 
     it("Submit for approval", () => {
-      cy.lhrSubmitForApproval();
+      cy.lhrSubmitForApprovalWithoutApi();
     });
 
     it("Approve approval", () => {
-      cy.lhrApprove();
+      cy.lhrApproveWithoutApi();
     });
 
     it(`Verify status is 'RELEASED'`, () => {

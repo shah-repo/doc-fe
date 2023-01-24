@@ -6,7 +6,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -431,7 +430,7 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it(`Verify LHRT is in ${STATUS_TYPES_LABEL.DRAFT} status`, () => {
@@ -464,7 +463,7 @@ context("LHRt using regular AR test", () => {
   });
 
   context("Create AR", () => {
-    it("Navigate to Approval Request list", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -477,7 +476,7 @@ context("LHRt using regular AR test", () => {
       cy.unClick();
     });
 
-    it("Enter description 'AR from New form template for Approval Request'", () => {
+    it("Enter description 'AR from New form template for approval request'", () => {
       cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 
@@ -490,9 +489,10 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Capture current url", () => {
@@ -528,15 +528,14 @@ context("LHRt using regular AR test", () => {
 
     it("Select 'Part document' for Part to be Manufactured", () => {
       cy.get("[data-cy='field-renderHTML']").scrollIntoView();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("[name=\"lhr-selected-part\"]").find("button").last().arrowClick({ force: true });
-      });
+      cy.get("[name=\"lhr-selected-part\"]").find("button").last().arrowClick({ force: true });
+      cy.listLoadingElementShouldNotExist();
       cy.get("[data-cy=\"lhr-selected-part\"]").focus().arrowType("Part document");
       cy.get("ul>li[role=option]").contains("Part document").arrowClick({ force: true });
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -551,6 +550,7 @@ context("LHRt using regular AR test", () => {
       cy.get("[data-cy=\"transitionButton\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Verify error message", () => {
@@ -578,13 +578,12 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Select MPI document for step #1 in LHRt", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI created with API");
-      });
+      cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI created with API");
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -623,10 +622,7 @@ context("LHRt using regular AR test", () => {
 
     it("Close AR", () => {
       cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR], () => {
-          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-        });
+      cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });
@@ -688,7 +684,7 @@ context("LHRt using regular AR test", () => {
   });
 
   context("Create new AR", () => {
-    it("Navigate to Approval Request list", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 
@@ -700,7 +696,7 @@ context("LHRt using regular AR test", () => {
       cy.arEnterApprovalRequestTitle({ title: "LHRT AR 2" });
     });
 
-    it("Enter description 'AR from New form template for Approval Request'", () => {
+    it("Enter description 'AR from New form template for approval request'", () => {
       cy.arEnterApprovalRequestDescription({ description: "LHRT AR" });
     });
 
@@ -713,9 +709,10 @@ context("LHRt using regular AR test", () => {
     });
 
     it("Add first Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].name });
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
     it("Click on Save", () => {
@@ -760,14 +757,13 @@ context("LHRt using regular AR test", () => {
 
     it("Select MPI document for step #2 in LHRt", () => {
       cy.get("[data-cy=\"LHR Step 2\"]").arrowClick({ force: true });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-        cy.get("[name^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
-        cy.unClick();
-      });
+      cy.get("[name^=\"lhr-step-\"]").autocompleteSelect("MPI created with API");
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -806,10 +802,7 @@ context("LHRt using regular AR test", () => {
 
     it("Close AR", () => {
       cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR], () => {
-          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-        });
+      cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });

@@ -78,7 +78,7 @@ Cypress.Commands.add("exportVerifyEmail", (params: { status: string; filename: s
           fileName: `${recordId.replace(" #", "-")}${params.filename}.pdf`,
         }).then((cdata) => {
           expect(cdata.text).to.have.string(params.pdfStatus ? params.pdfStatus : params.status);
-          if (params.type !== "Approval Request") {
+          if (params.type !== "approval request") {
             expect(cdata.text).match(/Attachments\nNone/);
           }
         });

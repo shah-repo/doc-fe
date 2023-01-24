@@ -194,7 +194,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Verify Predefiend Tabs Exist", () => {
@@ -274,7 +274,7 @@ context("Record inline existing Flow with detail ", () => {
 
     context("Create document", () => {
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.landingPageLoadingElementShouldNotExist();
       });
     });
@@ -390,7 +390,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Click on Save", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Navigate to Details tab", () => {
@@ -401,7 +401,8 @@ context("Record inline existing Flow with detail ", () => {
       it("Approve First Inline Approval", () => {
         cy.lhrApproveWithoutApi();
         cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist().wait(2000);
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Turn off autosave", () => {
@@ -423,7 +424,7 @@ context("Record inline existing Flow with detail ", () => {
       });
 
       it("Click on Save", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Navigate to Details tab", () => {
@@ -437,10 +438,10 @@ context("Record inline existing Flow with detail ", () => {
 
 
       it("Approve first Inline Approval", () => {
-        cy.drSelectDetailsTab().wait(2000);
         cy.lhrApproveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Navigate to detail tab", () => {
@@ -455,6 +456,7 @@ context("Record inline existing Flow with detail ", () => {
         cy.lhrApproveWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Send request for approval", () => {

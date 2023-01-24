@@ -21,7 +21,9 @@ declare global {
       navigToApprovalRequestList(): Chainable<Subject>;
       navigToApprovalRequestListWithoutApi(): Chainable<Subject>;
       navigToPurchaseOrder(): Chainable<Subject>;
+      navigToPurchaseOrderWithoutApi(): Chainable<Subject>;
       navigToSuppliers(): Chainable<Subject>;
+      navigToSuppliersWithoutApi(): Chainable<Subject>;
       navigToReceivableList(): Chainable<Subject>;
       navigToWorkOrders(): Chainable<Subject>;
       navigToRecords(): Chainable<Subject>;
@@ -31,6 +33,7 @@ declare global {
       navigToParts(): Chainable<Subject>;
       navigToLots(): Chainable<Subject>;
       navigToLHR(): Chainable<Subject>;
+      navigToLHRWithoutAPI(): Chainable<Subject>;
       navigToEB(): Chainable<Subject>;
       navigToDocumentListWithUnsavedChanges(params: { confirmPopup: boolean }): Chainable<Subject>;
       navigToTrainingRecords(): Chainable<Subject>;
@@ -123,6 +126,17 @@ Cypress.Commands.add("navigToLHR", () => {
         NavigationItems.LHR,
       ],
     });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToLHRWithoutAPI", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.MANUFACTURING,
+      NavigationItems.LHR,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
@@ -261,6 +275,11 @@ Cypress.Commands.add("navigToPurchaseOrder", () => {
   cy.landingPageLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("navigToPurchaseOrderWithoutApi", () => {
+  cy.navigClickOnItem({ navigItem: NavigationItems.PURCHASE_ORDERS });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("navigToSuppliers", () => {
   cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocRevStatusesCategory], () => {
     cy.navigToNestedItem({
@@ -270,6 +289,17 @@ Cypress.Commands.add("navigToSuppliers", () => {
         NavigationItems.SUPPLIER_LIST,
       ],
     });
+  });
+  cy.landingPageLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("navigToSuppliersWithoutApi", () => {
+  cy.navigToNestedItem({
+    navigItems: [
+      NavigationItems.DASHBOARD,
+      NavigationItems.SUPPLIER_MANAGEMENT,
+      NavigationItems.SUPPLIER_LIST,
+    ],
   });
   cy.landingPageLoadingElementShouldNotExist();
 });
