@@ -172,7 +172,7 @@ export const withFBInput = <T extends FBInputProps>(
         if (typeof convertedFieldValue === "string" || typeof convertedFieldValue === "number") {
           if (!isUndefined(fieldValue) && !isUndefined(formStateFieldValue)) {
             showValidationField = Array.isArray(formStateFieldValue) ? formStateFieldValue.includes(fieldValue) :
-              formStateFieldValue === fieldValue;
+              String(formStateFieldValue) === String(fieldValue);
           }
         } else if (typeof convertedFieldValue === "object") {
           let intermediateFlag;
