@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import { FB, FBEditorPropertiesType, FBInputProps, FBInputState, FBOptionValueType } from "..";
 import { toastError } from "../../components/notifications";
 import { isMoreDigitsAfterDecimal } from "../../dashboard.new/line.items/common/Utils";
+import FBDataStore from "../FBStore/FBDataStore";
 import { FBFieldName } from "../helpers/FBFieldName";
 
 export const withFBOnChange = <T extends FBInputProps>(
@@ -57,6 +58,7 @@ export const withFBOnChange = <T extends FBInputProps>(
       isString(formValue) && transform && (formValue = setTranform?.(formValue));
       // TODO: refactor with state opt
       formState?.setFieldValue(name, formValue, state || withState, omitFormValue);
+      FBDataStore?.setRefreshData(cloneDeep(FBDataStore?.refreshData));
 
       if (type && !FBInputState.omitOnChange.includes(type)) {
         formState?.setFieldAutosave(name);

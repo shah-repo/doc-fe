@@ -8,6 +8,7 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import ItemsAndDetailsWrapper from "../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import AttachmentsField from "../../../../ui/document.revision/form/attachments";
 import { isOperator } from "../../../../ui/documentRevision/DocumentRevisionDisplay.container";
@@ -16,7 +17,7 @@ import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.
 import RedlineBanner from "../../../../ui/documentRevision/forms/presenters/redline/Redline.banner";
 import UpgradeToLatestContainer from "../../../../ui/documentRevision/forms/presenters/upgrade.to.latest/UpgradeToLatest.container";
 import { checkIsDocumentLHR, checkIsDocumentMPI, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
-import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace } from "../../../../ui/form.builder";
+import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
 import { withSMTabs } from "../../../Shifamed/Components/SMTabs/SMTabs.hoc";
@@ -265,6 +266,14 @@ const DocumentRevisionForm: React.FunctionComponent<DocumentRevisionFormProps> =
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                               docRevStatus={documentRevision?.status}
+                            />
+                          )}
+                          {tabType === TabTypeOptions.ITEMS && (
+                            <ItemsAndDetailsWrapper
+                              currentDocRevId={documentRevision?.id}
+                              initialValues={formInput ?? {}}
+                              autosave={autosaveEnabled}
+                              mode={FBWorkspaceModeOptions.PREVIEW}
                             />
                           )}
                         </SMBox>

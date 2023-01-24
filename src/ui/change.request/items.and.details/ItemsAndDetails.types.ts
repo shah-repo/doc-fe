@@ -41,9 +41,9 @@ export interface ApprovalRequestGridItem {
 
 export interface ItemsAndDetailsWrapperProps {
   currentDocRevId?: string;
-  changeRequest: ChangeRequest;
+  changeRequest?: ChangeRequest;
   initialValues: Pick<FBFormProps, "initialValues">;
   autosave: boolean;
   mode: FBWorkspaceMode;
-  asyncState: AsyncActionPayload;
+  asyncState?: AsyncActionPayload;
 }

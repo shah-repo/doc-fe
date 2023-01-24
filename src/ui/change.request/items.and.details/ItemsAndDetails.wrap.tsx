@@ -95,14 +95,14 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
   ), [itemsAndDetailsState.submitList]);
 
   useEffect(() => {
-    if ((asyncState.status === AsyncStatus.Success ||
+    if (asyncState && (asyncState.status === AsyncStatus.Success ||
       asyncState.status === AsyncStatus.Error)) {
       // i.e. processing completed
       itemsAndDetailsState.setLoadingState(false);
       itemsAndDetailsState.setViewItemActionsVisibility(true);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [asyncState.status]);
+  }, [asyncState?.status]);
 
   useEffect(() => {
     processChangeRequest();
@@ -115,45 +115,48 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
 
   const processChangeRequest = () => {
     let currentDocRevPresent = false;
-    const documentRevisionsData = changeRequest.documentRevisions;
+    let entries: any[] = [];
+    if (changeRequest) {
+      const documentRevisionsData = changeRequest.documentRevisions;
 
-    const documentRevisionsAssigned: FBDocumentRevisionsValue[] = changeRequest.formInput?.documentRevisions ?? [];
-    // Happens only when one of the expressAR options is chosen, not when viewing from the link
-    if (currentDocRevId) {
-      currentDocRevPresent = documentRevisionsAssigned.findIndex(
-        (docRev: FBDocumentRevisionsValue) => (docRev.proposedDocumentRevision.id === currentDocRevId)) !== -1;
+      const documentRevisionsAssigned: FBDocumentRevisionsValue[] = changeRequest.formInput?.documentRevisions ?? [];
+      // Happens only when one of the expressAR options is chosen, not when viewing from the link
+      if (currentDocRevId) {
+        currentDocRevPresent = documentRevisionsAssigned.findIndex(
+          (docRev: FBDocumentRevisionsValue) => (docRev.proposedDocumentRevision.id === currentDocRevId)) !== -1;
+      }
+
+      entries = documentRevisionsAssigned.map((item: FBDocumentRevisionsValue) => {
+        const entryInfo = {
+          justificationOfChange: item.justificationOfChange,
+          descriptionOfChange: item.descriptionOfChange,
+          docRevId: item.proposedDocumentRevision.id,
+          documentId: "",
+          id: item.id,
+          titleText: "",
+          displayRevision: "",
+          isPart: false,
+        };
+
+        const docRevId = item.proposedDocumentRevision.id;
+        if (docRevId === currentDocRevId) {
+          currentDocRevPresent = true;
+        }
+        const { displayRevision, name, document } =
+        documentRevisionsData.find((docRev: DocumentRevision) => docRev.id === docRevId) ?? {};
+        if (document) {
+          entryInfo.titleText = generateDocTitleText(document.docId, displayRevision, name);
+          entryInfo.isPart = document.documentType.group === DOC_TYPE_GROUP.PART;
+          entryInfo.documentId = document.id;
+          entryInfo.displayRevision = displayRevision;
+        }
+
+        return entryInfo;
+      });
     }
 
-    const entries = documentRevisionsAssigned.map((item: FBDocumentRevisionsValue) => {
-      const entryInfo = {
-        justificationOfChange: item.justificationOfChange,
-        descriptionOfChange: item.descriptionOfChange,
-        docRevId: item.proposedDocumentRevision.id,
-        documentId: "",
-        id: item.id,
-        titleText: "",
-        displayRevision: "",
-        isPart: false,
-      };
-
-      const docRevId = item.proposedDocumentRevision.id;
-      if (docRevId === currentDocRevId) {
-        currentDocRevPresent = true;
-      }
-      const { displayRevision, name, document } =
-        documentRevisionsData.find((docRev: DocumentRevision) => docRev.id === docRevId) ?? {};
-      if (document) {
-        entryInfo.titleText = generateDocTitleText(document.docId, displayRevision, name);
-        entryInfo.isPart = document.documentType.group === DOC_TYPE_GROUP.PART;
-        entryInfo.documentId = document.id;
-        entryInfo.displayRevision = displayRevision;
-      }
-
-      return entryInfo;
-    });
-
     itemsAndDetailsState.setApprovalRequestItemsList(entries);
-    if (!currentDocRevPresent && currentDocRevId) {
+    if (changeRequest && !currentDocRevPresent && currentDocRevId) {
       setTimeout(() => {
         itemsAndDetailsState.setSubmitList(true);
       }, 100);
