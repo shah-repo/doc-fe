@@ -3,7 +3,6 @@
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
@@ -160,11 +159,11 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and released", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -215,7 +214,7 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Navigate to Details tab", () => {
@@ -237,7 +236,7 @@ context("Record type Document Layout verification", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -311,9 +310,7 @@ context("Record type Document Layout verification", () => {
         });
 
         it("Approve and release FORM document", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
     });
@@ -340,7 +337,7 @@ context("Record type Document Layout verification", () => {
         cy.drEnterDocumentDescription({ description: "Test Description for record one" });
       });
       it("Save the Document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
     context("Validate Tabs", () => {
@@ -446,9 +443,9 @@ context("Record type Document Layout verification", () => {
         });
 
         it("Add another group permission", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Developers");
-          });
+          cy.drAddGroupFromPermissionTab("Developers");
+          cy.progressBarShouldNotExist();
+          cy.listLoadingElementShouldNotExist();
         });
       });
 
@@ -484,7 +481,7 @@ context("Record type Document Layout verification", () => {
         });
 
         it("Click on Save", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
           cy.listLoadingElementShouldNotExist();
         });
 
@@ -549,9 +546,8 @@ context("Record type Document Layout verification", () => {
 
       context("Verify Scroll", () => {
         it("Navigate to history tab", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-          });
+          cy.drSelectHistoryTab();
+          cy.progressBarShouldNotExist();
         });
 
         it("Click and drag the scroll bar and verify that user can scroll history tab", () => {
@@ -566,7 +562,7 @@ context("Record type Document Layout verification", () => {
 
         it(`Add first Approver as ${USERS[1].name}`, () => {
           cy.drSelectOverviewTab();
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+          cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
         });
 
         it("Save Record'", () => {
@@ -574,13 +570,13 @@ context("Record type Document Layout verification", () => {
         });
 
         it("release button click'", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PostDocRevInReview, CyRoutes.DocRevPreview], () => {
-            cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
-          });
+          cy.get("[data-cy='ApproveAndRelease-button']").arrowClick();
         });
+
         it("Approve record button click", () => {
-          cy.ebApprove();
+          cy.lhrApproveWithoutApi();
         });
+
       });
     });
   });

@@ -399,7 +399,7 @@ context("Export Engineering Build doc", () => {
       cy.get("input[name=\"validationMode\"]").eq(1).arrowClick();
       cy.get(`input[name="validators.required_if"]`).check();
       cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-textfield" );
-      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Y" );
+      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("Y").wait(500);
       cy.fbAddNewFieldButton();
     });
 

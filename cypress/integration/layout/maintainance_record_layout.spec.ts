@@ -237,7 +237,7 @@ context("Layout Verification of maintainance records", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -268,7 +268,7 @@ context("Layout Verification of maintainance records", () => {
     });
 
     it("Approve and released", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
   });
@@ -312,7 +312,7 @@ context("Layout Verification of maintainance records", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -424,7 +424,7 @@ context("Layout Verification of maintainance records", () => {
 
   context("Release MR Form", () => {
     it("Approve and release  document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
     });
   });
@@ -478,7 +478,7 @@ context("Layout Verification of maintainance records", () => {
     });
 
     it("Click on Save", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to specification tab", () => {
@@ -522,11 +522,11 @@ context("Layout Verification of maintainance records", () => {
     });
 
     it("Click on Save", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and released", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Navigate to specification tab", () => {
@@ -679,7 +679,6 @@ context("Layout Verification of maintainance records", () => {
               cy.wrap($el).arrowClick();
             }
           });
-        cy.listLoadingElementShouldExist();
         cy.progressBarShouldNotExist();
       });
 
@@ -702,7 +701,6 @@ context("Layout Verification of maintainance records", () => {
         cy.progressBarShouldNotExist();
         cy.wait(3000);
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
-        cy.listLoadingElementShouldExist();
         cy.progressBarShouldNotExist();
       });
     });

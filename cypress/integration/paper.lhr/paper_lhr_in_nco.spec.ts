@@ -8,7 +8,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { lotIdRef } from "../../utils/constants/dateHandler";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -178,7 +177,8 @@ context("Verify Paper LHR", () => {
       });
 
       it("Create new document from form", () => {
-        cy.drCreateNewDocumentFromForm();
+        cy.drCreateNewDocumentFromFormRecord();
+        cy.wait(3000);
       });
 
       it("Enters title 'New Company'", () => {
@@ -191,6 +191,8 @@ context("Verify Paper LHR", () => {
 
       it("Select 'Details' tab", () => {
         cy.drSelectDetailsTab();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it(`Enters company name '${newCompanyName}'`, () => {
@@ -238,9 +240,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Approve and release document - create company", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Log out user", () => {
@@ -592,7 +592,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -689,7 +689,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -734,7 +734,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it(`Verify 'The Part to be Manufactured is required field' is displayed`, () => {
@@ -771,7 +771,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Save form", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Verify File Upload is not diplayed", () => {
@@ -848,11 +848,10 @@ context("Verify Paper LHR", () => {
 
     context("Fill the document", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get(`[data-cy="lhr-selected-part"]`).arrowType("Part document");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-        });
-
+        cy.get(`[data-cy="lhr-selected-part"]`).autocompleteSelect("Part document");
+        // cy.get(`[data-cy="lhr-selected-part"]`).arrowType("Part document");
+        // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+        cy.listLoadingElementShouldNotExist();
         cy.get(`[data-cy="Part to be Manufactured"]`)
           .parent().parent().parent().parent().next("p")
           .should("not.exist");
@@ -874,9 +873,9 @@ context("Verify Paper LHR", () => {
       });
 
       it("Select 'R&D' build type", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.lhrChangeBuildTypeToRnd();
-        });
+        cy.lhrChangeBuildTypeToRnd();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get(`[name="lhr-build-type"]`).eq(1).should("have.value", "Production").should("be.disabled");
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -895,7 +894,10 @@ context("Verify Paper LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
     });
 
@@ -939,18 +941,18 @@ context("Verify Paper LHR", () => {
 
     context("Click on 'Paper LHR' document and insert the Approval", () => {
       it("Select first LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-          cy.get("tr.k-master-row").first().arrowClick();
-        });
+        cy.get("tr.k-master-row").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
     });
 
     context("Release LHR", () => {
       it("Add approval", () => {
-        cy.wait(7000);
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].email });
         cy.listLoadingElementShouldNotExist();
-        cy.pmAddApproverOnApproverList({ approver: USERS[11].email });
+        cy.progressBarShouldNotExist();
       });
 
       it("Click save document", () => {
@@ -959,11 +961,11 @@ context("Verify Paper LHR", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record", () => {
-        cy.lhrApprove();
+        cy.lhrApproveWithoutApi();
       });
 
       it(`Verify lot is same as earlier release`, () => {
@@ -1015,9 +1017,7 @@ context("Verify Paper LHR", () => {
 
     context("Select on 'Paper LHR' document", () => {
       it("Select first LHR", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-          cy.get("tr.k-master-row").first().arrowClick();
-        });
+        cy.get("tr.k-master-row").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
       });
     });
@@ -1028,16 +1028,14 @@ context("Verify Paper LHR", () => {
       });
 
       it("Enter End Quantity field value", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
-          cy.unClick();
-        });
+        cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
         cy.listLoadingElementShouldNotExist();
       });
 
@@ -1051,7 +1049,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       it(`Verify that document status is ${STATUS_TYPES_LABEL.RELEASED}`, () => {
@@ -1165,11 +1163,10 @@ context("Verify Paper LHR", () => {
 
     context("Fill the document", () => {
       it("Select 'Part document' for Part to be Manufactured", () => {
-        cy.get(`[data-cy="lhr-selected-part"]`).arrowType("Part document");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("ul>li[role=option]").contains("Part document").arrowClick();
-        });
-
+        cy.get(`[data-cy="lhr-selected-part"]`).autocompleteSelect("Part document");
+        // cy.get(`[data-cy="lhr-selected-part"]`).arrowType("Part document");
+        // cy.get("ul>li[role=option]").contains("Part document").arrowClick();
+        cy.saveBarShouldNotExist();
         cy.get(`[data-cy="Part to be Manufactured"]`)
           .parent().parent().parent().parent().next("p")
           .should("not.exist");
@@ -1184,7 +1181,6 @@ context("Verify Paper LHR", () => {
 
       it("Select 'Production' build type", () => {
         cy.lhrSelectBuildTypeProduction();
-
         cy.get(`[data-cy="Build Type"]`)
           .parent().parent().parent().parent().next("p")
           .should("not.exist");
@@ -1200,9 +1196,8 @@ context("Verify Paper LHR", () => {
         cy.get(`[data-cy="form.builder.lhr.build.switch"]`).should("exist");
         cy.get(`[data-cy="form.builder.cancel"]`).should("exist");
 
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get(`[data-cy="form.builder.lhr.build.switch"]`).arrowClick();
-        });
+        cy.get(`[data-cy="form.builder.lhr.build.switch"]`).arrowClick();
+        cy.saveBarShouldNotExist();
         cy.get(`[name="lhr-build-type"]`).eq(1).should("have.value", "Production").should("be.disabled");
         cy.progressBarShouldNotExist();
       });
@@ -1238,11 +1233,9 @@ context("Verify Paper LHR", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get(`[aria-colindex="9"] input`).arrowType(secondLhrId).wait(500);
         cy.listLoadingElementShouldNotExist();
-
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-          cy.get("tr.k-master-row").first().arrowClick();
-        });
+        cy.get("tr.k-master-row").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify added attachment is present", () => {
@@ -1315,15 +1308,14 @@ context("Verify Paper LHR", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get(`[aria-colindex="9"] input`).arrowType(secondLhrId).wait(500);
         cy.listLoadingElementShouldNotExist();
-
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-          cy.get("tr.k-master-row").first().arrowClick();
-        });
+        cy.get("tr.k-master-row").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(3000);
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
         cy.listLoadingElementShouldNotExist();
       });
 
@@ -1332,11 +1324,11 @@ context("Verify Paper LHR", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record", () => {
-        cy.lhrApprove();
+        cy.lhrApproveWithoutApi();
       });
     });
 
@@ -1388,10 +1380,7 @@ context("Verify Paper LHR", () => {
         cy.listLoadingElementShouldNotExist();
         cy.get(`[aria-colindex="9"] input`).arrowType(secondLhrId).wait(500);
         cy.listLoadingElementShouldNotExist();
-
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-          cy.get("tr.k-master-row").first().arrowClick();
-        });
+        cy.get("tr.k-master-row").first().arrowClick();
         cy.listLoadingElementShouldNotExist();
       });
     });
@@ -1402,18 +1391,14 @@ context("Verify Paper LHR", () => {
       });
 
       it("Enter End Quantity field value", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
-          cy.unClick();
-        });
+        cy.get("[name=\"lhr-end-quantity\"]").clear().arrowType("25");
+        cy.unClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Add approval", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
-        });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       });
 
       it("Save it", () => {
@@ -1425,7 +1410,7 @@ context("Verify Paper LHR", () => {
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       it(`Verify that document status is ${STATUS_TYPES_LABEL.RELEASED}`, () => {

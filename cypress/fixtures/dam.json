@@ -3587,11 +3587,12 @@
           }
         }
       },
-      "approvalRoles": {
-        "stage1": [],
-        "stage2": [],
-        "stage3": [],
-        "admStage": []
+      "approvalRoles":
+      {
+          "stage1": [],
+          "stage2": [],
+          "stage3": [],
+          "admStage": []
       }
     },
     {

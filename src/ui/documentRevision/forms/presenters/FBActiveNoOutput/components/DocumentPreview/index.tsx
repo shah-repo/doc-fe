@@ -165,10 +165,13 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
     <Observer>
       {() => (
         <SMTemplate
-          templateBoxProps={{ stretchY: "100%" }}
+          templateBoxProps={{
+            stretchY: "100%",
+            mx: -3.75,
+            mt: -3,
+          }}
           contentBoxProps={{
-            height: "auto",
-            minHeight: (((!isLHR && !isTypeMpiDoc) || isLHR) ? "20%" : "0px"),
+            overflow: "unset",
           }}
           header={(!isLHR && !isTypeMpiDoc) && !formPreview && (
             <DocumentRevisionFormHeader type={type} documentTypeId={formik.values.document?.documentType?.id} />
@@ -189,7 +192,7 @@ const DocumentPreview: React.FunctionComponent<ComponentProps> = ({
                   const showTabContent = _tabsState?.isTabActive(tabInfo.tabId);
 
                   return (
-                    <SMBox key={tabInfo.tabId} className={classes.previewTabContent}>
+                    <SMBox key={tabInfo.tabId} className={classes.previewTabContent} pr={.75}>
                       {tabType === TabTypeOptions.MIXED && <>
                         {!formPreview && <DocumentRevisionFormPresenter
                           {...formik}

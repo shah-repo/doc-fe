@@ -197,7 +197,7 @@ context("Export DAM", () => {
       });
     });
 
-    it("Navigate to Approval Request list", () => {
+    it("Navigate to approval request list", () => {
       cy.navigToApprovalRequestList();
     });
 

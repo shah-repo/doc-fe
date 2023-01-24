@@ -7,7 +7,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { PaperLHR } from "../../utils/constants/documentTypes/paperLhr";
@@ -537,25 +536,19 @@ context("Change Ownership of Paper LHR", () => {
         });
       });
 
-      it("Turn off autosave", () => {
-        cy.cmpTurnOffAutosave();
-      });
-
       it("Enter initial quantity", () => {
         cy.get("[name=\"lhr_initial_quantity\"]").arrowType("10");
+        cy.unClick();
       });
 
       it("Enter end quantity", () => {
         cy.get("[name=\"lhr-end-quantity\"]").arrowType("10");
+        cy.unClick();
       });
 
       it("Select 'R&D' build type", () => {
-        cy.unClick();
         cy.get("[value=\"R&D\"]").check();
-      });
-
-      it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.progressBarShouldAppear();
       });
 
       it("Click on sidebar permission icon to add Operators", () => {
@@ -570,24 +563,21 @@ context("Change Ownership of Paper LHR", () => {
       it("Add an Approver 1", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[2].name);
         cy.unClick();
+        cy.progressBarShouldAppear();
       });
 
       it("Add an Approver 2", () => {
         cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[3].name);
         cy.unClick();
-      });
-
-      it("Click save document", () => {
+        cy.progressBarShouldAppear();
         cy.url().then((url: any) => {
           lhrUrl = url;
         });
-        cy.drClickCreateDocumentWithApiCallForForms();
       });
 
       it("Check history - added approvers should be displayed", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-          cy.drSelectHistoryTab();
-        });
+        cy.drSelectHistoryTab();
+        cy.progressBarShouldNotExist();
         cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
           .should("contain.text", "Approver Added").and("contain.text", USERS[3].name);
         cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
@@ -612,12 +602,8 @@ context("Change Ownership of Paper LHR", () => {
     });
 
     it("Visit LHR", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType,
-      ], () => {
-        cy.visit(lhrUrl);
-      });
+      cy.visit(lhrUrl);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -644,17 +630,16 @@ context("Change Ownership of Paper LHR", () => {
 
     it(`Remove ${USERS[3].name} approver`, () => {
       cy.contains(`${USERS[3].name} - ${USERS[3].email}`).parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+      cy.progressBarShouldAppear();
     });
 
     it(`Add ${USERS[1].name} approver`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
-        cy.unClick();
-      });
+      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[1].name);
+      cy.unClick();
+      cy.progressBarShouldAppear();
     });
 
     it("Check history - added and removed approvers should be displayed", () => {
-      cy.wait(3000);
       cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
         .should("contain.text", "Approver Added").and("contain.text", USERS[1].name);
       cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
@@ -678,12 +663,8 @@ context("Change Ownership of Paper LHR", () => {
     });
 
     it("Visit LHR", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType,
-      ], () => {
-        cy.visit(lhrUrl);
-      });
+      cy.visit(lhrUrl);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -700,27 +681,23 @@ context("Change Ownership of Paper LHR", () => {
     it(`Operator can add ${USERS[4].name} approver`, () => {
       cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(USERS[4].name);
       cy.unClick();
-      cy.progressBarShouldNotExist();
+      cy.progressBarShouldAppear();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("visit the LHR", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetDocumentTypes, CyRoutes.GetAvailableApprovers,
-        CyRoutes.GetSpecificDocumentType,
-      ], () => {
-        cy.visit(lhrUrl);
-      });
+      cy.visit(lhrUrl);
+      cy.wait(3000);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it(`Operator can remove ${USERS[4].name} approver`, () => {
       cy.contains(USERS[4].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
+      cy.progressBarShouldAppear();
     });
 
     it("Check history - added and removed approvers should be displayed", () => {
-      cy.wait(3000);
       cy.get("[data-cy=\"change-key-0-0\"]").parent().parent()
         .should("have.text", `Approver Removed${USERS[4].name}`);
       cy.get("[data-cy=\"change-key-1-0\"]").parent().parent()
@@ -728,7 +705,7 @@ context("Change Ownership of Paper LHR", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
   });
 });

@@ -6,7 +6,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -213,7 +212,7 @@ context("Status Bar of newly created ARs", () => {
 
   context("Check approval list defaults to draft", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
   });
 
@@ -221,7 +220,7 @@ context("Status Bar of newly created ARs", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -298,13 +297,13 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -325,13 +324,13 @@ context("Status Bar of newly created ARs", () => {
     });
 
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: "New Ar title", status: STATUS_TYPES_LABEL.DRAFT  });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -377,7 +376,7 @@ context("Status Bar of newly created ARs", () => {
 
     it("Verify 'Send to review' in status bar", () => {
       cy.get("[data-cy='transitionButton']").should("be.visible");
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it(`Check doc status as ${STATUS_TYPES_LABEL.IN_REVIEW}`, () => {
@@ -435,15 +434,7 @@ context("Status Bar of newly created ARs", () => {
 
   context("Approve the AR", () => {
     it("Approve the AR", () => {
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.GetRequiredApproversDocRev], () => {
-          cy.get("[data-cy='transition-approve']").contains("Approve submission").arrowClick();
-          cy.get("[data-cy='transition.action.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='passwordConfirm']").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
+      cy.arApproveARWithoutApi();
     });
   });
 
@@ -489,15 +480,8 @@ context("Status Bar of newly created ARs", () => {
 
   context("Close the AR", () => {
     it("Close the AR and verify AR status is Closed", () => {
-      cy.get("[data-cy='transition-closed']").first().arrowClick();
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCloseAR], () => {
-          cy.get("[data-cy='AlertDialog-continueButton']").arrowClick();
-        });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.checkToastMessage({ exists: false });
-      cy.wait(3000);
+      cy.arCloseARWithoutApi();
+      cy.wait(2000);
     });
   });
 
@@ -540,13 +524,13 @@ context("Status Bar of newly created ARs", () => {
 
   context("Open second AR and Void it", () => {
     it("Navigate to approval request list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Filter ar by name and status as DRAFT, and select it", () => {
       SystemRequirement("REQ-0830");
       cy.arClearFilters();
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestName2, status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestName2, status: STATUS_TYPES_LABEL.DRAFT  });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

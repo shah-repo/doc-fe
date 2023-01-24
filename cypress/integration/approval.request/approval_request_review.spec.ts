@@ -6,7 +6,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -17,15 +16,15 @@ let companyId: string;
 let emailsFromInbox: IMAPEmail[];
 let employeeLogin;
 
-const approvalRequestFormName = "Approval Request form template";
-const approvalRequestDocumentTitle = "Approval Request from newly created form";
+const approvalRequestFormName = "Approval request form template";
+const approvalRequestDocumentTitle = "Approval request from newly created form";
 const sampleDocOneTitle = "Sample Document One";
 
 const dateOffset = (5 * 1000);
 const dateAfterEmailShouldArrive = new Date();
 dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
-context("Approval Request form scenario", () => {
+context("Approval request form scenario", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -109,12 +108,12 @@ context("Approval Request form scenario", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Click on 'Approval Request' outputdocument type", () => {
+    it("Click on 'Approval request' outputdocument type", () => {
       cy.drSelectOutputDocumentType({ documentType: "Approval Request" });
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
@@ -155,13 +154,13 @@ context("Approval Request form scenario", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
-  context("Create Approval Request with newly created form", () => {
-    it("Navigate to Approval Request list", () => {
-      cy.navigToApprovalRequestList();
+  context("Create approval request with newly created form", () => {
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -183,7 +182,7 @@ context("Approval Request form scenario", () => {
     it("Add sample document one", () => {
       cy.arSelectDocumentTab();
       cy.wait(1000);
-      cy.arClickAddDocument();
+      cy.arClickAddDocumentWithoutApi();
       cy.arChoseSpecificProposedDocument({ name: sampleDocOneTitle });
       cy.arEnterDescriptionAddDocumentsDialog({ description: "Document description" });
       cy.arEnterJustificationAddDocumentsDialog({ justification: "Justification for added document" });
@@ -193,19 +192,23 @@ context("Approval Request form scenario", () => {
     // TODO: data-cy=\"fb-approvers-approvers\"]").should(be.disabled");
 
     it("Click Create Approval Request", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
-    it("Add approvers to Approval Request on approver list", () => {
+    it("Add approvers to approval request on approver list", () => {
       SystemRequirement("REQ-0940");
       cy.arSelectChangeDetailsTab();
       cy.wait(1000);
-      cy.arAddApproverOnApproverList({ approver: USERS[20].email });
-      cy.arAddApproverOnApproverList({ approver: USERS[22].email });
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[20].email });
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[22].email });
+      cy.wait(2000);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click send to review", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
+      cy.wait(2000);
     });
 
     it("Verify AR status", () => {
@@ -252,11 +255,11 @@ context("Approval Request form scenario", () => {
     });
   });
 
-  context("Verify owner can withdraw Approval Request and that dashboard notifications are not shown", () => {
+  context("Verify owner can withdraw approval request and that dashboard notifications are not shown", () => {
     context("Withdraw AR", () => {
       it("Withdraw Submission", () => {
         SystemRequirement("REQ-0890");
-        cy.arWithdrawSubmission();
+        cy.arWithdrawSubmissionWithoutApi();
         cy.checkToastMessage({ exists: false });
       });
     });
@@ -298,22 +301,23 @@ context("Approval Request form scenario", () => {
       });
 
       it("Navigate to AR", () => {
-        cy.navigToApprovalRequestList();
+        cy.navigToApprovalRequestListWithoutApi();
         cy.alClearFilters();
-        cy.arSelectFirstDocument();
+        cy.arSelectFirstDocumentWithoutApi();
       });
 
       it("Sending for review again", () => {
         SystemRequirement("REQ-0890");
-        cy.arClickSendToReview();
+        cy.arClickSendToReviewWithoutApi();
+        cy.wait(2000);
       });
     });
   });
 
-  context("Prevent the addition of documents that are already included on another Approval Request", () => {
-    it("Navigate to Approval Request list", () => {
+  context("Prevent the addition of documents that are already included on another approval request", () => {
+    it("Navigate to approval request list", () => {
       SystemRequirement("REQ-0860");
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Click Create a Approval Request button", () => {
@@ -329,7 +333,7 @@ context("Approval Request form scenario", () => {
     it("Document One already used, it must not be added again.", () => {
       SystemRequirement("REQ-0860");
       cy.arSelectDocumentTab();
-      cy.arClickAddDocument();
+      cy.arClickAddDocumentWithoutApi();
       cy.arIsProposedDocumentEmpty();
       cy.get("[data-cy=\"form.builder.cancel\"]").arrowClick();
     });
@@ -358,9 +362,9 @@ context("Approval Request form scenario", () => {
       });
 
       it("Reject AR from dashboard", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostRejectCRNew, CyRoutes.ARPreview, CyRoutes.GetPendingActions], () => {
-          cy.poRejectARNew({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
-        });
+        cy.poRejectARNew({ password: CONFIG.DEFAULT_ENLIL_USER_PASSWORD });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
       });
 
     });
@@ -402,17 +406,18 @@ context("Approval Request form scenario", () => {
       cy.cmpSelectCompany({ name: createdCompany.name, multiple: multipleCompanies });
     });
 
-    it("Navigate to Approval Request list", () => {
-      cy.navigToApprovalRequestList();
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Select first document", () => {
       cy.alClearFilters();
-      cy.arSelectFirstDocument();
+      cy.arSelectFirstDocumentWithoutApi();
     });
 
     it("Click send to review", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
+      cy.wait(3000);
     });
   });
 
@@ -461,13 +466,13 @@ context("Approval Request form scenario", () => {
   });
 
   context("Record the date and time stamp for approval and rejections", () => {
-    it("Navigate to Approval Request list", () => {
-      cy.navigToApprovalRequestList();
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Select first document", () => {
       cy.alClearFilters();
-      cy.arSelectFirstDocument();
+      cy.arSelectFirstDocumentWithoutApi();
     });
 
     it("Verify AR status is 'Approved'", () => {
@@ -492,7 +497,7 @@ context("Approval Request form scenario", () => {
 
     it("Navigate to dashboard", () => {
       SystemRequirement("REQ-2200");
-      cy.navigToDashboard();
+      cy.navigToDashboardWithoutApi();
     });
 
     it("Verify there is no dashboard notifications", () => {
@@ -517,11 +522,11 @@ context("Approval Request form scenario", () => {
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[20].email,
-          contains: ["Your Approval Request <b>ARID: AR-00002</b> is in review.", companyId],
+          contains: ["Your approval request <b>ARID: AR-00002</b> is in review.", companyId],
         },
         {
           sentToUser: USERS[22].email,
-          contains: ["Your Approval Request <b>ARID: AR-00002</b> is in review.", companyId],
+          contains: ["Your approval request <b>ARID: AR-00002</b> is in review.", companyId],
         },
       ];
       cy.imapVerifyEmailsInList({
@@ -538,7 +543,7 @@ context("Approval Request form scenario", () => {
           sentToUser: USERS[21].email,
           contains: [
             "Your request has been approved!",
-            `AR-00002\r\n                                          Approval Request from newly created form`,
+            `AR-00002\r\n                                          Approval request from newly created form`,
             companyId,
           ],
         },
@@ -557,7 +562,7 @@ context("Approval Request form scenario", () => {
           sentToUser: USERS[21].email,
           contains: [
             "Your request has been rejected!",
-            `AR-00002\r\n                                          Approval Request from newly created form`,
+            `AR-00002\r\n                                          Approval request from newly created form`,
             companyId,
           ],
         },

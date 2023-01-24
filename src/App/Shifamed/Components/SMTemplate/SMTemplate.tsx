@@ -1,6 +1,6 @@
 import { Observer } from "mobx-react";
 import React from "react";
-import { SM, SMBox, SMTemplateProps } from "../../..";
+import { SMBox, SMTemplateProps } from "../../..";
 
 const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
   header,
@@ -17,9 +17,7 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
   footer,
   children,
 }) =>
-{
-  const  { _documentRevisionFormState } = SM.useStores();
-  return (
+  (
     <Observer>{() =>
       <SMBox display="flex" flexDirection="row" flex={1} {...templateBoxProps}>
         {leftSidebar && (
@@ -38,9 +36,13 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
               {lhrSteps}
             </SMBox>
           )}
-          <SMBox display="flex"  overflow={!_documentRevisionFormState?.expanded ? "auto" : ""}
-            flex={1} {...contentBoxProps} >
-            <SMBox width="0px" flex={1}>
+          <SMBox
+            display="flex"
+            overflow="auto"
+            flex={1}
+            {...contentBoxProps}
+          >
+            <SMBox width={0} flex={1}>
               {children}
             </SMBox>
           </SMBox>
@@ -57,6 +59,6 @@ const SMTemplate: React.FunctionComponent<SMTemplateProps> = ({
         )}
       </SMBox>
     }</Observer>
-  ); };
+  );
 
 export default SMTemplate;

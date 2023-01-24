@@ -1,5 +1,4 @@
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -201,7 +200,7 @@ context(
         cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
       });
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
     context(
@@ -404,12 +403,8 @@ context(
                 `[id="mui-component-select-validators.required_if.value"]`
               ).arrowClick();
               cy.get(`[data-value="Open"]`)
-                .click()
-                .focused()
-                .autocompleteSelect("Open");
-              cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-                cy.fbAddNewFieldButton();
-              });
+                .click().wait(500);
+              cy.fbAddNewFieldButton();
             });
 
             it("Add File Upload", () => {
@@ -436,28 +431,28 @@ context(
               cy.contains("fb-text-editor").should("exist");
               cy.get("[id^='fb-attachment-field-file-']").should("exist");
             });
+          }
+        );
 
-            context(
-              "Make sure Field 2 is flagged as required when PO status is Open",
-              () => {
-                it("Select 'Open' for PO status", () => {
-                  cy.get("[id$=\"po-status-built-in\"]")
-                    .eq(1)
-                    .arrowClick({ force: true });
-                  cy.get("ul>li[role=option]").contains("Open").arrowClick();
-                  cy.listLoadingElementShouldNotExist();
-                  cy.progressBarShouldNotExist();
-                });
-                it("check Field 2 as flagged as required when PO status is open", () => {
-                  cy.contains(
-                    "The fb-text-editor field is required when PO Status is Open"
-                  ).should("exist");
-                });
-                it("Close Preview dialog", () => {
-                  cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
-                });
-              }
-            );
+        context(
+          "Make sure Field 2 is flagged as required when PO status is Open",
+          () => {
+            it("Select 'Open' for PO status", () => {
+              cy.get("[id$=\"po-status-built-in\"]")
+                .eq(1)
+                .arrowClick({ force: true });
+              cy.get(`ul>li[data-value="Open"]`).arrowClick();
+            });
+
+            it("check Field 2 as flagged as required when PO status is open", () => {
+              cy.contains(
+                "The fb-text-editor field is required when PO Status is Open"
+              ).should("exist");
+            });
+
+            it("Close Preview dialog", () => {
+              cy.get(`svg[data-cy="dialog-close"]`).arrowClick();
+            });
           }
         );
       }
@@ -468,6 +463,7 @@ context(
         it("Navigate to Details Tab", () => {
           cy.drSelectDetailsTab();
         });
+
         it("Edit text editor group", () => {
           cy.fbClickLabelEditHiddenBtn({ label: "fb-text-editor" });
           cy.get("button[data-cy='fb-editor-mode-validation-1']").arrowClick();
@@ -477,12 +473,14 @@ context(
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
+
         it("Remove Text Editor", () => {
           cy.contains("fb-text-editor")
             .parentsUntil("li")
             .find(`[data-cy="remove-schema-item"]`)
             .arrowClick({ force: true });
         });
+
         it("Remove File Upload", () => {
           cy.contains("file1")
             .parentsUntil("li")

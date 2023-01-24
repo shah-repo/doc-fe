@@ -5,7 +5,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { Material } from "../../utils/constants/documentTypes/material";
 import { Part } from "../../utils/constants/documentTypes/part";
@@ -536,9 +535,9 @@ context("Purchase Order Landing Page", () => {
 
   context("Create first 'Purchase Order' document", () => {
     it("Click on 'Create PO' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-      });
+      cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Check for PO ID uniqueness - ID should be POT-00001", () => {

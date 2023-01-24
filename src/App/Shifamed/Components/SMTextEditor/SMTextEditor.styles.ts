@@ -19,7 +19,7 @@ export const editorStyles = {
   },
 };
 
-export const SMEditorStyles = makeStyles(() =>
+export const SMEditorStyles = makeStyles((theme) =>
   createStyles({
     descriptionEditorClass: {
       "display": "-webkit-box",
@@ -51,9 +51,9 @@ export const SMEditorStyles = makeStyles(() =>
     },
     moreOrLess: {
       "color": Colors.dodger_blue,
-      "padding": "0",
-      "fontSize": "14px",
-      "margin": "0px 9px",
+      "padding": theme.spacing(0, .25),
+      "margin": theme.spacing(0, .5),
+      "fontSize": 14,
       "textTransform": "lowercase",
       "&:hover": {
         background: "unset",

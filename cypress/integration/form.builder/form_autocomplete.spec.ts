@@ -1014,8 +1014,8 @@ context("Autocomplete test", () => {
         cy.fbAddAutocompleteElement({ name: "Document Revision", label: "doc-revision", addBtnVisible: true });
       });
 
-      it("Select 'Approval Requests'", () => {
-        cy.fbAddAutocompleteElement({ name: "Approval Requests", label: "approval-request" });
+      it("Select 'Approval requests'", () => {
+        cy.fbAddAutocompleteElement({ name: "Approval requests", label: "approval-request" });
       });
 
       it("Select 'Approvers'", () => {
@@ -1136,7 +1136,7 @@ context("Autocomplete test", () => {
       cy.fbVerifyAutocompleteElementLength({ el: "doc-revision", length: 14 });
     });
 
-    it("Verify count of 'Approval Requests' in the list", () => {
+    it("Verify count of 'Approval requests' in the list", () => {
       cy.fbVerifyAutocompleteElementLength({ el: "approval-request", length: 11 });
     });
 
