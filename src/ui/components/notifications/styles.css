@@ -50,7 +50,7 @@
 
 
 .poStatusToastrBody {
-  background: #F2F9FF !important;
+  background: var(--zircon) !important;
   padding: 0px !important;
   margin-right: 15px !important;
   margin-left: 16px !important;
@@ -58,11 +58,11 @@
 
 #poStatusToast {
   padding: 0px !important;
-  background: #F2F9FF !important;
-  border: 1px solid #4D88FF;
+  background: var(--zircon) !important;
+  border: 1px solid var(--dodger_blue);
   border-radius: 6px !important;
-  border-left: solid 6px #4D88FF;
-  border-color: #4D88FF;
+  border-left: solid 6px var(--dodger_blue);
+  border-color: var(--dodger_blue);
   width: 503px;
   height: 88px;
 }

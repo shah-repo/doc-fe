@@ -125,11 +125,12 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       async.start(updatePOAction, docId, { poStatus: POStatusType.OPENED }, async);
     }
   };
+
   const getAlertDialogMessage = () => {
     if (action === POStatusType.VOIDED) {
-      return "documentRevision.record.void.alert";
+      return "documentRevision.po.void.alert";
     } else if (action === POStatusType.OPENED) {
-      return "documentRevision.record.open.alert";
+      return "documentRevision.po.open.alert";
     }
   };
 
