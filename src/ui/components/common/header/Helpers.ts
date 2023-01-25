@@ -1,4 +1,3 @@
-
 export enum FormHeaderStatusClassMapping {
   "Pending Approval"="PENDING_STATUS",
   "In Review"="PENDING_STATUS",

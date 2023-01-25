@@ -40,7 +40,9 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
     useEffect(() => {
       const reOpenedPOInfo = localStorage.getItem("reOpenedPOInfo");
       if (isReceivable && reOpenedPOInfo) {
-        openPOToastr(JSON.parse(reOpenedPOInfo));
+        try {
+          openPOToastr(JSON.parse(reOpenedPOInfo));
+        } catch {}
         localStorage.removeItem("reOpenedPOInfo");
       }
       _formState?.setMode("preview");
