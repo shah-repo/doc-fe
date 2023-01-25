@@ -145,7 +145,7 @@ const RelatedPartsContainer: React.FunctionComponent<Props> = ({
       formDocument: {
         id: get(documentRevision, "formDocumentId"),
       },
-      description: "",
+      description: documentRevision.description ?? "",
       name: "",
       suffixName: "",
       revision: documentRevision.revision,

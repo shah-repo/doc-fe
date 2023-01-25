@@ -49,7 +49,6 @@ export default makeStyles((theme) =>
       display: "inline-block",
     },
     partsGrid: {
-      paddingLeft: theme.spacing(1.5),
       marginBottom: theme.spacing(1.5),
     },
     btnMargin: {
