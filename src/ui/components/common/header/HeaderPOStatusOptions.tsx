@@ -40,6 +40,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
 
   const closePO = () => {
     dialog.close();
+    handleClose();
     async.start(updatePOAction, docId, { poStatus: POStatusType.CLOSED }, async);
   };
 

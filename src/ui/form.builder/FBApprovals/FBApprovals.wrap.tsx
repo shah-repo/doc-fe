@@ -10,7 +10,7 @@ import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { Approval } from "../../../state/ducks/common/types";
 import { documentRevisionsActions } from "../../../state/ducks/documentRevisions";
 import { DOC_TYPE_GROUP_OPTION } from "../../../state/ducks/documentRevisions/documentType/types";
-import { DocumentRevisionStatus, POStatusType } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus, DocumentStatus } from "../../../state/ducks/documents/types";
 import { store } from "../../../state/store";
 import { checkIsDocumentReceivable } from "../../documentRevision/helpers/checkDocumentGroup";
@@ -134,15 +134,10 @@ export const withFBApprovals = <T extends FBApprovalsProps>(
       () => approvalsState?.transitionApi.data,
       (data) => {
         if (
-          isReceivable && [
-            DocumentStatus.Draft,
-            DocumentStatus.Rejected,
-            DocumentStatus.Approved,
-          ].includes(data?.status as DocumentStatus) &&
-          document?.poStatus !== data?.documentRevision?.poStatus &&
-          data?.documentRevision?.poStatus === POStatusType.OPENED
+          isReceivable &&
+          data?.poDocId && data?.poDocRevision
         ) {
-          localStorage.setItem("showAutoReopenPopup", "true");
+          localStorage.setItem("reOpenedPOInfo", JSON.stringify({ id: data?.poDocId, revId: data?.poDocRevision }));
         }
         concatApprovals(data);
         if (data?.status === DocumentStatus.Draft) {

@@ -276,10 +276,15 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                           FormHeaderStatusClassMapping[displayStatus || status || label || ""]
                         ]
                       }`}
-                      label={isPO && isStatusReleased
-                        ? STATUS_TYPES_LABEL.APPROVED
-                        : (displayStatus || STATUS_TYPES_LABEL[status] || label
-                        ).toUpperCase()}
+                      label={
+                        isPO && isStatusReleased
+                          ? STATUS_TYPES_LABEL.APPROVED
+                          : (
+                            displayStatus ||
+                                STATUS_TYPES_LABEL[status] ||
+                                label
+                          ).toUpperCase()
+                      }
                       data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>

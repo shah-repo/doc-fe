@@ -38,9 +38,10 @@ export const withDocumentRevisionSummaryWrap = <T extends DocumentRevisionSummar
 
     // MARK: @state
     useEffect(() => {
-      if (isReceivable && localStorage.getItem("showAutoReopenPopup") === "true") {
-        openPOToastr({ id: "PO-09878", revId: "5" });
-        localStorage.setItem("showAutoReopenPopup", "");
+      const reOpenedPOInfo = localStorage.getItem("reOpenedPOInfo");
+      if (isReceivable && reOpenedPOInfo) {
+        openPOToastr(JSON.parse(reOpenedPOInfo));
+        localStorage.removeItem("reOpenedPOInfo");
       }
       _formState?.setMode("preview");
     // eslint-disable-next-line react-hooks/exhaustive-deps
