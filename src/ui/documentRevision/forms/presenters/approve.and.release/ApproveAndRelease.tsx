@@ -184,12 +184,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       if (!optionChosen) {
         expressApprovalDialog.open();
         templateSelectionDialog.close();
-      } else if (templateOptions.length > 0) {
-        if (templateOptions.length === 1) {
-          processCreatingRevision(templateOptions[0]);
-        } else {
-          templateSelectionDialog.open();
-        }
       }
     },
   });
@@ -228,7 +222,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   useEffect(() => {
-    if (templateOptions.length > 0) {
+    if (templateOptions.length > 0 && optionChosen) {
       if (templateOptions.length === 1) {
         processCreatingRevision(templateOptions[0]);
       } else {
@@ -237,7 +231,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templateOptions]);
-
 
   useEffect(() => {
     if (inDraftAROptions.length > 0) {
@@ -504,7 +497,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             dialog: existingDraftARSelectionDialog,
             inDraftAROptions,
             labelTranslation: "change.request.select.existing.title",
-            handleExistingCOSelection: processChosenApprovalRequest,
+            handleExistingARSelection: processChosenApprovalRequest,
           }} />
         </Dialog>
       }

@@ -3,7 +3,6 @@ import Colors from "../../../../ui/layout/theme/utils/colors";
 
 export default makeStyles({
   root: {
-    overflowY: "scroll",
     backgroundColor: Colors.alabaster,
   },
   tabs: {
@@ -17,10 +16,9 @@ export default makeStyles({
     minHeight: 44,
     maxHeight: 44,
     position: "sticky",
-  },
-  tabheader: {
-    top: 0,
-    overflowY: "unset",
+    left: 0,
+    right: 0,
+    top: -10,
   },
   tab: {
     width: "auto",

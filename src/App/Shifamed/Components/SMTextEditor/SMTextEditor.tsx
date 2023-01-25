@@ -36,9 +36,15 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
   const descriptionPlaceholder = intl.formatMessage({ id: "form.builder.enter.description" });
   const viewMore = intl.formatMessage({ id: "document.revision.view.more" });
   const viewLess = intl.formatMessage({ id: "document.revision.view.less" });
-  const toggleBtn = () => {
-    _textEditorState?.setPreviewMode(!_textEditorState?.previewMode);
-    _documentRevisionFormState?.setDescriptionFocused(!_documentRevisionFormState?.isDescriptionFocused);
+  const toggleEditMode = () => {
+    _textEditorState?.togglePreviewMode();
+    _documentRevisionFormState?.toggleDescriptionFocused();
+    _documentRevisionFormState?.toggleExpaned();
+  };
+  const setEditMode = () => {
+    _documentRevisionFormState?.setExpanded(true);
+    _documentRevisionFormState?.setDescriptionFocused(true);
+    _textEditorState?.setPreviewMode(false);
   };
   const onAway = () => {
     _documentRevisionFormState?.setExpanded(false);
@@ -49,7 +55,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
 
   const toggleButton = (el: React.MouseEvent<HTMLButtonElement>) => {
     el?.stopPropagation();
-    toggleBtn();
+    toggleEditMode();
   };
 
   return  (
@@ -87,10 +93,7 @@ const SMTextEditor: React.FunctionComponent<SMTextEditorProps> = ({
                   <Observer>
                     {() => (
                       <Editor
-                        onFocus={() => {
-                          _textEditorState?.setPreviewMode(false);
-                          _documentRevisionFormState?.setDescriptionFocused(true);
-                        }}
+                        onFocus={setEditMode}
                         onChange={() => showToggleButton && showToggleButton()}
                         {...{ onBlur, editorRef, onEditorStateChange, toolbar }}
                         editorState={_textEditorState?.editorState}
