@@ -183,6 +183,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       setTemplateOptions(options);
       if (!optionChosen) {
         expressApprovalDialog.open();
+        templateSelectionDialog.close();
       }
     },
   });
