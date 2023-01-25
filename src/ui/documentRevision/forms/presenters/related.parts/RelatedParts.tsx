@@ -97,7 +97,9 @@ const ParentPartSelector: React.FunctionComponent<{
         </Tooltip>
       </div>
       <FormControl>
-        <RadioGroup row value={status} onChange={(e) => parentStatusHandler(e.target.value as RELATED_PARTS_STATUS)}>
+        <RadioGroup row value={status} onChange={(e) => parentStatusHandler(e.target.value as RELATED_PARTS_STATUS)}
+          id="partTypeSelector"
+        >
           <FormControlLabel
             value={RELATED_PARTS_STATUS.PARENT_NO}
             control={<Radio color="primary" disableRipple={true} />}

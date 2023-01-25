@@ -503,7 +503,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
             dialog: existingDraftARSelectionDialog,
             inDraftAROptions,
             labelTranslation: "change.request.select.existing.title",
-            handleExistingCOSelection: processChosenApprovalRequest,
+            handleExistingARSelection: processChosenApprovalRequest,
           }} />
         </Dialog>
       }
