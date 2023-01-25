@@ -507,7 +507,6 @@ context("Export Bulk", () => {
 
   context("Move & Edit & Remove component", () => {
     it("Navigate to Details tab", () => {
-      // cy.wait(2000);
       cy.drSelectDetailsTab();
     });
 
@@ -515,7 +514,7 @@ context("Export Bulk", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for bulk import test" });
-      cy.fbAddField();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
     });
 
     it("move Component", () => {
@@ -534,7 +533,7 @@ context("Export Bulk", () => {
       cy.get("[data-cy=\"edit-schema-item\"]").eq(8).arrowClick({ force: true });
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
       cy.fbAddLabelName({ name: "Textfield for bulk import Edited" });
-      cy.fbAddField();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
     });
 
     it("remove Component", () => {
@@ -551,7 +550,8 @@ context("Export Bulk", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for bulk import test" });
-      cy.fbAddField();
+      cy.wait(1000);
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
     });
   });
 
@@ -574,6 +574,7 @@ context("Export Bulk", () => {
       cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").eq(0).arrowClick();
       cy.get("[data-cy=\"fb-template-name\"]").arrowType("Bulk_Import");
       cy.get("[data-cy=\"common.add\"]").arrowClick({ force: true });
+      cy.wait(2000);
     });
   });
 
@@ -600,7 +601,8 @@ context("Export Bulk", () => {
         cy.fbAddNewFieldWhenHidden();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for New bulk import test" });
-        cy.fbAddField();
+        cy.wait(1000);
+        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       });
 
       it("move Component", () => {
@@ -619,7 +621,7 @@ context("Export Bulk", () => {
         cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for New bulk import Edited" });
-        cy.fbAddField();
+        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       });
 
       it("remove Component", () => {
@@ -686,6 +688,11 @@ context("Export Bulk", () => {
 
     it("Upload file", () => {
       cy.atchUploadTemplateForBLC({ fileName: "Form Template Spreadsheet.xlsx" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(2000);
+      cy.closeAllAlertMessages();
+      cy.unClick();
     });
 
     it("Click save document", () => {
@@ -698,6 +705,7 @@ context("Export Bulk", () => {
 
     it("Submit for approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(3000);
     });
 
     it("Navigate to Details tab", () => {
