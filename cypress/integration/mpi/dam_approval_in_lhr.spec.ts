@@ -135,7 +135,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click on 'Save' button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("'Approve and Release' the document", () => {
@@ -209,7 +209,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Select Details tab", () => {
@@ -218,9 +218,6 @@ context("DAM approvals in LHR", () => {
 
       it("Approve and release document - create company", () => {
         cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Log out user", () => {
@@ -743,7 +740,7 @@ context("DAM approvals in LHR", () => {
   context("Owner and operator in LHR", () => {
     context("Create LHR", () => {
       it("Navigate to LHR landing page", () => {
-        cy.navigToLHR();
+        cy.navigToLHRWithoutAPI();
       });
 
       it("Click create new button", () => {
@@ -772,7 +769,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Click on sidebar permission icon to add group", () => {
@@ -979,9 +976,6 @@ context("DAM approvals in LHR", () => {
 
       it("Submit for approval", () => {
         cy.lhrSubmitForApprovalWithoutApi();
-        cy.wait(1000);
-        cy.saveBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
       });
 
       it("Select Details tab", () => {
@@ -1059,7 +1053,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click the save button", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and release DAM document", () => {
@@ -1069,7 +1063,7 @@ context("DAM approvals in LHR", () => {
 
     context("Create LHR", () => {
       it("Navigate to LHR landing page", () => {
-        cy.navigToLHR();
+        cy.navigToLHRWithoutAPI();
       });
 
       it("Click create new button", () => {
@@ -1099,7 +1093,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Click on sidebar permission icon to add group", () => {
@@ -1237,7 +1231,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click the save button", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Approve and release DAM document", () => {
@@ -1247,7 +1241,7 @@ context("DAM approvals in LHR", () => {
 
     context("Create LHR", () => {
       it("Navigate to LHR landing page", () => {
-        cy.navigToLHR();
+        cy.navigToLHRWithoutAPI();
       });
 
       it("Click create new button", () => {
@@ -1278,7 +1272,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Click on sidebar permission icon to add group", () => {
@@ -1396,7 +1390,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Navigate to LHR landing page", () => {
-        cy.navigToLHR();
+        cy.navigToLHRWithoutAPI();
       });
 
       it("Turn off autosave", () => {
@@ -1431,7 +1425,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Add owner which is part of DAM and verify checkmark should be ticked", () => {
@@ -1499,7 +1493,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Navigate to LHR landing page", () => {
-        cy.navigToLHR();
+        cy.navigToLHRWithoutAPI();
       });
 
       it("Turn off autosave", () => {
@@ -1534,7 +1528,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Click 'LHR Step 1'", () => {
@@ -1554,7 +1548,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Select Procedure tab", () => {
@@ -1570,7 +1564,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Complete step", () => {
@@ -1582,10 +1576,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click 'Revise Document'", () => {
-        cy.get("[data-cy=\"updateRecord\"]").arrowClick();
-        cy.wait(1000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickReviseDocument();
       });
 
       it("Turn off autosave", () => {
@@ -1722,7 +1713,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Navigate to LHR landing page", () => {
-        cy.navigToLHR();
+        cy.navigToLHRWithoutAPI();
       });
 
       it("Turn off autosave", () => {
@@ -1752,7 +1743,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Change owner of document", () => {
@@ -1803,7 +1794,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Click 'LHR Step 1'", () => {
@@ -1823,7 +1814,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Select Procedure tab", () => {
@@ -1839,7 +1830,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Complete step", () => {

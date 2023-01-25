@@ -219,7 +219,7 @@ Cypress.Commands.add("fbSelectCustomFieldToAdd", (params: { name: string }) => {
 
 Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
-    cy.get("[type=\"checkbox\"]").check(item, { force: true });
+    cy.get(`[name="editorProperties"] [type="checkbox"]`).check(item, { force: true });
   });
 });
 
@@ -345,7 +345,7 @@ Cypress.Commands.add("fbEnterTextEditor", (params: { value: string }) => {
 
 Cypress.Commands.add("fbGroupOptions", (...list: string[]) => {
   list.forEach(function(item, i) {
-    cy.get("[data-cy=\"options\"]").arrowType((i === list.length - 1) ? item : item + "{enter}" );
+    cy.get("[data-cy=\"options\"]").arrowType((i === list.length - 1) ? item : item + "{enter}" ).wait(500);
   });
 });
 

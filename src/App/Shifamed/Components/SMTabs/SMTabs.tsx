@@ -1,10 +1,9 @@
 import { Tab, Tabs } from "@material-ui/core";
 import { Observer } from "mobx-react";
 import React, { ReactNode } from "react";
-import { SM, SMBox, SMMap, SMTabPanel, SMTabsProps, SMText } from "../../..";
+import { SMBox, SMMap, SMTabPanel, SMTabsProps, SMText } from "../../..";
 import useStyles from "./SMTabs.styles";
 import { withSMTabsWrap } from "./SMTabs.wrap";
-import cx from "classnames";
 
 const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   onChange,
@@ -15,18 +14,17 @@ const SMTabs: React.FunctionComponent<SMTabsProps> = ({
   panelProps,
 }) => {
   const classes = useStyles();
-  const  { _documentRevisionFormState } = SM.useStores();
 
   return (
     <Observer>
       {() => (
         <SMBox
           id="SMBodyTmpl"
+          className={classes.root}
           {...boxProps}
-          className={cx(classes.root, { [classes.tabheader]: !_documentRevisionFormState?.expanded })}
         >
           <Tabs
-            className={cx(classes.tabs, { [classes.tabheader]: !_documentRevisionFormState?.expanded })}
+            className={classes.tabs}
             value={_tabsState?.activeTabId}
             onChange={onChange}
             TabIndicatorProps={{ className: classes.indicator }}

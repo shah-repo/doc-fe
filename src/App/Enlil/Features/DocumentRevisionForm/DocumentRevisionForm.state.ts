@@ -106,8 +106,16 @@ export default class DocumentRevisionFormState implements DocumentRevisionFormSt
     set(this, "isLHRProgressBarVisible", visible);
   };
 
-  @action public setExpanded = (expand) => {
-    set(this, "expanded", expand);
+  @action public toggleExpaned = () => {
+    this.setExpanded(!this.expanded);
+  };
+
+  @action public setExpanded = (expanded: boolean) => {
+    set(this, "expanded", expanded);
+  };
+
+  @action public toggleDescriptionFocused = () => {
+    this.setDescriptionFocused(!this.isDescriptionFocused);
   };
 
   @action public setDescriptionFocused = (focused: boolean) => {

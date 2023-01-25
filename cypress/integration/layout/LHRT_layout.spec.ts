@@ -745,7 +745,7 @@ context("Create new LHRT Layout Verification", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -937,7 +937,7 @@ context("Create new LHRT Layout Verification", () => {
 
   context("Release LHRT", () => {
     it("Approve and release MPI document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });

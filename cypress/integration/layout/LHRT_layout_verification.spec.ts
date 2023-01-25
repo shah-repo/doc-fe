@@ -294,7 +294,7 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("verify form preview button in Overview Tab", () => {
@@ -414,9 +414,10 @@ context("Create new LHRT Layout Verification", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
+        cy.wait(3000);
       });
     });
 

@@ -48,7 +48,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
           filterSelectedOptions
           disableClearable
           disableBackspace
-          {...{ disabled, renderOption, loading, disabledOptions, disableChipDelete }}
+          disableChipDelete
+          {...{ disabled, renderOption, loading, disabledOptions }}
         />
         <Box display="flex" flexWrap="wrap" my={2}>
           <FBMapWrapper<FBRequiredApprover[]> collection={orderBy(groups, "documentStage")}>

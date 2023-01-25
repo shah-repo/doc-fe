@@ -19,12 +19,12 @@ let approvalRequestDocumentType;
 let initialArDocument;
 let createdDocumentRevResponse;
 let createdDocumentRevResponse2;
-const documentRevisionName = "New document for testing Approval Request list";
-const documentRevisionName2 = "New document for testing Approval Request list two";
-const approvalRequestName = "Approval Request for testing 1";
-const approvalRequestName2 = "Approval Request for testing 2";
+const documentRevisionName = "New document for testing approval request list";
+const documentRevisionName2 = "New document for testing approval request list two";
+const approvalRequestName = "Approval request for testing 1";
+const approvalRequestName2 = "Approval request for testing 2";
 
-context("Approval Request landing page test", () => {
+context("Approval request landing page test", () => {
   before(() => {
     cy.clearLocalStorageSnapshot();
   });
@@ -77,7 +77,7 @@ context("Approval Request landing page test", () => {
       });
     });
 
-    it("[API]Create document revisions for Approval Request list test", (done: any) => {
+    it("[API]Create document revisions for approval request list test", (done: any) => {
       cy.grpGetGroupByName({
         sessionId: loginResponse.sessionId,
         employeeId: secondEmployee.id,
@@ -150,7 +150,7 @@ context("Approval Request landing page test", () => {
       });
     });
 
-    it("[API]Create Approval Requests for created document revisions", () => {
+    it("[API]Create approval requests for created document revisions", () => {
       cy.arGetArDocumentByName({
         sessionId: loginResponse.sessionId,
         employeeId: secondEmployee.id,
@@ -160,7 +160,7 @@ context("Approval Request landing page test", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: approvalRequestName,
-            description: "Description for first Approval Request",
+            description: "Description for first approval request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -178,7 +178,7 @@ context("Approval Request landing page test", () => {
         cy.arCreateApprovalRequest({
           payload: {
             title: approvalRequestName2,
-            description: "Description for second Approval Request",
+            description: "Description for second approval request",
             documentType: { id: approvalRequestDocumentType[0].id },
             formDocument: { id: initialArDocument[0].id },
             formInput: {
@@ -204,27 +204,28 @@ context("Approval Request landing page test", () => {
   });
 
   context("Check approval list defaults to draft and in review status for AR at start of session", () => {
-    it("Navigate to Approval Request list", () => {
-      cy.navigToApprovalRequestList();
+    it("Navigate to approval request list", () => {
+      cy.navigToApprovalRequestListWithoutApi();
     });
   });
 
-  context("Prepare Approval Request", () => {
+  context("Prepare approval request", () => {
     it("Filter ar by name and status, and select it", () => {
       SystemRequirement("REQ-0830");
-      cy.arFilterARListByNameAndStatus({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
+      cy.arFilterARListByNameAndStatusWithoutApi({ title: approvalRequestName, status: STATUS_TYPES_LABEL.DRAFT  });
     });
 
-    it("Add approvers to Approval Request on approver list", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+    it("Add approvers to approval request on approver list", () => {
+      cy.arAddApproverOnApproverListWithoutApiCall({ approver: USERS[2].email });
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Send to review", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Navigate to ar list", () => {
-      cy.navigToApprovalRequestList();
+      cy.navigToApprovalRequestListWithoutApi();
     });
 
     it("Clear filters", () => {
@@ -240,7 +241,7 @@ context("Approval Request landing page test", () => {
   });
 
   context("Check for AR-s only on approval list", () => {
-    it("Check only Approval Requests are shown on approval list", () => {
+    it("Check only approval requests are shown on approval list", () => {
       SystemRequirement("REQ-0760");
       cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
     });
@@ -323,7 +324,7 @@ context("Approval Request landing page test", () => {
       });
     });
 
-    context("Check for maintaining Approval Request list filter options", () => {
+    context("Check for maintaining approval request list filter options", () => {
       it("Clear filters", () => {
         cy.alClearFilters();
       });
@@ -332,16 +333,16 @@ context("Approval Request landing page test", () => {
         cy.alFilterByStatus({ status: LINE_ITEMS_STATUS_TYPES.IN_REVIEW });
       });
 
-      it("Filter list by Approval Request title", () => {
+      it("Filter list by approval request title", () => {
         cy.alFilterByTitle({ title: approvalRequestName });
       });
 
       it("Navigate to Dashboard", () => {
-        cy.navigToDashboard();
+        cy.navigToDashboardWithoutApi();
       });
 
-      it("Navigate back to Approval Request list", () => {
-        cy.navigToApprovalRequestList();
+      it("Navigate back to approval request list", () => {
+        cy.navigToApprovalRequestListWithoutApi();
       });
 
       it("Verify filter by status", () => {
@@ -369,7 +370,7 @@ context("Approval Request landing page test", () => {
   context("Verify description is shown on hover", () => {
     it("Verify description", () => {
       SystemRequirement("REQ-0840");
-      cy.alVerifyDescriptionOnHover({ description: "Description for first Approval Request" });
+      cy.alVerifyDescriptionOnHover({ description: "Description for first approval request" });
     });
   });
 });

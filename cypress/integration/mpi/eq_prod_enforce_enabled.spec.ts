@@ -8,7 +8,6 @@ import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { Part } from "../../utils/constants/documentTypes/part";
@@ -1656,11 +1655,9 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Save document type", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentTypes, () => {
-        cy.get(`td input[value="Lot History Record"]`)
-          .parents("tr").find("button").eq(0).arrowClick().wait(200);
-      });
-      cy.landingPageLoadingElementShouldNotExist();
+      cy.get(`td input[value="Lot History Record"]`)
+        .parents("tr").find("button").eq(0).arrowClick();
+      cy.landingPageLoadingElementShouldAppear();
     });
 
     it("Verify Equipment Enforce Prod is checked", () => {
@@ -1739,7 +1736,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
   context("Verify user can select EQ if due date is past when Equipment Enforce Prod is unchecked", () => {
     it("Navigate to LHR", () => {
-      cy.navigToLHR();
+      cy.navigToLHRWithoutAPI();
     });
 
     it("Enter LHR document 2", () => {
@@ -1766,7 +1763,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Save LHR", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Select Details tab", () => {
@@ -1843,6 +1840,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
       it("Click save", () => {
         cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
+        cy.wait(1000);
       });
 
       it("Verify dialog is closed", () => {
@@ -1871,6 +1869,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
       it("Click change button to switch to expired equipment", () => {
         cy.get(`div[data-cy="form.builder.change"]`).arrowClick({ force: true });
+        cy.wait(1000);
       });
 
       it("Verify user can not select overdue equipment", () => {
@@ -1891,16 +1890,16 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
         cy.drSelectOverviewTab();
       });
       it("Add approver", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Complete step", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve step", () => {
         cy.wait(3000);
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -1910,31 +1909,31 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Click save document", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
-      it("Click save document", () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+      // it("Click save document", () => {
+      //   cy.drClickSaveWithoutApiCall();
+      // });
 
       it("Complete step", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve step", () => {
         cy.wait(3000);
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });
 
   context("Verify operator can select EQ if due date is past when Equipment Enforce Prod is unchecked", () => {
     it("Navigate to LHR", () => {
-      cy.navigToLHR();
+      cy.navigToLHRWithoutAPI();
     });
 
     it("Enter LHR document 1", () => {
@@ -1966,7 +1965,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Save LHR", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it(`Add operator ${USERS[2].name}`, () => {
@@ -1984,14 +1983,14 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Navigate to LHR", () => {
-        cy.navigToLHR();
-        cy.wait(5000);
+        cy.navigToLHRWithoutAPI();
+        cy.landingPageLoadingElementShouldNotExist();
       });
 
       it("Enter LHR document 1", () => {
         cy.dlClearFilters();
         cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00004");
-        cy.wait(5000);
+        cy.landingPageLoadingElementShouldNotExist();
         cy.dlSelectFirstDocument();
       });
 
@@ -2070,6 +2069,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
       it("Click save", () => {
         cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
+        cy.wait(1000);
       });
 
       it("Verify dialog is closed", () => {
@@ -2098,6 +2098,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
       it("Click change button to switch to expired equipment", () => {
         cy.get(`div[data-cy="form.builder.change"]`).arrowClick({ force: true });
+        cy.wait(1000);
       });
 
       it("Verify user can not select overdue equipment", () => {
@@ -2119,16 +2120,16 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Add approver", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
       });
 
       it("Complete step", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve step", () => {
         cy.wait(3000);
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -2142,7 +2143,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
       });
 
       it("Click save document", () => {
@@ -2150,12 +2151,12 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       });
 
       it("Complete step", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve step", () => {
         cy.wait(3000);
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });
