@@ -183,6 +183,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       setTemplateOptions(options);
       if (!optionChosen) {
         expressApprovalDialog.open();
+        templateSelectionDialog.close();
       } else if (templateOptions.length > 0) {
         if (templateOptions.length === 1) {
           processCreatingRevision(templateOptions[0]);
