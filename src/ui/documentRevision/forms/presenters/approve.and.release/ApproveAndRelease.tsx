@@ -183,12 +183,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
       setTemplateOptions(options);
       if (!optionChosen) {
         expressApprovalDialog.open();
-      } else if (templateOptions.length > 0) {
-        if (templateOptions.length === 1) {
-          processCreatingRevision(templateOptions[0]);
-        } else {
-          templateSelectionDialog.open();
-        }
       }
     },
   });
@@ -227,7 +221,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
   });
 
   useEffect(() => {
-    if (templateOptions.length > 0) {
+    if (templateOptions.length > 0 && optionChosen) {
       if (templateOptions.length === 1) {
         processCreatingRevision(templateOptions[0]);
       } else {
@@ -236,7 +230,6 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templateOptions]);
-
 
   useEffect(() => {
     if (inDraftAROptions.length > 0) {
