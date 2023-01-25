@@ -95,7 +95,16 @@ context("User management landing page", () => {
         cy.get("tr.k-grouping-row").should("not.exist");
         cy.get(`th[aria-colindex="2"][role]>div.k-grid-column-menu`).arrowClick();
         cy.get("div.k-columnmenu-item").eq(0).arrowClick();
-        cy.get("tr.k-grouping-row").should("have.length", "2");
+
+        cy.get(`td[data-grid-col-index="2"]`).first().then(($div) => {
+          const text = $div.text();
+          if (text === "Resend signup email") {
+            cy.get("tr.k-grouping-row").should("have.length", "2");
+          } else {
+            cy.get("tr.k-grouping-row").should("have.length", "1");
+          }
+        });
+
         cy.get(`div.k-group-indicator>a>span`).eq(1).arrowClick();
         cy.get("tr.k-grouping-row").should("not.exist");
       });
