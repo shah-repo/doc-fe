@@ -333,7 +333,7 @@ Cypress.Commands.add("drSelectCalPmHistoryTab", () => {
 });
 
 Cypress.Commands.add("drSelectOverviewTab", () => {
-  cy.get("[data-cy=\"tabId.overview\"]").arrowClick({ force: true });
+  cy.get("[data-cy=\"tabId.overview\"]").arrowClick({ force: true }).wait(500);
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -1003,20 +1003,15 @@ Cypress.Commands.add("drRequestAccessVisibility", (params: {isVisible: boolean})
 });
 
 Cypress.Commands.add("drApproveAndReleaseDocumentWithSelectingApprover", (names: string[], params?: { toastifyExists: boolean }) => {
-  cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApprovers], () => {
-    cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
-  });
+  cy.get("[data-cy=\"ApproveAndRelease-button\"]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   names.forEach((name) => {
     cy.get(`[data-cy="field-approvals"]`).arrowType(`${name}{enter}`);
   });
   cy.get("input[name=password]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-  cy.wrapWithWaitOnApiCall(
-    CyRoutes.ReleaseDocRev,
-    () => {
-      cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
-    });
+  cy.get("[data-cy=\"ApproveAndRelease-submit\"]").arrowClick();
+  cy.progressBarShouldAppear();
   if (params === undefined)
   {
     cy.checkToastMessage({ exists: false });

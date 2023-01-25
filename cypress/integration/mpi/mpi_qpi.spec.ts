@@ -9,7 +9,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { MPITestProcedureDeletable } from "../../utils/constants/documentTypes/mpi";
 import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
@@ -238,7 +237,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Upload logo picture 'image.jpg'", () => {
@@ -289,12 +288,11 @@ context("Mpi/Qpi test", () => {
         it("Add attachment to step #1", () => {
           cy.contains("Step #1").parentsUntil("li")
             .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachmentsAttached], () => {
-            cy.elUploadAttachment({
-              fileName: "test_image.jpg",
-              el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
-            });
+          cy.elUploadAttachment({
+            fileName: "test_image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
           });
+          cy.listLoadingElementShouldAppear();
         });
 
         it("Add 'Material one' to step #1", () => {
@@ -303,9 +301,7 @@ context("Mpi/Qpi test", () => {
 
         it("Add 'Material parameter' to step #1", () => {
           SystemRequirement("REQ-3620");
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material two" });
-          });
+          cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material two" });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -321,7 +317,7 @@ context("Mpi/Qpi test", () => {
 
         it("Click save document", () => {
           SystemRequirement("REQ-3120");
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Check doc Draft status and click on Send To Email", () => {
@@ -530,9 +526,7 @@ context("Mpi/Qpi test", () => {
 
       context("Release MPI", () => {
         it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
 
         it("Check MPI doc released status and click on Send To Email", () => {
@@ -775,7 +769,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Upload logo picture 'image.jpg'", () => {
@@ -826,12 +820,11 @@ context("Mpi/Qpi test", () => {
         it("Add attachment to step #1", () => {
           cy.contains("Step #1").parentsUntil("li")
             .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachmentsAttached], () => {
-            cy.elUploadAttachment({
-              fileName: "test_image.jpg",
-              el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
-            });
+          cy.elUploadAttachment({
+            fileName: "test_image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
           });
+          cy.listLoadingElementShouldAppear();
         });
 
         it("Add 'Material one' to step #1", () => {
@@ -860,7 +853,7 @@ context("Mpi/Qpi test", () => {
       context("Save QPI document and verify status", () => {
         it("Click save document", () => {
           SystemRequirement("REQ-3120");
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Check QPI doc Draft status and click on Send To Email", () => {
@@ -1065,7 +1058,7 @@ context("Mpi/Qpi test", () => {
 
       context("Release QPI document", () => {
         it("Approve and release QPI document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
 
         it("Check QPI doc released status and click on Send To Email", () => {

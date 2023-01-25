@@ -6,7 +6,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITestProcedureDeletable } from "../../utils/constants/documentTypes/mpi";
@@ -226,7 +225,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Upload logo picture 'image.jpg'", () => {
@@ -245,12 +244,11 @@ context("Mpi/Qpi test", () => {
         it("Add attachment to step #1", () => {
           cy.contains("Step #1").parentsUntil("li")
             .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.UploadAttachment, CyRoutes.GetAttachmentsAttached], () => {
-            cy.elUploadAttachment({
-              fileName: "test_image.jpg",
-              el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
-            });
+          cy.elUploadAttachment({
+            fileName: "test_image.jpg",
+            el: "fb-mediaalbum-upload-mpi-procedure-built-in.attachments",
           });
+          cy.listLoadingElementShouldAppear();
         });
 
         it("Add 'Material one' to step #1", () => {
@@ -264,15 +262,13 @@ context("Mpi/Qpi test", () => {
 
         it("Click save document", () => {
           SystemRequirement("REQ-3120");
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickSaveWithoutApiCall();
         });
       });
 
       context("Release MPI", () => {
         it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
     });
@@ -314,12 +310,16 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
         cy.get("[data-cy=\"lhr-selected-part\"]").arrowType("Material one");
         cy.get("ul>li[role=option]").contains("Material one").arrowClick();
+      });
+
+      it("Add 'Material one' in reference", () => {
+        cy.drSelectReferences("Material one");
       });
 
       it("Navigate to Detail Tab", () => {
@@ -341,12 +341,12 @@ context("Mpi/Qpi test", () => {
 
       context("Release LHRt", () => {
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Approve and release LHRt document", () => {
           SystemRequirement("REQ-3640");
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
     });
@@ -382,11 +382,11 @@ context("Mpi/Qpi test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     context("Create Purchase Order document with Product option from Form document", () => {
@@ -394,10 +394,12 @@ context("Mpi/Qpi test", () => {
         cy.navigToPurchaseOrder();
       });
 
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
+
       it("Click on 'Create PO' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-        });
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
       });
 
       it("Check for PO ID uniqueness - ID should be POT-00001", () => {
@@ -430,9 +432,7 @@ context("Mpi/Qpi test", () => {
 
       it("Click on 'Add item' button", () => {
         SystemRequirement("REQ-1360");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-          cy.poAddNewFieldItem();
-        });
+        cy.poAddNewFieldItem();
       });
 
       it("Click on 'Add' inside PO dialog box and check for required fields", () => {
@@ -494,8 +494,7 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Save PO", () => {
-        cy.wait(2000);
-        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Switch to Details tab", () => {
@@ -513,15 +512,11 @@ context("Mpi/Qpi test", () => {
       });
 
       it("Save PO document", () => {
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PatchDocRev], () => {
-            cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          });
-        cy.checkToastMessage({ exists: false });
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Click 'Approve' button", () => {
