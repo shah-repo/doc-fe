@@ -36,7 +36,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
           queryDict: {
             dataState,
           },
-          columnConfig: JSON.stringify(gridConfiguration.columns),
+          columnConfig: JSON.stringify(columns),
         },
         TRAINING_TABLE_NAME
       )
