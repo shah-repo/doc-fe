@@ -44,7 +44,11 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
   };
 
   useEffect(() => {
-    if (isEmpty(tableCriteria.queryDict)) {
+    if (
+      isEmpty(tableCriteria?.queryDict?.dataState?.filter?.filters)
+      && isEmpty(tableCriteria?.queryDict?.dataState?.sort)
+      && isEmpty(tableCriteria?.queryDict?.dataState?.group)
+    ) {
       const dataState: DataStateProps = {
         filter: {
           logic: "and",
@@ -61,7 +65,7 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
       );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableCriteria.queryDict]);
+  }, []);
 
   const trainingDetailsDialog = useDialog();
   const [training, setTraining] = useState<TrainingRecordQuery>(
