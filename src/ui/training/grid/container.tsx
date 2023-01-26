@@ -52,7 +52,13 @@ const TrainingListContainer: React.FunctionComponent<RouteComponentProps> = () =
       const dataState: DataStateProps = {
         filter: {
           logic: "and",
-          filters: [],
+          filters: [
+            {
+              field: "trainingPlan.employee.active",
+              operator: "eq",
+              value: true,
+            },
+          ],
         },
         sort: [],
         skip: 0,
