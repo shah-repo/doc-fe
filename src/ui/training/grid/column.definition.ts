@@ -4,7 +4,6 @@ import { KendoCellTemplates, KendoColumn, KendoGridConfiguration } from "../../c
 import { KendoGridFilterCell } from "../../components/KendoGrid/interfaces";
 import { DateFields } from "./interfaces";
 
-
 const columns: KendoColumn[] = [
   {
     field: "trId",
@@ -112,6 +111,19 @@ const columns: KendoColumn[] = [
     showColumnMenu: true,
     orderIndex: 9,
     filter: "text",
+  },
+  {
+    field: "trainingPlan.employee.active",
+    title: "common.active",
+    show: true,
+    locked: false,
+    width: 10,
+    groupable: false,
+    showColumnMenu: true,
+    orderIndex: 10,
+    filter: "boolean",
+    cell: KendoCellTemplates.ACTIVE,
+    filterCell: KendoGridFilterCell.ACTIVE,
   },
 ];
 
