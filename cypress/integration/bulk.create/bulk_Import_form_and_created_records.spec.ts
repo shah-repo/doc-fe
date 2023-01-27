@@ -514,7 +514,7 @@ context("Export Bulk", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for bulk import test" });
-      cy.fbAddField();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
     });
 
     it("move Component", () => {
@@ -533,7 +533,7 @@ context("Export Bulk", () => {
       cy.get("[data-cy=\"edit-schema-item\"]").eq(8).arrowClick({ force: true });
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
       cy.fbAddLabelName({ name: "Textfield for bulk import Edited" });
-      cy.fbAddField();
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
     });
 
     it("remove Component", () => {
@@ -542,7 +542,7 @@ context("Export Bulk", () => {
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Navigate to Details tab", () => {
+    it("Navigate to Overview tab", () => {
       cy.drSelectOverviewTab();
     });
 
@@ -550,25 +550,31 @@ context("Export Bulk", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
       cy.fbAddLabelName({ name: "Textfield for bulk import test" });
-      cy.fbAddField();
+      cy.wait(1000);
+      cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
     });
   });
 
   context("Release Bulk Import form", () => {
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+    });
+
+    it("Navigate to Details tab", () => {
+      cy.drSelectDetailsTab();
     });
 
     it("Export and save the template", () => {
       cy.get("[data-cy=\"FBWorkspace-exportTemplate\"]").eq(0).arrowClick();
       cy.get("[data-cy=\"fb-template-name\"]").arrowType("Bulk_Import");
-      cy.get("[data-cy=\"common.add\"]").arrowClick();
+      cy.get("[data-cy=\"common.add\"]").arrowClick({ force: true });
+      cy.wait(2000);
     });
   });
 
@@ -595,7 +601,8 @@ context("Export Bulk", () => {
         cy.fbAddNewFieldWhenHidden();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for New bulk import test" });
-        cy.fbAddField();
+        cy.wait(1000);
+        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       });
 
       it("move Component", () => {
@@ -614,7 +621,7 @@ context("Export Bulk", () => {
         cy.get("[data-cy=\"edit-schema-item\"]").eq(0).arrowClick({ force: true });
         cy.get("[data-cy=\"fb-editor-field-textfield\"]").clear();
         cy.fbAddLabelName({ name: "Textfield for New bulk import Edited" });
-        cy.fbAddField();
+        cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").arrowClick();
       });
 
       it("remove Component", () => {
@@ -652,7 +659,7 @@ context("Export Bulk", () => {
     });
 
     it("Save Record'", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to Details tab", () => {
@@ -672,7 +679,7 @@ context("Export Bulk", () => {
     });
 
     it("Save Record'", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Download excel template file", () => {
@@ -681,18 +688,24 @@ context("Export Bulk", () => {
 
     it("Upload file", () => {
       cy.atchUploadTemplateForBLC({ fileName: "Form Template Spreadsheet.xlsx" });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.wait(2000);
+      cy.closeAllAlertMessages();
+      cy.unClick();
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Add Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(3000);
     });
 
     it("Navigate to Details tab", () => {
@@ -700,7 +713,7 @@ context("Export Bulk", () => {
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Navigate to records list", () => {
