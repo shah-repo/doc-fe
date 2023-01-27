@@ -4,7 +4,6 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { Seed } from "../../utils/constants/documentTypes/seed";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
@@ -124,7 +123,7 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Add Text Field", () => {
@@ -151,11 +150,11 @@ context("Verify New Layout for Seed Document", () => {
       });
 
       it("Save Form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -193,7 +192,7 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -298,7 +297,7 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     it("Save Form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -350,7 +349,7 @@ context("Verify New Layout for Seed Document", () => {
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -372,7 +371,7 @@ context("Verify New Layout for Seed Document", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateSupplierWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -485,7 +484,7 @@ context("Verify New Layout for Seed Document", () => {
             });
 
             it("Save document", () => {
-              cy.drClickCreateSupplierWithApiCall();
+              cy.drClickCreateDocumentWithoutApiCallForForms();
             });
           });
         });
@@ -642,9 +641,7 @@ context("Verify New Layout for Seed Document", () => {
         cy.wait(2000);
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab(groupOne);
-        });
+        cy.drAddGroupFromPermissionTab(groupOne);
       });
     });
 
@@ -879,9 +876,7 @@ context("Verify New Layout for Seed Document", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab(groupTwo);
-          });
+          cy.drAddGroupFromPermissionTab(groupTwo);
         });
       });
 
@@ -1085,9 +1080,7 @@ context("Verify New Layout for Seed Document", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab(groupThree);
-          });
+          cy.drAddGroupFromPermissionTab(groupThree);
         });
       });
 

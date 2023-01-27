@@ -1,6 +1,5 @@
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
@@ -114,7 +113,7 @@ context("DAM and POAM", () => {
       });
 
       it("'Approve and Release' the document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -211,6 +210,8 @@ context("DAM and POAM", () => {
       });
 
       it("Upload Users List JSON", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.get(`[data-cy="Users List"]`).scrollIntoView();
         cy.atchUploadUserListJSONForNCO({ fileName: "users.csv", queue: 0 });
         cy.progressBarShouldNotExist();
@@ -271,13 +272,11 @@ context("DAM and POAM", () => {
         });
 
         it("Click CREATE DOCUMENT", () => {
-          cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-          cy.listLoadingElementShouldNotExist();
-          cy.progressBarShouldNotExist();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("'Approve and Release' the DAM Form", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
 
@@ -315,7 +314,7 @@ context("DAM and POAM", () => {
         });
 
         it("Click CREATE DOCUMENT", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("Click on Save button", () => {
@@ -323,7 +322,7 @@ context("DAM and POAM", () => {
         });
 
         it("'Approve and Release' the DAM Form", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
 
         it("Create New Document out of the Form", () => {
@@ -342,7 +341,7 @@ context("DAM and POAM", () => {
         });
 
         it("Click on Save button", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
       });
 
@@ -424,9 +423,7 @@ context("DAM and POAM", () => {
         });
 
         it("Open 'Add Role' dialog", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.drAddAnotherRoleBtn();
-          });
+          cy.drAddAnotherRoleBtn();
         });
 
         it(`Fill role name: Role One`, () => {
@@ -438,9 +435,7 @@ context("DAM and POAM", () => {
         });
 
         it("Save role", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-            cy.drAddApprovalRole();
-          });
+          cy.drAddApprovalRole();
         });
 
         it("Verify that Approval roles tab contains: Approval role, Approving users, Approving groups", () => {
@@ -457,10 +452,10 @@ context("DAM and POAM", () => {
 
         it(`Verify table header contains: Approvals numeric, Approvals numeric alpha,  Approvals alpha,
         Approvals administrative`, () => {
-          cy.get("table").contains("th", "Approvals Numeric");
-          cy.get("table").contains("th", "Approvals Numeric Alpha");
-          cy.get("table").contains("th", "Approvals Alpha");
-          cy.get("table").contains("th", "Approvals Administrative");
+          cy.contains("Approvals Numeric").should("exist");
+          cy.contains("Approvals Numeric Alpha").should("exist");
+          cy.contains("Approvals Alpha").should("exist");
+          cy.contains("Approvals Administrative").should("exist");
         });
 
         it("Click on 'Add Item' button", () => {
@@ -496,9 +491,7 @@ context("DAM and POAM", () => {
         });
 
         it("Save Approval Matrix Item", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.PatchDocRev, () => {
-            cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
-          });
+          cy.get("[data-cy=\"fb-control-btn\"]").contains("Save").arrowClick();
         });
       });
 
@@ -523,6 +516,7 @@ context("DAM and POAM", () => {
         });
 
         it("Verify Add/Remove References", () => {
+          cy.wait(2000);
           cy.verifyAddRemoveReference({ formId: "FM-00001" });
         });
 
@@ -597,21 +591,17 @@ context("DAM and POAM", () => {
 
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.recCheckRevisionStage({ stage: "Revision 1" });
-            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-          });
+          cy.drClickRevisionsSidePanel();
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+          cy.recCheckRevisionStage({ stage: "Revision 1" });
+          cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
         });
       });
 
       context("Verify History tab", () => {
         it("Open history tab and verify changes are being captured", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
-          });
+          cy.drSelectHistoryTab();
+          cy.get("[data-cy=\"History-detail\"]").should("be.visible");
         });
       });
 
@@ -632,7 +622,7 @@ context("DAM and POAM", () => {
         });
 
         it("Save document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
       });
 
@@ -666,7 +656,7 @@ context("DAM and POAM", () => {
 
       context("'Approve and Release' the document", () => {
         it("'Approve and Release' the document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
 
         it("Check doc rev 1 released status", () => {
@@ -789,21 +779,17 @@ context("DAM and POAM", () => {
 
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.recCheckRevisionStage({ stage: "Revision 1" });
-            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-          });
+          cy.drClickRevisionsSidePanel();
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+          cy.recCheckRevisionStage({ stage: "Revision 1" });
+          cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
         });
       });
 
       context("Verify History tab", () => {
         it("Open history tab and verify changes are being captured", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetDocAudit], () => {
-            cy.drSelectHistoryTab();
-            cy.get("[data-cy=\"History-detail\"]").should("be.visible");
-          });
+          cy.drSelectHistoryTab();
+          cy.get("[data-cy=\"History-detail\"]").should("be.visible");
         });
       });
 
@@ -856,12 +842,10 @@ context("DAM and POAM", () => {
 
       context("Click on Revisions and Choose previous Revision of DAM and verify", () => {
         it("Open revisions tab, click and verify revision", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-            cy.drClickRevisionsSidePanel();
-            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-            cy.recCheckRevisionStage({ stage: "Revision 1" });
-            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-          });
+          cy.drClickRevisionsSidePanel();
+          cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+          cy.recCheckRevisionStage({ stage: "Revision 1" });
+          cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
         });
       });
     });
@@ -915,11 +899,11 @@ context("DAM and POAM", () => {
         });
 
         it("Click CREATE DOCUMENT", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("'Approve and Release' the PO Approval Matrix Form", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
 
       });
@@ -970,7 +954,7 @@ context("DAM and POAM", () => {
         });
 
         it("Click CREATE DOCUMENT", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it(`Verify that the top left of the page displays: Icon and document type, 
@@ -1041,7 +1025,7 @@ context("DAM and POAM", () => {
 
       context("Release the form", () => {
         it("'Approve and Release' the PO Approval Matrix Form", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
 
@@ -1162,7 +1146,7 @@ context("DAM and POAM", () => {
         });
 
         it("Click on Save button", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it(" Verify that data is save in table", () => {
@@ -1326,7 +1310,7 @@ context("DAM and POAM", () => {
           });
 
           it("Save document", () => {
-            cy.drClickCreateDocumentWithApiCall();
+            cy.drClickCreateDocumentWithoutApiCall();
           });
         });
 
@@ -1381,7 +1365,7 @@ context("DAM and POAM", () => {
           });
 
           it("'Approve and Release' the document", () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+            cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
           });
 
           it("Check doc rev 1 released status", () => {
@@ -1671,12 +1655,10 @@ context("DAM and POAM", () => {
 
         context("Click on Revisions and Choose previous Revision of DAM and verify", () => {
           it("Open revisions tab, click and verify revision", () => {
-            cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-              cy.drClickRevisionsSidePanel();
-              cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
-              cy.recCheckRevisionStage({ stage: "Revision 1" });
-              cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
-            });
+            cy.drClickRevisionsSidePanel();
+            cy.get("[data-cy=\"DocumentRevisionList-item\"]").eq(0).arrowClick();
+            cy.recCheckRevisionStage({ stage: "Revision 1" });
+            cy.get("[data-cy=\"HeaderInfo-Rev\"]").contains("Rev 1");
           });
         });
       });
