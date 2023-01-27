@@ -1545,7 +1545,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
     });
 
     it("Enter LHR document 2", () => {
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     context("Fill LHR document and start LHRs", () => {
@@ -1661,18 +1661,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click change button to switch to expired equipment", () => {
-        cy.get(`div[data-cy="form.builder.change"]`).arrowClick({ force: true });
-        cy.listLoadingElementShouldNotExist().wait(1000);
-      });
-
-      it("Select expired equipment", () => {
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick().wait(500);
-        cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
-      });
-
-      it("Click save", () => {
-        cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
-        cy.wait(1000);
+        cy.lhrChangeEquipment({ changeElement: 0, equipment: "EQ-00002" });
       });
 
       it("Verify selected equipment and its information", () => {
@@ -1730,10 +1719,6 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
         cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
-      // it("Click save document", () => {
-      //   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      // });
-
       it("Complete step", () => {
         cy.pmSubmitForApprovalWithoutAPI();
       });
@@ -1751,7 +1736,8 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
     it("Enter LHR document 1", () => {
       cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00004");
-      cy.dlSelectFirstDocument();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     context("Fill LHR document and assign operator", () => {
@@ -1782,6 +1768,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it(`Add operator ${USERS[2].name}`, () => {
         cy.drAssignDocumentTo({ username: USERS[2].name });
+        cy.wait(5000);
       });
     });
 
@@ -1800,7 +1787,8 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
 
       it("Enter LHR document 1", () => {
         cy.get(`th[aria-colindex="9"] input`).arrowType("LHR-00004");
-        cy.dlSelectFirstDocument();
+        cy.landingPageLoadingElementShouldNotExist();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Select Details tab", () => {
@@ -1812,7 +1800,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click 'START MPI'", () => {
-        cy.mpiStartStep({ stepNumber: 1 });
+        cy.mpiStartStepWithoutApi({ stepNumber: 1 });
       });
 
       it("Turn off autosave", () => {
@@ -1894,18 +1882,7 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       });
 
       it("Click change button to switch to expired equipment", () => {
-        cy.get(`div[data-cy="form.builder.change"]`).arrowClick({ force: true });
-        cy.listLoadingElementShouldNotExist().wait(1000);
-      });
-
-      it("Select expired equipment", () => {
-        cy.get(`div[role=dialog] button[title="Open"]`).arrowClick().wait(500);
-        cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
-      });
-
-      it("Click save", () => {
-        cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
-        cy.wait(1000);
+        cy.lhrChangeEquipment({ changeElement: 0, equipment: "EQ-00002" });
       });
 
       it("Verify selected equipment and its information", () => {
@@ -1962,10 +1939,6 @@ context("Verify Equipment Prod Enforce disabled on LHR with owner and operator",
       it("Add an Approval", () => {
         cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
       });
-
-      // it("Click save document", () => {
-      //   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      // });
 
       it("Complete step", () => {
         cy.pmSubmitForApprovalWithoutAPI();

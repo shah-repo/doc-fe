@@ -4,7 +4,6 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -219,7 +218,7 @@ context("Mpi Template", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       context("Fill step #1", () => {
@@ -329,6 +328,7 @@ context("Mpi Template", () => {
           cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
           cy.fbAddNewFieldButton();
           cy.elUploadAttachment({ fileName: "image.jpg", el: "fb-attachment-field-fb-blank-template-" });
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add Quantity", () => {
@@ -372,13 +372,11 @@ context("Mpi Template", () => {
 
       context("Release MPI", () => {
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
     });
@@ -422,7 +420,7 @@ context("Mpi Template", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Select 'Part document' for Part to be Manufactured", () => {
@@ -532,6 +530,7 @@ context("Mpi Template", () => {
           cy.fbEnterNameValue({ name: "label", value: "fb-blank-template" });
           cy.fbAddNewFieldButton();
           cy.elUploadAttachment({ fileName: "image.jpg", el: "fb-attachment-field-fb-blank-template-" });
+          cy.listLoadingElementShouldNotExist();
         });
 
         it("Add Quantity", () => {
@@ -575,11 +574,11 @@ context("Mpi Template", () => {
 
       context("Release LHRt document", () => {
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickSaveWithoutApiCall();
         });
 
         it("Approve and release LHRt document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
     });

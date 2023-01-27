@@ -36,6 +36,7 @@ declare global {
       ebAddApproverOnApproverListWithPatchCall(params: {approver: string }): Chainable<Subject>;
       ebAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       lhrSaveWithoutApi(): Chainable<Subject>;
+      lhrWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
     }
   }
 }
@@ -228,11 +229,10 @@ Cypress.Commands.add("ebWithdrawSubmisison", () => {
 });
 
 Cypress.Commands.add("ebWithdrawSubmisisonWithoutApi", () => {
-  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
-  cy.wait(2000);
+  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick().wait(500);
   cy.get("#AlertDialog-continueButton").arrowClick();
   cy.checkToastMessage({ exists: false });
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -245,6 +245,7 @@ Cypress.Commands.add("ebAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
+// eslint-disable-next-line max-len
 Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
   cy.get(`[data-cy^="fb-approvals-"]`).arrowClick();
@@ -269,5 +270,13 @@ Cypress.Commands.add("lhrSaveWithoutApi", () => {
   cy.wait(1000);
   cy.checkToastMessage({ exists: false });
   cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrWithdrawSubmisisonWithoutApi", () => {
+  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick().wait(500);
+  cy.get("#AlertDialog-continueButton").arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.wait(2000);
   cy.listLoadingElementShouldNotExist();
 });
