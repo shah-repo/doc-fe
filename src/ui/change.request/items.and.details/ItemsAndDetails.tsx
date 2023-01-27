@@ -38,20 +38,19 @@ const TopSection: React.FunctionComponent<{
           </Typography>
         </Grid>
 
-        { isButtonShown &&
-            <Grid item>
-              <Typography>
-                <Button
-                  className={classes.btnMargin}
-                  color="primary"
-                  startIcon={<AddCircleIcon color="primary" />}
-                  onClick={showEditRow}
-                >
-                  <Text translation="approvalRequest.items.button.addText"/>
-                </Button>
-              </Typography>
-            </Grid>
-        }
+        <Grid item>
+          <Typography>
+            <Button
+              className={classes.btnMargin}
+              disabled={!isButtonShown}
+              color="primary"
+              startIcon={<AddCircleIcon color="primary" />}
+              onClick={isButtonShown ? showEditRow : (e) => e.preventDefault()}
+            >
+              <Text translation="approvalRequest.items.button.addText"/>
+            </Button>
+          </Typography>
+        </Grid>
       </Grid>
       <Divider className={classes.dividerStyle} />
     </div>
