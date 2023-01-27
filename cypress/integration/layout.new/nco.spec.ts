@@ -1,6 +1,5 @@
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
@@ -148,11 +147,11 @@ context("Verify New Layout for NCO Document", () => {
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -190,7 +189,7 @@ context("Verify New Layout for NCO Document", () => {
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -289,7 +288,7 @@ context("Verify New Layout for NCO Document", () => {
 
     context("Approve and release document", () => {
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -311,7 +310,7 @@ context("Verify New Layout for NCO Document", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateSupplierWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -482,7 +481,7 @@ context("Verify New Layout for NCO Document", () => {
           });
 
           it("Save document", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.drClickCreateDocumentWithoutApiCallForForms();
           });
         });
       });
@@ -514,9 +513,9 @@ context("Verify New Layout for NCO Document", () => {
 
       context("Click confirm and verify migrated fields are present", () => {
         it("Click on confirm change", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-            cy.get("[data-cy='common.confirm.change']").arrowClick();
-          });
+          cy.get("[data-cy='common.confirm.change']").arrowClick();
+          cy.progressBarShouldNotExist();
+          cy.wait(2000);
         });
 
         it("Navigate to details Tab", () => {
@@ -593,9 +592,7 @@ context("Verify New Layout for NCO Document", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab(groupOne);
-          });
+          cy.drAddGroupFromPermissionTab(groupOne);
         });
       });
 
@@ -815,9 +812,7 @@ context("Verify New Layout for NCO Document", () => {
             cy.wait(2000);
             cy.listLoadingElementShouldNotExist();
             cy.progressBarShouldNotExist();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-              cy.drAddGroupFromPermissionTab(groupTwo);
-            });
+            cy.drAddGroupFromPermissionTab(groupTwo);
           });
         });
 
@@ -869,7 +864,7 @@ context("Verify New Layout for NCO Document", () => {
 
     context("Approve and Release NCO document", () => {
       it("'Approve and Release' the document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -1020,9 +1015,7 @@ context("Verify New Layout for NCO Document", () => {
             cy.wait(2000);
             cy.listLoadingElementShouldNotExist();
             cy.progressBarShouldNotExist();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-              cy.drAddGroupFromPermissionTab(groupThree);
-            });
+            cy.drAddGroupFromPermissionTab(groupThree);
           });
         });
 

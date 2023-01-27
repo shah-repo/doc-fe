@@ -4,7 +4,6 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { BulkImportWithSchema } from "../../utils/constants/documentTypes/bulkImport";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
@@ -148,13 +147,13 @@ context("Verify New Layout for Bulk Import Document", () => {
     });
 
     it("Save Form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -283,7 +282,7 @@ context("Verify New Layout for Bulk Import Document", () => {
         });
 
         it("Save Form", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -339,7 +338,7 @@ context("Verify New Layout for Bulk Import Document", () => {
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -361,7 +360,7 @@ context("Verify New Layout for Bulk Import Document", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -442,7 +441,7 @@ context("Verify New Layout for Bulk Import Document", () => {
         });
 
         it("Save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -514,25 +513,15 @@ context("Verify New Layout for Bulk Import Document", () => {
       });
 
       it("Verify Add/Remove References", () => {
-        const docId = "FM-00001";
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-          cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.verifyAddRemoveReference({ formId: "FM-00001" });
+      });
 
-        it("Save the document", () => {
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-          cy.drRemoveReferences({ reference: docId });
-        });
+      it("Save the document", () => {
+        cy.drClickCreateDocumentWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
+
 
       it("Verify Referenced By, Training, Release Date and Form Info", () => {
         cy.verifyReferencesOtherInfo();
@@ -624,9 +613,7 @@ context("Verify New Layout for Bulk Import Document", () => {
         cy.wait(2000);
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab(groupOne);
-        });
+        cy.drAddGroupFromPermissionTab(groupOne);
       });
 
       it("Save the document", () => {
@@ -840,18 +827,7 @@ context("Verify New Layout for Bulk Import Document", () => {
         });
 
         it("Verify Add/Remove References", () => {
-          const docId = "FM-00001";
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-            cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-          cy.wait(2000);
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-            cy.drRemoveReferences({ reference: docId });
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
+          cy.verifyAddRemoveReference({ formId: "FM-00001" });
         });
 
         it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -884,9 +860,7 @@ context("Verify New Layout for Bulk Import Document", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab(groupTwo);
-          });
+          cy.drAddGroupFromPermissionTab(groupTwo);
         });
       });
 
@@ -947,14 +921,11 @@ context("Verify New Layout for Bulk Import Document", () => {
       cy.drSelectOverviewTab();
     });
 
-    it("Turn of autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
-
     it("Add Approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: owner });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: owner });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(1000);
     });
 
     it("Save the form", () => {
@@ -967,12 +938,11 @@ context("Verify New Layout for Bulk Import Document", () => {
       cy.pmSubmitForApprovalWithoutAPI();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(1000);
     });
 
     it("Approve bulk import record", () => {
-      cy.ebApprove();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.lhrApproveWithoutApi();
     });
   });
 
@@ -1116,7 +1086,7 @@ context("Verify New Layout for Bulk Import Document", () => {
 
       context("Verify Revisions tab", () => {
         it("Open revisions tab, click and verify current revision", () => {
-          cy.openRevisionsTabAndVerifyCurrentRevision("A");
+          cy.openRevisionsTabAndVerifyCurrentRevisionWithoutApi("A");
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -1139,9 +1109,7 @@ context("Verify New Layout for Bulk Import Document", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab(groupThree);
-          });
+          cy.drAddGroupFromPermissionTab(groupThree);
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
