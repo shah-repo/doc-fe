@@ -41,6 +41,7 @@ Cypress.Commands.add("exportVerifyEmail", (params: { status: string; filename: s
     cy.checkToastMessageContains({
       message: "File will be sent to your email shortly.",
     });
+    cy.wait(5000);
 
     const getEmailSetting =  {
       to: CONFIG.TEST_EMAIL,
@@ -108,13 +109,14 @@ Cypress.Commands.add("inlineApprovalWithoutApi", () => {
   cy.get("[data-cy=\"fb-control-btn\"]").contains("Approve").first().arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
-  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"common.confirm\"]").arrowClick({ force: true });
   cy.checkToastMessage({ exists: false });
-  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist().wait(2000);
   cy.listLoadingElementShouldNotExist();
+  cy.progressBarShouldNotExist();
 });
 
 Cypress.Commands.add("getExportPdfContent", (params: { status: string; filename: string; type?: string}) => {

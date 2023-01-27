@@ -4,7 +4,6 @@
 
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let arUrl;
@@ -100,19 +99,15 @@ context("Export DAM", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Click 'Create New' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter title", () => {
@@ -147,14 +142,13 @@ context("Export DAM", () => {
     });
 
     it("Select the Record inline form", () => {
+      cy.pause();
       cy.dlFilterByDocTitle({ docTitle: "DAM form" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click 'Create New' button", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"PreviewControlsContainer-createNew\"]").arrowClick();
-      });
+      cy.drCreateNewDocumentFromForm();
     });
 
     it("Enter title", () => {
@@ -166,7 +160,7 @@ context("Export DAM", () => {
     });
 
     it("clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Verify export", () => {
@@ -180,7 +174,7 @@ context("Export DAM", () => {
 
   context(`DAM with ${STATUS_TYPES_LABEL.RELEASED} status`, () => {
     it("Approve and release the form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify export", () => {
@@ -191,7 +185,7 @@ context("Export DAM", () => {
   context(`DAM with ${STATUS_TYPES_LABEL.PENDING_CHANGE} status`, () => {
     it("Revise document", () => {
       cy.drClickReviseDocument();
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
       cy.url().then((url: any) => {
         damUrl = url;
       });
@@ -222,15 +216,15 @@ context("Export DAM", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Add Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name, noWait: true });
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name, noWait: true });
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
       cy.url().then((url: any) => {
         arUrl = url;
       });
@@ -238,8 +232,8 @@ context("Export DAM", () => {
 
     it("Navigate to DAM", () => {
       cy.visit(damUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -253,8 +247,8 @@ context("Export DAM", () => {
   context(`DAM with ${STATUS_TYPES_LABEL.IN_REVIEW} status`, () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Send To Review'", () => {
@@ -263,8 +257,8 @@ context("Export DAM", () => {
 
     it("Navigate to DAM", () => {
       cy.visit(damUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -275,18 +269,18 @@ context("Export DAM", () => {
   context(`DAM with ${STATUS_TYPES_LABEL.APPROVED} status`, () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve Submission'", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
     });
 
     it("Navigate to DAM", () => {
       cy.visit(damUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {

@@ -97,8 +97,8 @@ context("Export Other internal doc", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Save the document", () => {
-      cy.drClickSaveWithoutApiCall();
+    it("Click Create document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -137,9 +137,9 @@ context("Export Other internal doc", () => {
     });
 
     it("Select 'Superseded' record", () => {
-      cy.contains("Superseded").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
+      cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -176,8 +176,8 @@ context("Export Other internal doc", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Save the document", () => {
-      cy.drClickSaveWithoutApiCall();
+    it("Click Create document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click Void button", () => {
@@ -220,8 +220,8 @@ context("Export Other internal doc", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Save the document", () => {
-      cy.drClickSaveWithoutApiCall();
+    it("Click Create document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
       cy.url().then((url: any) => {
         recordUrl = url;
       });
@@ -256,7 +256,7 @@ context("Export Other internal doc", () => {
     });
 
     it("Add Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name, noWait: true });
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name, noWait: true });
     });
 
     it("Click on Save", () => {
@@ -268,9 +268,8 @@ context("Export Other internal doc", () => {
 
     it("Navigate to CP", () => {
       cy.visit(recordUrl);
-      cy.wait(3000);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -284,20 +283,18 @@ context("Export Other internal doc", () => {
   context("CP with In Review status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
-      cy.wait(3000);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Navigate to CP", () => {
       cy.visit(recordUrl);
-      cy.wait(3000);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -308,20 +305,18 @@ context("Export Other internal doc", () => {
   context("CP with Approved status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
-      cy.wait(3000);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve Submission'", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
     });
 
     it("Navigate to CP", () => {
       cy.visit(recordUrl);
-      cy.wait(3000);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {

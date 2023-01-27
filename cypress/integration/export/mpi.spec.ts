@@ -228,7 +228,7 @@ context("Export MPI", () => {
 
   context("MPI with Released status", () => {
     it("Approve and release the form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify export", () => {
@@ -241,7 +241,7 @@ context("Export MPI", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Obsolete" });
       cy.drClickCreateDocumentWithoutApiCall();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify export", () => {
@@ -258,9 +258,9 @@ context("Export MPI", () => {
     });
 
     it("Select 'Superseded' record", () => {
-      cy.contains("Superseded").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
+      cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -344,7 +344,7 @@ context("Export MPI", () => {
       cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
     });
 
-    it("Save the document", () => {
+    it("Click Create document", () => {
       cy.drClickCreateDocumentWithoutApiCall();
       cy.url().then((url: any) => {
         recordUrl = url;
@@ -376,11 +376,11 @@ context("Export MPI", () => {
     });
 
     it("Click Create Approval Request", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Add Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name, noWait: true });
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name, noWait: true });
     });
 
     it("Click on Save", () => {
@@ -392,9 +392,8 @@ context("Export MPI", () => {
 
     it("Navigate to MPI", () => {
       cy.visit(recordUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
     });
 
     it("Verify export", () => {
@@ -408,19 +407,18 @@ context("Export MPI", () => {
   context("MPI with In Review status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Navigate to MPI", () => {
       cy.visit(recordUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
     });
 
     it("Verify export", () => {
@@ -434,19 +432,18 @@ context("Export MPI", () => {
   context("MPI with Approved status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve Submission'", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
     });
 
     it("Navigate to MPI", () => {
       cy.visit(recordUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
     });
 
     it("Verify export", () => {

@@ -136,6 +136,10 @@ context("Export Part Lot", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create new Part Lot form", () => {
@@ -168,7 +172,7 @@ context("Export Part Lot", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {
@@ -255,15 +259,19 @@ context("Export Part Lot", () => {
       cy.unClick();
     });
 
+    it("Click on Save", () => {
+      cy.drClickSaveWithoutApiCall();
+    });
+
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
   context("Export", () => {
     it("Export template", () => {
       cy.get(`[data-cy="FBWorkspace-exportTemplate"]`).eq(0).click();
-      cy.get(`[data-cy="fb-template-name"]`).arrowType("CPL_Form_Template");
+      cy.get(`[data-cy="fb-template-name"]`).arrowType("CPL_Form_Template").wait(1000);
       cy.get(`[data-cy="common.add"]`).arrowClick();
     });
   });
@@ -298,7 +306,7 @@ context("Export Part Lot", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Check status should be Draft", () => {
@@ -350,7 +358,7 @@ context("Export Part Lot", () => {
     it("Select the CSL inline form", () => {
       cy.dlFilterByDocTitle({ docTitle: "Part Lot Form" });
 
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on Create New button", () => {
@@ -395,19 +403,19 @@ context("Export Part Lot", () => {
     });
 
     it("Add one approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve step", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Check status should be Released", () => {
