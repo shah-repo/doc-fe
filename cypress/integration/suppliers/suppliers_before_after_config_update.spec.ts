@@ -1169,8 +1169,8 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Supplier Capabilities", () => {
-        cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-        cy.unClick();
+      cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
+      cy.unClick();
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
