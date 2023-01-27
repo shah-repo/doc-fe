@@ -89,11 +89,11 @@ context("Autocomplete 'Approval requests' test", () => {
       });
 
       it("Click Create Approval Request", () => {
-        cy.arSaveApiCall();
+        cy.arSaveApiCallWithoutApi();
       });
 
       it("Add first approver to approval request on approver list", () => {
-        cy.arAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
       });
     });
 
@@ -128,7 +128,7 @@ context("Autocomplete 'Approval requests' test", () => {
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {

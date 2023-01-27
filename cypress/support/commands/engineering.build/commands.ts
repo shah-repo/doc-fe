@@ -34,6 +34,7 @@ declare global {
       ebWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
       ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       ebAddApproverOnApproverListWithPatchCall(params: {approver: string }): Chainable<Subject>;
+      ebAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       lhrSaveWithoutApi(): Chainable<Subject>;
       lhrWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
     }
@@ -128,8 +129,8 @@ Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: s
 });
 
 Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick();
-  cy.listLoadingElementShouldAppear().wait(500);
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick().wait(500);
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
@@ -251,6 +252,15 @@ Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { appr
   cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals, CyRoutes.PatchDocRev], () => {
     cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("ebAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get(`[data-cy^="fb-approvals-"]`).arrowClick();
+  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+  cy.wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });

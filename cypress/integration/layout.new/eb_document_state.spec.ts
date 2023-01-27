@@ -2,7 +2,6 @@ import "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
@@ -135,13 +134,13 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
       });
 
       context("Approve and Release Form", () => {
         it("Approve and Release document", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
       });
     });
@@ -178,10 +177,8 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
             });
             it(`Make a change that triggers autosave→ 
             While it saves the changes it should say “Auto-saving, please wait…”`, () => {
-              cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-                cy.drEnterDocumentDescription({ description: "EB Description" });
-                cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
-              });
+              cy.drEnterDocumentDescription({ description: "EB Description" });
+              cy.get(`[data-cy="header.autoSaving"]`).should("have.text", "Auto-saving, please wait…");
               cy.progressBarShouldNotExist();
             });
             it("Check Last save should be updated", () => {
@@ -210,8 +207,8 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
               cy.get(`[data-cy="header-last-saved"]`).should("have.text", "Last saved a few seconds ago");
             });
             it("Add Approver to approvals list", () => {
-              cy.wait(3000);
-              cy.pmAddApproverOnApproverList({ approver: owner });
+              // cy.wait(3000);
+              cy.pmAddApproverOnApproverListWithoutApi({ approver: owner });
               cy.progressBarShouldNotExist();
             });
             it("Check Last save should be present in autosave", () => {
@@ -310,11 +307,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       () => {
         it("Add Approver to approvals list", () => {
           cy.wait(3000);
-          cy.pmAddApproverOnApproverList({ approver: owner });
+          cy.pmAddApproverOnApproverListWithoutApi({ approver: owner });
         });
 
         it("Click on Submit For Approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
       }
     );
@@ -342,9 +339,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Click 'Withdraw Submission' button", () => {
           cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-            cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-          });
+          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+        });
+
+        it("Turn off autosave", () => {
+          cy.cmpTurnOffAutosave();
         });
 
         it("check three dots are visible", () => {
@@ -353,7 +352,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Check if 'Change Owner' button header menu is visible and functional", () => {
           cy.get("#HeaderMenuButton").arrowClick();
-          cy.get("#OwnerChangerPresenter-changeOwner").should("be.visible").arrowClick();
+          cy.get("[data-cy=\"changeOwner\"]").should("be.visible").arrowClick();
           cy.get("[data-cy=\"changeOwner-submit\"]").arrowClick();
         });
 
@@ -367,7 +366,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Click on Submit For Approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
       });
     });
@@ -382,7 +381,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
     context("Approve Engineering Build → The Engineering Build is in the Released status", () => {
       it("Approve the record", () => {
         cy.wait(3000);
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
 
       it(`The Engineering Build is in the ${STATUS_TYPES_LABEL.RELEASED}  state`, () => {
@@ -439,16 +438,16 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
           it("Add Approver to approvals list", () => {
             cy.wait(3000);
-            cy.pmAddApproverOnApproverList({ approver: owner });
+            cy.pmAddApproverOnApproverListWithoutApi({ approver: owner });
           });
 
           it("Click on Submit For Approval", () => {
-            cy.pmSubmitForApproval();
+            cy.pmSubmitForApprovalWithoutAPI();
           });
 
           it("Approve the Engineering Build", () => {
             cy.wait(3000);
-            cy.ebApprove();
+            cy.ebApproveWithoutApi();
           });
         });
       });
@@ -473,21 +472,24 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
     context(`Update the Engineering Build and release the new revision`, () => {
       it("Check if 'Update Record' button header menu and is functional", () => {
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.wait(2000);
         cy.get("[data-cy=\"updateRecord\"]").should("be.visible").arrowClick();
+        cy.listLoadingElementShouldNotExist();
       });
 
       it("Add Approver to approvals list", () => {
         cy.wait(3000);
-        cy.pmAddApproverOnApproverList({ approver: owner });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: owner });
       });
 
       it("Click on Submit For Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve the record", () => {
-        cy.wait(3000);
-        cy.ebApprove();
+        cy.lhrApproveWithoutApi();
       });
     });
 
@@ -507,7 +509,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
             status: STATUS_TYPES_LABEL.ARCHIVE,
             title: "Records",
             docId: "EB-00001",
-            revision: "Rev A.1",
+            revision: "Rev A",
           });
         });
 
@@ -599,19 +601,18 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         it("Revise document with 'Void' option", () => {
           cy.drClickReviseDocument();
           cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
-          cy.drClickCreateDocumentWithoutApiCall();
-          cy.wait(3000);
           cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[1].name}`);
+          cy.drClickCreateDocumentWithoutApiCall();
           cy.drApproveAndReleaseDialog();
           cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
           cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
+          cy.wait(3000);
         });
 
         it("Approve the Engineering Build", () => {
-          cy.wait(3000);
-          cy.ebApprove();
+          cy.lhrApproveWithoutApi();
         });
       }
     );
