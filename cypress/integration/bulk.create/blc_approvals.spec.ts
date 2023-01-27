@@ -4,7 +4,6 @@
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ApprovalsDocType, ApprovalsInlineType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -329,11 +328,11 @@ context("Bulk create approvals block/inline test", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         cy.url().then((url: any) => {
           blcForm = url;
         });
@@ -364,10 +363,10 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
-          cy.unClick();
-        });
+        cy.get("[name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -389,7 +388,7 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Overview' tab", () => {
@@ -397,30 +396,28 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
     context("Create bulk records", () => {
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });
 
   context("Start bulk creation flow for approvals inline", () => {
     it(`Navigate to BLC form`, () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-        cy.visit(blcForm);
-      });
+      cy.visit(blcForm);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -443,10 +440,10 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
-          cy.unClick();
-        });
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -474,7 +471,7 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
     });
 
@@ -488,17 +485,17 @@ context("Bulk create approvals block/inline test", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
     context("Create bulk records", () => {
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });

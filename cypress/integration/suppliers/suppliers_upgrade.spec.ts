@@ -6,7 +6,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -315,7 +314,7 @@ context("Test upgradability of old supplier form and record", () => {
 
       it("Select old supplier form document from document list", () => {
         cy.dlFilterByDocTitle({ docTitle: "Old supplier form" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Click on revise", () => {
@@ -336,19 +335,19 @@ context("Test upgradability of old supplier form and record", () => {
         });
 
         it("Click add field", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions], () => {
-            cy.fbAddNewFieldButton();
-          });
+          cy.fbAddNewFieldButton();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
       });
 
       context("Save and release form", () => {
         it("Save form", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Approve and release form", () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+          cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         });
 
         it("Click on 'Details' tab", () => {
@@ -372,7 +371,7 @@ context("Test upgradability of old supplier form and record", () => {
 
       it("Select old supplier document in DRAFT from supplier list", () => {
         cy.supFilterByDocTitle({ docTitle: "Old draft supplier document" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Press Click Here on banner for form upgrade to latest version", () => {
@@ -389,11 +388,12 @@ context("Test upgradability of old supplier form and record", () => {
 
       context("Release upgraded supplier document", () => {
         it("Add approver to approvers list", () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+          cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
+          cy.wait(2000);
         });
 
         it("Click on 'Details' tab", () => {
@@ -401,7 +401,7 @@ context("Test upgradability of old supplier form and record", () => {
         });
 
         it("Approve supplier document", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
 
         it("Verify revision is revision 1 - Released", () => {
@@ -419,7 +419,7 @@ context("Test upgradability of old supplier form and record", () => {
         it("Select old supplier document in RELEASED from supplier list", () => {
           cy.dlClearFilters();
           cy.supFilterByDocTitle({ docTitle: "Old released supplier document" });
-          cy.dlSelectFirstDocument();
+          cy.dlSelectFirstDocumentWithoutApi();
         });
 
         it("Click update record", () => {
@@ -427,7 +427,7 @@ context("Test upgradability of old supplier form and record", () => {
         });
 
         it("Click save", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Press Click Here on banner for form upgrade to latest version", () => {
@@ -445,11 +445,12 @@ context("Test upgradability of old supplier form and record", () => {
 
       context("Release upgraded supplier document", () => {
         it("Add approver to approvers list", () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+          cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
+          cy.wait(2000);
         });
 
         it("Click on 'Details' tab", () => {
@@ -457,7 +458,7 @@ context("Test upgradability of old supplier form and record", () => {
         });
 
         it("Approve supplier document", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
 
         it("Verify revision is revision 1 - Released", () => {

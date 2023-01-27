@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { TestDocumentTypeRecord } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -370,11 +369,11 @@ context("Bulk create record headers", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
@@ -402,11 +401,11 @@ context("Bulk create record headers", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)")
-            .arrowClick();
-          cy.unClick();
-        });
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)")
+          .arrowClick();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -424,7 +423,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Overview' tab", () => {
@@ -432,11 +431,11 @@ context("Bulk create record headers", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -469,7 +468,7 @@ context("Bulk create record headers", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -497,7 +496,7 @@ context("Bulk create record headers", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -524,7 +523,7 @@ context("Bulk create record headers", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -552,7 +551,7 @@ context("Bulk create record headers", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -579,11 +578,11 @@ context("Bulk create record headers", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         context("Change doc type configuration, make label C not visible", () => {
@@ -616,7 +615,7 @@ context("Bulk create record headers", () => {
           });
 
           it("Approve record", () => {
-            cy.ebTryToApprove();
+            cy.ebApproveWithoutApi();
           });
 
           it("Verify error message", () => {
@@ -631,7 +630,8 @@ context("Bulk create record headers", () => {
 
         context("Withdraw subbmision and remove file", () => {
           it("Withdraw submission", () => {
-            cy.ebWithdrawSubmisison();
+            cy.ebWithdrawSubmisisonWithoutApi();
+            cy.wait(2000);
           });
 
           it("Click on 'Details' tab", () => {
@@ -654,7 +654,7 @@ context("Bulk create record headers", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -668,11 +668,11 @@ context("Bulk create record headers", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve record", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });

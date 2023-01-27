@@ -513,7 +513,11 @@ context("Checkboxes test", () => {
       it("Add Actions 'Action Button' with checkboxes", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Actions", field: "Action Button" });
-        cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[value^=\"SendEmailWithFormToFill\"]").check();
+        cy.get("input[value^=\"SendSurveyEmailWithFormToFill\"]").check();
+        cy.unClick();
         cy.fbAddNewFieldButton();
       });
     });

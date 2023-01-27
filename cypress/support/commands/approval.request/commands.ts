@@ -464,7 +464,7 @@ Cypress.Commands.add("arApproveARWithoutApi", () => {
   cy.get("button[aria-label=approve]").first().arrowClick();
   cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
   cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
 });

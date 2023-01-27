@@ -5,7 +5,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
 import { Part } from "./../../utils/constants/documentTypes/part";
@@ -376,7 +375,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -397,11 +396,11 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
       });
 
       it("Save Form", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and released", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -438,7 +437,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
       });
 
       it("Click create document after filling document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -517,7 +516,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           });
 
           it("Save Form", () => {
-            cy.drClickCreateDocumentWithApiCallForForms();
+            cy.drClickCreateDocumentWithoutApiCallForForms();
           });
         });
 
@@ -567,7 +566,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
 
     context("Approve and release document", () => {
       it("Approve and release document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -585,7 +584,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -678,7 +677,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
             });
 
             it("Save document", () => {
-              cy.drClickCreateDocumentWithApiCallForForms();
+              cy.drClickCreateDocumentWithoutApiCallForForms();
             });
           });
 
@@ -819,9 +818,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab(groupOne);
-          });
+          cy.drAddGroupFromPermissionTab(groupOne);
         });
       });
 
@@ -1051,16 +1048,12 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
             const docId = "FM-00001";
             cy.get("[data-cy='references-icon']").arrowClick().wait(1000);
             cy.get("[data-cy='referenceTo']").arrowClick();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-              cy.get("[data-cy='referenceTo']").autocompleteSelect(docId);
-              cy.unClick();
-            });
+            cy.get("[data-cy='referenceTo']").autocompleteSelect(docId);
+            cy.unClick();
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-              cy.get(`[data-cy="field-referenceTo"]`).contains(docId)
-                .parent().parent().parent().find("svg").arrowClick({ force: true });
-            });
+            cy.get(`[data-cy="field-referenceTo"]`).contains(docId)
+              .parent().parent().parent().find("svg").arrowClick({ force: true });
           });
 
           it("Verify Referenced By, Training, Release Date and Form Info", () => {
@@ -1090,9 +1083,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
             cy.wait(2000);
             cy.listLoadingElementShouldNotExist();
             cy.progressBarShouldNotExist();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-              cy.drAddGroupFromPermissionTab(groupTwo);
-            });
+            cy.drAddGroupFromPermissionTab(groupTwo);
           });
         });
 
@@ -1144,15 +1135,15 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
       });
 
       it("Add Approver", () => {
-        cy.pmAddApproverOnApproverList({ approver: owner });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: owner });
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve Component specification Lot document", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
 
@@ -1287,9 +1278,7 @@ context("Verify New Layout for PART_LOT internal type, Component specification",
             cy.wait(2000);
             cy.listLoadingElementShouldNotExist();
             cy.progressBarShouldNotExist();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-              cy.drAddGroupFromPermissionTab(groupThree);
-            });
+            cy.drAddGroupFromPermissionTab(groupThree);
           });
         });
 

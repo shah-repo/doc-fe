@@ -12,6 +12,7 @@ interface KendoTableSearchQueryType {
 }
 
 export enum KendoCellTemplates {
+  ACTIVE="Active",
   USER_AVATAR="UserAvatar",
   STATUS="Status",
   DATE_COMPLETED="DateCompleted",

@@ -4,7 +4,6 @@
 import "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -189,7 +188,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -199,7 +198,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -267,18 +266,18 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Production", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Production"]`).arrowClick();
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Production"]`).arrowClick();
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select one supplier use status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Pending Evaluation"]`).check({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[value="Pending Evaluation"]`).check({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify the status", () => {
@@ -313,20 +312,20 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Production", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Production"]`).arrowClick();
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Production"]`).arrowClick();
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select multiple supplier use status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Pending Evaluation"]`).check({ force: true });
-      });
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Approved"]`).check({ force: true });
-      });
+      cy.get(`[value="Pending Evaluation"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.get(`[value="Approved"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify the status", () => {
@@ -361,44 +360,44 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Production", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Production"]`).arrowClick();
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Production"]`).arrowClick();
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select single supplier use status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Pending Evaluation"]`).check({ force: true });
-      });
+      cy.get(`[value="Pending Evaluation"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Risk Classifications", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-      });
+      cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Capabilities", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-      });
+      cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplied parts etc.", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
-        cy.unClick();
-      });
+      cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -406,12 +405,13 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.ebAddApproverOnApproverListWithPatchCall({ approver: USERS[1].name });
+      cy.ebAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
       cy.landingPageLoadingElementShouldNotExist();
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(2000);
     });
 
     it("Verify the status", () => {
@@ -446,63 +446,61 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Production", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Production"]`).arrowClick();
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Production"]`).arrowClick();
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select multiple supplier use status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Pending Evaluation"]`).check({ force: true });
-        cy.get(`[value="Approved"]`).check({ force: true });
-      });
+      cy.get(`[value="Pending Evaluation"]`).check({ force: true });
+      cy.get(`[value="Approved"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Risk Classifications", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-      });
+      cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Capabilities", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-      });
+      cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplied parts etc.", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
-        cy.unClick();
-      });
+      cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Contracts and Agreements", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
-      });
+      cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Audits and Assessments", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Site Quality Audit"]`).check({ force: true });
-      });
+      cy.get(`[value="Site Quality Audit"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Certifications and Licenses", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="California FDB License"]`).scrollIntoView().check({ force: true });
-      });
+      cy.get(`[value="California FDB License"]`).scrollIntoView().check({ force: true });
       cy.wait(2000);
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
@@ -513,11 +511,12 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.ebAddApproverOnApproverListWithPatchCall({ approver: USERS[1].name });
+      cy.ebAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(2000);
     });
 
     it("Verify the status", () => {
@@ -552,44 +551,44 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Production", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Production"]`).arrowClick();
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Production"]`).arrowClick();
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select single supplier use status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Pending Evaluation"]`).check({ force: true });
-      });
+      cy.get(`[value="Pending Evaluation"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Risk Classifications", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-      });
+      cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Capabilities", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-      });
+      cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplied parts etc.", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
-        cy.unClick();
-      });
+      cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -597,15 +596,16 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.ebAddApproverOnApproverListWithPatchCall({ approver: USERS[1].name });
+      cy.ebAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(2000);
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -640,64 +640,62 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Production", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Production"]`).arrowClick();
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Production"]`).arrowClick();
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select multiple supplier use status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Pending Evaluation"]`).check({ force: true });
-        cy.get(`[value="Approved"]`).check({ force: true });
-      });
+      cy.get(`[value="Pending Evaluation"]`).check({ force: true });
+      cy.get(`[value="Approved"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Risk Classifications", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-      });
+      cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Capabilities", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-      });
+      cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplied parts etc.", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
-        cy.unClick();
-      });
+      cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Contracts and Agreements", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Audits and Assessments", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Site Quality Audit"]`).scrollIntoView().check({ force: true });
-      });
+      cy.get(`[value="Site Quality Audit"]`).scrollIntoView().check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Certifications and Licenses", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="California FDB License"]`).check({ force: true });
-      });
+      cy.get(`[value="California FDB License"]`).check({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -707,15 +705,16 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.ebAddApproverOnApproverListWithPatchCall({ approver: USERS[1].name });
+      cy.ebAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(2000);
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -881,7 +880,7 @@ context("Create company via API and create Suppliers document", () => {
   context("update supplier 1", () => {
     it("Select supplier 1", () => {
       cy.supFilterById({ docId: "SUP-00003" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -889,18 +888,18 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Production", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Production"]`).arrowClick();
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-supplier-use-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Production"]`).arrowClick();
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select single supplier use status", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Pending Evaluation"]`).check({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[value="Pending Evaluation"]`).check({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
   });
 
@@ -911,7 +910,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 2", () => {
       cy.supFilterById({ docId: "SUP-00004" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -933,7 +932,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 3", () => {
       cy.supFilterById({ docId: "SUP-00005" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -955,6 +954,9 @@ context("Create company via API and create Suppliers document", () => {
     it("Navigate to Supplier list", () => {
       cy.navigToSuppliers();
       cy.reload();
+      cy.wait(2000);
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Clear filters", () => {
@@ -986,7 +988,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 1", () => {
       cy.supFilterById({ docId: "SUP-00003" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -994,30 +996,30 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Risk Classifications", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-      });
+      cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Capabilities", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-      });
+      cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplied parts etc.", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
-        cy.unClick();
-      });
+      cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -1025,16 +1027,17 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.ebAddApproverOnApproverListWithPatchCall({ approver: USERS[1].name });
+      cy.ebAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
       cy.wait(2000);
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(2000);
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -1055,7 +1058,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 2", () => {
       cy.supFilterById({ docId: "SUP-00004" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -1063,49 +1066,47 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Risk Classifications", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-      });
+      cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Capabilities", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-      });
+      cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplied parts etc.", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
-        cy.unClick();
-      });
+      cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Contracts and Agreements", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[value="Non-Disclosure Agreement"]`).check({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Audits and Assessments", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Site Quality Audit"]`).check({ force: true });
-      });
+      cy.get(`[value="Site Quality Audit"]`).check({ force: true });
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Certifications and Licenses", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="California FDB License"]`).check({ force: true });
-      });
+      cy.get(`[value="California FDB License"]`).check({ force: true });
       cy.listLoadingElementShouldNotExist();
       cy.progressBarShouldNotExist();
     });
@@ -1115,15 +1116,16 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.ebAddApproverOnApproverListWithPatchCall({ approver: USERS[1].name });
+      cy.ebAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(2000);
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -1144,7 +1146,7 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 3", () => {
       cy.supFilterById({ docId: "SUP-00005" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Navigate to Detail Tab", () => {
@@ -1152,32 +1154,32 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Select Risk Classifications", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
-        cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[id^="mui-component-select-risk-classificaiton-"]`).arrowClick({ force: true });
+      cy.get(`[data-value="Minor"]`).arrowClick({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Type", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[value="Contract Manufacturer"]`).check({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplier Capabilities", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
-        cy.unClick();
-      });
+      cy.get(`[value="Plastic Injection Molding"]`).check({ force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select Supplied parts etc.", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
-        cy.unClick();
-      });
+      cy.get(`[data-cy^="supplied-parts-material-equipment-etc-"]`).autocompleteSelect("SUP-00003", { force: true });
+      cy.unClick();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -1185,15 +1187,16 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      cy.ebAddApproverOnApproverListWithPatchCall({ approver: USERS[1].name });
+      cy.ebAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(2000);
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -1214,11 +1217,11 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 4", () => {
       cy.supFilterById({ docId: "SUP-00006" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {
@@ -1239,11 +1242,11 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Select supplier 5", () => {
       cy.supFilterById({ docId: "SUP-00007" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Approve document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify the status", () => {

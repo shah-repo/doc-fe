@@ -9,7 +9,6 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -179,7 +178,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Verify approval field is added as result of predefined schema", () => {
@@ -215,7 +214,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it(`Check form status as ${STATUS_TYPES_LABEL.DRAFT} and click on Send To Email`, () => {
@@ -388,7 +387,7 @@ context("Create company via API and create Suppliers document", () => {
 
   context("Release supplier form and verify status as Released", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it(`Check form status as ${STATUS_TYPES_LABEL.RELEASED} and click on Send To Email`, () => {
@@ -575,9 +574,9 @@ context("Create company via API and create Suppliers document", () => {
 
     it("Click create new to create supplier", () => {
       SystemRequirement("REQ-2330");
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev], () => {
-        cy.supCreateNew();
-      });
+      cy.supCreateNew();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Enter 'Supplier Address/Phone'", () => {
@@ -599,13 +598,14 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add approver to approvers list", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
-      cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
-      cy.pmAddApproverOnApproverList({ approver: USERS[3].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[3].email });
     });
 
     it("Submit for approval", () => {
       cy.pmSubmitForApprovalWithoutAPI();
+      cy.wait(2000);
       cy.url().then((url: any) => {
         supplierDocument = url;
       });
@@ -622,9 +622,7 @@ context("Create company via API and create Suppliers document", () => {
 
       it("Navigate to Supplier", () => {
         SystemRequirement("REQ-4800");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.SessionDetails], () => {
-          cy.visit(supplierDocument);
-        });
+        cy.visit(supplierDocument);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -649,9 +647,7 @@ context("Create company via API and create Suppliers document", () => {
 
       it("Navigate to Supplier", () => {
         SystemRequirement("REQ-4800");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.SessionDetails], () => {
-          cy.visit(supplierDocument);
-        });
+        cy.visit(supplierDocument);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -675,9 +671,7 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Navigate to Supplier", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetRequiredApproversDocRev, CyRoutes.SessionDetails], () => {
-          cy.visit(supplierDocument);
-        });
+        cy.visit(supplierDocument);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -784,11 +778,11 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -813,7 +807,7 @@ context("Create company via API and create Suppliers document", () => {
       cy.unClick();
       cy.get("[data-cy=\"suggestFormCancelBtn\"]").arrowClick();
       cy.dlFilterByDocId({ docId: "SUP-00001" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     context("Verify next revision update of supplier document", () => {
@@ -826,11 +820,11 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Leave Update for Type of Change and save", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Click 'Save' button", () => {
@@ -841,7 +835,8 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
+        cy.wait(2000);
       });
 
       it("Approve supplier document", () => {
@@ -867,11 +862,11 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Leave Update for Type of Change and save", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Add approver", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[3].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[3].email });
       });
 
       it("Click 'Save' button", () => {
@@ -881,7 +876,8 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
+        cy.wait(2000);
       });
 
       it("Get the pending approval document Id", () => {
@@ -906,11 +902,9 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Rejecting request gives prompt", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PreventIdleLogout], () => {
-          cy.get(`.MuiListItemText-root.MuiListItemText-dense`).trigger("mouseover").wait(1000);
-          cy.get(`[data-cy="transition-reject"]`).trigger("mouseover").wait(1000);
-          cy.get(`[data-cy="transition-reject"]`).arrowClick();
-        });
+        cy.get(`.MuiListItemText-root.MuiListItemText-dense`).trigger("mouseover").wait(1000);
+        cy.get(`[data-cy="transition-reject"]`).trigger("mouseover").wait(1000);
+        cy.get(`[data-cy="transition-reject"]`).arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -950,23 +944,23 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       it("Add first approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Add second approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
       });
 
       it("Remove second Approver'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.ApprovalsAbandon], () => {
-          cy.contains(`${USERS[2].email}`).parent().next().arrowClick();
-        });
+        cy.contains(`${USERS[2].email}`).parent().next().arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Remove Approver who rejected request", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.ApprovalsAbandon], () => {
-          cy.contains(`${USERS[3].email}`).parent().next().arrowClick();
-        });
+        cy.contains(`${USERS[3].email}`).parent().next().arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it(`Check doc status as ${STATUS_TYPES_LABEL.DRAFT} and click on Send To Email`, () => {
@@ -1125,11 +1119,12 @@ context("Create company via API and create Suppliers document", () => {
 
       context("Approve supplier and release document", () => {
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
+          cy.wait(2000);
         });
 
         it("Approve supplier document", () => {
-          cy.ebTryToApprove();
+          cy.ebApproveWithoutApi();
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
