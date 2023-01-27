@@ -216,7 +216,7 @@ context("Validators tests", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -282,259 +282,114 @@ context("Validators tests", () => {
     });
 
     it("Click Create Document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
   context("Add 'Required' validation on 'Checkboxes'", () => {
-    it("Open add field dialogue", () => {
+    it("Add 'Required' validation on 'Checkboxes'", () => {
       cy.fbAddNewField();
-    });
-
-    it("Create 'Checkboxes'", () => {
       SystemRequirement("FB-0040");
       cy.fbSelectItemFromNewFieldList({ section: "Inputs",  field: "Checkbox group" });
-    });
-
-    it(`Give label to 'Checkbox' as 'Order'`, () => {
       cy.fbEnterLabel({ label: "Order" });
-    });
-
-    it("Add options to checbox group", () => {
       SystemRequirement("FB-0040");
       cy.fbGroupOptions("First", "Second", "Third");
-    });
-
-    it("Open validations", () => {
       cy.fbOpenValidation();
-    });
-
-    it(`Make 'Order' field required`, () => {
       SystemRequirement("FB-0220");
       cy.fbFieldRequired();
-    });
-
-    it("Add Checkbox Group", () => {
       cy.fbAddField();
     });
   });
 
   context("Add 'Required' validation on 'Autocomplete multiselect'", () => {
-    it("Open add field dialogue", () => {
+    it("Add 'Required' validation on 'Autocomplete multiselect'", () => {
       cy.fbClickAddNewHiddenBtn();
-    });
-
-    it("Create 'Autocomplete' multi select", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
-    });
-
-    it(`Give label to 'Autocomplete' as 'Required doctypes'`, () => {
       SystemRequirement("FB-0010");
       cy.fbEnterLabel({ label: "Required doctypes" });
-    });
-
-    it("Select 'Document types' for  autocomplete multiselect", () => {
       cy.fbAutocompleteType({ autocompleteOption: "Document types" });
-    });
-
-    it("Select multi-select checkbox", () => {
       cy.get("input[value=multiple]").check();
-    });
-
-    it("Open validations", () => {
       cy.fbOpenValidation();
-    });
-
-    it("Mark as 'Required If In'", () => {
       SystemRequirement("FB-0240");
       cy.get("[data-cy=\"fb-control-required_if_in:anotherfield,[value]\"]").arrowClick();
-    });
-
-    it(`Select 'Order' field`, () => {
       SystemRequirement("FB-0240");
       cy.get("[data-cy=\"validators.required_if_in.name\"]").autocompleteSelect(`Order`);
-    });
-
-    it(`Check required if 'First' 'Second'`, () => {
       cy.get("div[name=\"validators.required_if_in.value\"] input[value=\"First\"]").check();
       cy.get("div[name=\"validators.required_if_in.value\"] input[value=\"Second\"]").check();
-    });
-
-    it("Add autocomplete multi-select", () => {
       cy.fbAddField();
     });
   });
 
   context("Add 'Required' validation on 'Text Field'", () => {
-    it("Open add field dialogue", () => {
-      cy.fbClickAddNewHiddenBtn();
-    });
-
-    it("Create 'Text Field'", () => {
+    it("Add 'Required' validation on 'Text Field'", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-    });
-
-    it(`Give label to 'Text Field' as '${requiredFieldLabel}'`, () => {
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(requiredFieldLabel);
-    });
-
-    it("Open validations", () => {
       cy.fbOpenValidation();
-    });
-
-    it(`Make '${requiredFieldLabel}' field required`, () => {
       cy.fbFieldRequired();
-    });
-
-    it("Add text field", () => {
       cy.fbAddField();
-    });
-
-    it("Verify you can't enter data to textfield", () => {
       cy.get(`[data-cy^='${requiredFieldSelector}'] input`).should("have.attr", "disabled");
     });
   });
 
   context("Add 'Required If' validation on 'Text Field'", () => {
-
-    it("Open add field dialogue", () => {
+    it("Add 'Required If' validation on 'Text Field'", () => {
       cy.fbClickAddNewHiddenBtn();
-    });
-
-    it("Create 'Text Field'", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-    });
-
-    it(`Give label to 'Text Field' as '${requiredIfFieldLabel}'`, () => {
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(requiredIfFieldLabel);
-    });
-
-    it("Open validations", () => {
       cy.fbOpenValidation();
-    });
-
-    it("Mark as 'Required If'", () => {
       SystemRequirement("FB-0230");
       cy.get("[data-cy=\"fb-control-required_if:anotherfield,value\"]").arrowClick();
-    });
-
-    it(`Select '${requiredFieldLabel}' field`, () => {
       SystemRequirement("FB-0230");
       cy.get("[data-cy=\"validators.required_if.name\"]")
         .autocompleteSelect(`${requiredFieldLabel}`);
-    });
-
-    it(`Type value as '${requiredIfFieldValue}'`, () => {
       cy.get("[data-cy=\"validators.required_if.value\"]").arrowType(requiredIfFieldValue);
-    });
-
-    it(`Make '${requiredIfFieldLabel}' field required, if '${requiredFieldLabel}' 
-field text equals '${requiredIfFieldValue}': Add text field`, () => {
+      cy.wait(1000);
       cy.fbAddField();
     });
-
   });
 
   context("Add 'Required With' validation on 'Text Field'", () => {
-    it("Open add field dialogue", () => {
+    it("Add 'Required With' validation on 'Text Field'", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-    });
-
-    it("Create 'Text Field'", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-    });
-
-    it(`Give label to 'Text Field' as '${requiredWithFieldLabel}'`, () => {
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(requiredWithFieldLabel);
-    });
-
-    it("Open validations", () => {
       cy.fbOpenValidation();
-    });
-
-    it("Mark as 'Required With'", () => {
       SystemRequirement("FB-0250");
       cy.get("[data-cy=\"fb-control-required_with:foo,bar,...\"]").arrowClick();
-    });
-
-    it(`Select 'Required doctypes' field`, () => {
       cy.get("[data-cy=\"validators.required_with.name\"]").autocompleteSelect(`Required doctypes`);
-    });
-
-    it(`Make '${requiredWithFieldLabel}' field required, if 'Required doctypes' 
-    field is not empty': Add text field`, () => {
       cy.fbAddField();
     });
 
   });
 
   context("Add 'Required Without' validation on 'Text Field'", () => {
-    it("Open add field dialogue", () => {
+    it("Add 'Required Without' validation on 'Text Field'", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-    });
-
-    it("Create 'Text Field'", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-    });
-
-    it(`Give label to 'Text Field' as '${requiredWithoutFieldLabel}'`, () => {
       cy.get("[data-cy=\"fb-editor-field-textfield\"]").arrowType(requiredWithoutFieldLabel);
-    });
-
-    it("Open validations", () => {
       cy.fbOpenValidation();
-    });
-
-    it("Mark as 'Required Without'", () => {
       SystemRequirement("FB-0260");
       cy.get("[data-cy=\"fb-control-required_without:foo,bar,...\"]").arrowClick();
-    });
-
-    it(`Select '${requiredWithFieldLabel}' field`, () => {
       SystemRequirement("FB-0260");
       cy.get("[data-cy=\"validators.required_without.name\"]").arrowClick();
       cy.get("ul>li[role=option]").contains(requiredWithFieldLabel).arrowClick();
-    });
-
-    it(`Make '${requiredWithoutFieldLabel}' field required, if '${requiredWithFieldLabel}' 
-field is empty: Add text field`, () => {
       cy.fbAddField();
     });
 
   });
 
   context("Add 'Required Document Status' validation on 'Autocomplete'", () => {
-    it("Open add field dialogue", () => {
+    it("Add 'Required Document Status' validation on 'Autocomplete'", () => {
+      SystemRequirement("FB-0270");
       cy.fbAddNewFieldWhenHiddenLastPlace();
-    });
-
-    it("Create 'Autocomplete'", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
-    });
-
-    it(`Give label to 'Autocomplete' as '${requiredDocStatusFieldLabel}'`, () => {
       cy.get("[data-cy=\"label\"]").arrowType(requiredDocStatusFieldLabel);
-    });
-
-    it("Select 'Document revision' as options", () => {
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
-    });
-
-    it("Open validations", () => {
+      SystemRequirement("FB-0270");
       cy.fbOpenValidation();
-    });
-
-    it("Mark as 'Required Document Status'", () => {
       SystemRequirement("FB-0270");
       cy.get("[data-cy=\"fb-control-required_document_status:value\"]").arrowClick();
-    });
-
-    it("Select Released status", () => {
-      SystemRequirement("FB-0270");
       cy.get("[data-cy=\"validators.required_document_status.name\"]").autocompleteSelect("Draft");
-    });
-
-    it("Add autocomplete", () => {
       cy.fbAddField();
     });
 
@@ -543,35 +398,14 @@ field is empty: Add text field`, () => {
   context("Add 'Required Document Type' validation on 'Autocomplete'", () => {
     it("Open add field dialogue", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
-    });
-
-    it("Create 'Autocomplete'", () => {
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Autocomplete" });
-    });
-
-    it(`Give label to 'Autocomplete' as '${requiredDocTypeFieldLabel}'`, () => {
       cy.get("[data-cy=\"label\"]").arrowType(requiredDocTypeFieldLabel);
-    });
-
-    it("Select 'Document revision' as options", () => {
       cy.get("[data-cy=\"optionId\"]").autocompleteSelect("Document Revision");
-    });
-
-    it("Open validations", () => {
       cy.fbOpenValidation();
-    });
-
-    it("Mark as 'Required Document Type'", () => {
       SystemRequirement("FB-0280");
       cy.get("[data-cy=\"fb-control-required_document_type:value\"]").arrowClick();
-    });
-
-    it("Select Clinical Protocol", () => {
       SystemRequirement("FB-0280");
       cy.get("[data-cy=\"validators.required_document_type.name\"]").autocompleteSelect("Clinical Protocol");
-    });
-
-    it("Add autocomplete", () => {
       cy.fbAddField();
     });
 
@@ -579,11 +413,11 @@ field is empty: Add text field`, () => {
 
   context("Store DocId, Save document And 'Approve & Release Document", () => {
     it("Clicks on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and Release", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
   });
@@ -618,7 +452,7 @@ field is empty: Add text field`, () => {
 
   context("Validation errors should prevent from releasing document", () => {
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi({ toastifyExists: true });
     });
 
 
@@ -686,11 +520,14 @@ field is empty: Add text field`, () => {
 
     it(`Type '${requiredIfFieldValue}' in '${requiredFieldLabel}' field`, () => {
       cy.get(`[data-cy^='${requiredFieldSelector}']`).arrowType(requiredIfFieldValue);
-      cy.unClick();
+    });
+
+    it("Click on 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Should show error for 'required if' field", () => {
-
+      cy.reload();
       cy.get(`[data-cy^='${requiredIfFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -754,7 +591,12 @@ field is empty: Add text field`, () => {
       cy.get(`[data-cy^='${requiredWithFieldSelector}'] input`).clear();
     });
 
+    it("Click on 'Save' button", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+    });
+
     it("Should show error for 'required without' field", () => {
+      cy.reload();
       cy.get(`[data-cy^='${requiredWithoutFieldSelector}']`).then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
@@ -816,12 +658,12 @@ field is empty: Add text field`, () => {
 
   context("Release document", () => {
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("'Approve and Release' the document", () => {
       cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });

@@ -390,7 +390,9 @@ context("FORM Field test", () => {
       it("Add Actions 'Action Button'", () => {
         cy.fbClickAddNewHiddenBtn();
         cy.fbSelectItemFromNewFieldList({ section: "Actions", field: "Action Button" });
-        cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
+        cy.get("input[value^=\"SendEmailWithFormToFill\"]").check();
+        cy.get("input[value^=\"SendSurveyEmailWithFormToFill\"]").check();
+        cy.unClick();
         cy.fbAddNewFieldButton();
       });
 
@@ -743,7 +745,7 @@ context("FORM Field test", () => {
       });
 
       it("Approve and release FORM document", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
