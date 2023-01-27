@@ -122,7 +122,7 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Upload attachement picture 'image.jpg'", () => {
@@ -156,7 +156,7 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it(`Check doc ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
@@ -603,10 +603,7 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Clicks on 'Add new part' button", () => {
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.DocPreview], () => {
-          cy.ptClickCreateNewPart();
-        });
+        cy.ptClickCreateNewPart();
       });
 
       it("Enter document title 'Parts document title'", () => {
@@ -631,7 +628,7 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Navigate to specification tab", () => {
@@ -658,7 +655,7 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Extract document Id", () => {
@@ -1080,7 +1077,7 @@ context("Autocomplete 'Parts' test", () => {
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {

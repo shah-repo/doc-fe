@@ -99,7 +99,7 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -134,7 +134,7 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {
@@ -158,7 +158,7 @@ context("Autocomplete 'Document Revisions In Draft without Records' test", () =>
           });
 
           it("Click create a document", () => {
-            cy.drClickCreateDocumentWithApiCall();
+            cy.drClickCreateDocumentWithoutApiCall();
           });
         });
 

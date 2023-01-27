@@ -4,7 +4,6 @@
 import moment from "moment";
 import "moment-timezone";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -104,11 +103,11 @@ context("Autocomplete 'Available Part Documents' test", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -119,10 +118,8 @@ context("Autocomplete 'Available Part Documents' test", () => {
       });
 
       it("Clicks on 'Add new part' button", () => {
-        cy.wrapWithWaitOnApiCalls([
-          CyRoutes.DocPreview], () => {
-          cy.ptClickCreateNewPart();
-        });
+        cy.ptClickCreateNewPart();
+        cy.progressBarShouldNotExist();
       });
 
       it("Enter document title " + partsName, () => {
@@ -142,10 +139,9 @@ context("Autocomplete 'Available Part Documents' test", () => {
       });
 
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.progressBarShouldNotExist();
+        cy.fbClickButton({ el: "updateRecord" });
       });
     });
 
@@ -180,7 +176,7 @@ context("Autocomplete 'Available Part Documents' test", () => {
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {
