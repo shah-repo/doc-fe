@@ -142,7 +142,6 @@ context("Export DAM", () => {
     });
 
     it("Select the Record inline form", () => {
-      cy.pause();
       cy.dlFilterByDocTitle({ docTitle: "DAM form" });
       cy.dlSelectFirstDocumentWithoutApi();
     });
