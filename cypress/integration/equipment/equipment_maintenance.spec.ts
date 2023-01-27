@@ -405,7 +405,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate to calpmHistory tab", () => {
@@ -453,7 +453,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release EQ", () => {
@@ -474,9 +474,7 @@ context("Equipment maintenance test", () => {
 
       it("Select 'Equipment maintenance document'", () => {
         SystemRequirement("REQ-2870");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks, CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-          cy.get("tr.k-master-row").first().arrowClick();
-        });
+        cy.get("tr.k-master-row").first().arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -485,9 +483,7 @@ context("Equipment maintenance test", () => {
 
   context("Fill new preventative maintenance form", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+      cy.visit(equipmentURL);
     });
 
     it("Click on New CAL", () => {
@@ -542,7 +538,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Create 'Preventative maintenance document'", () => {
@@ -560,11 +556,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Select 'Equipment maintenance document'", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-        CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("tr.k-master-row").first().arrowClick();
-      });
+      cy.get("tr.k-master-row").first().arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -603,7 +595,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("navigate to Details tab", () => {
@@ -632,7 +624,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Create 'Calibration document'", () => {
@@ -652,10 +644,7 @@ context("Equipment maintenance test", () => {
     context("Verify maintenance document in equipment", () => {
       it("Select 'Equipment calibration document'", () => {
         SystemRequirement("REQ-2900");
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-          CyRoutes.DocRevPreview], () => {
-          cy.get("tr.k-master-row").first().arrowClick();
-        });
+        cy.get("tr.k-master-row").first().arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -677,13 +666,11 @@ context("Equipment maintenance test", () => {
 
       context("Release PM and calibration record", () => {
         it("Navigate to PM record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-            cy.visit(pmURL);
-          });
+          cy.visit(pmURL);
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Add an Approval", () => {
@@ -691,13 +678,11 @@ context("Equipment maintenance test", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Approve record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-            cy.ebApprove();
-          });
+          cy.ebApproveWithoutApi();
         });
 
         it("Verify status is 'Released'", () => {
@@ -705,13 +690,11 @@ context("Equipment maintenance test", () => {
         });
 
         it("Navigate to Calibration record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-            cy.visit(calibrationURL);
-          });
+          cy.visit(calibrationURL);
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Add an Approval", () => {
@@ -719,13 +702,11 @@ context("Equipment maintenance test", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Approve record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-            cy.ebApprove();
-          });
+          cy.ebApproveWithoutApi();
         });
 
         it("Verify status is 'Released'", () => {
@@ -774,9 +755,7 @@ context("Equipment maintenance test", () => {
 
           it("Verify 'CAL DUE DATE'", () => {
             SystemRequirement("REQ-2840", "REQ-2910");
-            cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-              cy.reload();
-            });
+            cy.reload();
             cy.listLoadingElementShouldNotExist();
             cy.get(`td[role="gridcell"][colspan="1"][data-grid-col-index="5"]`).should("have.text", CAL_DUE_DATE);
           });
@@ -801,10 +780,7 @@ context("Equipment maintenance test", () => {
 
           it("Select 'Equipment calibration document'", () => {
             SystemRequirement("REQ-2900");
-            cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-              CyRoutes.DocRevPreview], () => {
-              cy.get("tr.k-master-row").first().arrowClick();
-            });
+            cy.get("tr.k-master-row").first().arrowClick();
             cy.progressBarShouldNotExist();
             cy.listLoadingElementShouldNotExist();
           });
@@ -884,7 +860,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Save changes", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to CalPmHistoryTab ", () => {
@@ -904,11 +880,11 @@ context("Equipment maintenance test", () => {
     });
 
     it("Save changes", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve AR", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     context("Verify Maintenance History is changed to History", () => {
@@ -945,7 +921,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Save changes", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add Section", () => {
@@ -956,7 +932,7 @@ context("Equipment maintenance test", () => {
     });
 
     it("Approve and release", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     context("Navigate to EQ document and upgrade to latest form", () => {
@@ -966,11 +942,7 @@ context("Equipment maintenance test", () => {
       });
 
       it("Select 'Equipment maintenance document'", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview,
-          CyRoutes.DocPreview,
-          CyRoutes.GetFieldLocks], () => {
-          cy.get("tr.k-master-row").first().arrowClick();
-        });
+        cy.get("tr.k-master-row").first().arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -980,7 +952,7 @@ context("Equipment maintenance test", () => {
       });
 
       it("Save changes", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Click on upgrade to new form", () => {
@@ -1040,7 +1012,7 @@ context("Equipment maintenance test", () => {
         });
 
         it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         it("navigate to Details tab", () => {
@@ -1067,7 +1039,7 @@ context("Equipment maintenance test", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Create 'Preventative maintenance document'", () => {
@@ -1087,13 +1059,11 @@ context("Equipment maintenance test", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Approve record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-            cy.ebApprove();
-          });
+          cy.ebApproveWithoutApi();
         });
       });
 
@@ -1158,7 +1128,7 @@ context("Equipment maintenance test", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Create 'Calibration document'", () => {
@@ -1177,21 +1147,17 @@ context("Equipment maintenance test", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Approve record", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-            cy.ebApprove();
-          });
+          cy.ebApproveWithoutApi();
         });
       });
 
       context("Verify Maintenance History is changed to History", () => {
         it("Navigate to EQ document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-            cy.visit(equipmentURL);
-          });
+          cy.visit(equipmentURL);
         });
 
         it("Navigate to CalPmHistoryTab ", () => {
