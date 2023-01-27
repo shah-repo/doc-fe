@@ -128,8 +128,8 @@ Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: s
 });
 
 Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick();
-  cy.listLoadingElementShouldAppear().wait(500);
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick().wait(500);
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);

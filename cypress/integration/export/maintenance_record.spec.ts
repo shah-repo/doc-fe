@@ -422,7 +422,7 @@ context("Export maintenance record", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Select 'CAL/PM' tab", () => {
@@ -476,11 +476,11 @@ context("Export maintenance record", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release EQ", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it(`Check equipment status is '${STATUS_TYPES_LABEL.RELEASED}'`, () => {
@@ -517,8 +517,8 @@ context("Export maintenance record", () => {
       cy.cmpTurnOffAutosave();
     });
 
-    it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Save 'Preventative maintenance document'", () => {
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Open details tab", () => {
@@ -550,7 +550,7 @@ context("Export maintenance record", () => {
     });
 
     it("Save 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -566,25 +566,17 @@ context("Export maintenance record", () => {
   context("Maintenance Record with Released status", () => {
     context("Add Maintenance Record with Released", () => {
       it("Add approver", () => {
-        cy.get("[data-cy*='fb-approvals-fb-approvals']").eq(0)
-          .autocompleteSelect(USERS[1].name);
-        cy.wait(2000);
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       });
 
       it("Click on revisions tab on side panel", () => {
         cy.drClickRevisionsSidePanel();
       });
 
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-        cy.listLoadingElementShouldNotExist();
-        cy.progressBarShouldNotExist();
-      });
-
       it("Click WIP status Maintenance Record", () => {
-        cy.contains("WIP").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).contains("WIP").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select 'Details' tab", () => {
@@ -592,13 +584,11 @@ context("Export maintenance record", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Save and submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -608,7 +598,7 @@ context("Export maintenance record", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.inlineApproval();
+        cy.inlineApprovalWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -635,10 +625,6 @@ context("Export maintenance record", () => {
         cy.drClickReviseDocument();
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
-      });
-
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click Cancel draft", () => {
@@ -686,8 +672,8 @@ context("Export maintenance record", () => {
         cy.atchUploadAttachment({ fileName: "image.jpg" });
       });
 
-      it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Save 'Preventative maintenance document'", () => {
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Open details tab", () => {
@@ -718,8 +704,8 @@ context("Export maintenance record", () => {
           });
       });
 
-      it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("save 'Preventative maintenance document'", () => {
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -764,8 +750,8 @@ context("Export maintenance record", () => {
         cy.cmpTurnOffAutosave();
       });
 
-      it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Save 'Preventative maintenance document'", () => {
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Open details tab", () => {
@@ -796,8 +782,8 @@ context("Export maintenance record", () => {
           });
       });
 
-      it("Create 'Preventative maintenance document'", () => {
-        cy.drClickCreateDocumentWithApiCall();
+      it("Save 'Preventative maintenance document'", () => {
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
@@ -807,19 +793,15 @@ context("Export maintenance record", () => {
       });
 
       it("Add approver", () => {
-        cy.get("[data-cy*='fb-approvals-fb-approvals']").eq(0)
-          .autocompleteSelect(USERS[1].name);
-        cy.wait(2000);
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Save and submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Verify export", () => {

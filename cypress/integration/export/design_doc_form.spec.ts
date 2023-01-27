@@ -110,7 +110,7 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add TextField", () => {
@@ -183,7 +183,7 @@ context("Export internal doc - Design Document form", () => {
       cy.get("input[value^=\"visibility\"]").check();
       cy.get(`input[name="validators.required_if"]`).check();
       cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-textfield" );
-      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("A" );
+      cy.get(`[data-cy="validators.required_if.value"]`).arrowType("A").wait(500);
       cy.get("button[data-cy=\"fb-editor-actions-add\"]").contains("Add").last().arrowClick({ force: true });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -243,7 +243,7 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Save document", () => {
-      cy.drSaveDocumentWithoutaudit();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Get ids", () => {
@@ -398,7 +398,7 @@ context("Export internal doc - Design Document form", () => {
 
   context("Verify pdf content after released", () => {
     it("Approve and release the form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.drGetChangeRequestLinkElementFromUI().should("contain.text", "AR-").then(($lnEl: JQuery<HTMLElement>) => {
         arId = $lnEl.text();
       });

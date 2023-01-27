@@ -133,7 +133,7 @@ Cypress.Commands.add("trApproveTraining", () => {
 
 Cypress.Commands.add("trApproveTrainingWithoutApi", () => {
   cy.get("[data-cy=\"form.builder.request.approve\"]").click();
-  cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("input[name=\"password\"]").type(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(500);
   cy.get("[data-cy=\"common.confirm\"]").click();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();

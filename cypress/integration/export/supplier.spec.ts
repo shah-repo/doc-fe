@@ -97,7 +97,7 @@ context("Export Supplier", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify approval field is added as result of predefined schema", () => {
@@ -106,7 +106,7 @@ context("Export Supplier", () => {
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -124,7 +124,7 @@ context("Export Supplier", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateSupplierWithApiCall();
+      cy.drClickCreateSupplierWithoutApiCall();
     });
   });
 
@@ -136,17 +136,11 @@ context("Export Supplier", () => {
 
   context("Supplier with In Review status", () => {
     it("Add Approver", () => {
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[1].name}`);
-    });
-
-    it("Save the document", () => {
-      cy.drClickCreateSupplierWithApiCall();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Save and submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Verify export", () => {
@@ -159,7 +153,7 @@ context("Export Supplier", () => {
 
   context("Supplier with Released status", () => {
     it("Click Approve button", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify export", () => {
@@ -173,11 +167,12 @@ context("Export Supplier", () => {
   context("Supplier with Superseded status", () => {
     it("Revise document with 'Superseded' option", () => {
       cy.drClickReviseDocument();
+      cy.drClickSaveWithoutApiCall();
       cy.drEnterDocumentDescription({ description: "1" });
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[1].name}`);
-      cy.pmSubmitForApproval();
-      cy.ebApprove();
+      cy.progressBarShouldNotExist();
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.ebApproveWithoutApi();
     });
 
     it("Select Revision", () => {
@@ -185,9 +180,9 @@ context("Export Supplier", () => {
     });
 
     it("Select 'Superseded' record", () => {
-      cy.contains("Superseded").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
+      cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -204,26 +199,25 @@ context("Export Supplier", () => {
     });
 
     it("Select 'Released' record", () => {
-      cy.contains("Released").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
+      cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).contains("Released").arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Revise document with 'Void' option", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Void" });
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.get("[data-cy^=fb-approvals-fb-approvals-]").autocompleteSelect(`${USERS[1].name}`);
+      cy.drClickSaveWithoutApiCall();
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       cy.drApproveAndReleaseDialog();
-      cy.get("[name=\"voidDescription\"]").arrowType("Voiding");
+      cy.get("[name=\"voidDescription\"]").arrowType("Voiding").unClick();
       cy.get("[data-cy=\"fb-control-btn\"]").last().arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Click Approve", () => {
-      cy.contains("PENDING APPROVAL").arrowClick();
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Verify export", () => {

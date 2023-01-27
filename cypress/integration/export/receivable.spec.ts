@@ -626,7 +626,7 @@ context("Export Receivable doc", () => {
       cy.dlFilterByDocTitle({ docTitle: "Receivable inline form" });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -657,7 +657,7 @@ context("Export Receivable doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -692,9 +692,9 @@ context("Export Receivable doc", () => {
       });
 
       it("Select Last Signed", () => {
-        cy.contains("Last Signed").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Last Signed").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify export", () => {
@@ -712,9 +712,13 @@ context("Export Receivable doc", () => {
       });
 
       it("Click WIP status Receivable", () => {
-        cy.contains("WIP").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).contains("WIP").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Select 'Details' tab", () => {
@@ -724,15 +728,11 @@ context("Export Receivable doc", () => {
       });
 
       it("Update section", () => {
-        cy.get("[name^=\"textfield1\"]").arrowType("1");
+        cy.get("[name^=\"textfield1\"]").arrowType("1").unClick();
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCall();
-        cy.unClick();
-        cy.wait(2000);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.drClickSaveWithoutApiCall();
       });
 
       it("Select 'Details' tab", () => {
@@ -758,9 +758,9 @@ context("Export Receivable doc", () => {
       });
 
       it("Select Archive", () => {
-        cy.contains("Archive").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(2).contains("Archive").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify export", () => {
@@ -778,16 +778,15 @@ context("Export Receivable doc", () => {
       });
 
       it("Click WIP status Receivable", () => {
-        cy.contains("WIP").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).contains("WIP").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Finalize and release button click'", () => {
         cy.reload();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.recFinalizeAndReleaseRecord();
+        cy.listLoadingElementShouldAppear();
+        cy.recFinalizeAndReleaseRecordWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -804,10 +803,6 @@ context("Export Receivable doc", () => {
         cy.drClickReviseDocument();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click Cancel draft", () => {
@@ -837,7 +832,7 @@ context("Export Receivable doc", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.dlFilterByDocTitle({ docTitle: "Receivable form" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Click on Create New button", () => {
@@ -857,27 +852,21 @@ context("Export Receivable doc", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
-
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
-      });
     });
 
     context("Add Receivable with Pending Approval", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-approvals-]").eq(0).autocompleteSelect(`${USERS[11].name}`);
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Save and submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -908,7 +897,7 @@ context("Export Receivable doc", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
         cy.dlFilterByDocTitle({ docTitle: "Receivable form" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -926,7 +915,7 @@ context("Export Receivable doc", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
