@@ -216,7 +216,10 @@ context("Add and edit FB fields - Test 2", () => {
     it("Add Actions 'Action Button'", () => {
       cy.fbAddNewFieldWhenHidden();
       cy.fbSelectItemFromNewFieldList({ section: "Actions", field: "Action Button" });
-      cy.fbSelectCheckboxValue("SendEmailWithFormToFill");
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.get("input[value^=\"SendEmailWithFormToFill\"]").check();
+      cy.unClick();
       cy.fbAddNewFieldButton();
     });
 
@@ -306,7 +309,7 @@ context("Add and edit FB fields - Test 2", () => {
 
     it("Edit 'Action Button'", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "Send Email" });
-      cy.fbSelectCheckboxValue("SendSurveyEmailWithFormToFill");
+      cy.get("input[value^=\"SendSurveyEmailWithFormToFill\"]").check();
       cy.fbAddNewFieldButton();
     });
 
