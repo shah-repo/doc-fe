@@ -43,7 +43,7 @@ export interface ItemsAndDetailsWrapperProps {
   currentDocRevId?: string;
   changeRequest?: ChangeRequest;
   initialValues: Pick<FBFormProps, "initialValues">;
-  autosave: boolean;
+  autosave?: boolean;
   mode: FBWorkspaceMode;
   asyncState?: AsyncActionPayload;
 }
