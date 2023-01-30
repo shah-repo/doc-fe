@@ -10,12 +10,12 @@ const ApprovalRequestGridHeader: React.FunctionComponent<{}> = () => {
       <div className={classes.cellOne}>
         <Text translation="approvalRequest.grid.heading.item"/>
       </div>
-      <div className={classes.cellTwo}>
+      <div className={classes.cellOther}>
         <span className={classes.verticalDivider}>
           <Text translation="approvalRequest.grid.heading.description.of.change"/>
         </span>
       </div>
-      <div className={classes.cellThree}>
+      <div className={classes.cellOther}>
         <span className={classes.verticalDivider}>
           <Text translation="approvalRequest.grid.heading.justification.of.change"/>
         </span>
