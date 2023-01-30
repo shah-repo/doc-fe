@@ -14,9 +14,9 @@ const ApprovalsBlock: React.FC<{
   itemsCount,
   children,
 }) => {
-  const [opened, setOpened] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
   const toggleOpened = () => {
-    setOpened((prev) => !prev);
+    setIsOpened((prev) => !prev);
   };
 
   const classes = useStyles();
@@ -24,14 +24,14 @@ const ApprovalsBlock: React.FC<{
   return (
     <List className={classes.list}>
       <ListItem className={classes.stateListItem} onClick={toggleOpened}>
-        {opened ? <ListExpandIcon /> : <ListCollapseIcon />}
+        {isOpened ? <ListExpandIcon /> : <ListCollapseIcon />}
         <ListItemText>
           <Box display="flex" alignItems="center">
             <Box
               component="span"
               flexGrow={1}
               className={classNames(classes.itemHeader, {
-                [classes.expandedItemHeader]: opened,
+                [classes.expandedItemHeader]: isOpened,
               })}
             >
               <Text message={headerText} />
@@ -51,7 +51,7 @@ const ApprovalsBlock: React.FC<{
           </Box>
         </ListItemText>
       </ListItem>
-      <Collapse in={opened} timeout="auto" unmountOnExit>
+      <Collapse in={isOpened} timeout="auto" unmountOnExit>
         {children}
       </Collapse>
     </List>

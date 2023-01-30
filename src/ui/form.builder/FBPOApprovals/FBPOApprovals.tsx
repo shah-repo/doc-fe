@@ -3,11 +3,10 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import cx from "classnames";
 import { orderBy } from "lodash";
 import React from "react";
-import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
+import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInlineApprovalStatusIdent, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
 import { ReactComponent as EmailSuccessIcon } from "../../../assets/images/email_success.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
-import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import Text from "../../../ui/components/Text";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Colors from "../../layout/theme/utils/colors";
@@ -38,16 +37,19 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   const classes = useStyles();
 
   const approvalsByStatus = approvals?.reduce((list, approval) => {
-    if (approval.status) {
-      if (!list[approval.status]) {
-        list[approval.status] = [];
-      }
-      list[approval.status].push(approval);
+    if (!approval.status) {
+      return list;
     }
+
+    if (!list[approval.status]) {
+      list[approval.status] = [];
+    }
+    list[approval.status].push(approval);
+
     return list;
   }, {} as Record<string, FBInlineApprovalBody[]>);
 
-  const pendingStates = ["DRAFT", "PENDING"];
+  const pendingStates = [FBInlineApprovalStatusIdent.DRAFT, FBInlineApprovalStatusIdent.PENDING];
 
   return  (
     <FBProvider {...{ dialogState }}>
@@ -109,7 +111,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                           const isUserNeedToApprove =
                           documentStatus === DocumentRevisionStatus.InReview
                           && approval.approver?.user.id === currentUser
-                          && approval.status === ApprovalStatus.Pending;
+                          && approval.status === FBInlineApprovalStatusIdent.PENDING;
 
                           return (
                             <ListItem
@@ -175,7 +177,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                         variant="caption"
                                         className={classes.stateText}
                                       >
-                                        {approval.status === ApprovalStatus.Approved && (
+                                        {approval.status === FBInlineApprovalStatusIdent.APPROVED && (
                                           <EmailSuccessIcon className={classes.successIcon} />
                                         )}
                                         <Text message={poStatusText} />
@@ -183,7 +185,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                     )
                                 }
                                 secondary={
-                                  (status === ApprovalStatus.Approved) && (
+                                  (status === FBInlineApprovalStatusIdent.APPROVED) && (
                                     <Typography
                                       variant="caption"
                                       className={classes.dateText}
