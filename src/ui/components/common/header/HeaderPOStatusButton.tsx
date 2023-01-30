@@ -11,8 +11,6 @@ const styles = (theme: Theme) => ({
   },
   label: {
     padding: theme.spacing(1.25, 1.875, 1.25, 1.5),
-    fontFamily: "Sora",
-    fontStyle: "normal",
     fontWeight: 600,
     fontSize: "12px",
     lineHeight: "15px",

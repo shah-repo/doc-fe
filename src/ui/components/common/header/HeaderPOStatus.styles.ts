@@ -36,8 +36,6 @@ export default makeStyles((theme: Theme) => ({
     height: 36,
     margin: 0,
     padding: 0,
-    fontFamily: "Sora",
-    fontStyle: "normal",
   },
   defaultGroupButton: {
     "margin": 0,
