@@ -4,16 +4,14 @@ import React, { useState } from "react";
 import { ReactComponent as ListCollapseIcon } from "../../../assets/images/list_collapse.svg";
 import { ReactComponent as ListExpandIcon } from "../../../assets/images/list_expand.svg";
 import Text from "../../../ui/components/Text";
-import { FBInlineApprovalBody } from "../FBInlineApproval/FBInlineApproval.types";
-import { styles } from "./FBPOApprovals.styles";
-
+import useStyles from "./FBPOApprovals.styles";
 
 const ApprovalsBlock: React.FC<{
-  status: string;
-  approvals: FBInlineApprovalBody[];
+  headerText: string;
+  itemsCount: number;
 }> = ({
-  status,
-  approvals,
+  headerText,
+  itemsCount,
   children,
 }) => {
   const [opened, setOpened] = useState(false);
@@ -21,16 +19,12 @@ const ApprovalsBlock: React.FC<{
     setOpened((prev) => !prev);
   };
 
-  const classes = styles();
-
-  const poStatusHeaderText = ["DRAFT", "PENDING"].includes(status)
-    ? "common.pending"
-    : "APPROVED";
+  const classes = useStyles();
 
   return (
     <List className={classes.list}>
-      <ListItem className={classes.stateListItem} onClick={toggleOpened} >
-        {opened ? <ListExpandIcon /> : <ListCollapseIcon /> }
+      <ListItem className={classes.stateListItem} onClick={toggleOpened}>
+        {opened ? <ListExpandIcon /> : <ListCollapseIcon />}
         <ListItemText>
           <Box display="flex">
             <Box
@@ -38,10 +32,9 @@ const ApprovalsBlock: React.FC<{
               flexGrow={1}
               className={classNames(classes.itemHeader, {
                 [classes.expandedItemHeader]: opened,
-                [classes.collapsedItemHeader]: !opened,
               })}
             >
-              <Text message={poStatusHeaderText} />
+              <Text message={headerText} />
             </Box>
             <Box
               component="span"
@@ -51,7 +44,7 @@ const ApprovalsBlock: React.FC<{
               <Text
                 translation="common.items.count"
                 values={{
-                  count: approvals.length,
+                  count: itemsCount,
                 }}
               />
             </Box>
@@ -59,7 +52,7 @@ const ApprovalsBlock: React.FC<{
         </ListItemText>
       </ListItem>
       <Collapse in={opened} timeout="auto" unmountOnExit>
-        { children }
+        {children}
       </Collapse>
     </List>
   );

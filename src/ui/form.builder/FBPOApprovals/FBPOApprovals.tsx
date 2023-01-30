@@ -1,5 +1,6 @@
-import { Avatar, Box, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import cx from "classnames";
 import { orderBy } from "lodash";
 import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
@@ -11,10 +12,9 @@ import Text from "../../../ui/components/Text";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Colors from "../../layout/theme/utils/colors";
 import ApprovalsBlock from "./ApprovalsBlock";
-import { styles } from "./FBPOApprovals.styles";
+import useStyles from "./FBPOApprovals.styles";
 import { FBPOApprovalsProps } from "./FBPOApprovals.types";
 import { withFBPOApprovals } from "./FBPOApprovals.wrap";
-
 
 const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   renderOption,
@@ -35,7 +35,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   disableChipDelete,
   ...props
 }) => {
-  const classes = styles();
+  const classes = useStyles();
+
   const approvalsByStatus = approvals?.reduce((list, approval) => {
     if (approval.status) {
       if (!list[approval.status]) {
@@ -45,6 +46,8 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
     }
     return list;
   }, {} as Record<string, FBInlineApprovalBody[]>);
+
+  const pendingStates = ["DRAFT", "PENDING"];
 
   return  (
     <FBProvider {...{ dialogState }}>
@@ -82,157 +85,122 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
             <FBMapWrapper<Record<string, FBInlineApprovalBody[]>>
               collection={approvalsByStatus as Record<string, FBInlineApprovalBody[]>}
             >
-              {(approvals, status, statusIndex) => {
+              {(approvals, status) => {
 
-                const poStatusText = ["DRAFT", "PENDING"].includes(status)
+                const poStatusText = pendingStates.includes(status)
                   ? "common.pending.approval"
                   : "APPROVED";
 
+                const poStatusHeaderText = pendingStates.includes(status)
+                  ? "common.pending"
+                  : "APPROVED";
+
                 return (
-                  <ApprovalsBlock {...{ status, approvals, classes }} key={status + statusIndex}>
-                    <FBMapWrapper<FBInlineApprovalBody[]>
-                      collection={approvals}
-                    >
-                      {(approval, index: number) => {
-
-                        const isCurrentUserIsApprover = () =>
+                  <ApprovalsBlock
+                    headerText={poStatusHeaderText}
+                    itemsCount={approvals.length}
+                    key={status}
+                  >
+                    <List className={classes.approvalsList}>
+                      <FBMapWrapper<FBInlineApprovalBody[]>
+                        collection={approvals}
+                      >
+                        {(approval, index: number) => {
+                          const isUserNeedToApprove =
                           documentStatus === DocumentRevisionStatus.InReview
-                          && approval.status === ApprovalStatus.Pending
-                          && currentUser === approval.approver?.user.id;
+                          && approval.approver?.user.id === currentUser
+                          && approval.status === ApprovalStatus.Pending;
 
-                        const isCurrentUserIsNotApprover = () =>
-                          documentStatus === DocumentRevisionStatus.InReview
-                          && approval.status === ApprovalStatus.Pending
-                          && currentUser !== approval.approver?.user.id;
-
-                        return (
-                          <>
-                            <List>
-                              <ListItem key={approval.id} className={classes.listItem}>
-                                <ListItemAvatar>
-                                  {approval.approver.user.avatar ? (
-                                    <Avatar
-                                      className={classes.avatar}
-                                      src={approval.approver.user.avatar}
-                                      alt={approval.approver.user.name}
-                                    />
-                                  ) : (
-                                    <Avatar
-                                      className={classes.avatar}
-                                      style={{ backgroundColor: approval.approver.user.initialColor }}
-                                    >
-                                      {getInitalsFromName(approval.approver.user.name)}
-                                    </Avatar>
-                                  )}
-                                </ListItemAvatar>
-                                <ListItemText
-                                  primary={
-                                    <Typography
-                                      variant="h6"
-                                      component="h6"
-                                      id="simple-modal-title"
-                                      className={classes.nameText}
-                                    >
-                                      <Text message={approval.approver.user.name} />
-                                    </Typography>
-                                  }
-                                  secondary={
-                                    <Typography
-                                      variant="h6"
-                                      component="h6"
-                                      id="simple-modal-title"
-                                      className={classes.emailText}
-                                    >
-                                      <Text message={approval.approver.user.email} />
-                                    </Typography>
-                                  }
-                                />
-                                <ListItemText
-                                  primary={
-                                    <Box>
-                                      {(documentStatus === status)
-                                        ?
-                                        <Box display="flex" flexDirection="row-reverse">
-                                          <Typography
-                                            variant="h6"
-                                            component="h6"
-                                            className={classes.stateText}
-                                          >
-                                            <Text message={poStatusText} />
-                                          </Typography>
-                                        </Box> : (isCurrentUserIsApprover())
-                                          ? (<Box flexGrow={1} textAlign="right">
-                                            <FBButton
-                                              label="common.reject"
-                                              size="small"
-                                              variant="outlined"
-                                              className={classes.poRejectButton}
-                                              onClick={() => approvalTransition("reject", approval.id)}
-                                            />
-                                            <FBButton
-                                              label="form.builder.request.approve"
-                                              size="small"
-                                              className={classes.poApproveButton}
-                                              onClick={() => onApproveClick?.(approval.id || "")}
-                                            />
-                                          </Box>)
-                                          : (isCurrentUserIsNotApprover())
-                                            ? (<Box flexGrow={1} textAlign="right">
-                                              <Typography
-                                                variant="h6"
-                                                component="h6"
-                                                id="simple-modal-title"
-                                                data-cy="training-status"
-                                                className={classes.stateText}
-                                              >
-                                                <Text message={poStatusText} />
-                                              </Typography>
-                                            </Box>)
-                                            : (approval.status === ApprovalStatus.Approved) && (
-                                              <Grid
-                                                container
-                                                direction="row"
-                                                justify="flex-end"
-                                                alignItems="center"
-                                              >
-                                                <Typography
-                                                  variant="h6"
-                                                  component="h6"
-                                                  id="simple-modal-title"
-                                                  data-cy="training-status"
-                                                  className={classes.stateText}
-                                                >
-                                                  <EmailSuccessIcon
-                                                    className={classes.successIcon}
-                                                  />
-                                                  <Text message={poStatusText} />
-                                                </Typography>
-                                              </Grid>
-                                            )
-                                      }
-                                    </Box>
-                                  }
-                                  secondary={ (status === "APPROVED") &&
+                          return (
+                            <ListItem
+                              divider={index < approvals.length - 1}
+                              key={approval.id}
+                              className={classes.listItem}
+                            >
+                              <ListItemAvatar>
+                                <Avatar
+                                  className={classes.avatar}
+                                  src={approval.approver.user.avatar}
+                                  style={{ backgroundColor: approval.approver.user.initialColor }}
+                                  alt={approval.approver.user.name}
+                                >
+                                  {!approval.approver.user.avatar && getInitalsFromName(approval.approver.user.name)}
+                                </Avatar>
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={
                                   <Typography
-                                    align="right"
                                     variant="h6"
-                                    className={classes.dateText}
+                                    component="h6"
+                                    className={classes.nameText}
                                   >
-                                    <Text message={getFormattedDateString(
-                                      approval.reviewedAt,
-                                      MomentFormats.DateTime
-                                    )} />
+                                    {approval.approver.user.name}
                                   </Typography>
-                                  }
-                                />
-                              </ListItem>
-                              {index < (approvals.length - 1) && <Divider className={classes.divider}/>}
-                            </List>
-                          </>
-                        ); }}
-                    </FBMapWrapper>
+                                }
+                                secondary={
+                                  <Typography
+                                    variant="caption"
+                                    className={classes.emailText}
+                                  >
+                                    {approval.approver.user.email}
+                                  </Typography>
+                                }
+                              />
+                              <ListItemText
+                                className={classes.stateInfo}
+                                primary={
+                                  isUserNeedToApprove
+                                    ? (
+                                      <Box flexGrow={1} textAlign="right">
+                                        {/*
+                                          TODO
+                                          Review as outlined afer fixing FBButton or use other generic button component
+                                        */}
+                                        <FBButton
+                                          label="common.reject"
+                                          size="small"
+                                          className={cx(classes.poButton, classes.poRejectButton)}
+                                          onClick={() => approvalTransition("reject", approval.id)}
+                                        />
+                                        <FBButton
+                                          label="form.builder.request.approve"
+                                          size="small"
+                                          className={classes.poButton}
+                                          onClick={() => onApproveClick?.(approval.id || "")}
+                                        />
+                                      </Box>
+                                    )
+                                    : (
+                                      <Typography
+                                        variant="caption"
+                                        className={classes.stateText}
+                                      >
+                                        {approval.status === ApprovalStatus.Approved && (
+                                          <EmailSuccessIcon className={classes.successIcon} />
+                                        )}
+                                        <Text message={poStatusText} />
+                                      </Typography>
+                                    )
+                                }
+                                secondary={
+                                  (status === ApprovalStatus.Approved) && (
+                                    <Typography
+                                      variant="caption"
+                                      className={classes.dateText}
+                                    >
+                                      {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}
+                                    </Typography>
+                                  )
+                                }
+                              />
+                            </ListItem>
+                          );
+                        }}
+                      </FBMapWrapper>
+                    </List>
                   </ApprovalsBlock>
-                ); }}
+                );
+              }}
             </FBMapWrapper>
           </Box>
         </Box>
@@ -240,4 +208,5 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
     </FBProvider>
   );
 };
+
 export default withFBPOApprovals(FBPOApprovals);
