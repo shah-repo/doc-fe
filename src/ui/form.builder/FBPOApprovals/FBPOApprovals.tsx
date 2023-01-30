@@ -1,80 +1,20 @@
-import { Avatar, Box, Collapse, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
+import { Avatar, Box, Divider, Grid, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import classNames from "classnames";
 import { orderBy } from "lodash";
-import React, { useState } from "react";
+import React from "react";
 import { FBAutocompleteAsync, FBAutocompleteAsyncOption, FBButton, FBDialog, FBInlineApprovalBody, FBInput, FBMapWrapper, FBProvider, FBRequiredApprover, FBSection, FBText } from "..";
 import { ReactComponent as EmailSuccessIcon } from "../../../assets/images/email_success.svg";
-import { ReactComponent as ListCollapseIcon } from "../../../assets/images/list_collapse.svg";
-import { ReactComponent as ListExpandIcon } from "../../../assets/images/list_expand.svg";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import Text from "../../../ui/components/Text";
 import { getInitalsFromName } from "../../components/icons/avatar/helpers";
 import Colors from "../../layout/theme/utils/colors";
+import ApprovalsBlock from "./ApprovalsBlock";
 import { styles } from "./FBPOApprovals.styles";
 import { FBPOApprovalsProps } from "./FBPOApprovals.types";
 import { withFBPOApprovals } from "./FBPOApprovals.wrap";
 
-const ApprovalsBlock: React.FC<{
-  status: string;
-  approvals: FBInlineApprovalBody[];
-  classes: ReturnType<typeof styles>;
-}> = ({
-  status,
-  approvals,
-  classes,
-  children,
-}) => {
-  const [opened, setOpened] = useState(false);
-  const toggleOpened = () => {
-    setOpened((prev) => !prev);
-  };
-
-  const poStatusHeaderText = ["DRAFT", "PENDING"].includes(status)
-    ? "common.pending"
-    : "APPROVED";
-
-  return (
-    <List
-      className={classes.list}
-    >
-      <ListItem className={classes.stateListItem} onClick={toggleOpened} >
-        {opened ? <ListExpandIcon /> : <ListCollapseIcon /> }
-        <ListItemText>
-          <Box display="flex">
-            <Box
-              component="span"
-              flexGrow={1}
-              className={classNames(classes.itemHeader, {
-                [classes.expandedItemHeader]: opened,
-                [classes.collapsedItemHeader]: !opened,
-              })}
-            >
-              <Text message={poStatusHeaderText} />
-            </Box>
-            <Box
-              component="span"
-              justifyContent="flex-end"
-              className={classes.itemCount}
-            >
-              <Text
-                translation="common.items.count"
-                values={{
-                  count: approvals.length,
-                }}
-              />
-            </Box>
-          </Box>
-        </ListItemText>
-      </ListItem>
-      <Collapse in={opened} timeout="auto" unmountOnExit>
-        { children }
-      </Collapse>
-    </List>
-  );
-};
 
 const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
   renderOption,
