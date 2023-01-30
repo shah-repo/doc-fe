@@ -21,7 +21,7 @@ import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { AutoSizer, Size } from "react-virtualized";
 import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
-import { DocumentRevisionStatus } from "../../../state/ducks/documentRevisions/types";
+import { DocumentRevisionStatus, POStatusLabelMapping } from "../../../state/ducks/documentRevisions/types";
 import { tableSearchActions } from "../../../state/ducks/tableSearch";
 import { AsyncFilterTemplate } from "../../async.tasks/grid/filter.template/AsyncFilterTemplate";
 import { DateFilterTemplate } from "../../async.tasks/grid/filter.template/DateFilterTemplate";
@@ -179,6 +179,22 @@ export function KendoGrid<T extends any>({
       })}
     />
   );
+
+  const poStatusOptions = [
+    POStatusLabelMapping.OPENED,
+    POStatusLabelMapping.CLOSED,
+    POStatusLabelMapping.VOIDED,
+  ];
+
+  const POStatusFilter = (props: GridFilterCellProps) => (
+    <StatusFilterTemplate
+      {...props}
+      data={poStatusOptions}
+      defaultItem={intl.formatMessage({
+        id: TranslatedText[DisplayText.ALL],
+      })}
+    />
+  );
   const TypeFilter = (props: GridFilterCellProps) => (
     <DocumentTypeFilterTemplate
       {...props}
@@ -254,6 +270,7 @@ export function KendoGrid<T extends any>({
   const filterCellMapping = {
     [KendoGridFilterCell.ACTIVE]: ActiveFilter,
     [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
+    [KendoGridFilterCell.PO_STATUS]: POStatusFilter,
     [KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM]: TypeFilter,
     [KendoGridFilterCell.EFFECTIVE_DATE]: EffectiveDate,
     [KendoGridFilterCell.COMPLETED_AT]: CompletedDate,

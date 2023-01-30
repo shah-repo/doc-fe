@@ -13,6 +13,7 @@ export interface TableSearchFieldProps {
   dateFilter?: boolean;
   ownerTemplate?: boolean;
   statusTemplate? : boolean;
+  poStatusTemplate? : boolean;
 }
 
 export interface TableSearchQueryProps {

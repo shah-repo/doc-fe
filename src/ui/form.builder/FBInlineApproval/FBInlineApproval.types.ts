@@ -60,6 +60,8 @@ export type FBInlineApprovalBody =
   approverGroup?: string[];
   canRequest?: boolean;
   signatureGroupName?: string;
+  poDocId?: string;
+  poDocRevision?: string;
 };
 
 export interface FBInlineApprovalTransitionBody {

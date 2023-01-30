@@ -13,6 +13,7 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DOC_TYPE_GROUP_OPTION } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevision, DocumentRevisionStatus, RevisionChangeType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import HeaderPOStatus from "../../../components/common/header/HeaderPOStatus";
 import HeaderMenu from "../../../components/common/header/Menu";
 import { default as OwnerChangerContainer } from "../../../components/common/owner.changer/container";
 import { RequestType } from "../../../components/common/owner.changer/helpers/types";
@@ -385,28 +386,37 @@ const DocRevActions: React.FunctionComponent<any> = ({ ...props }) => {
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
+      <>
+        {isPO && documentRevision.poStatus && (
+          <HeaderPOStatus poStatus={documentRevision.poStatus} />
+        )}
+      </>
       <Observer>
         {() => (
           <>
-            {<StyledSubmitButton
-              showNewButton={isNewLayout && !isCreateUrl}
-              asyncState={asyncState}
-              label={isDisabled ?
-                "common.save" :
-                "navigation.createDocument"
-              }
-              onClick={onFormClick}
-              id="DocumentRevisionForm-submit"
-              data-cy={"DocumentRevisionForm-submit"}
-              disabled={isCreateDocumentDisabled || _documentRevisionFormState?.disabledAction}
-            />}
+            {
+              <StyledSubmitButton
+                showNewButton={isNewLayout && !isCreateUrl}
+                asyncState={asyncState}
+                label={isDisabled ? "common.save" : "navigation.createDocument"}
+                onClick={onFormClick}
+                id="DocumentRevisionForm-submit"
+                data-cy={"DocumentRevisionForm-submit"}
+                disabled={
+                  isCreateDocumentDisabled ||
+                  _documentRevisionFormState?.disabledAction
+                }
+              />
+            }
           </>
         )}
       </Observer>
       {!redlineActive && (
         <>
           {renderActionItems(initialButtons, true)}
-          {restButtons.length > 0 && <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>}
+          {restButtons.length > 0 && (
+            <HeaderMenu>{renderActionItems(restButtons, false)}</HeaderMenu>
+          )}
         </>
       )}
     </div>

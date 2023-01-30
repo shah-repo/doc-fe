@@ -53,6 +53,7 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     undefined,
     isRecord,
   );
+  const isRecordOrPO = isRecord || isDocumentPO;
 
   const { status, displayStatus } = documentRevision;
 
@@ -97,8 +98,12 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
     return documentRevision.obsoletedAt || documentRevision.effectiveDate;
   };
 
-  const docIdLabel = (isRecord ? "common.id" : "common.docId") as Translation;
-  const recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
+  const docIdLabel = (isRecordOrPO ? "common.id" : "common.docId") as Translation;
+  let recordOwnerLabel = "common.owner" as Translation;
+
+  if (isRecord && (isReleased || isVoided)) {
+    recordOwnerLabel = isVoided ? "record.voided.by" : "record.released.by";
+  }
 
   return (
     <div
@@ -143,18 +148,14 @@ const DocumentRevisionListPresenter: React.FunctionComponent<Props> = ({
       >
         <SummaryInfo
           dataCy={"common.docId"}
-          label={isDocumentPO ? undefined : docIdLabel}
+          label={docIdLabel}
           value={docId}
         />
-        {!isRecord && (
+        {!isRecordOrPO && (
           <SummaryInfo label="common.title" value={documentRevision.name} />
         )}
         <SummaryInfo
-          label={
-            isRecord && (isReleased || isVoided)
-              ? recordOwnerLabel
-              : "common.owner"
-          }
+          label={recordOwnerLabel}
           value={documentRevision.owner.user.name}
         />
         <SummaryInfo
