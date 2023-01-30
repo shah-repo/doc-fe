@@ -1,13 +1,16 @@
-import { Grid } from "@material-ui/core";
+import { ButtonProps, Grid } from "@material-ui/core";
 import { useFormikContext } from "formik";
 import * as React from "react";
+import { useSelector } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { ChangeRequest } from "../../../../state/ducks/changeRequest/types";
+import { authSelectors } from "../../../../state/ducks/auth";
+import { ChangeRequest, ChangeRequestStatus, ChangeRequestTransition } from "../../../../state/ducks/changeRequest/types";
 import { AsyncState } from "../../../../state/types";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { FB } from "../../../form.builder";
 import { RouteParamsCreate } from "../../utils/types";
 import AssessmentFormControlsContainer from "./AssessmentFormControls.container";
+import TransitionButton from "./TransitionButton";
 
 interface OwnProps {
   changeRequest?: ChangeRequest;
@@ -22,6 +25,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   asyncState,
   match,
 }) => {
+  const currentUserEmail = useSelector(authSelectors.currentUserEmail);
   const formDocumentId = React.useContext(formIdContext) || match.params.formId;
   const documentTypeId = match.params.documentTypeId;
   const { workspaceState, formState } = FB.useStores();
@@ -48,6 +52,24 @@ const DocRevActions: React.FunctionComponent<Props> = ({
 
   const label = changeRequest ? "common.save" : "navigation.createChangeRequest";
 
+  const renderTransitionButton = (
+    showButton: boolean,
+    transition: ChangeRequestTransition,
+    buttonProps?: ButtonProps,
+  ) => showButton && changeRequest &&
+        <TransitionButton
+          changeRequestId={changeRequest.id}
+          transition={transition}
+          buttonProps={buttonProps}
+          label={`changeRequest.transition.${transition}`}
+          showSubmitButton
+        />;
+
+  const isCurrentUserOwner = changeRequest?.owner.user.email === currentUserEmail;
+
+  const canSendToReview =
+    isCurrentUserOwner && changeRequest?.state === ChangeRequestStatus.Draft;
+
   return (
     <Grid
       container
@@ -55,6 +77,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
       justify="flex-end"
       direction="row"
     >
+      {renderTransitionButton(canSendToReview, "in_review")}
       <SubmitButton
         id="submit"
         showNewButton={true}
@@ -62,7 +85,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         onClick={onFormClick}
         dataCy={label}
         label={label} />
-      <AssessmentFormControlsContainer changeRequest={changeRequest} />
+      <AssessmentFormControlsContainer changeRequest={changeRequest} hideButton/>
     </Grid>
   );
 };

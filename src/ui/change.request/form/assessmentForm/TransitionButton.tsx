@@ -7,6 +7,7 @@ import { ChangeRequestTransition, ChangeRequestTransitionResponse } from "../../
 import { AsyncStatus } from "../../../../state/types";
 import FormMessage from "../../../components/forms/FormMessage";
 import FormProgress from "../../../components/forms/FormProgress";
+import SubmitButton from "../../../components/forms/SubmitButton";
 import Text from "../../../components/Text";
 import useActionCreator from "../../../hooks/useActionCreator";
 import useAsync from "../../../hooks/useAsync";
@@ -16,6 +17,7 @@ interface Props {
   label: string;
   changeRequestId: string;
   buttonProps?: ButtonProps;
+  showSubmitButton?: boolean;
 }
 
 const TransitionButton: React.FunctionComponent<Props> = ({
@@ -23,6 +25,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
   label,
   changeRequestId,
   buttonProps,
+  showSubmitButton = false,
 }) => {
   const applyTransition = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync<ChangeRequestTransitionResponse>();
@@ -42,6 +45,22 @@ const TransitionButton: React.FunctionComponent<Props> = ({
       }
     });
   };
+
+  if (showSubmitButton) {
+    return (
+      <React.Fragment>
+        <FormMessage asyncState={async.asyncState} />
+        <FormProgress asyncState={async.asyncState} />
+        <SubmitButton
+          id="transitionButton"
+          showNewButton={true}
+          asyncState={async.asyncState}
+          onClick={onClick}
+          dataCy={label}
+          label={label} />
+      </React.Fragment>
+    );
+  }
 
   return (
     <React.Fragment>
