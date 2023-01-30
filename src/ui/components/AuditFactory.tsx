@@ -168,6 +168,18 @@ const AuditFactory: React.FunctionComponent<Props> = ({
           />
         );
         break;
+      case "poStatus":
+        returnValue = (
+          <Text
+            dataCy={dataCy}
+            translation="documentRevision.audit.poStatus.updated.by"
+            values={{
+              status: <Text translation={audit.nextValue as Translation} />,
+              name: audit.owner?.user.name,
+            }}
+          />
+        );
+        break;
       case "securityGroups":
         returnValue = (<div data-cy={dataCy}>{(audit.nextValue as Group).name}</div>);
         break;
