@@ -15,6 +15,7 @@ import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 
 let createdCompany;
@@ -640,6 +641,7 @@ context("LHRs email notifications", () => {
 
   context("Verify emails for submitted LHR", () => {
     it("Verify emails", () => {
+      SystemRequirement("REQ-2140");
       const getEmailSetting =  {
         to: CONFIG.TEST_EMAIL,
         after: dateAfterEmailShouldArrive,
@@ -837,6 +839,7 @@ context("LHRs email notifications", () => {
 
     context("Verify emails for submitted LHR", () => {
       it("Verify emails", () => {
+        SystemRequirement("REQ-2140");
         const getEmailSetting =  {
           to: CONFIG.TEST_EMAIL,
           after: dateAfterEmailShouldArrive,
