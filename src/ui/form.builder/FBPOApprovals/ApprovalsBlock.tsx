@@ -26,7 +26,7 @@ const ApprovalsBlock: React.FC<{
       <ListItem className={classes.stateListItem} onClick={toggleOpened}>
         {opened ? <ListExpandIcon /> : <ListCollapseIcon />}
         <ListItemText>
-          <Box display="flex">
+          <Box display="flex" alignItems="center">
             <Box
               component="span"
               flexGrow={1}
