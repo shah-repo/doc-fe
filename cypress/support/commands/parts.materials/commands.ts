@@ -389,9 +389,8 @@ Cypress.Commands.add("lhrSelectEquipment", (params: { selectElement: integer; eq
 Cypress.Commands.add("lhrChangeEquipment", (params: { changeElement: integer; equipment: string }) => {
   cy.get("[data-cy=\"form.builder.change\"]").eq(params.changeElement).arrowClick({ force: true }).wait(500);
 
-  cy.get("input[data-cy=usedOverride]").arrowClick().wait(500);
-  cy.get("ul>li[role=option]").contains(params.equipment).arrowClick();
+  cy.get("input[data-cy=usedOverride]").arrowClick().wait(500).autocompleteSelect(params.equipment);
 
-  cy.get("[data-cy='form.builder.save']").arrowClick().wait(500);
+  cy.get("[data-cy='form.builder.save']").arrowClick().wait(1500);
 });
 

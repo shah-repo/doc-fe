@@ -1,5 +1,7 @@
 import { Chip, Grid } from "@material-ui/core";
 import React from "react";
+import { POStatusLabelMapping } from "../../../../state/ducks/documentRevisions/types";
+import { KendoGridFilterCell } from "../../KendoGrid/interfaces";
 import { statusClassMapping } from "../kendo/helpers";
 import Tooltip from "../kendo/Tooltip";
 import { CustomGridCellProps } from "../kendo/types";
@@ -20,6 +22,10 @@ export const Status = ({
     if (!cellRowClick) { return; }
     cellRowClick({ dataItem });
   };
+  let fieldLabel = status;
+  if (field === KendoGridFilterCell.PO_STATUS) {
+    fieldLabel = POStatusLabelMapping[status];
+  }
   return (
     <td
       colSpan={colSpan}
@@ -36,14 +42,14 @@ export const Status = ({
         justify="flex-start"
       >
         <Tooltip
-          data={status}
+          data={fieldLabel}
           childrenElement={
             <Chip
               size="small"
               className={`${classes.chip} ${
                 classes[statusClassMapping[status]]
               }`}
-              label={status}
+              label={fieldLabel}
             />
           }
         />

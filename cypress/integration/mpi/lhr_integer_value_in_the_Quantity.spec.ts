@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/camelcase */
 // eslint-disable-next-line spaced-comment
 /// <reference types="Cypress" />
+import moment from "moment-timezone";
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -31,6 +31,8 @@ let CSLDocumentType;
 let formDocumentType;
 let createdLotsFormDocument;
 let createdLot;
+
+const lotDateSuffix = moment().tz("America/Los_Angeles").format("YYMMDD");
 
 context("LHR steps verification", () => {
   before(() => {
@@ -878,7 +880,7 @@ context("LHR steps verification", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           retrain: false,
           document: {
-            docId: "LOT #22041301",
+            docId: `LOT #${lotDateSuffix}01`,
             securityList: {
               securityEmployees: [],
               securityGroups: [
@@ -937,7 +939,7 @@ context("LHR steps verification", () => {
           revisionChangeType: RevisionChangeType.NextRevision,
           retrain: false,
           document: {
-            docId: "LOT #22041302",
+            docId: `LOT #${lotDateSuffix}02`,
             securityList: {
               securityEmployees: [],
               securityGroups: [
@@ -977,11 +979,15 @@ context("LHR steps verification", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Navigate to LHR and Start Step", () => {
     it("Navigate to LHR", () => {
-      cy.navigToLHR();
+      cy.navigToLHRWithoutAPI();
     });
 
     it("Click 'Initiate New LHR'", () => {
@@ -989,28 +995,20 @@ context("LHR steps verification", () => {
     });
 
     it("Select a document type Lot History Record and select a Form released", () => {
-      cy.wrapWithWaitOnApiCalls([
-        CyRoutes.GetRequiredApproversDocRev, CyRoutes.DocPreview,
-        CyRoutes.GetFieldLocks], () => {
-        cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
-          .autocompleteSelect("Lot History Record");
-      });
+      cy.get("#MultipleFormTemplate-selectDocForm input[type='text']").arrowClick({ force: true })
+        .autocompleteSelect("Lot History Record");
     });
 
     it("Select build type Prod", () => {
       cy.get("[value='R&D']").arrowClick();
-      cy.wait(3000);
     });
 
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-      ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(USERS[1].name);
-      });
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Verify Click details Tab", () => {
@@ -1026,14 +1024,16 @@ context("LHR steps verification", () => {
     });
 
     it("Click 'START MPI'", () => {
-      cy.mpiStartStep({ stepNumber: 1 });
+      cy.mpiStartStepWithoutApi({ stepNumber: 1 });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Select Approval", () => {
-      cy.wrapWithWaitOnApiCalls([
-      ], () => {
-        cy.get("[data-cy^='fb-approvals']").autocompleteSelect(USERS[1].name);
-      });
+      cy.wait(1000);
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Select Procedure tab", () => {
@@ -1041,28 +1041,15 @@ context("LHR steps verification", () => {
     });
 
     it("Click 'SELECT' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.select\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
-      cy.get("input[data-cy=usedOverride]").arrowClick();
-      cy.get("ul>li[role=option]").contains(`LOT #22041301 | MT-00004.1`).arrowClick();
-    });
-
-    it("Select quantity in lot dialog", () => {
-      cy.get("[data-cy='quantity']").arrowType("5");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
+      cy.lhrSelectMaterial({
+        selectElement: 0,
+        lot: `LOT #${lotDateSuffix}01 | MT-00004.1`,
+        quantity: `5`,
+      });
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -1070,11 +1057,11 @@ context("LHR steps verification", () => {
     });
 
     it("Complete step", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
@@ -1084,11 +1071,7 @@ context("LHR steps verification", () => {
     });
 
     it("Add an Approval", () => {
-      cy.get("[data-cy^='fb-approvals-approvals-built-in']").autocompleteSelect(USERS[1].name);
-    });
-
-    it("Save the document", () => {
-      cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Select Procedure tab", () => {
@@ -1096,28 +1079,12 @@ context("LHR steps verification", () => {
     });
 
     it("Click 'SELECT' for 'Material' ", () => {
-      cy.get("[data-cy=\"form.builder.select\"]")
-        .eq(0)
-        .click({ force: true });
-    });
-
-    it(`Select lot 'LOT'`, () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.wait(2000);
-      cy.get("input[data-cy=usedOverride]").arrowClick();
-      cy.get("ul>li[role=option]").contains(`LOT #22041302 | MT-00006.1`).arrowClick();
-    });
-
-    it("Select quantity in lot dialog", () => {
-      cy.get("[data-cy='quantity']").arrowType("5");
-    });
-
-    it("Click 'SAVE' on select lot dialog", () => {
-      cy.get("[data-cy='form.builder.save']").arrowClick();
-    });
-
-    it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.lhrSelectMaterial({
+        selectElement: 0,
+        lot: `LOT #${lotDateSuffix}02 | MT-00006.1`,
+        quantity: `5`,
+      });
+      cy.progressBarShouldNotExist();
     });
 
     it("Navigate to Overview Tab", () => {
@@ -1125,11 +1092,11 @@ context("LHR steps verification", () => {
     });
 
     it("Complete step", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
 
     it("Select Procedure tab", () => {
@@ -1138,10 +1105,10 @@ context("LHR steps verification", () => {
 
     it("Verify the data", () => {
       cy.get("[data-cy=\"form.builder.mpi.part.selection.materials\"]").eq(0)
-        .contains("LOT #22041301 | MT-00004.1 | 5 inch")
+        .contains(`LOT #${lotDateSuffix}01 | MT-00004.1 | 5 inch`)
         .should("exist");
       cy.get("[data-cy=\"form.builder.mpi.part.selection.materials\"]").eq(1)
-        .contains("LOT #22041302 | MT-00006.1 | 5 kilogram")
+        .contains(`LOT #${lotDateSuffix}02 | MT-00006.1 | 5 kilogram`)
         .should("exist");
     });
   });

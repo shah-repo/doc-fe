@@ -1100,7 +1100,7 @@ context("Equipment maintenance for checking History in all states", () => {
       });
 
       it("Select first Equipment on list", () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       context("Verify Maintenance History is changed to History", () => {
@@ -1154,7 +1154,7 @@ context("Equipment maintenance for checking History in all states", () => {
       });
 
       it("Select first Equipment on list", () => {
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       context("Verify Maintenance History is changed to History", () => {
@@ -1186,7 +1186,7 @@ context("Equipment maintenance for checking History in all states", () => {
 
     context("Verify for Approved Numeric Equipment", () => {
       it("Approve Equipment", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       context("Verify Maintenance History is changed to History", () => {

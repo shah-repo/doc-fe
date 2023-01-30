@@ -333,7 +333,7 @@ context("Supplier test with Field Config", () => {
     });
 
     it("Create the form", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Verify Approvals Section", () => {
@@ -345,7 +345,7 @@ context("Supplier test with Field Config", () => {
     });
 
     it("Approve and release", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -375,7 +375,7 @@ context("Supplier test with Field Config", () => {
       });
 
       it("Clicks Save button", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Verify `Approve and Release` should not exist", () => {
@@ -383,15 +383,15 @@ context("Supplier test with Field Config", () => {
       });
 
       it("Add an Approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].name });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve", () => {
-        cy.ebApprove();
+        cy.ebApproveWithoutApi();
       });
     });
   });

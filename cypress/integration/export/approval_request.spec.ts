@@ -6,7 +6,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -273,6 +272,10 @@ context("Export for Approval Request", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: employeeLoginFirst.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create approval request with newly created form", () => {
@@ -305,7 +308,7 @@ context("Export for Approval Request", () => {
     });
 
     it("Add Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name });
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
     });
 
     it("Click on Save", () => {
@@ -340,15 +343,7 @@ context("Export for Approval Request", () => {
   context(`AR with ${STATUS_TYPES_LABEL.APPROVED} status`, () => {
     context("Approve Submission", () => {
       it("Click Approve Submission button", () => {
-        cy.get("[data-cy=\"transition-approve\"]").first().arrowClick();
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.ChangeRequestApproveNew], () => {
-            cy.get("[data-cy=\"transition.action.password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-            cy.get("[data-cy=\"passwordConfirm\"]").arrowClick();
-          });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.checkToastMessage({ exists: false });
+        cy.arApproveARWithoutApi();
       });
 
       it("Verify export", () => {
@@ -364,11 +359,8 @@ context("Export for Approval Request", () => {
     context("Approve Submission", () => {
       it("Click Close button", () => {
         cy.get("[data-cy=\"transition-closed\"]").first().arrowClick();
-        cy.wrapWithWaitOnApiCalls(
-          [CyRoutes.PostCloseAR], () => {
-            cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-          });
-        cy.progressBarShouldNotExist();
+        cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
+        cy.progressBarShouldAppear();
         cy.listLoadingElementShouldNotExist();
         cy.checkToastMessage({ exists: false });
       });
@@ -386,6 +378,10 @@ context("Export for Approval Request", () => {
     context("Create a AR from form", () => {
       it("Navigate to approval request list", () => {
         cy.navigToApprovalRequestList();
+      });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
       });
 
       it("Click Create a Approval Request button", () => {
@@ -413,7 +409,7 @@ context("Export for Approval Request", () => {
       });
 
       it("Click on Save", () => {
-        cy.arSaveApiCall();
+        cy.arSaveApiCallWithoutApi();
       });
     });
 

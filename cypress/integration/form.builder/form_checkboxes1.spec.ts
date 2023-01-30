@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -103,7 +102,7 @@ context("Checkboxes test1", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -347,7 +346,9 @@ context("Checkboxes test1", () => {
     it("Add Actions 'Action Button' with checkboxes", () => {
       cy.fbAddNewFieldWhenHiddenLastPlace();
       cy.fbSelectItemFromNewFieldList({ section: "Actions", field: "Action Button" });
-      cy.fbSelectCheckboxValue("SendEmailWithFormToFill", "SendSurveyEmailWithFormToFill");
+      cy.get("input[value^=\"SendEmailWithFormToFill\"]").check();
+      cy.get("input[value^=\"SendSurveyEmailWithFormToFill\"]").check();
+      cy.unClick();
       cy.fbAddNewFieldButton();
     });
   });
@@ -438,14 +439,12 @@ context("Checkboxes test1", () => {
 
   context("Create & Approve Document", () => {
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        cy.fbClickButton({ el: "updateRecord" });
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+      cy.fbClickButton({ el: "updateRecord" });
     });
   });
 
@@ -613,7 +612,7 @@ context("Checkboxes test1", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 

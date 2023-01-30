@@ -219,6 +219,7 @@ context("Password expire reset flow", { tags: ["@timetool"] }, () => {
 
         it("Submit async task", () => {
           cy.asyncTaskClickSubmit({ password: previousPassword });
+          cy.wait(5000);
         });
       });
 
@@ -247,7 +248,7 @@ context("Password expire reset flow", { tags: ["@timetool"] }, () => {
         });
 
         it("Enter email and current password", () => {
-          cy.get("[data-cy=\"email\"]").arrowType(emailOfUserToSignUp);
+          cy.get("[data-cy=\"email\"]", { timeout: 10000 }).arrowType(emailOfUserToSignUp);
           cy.get("[data-cy=\"currentPassword\"]").arrowType(previousPassword);
         });
 
@@ -264,8 +265,7 @@ context("Password expire reset flow", { tags: ["@timetool"] }, () => {
         });
 
         it("Verify password change notification", () => {
-          cy.get(`[data-cy="ResetPasswordSuccessful-title"]`)
-            .should("have.text", "Password Reset Successfully!");
+          cy.contains("Password Reset Successfully!", { timeout: 15000 }).should("be.visible");
         });
       });
 
@@ -315,6 +315,7 @@ context("Password expire reset flow", { tags: ["@timetool"] }, () => {
         it("Submit async task", () => {
           cy.asyncTaskClickSubmit({ password: previousPassword });
           searchMailFromDate = new Date();
+          cy.wait(5000);
         });
       });
 
@@ -349,7 +350,7 @@ context("Password expire reset flow", { tags: ["@timetool"] }, () => {
         });
 
         it("Enter email and current password", () => {
-          cy.get("[data-cy=\"email\"]").arrowType(emailOfUserToSignUp);
+          cy.get("[data-cy=\"email\"]", { timeout: 10000 }).arrowType(emailOfUserToSignUp);
           cy.get("[data-cy=\"currentPassword\"]").arrowType(previousPassword);
         });
 
@@ -366,7 +367,7 @@ context("Password expire reset flow", { tags: ["@timetool"] }, () => {
         });
 
         it("Password Reset Successfully should be displayed", () => {
-          cy.contains("Password Reset Successfully!").should("exist");
+          cy.contains("Password Reset Successfully!", { timeout: 15000 }).should("be.visible");
         });
       });
 

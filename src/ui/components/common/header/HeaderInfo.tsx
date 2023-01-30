@@ -15,7 +15,7 @@ import { ApplicationState } from "../../../../state/reducers";
 import { CHANGE_REQUEST_LIST_URL, DOCUMENT_BY_CATEGORY_ROOT_URL, DOCUMENT_REVISION_LIST_URL } from "../../../constants/urls";
 import { DocCategories, DocTypeGroups } from "../../../dashboard.new/line.items/common/types";
 import { documentPreviewPath } from "../../../document.revision/utils/paths";
-import { checkIsDocumentEquipment, checkIsDocumentMPIOutput } from "../../../documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentEquipment, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../documentRevision/helpers/checkDocumentGroup";
 import { isDocumentRevisionCanceled, isDocumentRevisionInStatus } from "../../../documentRevision/helpers/documentRevisionStatus";
 import CustomLabelTooltip from "../../../hooks/docCustomization/CustomLabelTooltip";
 import { useDocumentStatus, useTitle } from "../../../hooks/docCustomization/useCustomization";
@@ -61,6 +61,7 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
   const isStatusCanceled = isDocumentRevisionCanceled(status);
   const documentType = useSelector((state: ApplicationState) =>
     documentTypeSelectors.getDocumentTypeById(state, documentTypeId || ""));
+  const isPO = checkIsDocumentPO(documentType?.groupOptions);
   const isTypeMpiOutput = checkIsDocumentMPIOutput(documentType?.groupOptions);
   const navigationDetails = useSelector((state: ApplicationState) =>
     companySelectors.getNavigationDetails(
@@ -275,7 +276,15 @@ const HeaderInfo: React.FunctionComponent<Props> = ({
                           FormHeaderStatusClassMapping[displayStatus || status || label || ""]
                         ]
                       }`}
-                      label={(displayStatus || STATUS_TYPES_LABEL[status] || label).toUpperCase()}
+                      label={
+                        isPO && isStatusReleased
+                          ? STATUS_TYPES_LABEL.APPROVED
+                          : (
+                            displayStatus ||
+                                STATUS_TYPES_LABEL[status] ||
+                                label
+                          ).toUpperCase()
+                      }
                       data-cy="HeaderInfo-status"
                     />
                   </CustomLabelTooltip>

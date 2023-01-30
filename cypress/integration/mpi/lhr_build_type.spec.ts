@@ -1203,10 +1203,6 @@ context("LHR Build type flow", () => {
       cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 
-    it("Click save document", () => {
-      cy.drClickSaveWithoutApiCall();
-    });
-
     it("Complete step", () => {
       cy.pmSubmitForApprovalWithoutAPI();
     });
@@ -1223,10 +1219,6 @@ context("LHR Build type flow", () => {
 
     it("Add an Approval", () => {
       cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
-    });
-
-    it("Click save document", () => {
-      cy.lhrSaveWithoutApi();
     });
 
     it("Submit for approval", () => {
@@ -1324,10 +1316,6 @@ context("LHR Build type flow", () => {
       cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
     });
 
-    it("Click save document", () => {
-      cy.drClickSaveWithoutApiCall();
-    });
-
     it("Complete step", () => {
       cy.lhrSubmitForApprovalWithoutApi();
     });
@@ -1344,10 +1332,6 @@ context("LHR Build type flow", () => {
 
     it("Add an Approval", () => {
       cy.lhrAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
-    });
-
-    it("Click save document", () => {
-      cy.lhrSaveWithoutApi();
     });
 
     it("Submit for approval", () => {

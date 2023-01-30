@@ -3,10 +3,12 @@ import { filter, find, map } from "lodash";
 import moment from "moment";
 import { TIME_ZONE } from "../../../common/utils/date";
 import { DOCUMENT_REVISION_SEARCH_ROOT_URL } from "../../../state/ducks/documentRevisions/constants";
+import { POStatusLabelMapping, POStatusType } from "../../../state/ducks/documentRevisions/types";
 import { TRAINING_RECORDS_SEARCH_URL } from "../../../state/ducks/training/constants";
 import { documentRevisionEffectiveDateOption, trainingCompletedOnDateOption } from "../../document.revision/utils/helpers";
 import { CompletedOnDateOptions } from "../../document.revision/utils/types";
 import { DateFields } from "../../training/kendo/types";
+import { KendoGridFilterCell } from "./interfaces";
 
 export const getDynamicPayloadItems = (queryUrl, payload) => {
   const removeFieldFromFilters = (filters: any[], field: string) => {
@@ -15,6 +17,19 @@ export const getDynamicPayloadItems = (queryUrl, payload) => {
   };
   switch (queryUrl) {
     case DOCUMENT_REVISION_SEARCH_ROOT_URL: {
+      // handling payload for po Status cases
+      const poStatusField = find(payload.filters, { field: KendoGridFilterCell.PO_STATUS });
+      if (poStatusField && payload?.filters && poStatusField.field === KendoGridFilterCell.PO_STATUS) {
+        payload?.filters?.forEach((filter) => {
+          if (poStatusField.field === KendoGridFilterCell.PO_STATUS) {
+            if ([POStatusLabelMapping.CLOSED, POStatusLabelMapping.VOIDED].includes(filter.value)) {
+              filter.value = filter.value.toUpperCase();
+            } else {
+              filter.value = POStatusType.OPENED;
+            }
+          }
+        });
+      }
       // Special handling in payload for effectiveDate
       const effectiveDateFiel = find(payload.filters, { field: "effectiveDate" });
       if (effectiveDateFiel && effectiveDateFiel.field === "effectiveDate") {

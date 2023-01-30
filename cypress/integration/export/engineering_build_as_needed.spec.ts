@@ -852,21 +852,17 @@ context("Procedure and parts flow test", () => {
         });
 
         it("Add step description", () => {
-          cy.wrapWithWaitOnApiCalls([], () => {
-            cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
-          });
+          cy.mpiEnterDescriptionToStep({ numbOfStep: 2, description: "Description of step two" });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Add files to the step Attachments field", () => {
-          cy.wrapWithWaitOnApiCalls([], () => {
-            cy.contains("Step #2").parentsUntil("li")
-              .find("[data-cy=\"albumMediaButton\"]").arrowClick();
-            cy.elUploadAttachment({
-              fileName: "test_image.jpg",
-              el: "fb-mediaalbum-upload-",
-            });
+          cy.contains("Step #2").parentsUntil("li")
+            .find("[data-cy=\"albumMediaButton\"]").arrowClick();
+          cy.elUploadAttachment({
+            fileName: "test_image.jpg",
+            el: "fb-mediaalbum-upload-",
           });
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();

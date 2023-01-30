@@ -188,7 +188,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Click create a document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Upload attachement picture 'image.jpg'", () => {
@@ -251,7 +251,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
@@ -753,10 +753,10 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Add two approvers", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
-        cy.pmAddApproverOnApproverList({ approver: USERS[2].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[2].email });
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -1003,7 +1003,7 @@ context("Autocomplete 'Lots' test", () => {
 
     context("resubmit document for Approval", () => {
       it("Click on submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
     });
 
@@ -1257,7 +1257,7 @@ context("Autocomplete 'Lots' test", () => {
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {

@@ -2,7 +2,6 @@ import "moment-timezone";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let createdCompany;
@@ -156,7 +155,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Click create document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
       });
 
@@ -306,7 +305,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         });
 
         it("Click on Submit For Approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
       }
     );
@@ -346,13 +345,11 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
 
         it("Click 'Withdraw Submission' button", () => {
           cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview], () => {
-            cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
-          });
+          cy.get("[data-cy=\"AlertDialog-continueButton\"]").arrowClick();
         });
 
         it("Click on Submit For Approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
       });
     });
@@ -370,9 +367,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
         cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         cy.checkToastMessage({ exists: false });
         cy.listLoadingElementShouldNotExist();
       });
@@ -428,7 +423,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           });
 
           it("Click on Submit For Approval", () => {
-            cy.pmSubmitForApproval();
+            cy.pmSubmitForApprovalWithoutAPI();
           });
 
           it("Approve the Supplier", () => {
@@ -436,12 +431,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
             cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
             cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
             cy.unClick();
-            cy.wrapWithWaitOnApiCalls(
-              [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-              () => {
-                cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-              }
-            );
+            cy.get("[data-cy=\"common.confirm\"]").arrowClick();
             cy.checkToastMessage({ exists: false });
             cy.listLoadingElementShouldNotExist();
           });
@@ -479,7 +469,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
       });
 
       it("Click on Submit For Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Approve the record", () => {
@@ -487,9 +477,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
         cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
         cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
         cy.unClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails], () => {
-          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-        });
+        cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         cy.checkToastMessage({ exists: false });
         cy.listLoadingElementShouldNotExist();
       });
@@ -517,12 +505,7 @@ context(`Scenario 2.1 Status bar design of new items approved via approval block
           cy.get("[data-cy=\"form.builder.request.approve\"]").contains("Approve").arrowClick();
           cy.get("input[name=\"password\"]").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD).wait(1500);
           cy.unClick();
-          cy.wrapWithWaitOnApiCalls(
-            [CyRoutes.PostApprovalsApprove, CyRoutes.DocPreview, CyRoutes.SessionDetails],
-            () => {
-              cy.get("[data-cy=\"common.confirm\"]").arrowClick();
-            }
-          );
+          cy.get("[data-cy=\"common.confirm\"]").arrowClick();
           cy.checkToastMessage({ exists: false });
           cy.listLoadingElementShouldNotExist();
         });

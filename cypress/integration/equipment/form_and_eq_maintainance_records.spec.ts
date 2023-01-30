@@ -107,7 +107,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click create a document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Predefined fields are displayed", () => {
@@ -153,7 +153,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -227,7 +227,10 @@ context("Equipment maintenance and calibration", () => {
       it("Add component", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.fbAddLabelName({ name: "Textfield for equipment test" });
+        cy.unClick();
         cy.fbAddField();
       });
 
@@ -260,7 +263,10 @@ context("Equipment maintenance and calibration", () => {
         cy.drSelectOverviewTab();
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.fbAddLabelName({ name: "Textfield for equipment test" });
+        cy.unClick();
         cy.fbAddField();
       });
     });
@@ -274,7 +280,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
 
       it("Export and save the template", () => {
@@ -319,7 +325,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Click create a document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Import the template", () => {
@@ -340,7 +346,10 @@ context("Equipment maintenance and calibration", () => {
       it("Add component", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
+        cy.progressBarShouldNotExist();
+        cy.listLoadingElementShouldNotExist();
         cy.fbAddLabelName({ name: "Textfield for new equipment test" });
+        cy.unClick();
         cy.fbAddField();
       });
 
@@ -410,7 +419,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Verify that Approvals field is automatically added", () => {
@@ -447,6 +456,7 @@ context("Equipment maintenance and calibration", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for PM" });
+        cy.unClick();
         cy.fbAddField();
       });
 
@@ -479,17 +489,18 @@ context("Equipment maintenance and calibration", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for PM test" });
+        cy.unClick();
         cy.fbAddField();
       });
 
       it("Click save a document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
     context("Approve and release form & Export", () => {
       it("Approve and release form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         cy.url().then((url: any) => {
           createdPMFormDocumentId = url.split("/").pop();
         });
@@ -541,7 +552,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Verify that Approvals field is automatically added", () => {
@@ -567,6 +578,7 @@ context("Equipment maintenance and calibration", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for New PM" });
+        cy.unClick();
         cy.fbAddField();
       });
 
@@ -636,7 +648,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     context("Predefined fields are displayed", () => {
@@ -669,6 +681,7 @@ context("Equipment maintenance and calibration", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for CAL" });
+        cy.unClick();
         cy.fbAddField();
       });
 
@@ -700,17 +713,18 @@ context("Equipment maintenance and calibration", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for CAL test" });
+        cy.unClick();
         cy.fbAddField();
       });
 
       it("Click save a document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
     });
 
     context("Approve and release form", () => {
       it("Approve and release CAL form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         cy.url().then((url: any) => {
           createdCalibrationFormDocumentId = url.split("/").pop();
         });
@@ -761,7 +775,7 @@ context("Equipment maintenance and calibration", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Import the template", () => {
@@ -783,6 +797,7 @@ context("Equipment maintenance and calibration", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
         cy.fbAddLabelName({ name: "Textfield for New CAL" });
+        cy.unClick();
         cy.fbAddField();
       });
 
@@ -878,7 +893,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Select document 'NO' for preventative maintenance required", () => {
@@ -964,11 +979,11 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       cy.url().then((url: any) => {
         equipmentURL = url;
       });
@@ -1003,7 +1018,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("navigate to Details tab", () => {
@@ -1030,11 +1045,11 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Create 'Preventative maintenance document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("navigate to overview tab", () => {
@@ -1050,25 +1065,21 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-        cy.ebApprove();
-      });
+      cy.ebApproveWithoutApi();
     });
   });
 
   context("Create Calibration record", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+      cy.visit(equipmentURL);
     });
 
     it("Click 'NEW PM' on preventative maintenace section", () => {
@@ -1099,7 +1110,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("navigate to Details tab", () => {
@@ -1128,11 +1139,11 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Create 'Calibration document'", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("navigate to overview tab", () => {
@@ -1148,25 +1159,21 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Click save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve record", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAvailableApprovers], () => {
-        cy.ebApprove();
-      });
+      cy.ebApproveWithoutApi();
     });
   });
 
   context("Verify Maintenance History is now only History", () => {
     it("Navigate to Equipment document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-        cy.visit(equipmentURL);
-      });
+      cy.visit(equipmentURL);
     });
 
     it("Turn off autosave", () => {

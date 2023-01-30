@@ -30,6 +30,7 @@ declare global {
       verifyTabs(...tabs: string[]): Chainable;
       verifyReferencesTabAsActive(): Chainable;
       openRevisionsTabAndVerifyCurrentRevision(rev: string): Chainable;
+      openRevisionsTabAndVerifyCurrentRevisionWithoutApi(rev: string): Chainable;
       verifyStatusbarBgcolor(params: {bcolor: string}): Chainable;
       verifyLastSavedExists(): Chainable;
       verifyLastSavedNotExists(): Chainable;
@@ -222,6 +223,13 @@ Cypress.Commands.add("openRevisionsTabAndVerifyCurrentRevision", (rev) => {
     cy.recCheckRevisionStage({ stage: `Revision ${rev}` });
     cy.get(`[data-cy="HeaderInfo-Rev"]`).contains(`Rev ${rev}`);
   });
+});
+
+Cypress.Commands.add("openRevisionsTabAndVerifyCurrentRevisionWithoutApi", (rev) => {
+  cy.drClickRevisionsSidePanel();
+  cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).arrowClick();
+  cy.recCheckRevisionStage({ stage: `Revision ${rev}` });
+  cy.get(`[data-cy="HeaderInfo-Rev"]`).contains(`Rev ${rev}`);
 });
 
 Cypress.Commands.add("verifyLastSavedExists", () => {
