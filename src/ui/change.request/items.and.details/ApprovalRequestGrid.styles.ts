@@ -105,11 +105,16 @@ export default makeStyles((theme) =>
         width: "100%",
       },
     },
-    cellTwo: {
-      width: "35%",
+    cellOther: {
+      "width": "35%",
+      "& .MuiOutlinedInput-multiline": {
+        padding: "10.5px 14px",
+      },
     },
-    cellThree: {
-      width: "35%",
+    hiddenLegend: {
+      "& legend": {
+        display: "none",
+      },
     },
     itemLeftPadding: {
       paddingLeft: `calc(${theme.spacing(1.25)}px + 1px)`,
