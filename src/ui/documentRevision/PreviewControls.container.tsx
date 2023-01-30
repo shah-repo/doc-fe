@@ -39,7 +39,7 @@ import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
-import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased, isDocumentRevisionVoided } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
@@ -398,6 +398,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const isDocumentInReview = isDocumentRevisionInReview(documentRevision.status);
   const isDocumentApproved = isDocumentRevisionApproved(documentRevision.status);
   const isDocumentReleased = isDocumentRevisionReleased(documentRevision.status);
+  const isDocumentVoided = isDocumentRevisionVoided(documentRevision.status);
 
   if (!(!isDocumentDraft || !canCreateInspection)) {
     accessableButtons.push("inspectionControl");
@@ -477,7 +478,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       <>
         {isPO &&
           documentRevision.poStatus &&
-          (isDocumentInReview || isDocumentDraft) && (
+          (isDocumentInReview || isDocumentDraft || isDocumentVoided) && (
           <HeaderPOStatus poStatus={documentRevision.poStatus} />
         )}
       </>
