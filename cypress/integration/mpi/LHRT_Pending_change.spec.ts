@@ -6,7 +6,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -536,6 +535,10 @@ context("LHRT Pending Change", () => {
     it("Login user to dashboard", () => {
       cy.authLoginToDashboard({ USER: USERS[1], employeeId: adminEmployee.id });
     });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
+    });
   });
 
   context("Create MPI document", () => {
@@ -567,56 +570,43 @@ context("LHRT Pending Change", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
+      });
+    });
+
+    context("Fill step #1", () => {
+      it("Select Procedure tab", () => {
+        cy.drSelectProcedureTab();
       });
 
-      context("Fill step #1", () => {
-        it("Select Procedure tab", () => {
-          cy.drSelectProcedureTab();
-        });
-
-        it("Add 'Material one' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Add 'Material parameter' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material three" });
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-
-        it("Add 'Equipment one' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
-
-        it("Add 'Equipment parameter' to step #1", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-            cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
-          });
-          cy.progressBarShouldNotExist();
-          cy.listLoadingElementShouldNotExist();
-        });
+      it("Add 'Material one' to step #1", () => {
+        cy.mpiAddMaterialDocumentToStep({ numbOfStep: 1, material: "Material one", quntity: "3", unit: "Each" });
       });
-      context("Release MPI", () => {
-        it("Approve and release MPI document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-            cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          });
-        });
+
+      it("Add 'Material parameter' to step #1", () => {
+        cy.mpiAddMaterialParameterToStep({ numbOfStep: 1, material: "Parameter for material three" });
+      });
+
+      it("Add 'Equipment one' to step #1", () => {
+        cy.mpiAddEquipmentToStep({ numbOfStep: 1, equipment: "Equipment one" });
+      });
+
+      it("Add 'Equipment parameter' to step #1", () => {
+        cy.mpiAddEquipmentParameterToStep({ numbOfStep: 1, equipmentDescription: "Equipment parameter" });
+      });
+
+      it("Click save document", () => {
+        cy.drClickSaveWithoutApiCall();
+      });
+    });
+
+    context("Release MPI", () => {
+      it("Approve and release MPI document", () => {
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
   });
+
   context("Create LHRt document", () => {
     context("Start document creation flow", () => {
       it("Navigate to Document list", () => {
@@ -627,8 +617,13 @@ context("LHRT Pending Change", () => {
       it("Click on 'Create a document' button", () => {
         cy.cmpClickCreateNewDocument();
       });
+
+      it("Turn off autosave", () => {
+        cy.cmpTurnOffAutosave();
+      });
     });
   });
+
   context("Fill LHRt document attributes", () => {
     it("Enter document title 'LHRt document'", () => {
       cy.drEnterDocumentTitle({ name: "LHRt document" });
@@ -651,19 +646,23 @@ context("LHRT Pending Change", () => {
     });
 
     it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
+
   context("Create an AR", () => {
     it("Navigates to Approval Request list", () => {
       cy.navigToApprovalRequestList();
     });
+
     it("Click Create a Approval Request button", () => {
       cy.arClickCreateAnAR();
     });
+
     it("Enter AR title", () => {
       cy.arEnterApprovalRequestTitle({ title: "LHRT" });
     });
+
     it("Enter description", () => {
       cy.arEnterApprovalRequestDescription({ description: "test" });
     });
@@ -677,9 +676,10 @@ context("LHRT Pending Change", () => {
     });
 
     it("Save AR", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
     });
   });
+
   context("Go back to LHRT", () => {
     it("Navigate to Document list", () => {
       cy.unClick();
@@ -699,20 +699,21 @@ context("LHRT Pending Change", () => {
       cy.get("[data-cy=\"lhr-selected-part\"]").autocompleteSelect("CS-00005 - Part document");
     });
 
+    it("Add 'Part document' in reference", () => {
+      cy.drSelectReferences("Part document");
+    });
+
     context("Select a different MPI", () => {
       it("Select Details tab", () => {
         cy.drSelectDetailsTab();
       });
 
-
       it("Select MPI document for step #1 in LHRt", () => {
         cy.get("input[data-cy=\"lhrstep-built-in\"]").then(($el) => {
           $el.trigger("click");
         });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions, CyRoutes.PatchDocRev], () => {
-          cy.listLoadingElementShouldNotExist();
-          cy.get("input[data-cy=\"lhrstep-built-in\"]").arrowType("MPI document{downarrow}{enter}", { force: true });
-        });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[data-cy=\"lhrstep-built-in\"]").autocompleteSelect("MPI document");
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -724,21 +725,19 @@ context("LHRT Pending Change", () => {
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
+
       it("Added LHR Step should be editable, select MPI", () => {
         cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
           $el.trigger("click");
         });
       });
+
       it("When the MPI/QPI has parameterized materials and EQ, the user should be able to select for both", () => {
         cy.get("input[data-cy^=\"lhr-step\"]").then(($el) => {
           $el.trigger("click");
         });
-        cy.wrapWithWaitOnApiCalls([CyRoutes.GetAutocompleteOptions,
-          CyRoutes.GetAutocompleteOptions,
-          CyRoutes.PatchDocRev], () => {
-          cy.listLoadingElementShouldNotExist();
-          cy.get("input[data-cy^=\"lhr-step\"]").arrowType("MPI created with API{downarrow}{enter}", { force: true });
-        });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("input[data-cy^=\"lhr-step\"]").autocompleteSelect("MPI created with API");
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });

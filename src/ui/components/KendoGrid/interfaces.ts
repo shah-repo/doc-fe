@@ -64,6 +64,7 @@ export interface DataLoaderProps {
 }
 
 export enum KendoGridFilterCell {
+  ACTIVE="active",
   DISPLAY_STATUS="displayStatus",
   PO_STATUS="poStatus",
   DOCUMENT_TYPE_ACRONYM= "document.documentType.documentTypeAcronym",

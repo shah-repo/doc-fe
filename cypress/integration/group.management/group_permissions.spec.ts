@@ -137,7 +137,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click 'Add field'", () => {
@@ -195,7 +195,7 @@ context("Group Permissions Flow", () => {
 
   context("Create official group", () => {
     it("Saves the group", () => {
-      cy.grpSaveGroup();
+      cy.grpSaveGroupWithoutApi();
     });
   });
 
@@ -212,7 +212,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Saves the group", () => {
-      cy.grpSaveGroupPatch();
+      cy.grpSaveGroupPatchWithoutApi();
     });
 
     it("Filters groups by name and selects 'User Management'", function() {
@@ -227,7 +227,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Saves the group", () => {
-      cy.grpSaveGroupPatch();
+      cy.grpSaveGroupPatchWithoutApi();
     });
   });
 
@@ -241,7 +241,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Saves the group", () => {
-      cy.grpSaveGroupPatch();
+      cy.grpSaveGroupPatchWithoutApi();
     });
 
     it("Filters groups by name and selects 'Developers'", () => {
@@ -254,7 +254,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Saves the group", () => {
-      cy.grpSaveGroupPatch();
+      cy.grpSaveGroupPatchWithoutApi();
     });
   });
 
@@ -286,7 +286,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Saves the group", () => {
-      cy.grpSaveGroup();
+      cy.grpSaveGroupWithoutApi();
     });
   });
 
@@ -343,7 +343,7 @@ context("Group Permissions Flow", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Click 'Add field'", () => {

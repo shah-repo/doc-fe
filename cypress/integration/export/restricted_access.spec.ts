@@ -108,12 +108,12 @@ context("Export restricted access doc", () => {
       cy.unClick();
     });
 
-    it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click Create document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Approve and release the form", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -130,7 +130,7 @@ context("Export restricted access doc", () => {
 
     it("Select the form", () => {
       cy.dlFilterByDocTitle({ docTitle: "test form" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click 'Send To Email'", () => {

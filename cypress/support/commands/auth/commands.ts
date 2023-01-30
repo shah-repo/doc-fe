@@ -116,7 +116,7 @@ Cypress.Commands.add("authLogout", () => {
 });
 
 Cypress.Commands.add("authEnterSignUpPassword", (params: {password?: string}) => {
-  cy.get("[name=\"password\"]").arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+  cy.get("[name=\"password\"]", { timeout: 10000 }).arrowType(params?.password ?? CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
 });
 
 Cypress.Commands.add("authEnterSignUpConfirmPassword", (params: {password?: string}) => {

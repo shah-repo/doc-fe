@@ -8,7 +8,7 @@ import faker from "faker";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { momentInPST } from "../../utils/constants/dateHandler";
+import { emailDateOffset, momentInPST } from "../../utils/constants/dateHandler";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -176,7 +176,7 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
       context(`Test UI message for day ${dayToTest}`, () => {
         context("Use time tool to travel user back to future", () => {
           it("Navigate to async tasks", () => {
-            dateAfterEmailShouldArrive = new Date();
+            dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
             cy.navigToAsyncTasks();
           });
 
@@ -295,6 +295,7 @@ context("Password expiration emails & locked screen test", { tags: ["@timetool"]
 
         it("Submit async task", () => {
           cy.asyncTaskClickSubmit();
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
         });
 
         it("Get emails", () => {

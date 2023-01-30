@@ -7,7 +7,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -120,11 +119,11 @@ context("NCO document type management", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("'Approve and Release' the document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -194,11 +193,11 @@ context("NCO document type management", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release document - create company", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Log out user", () => {
@@ -1021,9 +1020,7 @@ context("NCO document type management", () => {
     it("Click 'ADD NEW EQUIPMENT'", () => {
       cy.get("[id='DocumentByTypeListPresenter-openDocRev']").arrowClick();
       cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-        cy.get("div[id^=react-select]").contains("Equipment or Fixture").arrowClick();
-      });
+      cy.get("div[id^=react-select]").contains("Equipment or Fixture").arrowClick();
     });
 
     it("Enter title 'Equipment maintenance document'", () => {
@@ -1044,7 +1041,7 @@ context("NCO document type management", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate To calpmhistory", () => {
@@ -1093,7 +1090,7 @@ context("NCO document type management", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Navigate To overview", () => {
@@ -1110,7 +1107,7 @@ context("NCO document type management", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     context("Verify owner", () => {
@@ -1137,7 +1134,7 @@ context("NCO document type management", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
         cy.wait(15000);
       });
 
@@ -1165,7 +1162,7 @@ context("NCO document type management", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on Equipment list", () => {
@@ -1566,7 +1563,7 @@ context("NCO document type management", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on Equipment list", () => {

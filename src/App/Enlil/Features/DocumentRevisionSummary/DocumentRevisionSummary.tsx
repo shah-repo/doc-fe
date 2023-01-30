@@ -8,6 +8,7 @@ import { documentTypeSelectors } from "../../../../state/ducks/documentRevisions
 import { DocumentGroupType, DOC_TYPE_GROUP, TabInfo, TabTypeOptions } from "../../../../state/ducks/documentRevisions/documentType/types";
 import { DocumentRevisionStatus, SmartReferenceType } from "../../../../state/ducks/documentRevisions/types";
 import { ApplicationState } from "../../../../state/reducers";
+import ItemsAndDetailsWrapper from "../../../../ui/change.request/items.and.details/ItemsAndDetails.wrap";
 import { FormContext } from "../../../../ui/components/forms/FormContext";
 import { DocTypeGroups } from "../../../../ui/dashboard.new/line.items/common/types";
 import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader";
@@ -204,6 +205,13 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             <FBTrainingInfoContainer
                               documentRevisionId={documentRevision?.id}
                               docRevStatus={documentRevision.status}
+                            />
+                          )}
+                          {tabType === TabTypeOptions.ITEMS && (
+                            <ItemsAndDetailsWrapper
+                              currentDocRevId={documentRevision?.id}
+                              initialValues={documentRevision.formInput ?? {}}
+                              mode={FBWorkspaceModeOptions.PREVIEW}
                             />
                           )}
                         </SMBox>

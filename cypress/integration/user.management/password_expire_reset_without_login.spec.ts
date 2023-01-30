@@ -7,6 +7,7 @@
 import faker from "faker";
 import { SQS_TYPES } from "../../../src/ui/async.tasks/types";
 import { CONFIG } from "../../support/config";
+import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { NavigationItems } from "../../utils/constants/navigationItems";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -220,7 +221,8 @@ context("Password expire reset flow", { tags: ["@timetool"] }, () => {
 
         it("Submit async task", () => {
           cy.asyncTaskClickSubmit({ password: previousPassword });
-          searchMailFromDate = new Date();
+          searchMailFromDate = new Date(new Date().getTime() - emailDateOffset);
+          cy.wait(5000);
         });
       });
 
@@ -278,7 +280,7 @@ context("Password expire reset flow", { tags: ["@timetool"] }, () => {
         });
 
         it("Password Reset Successfully should be displayed", () => {
-          cy.contains("Password Reset Successfully!").should("exist");
+          cy.contains("Password Reset Successfully!", { timeout: 15000 }).should("be.visible");
         });
       });
 

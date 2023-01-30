@@ -1726,7 +1726,6 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
       it("Save LHRs", () => {
         cy.drClickSaveWithoutApiCall();
       });
-
     });
   });
 
@@ -1851,18 +1850,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
     });
 
     it("Click change button to switch to expired equipment", () => {
-      cy.get(`div[data-cy="form.builder.change"]`).arrowClick({ force: true });
-      cy.wait(1000);
-    });
-
-    it("Select expired equipment", () => {
-      cy.listLoadingElementShouldNotExist();
-      cy.get(`div[role=dialog] button[title="Open"]`).arrowClick().wait(500);
-      cy.get(`ul>li[role=option]`).contains("EQ-00002").arrowClick();
-    });
-
-    it("Click save", () => {
-      cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
+      cy.lhrChangeEquipment({ changeElement: 0, equipment: "EQ-00002" });
     });
 
     it("Verify selected equipment and its information", () => {

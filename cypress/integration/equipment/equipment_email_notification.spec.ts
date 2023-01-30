@@ -402,7 +402,7 @@ context("Test Equipment maintenance email notifications", () => {
 
       it("Save document", () => {
         cy.unClick();
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Navigate To calpmhistory", () => {
@@ -430,7 +430,7 @@ context("Test Equipment maintenance email notifications", () => {
 
       it("Save document", () => {
         cy.unClick();
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -636,7 +636,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Navigate To specification", () => {
@@ -654,7 +654,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Navigate To calpmhistory", () => {
@@ -681,7 +681,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -879,7 +879,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Navigate To specification", () => {
@@ -897,7 +897,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
 
@@ -924,7 +924,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -1122,7 +1122,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Navigate To specification", () => {
@@ -1140,7 +1140,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Navigate To calpmhistory", () => {
@@ -1166,7 +1166,7 @@ context("Test Equipment maintenance email notifications", () => {
       });
 
       it("Save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 

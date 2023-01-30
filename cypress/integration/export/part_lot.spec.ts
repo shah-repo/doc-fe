@@ -6,7 +6,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { CSLDocument } from "../../utils/constants/documentTypes/csl";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -510,7 +509,7 @@ context("Export Part Lot", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Enter quantity received", () => {
@@ -526,7 +525,7 @@ context("Export Part Lot", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -539,12 +538,9 @@ context("Export Part Lot", () => {
   context("CSL with Last Signed status", () => {
     context("Add CSL with Last Signed", () => {
       it("Add inline approver", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
-              .autocompleteSelect("enlil.testmail+cy1");
-          });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(0)
+          .autocompleteSelect(USERS[1].email).wait(1000);
       });
 
       it("Click Request Approval button", () => {
@@ -552,7 +548,7 @@ context("Export Part Lot", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.inlineApproval();
+        cy.inlineApprovalWithoutApi();
       });
 
       it("Click on revisions tab on side panel", () => {
@@ -560,9 +556,9 @@ context("Export Part Lot", () => {
       });
 
       it("Select Last Signed", () => {
-        cy.contains("Last Signed").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Last Signed").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify export", () => {
@@ -581,7 +577,9 @@ context("Export Part Lot", () => {
       });
 
       it("Click WIP status CSL", () => {
-        cy.contains("WIP").arrowClick();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).contains("WIP").arrowClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select 'Details' tab", () => {
@@ -589,15 +587,14 @@ context("Export Part Lot", () => {
       });
 
       it("Update section", () => {
-        cy.get("[name^=\"textfield1\"]").arrowType("1");
+        cy.get("[name^=\"textfield1\"]").arrowType("1").unClick();
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
-        cy.wait(2000);
-        cy.unClick();
-        cy.progressBarShouldNotExist();
+        cy.drClickSaveWithoutApiCall();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
+        cy.wait(5000);
       });
 
       it("Select 'Details' tab", () => {
@@ -613,7 +610,7 @@ context("Export Part Lot", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.inlineApproval();
+        cy.inlineApprovalWithoutApi();
       });
 
       it("Click on revisions tab on side panel", () => {
@@ -621,9 +618,9 @@ context("Export Part Lot", () => {
       });
 
       it("Select Archive", () => {
-        cy.contains("Archive").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(2).contains("Archive").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Verify export", () => {
@@ -642,9 +639,9 @@ context("Export Part Lot", () => {
       });
 
       it("Click WIP status CSL", () => {
-        cy.contains("WIP").arrowClick();
-        cy.progressBarShouldNotExist();
+        cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(0).contains("WIP").arrowClick();
         cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select 'Details' tab", () => {
@@ -652,16 +649,13 @@ context("Export Part Lot", () => {
       });
 
       it("Fill section", () => {
-        cy.get("[name^=\"textfield2\"]").arrowType("Test two");
+        cy.get("[name^=\"textfield2\"]").arrowType("Test two").unClick();
       });
 
       it("Add inline approver", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-          () => {
-            cy.listLoadingElementShouldNotExist();
-            cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(1)
-              .autocompleteSelect("enlil.testmail+cy1");
-          });
+        cy.listLoadingElementShouldNotExist();
+        cy.get("[name*=\"fb-ia-inline-approval\"] input").eq(1)
+          .autocompleteSelect(USERS[1].email);
       });
 
       it("Click Request Approval button", () => {
@@ -669,12 +663,12 @@ context("Export Part Lot", () => {
       });
 
       it("Approve inline approval", () => {
-        cy.inlineApproval();
+        cy.inlineApprovalWithoutApi();
       });
 
       it("Finalize and release button click'", () => {
         cy.reload();
-        cy.recFinalizeAndReleaseRecord();
+        cy.recFinalizeAndReleaseRecordWithoutApi();
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist().wait(500);
       });
@@ -692,10 +686,6 @@ context("Export Part Lot", () => {
     context("Add CSL with Canceled", () => {
       it("Click Update CSL", () => {
         cy.drClickReviseDocument();
-      });
-
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click Cancel draft", () => {
@@ -748,23 +738,17 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 
     context("Add CSL with In Review", () => {
       it("Add inline approver", () => {
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].email}`);
-      });
-
-      it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Save and submit for Approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
       });
 
       it("Verify export", () => {
@@ -786,7 +770,7 @@ context("Export Part Lot", () => {
       it("Select the CSL form", () => {
         cy.dlClearFilters();
         cy.dlFilterByDocTitle({ docTitle: "CSL form" });
-        cy.dlSelectFirstDocument();
+        cy.dlSelectFirstDocumentWithoutApi();
       });
 
       it("Click on Create New button", () => {
@@ -814,7 +798,7 @@ context("Export Part Lot", () => {
       });
 
       it("Save the document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickSaveWithoutApiCall();
       });
     });
 

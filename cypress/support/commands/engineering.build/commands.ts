@@ -34,7 +34,9 @@ declare global {
       ebWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
       ebAddApproverOnApproverList(params: {approver: string }): Chainable<Subject>;
       ebAddApproverOnApproverListWithPatchCall(params: {approver: string }): Chainable<Subject>;
+      ebAddApproverOnApproverListWithoutApi(params: {approver: string }): Chainable<Subject>;
       lhrSaveWithoutApi(): Chainable<Subject>;
+      lhrWithdrawSubmisisonWithoutApi(): Chainable<Subject>;
     }
   }
 }
@@ -127,8 +129,8 @@ Cypress.Commands.add("ebAddMaterialDocument", (params: { title: string; value: s
 });
 
 Cypress.Commands.add("ebAddStep2MaterialDocument", (params: { title: string; value: string; name: string }) => {
-  cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick();
-  cy.listLoadingElementShouldAppear().wait(500);
+  cy.get("[data-cy=\"form.builder.materials.btn\"]").last().arrowClick().wait(500);
+  cy.listLoadingElementShouldNotExist();
   cy.get("[data-cy=\"title\"]").arrowClick();
   cy.get("ul>li[role=option]").contains(params.title).arrowClick({ force: true });
   cy.get("[name=\"quantity\"]").arrowType(params.value);
@@ -227,11 +229,10 @@ Cypress.Commands.add("ebWithdrawSubmisison", () => {
 });
 
 Cypress.Commands.add("ebWithdrawSubmisisonWithoutApi", () => {
-  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick();
-  cy.wait(2000);
+  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick().wait(500);
   cy.get("#AlertDialog-continueButton").arrowClick();
   cy.checkToastMessage({ exists: false });
-  cy.progressBarShouldNotExist();
+  cy.progressBarShouldAppear();
   cy.listLoadingElementShouldNotExist();
 });
 
@@ -244,6 +245,7 @@ Cypress.Commands.add("ebAddApproverOnApproverList", (params: { approver: string;
   cy.listLoadingElementShouldNotExist();
 });
 
+// eslint-disable-next-line max-len
 Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
   cy.get(`[data-cy^="fb-approvals-"]`).arrowClick();
@@ -254,10 +256,27 @@ Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { appr
   cy.listLoadingElementShouldNotExist();
 });
 
+Cypress.Commands.add("ebAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
+  cy.listLoadingElementShouldNotExist();
+  cy.get(`[data-cy^="fb-approvals-"]`).arrowClick();
+  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+  cy.wait(1000);
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
 Cypress.Commands.add("lhrSaveWithoutApi", () => {
   cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
   cy.wait(1000);
   cy.checkToastMessage({ exists: false });
   cy.saveBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+});
+
+Cypress.Commands.add("lhrWithdrawSubmisisonWithoutApi", () => {
+  cy.get("[data-cy=\"document.revision.withdraw.alert\"]").arrowClick().wait(500);
+  cy.get("#AlertDialog-continueButton").arrowClick();
+  cy.checkToastMessage({ exists: false });
+  cy.wait(2000);
   cy.listLoadingElementShouldNotExist();
 });
