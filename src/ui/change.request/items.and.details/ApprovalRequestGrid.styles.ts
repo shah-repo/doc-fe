@@ -108,7 +108,7 @@ export default makeStyles((theme) =>
     cellOther: {
       "width": "35%",
       "& .MuiOutlinedInput-multiline": {
-        padding: "10.5px 14px",
+        padding: theme.spacing(1.28, 1.75), // Need to be "10.5px 14px"
       },
     },
     hiddenLegend: {
