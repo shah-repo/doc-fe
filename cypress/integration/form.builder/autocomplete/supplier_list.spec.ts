@@ -100,7 +100,7 @@ context("Autocomplete 'Supplier list' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release document", () => {
@@ -122,7 +122,7 @@ context("Autocomplete 'Supplier list' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -157,7 +157,7 @@ context("Autocomplete 'Supplier list' test", () => {
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {

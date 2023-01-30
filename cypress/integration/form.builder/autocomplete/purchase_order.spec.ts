@@ -2,7 +2,6 @@
 /// <reference types="Cypress" />
 
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { PurchaseOrderTest } from "../../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
@@ -108,10 +107,8 @@ context("Autocomplete 'Purchase Order' test", () => {
       });
 
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.fbClickButton({ el: "updateRecord" });
       });
     });
 
@@ -121,9 +118,7 @@ context("Autocomplete 'Purchase Order' test", () => {
       });
 
       it("Click on 'Create PO' button", () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview], () => {
-          cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
-        });
+        cy.poSelectPoFormFromMultiSelect({ poType: "Purchase Order test" });
       });
 
       it("Get purchase order no", () => {
@@ -140,9 +135,8 @@ context("Autocomplete 'Purchase Order' test", () => {
 
       it("Add an Approval", () => {
         cy.get("[data-cy^=\"fb-po-approvals-\"]").arrowClick();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-          cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
-        });
+        cy.get("ul>li[role=option]").contains(USERS[1].name).arrowClick();
+        cy.progressBarShouldNotExist();
       });
 
       it("Save PO", () => {
@@ -150,11 +144,14 @@ context("Autocomplete 'Purchase Order' test", () => {
       });
 
       it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
+        cy.progressBarShouldNotExist();
+        cy.wait(2000);
       });
 
       it("Click 'Approve' button", () => {
-        cy.ebTryToApprove();
+        cy.ebApproveWithoutApi();
+        cy.wait(3000);
       });
     });
 
@@ -189,7 +186,7 @@ context("Autocomplete 'Purchase Order' test", () => {
         });
 
         it("Click create a document", () => {
-          cy.drClickCreateDocumentWithApiCall();
+          cy.drClickCreateDocumentWithoutApiCall();
         });
 
         context("Add form fields", () => {

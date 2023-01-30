@@ -5,7 +5,6 @@ import moment from "moment";
 import "moment-timezone";
 import { DOC_TYPE_GROUP } from "../../../../src/state/ducks/documentRevisions/documentType/types";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -107,14 +106,12 @@ context("Autocomplete 'Preventative Maintenance Forms' test", () => {
       });
 
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCall();
       });
 
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.fbClickButton({ el: "updateRecord" });
       });
     });
 

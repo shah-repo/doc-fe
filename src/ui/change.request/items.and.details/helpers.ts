@@ -3,7 +3,7 @@ import { FB } from "../../form.builder";
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from "./ItemsAndDetails.types";
 
 export const generateDocTitleText = (docId: string, displayRevision: string, name: string) => (
-  `${docId} # Rev ${displayRevision} - ${name}`
+  `${docId} • Rev ${displayRevision} - ${name}`
 );
 
 export const storeDataToFormData = (approvalRequestItemsList: ApprovalRequestGridItem[]): FBDocumentRevisionsValue[] => (

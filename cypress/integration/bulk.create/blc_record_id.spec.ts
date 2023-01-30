@@ -5,7 +5,6 @@ import "moment-timezone";
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { PrivatePoolTest, PublicPoolTest } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -420,11 +419,11 @@ context("Bulk create public, private and reserved record-ids", () => {
 
     context("Create and release form", () => {
       it("Click create document", () => {
-        cy.drClickCreateDocumentWithApiCall();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Approve and release Bulk create form", () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
         cy.url().then((url: any) => {
           blcForm = url;
         });
@@ -455,10 +454,10 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
 
       it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
-          cy.unClick();
-        });
+        cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+        cy.unClick();
+        cy.listLoadingElementShouldNotExist();
+        cy.progressBarShouldNotExist();
       });
 
       it("Select form to be used for bulk creation", () => {
@@ -475,7 +474,7 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Click on 'Overview' tab", () => {
@@ -483,11 +482,11 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
 
       it("Add approval", () => {
-        cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+        cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
     });
 
@@ -520,7 +519,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -549,7 +548,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -576,7 +575,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -603,7 +602,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -630,7 +629,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -658,7 +657,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -685,7 +684,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
@@ -713,11 +712,11 @@ context("Bulk create public, private and reserved record-ids", () => {
       });
 
       it("Click save document", () => {
-        cy.drClickCreateDocumentWithApiCallForForms();
+        cy.drClickCreateDocumentWithoutApiCallForForms();
       });
 
       it("Submit for approval", () => {
-        cy.pmSubmitForApproval();
+        cy.pmSubmitForApprovalWithoutAPI();
         cy.url().then((url: any) => {
           blc1 = url;
         });
@@ -726,9 +725,7 @@ context("Bulk create public, private and reserved record-ids", () => {
 
     context("Create bulk records BLC2", () => {
       it(`Navigate to BLC form`, () => {
-        cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-          cy.visit(blcForm);
-        });
+        cy.visit(blcForm);
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
@@ -755,10 +752,10 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Refresh autocomplete for selecting form to be used in bulk creation", () => {
-          cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-            cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
-            cy.unClick();
-          });
+          cy.get("[id=\"sm-tabpanel-1\" ] [name=\"fb-form-document-to-be-used\"]>div>div:nth-child(2)").arrowClick();
+          cy.unClick();
+          cy.listLoadingElementShouldNotExist();
+          cy.progressBarShouldNotExist();
         });
 
         it("Select form to be used for bulk creation", () => {
@@ -776,7 +773,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Click on 'Overview' tab", () => {
@@ -784,7 +781,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Add approval", () => {
-          cy.pmAddApproverOnApproverList({ approver: USERS[1].email });
+          cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[1].email });
         });
       });
 
@@ -798,11 +795,11 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
           cy.url().then((url: any) => {
             blc2 = url;
           });
@@ -831,15 +828,13 @@ context("Bulk create public, private and reserved record-ids", () => {
 
       context("Reject BLC1", () => {
         it(`Navigate to BLC1`, () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-            cy.visit(blc1);
-          });
+          cy.visit(blc1);
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Reject BLC1", () => {
-          cy.ebWithdrawSubmisison();
+          cy.ebWithdrawSubmisisonWithoutApi();
         });
       });
 
@@ -865,9 +860,7 @@ context("Bulk create public, private and reserved record-ids", () => {
     context("Complete and release bulk create documents", () => {
       context("Finish BLC1", () => {
         it(`Navigate to BLC1`, () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-            cy.visit(blc1);
-          });
+          cy.visit(blc1);
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
@@ -886,7 +879,7 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Click save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Click on 'Overview' tab", () => {
@@ -894,25 +887,23 @@ context("Bulk create public, private and reserved record-ids", () => {
         });
 
         it("Submit for approval", () => {
-          cy.pmSubmitForApproval();
+          cy.pmSubmitForApprovalWithoutAPI();
         });
 
         it("Approve BLC1", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
       });
 
       context("Finish BLC2", () => {
         it(`Navigate to BLC2`, () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails], () => {
-            cy.visit(blc2);
-          });
+          cy.visit(blc2);
           cy.progressBarShouldNotExist();
           cy.listLoadingElementShouldNotExist();
         });
 
         it("Approve BLC2", () => {
-          cy.ebApprove();
+          cy.ebApproveWithoutApi();
         });
       });
     });

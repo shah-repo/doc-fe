@@ -163,7 +163,7 @@ context("Export Part doc", () => {
     it("Select the Part form", () => {
       cy.dlFilterByDocTitle({ docTitle: "Part form" });
 
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on Create New button", () => {
@@ -179,7 +179,7 @@ context("Export Part doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
   });
 
@@ -206,7 +206,7 @@ context("Export Part doc", () => {
       cy.drClickReviseDocument();
       cy.drChooseTypeOfRevisionChangeOption({ option: "Obsolete" });
       cy.drClickCreateDocumentWithoutApiCall();
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Verify export", () => {
@@ -220,9 +220,9 @@ context("Export Part doc", () => {
     });
 
     it("Select 'Superseded' record", () => {
-      cy.contains("Superseded").eq(0).arrowClick();
-      cy.progressBarShouldNotExist();
+      cy.get(`[data-cy="DocumentRevisionList-item"]`).eq(1).contains("Superseded").arrowClick();
       cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -243,7 +243,7 @@ context("Export Part doc", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.dlFilterByDocTitle({ docTitle: "Part form" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on Create New button", () => {
@@ -263,7 +263,7 @@ context("Export Part doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click Void button", () => {
@@ -287,7 +287,7 @@ context("Export Part doc", () => {
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.dlFilterByDocTitle({ docTitle: "Part form" });
-      cy.dlSelectFirstDocument();
+      cy.dlSelectFirstDocumentWithoutApi();
     });
 
     it("Click on Create New button", () => {
@@ -307,7 +307,7 @@ context("Export Part doc", () => {
     });
 
     it("Save the document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
       cy.url().then((url: any) => {
         recordUrl = url;
       });
@@ -337,16 +337,16 @@ context("Export Part doc", () => {
       cy.arClickAddBtnOnAddDocumentsDialog();
     });
 
-    it("Click Create Approval Request", () => {
-      cy.arSaveApiCall();
+    it("Click Save Approval Request", () => {
+      cy.arSaveApiCallWithoutApi();
     });
 
     it("Add Approver'", () => {
-      cy.arAddApproverOnApproverList({ approver: USERS[1].name, noWait: true });
+      cy.arAddApproverOnApproverListWithoutApi({ approver: USERS[1].name, noWait: true });
     });
 
     it("Click on Save", () => {
-      cy.arSaveApiCall();
+      cy.arSaveApiCallWithoutApi();
       cy.url().then((url: any) => {
         arUrl = url;
       });
@@ -369,18 +369,18 @@ context("Export Part doc", () => {
   context("Part with In Review status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Send To Review'", () => {
-      cy.arClickSendToReview();
+      cy.arClickSendToReviewWithoutApi();
     });
 
     it("Navigate to Part", () => {
       cy.visit(recordUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {
@@ -394,18 +394,18 @@ context("Export Part doc", () => {
   context("Part with Approved status", () => {
     it("Navigate to AR", () => {
       cy.visit(arUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Click 'Approve Submission'", () => {
-      cy.arApproveAR();
+      cy.arApproveARWithoutApi();
     });
 
     it("Navigate to Part", () => {
       cy.visit(recordUrl);
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify export", () => {

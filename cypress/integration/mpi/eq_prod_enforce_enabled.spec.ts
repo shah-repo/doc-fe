@@ -2069,7 +2069,7 @@ context("Verify Equipment Prod Enforce enabled on LHR with owner and operator", 
 
       it("Click save", () => {
         cy.get(`div[data-cy="form.builder.save"]`).arrowClick();
-        cy.wait(1000);
+        cy.wait(1500);
       });
 
       it("Verify dialog is closed", () => {

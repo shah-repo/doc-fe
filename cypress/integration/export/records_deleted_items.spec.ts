@@ -6,7 +6,7 @@ import "moment-timezone";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
+import { emailDateOffset } from "../../utils/constants/dateHandler";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -14,10 +14,11 @@ let createdCompany;
 let loginResponse;
 let employeeLoginFirst;
 let emailsFromInbox: IMAPEmail[];
+let dateAfterEmailShouldArrive;
 
-const dateOffset = (5 * 1000);
-const dateAfterEmailShouldArrive = new Date();
-dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
+// const dateOffset = (5 * 1000);
+// const dateAfterEmailShouldArrive = new Date();
+// dateAfterEmailShouldArrive.setTime(dateAfterEmailShouldArrive.getTime() - dateOffset);
 
 context("Export Record doc", () => {
   before(() => {
@@ -182,14 +183,14 @@ context("Export Record doc", () => {
     });
 
     it("Click create a document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Add textfield", () => {
       cy.fbClickAddNewHiddenBtn();
       cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "Text field" });
-      cy.fbAddLabelName({ name: "Textfield for inline" });
-      cy.fbAddField();
+      cy.fbAddLabelName({ name: "Textfield for inline" }).unClick();
+      cy.fbAddNewFieldButton();
     });
 
     it("Add Checkbox group", () => {
@@ -232,8 +233,8 @@ context("Export Record doc", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click Save document", () => {
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Remove Date Picker and Select field", () => {
@@ -241,19 +242,20 @@ context("Export Record doc", () => {
       cy.fbClickRemoveBtn({ label: "fb-select-field" });
     });
 
-    it("Click create document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+    it("Click Save document", () => {
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Approve and release FORM document", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
 
     it("Click 'Create New' button", () => {
       cy.drCreateNewDocumentFromForm();
+    });
 
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
   });
 
@@ -277,20 +279,19 @@ context("Export Record doc", () => {
     });
 
     it("Select approver for inline approval", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals], () => {
-        cy.listLoadingElementShouldNotExist();
-        cy.get("[name*=\"fb-ia-inline-field\"] input")
-          .autocompleteSelect("enlil.testmail+cy1");
-      });
+      cy.listLoadingElementShouldNotExist();
+      cy.get("[name*=\"fb-ia-inline-field\"] input")
+        .autocompleteSelect(USERS[1].email).wait(1000);
     });
 
     it("Save record", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Click 'Sent To Email' button", () => {
       cy.sendToEmail();
-      cy.wait(10000);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.wait(5000);
     });
 
     it("Verify emails", () => {
@@ -323,12 +324,13 @@ context("Export Record doc", () => {
     });
 
     it("Click Approve", () => {
-      cy.inlineApproval();
+      cy.inlineApprovalWithoutApi();
     });
 
     it("Click 'Sent To Email' button", () => {
       cy.sendToEmail();
-      cy.wait(10000);
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      cy.wait(5000);
     });
 
     it("Verify emails", () => {
@@ -360,7 +362,7 @@ context("Export Record doc", () => {
         receivedEmails: emailsFromInbox,
         emailsToTest: emailsThatShouldBeReceived,
         getEmailsSincedate: dateAfterEmailShouldArrive,
-        assertNumberOfEmailsFoundInList: 2,
+        assertNumberOfEmailsFoundInList: 1,
       });
     });
   });

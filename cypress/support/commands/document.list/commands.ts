@@ -106,8 +106,8 @@ Cypress.Commands.add("dlVerifyFilterByRev", (params: {revision: string }) => {
 });
 
 Cypress.Commands.add("dlFilterByDocTitle", (params: {docTitle: string }) => {
-  cy.get(`[aria-colindex="3"] input`).arrowType(params.docTitle).wait(500);
-  cy.landingPageLoadingElementShouldNotExist();
+  cy.get(`[aria-colindex="3"] input`).eq(0).arrowType(params.docTitle);
+  cy.landingPageLoadingElementShouldAppear();
 });
 
 Cypress.Commands.add("dlVerifyFilterByDocTitle", (params: {docTitle: string }) => {

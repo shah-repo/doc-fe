@@ -5,7 +5,6 @@
 import { GroupTag } from "../../../src/state/ducks/auth/types";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
@@ -330,7 +329,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
 
     it("Navigate to Details tab", () => {
@@ -353,11 +352,11 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Save Form", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -395,7 +394,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
     });
   });
 
@@ -476,7 +475,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
         });
 
         it("Save Form", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
       });
 
@@ -526,7 +525,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
   context("Approve and release document", () => {
     it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
@@ -548,7 +547,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Save document", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
   });
 
@@ -703,7 +702,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
         });
 
         it("Save document", () => {
-          cy.drClickCreateDocumentWithApiCallForForms();
+          cy.drClickCreateDocumentWithoutApiCallForForms();
         });
 
         it("Turn on autosave", () => {
@@ -738,9 +737,8 @@ context("Verify New Layout for Training Curriculum Document", () => {
 
     context("Click confirm and verify migrated fields are present", () => {
       it("Click on confirm change", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.PostOrPatchDocRev, () => {
-          cy.get("[data-cy='common.confirm.change']").arrowClick();
-        });
+        cy.get("[data-cy='common.confirm.change']").arrowClick();
+        cy.wait(2000);
       });
 
       it("Navigate to details Tab", () => {
@@ -804,9 +802,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
         cy.wait(2000);
         cy.listLoadingElementShouldNotExist();
         cy.progressBarShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab(groupOne);
-        });
+        cy.drAddGroupFromPermissionTab(groupOne);
       });
     });
 
@@ -847,7 +843,6 @@ context("Verify New Layout for Training Curriculum Document", () => {
         cy.drSelectHistoryTab();
         cy.get(`[data-cy="History-detail"]`).should("be.visible");
       });
-
       verifyHistoryContent(history, groupOne);
     });
 
@@ -1019,9 +1014,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab(groupTwo);
-          });
+          cy.drAddGroupFromPermissionTab(groupTwo);
         });
       });
 
@@ -1081,11 +1074,11 @@ context("Verify New Layout for Training Curriculum Document", () => {
     });
 
     it("Submit for approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
     });
 
     it("Approve training curriculum document", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
@@ -1220,9 +1213,7 @@ context("Verify New Layout for Training Curriculum Document", () => {
           cy.wait(2000);
           cy.listLoadingElementShouldNotExist();
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab(groupThree);
-          });
+          cy.drAddGroupFromPermissionTab(groupThree);
         });
       });
 

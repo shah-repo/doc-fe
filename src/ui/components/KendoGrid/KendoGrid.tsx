@@ -55,6 +55,7 @@ import ClearFilters from "../table/ClearFilters";
 import { DataLoader } from "./DataLoader";
 import { KendoGridFilterCell, KendoGridProps } from "./interfaces";
 import KendoGridStyles from "./KendoGrid.styles";
+import { DropdownFilterTemplate } from "../common/kendo.column.templates/DropdownFilterTemplate";
 
 export function KendoGrid<T extends any>({
   tableName,
@@ -158,6 +159,17 @@ export function KendoGrid<T extends any>({
   };
 
   // Column Menu Filters
+  const ActiveFilter = (props: GridFilterCellProps) => (
+    <DropdownFilterTemplate
+      {...props}
+      data={[
+        { value: true, text: getTranslatedText("common.active") },
+        { value: false, text: getTranslatedText("common.inactive") },
+      ]}
+      defaultItem={{ value: "", text: getTranslatedText("common.all") }}
+    />
+  );
+
   const StatusFilter = (props: GridFilterCellProps) => (
     <StatusFilterTemplate
       {...props}
@@ -256,6 +268,7 @@ export function KendoGrid<T extends any>({
   );
 
   const filterCellMapping = {
+    [KendoGridFilterCell.ACTIVE]: ActiveFilter,
     [KendoGridFilterCell.DISPLAY_STATUS]: StatusFilter,
     [KendoGridFilterCell.PO_STATUS]: POStatusFilter,
     [KendoGridFilterCell.DOCUMENT_TYPE_ACRONYM]: TypeFilter,

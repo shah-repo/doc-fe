@@ -21,6 +21,7 @@ let adminSessionId;
 let asyncTasksGroup;
 let searchMailFromDate;
 let emailsFromInbox;
+let dateAfterEmailShouldArrive;
 const newPassword = "Tester123#!";
 const passExpiresInOneDay = momentInPST().add({ day: 1 }).format("MMM DD, YYYY");
 const passExpiresInTwoDays = momentInPST().add({ day: 2 }).format("MMM DD, YYYY");
@@ -31,7 +32,6 @@ const passExpiresInFiveDays = momentInPST().add({ day: 5 }).format("MMM DD, YYYY
 const nameOfUserToSignUp = faker.name.findName();
 const emailOfUserToSignUp =
 `enlil.testmail+${faker.fake("{{address.zipCode}}{{internet.userName}}")}@gmail.com`.toLowerCase();
-const dateAfterEmailShouldArrive = new Date();
 
 context("Password expire flow", { tags: ["@timetool"] }, () => {
   context("[API]Prepare company", () => {
@@ -181,6 +181,8 @@ context("Password expire flow", { tags: ["@timetool"] }, () => {
     testDays.forEach((dayToTest, i) => {
       context(`Test UI message for day ${dayToTest}`, () => {
         context("Use time tool to travel user back to future", () => {
+          dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+
           it("Navigate to async tasks", () => {
             cy.navigToAsyncTasks();
           });
@@ -200,6 +202,7 @@ context("Password expire flow", { tags: ["@timetool"] }, () => {
 
           it("Submit async task", () => {
             cy.asyncTaskClickSubmit();
+            cy.wait(5000);
           });
         });
 
@@ -249,6 +252,7 @@ context("Password expire flow", { tags: ["@timetool"] }, () => {
 
         it("Submit async task", () => {
           cy.asyncTaskClickSubmit();
+          cy.wait(5000);
         });
       });
 
@@ -310,6 +314,7 @@ context("Password expire flow", { tags: ["@timetool"] }, () => {
       it("Click reset password for user", () => {
         cy.usrFilterByEmail({ email: emailOfUserToSignUp });
         cy.contains("Reset Password").arrowClick();
+        cy.wait(5000);
       });
 
       it("Get email to unlock account", () => {
@@ -329,7 +334,7 @@ context("Password expire flow", { tags: ["@timetool"] }, () => {
       });
 
       it("Password Reset Successfully should be displayed", () => {
-        cy.contains("Password Reset Successfully!").should("exist");
+        cy.contains("Password Reset Successfully!", { timeout: 15000 }).should("be.visible");
       });
 
       it("Logs user in", () => {

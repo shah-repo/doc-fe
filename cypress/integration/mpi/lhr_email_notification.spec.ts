@@ -10,7 +10,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { IMAPEmail } from "../../support/commands/imap/imap";
 import { CONFIG } from "../../support/config";
-import { lotDateSuffix } from "../../utils/constants/dateHandler";
+import { emailDateOffset, lotDateSuffix } from "../../utils/constants/dateHandler";
 import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -33,6 +33,7 @@ let lhr1DocUrl;
 let lhr2DocUrl;
 let lhr3DocUrl;
 let lhrtDocUrl;
+let dateAfterEmailShouldArrive;
 
 enum BUILD_TYPE {
   RD = "R&D",
@@ -44,7 +45,6 @@ const MPIDocumentTitle =  "MPI document";
 
 const lhrInitialQuantityName = "[name=\"lhr_initial_quantity\"]";
 
-const dateAfterEmailShouldArrive = new Date();
 let emailsFromInbox: IMAPEmail[];
 
 const LHR4 = "LHR-00004";
@@ -401,6 +401,7 @@ context("LHRs email notifications", () => {
 
     it("Click 'Submit for Approval' button", () => {
       cy.lhrSubmitForApprovalWithoutApi();
+      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
     });
   });
 
@@ -474,7 +475,7 @@ context("LHRs email notifications", () => {
     });
 
     it("Save changes in LHRs", () => {
-      cy.lhrSaveWithoutApi();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Select Overview tab", () => {
@@ -790,7 +791,7 @@ context("LHRs email notifications", () => {
       });
 
       it("Click save document", () => {
-        cy.lhrClickSaveDocument();
+        cy.lhrSaveWithoutApi();
       });
     });
 
