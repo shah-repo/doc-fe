@@ -2,6 +2,8 @@ import { Button, ClickAwayListener, Grid, Grow, MenuItem, MenuList, Paper, Poppe
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React from "react";
 import { StyledButtonGroup } from "../../../../../App/Shifamed/Components/forms/presenters/StyledButtonGroup";
+import { ReactComponent as ExistingAR } from "../../../../../assets/images/existingAR.svg";
+import { ReactComponent as NewARIcon } from "../../../../../assets/images/newAR.svg";
 import Text from "../../../../components/Text";
 
 export enum ARActions {
@@ -9,8 +11,8 @@ export enum ARActions {
   EXISTING = "existing"
 }
 
-const options = [{ label: "releaseButton.option.newAR", value: ARActions.NEW },
-  { label: "releaseButton.option.existingAR", value: ARActions.EXISTING }];
+const options = [{ label: "releaseButton.option.newAR", value: ARActions.NEW, icon: <NewARIcon />  },
+  { label: "releaseButton.option.existingAR", value: ARActions.EXISTING, icon: <ExistingAR />  }];
 
 const SplitReleaseButton: React.FunctionComponent<{
   onClick: (value?: string) => void;
@@ -44,7 +46,8 @@ const SplitReleaseButton: React.FunctionComponent<{
   return (
     <Grid container direction="column" alignItems="center">
       <Grid item xs={12}>
-        <StyledButtonGroup variant="contained" color="primary" ref={anchorRef} aria-label="Release options">
+        <StyledButtonGroup variant="contained" disableRipple color="primary"
+          ref={anchorRef} aria-label="Release options">
           <Button
             color="primary"
             onClick={handleClick}
@@ -81,6 +84,7 @@ const SplitReleaseButton: React.FunctionComponent<{
                         key={option.value}
                         onClick={(event) => handleMenuItemClick(event, index)}
                       >
+                        <span style={{ paddingRight: "15px" }}>{option.icon}</span>
                         <Text message={option.label} />
                       </MenuItem>
                     ))}
