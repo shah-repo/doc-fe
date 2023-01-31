@@ -948,6 +948,7 @@ context("Training Flow test", () => {
     });
 
     it("'One-Time training title1' should be present", () => {
+      SystemRequirement("REQ-4510");
       cy.trLandingPageName({ name: "One-Time training title1" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "One-Time training title1");
     });
@@ -959,6 +960,7 @@ context("Training Flow test", () => {
     });
 
     it(`Verify training notification`, () => {
+      SystemRequirement("REQ-4510");
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 
