@@ -1,10 +1,11 @@
 import { Box, IconButton, Popper, TextField, Typography } from "@material-ui/core";
 import CachedIcon from "@material-ui/icons/Cached";
 import { RenderInputParams } from "@material-ui/lab/Autocomplete";
-import { get } from "lodash";
+import { get, includes } from "lodash";
 import { Observer } from "mobx-react";
 import React from "react";
 import { FB, FBAutocompleteProps, FBInput, FBMapWrapper } from "..";
+import { ChangeRequestStatus } from "../../../state/ducks/changeRequest/types";
 import { DOC_TYPE_GROUP } from "../../../state/ducks/documentRevisions/documentType/types";
 import { ApprovalStatus } from "../../../state/ducks/documents/types";
 import ListBoxComponent from "../../components/common/autocomplete/ListBoxComponent";
@@ -124,6 +125,10 @@ const FBAutocomplete: React.FunctionComponent<FBAutocompleteProps> = ({
     }
     return true;
   };
+
+  disabled = includes([ "fb-approvers-approvers", "form.builder.approvers"], props.name) &&
+    includes([ChangeRequestStatus.Approved, ChangeRequestStatus.Closed], workspaceState?.changeRequest?.state)
+    ? true : disabled;
 
   return (
     <>
