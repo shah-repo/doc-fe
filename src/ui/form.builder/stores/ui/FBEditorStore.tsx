@@ -63,7 +63,7 @@ class FBEditorStore {
     if (isUndefined(schema.index)) {
       return;
     }
-    const { type, index, customValidator, name = "" } = schema;
+    const { type, index, name = "" } = schema;
     this.editorIndex = index;
     this.editorMode = "update";
     this.open = true;
@@ -72,7 +72,6 @@ class FBEditorStore {
       ...schema,
       ...formValues,
     };
-    FBDynamicValidatorStore.setDynamicValidator(customValidator);
     this.editorTypeRenderer(
       type as FBEditorElementType,
       newSchema,

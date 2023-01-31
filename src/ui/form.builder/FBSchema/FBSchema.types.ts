@@ -28,7 +28,6 @@ export type FBSchemaProps = Pick<FBInputProps,
   | "reviseDisabled"
   | "outputDisabled"
   | "includeNotes"
-  | "customValidator"
   | "defaultValue"
   | "approvers"
   | "approverGroups"
