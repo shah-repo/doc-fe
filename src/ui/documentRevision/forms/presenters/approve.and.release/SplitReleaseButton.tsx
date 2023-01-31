@@ -2,8 +2,8 @@ import { Button, ClickAwayListener, Grid, Grow, MenuItem, MenuList, Paper, Poppe
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import React from "react";
 import { StyledButtonGroup } from "../../../../../App/Shifamed/Components/forms/presenters/StyledButtonGroup";
-import { ReactComponent as ExistingAR } from "../../../../../assets/images/existing_AR.svg";
-import { ReactComponent as NewARIcon } from "../../../../../assets/images/new_AR.svg";
+import { ReactComponent as ExistingAR } from "../../../../../assets/images/existing_ar.svg";
+import { ReactComponent as NewARIcon } from "../../../../../assets/images/new_ar.svg";
 import Text from "../../../../components/Text";
 
 export enum ARActions {
