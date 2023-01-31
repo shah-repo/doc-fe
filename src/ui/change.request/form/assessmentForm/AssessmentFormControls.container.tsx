@@ -21,13 +21,13 @@ import AssessmentFormVoidContainer from "./Void";
 interface Props {
   changeRequest?: ChangeRequest;
   errors?: FormikErrors<any>;
-  hideButton?: boolean;
+  isButtonShown?: boolean;
 }
 
 const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
   changeRequest,
   errors,
-  hideButton = false,
+  isButtonShown = false,
 }) => {
   const currentUserEmail = useSelector(authSelectors.currentUserEmail);
   const currentEmployeeId = useSelector(authSelectors.currentEmployeeId);
@@ -79,7 +79,7 @@ const AssessmentFormControlsContainer: React.FunctionComponent<Props> = ({
     showButton: boolean,
     transition: ChangeRequestTransition,
     buttonProps?: ButtonProps,
-  ) => showButton && !hideButton &&
+  ) => showButton && !isButtonShown &&
         <TransitionButton
           changeRequestId={changeRequest.id}
           transition={transition}

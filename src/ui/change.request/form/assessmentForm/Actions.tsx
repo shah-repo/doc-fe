@@ -53,16 +53,16 @@ const DocRevActions: React.FunctionComponent<Props> = ({
   const label = changeRequest ? "common.save" : "navigation.createChangeRequest";
 
   const renderTransitionButton = (
-    showButton: boolean,
+    isButtonShown: boolean,
     transition: ChangeRequestTransition,
     buttonProps?: ButtonProps,
-  ) => showButton && changeRequest &&
+  ) => isButtonShown && changeRequest &&
         <TransitionButton
           changeRequestId={changeRequest.id}
           transition={transition}
           buttonProps={buttonProps}
           label={`changeRequest.transition.${transition}`}
-          showSubmitButton
+          isSubmitButtonShown
         />;
 
   const isCurrentUserOwner = changeRequest?.owner.user.email === currentUserEmail;
@@ -85,7 +85,7 @@ const DocRevActions: React.FunctionComponent<Props> = ({
         onClick={onFormClick}
         dataCy={label}
         label={label} />
-      <AssessmentFormControlsContainer changeRequest={changeRequest} hideButton/>
+      <AssessmentFormControlsContainer changeRequest={changeRequest} isButtonShown/>
     </Grid>
   );
 };

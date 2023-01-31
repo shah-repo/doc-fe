@@ -17,7 +17,7 @@ interface Props {
   label: string;
   changeRequestId: string;
   buttonProps?: ButtonProps;
-  showSubmitButton?: boolean;
+  isSubmitButtonShown?: boolean;
 }
 
 const TransitionButton: React.FunctionComponent<Props> = ({
@@ -25,7 +25,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
   label,
   changeRequestId,
   buttonProps,
-  showSubmitButton = false,
+  isSubmitButtonShown = false,
 }) => {
   const applyTransition = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync<ChangeRequestTransitionResponse>();
@@ -46,7 +46,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
     });
   };
 
-  if (showSubmitButton) {
+  if (isSubmitButtonShown) {
     return (
       <React.Fragment>
         <FormMessage asyncState={async.asyncState} />
