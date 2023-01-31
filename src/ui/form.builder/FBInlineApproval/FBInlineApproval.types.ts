@@ -37,7 +37,7 @@ export type FBInlineApprovalTransition = "abandon" | "pending" | "approve" | "re
 
 export enum FBInlineApprovalStatusIdent {
   DRAFT = "DRAFT",
-  PENDING = "PENDING APPROVAL",
+  PENDING = "PENDING",
   ABANDONED = "ABANDONED",
   APPROVED = "APPROVED",
   REJECTED = "REJECTED",

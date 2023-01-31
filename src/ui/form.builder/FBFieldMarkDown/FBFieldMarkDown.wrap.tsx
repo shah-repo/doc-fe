@@ -1,4 +1,3 @@
-import Base64 from "Base64";
 import { get, template as lodashTemplate } from "lodash";
 import React from "react";
 import { FB, FBFieldMarkDownProps } from "..";
@@ -14,9 +13,7 @@ export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
     const { workspaceState, formState } = FB.useStores();
     const schemaItem = workspaceState?.getSchemaItemAt(index) || {};
 
-    let { customValidator } = schemaItem;
     const { name } = schemaItem;
-    customValidator = customValidator ? Base64.atob(customValidator.fn || "") : "";
 
     const template = lodashTemplate(`
       <%= label %>
@@ -25,7 +22,6 @@ export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
       - name:  <%= name %>
       - rules:  <%= rules %>
       - value:  <%= value %>
-      <%= customValidator %>
     `);
 
     const source = template({
@@ -33,7 +29,6 @@ export const withFBFieldMarkDown = <T extends FBFieldMarkDownProps>(
       label: get(schemaItem, "label") || "",
       rules: get(schemaItem, "rules", ""),
       value: formState?.getFieldValue(name, ""),
-      customValidator,
     });
 
     return Component({
