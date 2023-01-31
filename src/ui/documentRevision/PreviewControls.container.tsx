@@ -454,7 +454,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       {buttons.includes("inspectionControl") && (
         <InspectionControlsContainer {...{ documentRevision }} renderAsButton={renderAsButton} />
       )}
-      {buttons.includes("pdf") && <DownloadHTML pdf={documentRevision.pdf} renderAsButton={renderAsButton} />}
+      {buttons.includes("pdf") &&
+      <DownloadHTML pdf={documentRevision.pdf} renderAsButton={renderAsButton} isPO={isPO} />}
       {buttons.includes("changeowner") && (
         <OwnerChangerContainer
           requestId={documentRevision.id}
