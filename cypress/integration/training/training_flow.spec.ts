@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -804,6 +805,7 @@ context("Training Flow test", () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-2460");
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
   });

@@ -878,6 +878,7 @@ context("Record inline Flow", () => {
       });
 
       it("Check inline record creation default to numeric revision", () => {
+        SystemRequirement("REQ-1020");
         cy.drClickRevisionsSidePanel();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();

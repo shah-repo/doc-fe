@@ -12,6 +12,7 @@ import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { QPITest } from "../../utils/constants/documentTypes/qpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -2562,6 +2563,7 @@ context("LHR & LHRS Flow", () => {
 
   context("Click on Redline button", () => {
     it("Click Red Line Button", () => {
+      SystemRequirement("REQ-3270");
       cy.get("[data-cy='HeaderMenuButton']").arrowClick();
       cy.get("[data-cy='redlineButton']").arrowClick();
       cy.wait(1000);
@@ -2589,6 +2591,7 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Add attachment", () => {
+        SystemRequirement("REQ-3270");
         cy.wait(1000);
         cy.contains("Step #1").parentsUntil("li")
           .find("[data-cy='mediaUploadField']").arrowClick();
@@ -2602,6 +2605,7 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Add 'Part document' to step #2", () => {
+        SystemRequirement("REQ-3270");
         cy.get("[data-cy='form.builder.materials.btn']").eq(0).arrowClick();
         cy.listLoadingElementShouldNotExist();
         cy.get("[data-cy='title']").arrowClick();
@@ -2616,6 +2620,7 @@ context("LHR & LHRS Flow", () => {
       });
 
       it("Add 'Equipment one' to step #2", () => {
+        SystemRequirement("REQ-3270");
         cy.mpiAddEquipmentToStep({
           numbOfStep: 1,
           equipment: "Equipment one",
@@ -2765,6 +2770,7 @@ context("LHR & LHRS Flow", () => {
     });
 
     it("Click Red Line Button", () => {
+      SystemRequirement("REQ-3270");
       cy.get("[data-cy='HeaderMenuButton']").arrowClick();
       cy.get("[data-cy='redlineButton']").arrowClick();
       cy.wait(1000);
@@ -2828,6 +2834,7 @@ context("LHR & LHRS Flow", () => {
   context("Expand LHR Step#2", () => {
     context("verify the following fields for LHR Step1", () => {
       it("verify MPI/QPI Doc ID and Title", () => {
+        SystemRequirement("REQ-3280");
         cy.get("div[class^='MuiExpansionPanelSummary']").eq(1).arrowClick();
         cy.get("input[value='LHR-00001, Step #2 (QPI-00002, QPI document1, Rev 1)']").should(
           "exist"
