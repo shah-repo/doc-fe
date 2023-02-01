@@ -6,7 +6,6 @@ import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import Text from "../../components/Text";
 import { FBFormState } from "../../form.builder";
-import Colors from "../../layout/theme-next/colors";
 import ApprovalRequestEditGridItem from "./ApprovalRequestEditGridItem";
 import useStyles from "./ApprovalRequestGrid.styles";
 import ApprovalRequestGridHeader from "./ApprovalRequestGridHeader";
@@ -34,7 +33,7 @@ const TopSection: React.FunctionComponent<{
     <div>
       <Grid className={classes.gridCenterAlign} container>
         <Grid item>
-          <Typography variant="h6" id="sectionTitle" component="div" style={{ color: Colors.textBlack }}>
+          <Typography variant="h6" id="sectionTitle" component="div" className={classes.sectionTitle}>
             <Text translation="approvalRequest.items.section.heading"/>
           </Typography>
         </Grid>
