@@ -335,7 +335,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
   };
 
   const confirmEdit = () => {
-    if (validateDocId() && relatedPartDetails.name) {
+    if (validateDocId()) {
       createNewDocument(relatedPartDetails);
     }
   };
