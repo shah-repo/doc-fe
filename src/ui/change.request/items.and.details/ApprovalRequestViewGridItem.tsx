@@ -101,10 +101,10 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
           }
           <span>{docTitle}</span>
         </div>
-        <div className={cx(classes.cellTwo, classes.itemLeftPadding)}>
+        <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
           <span>{descriptionOfChange}</span>
         </div>
-        <div className={cx(classes.cellThree, classes.itemLeftPadding)}>
+        <div className={cx(classes.cellOther, classes.itemLeftPadding)}>
           <span>{justificationOfChange}</span>
         </div>
       </div>

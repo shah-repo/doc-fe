@@ -37,7 +37,7 @@ export type FBInlineApprovalTransition = "abandon" | "pending" | "approve" | "re
 
 export enum FBInlineApprovalStatusIdent {
   DRAFT = "DRAFT",
-  PENDING = "PENDING APPROVAL",
+  PENDING = "PENDING",
   ABANDONED = "ABANDONED",
   APPROVED = "APPROVED",
   REJECTED = "REJECTED",
@@ -60,6 +60,8 @@ export type FBInlineApprovalBody =
   approverGroup?: string[];
   canRequest?: boolean;
   signatureGroupName?: string;
+  poDocId?: string;
+  poDocRevision?: string;
 };
 
 export interface FBInlineApprovalTransitionBody {

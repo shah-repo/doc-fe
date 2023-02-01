@@ -27,11 +27,11 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
     <FBForm {...{ formState }} >
       <div className={cx(classes.enclosingDiv, classes.enclosingDivEditItem)}>
         <div className={cx(classes.itemRow, classes.editItemRow)}>
-          <div className={classes.cellOne}>
+          <div className={cx(classes.cellOne, classes.hiddenLegend)}>
             { showAutoComplete &&
               <FBAutocompleteAsync
                 name="proposedDocumentRevision"
-                label=""
+                label="form.builder.document"
                 placeholder="form.builder.select.document"
                 optionId={FBAutocompleteAsyncOption.DRAFTdocumentRevisions}
                 optionValueType="id"
@@ -43,20 +43,20 @@ const ApprovalRequestEditGridItem: React.FunctionComponent<{
             }
             { !showAutoComplete && <span>{titleText}</span>}
           </div>
-          <div className={cx(classes.cellTwo, classes.itemLeftPadding)}>
+          <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
             <FBTextField
               name="descriptionOfChange"
-              label=""
+              label="form.builder.description.of.change"
               placeholder="form.builder.enter.text"
               rules="required"
               multiline={true}
               rows={1}
             />
           </div>
-          <div className={cx(classes.cellThree, classes.itemLeftPadding)}>
+          <div className={cx(classes.cellOther, classes.itemLeftPadding, classes.hiddenLegend)}>
             <FBTextField
               name="justificationOfChange"
-              label=""
+              label="form.builder.justification.of.change"
               placeholder="form.builder.enter.text"
               rules="required"
               multiline={true}

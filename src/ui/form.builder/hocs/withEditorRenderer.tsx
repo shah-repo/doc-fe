@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { FormikProps } from "formik";
-import { Dictionary, get, has, includes, isEmpty, isObject, isUndefined, kebabCase, keys, omit, pick, set, truncate, union } from "lodash";
 import React from "react";
+import { get, has, includes, isObject, isUndefined, kebabCase, keys, omit, pick, set, truncate, union } from "lodash";
 import { useIntl } from "react-intl";
 import { FB, FBData } from "..";
 import { isTranslation } from "../../translations/types";
@@ -43,7 +43,7 @@ export const withEditorRenderer =
     //   ...props.values,
     // });
 
-    const propsByType = (): Dictionary<FBTemplateSchema | string[]> => {
+    const propsByType = () => {
       if (type === "action") {
         return { actions: keys(props.values) };
       }
@@ -70,11 +70,8 @@ export const withEditorRenderer =
       }
       name = `${name}-${uniqid()}`;
       // const item = schemaItem();
-      const customValidator = FBDynamicValidatorStore.dynamicValidator;
 
-      let rules = FBValidatorStore.getRules();
-      const customValidatorRule = customValidator && customValidator.name;
-      customValidatorRule && (rules += `${!isEmpty(rules) ? "|" : ""}${customValidatorRule}`);
+      const rules = FBValidatorStore.getRules();
 
       const schema: FBTemplateSchema = {
         index,
@@ -84,7 +81,6 @@ export const withEditorRenderer =
         rules,
         // applicableOn: FBValidatorStore.applicableOn ? [FBValidatorTrigger.ON_STATE_TO_IN_REVIEW] : [],
         applicableOn: ["ON_STATE_TO_IN_REVIEW"],
-        customValidator,
         formValuesRules: FBValidatorStore.formValues,
         ...(type === "instructionsmediaupload" && { isTemplate: true }),
       };
@@ -106,7 +102,7 @@ export const withEditorRenderer =
         });
       }
       if (type === "inlineapproval") {
-        const approvalName: string = (values as FBInputProps).name || "";
+        const approvalName: string = (values).name || "";
         FBStore.setValues({
           ...omit(FBStore.getValues(), ["approvers", "approverGroups", "approveIsBlocking"]),
           [approvalName]: pick(values, ["approvers", "approverGroups", "approveIsBlocking"]),

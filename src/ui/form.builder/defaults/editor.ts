@@ -1,5 +1,4 @@
 import { Dictionary } from "lodash";
-import { FBInputType } from "..";
 import FBLabelEditor from "../components/editors/FBLabelEditor";
 import { FBEditorElementType } from "../types/editor";
 
@@ -37,38 +36,6 @@ export const FBFieldEditorComponent: Dictionary<React.FunctionComponent<any>> = 
   // inlineapproval: FBEditorRequestApproval,
   // instructionsdocument: FBEditorInstructionsDocument,
   // selectdocument: FBEditorSelectDocument,
-};
-
-export const FBEditorSectionConfig: Dictionary<FBInputType[]> = {
-  section: ["section", "subsection", "stepsection", "teststep"],
-  basics: [
-    "textfield",
-    "checkbox",
-    "checkboxgroup",
-    "autocomplete",
-    "texteditor",
-    "datepicker",
-    "hyperlink",
-    "select",
-    "radio",
-    "radiogroup",
-    "paragraph",
-    "fileupload",
-    "quantity",
-    "timer",
-    "purchaseorder",
-    "poreceive",
-    "documentRevisions",
-    "approvalMatrix",
-    "approvalRoles",
-    "poApprovalMatrix",
-    "instructionsmediaupload",
-    "evidencemediaupload",
-  ],
-  approvals: ["hellosign", "approval"],
-  buttons: ["checkpoint", "createlabel"],
-  instructions: ["instructionsdocument", "selectdocument"],
-  actions: ["action"],
 };
 
 export const FBGroupEditorOptions: Dictionary<any[]> = {

@@ -41,6 +41,10 @@ export const columnSearchConfiguration = (valuePath: string, tableCriteria: Tabl
     searchOptions.dataKey = "displayStatus";
     searchOptions.statusTemplate = true;
   }
+  if (valuePath === "poStatus") {
+    searchOptions.dataKey = "poStatus";
+    searchOptions.poStatusTemplate = true;
+  }
   return searchOptions;
 };
 
