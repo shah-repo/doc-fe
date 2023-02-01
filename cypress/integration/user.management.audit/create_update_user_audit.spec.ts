@@ -322,6 +322,7 @@ context("User Creation Flow", () => {
       });
 
       it("Click deactivate button", () => {
+        SystemRequirement("REQ-4190");
         cy.usrClickStatusButton();
         cy.usrClickCloseDialogButton();
         currentDate = momentInPST().format("MMM D, YYYY hh:m");

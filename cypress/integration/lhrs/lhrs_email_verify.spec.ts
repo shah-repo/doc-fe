@@ -11,6 +11,7 @@ import { LHRT } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 import { STATUS_TYPES_LABEL } from "./../../../src/state/ducks/dashboard.new/my.feeds/types";
 
 let createdCompany;
@@ -1019,6 +1020,7 @@ context("Email format Verification after LHR released", () => {
     });
 
     it("Verify the emails that should be received", () => {
+      SystemRequirement("REQ-5170");
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[1].email,

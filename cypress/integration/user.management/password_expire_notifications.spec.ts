@@ -268,6 +268,7 @@ context("Password expire flow", { tags: ["@timetool"] }, () => {
         });
 
         it("Verify user is locked page present on screen", () => {
+          SystemRequirement("REQ-4180");
           cy.usrVerifyUserLockedPageIsPresented();
         });
       });
