@@ -610,6 +610,7 @@ context("Add and edit FB fields - Test 1", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing training form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -686,6 +687,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 1 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -723,6 +725,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 2 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -758,6 +761,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 3 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[2];
       if (el.includes("Page 3 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -793,6 +797,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 4 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[3];
       if (el.includes("Page 4 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -832,6 +837,8 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 5 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4870");
       const el = pages[4];
       if (el.includes("Page 5 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -916,6 +923,7 @@ context("Add and edit FB fields - Test 1", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing training form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -992,6 +1000,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 1 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -1031,6 +1040,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 2 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -1066,6 +1076,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 3 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[2];
       if (el.includes("Page 3 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -1101,6 +1112,7 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 4 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[3];
       if (el.includes("Page 4 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );
@@ -1140,6 +1152,8 @@ context("Add and edit FB fields - Test 1", () => {
     });
 
     it("Verify page 5 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4870");
       const el = pages[4];
       if (el.includes("Page 5 of 5")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nNEW DOCUMENT REVISION`, "gi" );

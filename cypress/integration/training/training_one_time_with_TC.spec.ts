@@ -476,6 +476,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing training form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -545,6 +546,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 1 for training form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
@@ -586,6 +588,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 2 for training form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
@@ -609,6 +612,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 3 for training form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nONE-TIME TRAINING FORM TITLE`, "gi" );
@@ -773,6 +778,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Verify zip file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing training notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -834,6 +840,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 1 for draft document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -879,6 +886,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       }
     });
     it("Verify page 2 for draft document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
@@ -991,6 +999,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Verify PDF file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Extract download link from gmail", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -1054,6 +1063,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     });
 
     it("Verify page 1 for released document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -1096,6 +1106,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       }
     });
     it("Verify page 2 for released document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new

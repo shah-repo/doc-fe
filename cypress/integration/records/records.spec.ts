@@ -352,6 +352,7 @@ context("Records flow", () => {
     });
 
     context("Verify that zip file containing pdf downloaded", () => {
+      SystemRequirement("REQ-4860");
       it("Download zip file containing record form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -417,6 +418,7 @@ context("Records flow", () => {
       });
 
       it("Verify page 1 for record form", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nLOT HISTORY RECORD`, "gi" );
@@ -452,6 +454,8 @@ context("Records flow", () => {
       });
 
       it("Verify page 2 of record form", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4870");
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nLOT HISTORY RECORD`, "gi" );
@@ -539,6 +543,7 @@ context("Records flow", () => {
     });
 
     context("Verify that zip file containing pdf downloaded", () => {
+      SystemRequirement("REQ-4860");
       it("Download zip file containing record form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -604,6 +609,7 @@ context("Records flow", () => {
       });
 
       it("Verify page 1 for record form", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nLOT HISTORY RECORD`, "gi" );
@@ -640,6 +646,8 @@ context("Records flow", () => {
       });
 
       it("Verify page 2 of record form", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4870");
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nLOT HISTORY RECORD`, "gi" );
@@ -945,6 +953,7 @@ context("Records flow", () => {
   });
 
   context("Verify zip file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing Approval Record notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -1001,6 +1010,7 @@ context("Records flow", () => {
     });
 
     it("Verify page 1 for WIP document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
@@ -1108,6 +1118,7 @@ context("Records flow", () => {
     });
 
     context("Verify zip file downloaded", () => {
+      SystemRequirement("REQ-4860");
       it("Download zip file containing Approval Record notification", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -1164,6 +1175,7 @@ context("Records flow", () => {
       });
 
       it("Verify page 1 for Released document", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new

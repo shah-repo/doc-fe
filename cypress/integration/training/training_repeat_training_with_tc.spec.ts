@@ -14,6 +14,7 @@ import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate, trAssign
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -498,6 +499,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
   });
 
   context("Verify PDF file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Extract download link from gmail", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -563,6 +565,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 1 of training form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new
@@ -606,6 +609,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 2 of training form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new
@@ -634,6 +638,8 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 3 of training form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new
@@ -835,6 +841,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
   });
 
   context("Verify PDF file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Extract download link from gmail", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -895,6 +902,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 1 of draft document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -936,6 +944,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 2 of draft document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
@@ -1028,6 +1037,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
   });
 
   context("Verify PDF file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Extract download link from gmail", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -1082,6 +1092,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 1 of released document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -1123,6 +1134,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 2 of released document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new

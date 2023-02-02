@@ -313,6 +313,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing training form", () => {
       cy.wait(2000);
       expect(downloadUrl).contains("exported_file_download");
@@ -383,6 +384,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 1 for PM form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
@@ -414,6 +416,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 2 for PM form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
@@ -434,6 +437,8 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 3 for PM form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
@@ -518,6 +523,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing training form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -587,6 +593,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 1 for PM form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
@@ -618,6 +625,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 2 for PM form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
@@ -638,6 +646,8 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 3 for PM form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${pMFormId}, Revision 1\nPREVENTATIVE MAINTENANCE FORM`, "gi" );
@@ -785,6 +795,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing training form", () => {
       cy.wait(2000);
       expect(downloadUrl).contains("exported_file_download");
@@ -855,6 +866,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 1 for CAL form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
@@ -886,6 +898,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 2 for CAL form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
@@ -906,6 +919,8 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 3 for CAL form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
@@ -990,6 +1005,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing training form", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -1059,6 +1075,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 1 for CAL form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
@@ -1090,6 +1107,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 2 for CAL form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
@@ -1110,6 +1128,8 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 3 for CAL form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${calFormId}, Revision 1\nCALIBRATION FORM`, "gi" );
@@ -1437,6 +1457,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify zip file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing PM request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -1495,6 +1516,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 1 in WIP document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
@@ -1665,6 +1687,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify zip file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing approval request notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -1723,6 +1746,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 1 in Released document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
@@ -1971,6 +1995,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify zip file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing Calibration document", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -2029,6 +2054,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 1 in CAL document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
@@ -2197,6 +2223,7 @@ context("Equipment maintenance and calibration", () => {
   });
 
   context("Verify zip file downloaded", () => {
+    SystemRequirement("REQ-4860");
     it("Download zip file containing Calibration notification", () => {
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -2255,6 +2282,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Verify page 1 in Released document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
