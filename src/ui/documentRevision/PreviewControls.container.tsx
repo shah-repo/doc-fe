@@ -113,7 +113,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       dispatch(documentRevisionsActions.loadDocument(formDocumentId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formDocumentId, documentRevision?.pdf]);
+  }, [formDocumentId]);
   const dialog = useDialog();
   const asyncWithdraw = useAsync<DocumentRevisionTransitionResponse>();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
