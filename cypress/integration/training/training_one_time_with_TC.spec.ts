@@ -846,6 +846,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       SystemRequirement("REQ-4850");
       SystemRequirement("REQ-4880");
       SystemRequirement("REQ-3760");
+      SystemRequirement("REQ-3790");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -1072,6 +1073,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
       SystemRequirement("REQ-4850");
       SystemRequirement("REQ-4880");
       SystemRequirement("REQ-3760");
+      SystemRequirement("REQ-3790");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
