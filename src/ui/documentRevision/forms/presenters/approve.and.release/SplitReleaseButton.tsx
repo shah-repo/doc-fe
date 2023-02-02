@@ -69,7 +69,7 @@ const SplitReleaseButton: React.FunctionComponent<{
             <ArrowDropDownIcon />
           </Button>
         </StyledButtonGroup>
-        <Popper open={isOpened}  className={classes.topUpper}  anchorEl={anchorRef.current}
+        <Popper open={isOpened}  className={classes.dropDown}  anchorEl={anchorRef.current}
           role={undefined} transition disablePortal>
           {({ TransitionProps, placement }) => (
             <Grow
