@@ -17,6 +17,8 @@ import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutpu
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
+import HeaderPOStatus from "../components/common/header/HeaderPOStatus";
+import HeaderPOStatusOptions from "../components/common/header/HeaderPOStatusOptions";
 import HeaderMenu from "../components/common/header/Menu";
 import OwnerChangerContainer from "../components/common/owner.changer/container";
 import { RequestType } from "../components/common/owner.changer/helpers/types";
@@ -29,7 +31,7 @@ import PDFSocket from "../document.revision/summary/pdf.socket";
 import { documentNewVersionPath } from "../document.revision/utils/paths";
 import { useHandleCreateDoc } from "../documentType/list/CreateDocumentByType";
 import CustomLabelTooltip from "../hooks/docCustomization/CustomLabelTooltip";
-import { useReviseDocument } from "../hooks/docCustomization/useCustomization";
+import { useReviseDocument, useUpdateDocument } from "../hooks/docCustomization/useCustomization";
 import useActionCreator from "../hooks/useActionCreator";
 import useAsync from "../hooks/useAsync";
 import useDialog from "../hooks/useDialog";
@@ -37,7 +39,7 @@ import Colors from "../layout/theme/utils/colors";
 import ExportToEmail from "./forms/presenters/export.to.email/ExportToEmail";
 import { checkCanBeCopied, checkCanTypeCreateInspection, checkIsDocumentDirectApproved, checkIsDocumentEB, checkIsDocumentExportable, checkIsDocumentPO, checkIsDocumentRecord, checkIsTypeHaveOutput } from "./helpers/checkDocumentGroup";
 import { canCreateNewVersion, canCreateOutput } from "./helpers/documentRevisionPermissions";
-import { getIsLastVersionObsolete, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased } from "./helpers/documentRevisionStatus";
+import { getIsLastVersionObsolete, isDocumentRevisionApproved, isDocumentRevisionInDraft, isDocumentRevisionInReview, isDocumentRevisionReleased, isDocumentRevisionVoided } from "./helpers/documentRevisionStatus";
 import { InspectionControlsContainer } from "./InspectionControls/InspectionControls.container";
 
 interface OwnProps {
@@ -68,6 +70,13 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
     label: reviseLabel,
     tooltipConfig,
   } = useReviseDocument(documentRevision.document?.documentType?.id);
+
+  const {
+    isVisible: showUpdate,
+    label: updateLabel,
+    tooltipConfig: updateRecordtooltipConfig,
+  } = useUpdateDocument(documentRevision.document?.documentType?.id);
+
   const intl = useIntl();
   const dispatch = useDispatch();
   const [isEmailSent, toogleEmailSent] = useState<boolean>(false);
@@ -104,7 +113,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       dispatch(documentRevisionsActions.loadDocument(formDocumentId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formDocumentId]);
+  }, [formDocumentId, documentRevision?.pdf]);
   const dialog = useDialog();
   const asyncWithdraw = useAsync<DocumentRevisionTransitionResponse>();
   const applyTransition = useActionCreator(documentRevisionsActions.applyTransition);
@@ -170,6 +179,48 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
               id="PreviewControlsContainer-revise"
               data-cy="updateRecord" >
               <Text message={reviseLabel} />
+            </Button>
+          )}
+        </CustomLabelTooltip>
+      );
+    }
+  };
+  const renderUpdateButton = (renderAsButton) => {
+    if (hasAccess && canCreate() && showUpdate) {
+      return (
+        <CustomLabelTooltip {...{ tooltipConfig: updateRecordtooltipConfig }}>
+          {isNewLayout ? (
+            renderAsButton ? (
+              <StyledButton
+                color="primary"
+                onClick={cloneDocument}
+                id="PreviewControlsContainer-revise"
+                data-cy="updateRecord"
+              >
+                <Text message={updateLabel} />
+              </StyledButton>
+            ) : (
+              <StyledMenuListItem button alignItems="flex-start">
+                <StyledMenuListIcon>
+                  <WithDrawSubmissionIcon />
+                </StyledMenuListIcon>
+                <StyledMenuListItemText
+                  id="PreviewControlsContainer-revise"
+                  data-cy="updateRecord"
+                  primary={<Text message={updateLabel} />}
+                  onClick={cloneDocument}
+                />
+              </StyledMenuListItem>
+            )
+          ) : (
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={cloneDocument}
+              id="PreviewControlsContainer-revise"
+              data-cy="updateRecord"
+            >
+              <Text message={updateLabel} />
             </Button>
           )}
         </CustomLabelTooltip>
@@ -318,8 +369,11 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   );
 
   const accessableButtons: string[] = [];
-  if (!isLastVersionObsolete() && hasAccess && canCreate() && showRevise) {
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise) {
     accessableButtons.push("cloneButton");
+  }
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && isPO && showUpdate) {
+    accessableButtons.push("updateButton");
   }
   if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
     accessableButtons.push("newcloneButton");
@@ -341,6 +395,10 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const docRevGroupOptions = documentRevision.document?.documentType?.groupOptions;
   const canCreateInspection = checkCanTypeCreateInspection(docRevGroupOptions);
   const isDocumentDraft = isDocumentRevisionInDraft(documentRevision.status);
+  const isDocumentInReview = isDocumentRevisionInReview(documentRevision.status);
+  const isDocumentApproved = isDocumentRevisionApproved(documentRevision.status);
+  const isDocumentReleased = isDocumentRevisionReleased(documentRevision.status);
+  const isDocumentVoided = isDocumentRevisionVoided(documentRevision.status);
 
   if (!(!isDocumentDraft || !canCreateInspection)) {
     accessableButtons.push("inspectionControl");
@@ -380,6 +438,7 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   const renderbuttons = (buttons: string[], renderAsButton: boolean) => (
     <>
       {buttons.includes("cloneButton") && renderCloneButton(renderAsButton)}
+      {buttons.includes("updateButton") && renderUpdateButton(renderAsButton)}
       {buttons.includes("newcloneButton") && (
         <CopyEBButton {...{ documentRevision, renderAsButton }} />
       )}
@@ -412,11 +471,28 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
       )}
     </>
   );
-
   return (
     <>
-      <PDFSocket {...{ documentRevision }}/>
+      <PDFSocket {...{ documentRevision }} />
       {isNewLayout ? newRenderNoAccessWarning() : renderNoAccessWarning()}
+      <>
+        {isPO &&
+          documentRevision.poStatus &&
+          (isDocumentInReview || isDocumentDraft || isDocumentVoided) && (
+          <HeaderPOStatus poStatus={documentRevision.poStatus} />
+        )}
+      </>
+      <>
+        {hasAccess && canCreate() && isPO &&
+          documentRevision?.id &&
+          documentRevision?.poStatus &&
+          (isDocumentApproved || isDocumentReleased) && (
+          <HeaderPOStatusOptions
+            poStatus={documentRevision?.poStatus}
+            docId={documentRevision?.id}
+          />
+        )}
+      </>
       {initialButtons.length > 0 && renderbuttons(initialButtons, true)}
       {restButtons.length > 0 && (
         <HeaderMenu>{renderbuttons(restButtons, false)}</HeaderMenu>

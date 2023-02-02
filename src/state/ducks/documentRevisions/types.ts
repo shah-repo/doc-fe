@@ -24,6 +24,18 @@ export enum DocumentRevisionStatus {
   Voided = "VOIDED",
 }
 
+export enum POStatusType {
+  OPENED = "OPENED",
+  CLOSED = "CLOSED",
+  VOIDED = "VOIDED"
+}
+
+export enum POStatusLabelMapping {
+  OPENED = "Open",
+  CLOSED = "Closed",
+  VOIDED = "Voided"
+}
+
 
 export enum RevisionChangeType {
   NextRevision = "NEXT_REVISION",
@@ -185,6 +197,7 @@ export interface DocumentRevision extends FBDocumentRevisionProps {
   smartReferencesTo?: SmartReference[];
   usedDocumentsInLHRS?: UsedDocumentsInLHRS[];
   redline?: boolean;
+  poStatus?: POStatusType;
   relatedPartsStatus?: RELATED_PARTS_STATUS;
   relatedParentPartDetails?: RelatedParentPartDetails;
 }

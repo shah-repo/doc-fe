@@ -15,7 +15,7 @@ import SummaryHeader from "../../../../ui/document.revision/header/SummaryHeader
 import Attachment from "../../../../ui/document.revision/summary/attachment";
 import SummaryPresenter from "../../../../ui/document.revision/summary/presenter";
 import LHRBanner from "../../../../ui/documentRevision/forms/presenters/lhr/LHR.banner";
-import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
+import { checkIsDocumentForm, checkIsDocumentLHR, checkIsDocumentMPIOutput, checkIsDocumentPO } from "../../../../ui/documentRevision/helpers/checkDocumentGroup";
 import { FBEditorState, FBSchemaProps, FBSection, FBWorkspace, FBWorkspaceModeOptions } from "../../../../ui/form.builder";
 import FBMaterialEqInfoContainer from "../../../../ui/form.builder/FBMaterialEquipmentInfo/FBMaterailEqInfo.container";
 import Colors from "../../../../ui/layout/theme/utils/colors";
@@ -38,6 +38,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
   const groupOptions = documentRevision?.document.documentType.groupOptions;
   const isLHR = checkIsDocumentLHR(groupOptions);
   const isTypeMpiDoc = checkIsDocumentMPIOutput(groupOptions);
+  const isPO = checkIsDocumentPO(documentRevision?.document.documentType.groupOptions);
   const smartReferencesFrom =
   documentRevision?.smartReferencesFrom?.filter(
       (ref) =>
@@ -194,7 +195,7 @@ const DocumentRevisionSummary: React.FunctionComponent<DocumentRevisionSummaryPr
                             </>
                           )}
                           {tabType === TabTypeOptions.TABS_MEQ &&
-                          documentRevision.status !== DocumentRevisionStatus.Voided &&
+                          !isPO && documentRevision.status !== DocumentRevisionStatus.Voided &&
                           <FBMaterialEqInfoContainer
                             documentRevision={documentRevision}
                             inView={Boolean(_tabsState?.isTabActive(TabTypeOptions.TABS_MEQ))}
