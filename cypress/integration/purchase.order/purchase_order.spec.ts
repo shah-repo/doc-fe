@@ -708,6 +708,7 @@ context("PO test", () => {
     });
 
     it("Check if PO state is blank", () => {
+      SystemRequirement("REQ-1560");
       cy.get("[data-cy=\"note-icon\"]").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

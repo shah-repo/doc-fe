@@ -973,6 +973,7 @@ context("Test training records and training curriculum landing page", () => {
 
     context("Verify filters on each field", () => {
       it("Verify filter for DOC ID", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="1"] input`).arrowType("FM-00004");
         cy.progressBarShouldNotExist();
@@ -983,6 +984,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for TRN ID", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] input`).arrowType("TRN-00005");
         cy.progressBarShouldNotExist();
@@ -993,6 +995,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for REVISION", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).arrowType("1");
         cy.progressBarShouldNotExist();
@@ -1003,6 +1006,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for DOCUMENT TITLE", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="4"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="4"] input`).arrowType("Form2 document for training");
         cy.progressBarShouldNotExist();
@@ -1013,6 +1017,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for TRAINEE", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="5"] input`).arrowType("Athena Block");
         cy.progressBarShouldNotExist();
@@ -1023,6 +1028,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for ASSIGN DATE", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="6"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="6"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Last 7 days").arrowClick();
@@ -1034,6 +1040,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for DUE DATE", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="7"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="7"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Due in 7 days").arrowClick();
@@ -1052,6 +1059,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for COMPLETED ON", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="8"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="8"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Pending").arrowClick();
@@ -1063,6 +1071,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for TC ID", () => {
+        SystemRequirement("REQ-2820");
         cy.get(`th[aria-colindex="9"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="9"] input`).arrowType("TCT-00002");
         cy.progressBarShouldNotExist();

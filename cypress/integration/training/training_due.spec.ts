@@ -16,6 +16,7 @@ import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -840,6 +841,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5060");
       cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
   });
@@ -852,6 +854,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5060");
       cy.get("[status=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
@@ -862,6 +865,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5060");
       cy.get("[trainingstatus=\"DUE\"]").eq(0).should("have.text", TrainingStatus.DUE_IN_7_DAYS);
     });
 
@@ -899,6 +903,7 @@ context("Test for Training due", { tags: ["@timetool"] }, () => {
     });
 
     it("Chart - Due in 7 Days should have 2", () => {
+      SystemRequirement("REQ-5040");
       cy.intercept({ method: "GET", pathname: "/api/v1/training_record/dueSummary/*" }, (req) => {
         req.reply((res) => {
           expect(res.body.DUE).to.equal(2);

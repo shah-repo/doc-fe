@@ -17,6 +17,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -821,6 +822,7 @@ context("Test training records after refresh period passes", { tags: ["@timetool
 
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-2460");
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `Your training on${releasedFormId}Rev 1 released form` });
       // eslint-disable-next-line max-len
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released formA training is assigned to you` });

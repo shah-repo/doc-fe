@@ -9,6 +9,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -653,12 +654,14 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select document 'released doc3' to be trained on", () => {
+      SystemRequirement("REQ-4550");
       cy.get("[data-cy=training-document-to-be-trained-on]").autocompleteSelect("released doc3");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Remove document 'released doc2' to be trained on", () => {
+      SystemRequirement("REQ-4550");
       cy.get("[data-cy=training-document-to-be-trained-on]").parent()
         .find(".MuiAutocomplete-tag").eq(1).find(".MuiSvgIcon-root.MuiChip-deleteIcon").arrowClick({ force: true });
       cy.progressBarShouldNotExist();
@@ -738,6 +741,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Training record for doc2", () => {
+      SystemRequirement("REQ-4570");
       cy.trLandingPageDocId({ docId: releasedDoc2Id });
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.progressBarShouldNotExist();
@@ -767,6 +771,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it(`Verify training notification for doc 2 should not present`, () => {
+      SystemRequirement("REQ-4570");
       cy.dashVerifyListItemNotExistsOnDashboard({ listItem: `${releasedDoc2Id}Rev 1 released doc2` });
     });
 

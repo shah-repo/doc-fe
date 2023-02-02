@@ -398,6 +398,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.poSelectSupplier({ supplier: "SUP-00001 - rev 1 - New suplier for PO" });
       });
 
@@ -584,6 +585,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.poSelectSupplier({ supplier: "SUP-00001 - rev 2 - New suplier for PO12" });
       });
 
@@ -742,6 +744,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.poSelectSupplier({ supplier: "SUP-00002 - rev 1 - released supplier" });
       });
 
@@ -992,6 +995,7 @@ context("Purchase Supplier Update", () => {
       });
 
       it("Select Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.poSelectSupplier({ supplier: "SUP-00002 - rev 3 - released supplier12" });
       });
 
