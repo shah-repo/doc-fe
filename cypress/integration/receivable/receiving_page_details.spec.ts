@@ -1246,7 +1246,8 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify page 1 for Receivable form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
@@ -1465,7 +1466,8 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify page 1 for Receivable form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
@@ -1833,7 +1835,8 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify page 1 for Receivable form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
@@ -2015,7 +2018,8 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify page 1 for Receivable form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );

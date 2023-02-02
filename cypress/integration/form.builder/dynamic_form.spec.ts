@@ -403,7 +403,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 1 in document", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[0];
       expect(el).match(/Page 1 of 4/);
       if (el.includes("Page 1 of 4")) {
@@ -436,7 +437,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 2 in document", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[1];
       expect(el).match(/Page 2 of 4/);
       if (el.includes("Page 2 of 4")) {
@@ -476,7 +478,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 3 in document", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[2];
       expect(el).match(/Page 3 of 4/);
       if (el.includes("Page 3 of 4")) {
@@ -501,7 +504,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 4 in document", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[3];
       expect(el).match(/Page 4 of 4/);
@@ -659,7 +663,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 1 in document", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[0];
       expect(el).match(/Page 1 of 4/);
       if (el.includes("Page 1 of 4")) {
@@ -693,7 +698,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 2 in document", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[1];
       expect(el).match(/Page 2 of 4/);
       if (el.includes("Page 2 of 4")) {
@@ -733,7 +739,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 3 in document", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[2];
       expect(el).match(/Page 3 of 4/);
       if (el.includes("Page 3 of 4")) {
@@ -758,7 +765,8 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 4 in document", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[3];
       expect(el).match(/Page 4 of 4/);

@@ -1422,7 +1422,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 1 for LHRt", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
@@ -1464,7 +1465,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 2 of LHRt", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
 
@@ -1509,7 +1511,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 3 of LHRt", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
@@ -1706,7 +1709,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 1 for LHRt", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
@@ -1749,7 +1753,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 2 of LHRt", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         expect(el).match(/LHR STEP #1\nPI-00002 - MPI document/);
@@ -1786,7 +1791,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 3 of LHRt", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
@@ -2158,7 +2164,8 @@ context("Autosave LHR", () => {
       });
 
       it("Verify page 1 for LHR", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 3")) {
           tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
@@ -2204,7 +2211,8 @@ context("Autosave LHR", () => {
       });
 
       it("Verify page 2 of LHR", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[1];
         if (el.includes("Page 2 of 3")) {
           tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
@@ -2249,7 +2257,8 @@ context("Autosave LHR", () => {
       });
 
       it("Verify page 3 of LHR", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[2];
         if (el.includes("Page 3 of 3")) {
           tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
@@ -2636,7 +2645,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 1 for LHR", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 4")) {
         tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
@@ -2682,7 +2692,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 2 of LHR", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 4")) {
         tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
@@ -2730,7 +2741,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 3 of LHR", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[2];
       if (el.includes("Page 3 of 4")) {
         tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);
@@ -2779,7 +2791,8 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 4 of LHR", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[3];
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new RegExp( `Lot History Record Test\n${lotDocumentId}\nCS-00005, REV 1, PART DOCUMENT`);

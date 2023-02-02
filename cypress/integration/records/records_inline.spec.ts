@@ -423,7 +423,8 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 1 for record form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 3")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
@@ -464,7 +465,8 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 2 of record form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[1];
         if (el.includes("Page 2 of 3")) {
 
@@ -494,7 +496,8 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 3 of record form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         SystemRequirement("REQ-4870");
         const el = pages[2];
         if (el.includes("Page 3 of 3")) {
@@ -649,7 +652,8 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 1 for record form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 3")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
@@ -691,7 +695,8 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 2 of record form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[1];
         if (el.includes("Page 2 of 3")) {
 
@@ -720,7 +725,8 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 3 of record form", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         SystemRequirement("REQ-4870");
         const el = pages[2];
         if (el.includes("Page 3 of 3")) {
@@ -1019,7 +1025,8 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 1 for WIP document", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new
@@ -1369,7 +1376,8 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 1 for Released document", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new

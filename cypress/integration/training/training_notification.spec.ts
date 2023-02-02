@@ -797,7 +797,8 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify PDF file for pending training notification", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),

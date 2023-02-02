@@ -283,7 +283,8 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Verify page 1 for Parts form", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
@@ -325,7 +326,8 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Verify page 2 for Parts form", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
@@ -351,7 +353,8 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Verify page 3 for Parts form", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
@@ -509,7 +512,8 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Verify page 1 for Parts form", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
@@ -552,7 +556,8 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Verify page 2 for Parts form", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new RegExp( `Form\n${partsFormId}, Revision 1\nNEW PART FORM`, "gi" );
@@ -578,7 +583,8 @@ context("Autocomplete 'Parts' test", () => {
     });
 
     it("Verify page 3 for Parts form", () => {
-      SystemRequirement("REQ-4850", "REQ-4880");
+      SystemRequirement("REQ-4850");
+      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
@@ -788,7 +794,8 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Verify page 1 for Parts document", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new RegExp( `Parts\n${partsDocId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
@@ -832,7 +839,8 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Verify page 2 for Parts document", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         SystemRequirement("REQ-4870");
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
@@ -992,7 +1000,8 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Verify page 1 for Parts document", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new RegExp( `Parts\n${partsDocId}, Revision 1\nPARTS DOCUMENT TITLE`, "gi" );
@@ -1036,7 +1045,8 @@ context("Autocomplete 'Parts' test", () => {
       });
 
       it("Verify page 2 for Parts document", () => {
-        SystemRequirement("REQ-4850", "REQ-4880");
+        SystemRequirement("REQ-4850");
+        SystemRequirement("REQ-4880");
         SystemRequirement("REQ-4870");
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
