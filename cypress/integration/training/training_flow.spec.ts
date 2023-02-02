@@ -518,11 +518,8 @@ context("Training Flow test", () => {
     });
 
     it("Verify training options document types", () => {
-<<<<<<< HEAD
       SystemRequirement("REQ-4410");
-=======
       SystemRequirement("REQ-4460");
->>>>>>> 9426f556b8fff1d45bccb774cd9577b4f2328eda
       cy.get(`[name="training-document-to-be-trained-on"]`).arrowClick();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "released form");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", approvedFormId);

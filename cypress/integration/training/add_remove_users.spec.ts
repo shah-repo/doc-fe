@@ -566,11 +566,8 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Add new User to train", () => {
-<<<<<<< HEAD
       SystemRequirement("REQ-4470");
-=======
       SystemRequirement("REQ-4550");
->>>>>>> 9426f556b8fff1d45bccb774cd9577b4f2328eda
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[7].name}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
