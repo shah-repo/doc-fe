@@ -8,6 +8,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { RecordDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -858,6 +859,7 @@ context("Records flow", () => {
     });
 
     context("Search Fields Verification", () => {
+      SystemRequirement("FB-0300");
       it("Verify Search Field for `text`", () => {
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.get(`input[placeholder^="Search"]`).clear().arrowType("text").arrowClick();
@@ -883,6 +885,7 @@ context("Records flow", () => {
     });
 
     context("Favourites Verification", () => {
+      SystemRequirement("FB-0290");
       it("Verify Favorites", () => {
         cy.get(`[data-cy="Inline Approval"]`).parent()
           .find("button").eq(1).click();

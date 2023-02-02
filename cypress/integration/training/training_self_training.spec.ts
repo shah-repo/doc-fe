@@ -319,6 +319,7 @@ context("Self training test", () => {
 
     it("Check for training text inside dialog box and complete training", () => {
       cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
+      SystemRequirement("REQ-4430");
       cy.get("[data-cy=training-complete]").click();
       cy.get("form>div").should("contain.text", "TRN ID");
       cy.get("form>div").should("contain.text", "Doc ID Rev");
@@ -430,6 +431,7 @@ context("Self training test", () => {
 
     it("Check for training text inside dialog box and complete training", () => {
       cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
+      SystemRequirement("REQ-4430");
       cy.get("[data-cy=training-complete]").click();
       cy.get("form>div").should("contain.text", "TRN ID");
       cy.get("form>div").should("contain.text", "Doc ID Rev");

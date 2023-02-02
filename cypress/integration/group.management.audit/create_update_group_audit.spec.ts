@@ -179,7 +179,7 @@ context("Group Creation Flow", () => {
   });
 
   context("Check if the history is created for first official group", () => {
-    SystemRequirement("REQ-2640");
+    SystemRequirement("REQ-2640", "REQ-5240");
     context("Check history in group managment page", () => {
       it("Open history panel", () => {
         cy.grpHistoryClickOpenButton();
@@ -380,7 +380,7 @@ context("Group Creation Flow", () => {
   });
 
   context("Check if the history is created for edited 'Group A'", () => {
-    SystemRequirement("REQ-2640");
+    SystemRequirement("REQ-2640", "REQ-5240");
     context("Check history in group managment page", () => {
       it("Open history panel", () => {
         cy.grpHistoryClickOpenButton();

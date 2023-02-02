@@ -869,6 +869,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Verify 3 roles should be present and disabled", () => {
+        SystemRequirement("REQ-0520");
         cy.get("[data-cy='form.builder.approvals']").parent().parent().parent().parent()
           .find(".MuiSvgIcon-colorDisabled").should("have.length", 3);
         cy.get("[data-cy='Harry Bartoletti']").should("be.exist");
@@ -927,6 +928,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add operator and verify checkmark should not be ticked", () => {
+        SystemRequirement("REQ-0520");
         cy.lhrAddApproverOnApproverList({ approver: USERS[3].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
@@ -934,6 +936,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add owner and verify checkmark should not be ticked", () => {
+        SystemRequirement("REQ-0520");
         cy.lhrAddApproverOnApproverList({ approver: USERS[1].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorDisabled");
@@ -941,6 +944,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Add DAM role user and verify checkmark should be ticked", () => {
+        SystemRequirement("REQ-0520");
         cy.lhrAddApproverOnApproverList({ approver: USERS[2].name });
         cy.get("[data-cy='Harry Bartoletti']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
         cy.get("[data-cy='Clinical Team']").parent().find("svg").should("have.class", "MuiSvgIcon-colorPrimary");
@@ -983,6 +987,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click Approve button", () => {
+        SystemRequirement("REQ-0520");
         cy.lhrApproveWithoutApi();
       });
     });
