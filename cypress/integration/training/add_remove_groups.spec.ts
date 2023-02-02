@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -474,6 +475,7 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Select Groups to train 'Group1 and Group2'", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group1");
       cy.unClick();
       cy.progressBarShouldNotExist();
@@ -588,6 +590,7 @@ context("Add/Remove groups from Training Curriculum", () => {
     });
 
     it("Add new Group to train 'Group3'", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Group3");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
