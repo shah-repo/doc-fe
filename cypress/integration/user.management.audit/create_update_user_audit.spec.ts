@@ -99,7 +99,7 @@ context("User Creation Flow", () => {
   });
 
   context(`Check if the history is created for ${nameOfFirstUserToSignUp}`, () => {
-    SystemRequirement("REQ-2640");
+    SystemRequirement("REQ-2640", "REQ-5240");
     it("Open history panel", () => {
       cy.usrHistoryClickOpenButton();
     });
@@ -185,7 +185,7 @@ context("User Creation Flow", () => {
   });
 
   context(`Check if the signup history is created for ${nameOfFirstUserToSignUp}`, () => {
-    SystemRequirement("REQ-2640");
+    SystemRequirement("REQ-2640", "REQ-5240");
     it("Check history is created", () => {
       it("Open history panel", () => {
         cy.usrHistoryClickOpenButton();
@@ -286,7 +286,7 @@ context("User Creation Flow", () => {
   });
 
   context(`Check if the reset password email history is created for ${nameOfFirstUserToSignUp}`, () => {
-    SystemRequirement("REQ-2640");
+    SystemRequirement("REQ-2640", "REQ-5240");
     it("Check history is created", () => {
       it("Open history panel", () => {
         cy.usrHistoryClickOpenButton();
@@ -322,6 +322,7 @@ context("User Creation Flow", () => {
       });
 
       it("Click deactivate button", () => {
+        SystemRequirement("REQ-4190");
         cy.usrClickStatusButton();
         cy.usrClickCloseDialogButton();
         currentDate = momentInPST().format("MMM D, YYYY hh:m");
@@ -329,7 +330,7 @@ context("User Creation Flow", () => {
     });
 
     context(`Check if the deactivate history is created for ${nameOfThirdUserToSignUp}`, () => {
-      SystemRequirement("REQ-2640");
+      SystemRequirement("REQ-2640", "REQ-5240");
       it("Check history is created", () => {
         it("Open history panel", () => {
           cy.usrHistoryClickOpenButton();
@@ -367,7 +368,7 @@ context("User Creation Flow", () => {
     });
 
     context(`Check if the reactivate history is created for ${nameOfThirdUserToSignUp}`, () => {
-      SystemRequirement("REQ-2640");
+      SystemRequirement("REQ-2640", "REQ-5240");
       it("Check history is created", () => {
         it("Open history panel", () => {
           cy.usrHistoryClickOpenButton();

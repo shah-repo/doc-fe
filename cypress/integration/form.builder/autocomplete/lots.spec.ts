@@ -205,6 +205,7 @@ context("Autocomplete 'Lots' test", () => {
         cy.fbEnterNameValue({ name: "label", value: "fb-range" });
         cy.fbEnterNameValue({ name: "placeholder", value: "fb-range placeholder" });
         cy.get(`[data-cy="fb-control-form.builder.range"]`).arrowClick();
+        SystemRequirement("FB-0090");
         cy.fbSelectTextFieldRangeFromValue({ value: "0" });
         cy.fbSelectTextFieldRangeToValue({ value: "10" });
         cy.unClick();

@@ -565,6 +565,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it("Add new User to train", () => {
+      SystemRequirement("REQ-4550");
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[7].name}`);
       cy.unClick();
       cy.progressBarShouldNotExist();
@@ -572,6 +573,7 @@ context("Add/Remove users from Training Curriculum", () => {
     });
 
     it(`Remove users ${USERS[11].name} and ${USERS[13].name}`, () => {
+      SystemRequirement("REQ-4550");
       cy.get("[data-cy=training-select-users-to-train]").parent().parent()
         .find(".MuiChip-root.MuiAutocomplete-tag.MuiChip-deletable")
         .contains(USERS[11].name).parent().parent().find("svg").arrowClick();
