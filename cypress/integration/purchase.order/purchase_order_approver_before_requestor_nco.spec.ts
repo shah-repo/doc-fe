@@ -12,6 +12,7 @@ import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1482,6 +1483,7 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
 
   context(`Verify that the system automatically update the approvals field with the new requestor selected`, () => {
     it("Check approvers automatically added", () => {
+      SystemRequirement("REQ-5200");
       cy.get(`[name^="fb-po-approvals-"]`).last().should("contain", `${USERS[2].name} - ${USERS[2].email}`)
         .and("have.length", 1);
       cy.progressBarShouldNotExist();
