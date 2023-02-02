@@ -5,9 +5,6 @@ import Colors from "../../../../../ui/layout/theme/utils/colors";
 const styles = () => ({
   root: {
     "margin": 0,
-    "&:hover": {
-      backgroundColor: Colors.light_gray,
-    },
     "& .MuiButtonGroup-grouped": {
       background: "transparent",
       margin: 0,

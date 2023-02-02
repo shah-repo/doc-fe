@@ -33,7 +33,7 @@ const TopSection: React.FunctionComponent<{
     <div>
       <Grid className={classes.gridCenterAlign} container>
         <Grid item>
-          <Typography variant="h6" id="sectionTitle" component="div">
+          <Typography variant="h6" id="sectionTitle" component="div" className={classes.sectionTitle}>
             <Text translation="approvalRequest.items.section.heading"/>
           </Typography>
         </Grid>

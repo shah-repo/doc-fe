@@ -845,6 +845,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Verify page 1 for draft document", () => {
       SystemRequirement("REQ-4850");
       SystemRequirement("REQ-4880");
+      SystemRequirement("REQ-3760");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -1070,6 +1071,7 @@ context("Repeat One Time Training with Training Curriculum", () => {
     it("Verify page 1 for released document", () => {
       SystemRequirement("REQ-4850");
       SystemRequirement("REQ-4880");
+      SystemRequirement("REQ-3760");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new

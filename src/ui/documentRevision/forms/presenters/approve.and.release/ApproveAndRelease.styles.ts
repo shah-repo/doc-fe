@@ -17,5 +17,10 @@ export const styles = makeStyles((theme: Theme) =>
       height: 40,
       marginTop: "0 !important",
     },
+    dropDown: {
+      top: "2px !important",
+      width: "161px",
+      left: "-10px",
+    },
   }),
 );

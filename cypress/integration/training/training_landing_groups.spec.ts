@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -784,6 +785,7 @@ context("Groups on Training Curriculum landing page", () => {
 
   context("Check columns on Training Curriculums page", () => {
     it("Check default columns on landing page", () => {
+      SystemRequirement("REQ-4680");
       cy.trVerifyElementByColumnName({ name: "TRAINING CURRICULUM ID" });
       cy.trVerifyElementByColumnName({ name: "TITLE" });
       cy.trVerifyElementByColumnName({ name: "OWNER" });
