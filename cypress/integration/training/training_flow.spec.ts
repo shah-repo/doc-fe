@@ -518,7 +518,11 @@ context("Training Flow test", () => {
     });
 
     it("Verify training options document types", () => {
+<<<<<<< HEAD
       SystemRequirement("REQ-4410");
+=======
+      SystemRequirement("REQ-4460");
+>>>>>>> 9426f556b8fff1d45bccb774cd9577b4f2328eda
       cy.get(`[name="training-document-to-be-trained-on"]`).arrowClick();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "released form");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", approvedFormId);
@@ -817,6 +821,7 @@ context("Training Flow test", () => {
 
   context("Open and complete Training", () => {
     it("Navigate to assigned training and verify due of 30 days", () => {
+      SystemRequirement("REQ-4520");
       cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
@@ -833,6 +838,7 @@ context("Training Flow test", () => {
     });
 
     it("click complete training button", () => {
+      SystemRequirement("REQ-4520");
       cy.trCompleteTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -902,6 +908,7 @@ context("Training Flow test", () => {
     });
 
     it("Select force training option 'Yes'", () => {
+      SystemRequirement("REQ-4510");
       cy.get(`[name="training-force-retraining-for-everyone"]`).eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -951,6 +958,7 @@ context("Training Flow test", () => {
     });
 
     it("'One-Time training title1' should be present", () => {
+      SystemRequirement("REQ-4510");
       cy.trLandingPageName({ name: "One-Time training title1" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "One-Time training title1");
     });
@@ -962,6 +970,7 @@ context("Training Flow test", () => {
     });
 
     it(`Verify training notification`, () => {
+      SystemRequirement("REQ-4510");
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 

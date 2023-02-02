@@ -540,6 +540,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it(`Training record for ${USERS[11].name}`, () => {
+      SystemRequirement("REQ-4580");
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
@@ -554,6 +555,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it(`Training record for ${USERS[12].name}`, () => {
+      SystemRequirement("REQ-4580");
       cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
