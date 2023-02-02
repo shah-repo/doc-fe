@@ -897,7 +897,7 @@ context("Autocomplete 'Lots' test", () => {
     });
 
     context("Verify that zip file containing pdf downloaded", () => {
-      SystemRequirement("REQ-4860";
+      SystemRequirement("REQ-4860");
       it("Download zip file containing training form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
