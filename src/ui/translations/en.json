@@ -356,6 +356,7 @@
   "common.parent.groups": "Parent groups",
   "common.renderHTML": "Render HTML",
   "common.download.html": "Download HTML",
+  "common.view.pdf": "View PDF",
   "common.hello.sign.enable": "Enable Hello Sign",
   "common.hello.sign.disable": "Disable Hello Sign",
   "common.generate.pdf": "Generate PDF",
