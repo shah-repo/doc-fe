@@ -6,6 +6,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { PurchaseOrderNew } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -669,6 +670,7 @@ add the requestor to the approvals field - ENC-12706`,
     the requestor to the approval field`,
       () => {
         it(`Check the Approval field does not contain requestor ${USERS[2].name}`, () => {
+          SystemRequirement("REQ-5220");
           cy.get("[data-cy^='fb-po-approvals']").should("not.have.text", USERS[2].name);
         });
       }

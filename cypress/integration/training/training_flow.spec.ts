@@ -811,6 +811,7 @@ context("Training Flow test", () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-2460");
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
   });

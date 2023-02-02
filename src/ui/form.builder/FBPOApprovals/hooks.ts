@@ -208,7 +208,8 @@ export const usePoApprovals = (
       FBDataStore.setApprovals(data, FBDataStoreApprovalKeys.PO_APPROVALS);
       if (id && [ApprovalStatus.Approved, ApprovalStatus.Rejected].includes(data?.status as ApprovalStatus)) {
         // TODO investigate why reload here sometimes causes blink and returns to prev state
-        return dispatch(documentRevisionsActions.load(id));
+        // sometimes it is showing prev state of documentRevision so added this hard reload.
+        document.location.reload(); // documentRevision values are not consistent.
       }
       updateSignatureGroupNames();
     }

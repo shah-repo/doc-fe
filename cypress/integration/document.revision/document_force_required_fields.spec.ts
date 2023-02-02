@@ -5,6 +5,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -168,6 +169,7 @@ context("Document force required fields", () => {
 
   context("Verify user is forced to fill required fields", () => {
     it("Click on 'Approve and release' button", () => {
+      SystemRequirement("REQ-4890");
       cy.drApproveAndReleaseDocumentWithoutSelectingForm({ toastifyExists: true });
     });
 

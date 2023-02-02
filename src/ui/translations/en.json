@@ -1224,6 +1224,7 @@
   "PENDING_CHANGE.SUP": "Draft",
   "IN_REVIEW": "In Review",
   "IN_REVIEW.PO": "Pending Approval",
+  "common.pending.approval": "Pending Approval",
   "IN_REVIEW.SUP": "Under Evaluation",
   "RELEASED": "Released",
   "RELEASED.PO": "Open",
