@@ -55,7 +55,6 @@ const SplitReleaseButton: React.FunctionComponent<{
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
             className={classes.buttonHover}
-
           >
             <Text translation="releaseButton.option.expressAR" />
           </Button>

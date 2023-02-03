@@ -29,7 +29,6 @@ export const styles = makeStyles((theme: Theme) =>
         "border-bottom-left-radius": "100px",
         "border-top-left-radius": "100px",
       },
-
       "border-bottom-left-radius": "100px",
       "border-top-left-radius": "100px",
     },
@@ -39,7 +38,6 @@ export const styles = makeStyles((theme: Theme) =>
         "border-bottom-right-radius": "100px",
         "border-top-right-radius": "100px",
       },
-
       "border-bottom-right-radius": "100px",
       "border-top-right-radius": "100px",
     },
