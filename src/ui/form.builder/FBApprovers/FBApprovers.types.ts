@@ -17,6 +17,7 @@ export interface FBId {
 
 export interface FBEmployee {
   id: string;
+  active: boolean;
   user: FBUser;
 }
 
@@ -30,6 +31,7 @@ export interface FBGroup {
   id: string;
   name?: string;
   employees: FBEmployee[];
+  activeEmployees: FBEmployee[]
 }
 
 export interface FBApprover {
