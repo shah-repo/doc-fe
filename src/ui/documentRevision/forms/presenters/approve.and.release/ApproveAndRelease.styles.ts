@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
+import Colors from "../../../../layout/theme/utils/colors";
 
 export const styles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,21 +25,19 @@ export const styles = makeStyles((theme: Theme) =>
     },
     buttonHover: {
       "&:hover": {
-        "backgroundColor": "#F2F4F6 !important",
-        "border-bottom-left-radius": "100px",
-        "border-top-left-radius": "100px",
+        backgroundColor: `${Colors.light_gray} !important`,
+        borderTopLeftRadius: "100px",
       },
-      "border-bottom-left-radius": "100px",
-      "border-top-left-radius": "100px",
+      "borderTopLeftRadius": "100px",
+      "borderBottomLeftRadius": "100px",
     },
     hoverArrow: {
       "&:hover": {
-        "backgroundColor": "#F2F4F6 !important",
-        "border-bottom-right-radius": "100px",
-        "border-top-right-radius": "100px",
+        backgroundColor: `${Colors.light_gray} !important`,
+        borderTopRightRadius: "100px",
       },
-      "border-bottom-right-radius": "100px",
-      "border-top-right-radius": "100px",
+      "borderTopRightRadius": "100px",
+      "borderBottomRightRadius": "100px",
     },
   }),
 );
