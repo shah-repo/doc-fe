@@ -946,7 +946,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`${TrainingStatus.OVERDUE} should exist`, () => {
-      SystemRequirement("REQ-4530");
+      SystemRequirement("REQ-4530", "REQ-5060");
       cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
 
@@ -955,7 +955,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`${TrainingStatus.OVERDUE} should exist`, () => {
-      SystemRequirement("REQ-4530");
+      SystemRequirement("REQ-4530", "REQ-5060");
       cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
 
@@ -964,7 +964,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`${TrainingStatus.OVERDUE} should exist`, () => {
-      SystemRequirement("REQ-4530");
+      SystemRequirement("REQ-4530", "REQ-5060");
       cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
   });
@@ -981,7 +981,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
-      SystemRequirement("REQ-5070");
+      SystemRequirement("REQ-5060", "REQ-5070");
       cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", TrainingStatus.OVERDUE);
     });
 
@@ -1067,6 +1067,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5060");
       cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", TrainingStatus.OVERDUE);
     });
 

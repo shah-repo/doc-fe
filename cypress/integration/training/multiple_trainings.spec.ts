@@ -15,6 +15,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1361,6 +1362,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Check if pop-up modal has due trainings with 2 users", () => {
+      SystemRequirement("REQ-5060");
       cy.get("h2").eq(1).should("contain.text", "DUE IN 7 DAYS (2)");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1648,10 +1650,12 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("In dashboard, training outstanding chart should be present", () => {
+      SystemRequirement("REQ-5040");
       cy.get("#training-chart canvas").should("be.exist");
     });
 
     it("In dashboard, user view should have 3 tabs", () => {
+      SystemRequirement("REQ-5060");
       cy.get("[role=\"tablist\"]").eq(1).find("button").should("have.length", 3);
       cy.get("[role=\"tablist\"]").eq(1).find("button").eq(0).should("contain.text", "ALL");
       cy.get("[role=\"tablist\"]").eq(1).find("button").eq(1).should("contain.text", "Overdue");
@@ -1659,6 +1663,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Training tab should have separate line item for Overdue & Due", () => {
+      SystemRequirement("REQ-5060");
       cy.contains("Trainings").eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1700,6 +1705,7 @@ context("Test for multiple TCs and users have different due dates", { tags: ["@t
     });
 
     it("Check training item format", () => {
+      SystemRequirement("REQ-5050");
       cy.get("#full-width-tabpanel-1 li").eq(0)
         .should("contain.text", "At")
         .and("contain.text", "Athena")

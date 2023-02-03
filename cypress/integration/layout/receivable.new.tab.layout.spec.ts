@@ -13,6 +13,7 @@ import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseO
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[1];
 const FIRST_USER = USERS[2];
@@ -965,6 +966,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Insert Receipt Quantity and click on save ", () => {
+      SystemRequirement("REQ-2000");
       cy.get("[data-cy='received'] input").clear().arrowType("180");
       cy.wait(2000);
       cy.get("[data-cy='form.builder.save']").arrowClick().wait(2000);
@@ -1280,6 +1282,7 @@ context("Receiving landing page test", () => {
   });
 
   context("Release document", () => {
+    SystemRequirement("REQ-2000");
     it("Navigate to overview tab", () => {
       cy.drSelectOverviewTab();
       cy.listLoadingElementShouldNotExist();
@@ -1295,6 +1298,7 @@ context("Receiving landing page test", () => {
     });
 
     it("Click 'Submit for Approval' button", () => {
+      SystemRequirement("REQ-2040");
       cy.pmSubmitForApprovalWithoutAPI();
     });
 

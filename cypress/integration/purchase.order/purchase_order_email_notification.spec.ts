@@ -12,6 +12,7 @@ import { CONFIG } from "../../support/config";
 import { POPart } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -374,6 +375,7 @@ context("Send PO Owner an email notification when a PO is approved", () => {
     });
 
     it("Verify the emails that should be received", () => {
+      SystemRequirement("REQ-5160");
       const emailsThatShouldBeReceived: IMAPEmailsInTesting[] = [
         {
           sentToUser: USERS[1].email,

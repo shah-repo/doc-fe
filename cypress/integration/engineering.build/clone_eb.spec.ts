@@ -941,6 +941,7 @@ context("Clone EB Flow test", () => {
       });
 
       it("Choose an existing part from the list of available parts", () => {
+        SystemRequirement("REQ-3830");
         cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("PRT-00005 - rev 1 - Part document");
       });
 

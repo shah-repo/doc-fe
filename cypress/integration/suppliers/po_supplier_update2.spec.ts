@@ -7,6 +7,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ncoFormName = "NCO Form";
 const randomNumberForCompany = (Math.round(Math.random() * 100000)) % 100000;
@@ -524,6 +525,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Click 'Create A New Supplier'", () => {
+        SystemRequirement("REQ-4840");
         cy.get("[data-cy=\"form.builder.create.new.supplier\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -554,6 +556,7 @@ context("DAM approvals in LHR", () => {
       });
 
       it("Verify Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 1 - New Supplier");
       });
 

@@ -7,6 +7,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -130,6 +131,7 @@ context("Suppliers landing page", () => {
     });
 
     it("Verify all columns are present", () => {
+      SystemRequirement("REQ-2240");
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${supplierId}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${supplierName}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${supplierLevel}`);

@@ -33,7 +33,7 @@ const TopSection: React.FunctionComponent<{
     <div>
       <Grid className={classes.gridCenterAlign} container>
         <Grid item>
-          <Typography variant="h6" id="sectionTitle" component="div">
+          <Typography variant="h6" id="sectionTitle" component="div" className={classes.sectionTitle}>
             <Text translation="approvalRequest.items.section.heading"/>
           </Typography>
         </Grid>
@@ -44,7 +44,7 @@ const TopSection: React.FunctionComponent<{
               className={classes.btnMargin}
               disabled={!isButtonShown}
               color="primary"
-              startIcon={<AddCircleIcon color="primary" />}
+              startIcon={<AddCircleIcon color={!isButtonShown ? "disabled" : "primary"} />}
               onClick={isButtonShown ? showEditRow : (e) => e.preventDefault()}
             >
               <Text translation="approvalRequest.items.button.addText"/>

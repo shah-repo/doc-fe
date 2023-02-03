@@ -896,6 +896,7 @@ context("Procedure and parts flow test", () => {
 
   context("Choose a part and approve EB", () => {
     it("Choose an existing part from the list of available parts", () => {
+      SystemRequirement("REQ-3830");
       cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect("Part for EB document");
       cy.wait(1000);
       cy.progressBarShouldNotExist();
