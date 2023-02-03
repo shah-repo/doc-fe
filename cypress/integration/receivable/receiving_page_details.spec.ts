@@ -11,6 +11,7 @@ import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let adminEmployeeLoginResponse;
 let createdCompany;
@@ -1522,6 +1523,7 @@ context("Receivable test with Page Details", () => {
 
   context("Click on “Receive all“", () => {
     it("Click on “Receive all”", () => {
+      SystemRequirement("REQ-4790");
       cy.get("[data-cy=\"form.builder.receive\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
