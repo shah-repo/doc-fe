@@ -5,6 +5,7 @@ import Colors from "../../../../../ui/layout/theme/utils/colors";
 const styles = () => ({
   root: {
     "margin": 0,
+
     "& .MuiButtonGroup-grouped": {
       background: "transparent",
       margin: 0,
@@ -12,6 +13,7 @@ const styles = () => ({
     },
     "& .MuiButton-contained:hover": {
       boxShadow: "unset",
+
     },
   },
   contained: {
