@@ -14,7 +14,8 @@ const HeaderPOStatus: React.FC<Props> = ({ poStatus }) => {
 
   return (
     <StyledPOStatusButton type="submit" color="primary" disableRipple>
-      <div className={classNames(classes.statusIcon,  classes[poStatus])} />
+      <div data-cy={`po-status-button-${poStatus}`} className={classNames(classes.statusIcon,
+        classes[poStatus])} />
       <Text message={POStatusLabelMapping[poStatus]}/>
     </StyledPOStatusButton>
   );
