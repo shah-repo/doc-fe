@@ -148,10 +148,10 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
     ), []);
     // Groups list
     React.useEffect(() => reaction(
-      () => get(document,"document.securityGroups[0]"),
+      () => get(document, "document.securityGroups[0]"),
       (data) => {
         if (!data) { return; }
-        concatOptions(data?.employees, data.name)
+        concatOptions(data?.employees, data.name);
       }, {
         fireImmediately: true,
       },
