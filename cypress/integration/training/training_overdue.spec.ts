@@ -16,6 +16,7 @@ import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolNotRedline } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -945,6 +946,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`${TrainingStatus.OVERDUE} should exist`, () => {
+      SystemRequirement("REQ-4530");
       cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
 
@@ -953,6 +955,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`${TrainingStatus.OVERDUE} should exist`, () => {
+      SystemRequirement("REQ-4530");
       cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
 
@@ -961,6 +964,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it(`${TrainingStatus.OVERDUE} should exist`, () => {
+      SystemRequirement("REQ-4530");
       cy.contains(TrainingStatus.OVERDUE).should("exist");
     });
   });
@@ -977,6 +981,7 @@ context("Test for Training Overdue", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-5070");
       cy.get("[trainingstatus=\"OVERDUE\"]").eq(0).should("have.text", TrainingStatus.OVERDUE);
     });
 
