@@ -8,7 +8,6 @@ export const styles = makeStyles((theme: Theme) =>
     submitButton: {
       float: "right",
       clear: "right",
-
     },
     cancelButton: {
       float: "right",
