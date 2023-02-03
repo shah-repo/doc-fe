@@ -6,6 +6,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -267,6 +268,7 @@ context("Revise Part from EB and release cloned EB test", () => {
 
     context("Choose a part", () => {
       it("Choose an released part from the list of available parts", () => {
+        SystemRequirement("REQ-3830");
         cy.get("[data-cy=\"childrenParts\"]").arrowType(PART_NAME + "{downarrow}{enter}");
         cy.listLoadingElementShouldNotExist();
       });
