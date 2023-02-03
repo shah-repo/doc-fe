@@ -29,7 +29,7 @@ const SummaryHeader: React.FunctionComponent<Props> = ({
   canEdit,
   displayLastSaved,
 }) => {
-  const isNewLayout = SM.isNewCRLayout;
+  const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
   const formik = useFormikContext();
 
   const submitButtonRenderer = canEdit && (
