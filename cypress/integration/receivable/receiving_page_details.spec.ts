@@ -2133,10 +2133,12 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Verify requester is present on receivable", () => {
+      SystemRequirement("REQ-1910");
       cy.get("input[data-cy^=\"po-requestor\"]").should("have.attr", "value", `${USERS[11].name} - ${USERS[11].email}`);
     });
 
     it("Verify supplier is present on receivable", () => {
+      SystemRequirement("REQ-1910");
       cy.get("input[data-cy^=\"po-supplier-built-in\"]")
         .should("have.attr", "value", "SUP-00001 - rev 1 - API Supplier Document");
     });
