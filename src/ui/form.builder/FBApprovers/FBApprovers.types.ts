@@ -31,7 +31,6 @@ export interface FBGroup {
   id: string;
   name?: string;
   employees: FBEmployee[];
-  activeEmployees: FBEmployee[]
 }
 
 export interface FBApprover {
