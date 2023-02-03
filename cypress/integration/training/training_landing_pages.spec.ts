@@ -1453,6 +1453,7 @@ context("Test training records and training curriculum landing page", () => {
 
     context("Verify filters on each field", () => {
       it("Verify filter for Title", () => {
+        SystemRequirement("REQ-4690");
         cy.get(`th[aria-colindex="1"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="1"] input`).arrowType("BTraining Curriculum test record2");
         cy.progressBarShouldNotExist();
@@ -1463,6 +1464,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for TRAINING CURRICULUM ID", () => {
+        SystemRequirement("REQ-4690");
         cy.get(`th[aria-colindex="2"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="2"] input`).arrowType("TCT-00002");
         cy.progressBarShouldNotExist();
@@ -1473,6 +1475,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for OWNER", () => {
+        SystemRequirement("REQ-4690");
         cy.get(`th[aria-colindex="3"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="3"] input`).arrowType("Giovanni Reynolds");
         cy.progressBarShouldNotExist();
@@ -1483,6 +1486,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for DOCUMENT STATE", () => {
+        SystemRequirement("REQ-4690");
         cy.get(`th[aria-colindex="4"] span.k-input`).should("have.text", "All");
         cy.get(`th[aria-colindex="4"] span.k-input`).arrowClick();
         cy.get("ul>li[role=option]").contains("Released").arrowClick();
@@ -1494,6 +1498,7 @@ context("Test training records and training curriculum landing page", () => {
       });
 
       it("Verify filter for GROUP", () => {
+        SystemRequirement("REQ-4690");
         cy.get(`th[aria-colindex="5"] input`).should("have.attr", "value", "");
         cy.get(`th[aria-colindex="5"] input`).arrowType("Everyone");
         cy.progressBarShouldNotExist();
