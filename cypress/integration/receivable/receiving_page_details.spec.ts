@@ -51,7 +51,9 @@ const TEXTFIELD_LABEL = "TEXT FIELD";
 const RADIO_BUTTON_GROUP_LABEL = "radioGroup";
 const CHECKBOX_LABEL = "checkboxGroup";
 const CHECKBOX_REQUIRED_IF_VALUE = "Y";
-
+const orderQty1 = "200";
+const orderQty2 = "100";
+const orderQty3 = "2";
 
 context("Receivable test with Page Details", () => {
   before(() => {
@@ -769,7 +771,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Enter Quantity Ordered", () => {
-          cy.poEnterQuantityOrdered({ quantity: "200" });
+          cy.poEnterQuantityOrdered({ quantity: orderQty1 });
         });
 
         it("Select Units", () => {
@@ -803,7 +805,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Enter Quantity Ordered", () => {
-          cy.poEnterQuantityOrdered({ quantity: "100" });
+          cy.poEnterQuantityOrdered({ quantity: orderQty2 });
         });
 
         it("Select Units", () => {
@@ -845,7 +847,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Enter Quantity Ordered", () => {
-          cy.poEnterQuantityOrdered({ quantity: "2" });
+          cy.poEnterQuantityOrdered({ quantity: orderQty3 });
         });
 
         it("Select Units", () => {
@@ -1526,6 +1528,13 @@ context("Receivable test with Page Details", () => {
       SystemRequirement("REQ-4790");
       cy.get("[data-cy=\"form.builder.receive\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify Receipt QTY for all line items is auto populated and matches with ordered amount", () => {
+      SystemRequirement("REQ-4790");
+      cy.get(`[data-cy="received"]`).eq(0).contains(orderQty1);
+      cy.get(`[data-cy="received"]`).eq(1).contains(orderQty2);
+      cy.get(`[data-cy="received"]`).eq(2).contains(orderQty3);
     });
 
     it("Click 'Create a Lot' on first line item", () => {
