@@ -44,7 +44,7 @@ const TopSection: React.FunctionComponent<{
               className={classes.btnMargin}
               disabled={!isButtonShown}
               color="primary"
-              startIcon={<AddCircleIcon color="primary" />}
+              startIcon={<AddCircleIcon color={!isButtonShown ? "disabled" : "primary"} />}
               onClick={isButtonShown ? showEditRow : (e) => e.preventDefault()}
             >
               <Text translation="approvalRequest.items.button.addText"/>

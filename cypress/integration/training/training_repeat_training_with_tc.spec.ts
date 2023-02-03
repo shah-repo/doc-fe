@@ -14,6 +14,7 @@ import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate, trAssign
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -735,6 +736,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Enter training refresh period days", () => {
+      SystemRequirement("REQ-4540");
       cy.get("[name=training-validity]").arrowType("40");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

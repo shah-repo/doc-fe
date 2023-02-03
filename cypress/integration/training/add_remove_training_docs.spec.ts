@@ -494,6 +494,7 @@ context("Add/Remove Training docs from Training Curriculum", () => {
     });
 
     it("Select User to train", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.unClick();
       cy.listLoadingElementShouldNotExist();
