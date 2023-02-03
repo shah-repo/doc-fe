@@ -8,6 +8,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 import { testHelpCenterModule } from "../../utils/functions/testHelpCenterModule";
 
 context("Help Center behaviour", () => {
@@ -1270,7 +1271,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData);
     });
   });
@@ -1288,7 +1289,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData);
     });
   });
@@ -1306,7 +1307,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1324,7 +1325,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1342,7 +1343,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1358,7 +1359,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1374,7 +1375,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1392,7 +1393,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1410,7 +1411,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1428,7 +1429,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1446,7 +1447,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1464,7 +1465,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1482,7 +1483,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData, { withDocuments: true });
     });
   });
@@ -1500,7 +1501,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData);
     });
   });
@@ -1518,7 +1519,7 @@ context("Help Center behaviour", () => {
       it("Check module data", () => {
         expect(moduleData).to.exist;
       });
-
+      SystemRequirement("REQ-5250");
       testHelpCenterModule(moduleData);
     });
   });
