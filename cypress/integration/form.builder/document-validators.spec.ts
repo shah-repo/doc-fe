@@ -523,7 +523,7 @@ context("Validators tests", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Should show error for 'required if' field", () => {
@@ -535,6 +535,10 @@ context("Validators tests", () => {
           .should("have.text",
             `The ${requiredIfFieldLabel} field is required when ${requiredFieldLabel} is ${requiredIfFieldValue}.`);
       });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it("Fill in 'required' custom text field", () => {
@@ -592,7 +596,7 @@ context("Validators tests", () => {
     });
 
     it("Click on 'Save' button", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
+      cy.drClickSaveWithoutApiCall();
     });
 
     it("Should show error for 'required without' field", () => {
