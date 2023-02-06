@@ -78,6 +78,7 @@ declare global {
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
       poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
+      poClickOnPending(): Chainable<Subject>;
       poApprove(): Chainable<Subject>;
       poApproveWithoutApi(): Chainable<Subject>;
       poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
@@ -475,6 +476,12 @@ Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
 
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("poClickOnPending", () => {
+  cy.get(`[data-cy="approval-block-common.pending"]`).arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poApprove", () => {
