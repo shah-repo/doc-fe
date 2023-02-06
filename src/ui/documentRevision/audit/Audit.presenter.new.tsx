@@ -1,12 +1,12 @@
 import { Box, LinearProgress, List, Typography } from "@material-ui/core";
-import { has, isEmpty, last, orderBy } from "lodash";
+import { find, has, isEmpty, last, orderBy } from "lodash";
 import React from "react";
 import { useIntl } from "react-intl";
 import { useSelector } from "react-redux";
 import striptags from "striptags";
 import { getFormattedDateString, MomentFormats } from "../../../common/utils/date";
 import { Audit, AuditGroupType } from "../../../state/ducks/audit/types";
-import { Approval, ApprovalStatus } from "../../../state/ducks/common/types";
+import { Approval, ApprovalStatus, User } from "../../../state/ducks/common/types";
 import { documentRevisionsSelectors } from "../../../state/ducks/documentRevisions";
 import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../state/types";
@@ -47,11 +47,11 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
     Object.keys(audit).map((groupId, key) => {
       const change = audit[groupId][0];
       const { owner, ownerUser, ownerThirdParty, ownerName } = change;
-      const isPOAutoChange = change.field === "poStatus" && ownerName === "Server Automation";
-      const name = isPOAutoChange ? ownerName :
-      ((owner && owner.user) || ownerUser || ownerThirdParty)?.name ?? ownerName;
-      const updatedUser = isPOAutoChange && ownerName && owner?.user ? { ...owner.user, ...{ name: ownerName } }
-        : (owner && owner.user) || ownerUser || ownerThirdParty || { name };
+      const isPOAutoChange =
+        change.field === "poStatus" && ownerName === "Server Automation";
+      const changeOwner = find([owner, ownerUser, ownerThirdParty], "user.name");
+      const finalOwner = !isPOAutoChange && changeOwner ? changeOwner.user : { name: ownerName } as User;
+      const name = isPOAutoChange ? ownerName : changeOwner?.user?.name ?? ownerName;
 
       if (change.field.includes("-built-in")) {
         return null;
@@ -65,7 +65,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         <Box key={groupId} className={classes.changeContainer}>
           <UserAvatarListItem
             name={<span data-cy={`change-key-${key}`}>{name}</span>}
-            user={updatedUser}
+            user={finalOwner}
             secondaryComponent={
               <DateTime
                 data-cy={`audit-time-${key}`}
