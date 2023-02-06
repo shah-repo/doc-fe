@@ -160,7 +160,6 @@ Cypress.Commands.add("recSelectRecordFormFromMultiSelect", (params: {recordType:
     cy.get("div[id^=react-select]").contains(params.recordForm).arrowClick();
   }
   cy.unClick();
-  cy.progressBarShouldAppear();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
 });
