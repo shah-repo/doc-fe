@@ -100,17 +100,17 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
   const getMenuOptions = () => (
     <>
       {poStatus === POStatusType.CLOSED && (
-        <MenuItem onClick={handleOpen} className={classes.menuItem}>
+        <MenuItem data-cy="po-status-menu-opened" onClick={handleOpen} className={classes.menuItem}>
           {getPOStatusMenuItem(POStatusType.OPENED)}
         </MenuItem>
       )}
       {poStatus === POStatusType.OPENED && (
-        <MenuItem onClick={closePO} className={classes.menuItem}>
+        <MenuItem data-cy="po-status-menu-closed" onClick={closePO} className={classes.menuItem}>
           {getPOStatusMenuItem(POStatusType.CLOSED)}
         </MenuItem>
       )}
       {poStatus === POStatusType.OPENED && (
-        <MenuItem onClick={handleVoid} className={classes.menuItem}>
+        <MenuItem data-cy="po-status-menu-voided" onClick={handleVoid} className={classes.menuItem}>
           {getPOStatusMenuItem(POStatusType.VOIDED)}
         </MenuItem>
       )}
@@ -143,6 +143,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
       >
         <Button
           type="submit"
+          data-cy={`po-status-button-${poStatus}`}
           className={cx(classes.defaultGroupButton, classes.textBtn)}
           disableRipple
           onClick={handleClick}
@@ -152,6 +153,7 @@ const HeaderPOStatusOptions: React.FunctionComponent<Props> = ({
         </Button>
         <Button
           onClick={handleClick}
+          data-cy="po-status-menu"
           aria-owns={anchorEl ? "po-status-menu" : undefined}
           aria-haspopup="true"
           className={cx(classes.defaultGroupButton, classes.iconBtn)}

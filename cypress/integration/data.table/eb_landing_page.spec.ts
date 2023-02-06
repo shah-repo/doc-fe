@@ -10,6 +10,7 @@ import { CONFIG } from "../../support/config";
 import { EngineeringBuild } from "../../utils/constants/documentTypes/engineeringBuild";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -604,6 +605,7 @@ context("Test Engineering Build landing page", () => {
     });
 
     it("Verify all columns are present", () => {
+      SystemRequirement("REQ-4620");
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${ebId}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${rev}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${state}`);

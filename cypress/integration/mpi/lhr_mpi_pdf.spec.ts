@@ -1323,6 +1323,7 @@ context("Autosave LHR", () => {
         subject: `Export for document ${lhrDocId}`,
       };
 
+      SystemRequirement("REQ-3750");
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;

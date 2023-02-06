@@ -12,6 +12,7 @@ import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHis
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -829,6 +830,7 @@ context("Test LHR landing page", () => {
     });
 
     it("Verify all columns are present", () => {
+      SystemRequirement("REQ-3370");
       cy.get(`th[role="columnheader"]`).eq(0).should("have.text", `${lot}`);
       cy.get(`th[role="columnheader"]`).eq(1).should("have.text", `${state}`);
       cy.get(`th[role="columnheader"]`).eq(2).should("have.text", `${owner}`);

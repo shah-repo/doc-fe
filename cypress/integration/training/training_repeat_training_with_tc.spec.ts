@@ -744,6 +744,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Enter training refresh period days", () => {
+      SystemRequirement("REQ-4540");
       cy.get("[name=training-validity]").arrowType("40");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

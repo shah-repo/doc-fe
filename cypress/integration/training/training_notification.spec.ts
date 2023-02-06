@@ -717,6 +717,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
       cy.get("div.MuiDialogTitle-root").contains("Training Record");
       cy.get(".MuiBox-root").contains(`${releasedFormId}`);
       dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
+      SystemRequirement("REQ-3750");
       cy.get("[data-cy=\"exportToEmail\"]").contains("Send To Email").arrowClick();
     });
 

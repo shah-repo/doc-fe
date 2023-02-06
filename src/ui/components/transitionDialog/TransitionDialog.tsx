@@ -41,7 +41,7 @@ const TransitionDialog: React.FunctionComponent<Props> =
     transitionDialog,
     effectiveDateDialog,
   }) => {
-    const isNewLayout = SM.isNewCRLayout;
+    const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
     const renderPasswordForm = (props: FormikProps<any>) => (
       <PasswordForm {...props} asyncState={asyncState} cancel={transitionDialog.close} />
     );

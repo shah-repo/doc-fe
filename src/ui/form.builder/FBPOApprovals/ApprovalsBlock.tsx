@@ -23,7 +23,7 @@ const ApprovalsBlock: React.FC<{
 
   return (
     <List className={classes.list}>
-      <ListItem className={classes.stateListItem} onClick={toggleOpened}>
+      <ListItem data-cy={`approval-block-${headerText}`} className={classes.stateListItem} onClick={toggleOpened}>
         {isOpened ? <ListExpandIcon /> : <ListCollapseIcon />}
         <ListItemText>
           <Box display="flex" alignItems="center">

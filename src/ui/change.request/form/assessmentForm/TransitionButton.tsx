@@ -29,7 +29,7 @@ const TransitionButton: React.FunctionComponent<Props> = ({
 }) => {
   const applyTransition = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync<ChangeRequestTransitionResponse>();
-  const isNewLayout = SM.isNewCRLayout;
+  const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
   const { _formState } = SM.useStores();
 
   const onClick = () => {

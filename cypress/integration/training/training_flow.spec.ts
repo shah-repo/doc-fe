@@ -518,6 +518,7 @@ context("Training Flow test", () => {
     });
 
     it("Verify training options document types", () => {
+      SystemRequirement("REQ-4410");
       SystemRequirement("REQ-4460");
       cy.get(`[name="training-document-to-be-trained-on"]`).arrowClick();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "released form");
@@ -551,10 +552,12 @@ context("Training Flow test", () => {
     });
 
     it("Select Groups to train 'Developers'", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Developers");
     });
 
     it("Select User to train", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -709,12 +712,14 @@ context("Training Flow test", () => {
     });
 
     it("Select training group 'Developers'", () => {
+      SystemRequirement("REQ-4470");
       cy.get(`[name="training-select-groups-to-train"]`).autocompleteSelect("Developers");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select User to train", () => {
+      SystemRequirement("REQ-4470");
       cy.get(`[data-cy="training-select-users-to-train"]`).autocompleteSelect(`${USERS[11].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -907,6 +912,7 @@ context("Training Flow test", () => {
     });
 
     it("Select User to train", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
