@@ -105,6 +105,9 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
   const isDocumentDAM = checkIsDocumentDAM(groupOptions);
   const isAlphaReleased = isDocumentAlphaReleased(documentRevision?.revisionStage);
   const isPart = checkIsDocumentPart(groupOptions);
+  const isPartForm = hasOutput ?
+    checkIsDocumentPart((documentRevision?.formTemplate?.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions)
+    : false;
   const isDocRevFirstDraft = (isDocRevStatusDraft || isDocRevStatusInPendingChange) && documentRevision?.version === 1;
   const isSubrevision = Boolean(documentRevision?.subRevision);
   const isRevisionChangeHidden = isRecord && isDocRevStatusDraft && !isSubrevision;
@@ -324,10 +327,10 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
               />
             </Grid>
           )}
-          {isPart &&
+          {(isPart || isPartForm) &&
             <Grid item xs={12}>
               <RelatedPartsWrapper
-                viewOnly={isDisabledInputInPreview}
+                viewOnly={isDisabledInputInPreview || hasOutput}
                 documentRevision={documentRevision}
                 relatedPartsStatus= {documentRevision?.relatedPartsStatus} />
             </Grid>
