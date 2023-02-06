@@ -11,6 +11,7 @@ import { NCORecord } from "../../utils/constants/documentTypes/nco";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
 import { SupplierExport } from "../../utils/constants/documentTypes/supplier";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -947,6 +948,7 @@ context("PO Removes lineitems removes approver", () => {
     });
 
     it("Check approvers automatically added", () => {
+      SystemRequirement("REQ-5200");
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
     });
 

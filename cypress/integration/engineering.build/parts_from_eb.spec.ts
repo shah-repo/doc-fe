@@ -275,6 +275,7 @@ context("Parts from EB flow test", () => {
       });
 
       it("Choose an existing part from the list of available parts", () => {
+        SystemRequirement("REQ-3830");
         cy.get("[data-cy=\"childrenParts\"]").autocompleteSelect(EXISTING_PART_NAME);
         cy.listLoadingElementShouldNotExist();
       });

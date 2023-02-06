@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -517,6 +518,8 @@ context("Training Flow test", () => {
     });
 
     it("Verify training options document types", () => {
+      SystemRequirement("REQ-4410");
+      SystemRequirement("REQ-4460");
       cy.get(`[name="training-document-to-be-trained-on"]`).arrowClick();
       cy.get(".MuiAutocomplete-popper ul li").should("contain", "released form");
       cy.get(".MuiAutocomplete-popper ul li").should("contain", approvedFormId);
@@ -549,10 +552,12 @@ context("Training Flow test", () => {
     });
 
     it("Select Groups to train 'Developers'", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-groups-to-train]").autocompleteSelect("Developers");
     });
 
     it("Select User to train", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -707,12 +712,14 @@ context("Training Flow test", () => {
     });
 
     it("Select training group 'Developers'", () => {
+      SystemRequirement("REQ-4470");
       cy.get(`[name="training-select-groups-to-train"]`).autocompleteSelect("Developers");
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select User to train", () => {
+      SystemRequirement("REQ-4470");
       cy.get(`[data-cy="training-select-users-to-train"]`).autocompleteSelect(`${USERS[11].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -804,12 +811,14 @@ context("Training Flow test", () => {
     });
 
     it("Verify training notification", () => {
+      SystemRequirement("REQ-2460");
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
   });
 
   context("Open and complete Training", () => {
     it("Navigate to assigned training and verify due of 30 days", () => {
+      SystemRequirement("REQ-4520");
       cy.intercept({ method: "GET", pathname: "/api/v1/document_revisions/*" }, (req) => {
         req.reply((res) => {
           if (res.body !== "") {
@@ -826,6 +835,7 @@ context("Training Flow test", () => {
     });
 
     it("click complete training button", () => {
+      SystemRequirement("REQ-4520");
       cy.trCompleteTrainingWithoutApi();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -895,12 +905,14 @@ context("Training Flow test", () => {
     });
 
     it("Select force training option 'Yes'", () => {
+      SystemRequirement("REQ-4510");
       cy.get(`[name="training-force-retraining-for-everyone"]`).eq(0).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Select User to train", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -943,6 +955,7 @@ context("Training Flow test", () => {
     });
 
     it("'One-Time training title1' should be present", () => {
+      SystemRequirement("REQ-4510");
       cy.trLandingPageName({ name: "One-Time training title1" });
       cy.get(`[data-grid-row-index="0"]`).should("contain", "One-Time training title1");
     });
@@ -954,6 +967,7 @@ context("Training Flow test", () => {
     });
 
     it(`Verify training notification`, () => {
+      SystemRequirement("REQ-4510");
       cy.dashVerifyListItemExistsOnDashboard({ listItem: `${releasedFormId}Rev 1 released form` });
     });
 

@@ -9,6 +9,7 @@ import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHis
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1068,6 +1069,7 @@ context(`Scenario 2.5.1 New LHR, LHRS and LOT Status bar design`, () => {
       `Click on the redline → Verify the status bar continues working as specified in the previous step and there’s only a “Save” button next in it.`,
       () => {
         it(`Click on the redline`, () => {
+          SystemRequirement("REQ-3650");
           cy.get("#HeaderMenuButton").arrowClick();
           cy.get("[data-cy=\"redlineButton\"]").arrowClick();
         });

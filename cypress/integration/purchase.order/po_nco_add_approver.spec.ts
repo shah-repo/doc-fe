@@ -1013,6 +1013,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
 
     it("Check approvers automatically added", () => {
+      SystemRequirement("REQ-5200");
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[11].name} - ${USERS[11].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
@@ -1096,6 +1097,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
 
   context("Verify that if the Requestor fulfills the PO approval level in Red color", () => {
     it("Check if selected approver has approval signature right by his name", () => {
+      SystemRequirement("REQ-5210");
       cy.contains("PO Approval sig");
       cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[2].name + " | DRAFT" + USERS[2].email);
     });
@@ -1145,6 +1147,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     });
 
     it("Check approvers automatically added", () => {
+      SystemRequirement("REQ-5200");
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[12].name} - ${USERS[12].email}`);
     });
   });
@@ -1583,6 +1586,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
   // eslint-disable-next-line max-len
   context("Verify that if the Requestor fulfills the PO approval level then the system should mark the approval level as fulfilled", () => {
     it("Check if selected approver has approval signature right by his name", () => {
+      SystemRequirement("REQ-5210");
       cy.contains("PO Approval sig");
       cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(USERS[12].name + " | DRAFT" + USERS[12].email);
     });
@@ -1633,6 +1637,7 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
   // eslint-disable-next-line max-len
   context(`Verify that if the Requestor fulfills the PO approval level then the system should mark the approval level as fulfilled`, () => {
     it("Check approvers automatically added", () => {
+      SystemRequirement("REQ-5210");
       cy.get(`[name^="fb-po-approvals-"]`).eq(1).should("contain", `${USERS[1].name} - ${USERS[1].email}`);
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();

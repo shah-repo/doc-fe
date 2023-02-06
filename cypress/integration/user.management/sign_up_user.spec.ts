@@ -124,6 +124,7 @@ context("Sign up user flow", () => {
     });
 
     it("Check initials of new user are correct", () => {
+      SystemRequirement("REQ-4780");
       cy.usrGetInitials({ fullName: nameOfUserToSignUp });
     });
   });

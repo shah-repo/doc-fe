@@ -29,7 +29,7 @@ const ChangeRequestWithdrawDialog: React.FunctionComponent<Props> = ({
   transition,
   renderAsButton = false,
 }) => {
-  const isNewLayout = SM.isNewCRLayout;
+  const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
   const dialog = useDialog();
   const applyTransition = useActionCreator(changeRequestsActions.applyTransition);
   const async = useAsync<ChangeRequestTransitionResponse>();

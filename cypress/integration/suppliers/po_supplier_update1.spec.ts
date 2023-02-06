@@ -3,6 +3,7 @@ import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/t
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -357,6 +358,7 @@ context("Purchase Supplier Update1", () => {
       });
 
       it("Click 'Create A New Supplier'", () => {
+        SystemRequirement("REQ-4840");
         cy.get("[data-cy=\"form.builder.create.new.supplier\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
@@ -381,12 +383,14 @@ context("Purchase Supplier Update1", () => {
       });
 
       it("Create new supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.get("[data-cy=\"common.confirm\"]").arrowClick();
         cy.progressBarShouldNotExist();
         cy.listLoadingElementShouldNotExist();
       });
 
       it("Verify Supplier", () => {
+        SystemRequirement("REQ-4840");
         cy.get("[data-cy^=\"po-supplier-built-in\"]").should("have.value", "SUP-00002 - rev 1 - Supplier");
       });
 

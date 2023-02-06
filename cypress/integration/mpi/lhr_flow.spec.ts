@@ -1101,7 +1101,7 @@ context("LHR flow", () => {
       });
 
       it("Add attachment", () => {
-        SystemRequirement("REQ-3090");
+        SystemRequirement("REQ-3090", "REQ-3270");
         cy.contains("Step #1").parentsUntil("li")
           .find("[data-cy=\"albumMediaButton\"]").arrowClick();
         cy.elUploadAttachment({
@@ -1142,6 +1142,7 @@ context("LHR flow", () => {
 
     context("Fill step #2", () => {
       it("Add step #2", () => {
+        SystemRequirement("REQ-3060");
         cy.fbAddNewFieldWhenHiddenLastPlace();
         cy.fbSelectItemFromNewFieldList({ section: "Inputs", field: "PI Procedure" });
         cy.progressBarShouldNotExist();

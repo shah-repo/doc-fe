@@ -258,6 +258,9 @@ export default makeStyles((theme) =>
       overflow: "hidden",
       display: "block",
     },
+    sectionTitle: {
+      color: Colors.almost_black,
+    },
   })
 );
 

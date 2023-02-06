@@ -249,7 +249,7 @@ context("Sigle user multiple company test", () => {
   });
 
   context(`Check if the change name history is created for ${nameOfFirstUserToSignUp}`, () => {
-    SystemRequirement("REQ-2640");
+    SystemRequirement("REQ-2640", "REQ-5240");
     it("Open history panel", () => {
       cy.usrHistoryClickOpenButton();
     });
@@ -390,7 +390,7 @@ context("Sigle user multiple company test", () => {
   });
 
   context(`Check if the change avatar history is created for ${nameOfFirstUserToSignUp}`, () => {
-    SystemRequirement("REQ-2640");
+    SystemRequirement("REQ-2640", "REQ-5240");
     it("Open history panel", () => {
       cy.usrHistoryClickOpenButton();
     });

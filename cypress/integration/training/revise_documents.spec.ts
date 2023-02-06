@@ -8,6 +8,7 @@ import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { OneTimeTrainingTest, TrainingCurriculum } from "../../utils/constants/documentTypes/trainingCurriculum";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -426,6 +427,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it("Select User to train", () => {
+      SystemRequirement("REQ-4470");
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[11].name}`);
       cy.get("[data-cy=training-select-users-to-train]").autocompleteSelect(`${USERS[12].name}`);
       cy.wait(2000);
@@ -538,6 +540,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it(`Training record for ${USERS[11].name}`, () => {
+      SystemRequirement("REQ-4580");
       cy.trLandingPageUsername({ username: USERS[11].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
@@ -552,6 +555,7 @@ context("Revising Documents assigned as Training material", () => {
     });
 
     it(`Training record for ${USERS[12].name}`, () => {
+      SystemRequirement("REQ-4580");
       cy.trLandingPageUsername({ username: USERS[12].name });
       cy.trLandingPageDocRevTitle({ title: "released doc1" });
       cy.trLandingPageDocId({ docId: releasedDoc1Id });
