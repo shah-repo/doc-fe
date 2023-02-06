@@ -212,7 +212,6 @@ context("Document force required fields", () => {
     it("Close dialog box", () => {
       cy.drCloseApproveAndReleaseDialog();
     });
-
   });
 
   context("Verify filled fields of created document", () => {
