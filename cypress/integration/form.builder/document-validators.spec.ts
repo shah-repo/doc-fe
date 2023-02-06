@@ -5,7 +5,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
@@ -528,7 +527,9 @@ context("Validators tests", () => {
 
     it("Should show error for 'required if' field", () => {
       cy.reload();
-      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).then((elem) => {
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.get(`[data-cy^='${requiredIfFieldSelector}']`).scrollIntoView().then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
@@ -601,13 +602,19 @@ context("Validators tests", () => {
 
     it("Should show error for 'required without' field", () => {
       cy.reload();
-      cy.get(`[data-cy^='${requiredWithoutFieldSelector}']`).then((elem) => {
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
+      cy.get(`[data-cy^='${requiredWithoutFieldSelector}']`).scrollIntoView().then((elem) => {
         const errorBlock = elem.offsetParent().siblings("p");
 
         cy.wrap(errorBlock)
           .should("have.text",
             `The ${requiredWithoutFieldLabel} field is required when ${requiredWithFieldLabel} is empty.`);
       });
+    });
+
+    it("Turn off autosave", () => {
+      cy.cmpTurnOffAutosave();
     });
 
     it(`Fill in '${requiredWithFieldLabel}' field only`, () => {
@@ -617,9 +624,8 @@ context("Validators tests", () => {
 
   context(`Test ${requiredDocStatusFieldLabel} (required document status) Field`, () => {
     it("Add incorrect document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect("AR Form");
-      });
+      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect("AR Form");
+
     });
 
     it("Should show error for 'Incorrect document status' field", () => {
@@ -633,18 +639,14 @@ context("Validators tests", () => {
 
     it(`Fill in '${requiredDocStatusFieldLabel}' with draft CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect(`${documentRevisionName}`);
-      });
+      cy.get(`[data-cy^='${requiredDocStatusFieldSelector}']`).autocompleteSelect(`${documentRevisionName}`);
     });
   });
 
   context(`Test ${requiredDocTypeFieldLabel} (required document type) Field`, () => {
     it("Add incorrect document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect("AR Form").wait(500);
-        cy.unClick();
-      });
+      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect("AR Form").wait(500);
+      cy.unClick();
     });
 
     it("Should show error for 'Incorrect document type' field", () => {
@@ -654,9 +656,7 @@ context("Validators tests", () => {
 
     it(`Fill in '${requiredDocTypeFieldLabel}' with our CS Document`, () => {
       cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).clear();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostRemoteValidatorsHelper], () => {
-        cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect(`${csDocTitle}`);
-      });
+      cy.get(`[data-cy^='${requiredDocTypeFieldSelector}']`).autocompleteSelect(`${csDocTitle}`);
     });
   });
 
@@ -666,9 +666,7 @@ context("Validators tests", () => {
     });
 
     it("'Approve and Release' the document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevPreview, CyRoutes.DocPreview], () => {
-        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
-      });
+      cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
     });
   });
 
