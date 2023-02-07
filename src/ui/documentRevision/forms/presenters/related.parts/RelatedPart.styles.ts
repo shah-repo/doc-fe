@@ -47,6 +47,8 @@ export default makeStyles((theme) =>
     titleHeading: {
       marginRight: theme.spacing(1.25),
       display: "inline-block",
+      fontWeight: 600,
+      color: Colors.almost_black,
     },
     partsGrid: {
       marginBottom: theme.spacing(1.5),
@@ -178,6 +180,9 @@ export default makeStyles((theme) =>
         lineHeight: "1.15rem",
         margin: theme.spacing(1, 0, 0, .5),
       },
+    },
+    smallText: {
+      fontSize: "12px",
     },
   })
 );

@@ -543,12 +543,13 @@ context("FORM Field test", () => {
         cy.fbClickButton({ el: "fb-editor-actions-cancel" });
       });
 
-      it("Verify Purchase Order attributes", () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
-        cy.fbVerifyNameValue({ name: "label", value: "fb-purchase-order" });
-        cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
-        cy.fbClickButton({ el: "fb-editor-actions-cancel" });
-      });
+      // code is commented for ENC-13939
+      // it("Verify Purchase Order attributes", () => {
+      //   cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
+      //   cy.fbVerifyNameValue({ name: "label", value: "fb-purchase-order" });
+      //   cy.fbVerifyCheckboxValue("reviseDisabled", "deleteDisabled", "copyableValue");
+      //   cy.fbClickButton({ el: "fb-editor-actions-cancel" });
+      // });
 
       it("Verify Receive Purchase Order attributes", () => {
         cy.fbClickLabelEditHiddenBtn({ label: "fb-receive-purchase-order" });

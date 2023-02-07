@@ -599,6 +599,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing bulk create form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -668,6 +669,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
     });
 
     it("Verify page 1 for bulk create form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
@@ -741,6 +743,7 @@ context("Bulk create public, private and reserved doc-ids", () => {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nBULK CREATE FORM`, "gi" );
         expect(el).match(tmpRegex);
 
+        SystemRequirement("REQ-4870");
         expect(el).match(/Approval History\nAR IDREVDESCRIPTION OF CHANGEEFFECTIVE DATE/);
 
         tmpRegex = new RegExp( `AR-000061N\\/A \\(Numeric Release\\)${footerDate}`, "gi" );

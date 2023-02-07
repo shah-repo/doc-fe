@@ -12,6 +12,7 @@ import { emailDateOffset, fileTimeFormat, pdfFooterDate } from "../../utils/cons
 import { Material } from "../../utils/constants/documentTypes/material";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -477,6 +478,7 @@ context("Export Engineering Build doc", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -548,6 +550,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Verify page 1 of EB form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 4")) {
         tmpRegex = new
@@ -621,6 +624,7 @@ context("Export Engineering Build doc", () => {
     });
 
     it("Verify page 4 of EB form", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[3];
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new

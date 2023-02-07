@@ -40,9 +40,11 @@ import RelatedPartsState from "./RelatedParts.state";
 const ParentPartSelector: React.FunctionComponent<{
   status: RELATED_PARTS_STATUS;
   parentStatusChanged: (value: string) => void;
+  relatedPartsState: RelatedPartsState;
 }> = ({
   status,
   parentStatusChanged,
+  relatedPartsState,
 }) => {
   const [disable, setDisable] = useState({
     disable1: false,
@@ -76,6 +78,10 @@ const ParentPartSelector: React.FunctionComponent<{
   const parentStatusHandler = (
     value: RELATED_PARTS_STATUS
   ) => {
+    if (relatedPartsState.viewOnlyMode) {
+      return false;
+    }
+
     disableOptions(value);
     parentStatusChanged(value);
   };
@@ -84,8 +90,10 @@ const ParentPartSelector: React.FunctionComponent<{
     <div>
       <div className={classes.title}>
         <Typography
-          className={classes.titleHeading}
-          variant="h6"
+          className={cx(classes.titleHeading, {
+            [classes.smallText]: relatedPartsState.viewOnlyMode,
+          })}
+          variant="body1"
           id="tableTitle"
         >
           <Text translation="relatedParts.parentPart.question"/>
@@ -96,7 +104,9 @@ const ParentPartSelector: React.FunctionComponent<{
           <InfoIcon color="primary" />
         </Tooltip>
       </div>
-      <FormControl>
+      <FormControl className={cx({
+        [classes.smallText]: relatedPartsState.viewOnlyMode,
+      })}>
         <RadioGroup row value={status} onChange={(e) => parentStatusHandler(e.target.value as RELATED_PARTS_STATUS)}
           id="partTypeSelector"
         >
@@ -420,7 +430,8 @@ const RelatedParts: React.FunctionComponent<{
     <>
       {isRelatedPartsParent &&
       <div className={classes.mainDiv}>
-        <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged} />
+        <ParentPartSelector status={parentStatus}  parentStatusChanged={parentStatusChanged}
+          relatedPartsState={relatedPartsState}/>
         {parentStatus === RELATED_PARTS_STATUS.PARENT_SEPARATE && !relatedPartsState.viewOnlyMode && (
           <Grid item xs={12}>
             <FBButton label="relatedParts.button.addText"
