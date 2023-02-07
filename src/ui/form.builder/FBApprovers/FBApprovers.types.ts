@@ -19,6 +19,7 @@ export interface FBId {
 
 export interface FBEmployee {
   id: string;
+  active: boolean;
   user: FBUser;
 }
 
