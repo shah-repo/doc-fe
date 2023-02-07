@@ -171,19 +171,29 @@ const AuditFactory: React.FunctionComponent<Props> = ({
         break;
       case "poStatus":
         returnValue = (
-          <Text
-            dataCy={dataCy}
-            translation="documentRevision.audit.poStatus.updated.by"
-            values={{
-              status: <Text translation={audit.nextValue as Translation} />,
-              name: audit.ownerName,
-              timestamp: <DateTime
-                data-cy={`${dataCy}-date-time`}
-                value={audit.timestamp}
-                format={MomentFormats.BriefDateTime}
-              />,
-            }}
-          />
+          <>
+            <Text
+              dataCy={dataCy}
+              translation="documentRevision.audit.poStatus.updated.by"
+              values={{
+                status: <Text translation={audit.nextValue as Translation} />,
+                name: audit.ownerName,
+                timestamp: (
+                  <DateTime
+                    data-cy={`${dataCy}-date-time`}
+                    value={audit.timestamp}
+                    format={MomentFormats.BriefDateTime}
+                  />
+                ),
+              }}
+            />
+            {audit?.poReceivedQtyFlag && (
+              <Text
+                dataCy={dataCy}
+                translation="documentRevision.audit.poStatus.quantity.discrepancies"
+              />
+            )}
+          </>
         );
         break;
       case "securityGroups":
