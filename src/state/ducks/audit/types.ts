@@ -47,7 +47,7 @@ export interface Audit {
   ownerName?: string;
   fbSchemaItem?: FBSchemaProps;
   relatedEntity?: DocumentRevision | Approval;
-  poReceivedQtyFlag?: boolean;
+  hasPoReceivedQtyFlag?: boolean;
 }
 
 export interface AuditActionPayload {
