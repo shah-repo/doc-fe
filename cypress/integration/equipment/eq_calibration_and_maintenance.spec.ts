@@ -522,7 +522,6 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -790,7 +789,6 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
-      SystemRequirement("REQ-4860");
       cy.wait(2000);
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -996,7 +994,6 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1444,7 +1441,6 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify zip file downloaded", () => {
     it("Download zip file containing PM request notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1673,7 +1669,6 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify zip file downloaded", () => {
     it("Download zip file containing approval request notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1980,7 +1975,6 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify zip file downloaded", () => {
     it("Download zip file containing Calibration document", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -2207,7 +2201,6 @@ context("Equipment maintenance and calibration", () => {
 
   context("Verify zip file downloaded", () => {
     it("Download zip file containing Calibration notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

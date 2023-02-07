@@ -423,7 +423,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing DAM request form", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -821,7 +820,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Verify zip file downloaded", () => {
     it("Download zip file containing document notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1076,7 +1074,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Verify zip file downloaded", () => {
     it("Download zip file containing document notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1445,7 +1442,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Verify zip file downloaded", () => {
     it("Download zip file containing document notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1600,7 +1596,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Verify zip file downloaded", () => {
     it("Download zip file containing document notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1853,7 +1848,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
 
   context("Verify zip file downloaded", () => {
     it("Download zip file containing document notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

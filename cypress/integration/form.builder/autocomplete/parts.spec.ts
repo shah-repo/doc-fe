@@ -437,7 +437,6 @@ context("Autocomplete 'Parts' test", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing form", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -716,7 +715,6 @@ context("Autocomplete 'Parts' test", () => {
 
     context("Verify that zip file containing pdf downloaded", () => {
       it("Download zip file containing form", () => {
-        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -917,7 +915,6 @@ context("Autocomplete 'Parts' test", () => {
 
     context("Verify that zip file containing pdf downloaded", () => {
       it("Download zip file containing form", () => {
-        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

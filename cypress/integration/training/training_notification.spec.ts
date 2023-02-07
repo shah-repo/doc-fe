@@ -927,7 +927,6 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Download zip file containing completed training notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

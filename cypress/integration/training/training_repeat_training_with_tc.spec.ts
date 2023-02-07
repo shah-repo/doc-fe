@@ -841,7 +841,6 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
   context("Verify PDF file downloaded", () => {
     it("Extract download link from gmail", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1035,7 +1034,6 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
 
   context("Verify PDF file downloaded", () => {
     it("Extract download link from gmail", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
