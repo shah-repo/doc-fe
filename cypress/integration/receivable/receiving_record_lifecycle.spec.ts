@@ -28,17 +28,16 @@ let createdPartDocument;
 let createdPOFormDocument;
 let receivingName;
 let receivePageDetailsId;
-let receivingDocumentType;
 let receivingDocumentTypeNew;
 let oldReceivingForm;
-let CSLDocumentType;
-let createdLotsFormDocument;
 const PART_DOCUMENT_TYPE_NAME = "Part";
 const SupplierFormTitle = "Supplier form";
 const TEXTFIELD_LABEL = "TEXT FIELD";
 const RADIO_BUTTON_GROUP_LABEL = "radioGroup";
 const CHECKBOX_LABEL = "checkboxGroup";
 const CHECKBOX_REQUIRED_IF_VALUE = "Y";
+const orderQty1 = "200";
+const orderQty2 = "50";
 
 
 context("Receivable record lifecycle", () => {
@@ -79,12 +78,10 @@ context("Receivable record lifecycle", () => {
           createdCompany = response;
           adminEmployee = createdCompany.employees.find((employee) => employee.user.email === USERS[11].email);
           purchaseOrderDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Purchase Order test");
-          receivingDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable");
           receivingDocumentTypeNew = cmpFilterDocumentTypeIdByName(createdCompany, "Receivable test");
           approvalRequestDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Approval Request");
           formDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Form");
           supplierDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Suppliers");
-          CSLDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, "Lots test");
           partDocumentType = cmpFilterDocumentTypeIdByName(createdCompany, PART_DOCUMENT_TYPE_NAME);
           done();
         });
@@ -473,226 +470,144 @@ context("Receivable record lifecycle", () => {
         }).then(() => done() );
       });
     });
-
-    it("[API]Create old receiving form", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Old receiving Form document</p>",
-          document: {
-            docId: "FM-00004",
-            documentType: {
-              id: formDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Old Receiving Form document",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [{
-              id: receivingDocumentType[0].id,
-            }],
-            schema: [
-              {
-                name: "receiving-ku6t73ty",
-                type: "poreceive",
-                index: 0,
-                label: "Select PO",
-                tabId: "details",
-                rules: "",
-                hidden: false,
-                deleted: false,
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: false,
-                outputDisabled: false,
-                validationMode: "default",
-                editorProperties: [],
-                validationAttribute: "Select PO",
-                deleteInFormDisabled: false,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "fb-approvals-ku6t6gzw",
-                type: "approvals",
-                tabId: "overview",
-                index: 1,
-                label: "form.builder.approvals",
-                deleteDisabled: true,
-                uniqueSchemaItem: true,
-              },
-            ],
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        oldReceivingForm = response;
-        cy.drAPIApproveAndRelease({
-          documentId: oldReceivingForm.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done() );
-      });
-    });
-
-    it("[API]Create Lots form", (done: any) => {
-      cy.drCreateDocumentRevision({
-        payload: {
-          attachments: [],
-          description: "<p>Lots Form document</p>",
-          document: {
-            docId: "FM-00008",
-            documentType: {
-              id: formDocumentType[0].id,
-            },
-            securityList: {
-              operators: [],
-              securityEmployees: [],
-              securityGroups: [
-                {
-                  id: group.body[0].id,
-                },
-              ],
-            },
-          },
-          name: "Lots form document",
-          referenceTo: [],
-          retrain: false,
-          revisionChangeType: RevisionChangeType.NextRevision,
-          revisionStage: 1,
-          formTemplate: {
-            outputDocumentTypes: [{
-              id: CSLDocumentType[0].id,
-            }],
-            schema: [
-              {
-                name: "lot_quantity",
-                type: "quantity",
-                index: 0,
-                label: "Initial Quantity",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                editorProperties: [],
-                validationAttribute: "Initial Quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lot_usable_quantity",
-                type: "quantity",
-                index: 1,
-                label: "Usable Quantity",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                editorProperties: [],
-                validationAttribute: "Usable Quantity",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lot_expiry_date",
-                type: "datepicker",
-                index: 2,
-                label: "Expiration Date",
-                tabId: "details",
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationAttribute: "Expiration Date",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-              {
-                name: "lot_part",
-                type: "autocomplete",
-                index: 3,
-                label: "Part Selection",
-                tabId: "details",
-                optionId: "21",
-                placeholder: "Select the appropriate part for this lot",
-                deleteDisabled: true,
-                deleteInFormDisabled: true,
-              },
-              {
-                name: "100-inspection-override",
-                type: "checkboxgroup",
-                index: 4,
-                label: "100% Inspection Override",
-                tabId: "details",
-                options: [
-                  {
-                    text: "100% Inspection Override",
-                    value: "100% Inspection Override",
-                  },
-                ],
-                applicableOn: [
-                  "ON_STATE_TO_IN_REVIEW",
-                ],
-                deleteDisabled: true,
-                validationMode: "default",
-                editorProperties: [],
-                validationAttribute: "100% Inspection Override",
-                deleteInFormDisabled: true,
-                applicableValidationSchema: true,
-              },
-            ],
-          },
-        },
-        employeeId: adminEmployee.id as unknown as string,
-        sessionId: loginResponse.sessionId as unknown as string,
-      }).then((response) => {
-        createdLotsFormDocument = response;
-        cy.drAPIApproveAndRelease({
-          documentId: createdLotsFormDocument.id,
-          payload: {
-            effectiveDate: (new Date()).toISOString(),
-            documentType: { id: approvalRequestDocumentType[0].id },
-            formDocument: { id: initialArDocument[0].id },
-            approversWithSignatures: [{ approver: { id: adminEmployee.id } }],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => {
-          done();
-        });
-      });
-    });
   });
+
   context("Login user", () => {
-    context("Login user when he doesn't have privileges", () => {
-      it("Login user to dashboard", () => {
-        cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
-      });
+    it("Login user to dashboard", () => {
+      cy.authLoginToDashboard({ USER: USERS[11], employeeId: adminEmployee.id });
     });
   });
 
-  context("Create PO document with three Products", () => {
+  context("Create a form with output as 'PO Approval matrix', Approve and release it", () => {
+    it("Navigates to document list", () => {
+      cy.navigToDocumentList();
+    });
+
+    it("Clicks on 'create a document' button", () => {
+      cy.cmpClickCreateNewDocument();
+    });
+
+    it("Enters title 'POAM Form'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Form" });
+    });
+
+    it("Enters description 'POAM Form description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Form description" });
+    });
+
+    it("Select 'Numeric' revision stage", () => {
+      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
+    });
+
+    it("Selects 'Form' document type from dropdown", () => {
+      cy.drSelectDocumentType({ documentType: "Form" });
+    });
+
+    it("Selects 'PO Approval Matrix' document type from dropdown", () => {
+      cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click create document after filling document", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Create POAM document for PO", () => {
+    it("Click on Create New button", () => {
+      cy.drCreateNewDocumentFromForm();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter title as 'POAM Document'", () => {
+      cy.drEnterDocumentTitle({ name: "POAM Document" });
+    });
+
+    it("Enter description as 'POAM Doc description'", () => {
+      cy.drEnterDocumentDescription({ description: "POAM Doc description" });
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+    });
+
+    it("Navigate to MatrixDetails tab", () => {
+      cy.drSelectMatrixDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Click on 'Add Item'", () => {
+    it("Click on 'Add Item'", () => {
+      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Enter Level Name value to be 'level 1'", () => {
+      cy.poAMEnterLevelName({ name: "level 1" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Enter Limit value to be '15000'", () => {
+      cy.poAMEnterLimit({ limit: "15000" });
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Fill in the fields - Signature 1 group as 'Everyone'", () => {
+      cy.get(`[name="signatures.0.groups"]`).arrowClick().wait(1000);
+      cy.contains("Everyone").arrowClick().wait(1000);
+      cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on 'Add' button", () => {
+      cy.get(`[data-cy="common.add"]`).contains("Add").arrowClick().wait(500);
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify 'Everyone' group exists under signature 1", () => {
+      cy.get(`tr>td[class*="MuiTableCell-root"]`).eq(2).contains("Everyone");
+    });
+
+    it("Click 'Save' document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+    });
+  });
+
+  context("Release POAM", () => {
+    it("Approve and release document", () => {
+      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+    });
+
+    it("Switch to matrix details tab", () => {
+      cy.drSelectMatrixDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify 'Everyone' group exists under signature 1", () => {
+      cy.get(`tr>td[class*="MuiTableCell-root"]`).eq(2).contains("Everyone");
+    });
+  });
+
+  context("Create PO document with a line item", () => {
     it("Click on 'Purchase Order' on sidebar", () => {
       cy.navigToPurchaseOrderWithoutApi();
       cy.progressBarShouldNotExist();
@@ -738,59 +653,105 @@ context("Receivable record lifecycle", () => {
     it("Click 'Save the document", () => {
       cy.recClickCreateDocumentWithApiCall();
     });
+  });
 
-    context("Create first line item on PO", () => {
-      it("Navigate to Lineitem tab", () => {
-        cy.drSelectLineItems();
-      });
-
-      it("Click on 'Add item' button", () => {
-        cy.poAddNewFieldItem();
-        cy.listLoadingElementShouldNotExist();
-      });
-
-      it("Select Part Number", () => {
-        cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
-      });
-
-      it("Enter Quantity Ordered", () => {
-        cy.poEnterQuantityOrdered({ quantity: "200" });
-      });
-
-      it("Select Units", () => {
-        cy.poSelectUnits();
-      });
-
-      it("Enter Unit Price", () => {
-        cy.poNumberOfUnits({ number: "5" });
-      });
-
-      it("Add Required Date", () => {
-        cy.get("[name^=date]").parent().find("button").arrowClick();
-        cy.get("button.MuiPickersDay-daySelected").arrowClick();
-      });
-
-      it("Click on 'Add' inside PO dialog box", () => {
-        cy.poAddPOButtonClick();
-        cy.listLoadingElementShouldNotExist();
-      });
+  context("Create first line item on PO", () => {
+    it("Navigate to Lineitem tab", () => {
+      cy.drSelectLineItems();
     });
 
-    context("Approve Purchase Order document", () => {
-      it("Click on 'Details' tab", () => {
-        cy.drSelectDetailsTab();
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-      });
+    it("Click on 'Add item' button", () => {
+      cy.poAddNewFieldItem();
+      cy.listLoadingElementShouldNotExist();
+    });
 
-      it("Click 'Submit for Approval' button", () => {
-        cy.pmSubmitForApproval();
-      });
+    it("Select Part Number", () => {
+      cy.poSelectPartNumber({ partNo: "PRT-00005 - 1" });
+    });
 
-      it("Click 'Approve' button", () => {
-        cy.poClickOnPending();
-        cy.ebApproveWithoutApi();
-      });
+    it("Enter Quantity Ordered", () => {
+      cy.poEnterQuantityOrdered({ quantity: orderQty1 });
+    });
+
+    it("Select Units", () => {
+      cy.poSelectUnits();
+    });
+
+    it("Enter Unit Price", () => {
+      cy.poNumberOfUnits({ number: "5" });
+    });
+
+    it("Add Required Date", () => {
+      cy.get("[name^=date]").parent().find("button").arrowClick();
+      cy.get("button.MuiPickersDay-daySelected").arrowClick();
+    });
+
+    it("Click on 'Add' inside PO dialog box", () => {
+      cy.poAddPOButtonClick();
+      cy.listLoadingElementShouldNotExist();
+    });
+  });
+
+  context("Create second line item for service", () => {
+    it("Click on 'Add item' button", () => {
+      cy.unClick();
+      cy.poAddNewFieldItem();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click on service option", () => {
+      cy.poSelectOption({ optionName: "service" });
+    });
+
+    it("Select service id", () => {
+      cy.poEnterServiceID({ serviceId: "SRV123" });
+    });
+
+    it("Enter Description", () => {
+      cy.poEnterDescription({ description: "Description for SRV123" });
+    });
+
+    it("Enter Quantity Ordered", () => {
+      cy.poEnterQuantityOrdered({ quantity: orderQty2 });
+    });
+
+    it("Select Units", () => {
+      cy.poSelectUnits();
+    });
+
+    it("Select GL code", () => {
+      cy.poSelectGLCode();
+    });
+
+    it("Enter Unit Price", () => {
+      cy.poNumberOfUnits({ number: "190" });
+    });
+
+    it("Click on 'Add' inside PO dialog box", () => {
+      cy.poAddPOButtonClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Save document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
+    });
+  });
+
+  context("Approve Purchase Order document", () => {
+    it("Click on 'Details' tab", () => {
+      cy.drSelectDetailsTab();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Click 'Submit for Approval' button", () => {
+      cy.pmSubmitForApproval();
+    });
+
+    it("Click 'Approve' button", () => {
+      cy.poClickOnPending();
+      cy.ebApproveWithoutApi();
     });
   });
 
@@ -801,7 +762,7 @@ context("Receivable record lifecycle", () => {
           attachments: [],
           description: "<p>New Recivable description</p>",
           document: {
-            docId: "FM-00002",
+            docId: "FM-00004",
             documentType: {
               id: formDocumentType[0].id,
             },
@@ -979,120 +940,10 @@ context("Receivable record lifecycle", () => {
     });
   });
 
-  context("Create a form with output as 'PO Approval matrix', Approve and release it", () => {
-    it("Navigates to document list", () => {
-      cy.navigToDocumentList();
-    });
-
-    it("Clicks on 'create a document' button", () => {
-      cy.cmpClickCreateNewDocument();
-    });
-
-    it("Enters title 'POAM Form'", () => {
-      cy.drEnterDocumentTitle({ name: "POAM Form" });
-    });
-
-    it("Enters description 'POAM Form description'", () => {
-      cy.drEnterDocumentDescription({ description: "POAM Form description" });
-    });
-
-    it("Select 'Numeric' revision stage", () => {
-      cy.drSelectRevisionStageOptions({ revisionStageOption: "Numeric" });
-    });
-
-    it("Selects 'Form' document type from dropdown", () => {
-      cy.drSelectDocumentType({ documentType: "Form" });
-    });
-
-    it("Selects 'PO Approval Matrix' document type from dropdown", () => {
-      cy.drSelectOutputDocumentType({ documentType: "PO Approval Matrix" });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Click create document after filling document", () => {
-      cy.drClickCreateDocumentWithoutApiCall();
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-
-    it("Approve and release document", () => {
-      cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-  });
-
-  context("Create POAM document for PO", () => {
-    it("Click on Create New button", () => {
-      cy.drCreateNewDocumentFromForm();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Enter title as 'POAM Document'", () => {
-      cy.drEnterDocumentTitle({ name: "POAM Document" });
-    });
-
-    it("Enter description as 'POAM Doc description'", () => {
-      cy.drEnterDocumentDescription({ description: "POAM Doc description" });
-    });
-
-    it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
-    });
-
-    it("Navigate to MatrixDetails tab", () => {
-      cy.drSelectMatrixDetailsTab();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-  });
-
-  context("Click on 'Add Item'", () => {
-    it("Click on 'Add Item'", () => {
-      cy.get(`div[name="po-levels-built-in"] button[data-cy="fb-control-btn"]`).arrowClick({ force: true });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-      cy.landingPageLoadingElementShouldNotExist();
-    });
-
-    it("Enter Level Name value to be 'level 1'", () => {
-      cy.poAMEnterLevelName({ name: "level 1" });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Enter Limit value to be '400'", () => {
-      cy.poAMEnterLimit({ limit: "400" });
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Fill in the fields - Signature 1 group as 'Everyone'", () => {
-      cy.get(`[name="signatures.0.groups"]`).arrowClick().wait(1000);
-      cy.contains("Everyone").arrowClick().wait(1000);
-      cy.unClick();
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Click on 'Add' button", () => {
-      cy.get(`[data-cy="common.add"]`).contains("Add").arrowClick().wait(500);
-      cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Verify 'Everyone' group exists under signature 1", () => {
-      cy.get(`tr>td[class*="MuiTableCell-root"]`).eq(2).contains("Everyone");
-    });
-
-    it("Click 'Save' document", () => {
-      cy.drClickCreateDocumentWithoutApiCallForForms();
-    });
-  });
-
   context("Create RC", () => {
-    it("Turn off autosave", () => {
-      cy.cmpTurnOffAutosave();
-    });
+    // it("Turn off autosave", () => {
+    //   cy.cmpTurnOffAutosave();
+    // });
 
     it("Navigate to receiving", () => {
       cy.navigToReceivableList();
@@ -1115,25 +966,6 @@ context("Receivable record lifecycle", () => {
       cy.get(`input[type="checkbox"][value="2"]`).check();
       cy.listLoadingElementShouldNotExist();
       cy.wait(3000);
-    });
-
-    it("Search for API PO document and select it", () => {
-      cy.recSelectPo({ poTitle: "New Purchase Order" });
-      cy.unClick();
-    });
-
-    it("Verify requester is present on receivable", () => {
-      cy.get("input[data-cy^=\"po-requestor\"]").should("have.attr", "value", `${USERS[11].name} - ${USERS[11].email}`);
-    });
-
-    it("Verify supplier is present on receivable", () => {
-      cy.get("input[data-cy^=\"po-supplier-built-in\"]")
-        .should("have.attr", "value", "SUP-00001 - rev 1 - API Supplier Document");
-    });
-
-    it("Verify PO table is present on receivable", () => {
-      cy.get("div[name=\"po-items-built-in\"]>table").should("exist");
-      cy.unClick();
     });
 
     it("Save receivable", () => {
@@ -1170,73 +1002,38 @@ context("Receivable record lifecycle", () => {
 
   context(`Select PO and receive items`, () => {
     it("Select PO and receive items", () => {
-      cy.pause();
-    });
-  });
-
-  context(`Add approvers on the approvals block and release RC`, () => {
-    it("Add approvers on the approvals block and release RC", () => {
-      cy.pause();
+      cy.recSelectPo({ poTitle: "New Purchase Order" });
+      cy.unClick();
     });
 
-    it("Check if it follows DAM required approvers", () => {
-      cy.pause();
-    });
-  });
-
-  context("Add two approver and then remove one", () => {
-    it("Add approver", () => {
-      cy.pmAddApproverOnApproverList({ approver: USERS[12].name });
-      cy.pmAddApproverOnApproverList({ approver: USERS[11].name });
-    });
-
-    it("remove one approver", () => {
-      cy.contains(USERS[12].name).last().parent().parent().find(".MuiChip-deleteIcon").arrowClick();
-    });
-
-    it("Save receivable with approver", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
-    });
-  });
-
-  context("Verify `Receiving document` status and send email", () => {
-    it("Check doc Released status and click on Send To Email", () => {
-      cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.WIP });
-    });
-
-    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-      cy.checkToastMessageContains({
-        message: "File will be sent to your email shortly.",
-      });
-    });
-  });
-
-  context("Click on “Receive all“", () => {
     it("Click on “Receive all”", () => {
       SystemRequirement("REQ-4790");
       cy.get("[data-cy=\"form.builder.receive\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
     });
 
-    it("Click 'Create a Lot' on first line item", () => {
-      cy.get("tr>td>button").first().arrowClick();
-      cy.listLoadingElementShouldNotExist();
+    it("Verify Receipt QTY is auto populated and matches with ordered amount", () => {
+      SystemRequirement("REQ-4790");
+      cy.get(`[data-cy="received"]`).eq(0).contains(orderQty1);
     });
+  });
 
-    it("Select 'Lots test' document type", () => {
-      cy.get("[data-cy='lotType']").autocompleteSelect("Lots test");
-      cy.listLoadingElementShouldNotExist();
-    });
-
-    it("Select 'Lots form document' form", () => {
-      cy.get("[data-cy='lotForm']").autocompleteSelect("Lots form");
-    });
-
-    it("Click 'Create Lot' button", () => {
-      cy.get("[data-cy='form.builder.po.create.lot']").arrowClick();
+  context(`Add approvers on the approvals block and release RC`, () => {
+    it("Add approver", () => {
+      cy.pmAddApproverOnApproverListWithoutApi({ approver: USERS[11].name });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
-      cy.unClick();
+      cy.wait(3000);
+    });
+
+    it("Save receivable with approver", () => {
+      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Check if it follows DAM required approvers", () => {
+      cy.pause();
     });
   });
 
