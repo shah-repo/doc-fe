@@ -86,6 +86,8 @@ const Presenter: React.FunctionComponent<Props> = ({
   const outputDocumentTypeName = useSelector((state: ApplicationState) =>
     formTemplate ? (formTemplate.outputDocumentTypes as FBOutputDocumentType[]).map((i) =>
       documentTypeSelectors.getDocTypeName(state, i.id)).join(", ") : []);
+  const isPartForm = useSelector((state: ApplicationState) => formTemplate
+    ? checkIsDocumentPart((formTemplate.outputDocumentTypes[0] as FBOutputDocumentType)?.groupOptions) : false);
 
   const renderTrainingControl = shouldRenderTrainingButton && (
     <TrainingControl
@@ -163,7 +165,7 @@ const Presenter: React.FunctionComponent<Props> = ({
           <BuildsContainer dataProp={flatten([parentParts])} label="common.part.of"
             labelProps={AutoCompleteStyles.labelProps} labelFont={AutoCompleteStyles.labelFont} />
         )}
-        {isPart &&
+        {(isPart || isPartForm) &&
             <Grid item xs={12}>
               <RelatedPartsWrapper
                 viewOnly={true}
