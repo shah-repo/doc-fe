@@ -331,6 +331,7 @@ context("Dynamic Form Test", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing training form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -402,6 +403,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 1 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       expect(el).match(/Page 1 of 4/);
       if (el.includes("Page 1 of 4")) {
@@ -497,6 +499,7 @@ context("Dynamic Form Test", () => {
     });
 
     it("Verify page 4 in document", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[3];
       expect(el).match(/Page 4 of 4/);
       if (el.includes("Page 4 of 4")) {

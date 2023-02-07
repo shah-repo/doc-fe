@@ -35,7 +35,7 @@ const AssessmentFormVoidContainer: React.FunctionComponent<Props> = ({
       async,
     );
   };
-  const isNewLayout = SM.isNewCRLayout;
+  const isNewLayout = SM.isNewCRLayout || SM.isNewLayout;
 
   if (!changeRequest) {
     return null;

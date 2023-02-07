@@ -14,6 +14,7 @@ import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1322,6 +1323,7 @@ context("Autosave LHR", () => {
         subject: `Export for document ${lhrDocId}`,
       };
 
+      SystemRequirement("REQ-3750");
       cy.imapGetMails({ userEmail: CONFIG.TEST_EMAIL, options: getEmailSetting }).should((emails) => {
         if (emails) {
           emailsFromInbox = emails;
@@ -1354,6 +1356,7 @@ context("Autosave LHR", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
@@ -1420,6 +1423,7 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 1 for LHRt", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `LHR template\n${lhrDocId}, Revision 1\nLHRT DOCUMENT`, "gi" );
@@ -1505,6 +1509,7 @@ context("Autosave LHR", () => {
     });
 
     it("Verify page 3 of LHRt", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
 

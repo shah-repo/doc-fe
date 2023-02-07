@@ -270,6 +270,7 @@ context("Create company via API and create Suppliers document", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing Approval request form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -329,6 +330,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Verify page 1 of Supplier form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new RegExp( `Form\n${supFormId}, Revision 1\nNEW SUPPLIER FORM`, "gi" );
@@ -362,6 +364,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Verify page 2 of Supplier form", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new RegExp( `Form\n${supFormId}, Revision 1\nNEW SUPPLIER FORM`, "gi" );
@@ -447,6 +450,7 @@ context("Create company via API and create Suppliers document", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file containing Supplier form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1017,6 +1021,7 @@ context("Create company via API and create Suppliers document", () => {
 
       context("Verify that zip file containing pdf downloaded", () => {
         it("Download zip file containing Supplier form", () => {
+          SystemRequirement("REQ-4860");
           expect(downloadUrl).contains("exported_file_download");
           fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1188,6 +1193,7 @@ context("Create company via API and create Suppliers document", () => {
 
       context("Verify that zip file containing pdf downloaded", () => {
         it("Download zip file containing Supplier form", () => {
+          SystemRequirement("REQ-4860");
           expect(downloadUrl).contains("exported_file_download");
           fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

@@ -51,7 +51,9 @@ const TEXTFIELD_LABEL = "TEXT FIELD";
 const RADIO_BUTTON_GROUP_LABEL = "radioGroup";
 const CHECKBOX_LABEL = "checkboxGroup";
 const CHECKBOX_REQUIRED_IF_VALUE = "Y";
-
+const orderQty1 = "200";
+const orderQty2 = "100";
+const orderQty3 = "2";
 
 context("Receivable test with Page Details", () => {
   before(() => {
@@ -769,7 +771,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Enter Quantity Ordered", () => {
-          cy.poEnterQuantityOrdered({ quantity: "200" });
+          cy.poEnterQuantityOrdered({ quantity: orderQty1 });
         });
 
         it("Select Units", () => {
@@ -803,7 +805,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Enter Quantity Ordered", () => {
-          cy.poEnterQuantityOrdered({ quantity: "100" });
+          cy.poEnterQuantityOrdered({ quantity: orderQty2 });
         });
 
         it("Select Units", () => {
@@ -845,7 +847,7 @@ context("Receivable test with Page Details", () => {
         });
 
         it("Enter Quantity Ordered", () => {
-          cy.poEnterQuantityOrdered({ quantity: "2" });
+          cy.poEnterQuantityOrdered({ quantity: orderQty3 });
         });
 
         it("Select Units", () => {
@@ -1185,6 +1187,7 @@ context("Receivable test with Page Details", () => {
 
     context("Verify that zip file contains pdf", () => {
       it("Download zip file containing Approval request form", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1245,6 +1248,7 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify page 1 for Receivable form", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
@@ -1526,6 +1530,13 @@ context("Receivable test with Page Details", () => {
       SystemRequirement("REQ-4790");
       cy.get("[data-cy=\"form.builder.receive\"]").arrowClick();
       cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Verify Receipt QTY for all line items is auto populated and matches with ordered amount", () => {
+      SystemRequirement("REQ-4790");
+      cy.get(`[data-cy="received"]`).eq(0).contains(orderQty1);
+      cy.get(`[data-cy="received"]`).eq(1).contains(orderQty2);
+      cy.get(`[data-cy="received"]`).eq(2).contains(orderQty3);
     });
 
     it("Click 'Create a Lot' on first line item", () => {
@@ -2133,10 +2144,12 @@ context("Receivable test with Page Details", () => {
     });
 
     it("Verify requester is present on receivable", () => {
+      SystemRequirement("REQ-1910");
       cy.get("input[data-cy^=\"po-requestor\"]").should("have.attr", "value", `${USERS[11].name} - ${USERS[11].email}`);
     });
 
     it("Verify supplier is present on receivable", () => {
+      SystemRequirement("REQ-1910");
       cy.get("input[data-cy^=\"po-supplier-built-in\"]")
         .should("have.attr", "value", "SUP-00001 - rev 1 - API Supplier Document");
     });

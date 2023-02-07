@@ -47,13 +47,14 @@ const SplitReleaseButton: React.FunctionComponent<{
   return (
     <Grid container direction="column" alignItems="center">
       <Grid item xs={12}>
-        <StyledButtonGroup variant="contained" disableRipple color="primary"
+        <StyledButtonGroup variant="contained" disableRipple  color="primary"
           ref={anchorRef} aria-label="Release options">
           <Button
             color="primary"
             onClick={handleClick}
             id="ApproveAndRelease-button"
             data-cy="ApproveAndRelease-button"
+            className={classes.buttonHover}
           >
             <Text translation="releaseButton.option.expressAR" />
           </Button>
@@ -64,6 +65,7 @@ const SplitReleaseButton: React.FunctionComponent<{
             aria-expanded={isOpened}
             aria-label="Select AR strategy"
             aria-haspopup="menu"
+            className={classes.hoverArrow}
             onClick={handleToggle}
           >
             <ArrowDropDownIcon />

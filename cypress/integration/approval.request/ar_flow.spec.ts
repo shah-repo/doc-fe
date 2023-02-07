@@ -324,6 +324,7 @@ context("Approval request form", () => {
     });
 
     it("Verify file size of the downloaded zip file", () => {
+      SystemRequirement("REQ-4860");
       const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
       cy.readFile(zipfile).its("length").should("be.gt", 500);
     });
@@ -375,6 +376,7 @@ context("Approval request form", () => {
     });
 
     it("Verify page 1 for Approval request form", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW APPROVAL REQUEST FORM TEMPLATE`, "gi" );
@@ -434,6 +436,7 @@ context("Approval request form", () => {
     });
 
     it("Verify page 3 for Approval request form", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nNEW APPROVAL REQUEST FORM TEMPLATE`, "gi" );
