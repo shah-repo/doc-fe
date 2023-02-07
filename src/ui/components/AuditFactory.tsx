@@ -189,7 +189,7 @@ const AuditFactory: React.FunctionComponent<Props> = ({
             />
             {audit?.poReceivedQtyFlag && (
               <Text
-                dataCy={dataCy}
+                dataCy={`${dataCy}-quantity-discrepancies`}
                 translation="documentRevision.audit.poStatus.quantity.discrepancies"
               />
             )}
