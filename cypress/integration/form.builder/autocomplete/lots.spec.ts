@@ -320,6 +320,7 @@ context("Autocomplete 'Lots' test", () => {
 
     context("Verify that zip file containing pdf downloaded", () => {
       it("Download zip file", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -599,6 +600,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Verify page 1 in document", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 2")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );
@@ -653,6 +655,7 @@ context("Autocomplete 'Lots' test", () => {
       });
 
       it("Verify page 2 in document", () => {
+        SystemRequirement("REQ-4870");
         const el = pages[1];
         if (el.includes("Page 2 of 2")) {
           tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nLOTS TITLE`, "gi" );

@@ -767,6 +767,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Download zip file containing pending training notification", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -797,6 +798,7 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Verify PDF file for pending training notification", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       cy.pdfparseFile(
         {
           directory: path.join(CONFIG.DOWNLOADS_DIR, downloadFile.replace(".zip", "")),
@@ -925,7 +927,6 @@ context("Training notification test", { tags: ["@timetool"] }, () => {
     });
 
     it("Download zip file containing completed training notification", () => {
-      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
