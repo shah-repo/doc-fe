@@ -13,7 +13,7 @@ import { ReactComponent as WarningWhiteIcon } from "../../assets/images/warning_
 import { ReactComponent as WithDrawSubmissionIcon } from "../../assets/images/withdraw_submission.svg";
 import { authSelectors } from "../../state/ducks/auth";
 import { documentRevisionsActions, documentRevisionsSelectors } from "../../state/ducks/documentRevisions";
-import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType } from "../../state/ducks/documentRevisions/types";
+import { Document, DocumentRevision, DocumentRevisionTransitionResponse, FBOutputDocumentType, POStatusType } from "../../state/ducks/documentRevisions/types";
 import { documentsActions } from "../../state/ducks/documents";
 import { ApplicationState } from "../../state/reducers";
 import AlertDialog from "../app/alert.dialog/AlertDialog";
@@ -372,7 +372,8 @@ const PreviewControlsContainer: React.FunctionComponent<PreviewControlsContainer
   if (!isLastVersionObsolete() && hasAccess && canCreate() && !isPO && showRevise) {
     accessableButtons.push("cloneButton");
   }
-  if (!isLastVersionObsolete() && hasAccess && canCreate() && isPO && showUpdate) {
+  if (!isLastVersionObsolete() && hasAccess && canCreate() && isPO && showUpdate &&
+   POStatusType.CLOSED !== selectedDocument.poStatus) {
     accessableButtons.push("updateButton");
   }
   if ((isStatusReleased || isStatusInDraft) && canCopy && isEB) {
