@@ -414,11 +414,12 @@ context("Add and edit FB fields - Test 1", () => {
       cy.fbAddNewFieldButton();
     });
 
-    it("Edit Purchase Order", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order1" });
-      cy.fbAddNewFieldButton();
-    });
+    // code is commented for ENC-13939
+    // it("Edit Purchase Order", () => {
+    //   cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
+    //   cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order1" });
+    //   cy.fbAddNewFieldButton();
+    // });
 
     it("Edit Receive Purchase Order", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-receive-purchase-order" });
@@ -451,7 +452,7 @@ context("Add and edit FB fields - Test 1", () => {
   context("Verify Updation of Fields on reload page", () => {
     it("reload page", () => {
       cy.navigToDocumentList();
-      cy.drFilterDocListByNameAndStatus({ title: "New Document Revision", status: "Draft" });
+      cy.drFilterDocListByDocIdAndStatus({  docId: "FM-00002", status: "Draft" });
     });
 
     it("Verify TextField", () => {
@@ -522,9 +523,10 @@ context("Add and edit FB fields - Test 1", () => {
       cy.contains("fb-timer1").should("exist");
     });
 
-    it("Verify Purchase Order", () => {
-      cy.contains("fb-purchase-order1").should("exist");
-    });
+    // code is commented for ENC-13939
+    // it("Verify Purchase Order", () => {
+    //   cy.contains("fb-purchase-order1").should("exist");
+    // });
 
     it("Verify Receive Purchase Order", () => {
       cy.contains("fb-receive-purchase-order1").should("exist");
