@@ -147,8 +147,7 @@ context("Export internal doc - Design Document", () => {
     });
 
     it("Verify page 1 of DD document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -175,8 +174,6 @@ context("Export internal doc - Design Document", () => {
     });
 
     it("Verify page 2 of DD document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {

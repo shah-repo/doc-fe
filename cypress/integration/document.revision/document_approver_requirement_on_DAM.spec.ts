@@ -302,8 +302,7 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 1 of draft DAM request form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nFORM DAM`, "gi" );
@@ -341,8 +340,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 2 of released DAM request form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
@@ -494,8 +491,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 1 of released DAM request form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nFORM DAM`, "gi" );
@@ -534,9 +529,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 2 of released DAM request form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
-      SystemRequirement("REQ-4870");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new RegExp( `Form\n${releasedFormId}, Revision 1\nFORM DAM`, "gi" );
@@ -894,8 +886,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 1 for draft document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new
@@ -928,8 +918,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 2 for draft document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new
@@ -971,9 +959,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 3 for draft document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
-      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new
@@ -1156,8 +1141,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 1 for released document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new
@@ -1191,8 +1174,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 2 for released document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new
@@ -1234,9 +1215,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 3 for released document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
-      SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
         tmpRegex = new
@@ -1518,8 +1496,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 1 for approval request document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
@@ -1675,8 +1651,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 1 for In Review approval request document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 1")) {
         tmpRegex = new
@@ -1930,8 +1904,6 @@ context("Document Approver Requirement on Document Approval Matrix", () => {
     });
 
     it("Verify page 1 for closed document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[0];
 
       if (el.includes("Page 1 of 1")) {

@@ -1187,6 +1187,7 @@ context("Receivable test with Page Details", () => {
 
     context("Verify that zip file contains pdf", () => {
       it("Download zip file containing Approval request form", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1204,7 +1205,6 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify file size of the downloaded zip file", () => {
-        SystemRequirement("REQ-4860");
         const zipfile = path.join(CONFIG.DOWNLOADS_DIR, downloadFile);
         cy.readFile(zipfile).its("length").should("be.gt", 500);
       });
@@ -1248,8 +1248,7 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify page 1 for Receivable form", () => {
-        SystemRequirement("REQ-4850");
-        SystemRequirement("REQ-4880");
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
@@ -1406,7 +1405,6 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      SystemRequirement("REQ-4860");
       it("Download zip file containing Approval request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -1468,8 +1466,6 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify page 1 for Receivable form", () => {
-        SystemRequirement("REQ-4850");
-        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
@@ -1783,7 +1779,6 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      SystemRequirement("REQ-4860");
       it("Download zip file containing Approval request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -1845,8 +1840,6 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify page 1 for Receivable form", () => {
-        SystemRequirement("REQ-4850");
-        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );
@@ -1966,7 +1959,6 @@ context("Receivable test with Page Details", () => {
     });
 
     context("Verify that zip file contains pdf", () => {
-      SystemRequirement("REQ-4860");
       it("Download zip file containing Approval request form", () => {
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
@@ -2028,8 +2020,6 @@ context("Receivable test with Page Details", () => {
       });
 
       it("Verify page 1 for Receivable form", () => {
-        SystemRequirement("REQ-4850");
-        SystemRequirement("REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 1")) {
           tmpRegex = new RegExp( `Receivable test\n${releasedFormId}, Revision A`, "gi" );

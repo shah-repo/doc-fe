@@ -288,8 +288,7 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Verify page 1 of DD form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 4")) {
         tmpRegex = new
@@ -325,8 +324,6 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Verify page 2 of DD form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 4")) {
         tmpRegex = new
@@ -357,8 +354,6 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Verify page 3 of DD form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[2];
       if (el.includes("Page 3 of 4")) {
         tmpRegex = new
@@ -382,8 +377,6 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Verify page 4 of DD form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[3];
       if (el.includes("Page 4 of 4")) {
@@ -445,8 +438,6 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Verify page 1 of DD form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 4")) {
         tmpRegex = new
@@ -482,8 +473,6 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Verify page 2 of DD form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 4")) {
         tmpRegex = new
@@ -514,8 +503,6 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Verify page 3 of DD form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[2];
       if (el.includes("Page 3 of 4")) {
         tmpRegex = new
@@ -539,9 +526,6 @@ context("Export internal doc - Design Document form", () => {
     });
 
     it("Verify page 4 of DD form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
-      SystemRequirement("REQ-4870");
       const el = pages[3];
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new

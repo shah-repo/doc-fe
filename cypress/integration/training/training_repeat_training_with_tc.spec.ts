@@ -565,8 +565,7 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 1 of training form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 3")) {
         tmpRegex = new
@@ -610,8 +609,6 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 2 of training form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 3")) {
         tmpRegex = new
@@ -640,8 +637,6 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 3 of training form", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       SystemRequirement("REQ-4870");
       const el = pages[2];
       if (el.includes("Page 3 of 3")) {
@@ -906,8 +901,6 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 1 of draft document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -949,8 +942,6 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 2 of draft document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
@@ -1098,8 +1089,6 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 1 of released document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 2")) {
         tmpRegex = new
@@ -1141,8 +1130,6 @@ context("Repeat Training with Training Curriculum", { tags: ["@timetool"] }, () 
     });
 
     it("Verify page 2 of released document", () => {
-      SystemRequirement("REQ-4850");
-      SystemRequirement("REQ-4880");
       const el = pages[1];
       if (el.includes("Page 2 of 2")) {
         tmpRegex = new
