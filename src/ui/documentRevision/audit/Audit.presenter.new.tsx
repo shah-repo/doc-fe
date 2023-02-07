@@ -51,7 +51,6 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
         change.field === "poStatus" && ownerName === "Server Automation";
       const changeOwner = find([owner, ownerUser, ownerThirdParty], "user.name");
       const finalOwner = !isPOAutoChange && changeOwner ? changeOwner.user : { name: ownerName } as User;
-      const name = isPOAutoChange ? ownerName : changeOwner?.user?.name ?? ownerName;
 
       if (change.field.includes("-built-in")) {
         return null;
@@ -64,7 +63,7 @@ const AuditPresenter: React.FunctionComponent<AuditPresenterProps> = ({
       return (
         <Box key={groupId} className={classes.changeContainer}>
           <UserAvatarListItem
-            name={<span data-cy={`change-key-${key}`}>{name}</span>}
+            name={<span data-cy={`change-key-${key}`}>{finalOwner?.name}</span>}
             user={finalOwner}
             secondaryComponent={
               <DateTime

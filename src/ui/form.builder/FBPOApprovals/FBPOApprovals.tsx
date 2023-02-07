@@ -134,6 +134,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                   <Typography
                                     variant="h6"
                                     component="h6"
+                                    data-cy={`user-name-${index}-${approval.status}`}
                                     className={classes.nameText}
                                   >
                                     {approval.approver.user.name}
@@ -142,6 +143,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                 secondary={
                                   <Typography
                                     variant="caption"
+                                    data-cy={`user-email-${index}-${approval.status}`}
                                     className={classes.emailText}
                                   >
                                     {approval.approver.user.email}
@@ -180,7 +182,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                         {approval.status === FBInlineApprovalStatusIdent.APPROVED && (
                                           <EmailSuccessIcon className={classes.successIcon} />
                                         )}
-                                        <Text message={poStatusText} />
+                                        <Text data-cy={`status-${index}-${approval.status}`} message={poStatusText} />
                                       </Typography>
                                     )
                                 }
@@ -189,6 +191,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
                                     <Typography
                                       variant="caption"
                                       className={classes.dateText}
+                                      data-cy={`date-timestamp-${index}-${approval.status}`}
                                     >
                                       {getFormattedDateString(approval.reviewedAt, MomentFormats.DateTime)}
                                     </Typography>
