@@ -352,8 +352,8 @@ context("Records flow", () => {
     });
 
     context("Verify that zip file containing pdf downloaded", () => {
-      SystemRequirement("REQ-4860");
       it("Download zip file containing record form", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -545,8 +545,8 @@ context("Records flow", () => {
     });
 
     context("Verify that zip file containing pdf downloaded", () => {
-      SystemRequirement("REQ-4860");
       it("Download zip file containing record form", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -957,8 +957,8 @@ context("Records flow", () => {
   });
 
   context("Verify zip file downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file containing Approval Record notification", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1123,8 +1123,8 @@ context("Records flow", () => {
     });
 
     context("Verify zip file downloaded", () => {
-      SystemRequirement("REQ-4860");
       it("Download zip file containing Approval Record notification", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

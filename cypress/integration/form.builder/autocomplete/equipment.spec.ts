@@ -542,8 +542,8 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
@@ -843,8 +843,8 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
@@ -1236,8 +1236,8 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
@@ -1497,8 +1497,8 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
@@ -2019,8 +2019,8 @@ context("Autocomplete 'Equipment' test", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {

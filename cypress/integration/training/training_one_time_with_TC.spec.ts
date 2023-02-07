@@ -476,8 +476,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file containing training form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -781,8 +781,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Verify zip file downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file containing training notification", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1006,8 +1006,8 @@ context("Repeat One Time Training with Training Curriculum", () => {
   });
 
   context("Verify PDF file downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Extract download link from gmail", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 

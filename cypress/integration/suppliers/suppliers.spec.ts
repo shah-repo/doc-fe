@@ -269,8 +269,8 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file containing Approval request form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -452,8 +452,8 @@ context("Create company via API and create Suppliers document", () => {
   });
 
   context("Verify that zip file containing pdf downloaded", () => {
-    SystemRequirement("REQ-4860");
     it("Download zip file containing Supplier form", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1028,8 +1028,8 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       context("Verify that zip file containing pdf downloaded", () => {
-        SystemRequirement("REQ-4860");
         it("Download zip file containing Supplier form", () => {
+          SystemRequirement("REQ-4860");
           expect(downloadUrl).contains("exported_file_download");
           fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
@@ -1202,8 +1202,8 @@ context("Create company via API and create Suppliers document", () => {
       });
 
       context("Verify that zip file containing pdf downloaded", () => {
-        SystemRequirement("REQ-4860");
         it("Download zip file containing Supplier form", () => {
+          SystemRequirement("REQ-4860");
           expect(downloadUrl).contains("exported_file_download");
           fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
 
