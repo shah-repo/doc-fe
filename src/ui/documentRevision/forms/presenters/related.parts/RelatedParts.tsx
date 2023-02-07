@@ -172,7 +172,8 @@ const RelatedPartGrid: React.FunctionComponent<{
   };
 
   return useObserver(() => (
-    <div className={classes.partsGrid}>
+    <div className={classes.partsGrid}
+      data-cy="partsGrid">
       <div>
         <Grid className={classes.gridCenterAlign} container>
           <Grid item>
@@ -189,6 +190,7 @@ const RelatedPartGrid: React.FunctionComponent<{
                     color="primary"
                     startIcon={<AddCircleIcon color="primary" />}
                     onClick={showEditRow}
+                    data-cy="add-related-part-btn"
                   >
                     <Text translation="relatedParts.button.addText"/>
                   </Button>
@@ -212,6 +214,7 @@ const RelatedPartGrid: React.FunctionComponent<{
             variant="outlined"
             startIcon={<AddOutlinedIcon />}
             onClick={showEditRow}
+            data-cy="add-related-part-btn"
           >
             <Text translation="relatedParts.button.addText"/>
           </Button>
@@ -236,7 +239,7 @@ const RelatedPartList: React.FunctionComponent<{
   const classes = useStyles();
   return useObserver(() => (
     <div className={classes.fullWidth}>
-      <Table aria-label="related parts table">
+      <Table aria-label="related parts table" data-cy="related-parts-table">
         <TableHead className={classes.tableHeadHeight}>
           <TableRow>
             <TableCell className={cx(classes.tableCell, classes.tableCellOne)} align="left">
@@ -349,7 +352,9 @@ const RelatedPartEditRow: React.FunctionComponent<{
       <div className={cx(classes.editRowParentDiv, {
         [classes.editRowParentNormal]: !relatedPartsState.docIdErrorMsg,
         [classes.editRowParentError]: Boolean(relatedPartsState.docIdErrorMsg),
-      })}>
+      })}
+      data-cy="relatedPartsEditRow"
+      >
         <div className={classes.editRowChildDivOne}>
           <label >{documentRevision?.document?.docId} - </label>
           <TextField
@@ -361,6 +366,7 @@ const RelatedPartEditRow: React.FunctionComponent<{
             value={relatedPartDetails.docId}
             error = {Boolean(relatedPartsState.docIdErrorMsg)}
             helperText={relatedPartsState.docIdErrorMsg ? <Text message={relatedPartsState.docIdErrorMsg}/> : ""}
+            name="relatedPartDocId"
           />
         </div>
         <div
@@ -371,16 +377,22 @@ const RelatedPartEditRow: React.FunctionComponent<{
             variant="outlined"
             value = {relatedPartDetails.name}
             onChange = {(e: ChangeEvent<HTMLInputElement>) =>
-              setRelatedPartDetails({ ...relatedPartDetails, name: e.target.value })}/>
+              setRelatedPartDetails({ ...relatedPartDetails, name: e.target.value })}
+            name="relatedPartTitle"
+          />
         </div>
       </div>
       {!relatedPartsState.docIdErrorMsg &&
         <div className={classes.actionButtonParentDiv}>
           <div className={classes.actionButtonChildDiv}>
-            <Button className={classes.actionButton} onClick = {resetAndCancelEdit}>
+            <Button
+              data-cy="cancelRelatedPartChildAddition"
+              className={classes.actionButton} onClick = {resetAndCancelEdit}>
               <ClearIcon className={classes.iconButton}/>
             </Button>
-            <Button className={classes.actionButton} onClick = {confirmEdit}>
+            <Button
+              data-cy="confirmRelatedPartChildAddition"
+              className={classes.actionButton} onClick = {confirmEdit}>
               <DoneIcon className={classes.iconButton} />
             </Button>
           </div>
