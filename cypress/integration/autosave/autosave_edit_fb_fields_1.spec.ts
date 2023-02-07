@@ -364,13 +364,14 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.progressBarShouldNotExist();
     });
 
-    it("Edit Purchase Order", () => {
-      cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
-      cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order1" });
-      cy.fbAddNewFieldButton();
-      cy.saveBarShouldNotExist();
-      cy.progressBarShouldNotExist();
-    });
+    // code is commented for ENC-13939
+    // it("Edit Purchase Order", () => {
+    //   cy.fbClickLabelEditHiddenBtn({ label: "fb-purchase-order" });
+    //   cy.fbEnterNameValue({ name: "label", value: "fb-purchase-order1" });
+    //   cy.fbAddNewFieldButton();
+    //   cy.saveBarShouldNotExist();
+    //   cy.progressBarShouldNotExist();
+    // });
 
     it("Edit Receive Purchase Order", () => {
       cy.fbClickLabelEditHiddenBtn({ label: "fb-receive-purchase-order" });
@@ -462,9 +463,11 @@ context.skip("Autosave on add and edit FB fields", () => {
       cy.contains("fb-timer1").should("exist");
     });
 
-    it("Verify Purchase Order", () => {
-      cy.contains("fb-purchase-order1").should("exist");
-    });
+
+    // code is commented for ENC-13939
+    // it("Verify Purchase Order", () => {
+    //   cy.contains("fb-purchase-order1").should("exist");
+    // });
 
     it("Verify Receive Purchase Order", () => {
       cy.contains("fb-receive-purchase-order1").should("exist");
