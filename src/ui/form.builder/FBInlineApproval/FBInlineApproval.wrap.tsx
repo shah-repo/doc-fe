@@ -151,7 +151,7 @@ export const withFBInlineApproval = <T extends FBInlineApprovalProps>(
       () => get(document, "document.securityGroups[0]"),
       (data) => {
         if (!data) { return; }
-        concatOptions(data?.employees, data.name);
+        concatOptions(data?.activeEmployees, data.name);
       }, {
         fireImmediately: true,
       },
