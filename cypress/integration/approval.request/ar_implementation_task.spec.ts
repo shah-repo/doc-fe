@@ -267,9 +267,8 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
     //   cy.get("[data-cy=\"description\"]").next().arrowType("Task Description");
     //   cy.get("[data-cy=\"assigned\"]").autocompleteSelect(`${USERS[1].email}`);
     //   cy.poAddDateRequired();
-    //   cy.wrapWithWaitOnApiCall(CyRoutes.PostTasks, () => {
-    //     cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
-    //   });
+    //   cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+    //   cy.progressBarShouldNotExist();
     // });
 
     // it("Add description 'Test' to trigger autosave", () => {
@@ -403,9 +402,8 @@ context("Approval request implementation tasks", { tags: ["@timetool"] }, () => 
   //     SystemRequirement("REQ-0710");
   //     cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Done$", "g")).arrowClick();
   //     cy.get("[data-cy=\"description\"]").next().arrowType("Task is done");
-  //     cy.wrapWithWaitOnApiCall(CyRoutes.PostTaskDone, () => {
-  //       cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
-  //     });
+  //     cy.get("[data-cy=\"fb-control-btn\"]").contains(new RegExp("^Add$", "g")).arrowClick();
+  //     cy.progressBarShouldNotExist();
   //   });
 
   //   it(`Check 'Implementation task' status is DONE`, () => {

@@ -8,7 +8,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
 
@@ -700,8 +699,7 @@ context("Layout Verification of maintainance records", () => {
         cy.drSelectOverviewTab();
         cy.progressBarShouldNotExist();
         cy.wait(3000);
-        cy.get("[data-cy^=fb-approvals-fb-approvals-]").eq(0).autocompleteSelect(`${USERS[1].name}`);
-        cy.progressBarShouldNotExist();
+        cy.ebAddApproverOnApproverListWithoutApi({ approver: USERS[1].name });
       });
     });
 
@@ -731,17 +729,7 @@ context("Layout Verification of maintainance records", () => {
 
       it("Verify References selection Add Remove", () => {
         const docId = "FM-00001";
-        cy.get("[data-cy=\"referenceTo\"]").arrowClick();
-        cy.listLoadingElementShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-          cy.get("[data-cy=\"referenceTo\"]").autocompleteSelect(docId);
-        });
-        cy.progressBarShouldNotExist();
-        cy.listLoadingElementShouldNotExist();
-        cy.wait(1000);
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocRevGet], () => {
-          cy.drRemoveReferences({ reference: docId });
-        });
+        cy.verifyAddRemoveReference({ formId: docId });
       });
 
       it("Verify if the MR is Referenced by", () => {
@@ -791,17 +779,14 @@ context("Layout Verification of maintainance records", () => {
         it("Add another user permission", () => {
           cy.wait(2000);
           cy.drAddUserFromPermissionTab(USERS[3].name);
+          cy.progressBarShouldAppear();
           cy.listLoadingElementShouldNotExist();
-          cy.progressBarShouldNotExist();
         });
 
         it("Add another group permission", () => {
-          cy.wait(2000);
+          cy.drAddGroupFromPermissionTab("Developers");
+          cy.progressBarShouldAppear();
           cy.listLoadingElementShouldNotExist();
-          cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([ CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Developers");
-          });
         });
       });
 

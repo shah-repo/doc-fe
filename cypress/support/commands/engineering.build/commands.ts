@@ -256,10 +256,11 @@ Cypress.Commands.add("ebAddApproverOnApproverListWithPatchCall", (params: { appr
   cy.listLoadingElementShouldNotExist();
 });
 
+// eslint-disable-next-line max-len
 Cypress.Commands.add("ebAddApproverOnApproverListWithoutApi", (params: { approver: string; waitAggregatedAudit?: boolean }) => {
   cy.listLoadingElementShouldNotExist();
   cy.get(`[data-cy^="fb-approvals-"]`).arrowClick();
-  cy.get("[data-cy^=\"fb-approvals\"]").scrollIntoView().click().autocompleteSelect(params.approver);
+  cy.get(`[data-cy^="fb-approvals-"]`).scrollIntoView().click().autocompleteSelect(params.approver);
   cy.wait(1000);
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
