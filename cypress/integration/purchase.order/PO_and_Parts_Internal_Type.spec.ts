@@ -8,6 +8,7 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 let createdCompany;
 let loginResponse;
@@ -1219,6 +1220,7 @@ context("PO and parts ", () => {
     });
 
     it(`Verify Grand Total field`, () => {
+      SystemRequirement("REQ-1440");
       cy.get(`[class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-auto"]`).eq(7).contains("$12.93");
     });
 
