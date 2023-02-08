@@ -344,6 +344,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
                   isDocRevFirstDraft,
                   showAdministrativeAndVoidChange,
                   isRecord,
+                  isPO,
                   releasedDocRev,
                   isAlphaReleased,
                 }}
