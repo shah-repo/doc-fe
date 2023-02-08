@@ -960,6 +960,14 @@ context("po withdraw submission ENC-12707", () => {
     });
   });
 
+  // The following is added to avaid bug ENC-14129
+  context(`Click on 3 dots and verify "Download HTML" button exists in UI`, () => {
+    it("Verify 'Download HTML' button is visible", () => {
+      cy.get("#HeaderMenuButton").arrowClick();
+      cy.get("[data-cy='downloadHtml']").should("be.visible");
+    });
+  });
+
   context(`Verify that data is saved`, () => {
     it("Navigate to PO", () => {
       cy.navigToPurchaseOrder();
