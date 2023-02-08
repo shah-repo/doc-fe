@@ -5,6 +5,7 @@ import { useObserver } from "mobx-react";
 import React, { useEffect, useRef } from "react";
 import { FB, FBApprovalPasswordForm, FBApprovalsStatusEndpoint, FBApprover, FBDialogState, FBPOApprovalsProps, FBRequiredApprover } from "..";
 import { PO_ITEMS_COMPONENT_NAME, PO_REQUESTOR_COMPONENT_NAME } from "../../../state/ducks/documentRevisions/constants";
+import { RevisionChangeType } from "../../../state/ducks/documentRevisions/types";
 import { store } from "../../../state/store";
 import Colors from "../../layout/theme/utils/colors";
 import { checkServiceOrProductPartExists } from "../FBPurchaseOrderTable/helpers";
@@ -99,8 +100,9 @@ export const withFBPOApprovals = <T extends FBPOApprovalsProps>(
 
       const poItems = workspaceState?.formInputSync?.get(PO_ITEMS_COMPONENT_NAME);
       const requestor = workspaceState?.formInputSync?.get(PO_REQUESTOR_COMPONENT_NAME);
-      const disableRequestorApproval = checkServiceOrProductPartExists(poItems);
-      disabledOptions = disableRequestorApproval ? [requestor] : [];
+      const isAdministrativeChange = workspaceState?.revisionChangeType === RevisionChangeType.AdministrativeChange;
+      const disableRequestorApprovalDeletion = !isAdministrativeChange && checkServiceOrProductPartExists(poItems);
+      disabledOptions = disableRequestorApprovalDeletion ? [requestor] : [];
     });
 
     // This runs when you manually remove an approver from the list
