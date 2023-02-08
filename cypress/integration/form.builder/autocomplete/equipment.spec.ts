@@ -543,6 +543,7 @@ context("Autocomplete 'Equipment' test", () => {
 
   context("Verify that zip file containing pdf downloaded", () => {
     it("Download zip file", () => {
+      SystemRequirement("REQ-4860");
       expect(downloadUrl).contains("exported_file_download");
       fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
       cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
@@ -613,6 +614,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify page 1 in document", () => {
+      SystemRequirement("REQ-4850", "REQ-4880");
       const el = pages[0];
       if (el.includes("Page 1 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );
@@ -737,6 +739,7 @@ context("Autocomplete 'Equipment' test", () => {
     });
 
     it("Verify page 4 in document", () => {
+      SystemRequirement("REQ-4870");
       const el = pages[3];
       if (el.includes("Page 4 of 4")) {
         tmpRegex = new RegExp( `Form\n${formId}, Revision 1\nEQUIPMENT-FORM`, "gi" );

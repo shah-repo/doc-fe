@@ -356,6 +356,7 @@ context("Record inline Flow", () => {
 
     context("Verify that zip file containing pdf downloaded", () => {
       it("Download zip file containing record form", () => {
+        SystemRequirement("REQ-4860");
         expect(downloadUrl).contains("exported_file_download");
         fileId = downloadUrl.match(/exported_file_download\?fileId=(.*)/)[1];
         cy.request(`${CONFIG.BE_URL}/api/v1/short_url/${fileId}`).then((res) => {
@@ -422,6 +423,7 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 1 for record form", () => {
+        SystemRequirement("REQ-4850", "REQ-4880");
         const el = pages[0];
         if (el.includes("Page 1 of 3")) {
           tmpRegex = new RegExp( `Form\n${recFormId}, Revision 1\nINLINE FORM DOCUMENT REVISION`, "gi" );
@@ -491,6 +493,7 @@ context("Record inline Flow", () => {
       });
 
       it("Verify page 3 of record form", () => {
+        SystemRequirement("REQ-4870");
         const el = pages[2];
         if (el.includes("Page 3 of 3")) {
 
