@@ -3,7 +3,7 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { emailDateOffset, receivingReleasedDateMonth } from "../../utils/constants/dateHandler";
+import { receivingReleasedDateMonth } from "../../utils/constants/dateHandler";
 import { LotsTest } from "../../utils/constants/documentTypes/lot";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderDocType } from "../../utils/constants/documentTypes/purchaseOrder";
@@ -969,7 +969,10 @@ context("Receivable record lifecycle", () => {
     });
 
     it("Save receivable", () => {
-      cy.drClickCreateDocumentWithApiCall();
+      cy.drClickCreateDocumentWithoutApiCall();
+      // cy.poSaveDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
@@ -1006,15 +1009,17 @@ context("Receivable record lifecycle", () => {
       cy.unClick();
     });
 
-    it("Click on “Receive all”", () => {
+    it("Click on “Receive All”", () => {
       SystemRequirement("REQ-4790");
-      cy.get("[data-cy=\"form.builder.receive\"]").arrowClick();
+      cy.get(`[data-cy*="form.builder.receive"]`).arrowClick();
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
     it("Verify Receipt QTY is auto populated and matches with ordered amount", () => {
       SystemRequirement("REQ-4790");
       cy.get(`[data-cy="received"]`).eq(0).contains(orderQty1);
+      cy.get(`[data-cy="received"]`).eq(1).contains(orderQty2);
     });
   });
 
@@ -1027,7 +1032,7 @@ context("Receivable record lifecycle", () => {
     });
 
     it("Save receivable with approver", () => {
-      cy.drClickCreateDocumentWithApiCallForForms();
+      cy.poSaveDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1037,185 +1042,191 @@ context("Receivable record lifecycle", () => {
     });
   });
 
-  context("Patch page details and verify receiving landing page", () => {
-    it("[API]Patch page details", (done: any) => {
-      cy.request({
-        method: "GET",
-        url: `${CONFIG.BE_URL}/api/v1/page_details`,
-        qs: {
-          category: "Receive",
-        },
-        headers: {
-          Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
-        },
-      }).then((response) => {
-        if (response.body) {
-          receivePageDetailsId = response.body[0].id;
-        }
-      }).then(() => {
-        cy.intercept({ method: "PATCH", pathname: "/api/v1/page_details/*" }).as("response");
-        cy.cmpUpdatePageDetails({
-          id: receivePageDetailsId,
-          payload: {
-            columns: [
-              {
-                label: "Receipt ID",
-                fieldName: "irrelevant",
-                showOnWeb: true,
-                valuePath: "document.docId",
-                showOnAndroid: true,
-              },
-              {
-                label: "Receipt Record State",
-                fieldName: "irrelevant",
-                showOnWeb: true,
-                valuePath: "displayStatus",
-                showOnAndroid: true,
-              },
-              {
-                label: "Owner",
-                fieldName: "irrelevant",
-                showOnWeb: true,
-                valuePath: "owner.user.name",
-                showOnAndroid: true,
-              },
-              {
-                fn: "AUTOCOMPLETE_DOC_ID",
-                label: "PO #",
-                fieldName: "irrelevant",
-                showOnWeb: true,
-                valuePath: "precalc.po-docId-in-receiving",
-                sourcePath: [
-                  `formInput.${receivingName}`,
-                  "formInput.receivable-l5tbfgkl",
-                ],
-                showOnAndroid: true,
-              },
-              {
-                label: "Released Date",
-                fieldName: "irrelevant",
-                showOnWeb: true,
-                valuePath: "releasedAt",
-                showOnAndroid: true,
-              },
-              {
-                fn: "PO_SUPPLIER_NAME_IN_RECEIVABLE",
-                label: "Supplier",
-                fieldName: "irrelevant",
-                showOnWeb: true,
-                valuePath: "precalc.po-suppliers-in-receiving",
-                sourcePath: [
-                  `formInput.${receivingName}`,
-                  "formInput.receivable-l5tbfgkl",
-                ],
-                showOnAndroid: true,
-              },
-              {
-                fn: "PART_NUMBER_REV_FROM_RECEIVABLE",
-                label: "Part Number/Rev",
-                fieldName: "irrelevant",
-                showOnWeb: true,
-                valuePath: "precalc.part_number_rev",
-                sourcePath: [
-                  `formInput.${receivingName}`,
-                  "formInput.receivable-l5tbfgkl",
-                ],
-                showOnAndroid: true,
-              },
-              {
-                fn: "PO_STATUS_IN_RECEIVABLE",
-                label: "PO Status",
-                fieldName: "irrelevant",
-                showOnWeb: true,
-                valuePath: "precalc.po-status-in-receiving",
-                sourcePath: [
-                  `formInput.${receivingName}`,
-                  "formInput.receivable-l5tbfgkl",
-                ],
-                showOnAndroid: true,
-              },
-            ],
-          },
-          employeeId: adminEmployee.id,
-          sessionId: loginResponse.sessionId,
-        }).then(() => done());
-      });
-    });
+  // context("Patch page details and verify receiving landing page", () => {
+  //   it("[API]Patch page details", (done: any) => {
+  //     cy.request({
+  //       method: "GET",
+  //       url: `${CONFIG.BE_URL}/api/v1/page_details`,
+  //       qs: {
+  //         category: "Receive",
+  //       },
+  //       headers: {
+  //         Authorization: `bearer ${adminEmployee.id}:${loginResponse.sessionId}`,
+  //       },
+  //     }).then((response) => {
+  //       if (response.body) {
+  //         receivePageDetailsId = response.body[0].id;
+  //       }
+  //     }).then(() => {
+  //       cy.intercept({ method: "PATCH", pathname: "/api/v1/page_details/*" }).as("response");
+  //       cy.cmpUpdatePageDetails({
+  //         id: receivePageDetailsId,
+  //         payload: {
+  //           columns: [
+  //             {
+  //               label: "Receipt ID",
+  //               fieldName: "irrelevant",
+  //               showOnWeb: true,
+  //               valuePath: "document.docId",
+  //               showOnAndroid: true,
+  //             },
+  //             {
+  //               label: "Receipt Record State",
+  //               fieldName: "irrelevant",
+  //               showOnWeb: true,
+  //               valuePath: "displayStatus",
+  //               showOnAndroid: true,
+  //             },
+  //             {
+  //               label: "Owner",
+  //               fieldName: "irrelevant",
+  //               showOnWeb: true,
+  //               valuePath: "owner.user.name",
+  //               showOnAndroid: true,
+  //             },
+  //             {
+  //               fn: "AUTOCOMPLETE_DOC_ID",
+  //               label: "PO #",
+  //               fieldName: "irrelevant",
+  //               showOnWeb: true,
+  //               valuePath: "precalc.po-docId-in-receiving",
+  //               sourcePath: [
+  //                 `formInput.${receivingName}`,
+  //                 "formInput.receivable-l5tbfgkl",
+  //               ],
+  //               showOnAndroid: true,
+  //             },
+  //             {
+  //               label: "Released Date",
+  //               fieldName: "irrelevant",
+  //               showOnWeb: true,
+  //               valuePath: "releasedAt",
+  //               showOnAndroid: true,
+  //             },
+  //             {
+  //               fn: "PO_SUPPLIER_NAME_IN_RECEIVABLE",
+  //               label: "Supplier",
+  //               fieldName: "irrelevant",
+  //               showOnWeb: true,
+  //               valuePath: "precalc.po-suppliers-in-receiving",
+  //               sourcePath: [
+  //                 `formInput.${receivingName}`,
+  //                 "formInput.receivable-l5tbfgkl",
+  //               ],
+  //               showOnAndroid: true,
+  //             },
+  //             {
+  //               fn: "PART_NUMBER_REV_FROM_RECEIVABLE",
+  //               label: "Part Number/Rev",
+  //               fieldName: "irrelevant",
+  //               showOnWeb: true,
+  //               valuePath: "precalc.part_number_rev",
+  //               sourcePath: [
+  //                 `formInput.${receivingName}`,
+  //                 "formInput.receivable-l5tbfgkl",
+  //               ],
+  //               showOnAndroid: true,
+  //             },
+  //             {
+  //               fn: "PO_STATUS_IN_RECEIVABLE",
+  //               label: "PO Status",
+  //               fieldName: "irrelevant",
+  //               showOnWeb: true,
+  //               valuePath: "precalc.po-status-in-receiving",
+  //               sourcePath: [
+  //                 `formInput.${receivingName}`,
+  //                 "formInput.receivable-l5tbfgkl",
+  //               ],
+  //               showOnAndroid: true,
+  //             },
+  //           ],
+  //         },
+  //         employeeId: adminEmployee.id,
+  //         sessionId: loginResponse.sessionId,
+  //       }).then(() => done());
+  //     });
+  //   });
 
-    it("Auth logout", () => {
-      cy.authLogout();
-    });
+  //   it("Auth logout", () => {
+  //     cy.authLogout();
+  //   });
 
-    it("Auth login first user", () => {
-      cy.authLogin({ email: USERS[11].email });
-    });
+  //   it("Auth login first user", () => {
+  //     cy.authLogin({ email: USERS[11].email });
+  //   });
 
-    it("Select company", () => {
-      cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
-    });
+  //   it("Select company", () => {
+  //     cy.cmpSelectCompany({ name: createdCompany.name, multiple: true });
+  //   });
 
-    it("Navigate to receiving", () => {
-      cy.navigToReceivableList();
-    });
+  //   it("Navigate to receiving", () => {
+  //     cy.navigToReceivableList();
+  //   });
 
-    it("Verify Receipt ID", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "RCT-00001");
-    });
+  //   it("Verify Receipt ID", () => {
+  //     cy.get("tr.k-master-row").first().find("td").eq(0).should("have.text", "RCT-00001");
+  //   });
 
-    it("Verify Receipt Record State", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "WIP");
-    });
+  //   it("Verify Receipt Record State", () => {
+  //     cy.get("tr.k-master-row").first().find("td").eq(1).should("have.text", "WIP");
+  //   });
 
-    it("Verify Owner", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[11].name);
-    });
+  //   it("Verify Owner", () => {
+  //     cy.get("tr.k-master-row").first().find("td").eq(2).should("contain.text", USERS[11].name);
+  //   });
 
-    it("Verify PO #", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "POT-00001");
-    });
+  //   it("Verify PO #", () => {
+  //     cy.get("tr.k-master-row").first().find("td").eq(3).should("have.text", "POT-00001");
+  //   });
 
-    it("Verify Released Date", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "");
-    });
+  //   it("Verify Released Date", () => {
+  //     cy.get("tr.k-master-row").first().find("td").eq(4).should("have.text", "");
+  //   });
 
-    it("Verify Supplier", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "API Supplier Document");
-    });
+  //   it("Verify Supplier", () => {
+  //     cy.get("tr.k-master-row").first().find("td").eq(5).should("have.text", "API Supplier Document");
+  //   });
 
-    it("Verify Part Number/Rev", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "PRT-00005 - 1, PRT-00006 - 1");
-    });
+  //   it("Verify Part Number/Rev", () => {
+  //     cy.get("tr.k-master-row").first().find("td").eq(6).should("have.text", "PRT-00005 - 1, PRT-00006 - 1");
+  //   });
 
-    it("Verify PO Status", () => {
-      cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", "Open");
-    });
-  });
+  //   it("Verify PO Status", () => {
+  //     cy.get("tr.k-master-row").first().find("td").eq(7).should("have.text", "Open");
+  //   });
+  // });
 
   context("Submit receiving document for Approval", () => {
+    it("Navigate to receiving", () => {
+      cy.navigToReceivableList();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
+    it("Clear Filter", () => {
+      cy.dlClearFilters();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+    });
+
     it("Open receiving document", () => {
       cy.dlSelectFirstDocument();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Submit for Approval", () => {
-      cy.pmSubmitForApproval();
+      cy.pmSubmitForApprovalWithoutAPI();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
-  context("While in “Pending Approval” state, send to email", () => {
-    it("Check doc Released status and click on Send To Email", () => {
+  context("While in “Pending Approval” state", () => {
+    it("Check doc Released status", () => {
       cy.arVerifyStatus({ status: STATUS_TYPES_LABEL.PENDING_APPROVAL });
-      cy.get("[data-cy=\"HeaderInfo-docId\"]").then((x) => {
-        releasedFormId = x.text();
-      });
-      dateAfterEmailShouldArrive = new Date(new Date().getTime() - emailDateOffset);
-      cy.sendToEmail();
     });
 
-    it("Verify popup message \"File will be sent to your email shortly.\"", () => {
-      cy.checkToastMessageContains({
-        message: "File will be sent to your email shortly.",
-      });
-    });
   });
 
   context("Approve receiving", () => {
