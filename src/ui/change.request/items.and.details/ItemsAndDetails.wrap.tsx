@@ -7,7 +7,7 @@ import { DocumentRevision } from "../../../state/ducks/documentRevisions/types";
 import { AsyncStatus } from "../../../state/types";
 import { useFormContext } from "../../components/forms/FormContext";
 import { FB, FBForm, FBFormState, FBWorkspaceModeOptions } from "../../form.builder";
-import { generateDocTitleText, storeDataToFormData } from "./helpers";
+import { generateDocTitleText, newARDocRevToAdd, storeDataToFormData } from "./helpers";
 import ItemsAndDetails from "./ItemsAndDetails";
 import ItemsAndDetailsState from "./ItemsAndDetails.state";
 import { ApprovalRequestGridItem, FBDocumentRevisionsValue, ItemsAndDetailsWrapperProps } from "./ItemsAndDetails.types";
@@ -75,9 +75,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
     parentFormState?.setFieldValue(name, cloneDeep(dataToSend), true);
     if (autosave) {
       submitForm();
-      if (asyncState?.status !== AsyncStatus.Success) {
-        itemsAndDetailsState.setLoadingState(true);
-      }
+      itemsAndDetailsState.setLoadingState(true);
     }
   };
 
@@ -88,6 +86,7 @@ const ItemsAndDetailsContainer: React.FunctionComponent<
         if (currentDocRevId) {
           const dataToSend: FBDocumentRevisionsValue[] =
             storeDataToFormData(itemsAndDetailsState.approvalRequestItemsList);
+          dataToSend.push(newARDocRevToAdd(currentDocRevId));
           submitData(dataToSend);
         }
       }
