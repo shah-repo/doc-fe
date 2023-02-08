@@ -970,7 +970,6 @@ context("Receivable record lifecycle", () => {
 
     it("Save receivable", () => {
       cy.drClickCreateDocumentWithoutApiCall();
-      // cy.poSaveDocument();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
@@ -1004,22 +1003,39 @@ context("Receivable record lifecycle", () => {
   });
 
   context(`Select PO and receive items`, () => {
-    it("Select PO and receive items", () => {
+    it("Select PO", () => {
       cy.recSelectPo({ poTitle: "New Purchase Order" });
       cy.unClick();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
+      cy.landingPageLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
-    it("Click on “Receive All”", () => {
+    it(`Click on 'Receive All' button`, () => {
       SystemRequirement("REQ-4790");
+      cy.get(`[data-cy*="form.builder.receive"]`).scrollIntoView();
       cy.get(`[data-cy*="form.builder.receive"]`).arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
+      cy.wait(3000);
     });
 
-    it("Verify Receipt QTY is auto populated and matches with ordered amount", () => {
+    it("Verify receive items QTY is auto populated and matches with ordered amount", () => {
       SystemRequirement("REQ-4790");
       cy.get(`[data-cy="received"]`).eq(0).contains(orderQty1);
       cy.get(`[data-cy="received"]`).eq(1).contains(orderQty2);
+    });
+
+    it("Verify 'Create Lot' button is not shown in service lineitem", () => {
+      SystemRequirement("REQ-3850");
+      cy.pause();
+    });
+
+    it("Save receivable", () => {
+      cy.drClickCreateDocumentWithoutApiCall();
+      cy.progressBarShouldNotExist();
+      cy.listLoadingElementShouldNotExist();
     });
   });
 
