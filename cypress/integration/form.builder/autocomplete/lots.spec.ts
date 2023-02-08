@@ -231,7 +231,6 @@ context("Autocomplete 'Lots' test", () => {
         cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
         cy.get("[value=\"X\"]").check({ force: true });
-        // cy.fbSelectCheckboxValue("X");
         cy.fbAddNewFieldButton();
       });
 
@@ -244,7 +243,6 @@ context("Autocomplete 'Lots' test", () => {
         cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
         cy.get("[value=\"Y\"]").check({ force: true });
-        // cy.fbSelectCheckboxValue("Y");
         cy.fbAddNewFieldButton();
       });
 
