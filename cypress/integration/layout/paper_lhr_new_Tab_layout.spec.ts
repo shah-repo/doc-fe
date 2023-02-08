@@ -8,7 +8,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderTest } from "../../utils/constants/documentTypes/purchaseOrder";
 import { ReceivableTest } from "../../utils/constants/documentTypes/receivable";
@@ -911,9 +910,7 @@ context("Paper LHR tab Layout", () => {
       it("Add another group permission", () => {
         cy.wait(2000);
         cy.progressBarShouldNotExist();
-        cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-          cy.drAddGroupFromPermissionTab("Developers");
-        });
+        cy.drAddGroupFromPermissionTab("Developers");
       });
     });
 
@@ -1325,9 +1322,7 @@ context("Paper LHR tab Layout", () => {
         it("Add another group permission", () => {
           cy.wait(2000);
           cy.progressBarShouldNotExist();
-          cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-            cy.drAddGroupFromPermissionTab("Can be approver");
-          });
+          cy.drAddGroupFromPermissionTab("Can be approver");
         });
 
       });

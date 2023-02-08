@@ -5,7 +5,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import Colors from "../../../src/ui/layout/theme/utils/colors";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { RecordOne } from "../../utils/constants/documentTypes/record";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
@@ -323,12 +322,9 @@ context("Record inline Flow", () => {
     });
 
     it("Select approver for first inline", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-        () => {
-          cy.listLoadingElementShouldNotExist();
-          cy.get("[name*=\"fb-ia-inline-field\"] input")
-            .autocompleteSelect(`${USERS[2].name}`, { force: true });
-        });
+      cy.get("[name*=\"fb-ia-inline-field\"] input")
+        .autocompleteSelect(`${USERS[2].name}`, { force: true });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Send request for approval", () => {
@@ -391,18 +387,16 @@ context("Record inline Flow", () => {
     });
 
     it("Navigate to Details tab", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetFieldLocks], () => {
-        cy.drSelectDetailsTab();
-      });
+      cy.drSelectDetailsTab();
+      cy.listLoadingElementShouldNotExist();
+      cy.progressBarShouldNotExist();
     });
 
     it("Select approver for second inline", () => {
       cy.wait(2000);
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PostApprovals],
-        () => {
-          cy.get("[name*=\"fb-ia-second-inline-field\"] input")
-            .autocompleteSelect(`${USERS[2].name}`, { force: true });
-        });
+      cy.get("[name*=\"fb-ia-second-inline-field\"] input")
+        .autocompleteSelect(`${USERS[2].name}`, { force: true });
+      cy.listLoadingElementShouldNotExist();
     });
 
     it("Check Last save should be present in autosave", () => {
