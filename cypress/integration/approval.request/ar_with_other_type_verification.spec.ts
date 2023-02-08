@@ -6,7 +6,6 @@ import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/co
 import { CONFIG } from "../../support/config";
 import { ClinicalProtocolDocType } from "../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
-import { CyRoutes } from "./../../support/routes";
 
 let createdCompany;
 let loginResponse;
@@ -367,14 +366,13 @@ context("Approval request implementation tasks", () => {
     });
 
     it("Verify Edit, Move and Remove", () => {
-      cy.wrapWithWaitOnApiCall(CyRoutes.GetAutocompleteOptions, () => {
-        cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
-        cy.fbEnterPlaceholder({ placeholder: " changed" });
-        cy.fbAddNewFieldButton();
-        cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
+      cy.fbClickLabelEditHiddenBtn({ label: "fb-textfield-2" });
+      cy.fbEnterPlaceholder({ placeholder: " changed" });
+      cy.fbAddNewFieldButton();
+      cy.get(`textarea[placeholder^="fb-textfield placeholder 2 changed"]`).should("exist");
 
-        cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
-      });
+      cy.fbClickRemoveBtn({ label: "fb-textfield-2" });
+      cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });
 
