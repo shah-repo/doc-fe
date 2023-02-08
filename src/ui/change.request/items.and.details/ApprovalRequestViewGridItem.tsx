@@ -15,6 +15,7 @@ import { ApprovalRequestGridItem, FBDocumentRevisionResponse } from "./ItemsAndD
 import { Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import { useLocation } from "react-router-dom";
 
 const ApprovalRequestViewGridItem: React.FunctionComponent<{
   entry: ApprovalRequestGridItem;
@@ -27,10 +28,14 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
   handleRemove,
   viewItemActionsVisible,
 }) => {
+  const location = useLocation();
   const classes = useStyles();
+
   const {
     docRevId, documentId, titleText, displayRevision, isPart, justificationOfChange, descriptionOfChange,
   } = entry;
+
+  const showDeleteButton = !location.pathname.includes(docRevId);
 
   const [docTitle, setDocTitle] = useState(titleText);
   const [docRelatedParts, setDocRelatedParts] = useState<{revId: string; titleText: string}[]>([]);
@@ -124,10 +129,11 @@ const ApprovalRequestViewGridItem: React.FunctionComponent<{
         </div>
       }
       { viewItemActionsVisible && <div className={cx(classes.actionButtonChildDiv, "actionBtnClass")}>
-        <Button className={cx(classes.actionButton, classes.actionButtonDelete)}>
+        { showDeleteButton && <Button className={cx(classes.actionButton, classes.actionButtonDelete)}>
           <DeleteIcon className={classes.iconButton}
             onClick={() => handleRemove(docRevId)}/>
         </Button>
+        }
         <Button className={classes.actionButton}>
           <EditIcon className={classes.iconButton} onClick={editItem}/>
         </Button>
