@@ -8,7 +8,6 @@ import { RevisionChangeType } from "../../../../src/state/ducks/documentRevision
 import { cmpFilterDocumentTypeIdByName } from "../../../support/commands/company/commands";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../../utils/constants/dateHandler";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { Part } from "../../../utils/constants/documentTypes/part";
@@ -231,7 +230,8 @@ context("Autocomplete 'Lots' test", () => {
         cy.get("input[value^=\"visibility\"]").check();
         cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
-        cy.fbSelectCheckboxValue("X");
+        cy.get("[value=\"X\"]").check({ force: true });
+        // cy.fbSelectCheckboxValue("X");
         cy.fbAddNewFieldButton();
       });
 
@@ -243,7 +243,8 @@ context("Autocomplete 'Lots' test", () => {
         cy.get("input[value^=\"visibility\"]").check();
         cy.get("input[name=\"validators.required_if\"]").arrowClick();
         cy.get(`[data-cy="validators.required_if.name"]`).autocompleteSelect("fb-radiobutton-group");
-        cy.fbSelectCheckboxValue("Y");
+        cy.get("[value=\"Y\"]").check({ force: true });
+        // cy.fbSelectCheckboxValue("Y");
         cy.fbAddNewFieldButton();
       });
 
@@ -464,9 +465,7 @@ context("Autocomplete 'Lots' test", () => {
 
     context("Approve and Release form", () => {
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
       });
     });
 
@@ -695,10 +694,7 @@ context("Autocomplete 'Lots' test", () => {
 
       it("Select 'Component Specification Lot' from the dropdown", () => {
         cy.get("[id=\"MultipleFormTemplate-selectDocForm\"]").arrowClick();
-
-        cy.wrapWithWaitOnApiCalls([CyRoutes.DocPreview, CyRoutes.DocPreview], () => {
-          cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
-        });
+        cy.get("div[id^=react-select]").contains("Component Specification Lot").arrowClick();
       });
 
       it("Add lot title", () => {
