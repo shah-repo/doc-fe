@@ -300,7 +300,9 @@ const RelatedPartViewRow: React.FunctionComponent<{
   const lastIndexOfDash = listItem.rootDocId.lastIndexOf("-");
 
   return (
-    <TableRow hover key={listItem.documentRevisionId}>
+    <TableRow hover key={listItem.documentRevisionId}
+      data-cy="relatedPartsViewRow"
+    >
       <TableCell align="left">
         {listItem.rootDocId.slice(0, lastIndexOfDash)} - <b>{listItem.rootDocId.substring(lastIndexOfDash + 1)}</b>
       </TableCell>
@@ -392,22 +394,22 @@ const RelatedPartEditRow: React.FunctionComponent<{
           />
         </div>
       </div>
-      {!relatedPartsState.docIdErrorMsg &&
-        <div className={classes.actionButtonParentDiv}>
-          <div className={classes.actionButtonChildDiv}>
-            <Button
-              data-cy="cancelRelatedPartChildAddition"
-              className={classes.actionButton} onClick = {resetAndCancelEdit}>
-              <ClearIcon className={classes.iconButton}/>
-            </Button>
-            <Button
-              data-cy="confirmRelatedPartChildAddition"
-              className={classes.actionButton} onClick = {confirmEdit}>
-              <DoneIcon className={classes.iconButton} />
-            </Button>
-          </div>
+      <div className={classes.actionButtonParentDiv}>
+        <div className={classes.actionButtonChildDiv}>
+          <Button
+            data-cy="cancelRelatedPartChildAddition"
+            className={classes.actionButton} onClick = {resetAndCancelEdit}>
+            <ClearIcon className={classes.iconButton}/>
+          </Button>
+          { !relatedPartsState.docIdErrorMsg &&
+          <Button
+            data-cy="confirmRelatedPartChildAddition"
+            className={classes.actionButton} onClick = {confirmEdit}>
+            <DoneIcon className={classes.iconButton} />
+          </Button>
+          }
         </div>
-      }
+      </div>
     </>
   ));
 };
