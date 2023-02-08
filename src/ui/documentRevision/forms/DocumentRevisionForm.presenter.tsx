@@ -330,7 +330,7 @@ const DocumentRevisionFormPresenter: React.FunctionComponent<Props> = ({
           {(isPart || isPartForm) &&
             <Grid item xs={12}>
               <RelatedPartsWrapper
-                viewOnly={isDisabledInputInPreview || hasOutput}
+                viewOnly={isDisabledInputInPreview || hasOutput || !isOwner}
                 documentRevision={documentRevision}
                 relatedPartsStatus= {documentRevision?.relatedPartsStatus} />
             </Grid>
