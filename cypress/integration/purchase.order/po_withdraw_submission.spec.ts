@@ -11,6 +11,7 @@ import { receivingReleasedDate } from "../../utils/constants/dateHandler";
 import { Part } from "../../utils/constants/documentTypes/part";
 import { PurchaseOrderNew } from "../../utils/constants/documentTypes/purchaseOrder";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
+import { SystemRequirement } from "../../utils/context/systemRequirement";
 
 const ADMIN_USER = USERS[1];
 let createdCompany;
@@ -1108,6 +1109,7 @@ context("po withdraw submission ENC-12707", () => {
     });
 
     it("Verify Grand Total", () => {
+      SystemRequirement("REQ-1440");
       cy.get("[data-cy='poTotal']").should("have.text", level1Value);
     });
   });
