@@ -23,4 +23,5 @@ export interface RelatedPartsListItem {
   documentRevisionId: string;
   name: string;
   status: DocumentRevisionStatus;
+  relatedStatus?: RELATED_PARTS_STATUS;
 }
