@@ -6,7 +6,6 @@ import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../../support/commands/imap/commands";
 import { CONFIG } from "../../../support/config";
-import { CyRoutes } from "../../../support/routes";
 import { ClinicalProtocolDocType } from "../../../utils/constants/documentTypes/clinicalProtocol";
 import { IMPORTER_USER, USERS } from "../../../utils/constants/users";
 import { SystemRequirement } from "../../../utils/context/systemRequirement";
@@ -848,10 +847,8 @@ context("Autocomplete 'Parts' test", () => {
 
     context("Approve and release FORM document", () => {
       it("Approve and release FORM document", () => {
-        cy.wrapWithWaitOnApiCall(CyRoutes.DocPreview, () => {
-          cy.drApproveAndReleaseDocumentWithoutSelectingForm();
-          cy.fbClickButton({ el: "updateRecord" });
-        });
+        cy.drApproveAndReleaseDocumentWithoutSelectingFormWithoutApi();
+        cy.fbClickButton({ el: "updateRecord" });
       });
 
       it("Get created Parts ID", () => {

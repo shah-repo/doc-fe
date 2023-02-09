@@ -36,6 +36,7 @@ declare global {
       lhrSubmitForApproval(): Chainable<Subject>;
       lhrSubmitForApprovalWithoutApi(): Chainable<Subject>;
       ptClickCreateNewPart(): Chainable<Subject>;
+      ptClickCreateNewPartWithoutApi(): Chainable<Subject>;
       pmToggleChangesFromPrevBuild(): Chainable<Subject>;
       ptSelectPartFormFromMultiSelect(params: {partForm: string}): Chainable<Subject>;
       pmVerifyAddedMaterial(params: {
@@ -207,6 +208,13 @@ Cypress.Commands.add("ptClickCreateNewPart", () => {
   cy.wrapWithWaitOnApiCall(CyRoutes.GetDocumentType, () => {
     cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   });
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
+  cy.checkToastMessage({ exists: false });
+});
+
+Cypress.Commands.add("ptClickCreateNewPartWithoutApi", () => {
+  cy.get("[id=DocumentByTypeListPresenter-openDocRev]").arrowClick();
   cy.progressBarShouldNotExist();
   cy.listLoadingElementShouldNotExist();
   cy.checkToastMessage({ exists: false });
