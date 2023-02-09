@@ -1,7 +1,7 @@
 import { Button, Divider, Grid, Typography } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import cx from "classnames";
-import { isEmpty, map } from "lodash";
+import { isEmpty, map, some } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import Text from "../../components/Text";
@@ -93,7 +93,7 @@ const ItemsAndDetails: React.FunctionComponent<{
     const { proposedDocumentRevision, justificationOfChange, descriptionOfChange }
       = formState?.getValues() as FBDocumentRevisionsValue;
 
-    if (isEmpty(justificationOfChange) || isEmpty(descriptionOfChange) || isEmpty(proposedDocumentRevision)) {
+    if (some([justificationOfChange, descriptionOfChange, proposedDocumentRevision], isEmpty)) {
       return;
     }
 
