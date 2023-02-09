@@ -1025,8 +1025,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     it("Check if selected approver has approval signature right by his name", () => {
       cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[11].name);
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[11].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[11].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[11].email);
       cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
@@ -1103,8 +1103,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       SystemRequirement("REQ-5210");
       cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[2].name);
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[2].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[2].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[2].email);
       cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
@@ -1595,8 +1595,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
       SystemRequirement("REQ-5210");
       cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[12].name);
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[12].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[12].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[12].email);
       cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
@@ -1657,8 +1657,8 @@ context("Add Requestor as an approver of the PO - ENC-12702", () => {
     it("Check if selected approver has approval signature right by his name", () => {
       cy.poClickOnPending();
       cy.contains("PO Approval sig");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[1].name);
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[1].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[1].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[1].email);
       cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 

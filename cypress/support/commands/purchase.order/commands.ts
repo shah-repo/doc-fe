@@ -145,8 +145,8 @@ Cypress.Commands.add("verifyPoApprovalSignature", (params) => {
   cy.get(`[data-cy*="fb-po-approvals-"]`).parent().parent().should("contain", `${params.name} - ${params.email}`);
   cy.poClickOnPending();
   cy.contains("PO Approval sig");
-  cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-name-0-DRAFT"]`).contains(params.name);
-  cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-email-0-DRAFT"]`).contains(params.email);
+  cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(params.name);
+  cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(params.email);
   cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
 });
 

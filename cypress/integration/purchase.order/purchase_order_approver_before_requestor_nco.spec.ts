@@ -1145,8 +1145,8 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     it("Check if selected approver has approval signature right by his name", () => {
       cy.poClickOnPending();
       cy.contains("PO Approval sig").should("exist");
-      cy.get("[name*='fb-po-approvals-']>div").find(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[1].name);
-      cy.get("[name*='fb-po-approvals-']>div").find(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[1].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[1].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[1].email);
       cy.get("[name*='fb-po-approvals-']>div").contains("Pending Approval");
     });
 
@@ -1499,8 +1499,8 @@ context("Create company with JSON's and verify Purchase Order-ENC-12725", () => 
     it("Check if selected approver has approval signature right by his name", () => {
       cy.poClickOnPending();
       cy.contains("PO Approval sig").should("exist");
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[2].name);
-      cy.get("[name*='fb-po-approvals-']>div").eq(4).find(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[2].email);
+      cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(USERS[2].name);
+      cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(USERS[2].email);
       cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
     });
 
