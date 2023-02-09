@@ -77,6 +77,7 @@ const FBPOApprovals: React.FunctionComponent<FBPOApprovalsProps> = ({
           <Box display="flex" flexWrap="wrap" my={2}>
             <FBMapWrapper<FBRequiredApprover[]> collection={orderBy(groups, "documentStage")}>
               {(group: FBRequiredApprover) => (
+                // eslint-disable-next-line max-len
                 <Box display="flex" data-cy={ isIncluded?.(group) ? "check-circle-primary" : "check-circle-disabled" } key={`fb-po-approvals-group-${group.id}`} mr={2.5}>
                   <CheckCircleIcon style = {{ color: isIncluded?.(group) ? Colors.green_blue : "disabled" }} />
                   <FBText boxProps={{ mt: 0.2, pl: 0.5 }} locale={group.name} />
