@@ -5,13 +5,13 @@ import { ReactComponent as SuccessIcon } from "../../../../assets/images/success
 import { changeRequestsActions } from "../../../../state/ducks/changeRequest";
 import {
   ChangeRequestTransition,
-  ChangeRequestTransitionResponse
+  ChangeRequestTransitionResponse,
 } from "../../../../state/ducks/changeRequest/types";
 import { dashboardMyFeedsActions } from "../../../../state/ducks/dashboard.new/my.feeds";
 import { dashboardTodoActions } from "../../../../state/ducks/dashboard.new/todo";
 import {
   EffectiveDateFormValues,
-  PasswordFormValues
+  PasswordFormValues,
 } from "../../../change.request/form/types";
 import { toastSuccess } from "../../../components/notifications";
 import useActionCreator from "../../../hooks/useActionCreator";
@@ -52,14 +52,14 @@ const ApproveDialogueContainer: React.FunctionComponent<Props> = ({
       effectiveDateDialog.close();
       transitionDialog.close();
       toastSuccess(<>
-      <div style={{ display: "flex" }}>
-        <div><SuccessIcon style={{ height:"30px" }}/></div>
-        <div>
-          <div><span style={{ fontWeight: "bold", color: "#000" }}>You successfully approved a document</span></div>
-          <div>{response?.crId}{response?.title} has been approved.</div>
-        </div>
-      </div></>, {
-            closeButton: true,
+        <div style={{ display: "flex" }}>
+          <div><SuccessIcon style={{ height: "30px" }}/></div>
+          <div>
+            <div><span style={{ fontWeight: "bold", color: "#000" }}>You successfully approved a document</span></div>
+            <div>{response?.crId}{response?.title} has been approved.</div>
+          </div>
+        </div></>, {
+        closeButton: true,
       });
       dispatch(dashboardTodoActions.loadMyFeedsList());
       dispatch(dashboardMyFeedsActions.loadMyFeedsList());
