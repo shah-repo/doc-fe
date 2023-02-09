@@ -8,9 +8,9 @@ import { CyRoutes } from "../../routes";
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
-      dashNavigToDoTab(): Chainable<Subject>;
-      dashNavigMyFeedTab(): Chainable<Subject>;
-      dashNavigRecentTab(): Chainable<Subject>;
+      dashboardToDoTab(): Chainable<Subject>;
+      dashboardMyFeedTab(): Chainable<Subject>;
+      dashboardRecentTab(): Chainable<Subject>;
       dashVerifyListItemExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashVerifyListItemNotExistsOnDashboard(params: {listItem: string}): Chainable<Subject>;
       dashGoToListItemFromDashboard(params: {listItem: string}): Chainable<Subject>;
@@ -24,17 +24,17 @@ declare global {
   }
 }
 
-Cypress.Commands.add("dashNavigToDoTab", () => {
+Cypress.Commands.add("dashboardToDoTab", () => {
   cy.get(`#scrollable-auto-tab-todo`).arrowClick();
   cy.progressBarShouldNotExist();
 });
 
-Cypress.Commands.add("dashNavigMyFeedTab", () => {
+Cypress.Commands.add("dashboardMyFeedTab", () => {
   cy.get(`#scrollable-auto-tab-my-feed`).arrowClick();
   cy.progressBarShouldNotExist();
 });
 
-Cypress.Commands.add("dashNavigRecentTab", () => {
+Cypress.Commands.add("dashboardRecentTab", () => {
   cy.get("#scrollable-auto-tab-recent").arrowClick();
   cy.progressBarShouldNotExist();
 });
