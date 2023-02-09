@@ -26,6 +26,7 @@ declare global {
       filterEquipByOwnerAndLocation(params: { location: string; owner: string }): Chainable<Subject>;
       filterRecordState(params: {state: string}): Chainable<Subject>;
       filterRecordVerifyRevisionFilter(params: {revision: string}): Chainable<Subject>;
+      filterLandingPageColumnFilter(params: { colIndex: number; input: string }): Chainable<Subject>;
     }
   }
 }
@@ -148,4 +149,9 @@ Cypress.Commands.add("filterRecordVerifyRevisionFilter", (params: {revision: str
   cy.get(`td[role="gridcell"][data-grid-col-index="1"]`).each(($el) => {
     expect($el.text()).to.equal(params.revision);
   });
+});
+
+Cypress.Commands.add("filterLandingPageColumnFilter", (params: { colIndex: number; input: string }) => {
+  cy.get(`th[aria-colindex="${params.colIndex}"] .k-filtercell > input`).arrowType(params.input).wait(500);
+  cy.landingPageLoadingElementShouldNotExist();
 });
