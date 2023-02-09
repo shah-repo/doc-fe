@@ -8,7 +8,6 @@ import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -1248,10 +1247,9 @@ context("Equipment maintenance and calibration", () => {
           const response = res.response.body;
           calDocId = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -1782,10 +1780,9 @@ context("Equipment maintenance and calibration", () => {
           const response = res.response.body;
           calDocId = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -2304,6 +2301,8 @@ context("Equipment maintenance and calibration", () => {
   context("Verify Maintenance History is now only History", () => {
     it("Navigate to Equipment document", () => {
       cy.visit(equipmentURL);
+      cy.listLoadingElementShouldAppear();
+      cy.progressBarShouldNotExist();
     });
 
     it("Turn off autosave", () => {
@@ -2413,7 +2412,7 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
+      cy.ebApproveWithoutApi();
     });
   });
 
@@ -2484,14 +2483,15 @@ context("Equipment maintenance and calibration", () => {
     });
 
     it("Approve record", () => {
-      cy.ebApprove();
-      cy.wait(10000);
+      cy.ebApproveWithoutApi();
     });
   });
 
   context("Verify Due date calculation", () => {
     it("Navigate to Equipment document", () => {
       cy.visit(equipmentURL);
+      cy.listLoadingElementShouldAppear();
+      cy.progressBarShouldNotExist();
     });
 
     it("Check preventative maintenance due date calculation is 365 days from completion date", () => {

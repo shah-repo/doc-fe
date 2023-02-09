@@ -56,8 +56,8 @@ declare global {
       poAMSelectUsers(...list: string[]): Chainable<Subject>;
       poAMCheckForApproval(): Chainable<Subject>;
       poSaveDocument(): Chainable<Subject>;
-      poAMCheckApprovalIconIfItsRed(): Chainable<Subject>;
-      poAMCheckApprovalIconIfItsGray(): Chainable<Subject>;
+      poAMCheckApprovalIconIfItsPrimary(): Chainable<Subject>;
+      poAMCheckApprovalIconIfItsDisabled(): Chainable<Subject>;
       poAMSelectApprover(...list: string[]): Chainable<Subject>;
       poAMEnterPassword(): Chainable<Subject>;
       poAMApproveButton(): Chainable<Subject>;
@@ -78,6 +78,7 @@ declare global {
       poListVerifyFilterBySupplier(params: {supplier: string}): Chainable<Subject>;
       poListVerifyFilterByOrderDate(params: {orderDate: string}): Chainable<Subject>;
       poSelectSupplier(params: {supplier: string}): Chainable<Subject>;
+      poClickOnPending(): Chainable<Subject>;
       poApprove(): Chainable<Subject>;
       poApproveWithoutApi(): Chainable<Subject>;
       poCheckRequestor(params: {requestor: string}): Chainable<Subject>;
@@ -142,8 +143,11 @@ Cypress.Commands.add("poCreateNew", () => {
 
 Cypress.Commands.add("verifyPoApprovalSignature", (params) => {
   cy.get(`[data-cy*="fb-po-approvals-"]`).parent().parent().should("contain", `${params.name} - ${params.email}`);
+  cy.poClickOnPending();
   cy.contains("PO Approval sig");
-  cy.get("[name*='fb-po-approvals-']>div").eq(4).contains(params.name + " | DRAFT" + params.email);
+  cy.get(`[data-cy="user-name-0-DRAFT"]`).contains(params.name);
+  cy.get(`[data-cy="user-email-0-DRAFT"]`).contains(params.email);
+  cy.get("[name*='fb-po-approvals-']>div").eq(4).contains("Pending Approval");
 });
 
 Cypress.Commands.add("verifyPoApprovalDisabled", (params) => {
@@ -383,12 +387,12 @@ Cypress.Commands.add("poAMCheckForApproval", () => {
   });
 });
 
-Cypress.Commands.add("poAMCheckApprovalIconIfItsRed", () => {
-  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorPrimary\"]").should("exist");
+Cypress.Commands.add("poAMCheckApprovalIconIfItsPrimary", () => {
+  cy.get(`[data-cy="check-circle-primary"]`).should("exist");
 });
 
-Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
-  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorDisabled\"]").should("exist");
+Cypress.Commands.add("poAMCheckApprovalIconIfItsDisabled", () => {
+  cy.get(`[data-cy="check-circle-disabled"]`).should("exist");
 });
 
 Cypress.Commands.add("poAMApproveButton", () => {
@@ -475,6 +479,12 @@ Cypress.Commands.add("poSelectSupplier", (params: {supplier: string }) => {
 
   cy.listLoadingElementShouldNotExist();
   cy.progressBarShouldNotExist();
+});
+
+Cypress.Commands.add("poClickOnPending", () => {
+  cy.get(`[data-cy="approval-block-common.pending"]`).arrowClick();
+  cy.progressBarShouldNotExist();
+  cy.listLoadingElementShouldNotExist();
 });
 
 Cypress.Commands.add("poApprove", () => {

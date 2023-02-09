@@ -5,7 +5,6 @@
 import "moment-timezone";
 import moment from "moment-timezone";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 let adminEmployee;
@@ -998,10 +997,9 @@ context("Equipment maintenance and calibration", () => {
         if (res.response) {
           const response = res.response.body;
           const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdPMFormDocumentId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newPMUrl);
-          });
+          cy.visit(newPMUrl);
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -1090,10 +1088,9 @@ context("Equipment maintenance and calibration", () => {
           const response = res.response.body;
           // eslint-disable-next-line max-len
           const newPMUrl = `${CONFIG.FE_URL}/document_revision/${createdCalibrationFormDocumentId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newPMUrl);
-          });
+          cy.visit(newPMUrl);
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });

@@ -5,7 +5,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { CONFIG } from "../../support/config";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { verifyHistoryContent } from "../../utils/context/historyContent";
-import { CyRoutes } from "./../../support/routes";
 
 let createdCompany;
 let loginResponse;
@@ -740,10 +739,7 @@ context("AA Document Layout verification", () => {
     });
 
     it("Verify References selection", () => {
-      cy.get("[data-cy='referenceTo'] input").autocompleteSelect("FM-00001");
-      cy.listLoadingElementShouldNotExist();
-      cy.progressBarShouldNotExist();
-      cy.drRemoveReferences({ reference: "FM-00001" });
+      cy.verifyAddRemoveReference({ formId: "FM-00001" });
     });
   });
 
@@ -939,12 +935,9 @@ context("AA Document Layout verification", () => {
 
     it("Check for training text inside dialog box and complete training", () => {
       cy.get("#root").should("contain.text", "Click here to acknowledge training completion");
-      cy.wrapWithWaitOnApiCalls(
-        [CyRoutes.PostCompleteTraining], () => {
-          cy.get("[data-cy=training-complete]").click();
-          cy.get("[data-cy='training.acknowladge.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
-          cy.get("[data-cy='passwordConfirm']").arrowClick();
-        });
+      cy.get("[data-cy=training-complete]").click();
+      cy.get("[data-cy='training.acknowladge.password']").arrowType(CONFIG.DEFAULT_ENLIL_USER_PASSWORD);
+      cy.get("[data-cy='passwordConfirm']").arrowClick();
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
       cy.checkToastMessage({ exists: false });

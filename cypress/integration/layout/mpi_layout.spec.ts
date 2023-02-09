@@ -6,7 +6,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { LHRTTest } from "../../utils/constants/documentTypes/lhrt";
 import { LotHistoryRecordTest } from "../../utils/constants/documentTypes/lotHistoryRecord";
 import { MPITest } from "../../utils/constants/documentTypes/mpi";
@@ -532,7 +531,7 @@ context("Mpi Layout", () => {
 
         it("Verify material", () => {
           cy.get(".MuiExpansionPanel-root").eq(0).find("li").eq(0)
-            .should("have.text", "MT-00004 - Material one | sets :9");
+            .should("have.text", "MT-00004 - Material one | sets: 9");
         });
         it("Verify equipment", () => {
           cy.get(".MuiExpansionPanel-root").eq(1).find("li").eq(0).should("have.text", "ET-00003 - Equipment one");
@@ -622,17 +621,12 @@ context("Mpi Layout", () => {
 
           it("Add another user permission", () => {
             cy.drAddUserFromPermissionTab(USERS[3].name);
-            cy.listLoadingElementShouldNotExist();
             cy.progressBarShouldNotExist();
           });
 
           it("Add another group permission", () => {
-            cy.wait(2000);
-            cy.listLoadingElementShouldNotExist();
+            cy.drAddGroupFromPermissionTab("Developers");
             cy.progressBarShouldNotExist();
-            cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocSecurity], () => {
-              cy.drAddGroupFromPermissionTab("Developers");
-            });
           });
         });
 

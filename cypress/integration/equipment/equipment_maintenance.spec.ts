@@ -8,7 +8,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 import { SystemRequirement } from "../../utils/context/systemRequirement";
 
@@ -495,10 +494,9 @@ context("Equipment maintenance test", () => {
           const response = res.response.body;
           const calDocId = response.documentId;
           const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newUrl);
-          });
+          cy.visit(newUrl);
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -575,10 +573,9 @@ context("Equipment maintenance test", () => {
           const response = res.response.body;
           const calDocId = response.documentId;
           const newPMUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-            CyRoutes.GetAvailableApprovers], () => {
-            cy.visit(newPMUrl);
-          });
+          cy.visit(newPMUrl);
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         }
       });
       cy.checkToastMessage({ exists: false });
@@ -992,10 +989,9 @@ context("Equipment maintenance test", () => {
               const response = res.response.body;
               const calDocId = response.documentId;
               const newPMUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                CyRoutes.GetAvailableApprovers], () => {
-                cy.visit(newPMUrl);
-              });
+              cy.visit(newPMUrl);
+              cy.listLoadingElementShouldAppear();
+              cy.progressBarShouldNotExist();
             }
           });
           cy.checkToastMessage({ exists: false });
@@ -1069,9 +1065,9 @@ context("Equipment maintenance test", () => {
 
       context("Fill new calbration form", () => {
         it("Navigate to EQ document", () => {
-          cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails, CyRoutes.DocPreview], () => {
-            cy.visit(equipmentURL);
-          });
+          cy.visit(equipmentURL);
+          cy.listLoadingElementShouldAppear();
+          cy.progressBarShouldNotExist();
         });
 
         it("Click 'NEW PM' on preventative maintenace section", () => {
@@ -1083,10 +1079,9 @@ context("Equipment maintenance test", () => {
               const response = res.response.body;
               const calDocId = response.documentId;
               const newPMUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                CyRoutes.GetAvailableApprovers], () => {
-                cy.visit(newPMUrl);
-              });
+              cy.visit(newPMUrl);
+              cy.listLoadingElementShouldAppear();
+              cy.progressBarShouldNotExist();
             }
           });
           cy.checkToastMessage({ exists: false });
