@@ -1406,5 +1406,7 @@
   "approvalRequest.items.button.addText": "Add Item",
   "approvalRequest.grid.heading.item": "Item",
   "approvalRequest.grid.heading.description.of.change": "Description of change",
-  "approvalRequest.grid.heading.justification.of.change": "Justification of change"
+  "approvalRequest.grid.heading.justification.of.change": "Justification of change",
+  "approvalRequest.approved.success": "You successfully approved a document",
+  "approvalRequest.approved.message": "{crId} {title} has been approved."
 }

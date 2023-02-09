@@ -110,6 +110,8 @@ export interface ChangeRequestTransitionRequestBody {
 
 export interface ChangeRequestTransitionResponse {
   id: string;
+  crId: string;
+  title: string;
 }
 
 export interface ChangeRequestAvailableApprovers {
