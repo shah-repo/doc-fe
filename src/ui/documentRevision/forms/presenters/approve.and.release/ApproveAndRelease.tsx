@@ -453,7 +453,7 @@ const ApproveAndRelease: React.FunctionComponent<Props> = ({
     <>
       <CustomLabelTooltip {...{ tooltipConfig }}>
         {isNewLayout && !isRecord ? (
-          !renderAsButton ?
+          renderAsButton ?
             <SplitReleaseButton
               onClick = {isRecord ? alertDialog.open : openDialog} />
             :
