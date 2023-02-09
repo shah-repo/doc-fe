@@ -385,11 +385,11 @@ Cypress.Commands.add("poAMCheckForApproval", () => {
 });
 
 Cypress.Commands.add("poAMCheckApprovalIconIfItsRed", () => {
-  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorPrimary\"]").should("exist");
+  cy.get(`[data-cy="check-circle-primary"]`).should("exist");
 });
 
 Cypress.Commands.add("poAMCheckApprovalIconIfItsGray", () => {
-  cy.get("[class=\"MuiSvgIcon-root MuiSvgIcon-colorDisabled\"]").should("exist");
+  cy.get(`[data-cy="check-circle-disabled"]`).should("exist");
 });
 
 Cypress.Commands.add("poAMApproveButton", () => {
