@@ -811,7 +811,6 @@ context("Test Engineering Build landing page", () => {
       });
 
       it(`Verify EB ID "Is not equal to" dropdown filter`, () => {
-        cy.pause();
         cy.dlVerifyDocumentCount({ numberOfDoc: 3 });
         cy.get(`th[aria-colindex="1"] span.k-i-filter`).arrowClick();
         cy.get("ul>li[role=option]").contains("Is not equal to").arrowClick();
