@@ -37,6 +37,7 @@ declare global {
       fbSelectCustomControl(): Chainable<Subject>;
       fbClickAddNewHiddenBtn(): Chainable<Subject>;
       fbSelectCheckboxValue(...list: string[]): Chainable<Subject>;
+      fbSelectCheckboxValueNew(params: { value: string }): Chainable<Subject>;
       fbUnSelectCheckboxValue(...list: string[]): Chainable<Subject>;
       fbInlineApprovalHisotryCheck(...list: string[]): Chainable<Subject>;
       fbSelectRadioButtonValue(params: { value: string }): Chainable<Subject>;
@@ -221,6 +222,10 @@ Cypress.Commands.add("fbSelectCheckboxValue", (...list: string[]) => {
   list.forEach((item) => {
     cy.get(`[name="editorProperties"] [type="checkbox"]`).check(item, { force: true });
   });
+});
+
+Cypress.Commands.add("fbSelectCheckboxValueNew", (params: { value: string }) => {
+  cy.get(`[value="${params.value}"]`).check({ force: true });
 });
 
 Cypress.Commands.add("fbCheckFieldsExistSectionList", (...list: string[]) => {

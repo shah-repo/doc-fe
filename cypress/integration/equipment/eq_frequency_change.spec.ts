@@ -8,7 +8,6 @@ import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.fe
 import { RevisionChangeType } from "../../../src/state/ducks/documentRevisions/types";
 import { cmpFilterDocumentTypeIdByName } from "../../support/commands/company/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { IMPORTER_USER, USERS } from "../../utils/constants/users";
 
 const ADMIN_USER = USERS[1];
@@ -1035,10 +1034,9 @@ context("Equipment due date calculation while changing frequency", () => {
               const response = res.response.body;
               calDocId = response.documentId;
               const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-              cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                CyRoutes.GetAvailableApprovers], () => {
-                cy.visit(newUrl);
-              });
+              cy.visit(newUrl);
+              cy.listLoadingElementShouldAppear();
+              cy.progressBarShouldNotExist();
             }
           });
           cy.checkToastMessage({ exists: false });
@@ -1305,10 +1303,9 @@ context("Equipment due date calculation while changing frequency", () => {
                 const response = res.response.body;
                 calDocId = response.documentId;
                 const newUrl = `${CONFIG.FE_URL}/document_revision/${calDocId}/version/${response.id}`;
-                cy.wrapWithWaitOnApiCalls([CyRoutes.SessionDetails,
-                  CyRoutes.GetAvailableApprovers], () => {
-                  cy.visit(newUrl);
-                });
+                cy.visit(newUrl);
+                cy.listLoadingElementShouldAppear();
+                cy.progressBarShouldNotExist();
               }
             });
             cy.checkToastMessage({ exists: false });

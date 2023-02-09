@@ -772,9 +772,7 @@ context("Create company via API and create Suppliers document", () => {
     });
 
     it("Add an Approval", () => {
-      // cy.wrapWithWaitOnApiCall(CyRoutes.PostApprovals, () => {
       cy.get("[data-cy^=fb-approvals-approvals-]").autocompleteSelect(USERS[1].name);
-      // });
       cy.progressBarShouldNotExist();
       cy.listLoadingElementShouldNotExist();
     });

@@ -1,7 +1,7 @@
 import { Button, Divider, Grid, Typography } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import cx from "classnames";
-import { map } from "lodash";
+import { isEmpty, map, some } from "lodash";
 import { useObserver } from "mobx-react";
 import React, { useState } from "react";
 import Text from "../../components/Text";
@@ -11,7 +11,7 @@ import useStyles from "./ApprovalRequestGrid.styles";
 import ApprovalRequestGridHeader from "./ApprovalRequestGridHeader";
 import ApprovalRequestItem from "./ApprovalRequestItem";
 import ItemsAndDetailsState from "./ItemsAndDetails.state";
-import { ApprovalRequestGridItem } from "./ItemsAndDetails.types";
+import { ApprovalRequestGridItem, FBDocumentRevisionsValue } from "./ItemsAndDetails.types";
 
 
 const Loader = () => {
@@ -90,6 +90,13 @@ const ItemsAndDetails: React.FunctionComponent<{
   }
 
   function addRevisionToChangeRequest() {
+    const { proposedDocumentRevision, justificationOfChange, descriptionOfChange }
+      = formState?.getValues() as FBDocumentRevisionsValue;
+
+    if (some([justificationOfChange, descriptionOfChange, proposedDocumentRevision], isEmpty)) {
+      return;
+    }
+
     setIsEditRowVisible(false);
     handleAdd();
   }

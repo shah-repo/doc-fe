@@ -6,7 +6,6 @@ import path from "path";
 import { STATUS_TYPES_LABEL } from "../../../src/state/ducks/dashboard.new/my.feeds/types";
 import { IMAPEmailsInTesting } from "../../support/commands/imap/commands";
 import { CONFIG } from "../../support/config";
-import { CyRoutes } from "../../support/routes";
 import { emailDateOffset, fileTimeFormat, pdfDocRelDate, pdfFooterDate } from "../../utils/constants/dateHandler";
 import { TestDocumentType } from "../../utils/constants/documentTypes/testTypes";
 import { USERS } from "../../utils/constants/users";
@@ -543,11 +542,9 @@ context("Add and edit FB fields - Test 1", () => {
     it("Upload attachment 'video.mp4'", () => {
       SystemRequirement("REQ-2990");
       cy.get("[data-cy=\"albumMediaButton\"]").arrowClick();
-      cy.wrapWithWaitOnApiCalls([CyRoutes.GetAttachmentsAttached], () => {
-        cy.pmUploadAttachment({ fileName: "video.mp4" });
-      });
+      cy.pmUploadAttachment({ fileName: "video.mp4" });
+      cy.listLoadingElementShouldAppear();
       cy.progressBarShouldNotExist();
-      cy.listLoadingElementShouldNotExist();
       cy.landingPageLoadingElementShouldNotExist();
     });
 
@@ -555,10 +552,8 @@ context("Add and edit FB fields - Test 1", () => {
       cy.contains("Step #1").should("exist");
     });
 
-    it("Save document", () => {
-      cy.wrapWithWaitOnApiCalls([CyRoutes.PatchDocRev], () => {
-        cy.get("[data-cy=\"DocumentRevisionForm-submit\"]").arrowClick();
-      });
+    it("Click save document", () => {
+      cy.drClickCreateDocumentWithoutApiCallForForms();
     });
 
     it(`Verify form ${STATUS_TYPES_LABEL.DRAFT} status and click on Send To Email`, () => {
